@@ -324,7 +324,10 @@ export const store_view_album_page_fetchData = reactive({
         } else if (selected === 'album_list_recently') {
             _order = 'desc'
             _sort = 'playDate'
-            if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            if(
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            ) {
                 _sort = 'DatePlayed'
             }
         }
@@ -339,7 +342,10 @@ export const store_view_album_page_fetchData = reactive({
                 _search, _starred,
                 this._artist_id
             )
-        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+        }else if(
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        ) {
             const sortBy = _sort === 'DatePlayed'
                 ? 'DatePlayed,SortName' : (_sort != 'id' ? _sort : 'IndexNumber');
             const sortOrder = _sort === 'DatePlayed'
@@ -356,7 +362,7 @@ export const store_view_album_page_fetchData = reactive({
                     sortBy, sortOrder,
                     String(this._end - this._start), String(this._start),
                     'MusicAlbum',
-                    'ParentId', 'Primary', 'true', '1',
+                    'ParentId', 'Primary,Backdrop,Thumb', 'true', '1',
                     store_view_album_page_logic.page_albumlists_filter_year > 0 ? store_view_album_page_logic.page_albumlists_filter_year : '',
                     filter
                 )

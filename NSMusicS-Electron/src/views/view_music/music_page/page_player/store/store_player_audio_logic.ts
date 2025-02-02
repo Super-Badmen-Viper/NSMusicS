@@ -1,4 +1,4 @@
-import {reactive, ref, watch} from 'vue'
+import {reactive, watch} from 'vue'
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 import {Audio_node_mpv} from "../../../../../data/data_models/song_Audio_Out/Audio_node_mpv";
 import {Audio_howler} from "../../../../../data/data_models/song_Audio_Out/Audio_howler";
@@ -10,11 +10,6 @@ import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {
     Audio_ApiService_of_Je
 } from "../../../../../data/data_access/servers_configs/jellyfin_api/services_web/Audio/index_service";
-import {store_server_user_model} from "../../../../../data/data_stores/server/store_server_user_model";
-import {store_view_media_page_info} from "../../page_media/store/store_view_media_page_info";
-import {
-    UserPlayedItems_ApiService_of_Je
-} from "../../../../../data/data_access/servers_configs/jellyfin_api/services_web/UserPlayedItems/index_service";
 
 export const store_player_audio_logic = reactive({
     player: new Audio_node_mpv(),
@@ -125,14 +120,29 @@ export const store_player_audio_logic = reactive({
         }
     },
     async update_current_media_info(media_file:any,index:number){
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
-            const audio_ApiService_of_Je = new Audio_ApiService_of_Je(
-                store_server_users.server_config_of_current_user_of_sqlite?.url
-            )
-            const getAudio_lyrics_id = await audio_ApiService_of_Je.getAudio_lyrics_id(media_file.id);
-            const lyrics = getAudio_lyrics_id != undefined
-                ? this.convertToLRC_Array_of_Je(getAudio_lyrics_id.Lyrics) : '';
-            store_player_audio_info.this_audio_lyrics_string = lyrics;
+        if(
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        ) {
+            try {
+                const audio_ApiService_of_Je = new Audio_ApiService_of_Je(
+                    store_server_users.server_config_of_current_user_of_sqlite?.url
+                )
+                let lyrics = []
+                if (store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+                    const getAudio_lyrics_id_of_Je = await audio_ApiService_of_Je.getAudio_lyrics_id_of_Je(media_file.id);
+                    lyrics = getAudio_lyrics_id_of_Je != undefined
+                        ? this.convertToLRC_Array_of_Je(getAudio_lyrics_id_of_Je.Lyrics) : '';
+                } else if (store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby') {
+                    const getAudio_lyrics_id_of_Em = await audio_ApiService_of_Je.getAudio_lyrics_id_of_Em(media_file.id);
+                    // lyrics = getAudio_lyrics_id_of_Em != undefined
+                    //     ? this.convertToLRC_Array_of_Em(getAudio_lyrics_id_of_Em.Lyrics) : '';
+                    lyrics = getAudio_lyrics_id_of_Em.Lyrics;
+                }
+                store_player_audio_info.this_audio_lyrics_string = lyrics;
+            }catch{
+                store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
+            }
         }else{
             store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
         }
@@ -170,6 +180,18 @@ export const store_player_audio_logic = reactive({
             })
             .join('\n');
         return `${lrcLines}`;
+    },
+    convertToLRC_Array_of_Em(lyrics: any[]) {
+        const SCALE_FACTOR = 0.0000001;
+        return lyrics.map((item) => {
+            const startTotalSeconds = item.StartPositionTicks * SCALE_FACTOR;
+            const minutes = Math.floor(startTotalSeconds / 60);
+            const seconds = Math.floor(startTotalSeconds % 60);
+            const centiseconds = Math.floor((startTotalSeconds * 100) % 100);
+            const time = `[${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(centiseconds).padStart(2, '0')}]`;
+            return `${time}${item.Text}`;
+        })
+        .join('\n');
     }
 });
 watch(() => store_player_audio_logic.player_select, async (newValue) => {

@@ -48,7 +48,10 @@ export const store_server_users = reactive({
                 store_server_user_model.password
             );
             return {username, salt, token}
-        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'){
+        }else if(
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        ){
 
         }
         return false

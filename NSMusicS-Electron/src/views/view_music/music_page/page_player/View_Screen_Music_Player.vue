@@ -1282,7 +1282,7 @@ onBeforeUnmount(() => {
                         color: #989292;font-weight: 550;font-size: calc(1.4vh + 4px);
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
-                      {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}
+                      {{ store_player_audio_info.this_audio_artist_name }} - {{ store_player_audio_info.this_audio_album_name }}
                     </div>
                     <n-slider
                         style="
@@ -1316,7 +1316,7 @@ onBeforeUnmount(() => {
                       </template>
                     </n-slider>
                     <div style="width: 46vh;text-align: left;margin-top: -4px;margin-left: calc(-74vh);">
-                      {{ store_player_audio_logic.current_play_time }} &nbsp;/&nbsp; {{ store_player_audio_logic.total_play_time }}
+                      {{ store_player_audio_logic.current_play_time }} &nbsp;:&nbsp; {{ store_player_audio_logic.total_play_time }}
                     </div>
                   </n-space>
                 </n-space>

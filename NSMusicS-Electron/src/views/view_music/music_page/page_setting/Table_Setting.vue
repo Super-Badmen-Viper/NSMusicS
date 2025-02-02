@@ -191,24 +191,29 @@
   });
   const server_set_of_addUser_of_type = ref(Type_Server_Kinds[2].value)
   let unwatch_server_set_of_addUser_of_type = watch(() => server_set_of_addUser_of_type.value, (newValue) => {
-    if(newValue === 'jellyfin') {
+    if(newValue === 'jellyfin' || newValue === 'emby'){
       server_login_model_of_apikey.value = true
     }else{
       server_login_model_of_apikey.value = false
     }
   });
-  const server_set_of_addUser_of_servername = ref('jellyfin')
-  const server_set_of_addUser_of_url = ref('http://localhost:8096')
+  const server_set_of_addUser_of_servername = ref('')
+  const server_set_of_addUser_of_url = ref('')
   const server_set_of_addUser_of_username = ref('')
   const server_set_of_addUser_of_password = ref('')
   const server_login_model_of_apikey = ref(false)
-  const server_set_of_addUser_of_apikey = ref('5bddae4d151945799b86de39c5fc1137')
+  const server_set_of_addUser_of_apikey = ref('')
   const server_set_of_addUser_of_apikey_user_option = ref([])
   const server_set_of_addUser_of_apikey_load_complete = ref(false)
-  async function update_server_apikey_user_option(init: any) {
-    store_server_user_model.authorization_of_Je = server_set_of_addUser_of_apikey.value
+  async function update_server_apikey_user_option(data: any) {
+    store_server_user_model.authorization_of_Je =
+        server_set_of_addUser_of_apikey.value.length === 0
+            ? data.apikey : server_set_of_addUser_of_apikey.value
     // load User
-    const userService = new Users_ApiService_of_Je(server_set_of_addUser_of_url.value)
+    const userService = new Users_ApiService_of_Je(
+        server_set_of_addUser_of_url.value.length === 0
+            ? data.url : server_set_of_addUser_of_url.value
+    )
     const result = await userService.getUsers_ALL()
     server_set_of_addUser_of_apikey_user_option.value = []
     store_server_user_model.userid_of_Je = ''
@@ -221,11 +226,11 @@
             value: row.Id
           });
         });
-        if(init != true || init != 'true') {
+        if(data.init === true || data.init === 'true') {
           store_server_user_model.userid_of_Je =
               server_set_of_addUser_of_apikey_user_option.value[0].value
         }else{
-          store_server_user_model.userid_of_Je = init
+          store_server_user_model.userid_of_Je = data.userid
         }
         // load Library parentid_of_Je
         const library_ApiService_of_Je = new Library_ApiService_of_Je(server_set_of_addUser_of_url.value)
@@ -262,7 +267,10 @@
             server_set_of_addUser_of_password.value,
             server_set_of_addUser_of_type.value
         )
-      }else if(server_set_of_addUser_of_type.value === 'jellyfin') {
+      }else if(
+          server_set_of_addUser_of_type.value === 'jellyfin' ||
+          server_set_of_addUser_of_type.value === 'emby'
+      ) {
         if(server_set_of_addUser_of_apikey.value.length > 0 &&
             store_server_user_model.userid_of_Je.length > 0){
           if(server_set_of_addUser_of_apikey_load_complete.value) {
@@ -319,7 +327,7 @@
             user_name, password,
             type
         )
-      }else if(server_set_of_addUser_of_type.value === 'jellyfin') {
+      }else if(server_set_of_addUser_of_type.value === 'jellyfin' || server_set_of_addUser_of_type.value === 'emby') {
         if(server_set_of_addUser_of_apikey_load_complete.value){
           result = await store_server_data_select_logic.update_server_setUser(
               id,
@@ -354,6 +362,8 @@
             store_server_user_model.server_select_kind = 'navidrome'
           }else if(user_config?.type === 'jellyfin'){
             store_server_user_model.server_select_kind = 'jellyfin'
+          }else if(user_config?.type === 'emby'){
+            store_server_user_model.server_select_kind = 'emby'
           }
         } else {
           message.error(t('error.invalidServer'), {duration: 3000})
@@ -809,12 +819,19 @@
                                       class="server_item_info"
                                       @click="() => {
                                         item.show = !item.show;
-                                        if(item.type === 'jellyfin'){
+                                        if(item.type === 'jellyfin' || item.type === 'emby'){
                                           server_login_model_of_apikey = true
+                                          server_set_of_addUser_of_apikey = item.user_name
+                                          update_server_apikey_user_option({
+                                            servername: item.server_name,
+                                            url: item.url,
+                                            apikey: item.user_name,
+                                            userid: item.password,
+                                            init: false
+                                          });
                                         }else{
                                           server_login_model_of_apikey = false
                                         }
-                                        update_server_apikey_user_option(item.password);
                                       }"
                                       style="
                             width: 230px;
@@ -864,9 +881,16 @@
                                           <n-form v-if="server_login_model_of_apikey" style="margin-top: -12px;">
                                             <n-space vertical style="margin-bottom: 10px;">
                                               <span>{{ $t('HeaderApiKey') }}</span>
-                                              <n-input clearable placeholder="" v-model:value="server_set_of_addUser_of_apikey"/>
-                                              <n-button strong secondary type="info"
-                                                        @click="update_server_apikey_user_option(true)">
+                                              <n-input clearable placeholder="" v-model:value="item.user_name"/>
+                                              <n-button
+                                                  strong secondary type="info"
+                                                  @click="update_server_apikey_user_option({
+                                                    servername: item.server_name,
+                                                    url: item.url,
+                                                    apikey: item.user_name,
+                                                    userid: item.password,
+                                                    init: true
+                                                  })">
                                                 {{ $t('ButtonOk') }}
                                               </n-button>
                                             </n-space>
@@ -896,13 +920,25 @@
                                                       @click="item.show = false;update_server_deleteUser(item.id, item.type);">
                                               {{ $t('common.delete') }}
                                             </n-button>
-                                            <n-button strong secondary type="info"
-                                                      @click="update_server_setUser(
-                                                item.id,
-                                                item.server_name,item.url,
-                                                item.user_name,item.password,
-                                                item.type
-                                            )">
+                                            <n-button
+                                                strong secondary type="info"
+                                                @click="()=>{
+                                                  if(item.type === 'navidrome'){
+                                                    server_set_of_addUser_of_type = 'navidrome'
+                                                  }else if (item.type === 'jellyfin'){
+                                                    server_set_of_addUser_of_type = 'jellyfin'
+                                                    item.password = store_server_user_model.userid_of_Je
+                                                  }else if (item.type === 'emby'){
+                                                    server_set_of_addUser_of_type = 'emby'
+                                                    item.password = store_server_user_model.userid_of_Je
+                                                  }
+                                                  update_server_setUser(
+                                                      item.id,
+                                                      item.server_name,item.url,
+                                                      item.user_name,item.password,
+                                                      item.type
+                                                  )
+                                                }">
                                               {{ $t('common.save') }}
                                             </n-button>
                                           </n-space>
@@ -1269,7 +1305,6 @@
                         />
                         <n-radio-button
                             style="text-align: center;width: 133px;"
-                            disabled
                             :key="Type_Server_Kinds[4].value"
                             :value="Type_Server_Kinds[4].value"
                             :label="Type_Server_Kinds[4].label"
@@ -1308,7 +1343,13 @@
                           <span>{{ $t('HeaderApiKey') }}</span>
                           <n-input clearable placeholder="" v-model:value="server_set_of_addUser_of_apikey"/>
                           <n-button strong secondary type="info"
-                                    @click="update_server_apikey_user_option(true)">
+                                    @click="update_server_apikey_user_option({
+                                          servername: server_set_of_addUser_of_servername,
+                                          url: server_set_of_addUser_of_url,
+                                          apikey: server_set_of_addUser_of_apikey,
+                                          userid: store_server_user_model.userid_of_Je,
+                                          init: true
+                                        })">
                             {{ $t('ButtonOk') }}
                           </n-button>
                         </n-space>

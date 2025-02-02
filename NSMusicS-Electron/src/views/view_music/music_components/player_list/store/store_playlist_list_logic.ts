@@ -113,7 +113,10 @@ export const store_playlist_list_logic = reactive({
                     playlist_tracks: get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Tracks(item.id)
                 })
             });
-        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+        }else if(
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        ) {
             const response_playlists = await axios(
                 store_server_users.server_config_of_current_user_of_sqlite?.url + '/Users/' +
                 store_server_user_model.userid_of_Je + '/Items?IncludeItemTypes=Playlist&Recursive=true&api_key=' +

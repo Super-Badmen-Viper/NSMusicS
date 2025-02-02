@@ -152,7 +152,7 @@ export const store_server_user_model = reactive({
                 store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
                 store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
             );
-        }else if(user_config?.type === 'jellyfin'){
+        }else if(user_config?.type === 'jellyfin' || user_config?.type === 'emby'){
             let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
             await get_Jellyfin_Temp_Data_To_LocalSqlite.get_playlist_je()
         }

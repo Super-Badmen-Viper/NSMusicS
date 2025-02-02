@@ -1,4 +1,7 @@
 import {Jellyfin_Api_Services_Web} from "../Jellyfin_Api_Services_Web"
+import axios from "axios";
+import {store_server_user_model} from "../../../../../data_stores/server/store_server_user_model";
+import {store_server_users} from "@/data/data_stores/server/store_server_users";
 
 export class Audio_ApiService_of_Je extends Jellyfin_Api_Services_Web {
     /**
@@ -95,12 +98,43 @@ export class Audio_ApiService_of_Je extends Jellyfin_Api_Services_Web {
      * @param itemId 音频项 ID
      * @returns 响应数据
      */
-    public async getAudio_lyrics_id(itemId: string): Promise<any> {
+    public async getAudio_lyrics_id_of_Je(itemId: string): Promise<any> {
         return this.sendRequest(
             'GET',
             `Audio/${itemId}/Lyrics`
         );
     }
+    public async getAudio_lyrics_id_of_Em(itemId: string): Promise<any> {
+        const response_PresentationUniqueKey = await axios(
+            store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Users/' +
+            store_server_user_model.userid_of_Je + '/Items/' + itemId +
+            '?fields=ShareLevel&ExcludeFields=VideoChapters%2CVideoMediaSources%2CMediaStreams&' +
+            'api_key=' + store_server_user_model.authorization_of_Je
+        );
+        return {
+            Lyrics: this.getFirstLyricsExtradata(response_PresentationUniqueKey.data)
+        }
+        // const response_lyric = await axios(
+        //     store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
+        //     itemId + '/' + response_PresentationUniqueKey.data.PresentationUniqueKey +
+        //     '/Subtitles/2/Stream.js?api_key=' + store_server_user_model.authorization_of_Je
+        // );
+        // return {
+        //     Lyrics: response_lyric.data.TrackEvents
+        // }
+    }
+    private getFirstLyricsExtradata(response_PresentationUniqueKey: any): string | null {
+        if (!response_PresentationUniqueKey.MediaStreams) {
+            return null;
+        }
+        for (const stream of response_PresentationUniqueKey.MediaStreams) {
+            if (stream.Extradata) {
+                return stream.Extradata;
+            }
+        }
+        return null;
+    }
+
     /**
      * 上传音频歌词
      * @param itemId 音频项 ID

@@ -268,7 +268,10 @@ export const store_app_configs_logic_load = reactive({
             store_server_user_model.username = username
             store_server_user_model.salt = salt
             store_server_user_model.token = token
-            if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            if(
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            ) {
                 store_server_user_model.authorization_of_Je =
                     store_server_users.server_config_of_current_user_of_sqlite?.user_name
                 // load User

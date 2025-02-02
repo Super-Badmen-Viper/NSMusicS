@@ -22,7 +22,10 @@ export const store_server_data_set_playlistInfo = reactive({
             } catch {
                 return ''
             }
-        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+        }else if(
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        ) {
             return await new Playlists_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).postPlaylists_Create(
                 name, '', 'Audio',
                 store_server_user_model.userid_of_Je
@@ -36,7 +39,10 @@ export const store_server_data_set_playlistInfo = reactive({
                     store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
                     id, name, comment, String(_public_)
                 );
-        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+        }else if(
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        ) {
             // Jellyfin-api does not support updating playlist information
             // await new Playlists_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).postPlaylists_Update(
             //     id, _public_, name
@@ -50,7 +56,10 @@ export const store_server_data_set_playlistInfo = reactive({
                     store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
                     id
                 );
-        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+        }else if(
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        ) {
             await new Items_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).delItems_List_Quick(
                 id
             )
@@ -65,7 +74,10 @@ export const store_server_data_set_playlistInfo = reactive({
                         store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
                         playlist_id, id);
             }
-        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+        }else if(
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        ) {
             await new Playlists_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).postPlaylists_Add(
                 playlist_id,
                 ids.join(','),
@@ -90,7 +102,10 @@ export const store_server_data_set_playlistInfo = reactive({
                     indexs[j] -= 1;
                 }
             }
-        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+        }else if(
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        ) {
             // Jellyfin does not support rating Delete Selected Playlist_item
             // await new Playlists_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).delPlaylists_Remove(
             //     playlist_id,
@@ -128,7 +143,10 @@ export const store_server_data_set_playlistInfo = reactive({
             } catch {
                 return [];
             }
-        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+        }else if(
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        ) {
 
         }
     }

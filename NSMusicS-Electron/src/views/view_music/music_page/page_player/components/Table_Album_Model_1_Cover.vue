@@ -37,24 +37,24 @@ function getAssetImage(firstImage: string) {
       "
       :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
       alt=""/>
-    <n-space vertical align="center"
-             style="width: 44vh;">
+    <n-space vertical
+             style="width: 55vh;">
       <div
           style="
-            width: 44vh;margin-top: -2px;
+            width: 55vh;margin-top: -2px;
             color: #E7E5E5;
             font-weight: 900;font-size: calc(2.2vh + 4px);
             overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
-            text-align: center;">
+            text-align: left;">
         {{ store_player_audio_info.this_audio_song_name }}
       </div>
       <div
           style="
-            width: 36vh;
+            width: 40vh;
             margin-top: -6px;
             color: #989292;font-weight: 550;font-size: calc(1.4vh + 4px);
             overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
-            text-align: center;">
+            text-align: left;">
         {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}
       </div>
     </n-space>
@@ -62,10 +62,11 @@ function getAssetImage(firstImage: string) {
     <n-space
       vertical
       v-if="!store_player_appearance.player_collapsed_album">
-      <n-space justify="space-between" style="width: 55vh;margin-top: -20px;">
+      <n-space justify="end" style="width: 55vh;margin-top: -29px;">
         <n-space>
           {{ store_player_audio_logic.current_play_time }}
         </n-space>
+        :
         <n-space>
           {{ store_player_audio_logic.total_play_time }}
         </n-space>

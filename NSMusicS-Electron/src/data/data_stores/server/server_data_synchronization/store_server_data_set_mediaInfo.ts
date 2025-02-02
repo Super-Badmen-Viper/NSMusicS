@@ -32,7 +32,10 @@ export const store_server_data_set_mediaInfo = reactive({
                         store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
                         id,'','');
             }
-        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+        }else if(
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        ) {
             if (!value) {
                 await new UserFavoriteItems_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).getUserFavoriteItems_Quick(
                     store_server_user_model.userid_of_Je,
@@ -53,7 +56,10 @@ export const store_server_data_set_mediaInfo = reactive({
                     store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
                     id,
                     String(value));
-        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+        }else if(
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        ) {
             // Jellyfin does not support rating
         }
     },
@@ -63,7 +69,10 @@ export const store_server_data_set_mediaInfo = reactive({
                 .set_scrobble(
                     store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
                     item_id, '', '');
-        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+        }else if(
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        ) {
             await new UserPlayedItems_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).getUserPlayedItems_Quick(
                 store_server_user_model.userid_of_Je,
                 item_id,
@@ -82,7 +91,10 @@ export const store_server_data_set_mediaInfo = reactive({
                 .updatePlaylist_songIdToAdd(
                     store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
                     playlist_id, media_file_id);
-        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+        }else if(
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        ) {
             await new Playlists_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).postPlaylists_Add(
                 playlist_id,
                 media_file_id,
@@ -99,12 +111,15 @@ export const store_server_data_set_mediaInfo = reactive({
                 .updatePlaylist_songIndexToRemove(
                     store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
                     playlist_id, index[0]);
-        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+        }else if(
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        ) {
             // Jellyfin does not support rating Delete Selected Playlist_item
-            // await new Playlists_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).delPlaylists_Remove(
-            //     playlist_id,
-            //     media_file_id
-            // )
+            await new Playlists_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).delPlaylists_Remove(
+                playlist_id,
+                media_file_id
+            )
         }
     }
 });

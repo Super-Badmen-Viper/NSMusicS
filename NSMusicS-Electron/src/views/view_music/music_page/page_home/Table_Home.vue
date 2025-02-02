@@ -54,7 +54,7 @@ const handleImageError = async (item: any) => {
     try {
       const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
       if (newImagePath.length > 0) {
-        item.medium_image_url = 'file:///' + newImagePath;
+        item.medium_image_url = newImagePath;
       } else {
         item.medium_image_url = result_src;
       }
@@ -512,7 +512,9 @@ onBeforeUnmount(() => {
                     >
                       <icon :size="42" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><PlayCircle24Regular/></icon>
                     </button>
-                    <div class="hover_buttons_top" v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'">
+                    <div class="hover_buttons_top"
+                         v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
+                               store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'">
                       <rate
                           class="viaSlot" style="margin-right: 8px;"
                           :length="5"
@@ -650,7 +652,9 @@ onBeforeUnmount(() => {
                     >
                       <icon :size="42" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><PlayCircle24Regular/></icon>
                     </button>
-                    <div class="hover_buttons_top" v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'">
+                    <div class="hover_buttons_top"
+                         v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
+                               store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'">
                       <rate
                           class="viaSlot" style="margin-right: 8px;"
                           :length="5"
@@ -787,7 +791,9 @@ onBeforeUnmount(() => {
                     >
                       <icon :size="42" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><PlayCircle24Regular/></icon>
                     </button>
-                    <div class="hover_buttons_top" v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'">
+                    <div class="hover_buttons_top"
+                         v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
+                               store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'">
                       <rate
                           class="viaSlot" style="margin-right: 8px;"
                           :length="5"
@@ -924,7 +930,9 @@ onBeforeUnmount(() => {
                     >
                       <icon :size="42" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><PlayCircle24Regular/></icon>
                     </button>
-                    <div class="hover_buttons_top" v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'">
+                    <div class="hover_buttons_top"
+                         v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
+                               store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'">
                       <rate
                           class="viaSlot" style="margin-right: 8px;"
                           :length="5"

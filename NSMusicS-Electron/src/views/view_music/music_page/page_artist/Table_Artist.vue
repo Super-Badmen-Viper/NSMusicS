@@ -55,7 +55,7 @@ const handleImageError = async (item: any) => {
     try {
       const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
       if (newImagePath.length > 0) {
-        item.medium_image_url = 'file:///' + newImagePath;
+        item.medium_image_url = newImagePath;
       } else {
         item.medium_image_url = result_src;
       }
@@ -133,7 +133,10 @@ if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidro
     {label:computed(() => t('entity.album_other')), key: 'album_count', state_Sort: state_Sort.Default },
     {label:computed(() => t('filter.songCount')), key: 'song_count', state_Sort: state_Sort.Default },
   ]
-}else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'){
+}else if(
+    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+    store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+){
   options_Sort_key.value = [
 
   ]
@@ -353,7 +356,10 @@ const Open_this_artist_all_artist_list_click = (artist_id:string) => {
     store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
     store_playlist_list_fetchData._artist_id = artist_id
   }
-  if(store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin') {
+  if(
+      store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' ||
+      store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'
+  ) {
     console.log('artist_list_of_artist_id_artist_click：' + artist_id);
     store_router_data_logic.get_album_list_of_artist_id_by_artist_info(artist_id)
   }else{
@@ -615,10 +621,10 @@ onBeforeUnmount(() => {
           </n-tooltip>
 
           <n-dropdown
-              v-if="!(
-                  store_server_user_model.model_server_type_of_web &&
+              v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
+                  store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby' &&
+                  !(store_server_user_model.model_server_type_of_web &&
                   store_view_artist_page_logic.page_artistlists_selected === 'artist_list_recently')
-                  && store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'
               "
               trigger="click" :show-arrow="true"
               :options="options_Sort" @select="handleSelect_Sort">
@@ -857,7 +863,9 @@ onBeforeUnmount(() => {
                     >
                       <icon :size="42" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><PlayCircle24Regular/></icon>
                     </button>
-                    <div class="hover_buttons_top" v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'">
+                    <div class="hover_buttons_top"
+                         v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
+                               store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'">
                       <rate
                           class="viaSlot" style="margin-right: 8px;"
                           :length="5"
@@ -912,12 +920,14 @@ onBeforeUnmount(() => {
                       {{ item.name }}
                     </span>
                   </div>
-                  <div v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'">
+                  <div v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
+                             store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'">
                     <span id="artist_artist_name" :style="{ maxWidth: item_artist_txt + 'px' }">
                        {{ $t('entity.album_other') + ': ' + item.album_count }}
                     </span>
                   </div>
-                  <div v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'">
+                  <div v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
+                             store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'">
                     <span id="artist_artist_name" :style="{ maxWidth: item_artist_txt + 'px' }">
                       {{ $t('entity.track_other') + ': ' + item.song_count }}
                     </span>
@@ -946,7 +956,8 @@ onBeforeUnmount(() => {
           {{ $t('player.addNext') }}
         </v-contextmenu-item>
         <v-contextmenu-item
-            v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'"
+            v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
+                  store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'"
             @click="menu_item_edit_selected_media_tags">
           {{ $t('page.contextMenu.showDetails') }}
         </v-contextmenu-item>

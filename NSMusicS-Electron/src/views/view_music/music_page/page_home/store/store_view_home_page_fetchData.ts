@@ -35,7 +35,10 @@ export const store_view_home_page_fetchData = reactive({
                     store_server_user_model.token,
                     store_server_user_model.salt,
                 )
-            }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            }else if(
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            ) {
                 await new Get_Jellyfin_Temp_Data_To_LocalSqlite().get_home_list(
                     store_server_user_model.parentid_of_Je_Music
                 )
@@ -61,7 +64,10 @@ export const store_view_home_page_fetchData = reactive({
                     store_server_user_model.token,
                     store_server_user_model.salt,
                 )
-            }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            }else if(
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            ) {
                 await new Get_Jellyfin_Temp_Data_To_LocalSqlite().get_home_list_of_maximum_playback(
                     store_server_user_model.parentid_of_Je_Music
                 )
@@ -83,7 +89,10 @@ export const store_view_home_page_fetchData = reactive({
                     store_server_user_model.token,
                     store_server_user_model.salt,
                 )
-            }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            }else if(
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            ) {
                 await new Get_Jellyfin_Temp_Data_To_LocalSqlite().get_home_list_of_random_search(
                     store_server_user_model.parentid_of_Je_Music
                 )
@@ -108,7 +117,10 @@ export const store_view_home_page_fetchData = reactive({
                     store_server_user_model.token,
                     store_server_user_model.salt,
                 )
-            }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            }else if(
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            ) {
                 await new Get_Jellyfin_Temp_Data_To_LocalSqlite().get_home_list_of_recently_added(
                     store_server_user_model.parentid_of_Je_Music
                 )
@@ -129,7 +141,10 @@ export const store_view_home_page_fetchData = reactive({
                     store_server_user_model.token,
                     store_server_user_model.salt,
                 )
-            }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            }else if(
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            ) {
                 await new Get_Jellyfin_Temp_Data_To_LocalSqlite().get_home_list_of_recently_played(
                     store_server_user_model.parentid_of_Je_Music
                 )

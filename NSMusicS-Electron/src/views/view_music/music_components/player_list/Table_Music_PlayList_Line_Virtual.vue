@@ -59,7 +59,7 @@ const handleImageError = async (item: any) => {
     try {
       const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
       if (newImagePath.length > 0) {
-        item.medium_image_url = 'file:///' + newImagePath;
+        item.medium_image_url = newImagePath;
       } else {
         item.medium_image_url = result_src;
       }

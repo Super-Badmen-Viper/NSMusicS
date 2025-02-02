@@ -211,7 +211,10 @@ export const store_view_artist_page_fetchData = reactive({
         }
     },
     async fetchData_This_Artist_MediaList(artist_id:any){
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin') {
+        if(
+            store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' ||
+            store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'
+        ) {
             store_player_appearance.player_mode_of_medialist_from_external_import = true;
         }
 
@@ -282,7 +285,10 @@ export const store_view_artist_page_fetchData = reactive({
         } else if (selected === 'artist_list_recently') {
             _order = 'desc'
             _sort = 'playDate'
-            if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            if(
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            ) {
                 _sort = 'DatePlayed'
             }
         } else if (selected != 'artist_list_all') {
@@ -298,7 +304,10 @@ export const store_view_artist_page_fetchData = reactive({
                 String(this._end), _order, _sort, String(this._start),
                 _search, _starred
             )
-        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+        }else if(
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        ) {
             const filter = _starred === 'true' ? 'IsFavorite' : ''
             let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
             await get_Jellyfin_Temp_Data_To_LocalSqlite.get_artist_list(
@@ -307,7 +316,7 @@ export const store_view_artist_page_fetchData = reactive({
                 '', '',
                 String(this._end - this._start), String(this._start),
                 'Artist',
-                'ParentId', 'Primary', 'true', '1',
+                'ParentId', 'Primary,Backdrop,Thumb', 'true', '1',
                 '',
                 filter
             )

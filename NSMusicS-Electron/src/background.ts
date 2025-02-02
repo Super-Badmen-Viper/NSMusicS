@@ -560,9 +560,9 @@ async function createWindow() {
             if (fs.existsSync(medium_image_url))
                 return filePath;
             else
-                return 'file:///' + path.join(driveDbPath, 'error_album.jpg');
+                return '';
         } catch {
-            return 'file:///' + path.join(driveDbPath, 'error_album.jpg');
+            return '';
         }
     });
     ipc.handle('window-get-LyricPath', (event, mediaPath) => {

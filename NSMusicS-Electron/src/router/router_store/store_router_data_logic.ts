@@ -293,7 +293,10 @@ export const store_router_data_logic = reactive({
                         store_server_user_model.salt,
                     )
                 }
-                else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'){
+                else if(
+                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+                ){
                     let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
                     await get_Jellyfin_Temp_Data_To_LocalSqlite.get_count_of_media_file()
                     await get_Jellyfin_Temp_Data_To_LocalSqlite.get_count_of_artist_album()

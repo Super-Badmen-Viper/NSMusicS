@@ -300,7 +300,10 @@ export const store_view_media_page_fetchData = reactive({
                     await this.fetchData_Media_of_server_web(true)
                     this._album_id = ''
                 }
-            }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            }else if(
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            ) {
                 this._start = 0;
                 this._end = 100;
                 this._album_id = id
@@ -354,7 +357,10 @@ export const store_view_media_page_fetchData = reactive({
                     this._artist_id = ''
                 }
             }
-            else if (store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            else if (
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            ) {
                 this._start = 0;
                 this._end = 100;
                 this._artist_id = id
@@ -409,7 +415,10 @@ export const store_view_media_page_fetchData = reactive({
         if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
             this._start += 100;
             this._end += 100;
-        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+        }else if(
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        ) {
             this._end += 100;
             this._start = this._end - 99;
         }
@@ -433,7 +442,10 @@ export const store_view_media_page_fetchData = reactive({
         } else if (selected === 'song_list_recently') {
             _order = 'desc'
             _sort = 'playDate'
-            if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            if(
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            ) {
                 _sort = 'DatePlayed'
             }
         } else if (selected != 'song_list_all') {
@@ -453,7 +465,10 @@ export const store_view_media_page_fetchData = reactive({
                 this._album_id, this._artist_id,
                 store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : ''
             )
-        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+        }else if(
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
+            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        ) {
             const sortBy = _sort === 'DatePlayed'
                 ? 'DatePlayed,SortName' : (_sort != 'id' ? _sort : 'IndexNumber');
             const sortOrder = _sort === 'DatePlayed'
@@ -471,7 +486,7 @@ export const store_view_media_page_fetchData = reactive({
                     sortBy, sortOrder,
                     String(this._end - this._start), String(this._start),
                     'Audio',
-                    'ParentId', 'Primary', 'true', '1',
+                    'ParentId', 'Primary,Backdrop,Thumb', 'true', '1',
                     store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : '',
                     filter
                 )

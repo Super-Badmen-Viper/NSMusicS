@@ -66,8 +66,16 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         if(maximum_playback != undefined && Array.isArray(maximum_playback)) {
             maximum_playback.map(async (album: any) => {
                 const medium_image_url =
-                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
-                    album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                        ?
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
+                        album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                        :
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
+                        (album.ImageTags?.Primary ? album.Id : album.ParentBackdropItemId) +
+                        (album.ImageTags?.Primary ? '/Images/Primary?tag=' : '/Images/Backdrop?tag=') +
+                        (album.ImageTags?.Primary ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
+                        '&api_key=' + store_server_user_model.authorization_of_Je;
                 store_view_home_page_info.home_Files_temporary_maximum_playback.push({
                     favorite: album.UserData.IsFavorite,
                     rating: 0,
@@ -125,8 +133,16 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         if(random_search != undefined && Array.isArray(random_search)) {
             random_search.map(async (album: any) => {
                 const medium_image_url =
-                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
-                    album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                        ?
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
+                        album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                        :
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
+                        (album.ImageTags?.Primary ? album.Id : album.ParentBackdropItemId) +
+                        (album.ImageTags?.Primary ? '/Images/Primary?tag=' : '/Images/Backdrop?tag=') +
+                        (album.ImageTags?.Primary ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
+                        '&api_key=' + store_server_user_model.authorization_of_Je;
                 store_view_home_page_info.home_Files_temporary_random_search.push({
                     favorite: album.UserData.IsFavorite,
                     rating: 0,
@@ -182,8 +198,16 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         if(recently_added != undefined && Array.isArray(recently_added)) {
             recently_added.map(async (album: any) => {
                 const medium_image_url =
-                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
-                    album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                        ?
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
+                        album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                        :
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
+                        (album.ImageTags?.Primary ? album.Id : album.ParentBackdropItemId) +
+                        (album.ImageTags?.Primary ? '/Images/Primary?tag=' : '/Images/Backdrop?tag=') +
+                        (album.ImageTags?.Primary ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
+                        '&api_key=' + store_server_user_model.authorization_of_Je;
                 store_view_home_page_info.home_Files_temporary_recently_added.push({
                     favorite: album.UserData.IsFavorite,
                     rating: 0,
@@ -240,8 +264,16 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         if(recently_played != undefined && Array.isArray(recently_played)) {
             recently_played.map(async (album: any) => {
                 const medium_image_url =
-                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
-                    album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                        ?
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
+                        album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                        :
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
+                        (album.ImageTags?.Primary ? album.Id : album.ParentBackdropItemId) +
+                        (album.ImageTags?.Primary ? '/Images/Primary?tag=' : '/Images/Backdrop?tag=') +
+                        (album.ImageTags?.Primary ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
+                        '&api_key=' + store_server_user_model.authorization_of_Je;
                 store_view_home_page_info.home_Files_temporary_recently_played.push({
                     favorite: album.UserData.IsFavorite,
                     rating: 0,
@@ -307,8 +339,16 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             store_view_media_page_info.media_File_metadata = [];
             await Promise.all(songlist.map(async (song: any, index: number) => {
                 const medium_image_url =
-                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
-                    song.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                        ?
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
+                        song.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                        :
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
+                        (song.ImageTags?.Primary ? song.Id : song.ParentBackdropItemId) +
+                        (song.ImageTags?.Primary ? '/Images/Primary?tag=' : '/Images/Backdrop?tag=') +
+                        (song.ImageTags?.Primary ?? song.ParentBackdropImageTags?.[0] ?? 'default') +
+                        '&api_key=' + store_server_user_model.authorization_of_Je;
                 const blobUrl =
                     store_server_users.server_config_of_current_user_of_sqlite?.url + '/Audio/' +
                     song.Id + '/universal?UserId=' +
@@ -394,8 +434,16 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             store_view_album_page_info.album_File_metadata = []
             albumlist.map(async (album: any, index: number) => {
                 const medium_image_url =
-                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
-                    album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                        ?
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
+                        album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                        :
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
+                        (album.ImageTags?.Primary ? album.Id : album.ParentBackdropItemId) +
+                        (album.ImageTags?.Primary ? '/Images/Primary?tag=' : '/Images/Backdrop?tag=') +
+                        (album.ImageTags?.Primary ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
+                        '&api_key=' + store_server_user_model.authorization_of_Je;
                 store_view_album_page_info.album_File_metadata.push(album)
                 store_view_album_page_info.album_Files_temporary.push({
                     absoluteIndex: index + 1 + last_index,
@@ -488,8 +536,16 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             store_view_media_page_info.media_File_metadata = [];
             await Promise.all(songlist.map(async (song: any, index: number) => {
                 const medium_image_url =
-                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
-                    song.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                        ?
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
+                        song.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                        :
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
+                        (song.ImageTags?.Primary ? song.Id : song.ParentBackdropItemId) +
+                        (song.ImageTags?.Primary ? '/Images/Primary?tag=' : '/Images/Backdrop?tag=') +
+                        (song.ImageTags?.Primary ?? song.ParentBackdropImageTags?.[0] ?? 'default') +
+                        '&api_key=' + store_server_user_model.authorization_of_Je;
                 const blobUrl =
                     store_server_users.server_config_of_current_user_of_sqlite?.url + '/Audio/' +
                     song.Id + '/universal?UserId=' +
@@ -580,8 +636,16 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             store_view_album_page_info.album_File_metadata = []
             albumlist.map(async (album: any, index: number) => {
                 const medium_image_url =
-                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
-                    album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                        ?
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
+                        album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                        :
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
+                        (album.ImageTags?.Primary ? album.Id : album.ParentBackdropItemId) +
+                        (album.ImageTags?.Primary ? '/Images/Primary?tag=' : '/Images/Backdrop?tag=') +
+                        (album.ImageTags?.Primary ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
+                        '&api_key=' + store_server_user_model.authorization_of_Je;
                 store_view_album_page_info.album_File_metadata.push(album)
                 store_view_album_page_info.album_Files_temporary.push({
                     absoluteIndex: index + 1 + last_index,
@@ -654,8 +718,16 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             store_view_album_page_info.album_File_metadata = []
             albumlist.map(async (album: any, index: number) => {
                 const medium_image_url =
-                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
-                    album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                        ?
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
+                        album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                        :
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
+                        (album.ImageTags?.Primary ? album.Id : album.ParentBackdropItemId) +
+                        (album.ImageTags?.Primary ? '/Images/Primary?tag=' : '/Images/Backdrop?tag=') +
+                        (album.ImageTags?.Primary ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
+                        '&api_key=' + store_server_user_model.authorization_of_Je;
                 store_view_album_page_info.album_File_metadata.push(album)
                 store_view_album_page_info.album_Files_temporary.push({
                     absoluteIndex: index + 1 + last_index,
@@ -728,8 +800,16 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             store_view_artist_page_info.artist_File_metadata = [];
             artistlist.map(async (artist: any, index: number) => {
                 const medium_image_url =
-                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
-                    artist.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                        ?
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
+                        artist.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                        :
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
+                        (artist.ImageTags?.Primary ? artist.Id : artist.ParentBackdropItemId) +
+                        (artist.ImageTags?.Primary ? '/Images/Primary?tag=' : '/Images/Backdrop?tag=') +
+                        (artist.ImageTags?.Primary ?? artist.ParentBackdropImageTags?.[0] ?? 'default') +
+                        '&api_key=' + store_server_user_model.authorization_of_Je;
                 store_view_artist_page_info.artist_File_metadata.push(artist)
                 store_view_artist_page_info.artist_Files_temporary.push({
                     absoluteIndex: index + 1 + last_index,
@@ -1016,7 +1096,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                 '2CSortName', 'Descending',
                 '1', 0,
                 'Audio',
-                'PrimaryImageAspectRatio', 'Primary', 'true', '1',
+                'PrimaryImageAspectRatio', 'Primary,Backdrop,Thumb', 'true', '1',
                 '', ''
             )
             store_view_media_page_info.media_starred_count = list_audio.TotalRecordCount
@@ -1031,7 +1111,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                 '2CSortName', 'Descending',
                 '1', 0,
                 'MusicAlbum',
-                'PrimaryImageAspectRatio', 'Primary', 'true', '1',
+                'PrimaryImageAspectRatio', 'Primary,Backdrop,Thumb', 'true', '1',
                 '', ''
             )
             store_view_album_page_info.album_item_count = list_album.TotalRecordCount
@@ -1051,7 +1131,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                 '2CSortName', 'Descending',
                 '1', 0,
                 'Audio',
-                'PrimaryImageAspectRatio', 'Primary', 'true', '1',
+                'PrimaryImageAspectRatio', 'Primary,Backdrop,Thumb', 'true', '1',
                 '', 'IsFavorite'
             )
             store_view_media_page_info.media_starred_count = list_audio.TotalRecordCount
@@ -1061,7 +1141,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                 '2CSortName', 'Descending',
                 '1', 0,
                 'MusicAlbum',
-                'PrimaryImageAspectRatio', 'Primary', 'true', '1',
+                'PrimaryImageAspectRatio', 'Primary,Backdrop,Thumb', 'true', '1',
                 '', 'IsFavorite'
             )
             store_view_album_page_info.album_starred_count = list_album.TotalRecordCount
