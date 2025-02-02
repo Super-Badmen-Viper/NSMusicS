@@ -1,4 +1,5 @@
 import {Jellyfin_Api_Services_Web} from "../Jellyfin_Api_Services_Web"
+import {store_server_users} from "../../../../../data_stores/server/store_server_users";
 
 export class Items_ApiService_of_Je extends Jellyfin_Api_Services_Web {
     /*
@@ -89,9 +90,20 @@ export class Items_ApiService_of_Je extends Jellyfin_Api_Services_Web {
     public async delItems_List_Quick(
         itemId: string
     ): Promise<any> {
-        return this.sendRequest(
-            'DELETE',
-            `Items/${itemId}`
-        );
+        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            return this.sendRequest(
+                'DELETE',
+                `Items/${itemId}`
+            );
+        }else{
+            const Ids = itemId
+            return this.sendRequest(
+                'POST',
+                `emby/Items/Delete`,
+                {
+                    Ids
+                }
+            );
+        }
     }
 }

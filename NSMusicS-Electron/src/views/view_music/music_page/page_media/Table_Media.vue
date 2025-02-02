@@ -303,6 +303,7 @@ onMounted(() => {
   }else if (store_server_user_model.model_server_type_of_web) {
 
   }
+  store_player_appearance.player_mode_of_medialist_from_external_import = false
 });
 
 ////// select Dtatsource of artistlists
@@ -500,9 +501,6 @@ import {store_router_data_info} from "@/router/router_store/store_router_data_in
 import {store_view_album_page_fetchData} from "@/views/view_music/music_page/page_album/store/store_view_album_page_fetchData";
 import {store_playlist_list_fetchData} from "@/views/view_music/music_components/player_list/store/store_playlist_list_fetchData";
 import {store_player_tag_modify} from "@/views/view_music/music_page/page_player/store/store_player_tag_modify";
-import {
-  Get_PlaylistInfo_From_LocalSqlite
-} from "@/data/data_access/local_configs/class_Get_PlaylistInfo_From_LocalSqlite";
 import {
   Get_Navidrome_Temp_Data_To_LocalSqlite
 } from "@/data/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
@@ -855,7 +853,7 @@ const onRefreshSharp = async () => {
         store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
         store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
     ) {
-      store_player_appearance.player_mode_of_medialist_from_external_import = true
+      store_player_appearance.player_mode_of_medialist_from_external_import = false;
       store_view_media_page_fetchData._album_id = ''
       store_view_media_page_fetchData._artist_id = ''
       store_view_album_page_fetchData._artist_id = ''
@@ -1296,16 +1294,17 @@ onBeforeUnmount(() => {
               background-color: transparent;
               ">
               <img
-                  :style="{
+                :style="{
                   width: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
                   height: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
                   WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 100%)'
                 }"
-                  style="
-                  margin-left: 200px; margin-top: -300px;
-                  object-fit: cover;object-position: center;
-                "
-                  :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                style="
+                margin-left: 200px; margin-top: -300px;
+                object-fit: cover;object-position: center;
+              "
+                :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                alt=""
               />
             </div>
             <n-page-header
@@ -1404,6 +1403,7 @@ onBeforeUnmount(() => {
                     object-fit: cover;
                     margin-left: -3px;"
                   :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                  alt=""
                 />
               </template>
               <template #extra>
@@ -1426,8 +1426,14 @@ onBeforeUnmount(() => {
             :data-active="active"
             v-contextmenu:contextmenu
             @contextmenu.prevent="
-              store_playlist_list_info.playlist_Menu_Item_Id = item.id;
-              store_playlist_list_info.playlist_Menu_Item_Rating = item.rating;
+              () => {
+                if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'){
+                   store_playlist_list_info.playlist_Menu_Item_Id = item.order_title
+                }else{
+                  store_playlist_list_info.playlist_Menu_Item_Id = item.id;
+                }
+                store_playlist_list_info.playlist_Menu_Item_Rating = item.rating;
+              }
             "
             class="message"
             :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)'}"
@@ -1453,6 +1459,7 @@ onBeforeUnmount(() => {
                     :src="item.medium_image_url"
                     @error="handleImageError(item)"
                     style="width: 60px; height: 60px; object-fit: cover;"
+                    alt=""
                   />
                   <div
                     class="hover-overlay"
@@ -1511,14 +1518,14 @@ onBeforeUnmount(() => {
                   }"
                 >{{ item.album }}</span>
               </div>
-              <div style="margin-left: auto; margin-right: 0px; width: 40px; display: flex; flex-direction: row;">
+              <div style="margin-left: auto; margin-right: 0; width: 40px; display: flex; flex-direction: row;">
                 <button
                   @click="()=>{
                     handleItemClick_Favorite(item.id, item.favorite);
                     item.favorite = !item.favorite;
                   }"
                   style="
-                    border: 0px; background-color: transparent;
+                    border: 0; background-color: transparent;
                     width: 28px; height: 28px;
                     margin-top: 2px;margin-right: 10px;
                     cursor: pointer;
@@ -1537,7 +1544,7 @@ onBeforeUnmount(() => {
               </div>
               <span
                   class="duration_txt"
-                  style="margin-left: auto;margin-top: 4px;margin-right: 0px;text-align: left;font-size: 14px;font-weight: 600;"
+                  style="margin-left: auto;margin-top: 4px;margin-right: 0;text-align: left;font-size: 14px;font-weight: 600;"
                   @click="click_count = 0">
                 {{ item.duration_txt }}
               </span>

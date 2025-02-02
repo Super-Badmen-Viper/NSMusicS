@@ -106,11 +106,10 @@ export const store_server_data_set_playlistInfo = reactive({
             store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
             store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
         ) {
-            // Jellyfin does not support rating Delete Selected Playlist_item
-            // await new Playlists_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).delPlaylists_Remove(
-            //     playlist_id,
-            //     ids.join(',')
-            // )
+            await new Playlists_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).delPlaylists_Remove(
+                playlist_id,
+                ids.join(',')
+            )
         }
         // for (const id of ids) {
         //     const indexs = await this.Set_PlaylistInfo_To_Update_GetPlaylist_MediaIndex(

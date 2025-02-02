@@ -11,7 +11,6 @@ import {store_view_media_page_logic} from "../../page_media/store/store_view_med
 import {store_view_media_page_info} from "../../page_media/store/store_view_media_page_info";
 import {store_view_media_page_fetchData} from "../../page_media/store/store_view_media_page_fetchData";
 import {store_playlist_list_info} from "../../../music_components/player_list/store/store_playlist_list_info"
-import {store_player_audio_info} from "../../page_player/store/store_player_audio_info";
 import {store_local_data_set_artistInfo} from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_artistInfo";
 import {
     Get_Navidrome_Temp_Data_To_LocalSqlite
@@ -20,7 +19,6 @@ import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {store_playlist_list_logic} from "../../../music_components/player_list/store/store_playlist_list_logic"
 import {store_playlist_list_fetchData} from "../../../music_components/player_list/store/store_playlist_list_fetchData";
 import {store_view_album_page_fetchData} from "../../page_album/store/store_view_album_page_fetchData";
-import {store_player_tag_modify} from "../../page_player/store/store_player_tag_modify";
 import error_album from '@/assets/img/error_album.jpg'
 import { isElectron } from '@/utils/electron/isElectron';
 import {Get_AnnotationInfo_To_LocalSqlite} from "../../../../../data/data_access/local_configs/class_Get_AnnotationInfo_To_LocalSqlite";
@@ -255,7 +253,7 @@ export const store_view_artist_page_fetchData = reactive({
     async fetchData_Artist_of_server_web_start(){
         store_view_artist_page_info.artist_Files_temporary = [];
         this._start = 0;
-        this._end = 100;
+        this._end = 30;
         await this.fetchData_Artist_of_server_web()
 
         if(store_player_appearance.player_mode_of_medialist_from_external_import) {
@@ -265,8 +263,8 @@ export const store_view_artist_page_fetchData = reactive({
         }
     },
     async fetchData_Artist_of_server_web_end(){
-        this._start += 100;
-        this._end += 100;
+        this._start += 30;
+        this._end += 30;
         await this.fetchData_Artist_of_server_web()
     },
     async fetchData_Artist_of_server_web(){

@@ -1,4 +1,5 @@
 import {Jellyfin_Api_Services_Web} from "../Jellyfin_Api_Services_Web"
+import {store_server_users} from "../../../../../data_stores/server/store_server_users";
 
 export class Playlists_ApiService_of_Je extends Jellyfin_Api_Services_Web {
     public async postPlaylists_Create(
@@ -20,8 +21,9 @@ export class Playlists_ApiService_of_Je extends Jellyfin_Api_Services_Web {
         return this.sendRequest(
             'POST',
             `Playlists/${playlistId}`,
-            undefined,
-            { Name: name, IsPublic: isPublic}
+            {
+                Name: name, IsPublic: isPublic
+            }
         );
     }
     public async postPlaylists_Add(playlistId: string, ids: string, userId: string): Promise<any> {
@@ -32,10 +34,18 @@ export class Playlists_ApiService_of_Je extends Jellyfin_Api_Services_Web {
         );
     }
     public async delPlaylists_Remove(playlistId: string, entryIds: string): Promise<any> {
-        return this.sendRequest(
-            'DELETE',
-            `Playlists/${playlistId}/Items`,
-            { entryIds }
-        );
+        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            return this.sendRequest(
+                'DELETE',
+                `Playlists/${playlistId}/Items`,
+                {entryIds}
+            );
+        }else{
+            return this.sendRequest(
+                'POST',
+                `emby/Playlists/${playlistId}/Items/Delete`,
+                {entryIds}
+            );
+        }
     }
 }

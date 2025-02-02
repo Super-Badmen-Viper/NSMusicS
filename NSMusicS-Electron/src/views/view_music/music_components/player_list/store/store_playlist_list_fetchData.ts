@@ -36,8 +36,8 @@ export const store_playlist_list_fetchData = reactive({
     _artist_id: '',
     async fetchData_PlayList_of_server_web_end(){
         if(!store_server_user_model.random_play_model) {
-            this._start += 100;
-            this._end += 100;
+            this._start += 30;
+            this._end += 30;
             await this.fetchData_PlayList_of_server_web()
         }
     },

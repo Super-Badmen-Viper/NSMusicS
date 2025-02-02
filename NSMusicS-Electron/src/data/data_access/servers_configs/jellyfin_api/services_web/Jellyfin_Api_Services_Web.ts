@@ -32,7 +32,8 @@ export class Jellyfin_Api_Services_Web {
                 headers,
             });
             return response.data;
-        } catch {
+        } catch (e) {
+            console.error(e);
             return undefined;
         }
     }

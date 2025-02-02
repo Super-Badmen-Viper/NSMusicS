@@ -295,7 +295,7 @@ export const store_view_media_page_fetchData = reactive({
                     });
                 }else if (store_server_user_model.model_server_type_of_web) {
                     this._start = 0;
-                    this._end = 100;
+                    this._end = 30;
                     this._album_id = id
                     await this.fetchData_Media_of_server_web(true)
                     this._album_id = ''
@@ -305,7 +305,7 @@ export const store_view_media_page_fetchData = reactive({
                 store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
             ) {
                 this._start = 0;
-                this._end = 100;
+                this._end = 30;
                 this._album_id = id
                 await this.fetchData_Media_of_server_web(true)
                 this._album_id = ''
@@ -351,7 +351,7 @@ export const store_view_media_page_fetchData = reactive({
                 }
                 else if (store_server_user_model.model_server_type_of_web) {
                     this._start = 0;
-                    this._end = 100;
+                    this._end = 30;
                     this._artist_id = id
                     await this.fetchData_Media_of_server_web(true)
                     this._artist_id = ''
@@ -362,7 +362,7 @@ export const store_view_media_page_fetchData = reactive({
                 store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
             ) {
                 this._start = 0;
-                this._end = 100;
+                this._end = 30;
                 this._artist_id = id
                 await this.fetchData_Media_of_server_web(true)
                 this._artist_id = ''
@@ -402,7 +402,7 @@ export const store_view_media_page_fetchData = reactive({
     async fetchData_Media_of_server_web_start(){
         store_view_media_page_info.media_Files_temporary = [];
         this._start = 0;
-        this._end = 100;
+        this._end = 30;
         await this.fetchData_Media_of_server_web(false)
 
         if(store_player_appearance.player_mode_of_medialist_from_external_import) {
@@ -413,14 +413,14 @@ export const store_view_media_page_fetchData = reactive({
     },
     async fetchData_Media_of_server_web_end(){
         if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
-            this._start += 100;
-            this._end += 100;
+            this._start += 30;
+            this._end += 30;
         }else if(
             store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
             store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
         ) {
-            this._end += 100;
-            this._start = this._end - 99;
+            this._end += 30;
+            this._start = this._end - 29;
         }
         await this.fetchData_Media_of_server_web(false)
     },

@@ -11,14 +11,12 @@ import {store_view_media_page_logic} from "../../page_media/store/store_view_med
 import {store_view_media_page_info} from "../../page_media/store/store_view_media_page_info";
 import {store_view_media_page_fetchData} from "../../page_media/store/store_view_media_page_fetchData";
 import {store_playlist_list_info} from "../../../music_components/player_list/store/store_playlist_list_info"
-import {store_player_audio_info} from "../../page_player/store/store_player_audio_info";
 import {store_playlist_list_logic} from "../../../music_components/player_list/store/store_playlist_list_logic"
 import {
     Get_Navidrome_Temp_Data_To_LocalSqlite
 } from "../../../../../data/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {store_playlist_list_fetchData} from "../../../music_components/player_list/store/store_playlist_list_fetchData";
-import {store_player_tag_modify} from "../../page_player/store/store_player_tag_modify";
 import error_album from '@/assets/img/error_album.jpg'
 import { isElectron } from '@/utils/electron/isElectron';
 import {store_player_audio_logic} from "../../page_player/store/store_player_audio_logic";
@@ -295,7 +293,7 @@ export const store_view_album_page_fetchData = reactive({
     async fetchData_Album_of_server_web_start(){
         store_view_album_page_info.album_Files_temporary = [];
         this._start = 0;
-        this._end = 100;
+        this._end = 30;
         await this.fetchData_Album_of_server_web()
 
         if(store_player_appearance.player_mode_of_medialist_from_external_import) {
@@ -305,8 +303,8 @@ export const store_view_album_page_fetchData = reactive({
         }
     },
     async fetchData_Album_of_server_web_end(){
-        this._start += 100;
-        this._end += 100;
+        this._start += 30;
+        this._end += 30;
         await this.fetchData_Album_of_server_web()
     },
     async fetchData_Album_of_server_web(){

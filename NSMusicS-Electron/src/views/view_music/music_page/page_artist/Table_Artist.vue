@@ -1,33 +1,72 @@
 <script setup lang="ts">
 ////// this_view resource of vicons_svg
 import {
-  ArrowSort24Regular, TextSortAscending20Regular, TextSortDescending20Regular,
-  Search20Filled,
+  ArrowSort24Regular,
+  Filter20Filled,
+  Heart24Regular,
+  Heart28Filled,
+  Open28Filled,
+  PaddingDown20Filled,
+  PaddingTop20Filled,
   PlayCircle24Regular,
-  Heart24Regular, Heart28Filled,
-  ChevronLeft16Filled, ChevronRight16Filled, Open28Filled,
-  Filter20Filled, PaddingTop20Filled, PaddingDown20Filled
+  Search20Filled,
+  TextSortAscending20Regular,
+  TextSortDescending20Regular
 } from '@vicons/fluent'
-import {
-  RefreshSharp
-} from '@vicons/ionicons5'
+import {RefreshSharp} from '@vicons/ionicons5'
 
 ////// this_view views_components of navie ui
-import { computed, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import {type InputInst, NButton, NIcon, NImage} from 'naive-ui';
+import {computed, h, onBeforeUnmount, onMounted, ref, watch} from 'vue'
+import {type InputInst, NButton, NIcon, useMessage} from 'naive-ui';
 import {Icon} from "@vicons/utils";
 import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
 import {store_player_audio_info} from "@/views/view_music/music_page/page_player/store/store_player_audio_info";
 import {store_view_artist_page_info} from "@/views/view_music/music_page/page_artist/store/store_view_artist_page_info";
-import {store_view_artist_page_logic} from "@/views/view_music/music_page/page_artist/store/store_view_artist_page_logic";
+import {
+  store_view_artist_page_logic
+} from "@/views/view_music/music_page/page_artist/store/store_view_artist_page_logic";
 import {store_view_album_page_logic} from "@/views/view_music/music_page/page_album/store/store_view_album_page_logic";
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
 import {store_router_history_data_of_artist} from "@/router/router_store/store_router_history_data_of_artist";
-import {store_router_history_data_of_album} from "@/router/router_store/store_router_history_data_of_album";
-import {store_view_artist_page_fetchData} from "@/views/view_music/music_page/page_artist/store/store_view_artist_page_fetchData";
+import {
+  store_view_artist_page_fetchData
+} from "@/views/view_music/music_page/page_artist/store/store_view_artist_page_fetchData";
 
 ////// i18n auto lang
-import { useI18n } from 'vue-i18n'
+import {useI18n} from 'vue-i18n'
+import error_album from '@/assets/img/error_album.jpg'
+import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
+////// changed_data write to sqlite
+import {
+  store_local_data_set_artistInfo
+} from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_artistInfo";
+import {store_playlist_list_info} from "@/views/view_music/music_components/player_list/store/store_playlist_list_info";
+import {store_view_media_page_logic} from "@/views/view_music/music_page/page_media/store/store_view_media_page_logic";
+import {store_view_media_page_info} from "@/views/view_music/music_page/page_media/store/store_view_media_page_info";
+////// right menu
+import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
+import {
+  store_view_media_page_fetchData
+} from "@/views/view_music/music_page/page_media/store/store_view_media_page_fetchData";
+import {
+  store_local_data_set_mediaInfo
+} from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_mediaInfo";
+import {
+  store_playlist_list_logic
+} from "@/views/view_music/music_components/player_list/store/store_playlist_list_logic";
+import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
+import {
+  store_view_album_page_fetchData
+} from "@/views/view_music/music_page/page_album/store/store_view_album_page_fetchData";
+import {
+  store_playlist_list_fetchData
+} from "@/views/view_music/music_components/player_list/store/store_playlist_list_fetchData";
+import {store_player_tag_modify} from "@/views/view_music/music_page/page_player/store/store_player_tag_modify";
+import {store_player_audio_logic} from "@/views/view_music/music_page/page_player/store/store_player_audio_logic";
+import {store_server_users} from "@/data/data_stores/server/store_server_users";
+import {store_router_data_info} from "@/router/router_store/store_router_data_info";
+import {store_player_appearance} from "@/views/view_music/music_page/page_player/store/store_player_appearance";
+
 const { t } = useI18n({
   inheritLocale: true
 })
@@ -39,8 +78,6 @@ const item_artist_txt = ref<number>(item_artist.value - 20)
 const itemSize = ref(220);
 const gridItems = ref(5);
 const itemSecondarySize = ref(185);
-import error_album from '@/assets/img/error_album.jpg'
-import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 const errorHandled = ref(new Map());
 const handleImageError = async (item: any) => {
   let result_src = error_album;
@@ -72,7 +109,7 @@ function getAssetImage(firstImage: string) {
 }
 // gridItems Re render
 const collapsed_width = ref<number>(1090);
-const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window_innerWidth, (newValue, oldValue) => {
+const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window_innerWidth, () => {
   updateGridItems();
 });
 const updateGridItems = () => {
@@ -216,7 +253,7 @@ const show_search_area = () => {
   {
     bool_show_search_area.value = false
     input_search_InstRef.value?.clear()
-    if(bool_input_search == true){
+    if(bool_input_search){
       // store_view_artist_page_logic.list_data_StartUpdate = true
       back_search_default()
       bool_input_search = false
@@ -242,8 +279,7 @@ const input_search_Value = ref<string>()
 let bool_input_search = false
 const click_search = () => {
   if (input_search_Value.value){
-    const page_artistlists_keyword = input_search_Value.value.toLowerCase();
-    store_view_artist_page_logic.page_artistlists_keyword = page_artistlists_keyword;
+    store_view_artist_page_logic.page_artistlists_keyword = input_search_Value.value.toLowerCase();
     bool_input_search = true
     options_Sort_key.value.forEach(element => {
       element.state_Sort = state_Sort.Default
@@ -284,7 +320,7 @@ const options_Filter = ref([
     }
   }
 ])
-const options_Filter_handleSelect = (key: string | number) => {
+const options_Filter_handleSelect = () => {
   store_view_artist_page_logic.page_artistlists_selected = 'artist_list_love'
   console.log('selected_value_for_artistlistall：'+'artist_list_love');
   breadcrumbItems.value = store_view_artist_page_logic.page_artistlists_options.find(option => option.value === 'artist_list_love')?.label || '';
@@ -357,7 +393,7 @@ const Open_this_artist_all_artist_list_click = (artist_id:string) => {
     store_playlist_list_fetchData._artist_id = artist_id
   }
   if(
-      store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' ||
+      store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
       store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'
   ) {
     console.log('artist_list_of_artist_id_artist_click：' + artist_id);
@@ -384,14 +420,6 @@ const Play_this_artist_all_media_list_click = async (artist_id: string) => {
   await store_view_artist_page_fetchData.fetchData_This_Artist_MediaList(artist_id)
 }
 
-////// changed_data write to sqlite
-import {Set_ArtistInfo_To_LocalSqlite} from '@/data/data_access/local_configs/class_Set_ArtistInfo_To_LocalSqlite'
-import {
-  store_local_data_set_artistInfo
-} from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_artistInfo";
-import {store_playlist_list_info} from "@/views/view_music/music_components/player_list/store/store_playlist_list_info";
-import {store_view_media_page_logic} from "@/views/view_music/music_page/page_media/store/store_view_media_page_logic";
-import {store_view_media_page_info} from "@/views/view_music/music_page/page_media/store/store_view_media_page_info";
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   store_local_data_set_artistInfo.Set_ArtistInfo_To_Favorite(id,favorite)
   page_artistlists_statistic.value.forEach((item: any) => {
@@ -412,23 +440,6 @@ const handleItemClick_Rating = (id_rating: any) => {
   }
 }
 
-////// right menu
-import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
-import {useMessage} from 'naive-ui'
-import {store_view_media_page_fetchData} from "@/views/view_music/music_page/page_media/store/store_view_media_page_fetchData";
-import {store_local_data_set_mediaInfo} from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_mediaInfo";
-import {store_playlist_list_logic} from "@/views/view_music/music_components/player_list/store/store_playlist_list_logic";
-import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
-import {store_view_album_page_fetchData} from "@/views/view_music/music_page/page_album/store/store_view_album_page_fetchData";
-import {store_playlist_list_fetchData} from "@/views/view_music/music_components/player_list/store/store_playlist_list_fetchData";
-import {store_player_tag_modify} from "@/views/view_music/music_page/page_player/store/store_player_tag_modify";
-import {store_player_audio_logic} from "@/views/view_music/music_page/page_player/store/store_player_audio_logic";
-import {store_server_users} from "@/data/data_stores/server/store_server_users";
-import {
-  Get_Jellyfin_Temp_Data_To_LocalSqlite
-} from "@/data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
-import {store_router_data_info} from "@/router/router_store/store_router_data_info";
-import {store_player_appearance} from "@/views/view_music/music_page/page_player/store/store_player_appearance";
 const contextmenu = ref(null as any)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
 const message = useMessage()

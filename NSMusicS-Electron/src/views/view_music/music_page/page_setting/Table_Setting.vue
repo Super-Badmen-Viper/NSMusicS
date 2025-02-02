@@ -5,18 +5,16 @@
     Delete20Regular, Settings48Regular
   } from '@vicons/fluent'
   import {
-    BareMetalServer, Add, Close, UserAvatarFilledAlt, Hearing, MediaCast
+    BareMetalServer, Add, Close, UserAvatarFilledAlt, MediaCast
   } from '@vicons/carbon'
 
   ////// i18n auto lang
   import {
     DocumentHeart20Regular,
-    Flag16Regular,
     Home28Regular, PeopleCommunity16Regular,
-    SlideMicrophone32Regular,
-    TextIndentIncreaseLtr20Filled as lyric
+    SlideMicrophone32Regular
   } from "@vicons/fluent";
-  import {AlbumFilled, QueueMusicRound, MotionPhotosAutoOutlined, MusicNoteRound} from "@vicons/material";
+  import {AlbumFilled, MusicNoteRound} from "@vicons/material";
   import {RouterLink} from "vue-router";
   import { useI18n } from 'vue-i18n'
   const { t } = useI18n({
@@ -31,19 +29,19 @@
   const computed_i18n_Label_SidebarConfiguration_14 = computed(() => t('nsmusics.siderbar_menu.lyricsProduction'));
   const computed_i18n_Label_SidebarConfiguration_15 = computed(() => t('nsmusics.siderbar_menu.musicCommunity'));
   import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
-  let unwatch_menuOptions_selectd_model_1 = watch(() => store_app_configs_info.menuOptions_selectd_model_1, (newValue) => {
+  let unwatch_menuOptions_selectd_model_1 = watch(() => store_app_configs_info.menuOptions_selectd_model_1, () => {
     store_app_configs_logic_save.save_system_config_of_App_Configs()
     create_menuOptions_appBar()
   });
-  let unwatch_menuOptions_selectd_model_2 = watch(() => store_app_configs_info.menuOptions_selectd_model_2, (newValue) => {
+  let unwatch_menuOptions_selectd_model_2 = watch(() => store_app_configs_info.menuOptions_selectd_model_2, () => {
     store_app_configs_logic_save.save_system_config_of_App_Configs()
     create_menuOptions_appBar()
   });
-  let unwatch_menuOptions_selectd_model_3 = watch(() => store_app_configs_info.menuOptions_selectd_model_3, (newValue) => {
+  let unwatch_menuOptions_selectd_model_3 = watch(() => store_app_configs_info.menuOptions_selectd_model_3, () => {
     store_app_configs_logic_save.save_system_config_of_App_Configs()
     create_menuOptions_appBar()
   });
-  let unwatch_menuOptions_selectd_model_4 = watch(() => store_app_configs_info.menuOptions_selectd_model_4, (newValue) => {
+  let unwatch_menuOptions_selectd_model_4 = watch(() => store_app_configs_info.menuOptions_selectd_model_4, () => {
     store_app_configs_logic_save.save_system_config_of_App_Configs()
     create_menuOptions_appBar()
   });
@@ -103,8 +101,8 @@
   ////// this_view views_components
   import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
   import { store_server_users } from '@/data/data_stores/server/store_server_users'
-  import {ref, onMounted, watch, onBeforeUnmount, computed, h, inject} from 'vue';
-  import {type MenuOption, NButton, NIcon,} from 'naive-ui'
+  import {ref, onMounted, watch, onBeforeUnmount, computed, h} from 'vue';
+  import {NButton, NIcon} from 'naive-ui'
   import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
   import {store_player_audio_logic} from "@/views/view_music/music_page/page_player/store/store_player_audio_logic";
   import {store_app_configs_logic_theme} from "@/data/data_stores/app/store_app_configs_logic_theme";
@@ -191,11 +189,7 @@
   });
   const server_set_of_addUser_of_type = ref(Type_Server_Kinds[2].value)
   let unwatch_server_set_of_addUser_of_type = watch(() => server_set_of_addUser_of_type.value, (newValue) => {
-    if(newValue === 'jellyfin' || newValue === 'emby'){
-      server_login_model_of_apikey.value = true
-    }else{
-      server_login_model_of_apikey.value = false
-    }
+    server_login_model_of_apikey.value = newValue === 'jellyfin' || newValue === 'emby';
   });
   const server_set_of_addUser_of_servername = ref('')
   const server_set_of_addUser_of_url = ref('')
@@ -207,11 +201,11 @@
   const server_set_of_addUser_of_apikey_load_complete = ref(false)
   async function update_server_apikey_user_option(data: any) {
     store_server_user_model.authorization_of_Je =
-        server_set_of_addUser_of_apikey.value.length === 0
+        data.apikey.length > 0
             ? data.apikey : server_set_of_addUser_of_apikey.value
     // load User
     const userService = new Users_ApiService_of_Je(
-        server_set_of_addUser_of_url.value.length === 0
+        data.url.length > 0
             ? data.url : server_set_of_addUser_of_url.value
     )
     const result = await userService.getUsers_ALL()
@@ -220,7 +214,7 @@
     server_set_of_addUser_of_apikey_load_complete.value = false
     if(result) {
       if(Array.isArray(result) && result.length > 0) {
-        result.forEach((row: any, index: number) => {
+        result.forEach((row: any) => {
           server_set_of_addUser_of_apikey_user_option.value.push({
             label: row.Name,
             value: row.Id
@@ -238,7 +232,7 @@
         store_server_user_model.parentid_of_Je = []
         if(result_parentIds.Items){
           if(Array.isArray(result_parentIds.Items) && result_parentIds.Items.length > 0) {
-            result_parentIds.Items.forEach((row: any, index: number) => {
+            result_parentIds.Items.forEach((row: any) => {
               store_server_user_model.parentid_of_Je.push({
                 label: row.Name,
                 value: row.Id
@@ -727,7 +721,6 @@
   //////
   import { openLink } from '@/utils/electron/openLink';
   import {store_local_data_select_logic} from "@/data/data_stores/local/local_data_select/store_local_data_select_logic";
-  import error_album from "*.jpg";
   import {
     Library_ApiService_of_Je
   } from "@/data/data_access/servers_configs/jellyfin_api/services_web/Library/index_service";

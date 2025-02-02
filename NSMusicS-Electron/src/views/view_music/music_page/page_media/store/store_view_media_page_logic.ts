@@ -12,6 +12,7 @@ import {store_server_user_model} from "@/data/data_stores/server/store_server_us
 import {store_server_data_set_playlistInfo} from "@/data/data_stores/server/server_data_synchronization/store_server_data_set_playlistInfo";
 import {store_server_data_set_mediaInfo} from "@/data/data_stores/server/server_data_synchronization/store_server_data_set_mediaInfo";
 import {store_player_appearance} from "../../page_player/store/store_player_appearance";
+import {store_server_users} from "../../../../../data/data_stores/server/store_server_users";
 
 export const store_view_media_page_logic = reactive({
     list_data_StartUpdate: false,
@@ -110,7 +111,9 @@ export const store_view_media_page_logic = reactive({
 
         if (store_server_user_model.model_select === 'server') {
             await store_server_data_set_playlistInfo.Set_Selected_MediaInfo_Delete_Selected_Playlist(
-                store_view_media_page_info.media_Files_selected.map((file: any) => file.id),
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby' ?
+                    store_view_media_page_info.media_Files_selected.map((file: any) => file.order_title) :
+                    store_view_media_page_info.media_Files_selected.map((file: any) => file.id),
                 value
             )
         }

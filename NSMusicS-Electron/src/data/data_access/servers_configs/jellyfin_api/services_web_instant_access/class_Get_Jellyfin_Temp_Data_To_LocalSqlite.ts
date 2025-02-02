@@ -1,31 +1,33 @@
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
-import {store_view_home_page_info} from "../../../../../views/view_music/music_page/page_home/store/store_view_home_page_info";
-import {Home_Lists_ApiWebService_of_ND} from "../../navidrome_api/services_web/page_lists/home_lists/index_service";
-import {store_view_artist_page_info} from "../../../../../views/view_music/music_page/page_artist/store/store_view_artist_page_info"
-import {store_view_album_page_info} from "../../../../../views/view_music/music_page/page_album/store/store_view_album_page_info";
-import {Media_library_scanning_ApiService_of_ND} from "../../navidrome_api/services_normal/media_library_scanning/index_service";
-import {store_view_media_page_info} from "../../../../../views/view_music/music_page/page_media/store/store_view_media_page_info";
-import {Artist_Lists_ApiWebService_of_ND} from "../../navidrome_api/services_web/page_lists/artist_lists/index_service";
-import {Album_Lists_ApiWebService_of_ND} from "../../navidrome_api/services_web/page_lists/album_lists/index_service";
-import {Media_Lists_ApiWebService_of_ND} from "../services_web/page_lists/song_lists/index_service";
-import {Playlists_ApiService_of_ND} from "../../navidrome_api/services_normal/playlists/index_service";
-import {Album$Medias_Lists_ApiService_of_ND} from "../../navidrome_api/services_normal/album$songs_lists/index_service";
-import {Browsing_ApiService_of_ND} from "../../navidrome_api/services_normal/browsing/index_service";
-import {store_playlist_list_info} from "../../../../../views/view_music/music_components/player_list/store/store_playlist_list_info"
-import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
-import {store_playlist_list_fetchData} from "../../../../../views/view_music/music_components/player_list/store/store_playlist_list_fetchData";
 import {
-    Media_Retrieval_ApiService_of_ND
-} from "../../navidrome_api/services_normal/media_retrieval/index_service";
-import {store_player_audio_logic} from "../../../../../views/view_music/music_page/page_player/store/store_player_audio_logic";
+    store_view_home_page_info
+} from "../../../../../views/view_music/music_page/page_home/store/store_view_home_page_info";
+import {
+    store_view_artist_page_info
+} from "../../../../../views/view_music/music_page/page_artist/store/store_view_artist_page_info"
+import {
+    store_view_album_page_info
+} from "../../../../../views/view_music/music_page/page_album/store/store_view_album_page_info";
+import {
+    store_view_media_page_info
+} from "../../../../../views/view_music/music_page/page_media/store/store_view_media_page_info";
+import {Browsing_ApiService_of_ND} from "../../navidrome_api/services_normal/browsing/index_service";
+import {
+    store_playlist_list_info
+} from "../../../../../views/view_music/music_components/player_list/store/store_playlist_list_info"
+import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
+import {Media_Retrieval_ApiService_of_ND} from "../../navidrome_api/services_normal/media_retrieval/index_service";
+import {
+    store_player_audio_logic
+} from "../../../../../views/view_music/music_page/page_player/store/store_player_audio_logic";
 import {store_server_user_model} from "../../../../data_stores/server/store_server_user_model";
 import {
     store_playlist_list_logic
 } from "../../../../../views/view_music/music_components/player_list/store/store_playlist_list_logic";
-import {store_player_audio_info} from "../../../../../views/view_music/music_page/page_player/store/store_player_audio_info";
+import {
+    store_player_audio_info
+} from "../../../../../views/view_music/music_page/page_player/store/store_player_audio_info";
 import {Items_ApiService_of_Je} from "../services_web/Items/index_service";
-
-import {Audio_ApiService_of_Je} from "../services_web/Audio/index_service";
 import {Artists_ApiService_of_Je} from "../services_web/Artists/index_service";
 import axios from "axios";
 import {
@@ -33,18 +35,11 @@ import {
 } from "../../../../../views/view_music/music_page/page_media/store/store_view_media_page_logic";
 
 export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
-    private audio_ApiService_of_Je = new Audio_ApiService_of_Je(
-        store_server_users.server_config_of_current_user_of_sqlite?.url
-    )
     private items_ApiService_of_Je = new Items_ApiService_of_Je(
         store_server_users.server_config_of_current_user_of_sqlite?.url
     )
     private artists_ApiService_of_Je = new Artists_ApiService_of_Je(
         store_server_users.server_config_of_current_user_of_sqlite?.url
-    )
-
-    private home_Lists_ApiWebService_of_ND = new Home_Lists_ApiWebService_of_ND(
-        store_server_users.server_config_of_current_user_of_sqlite?.url,
     )
 
     public async get_home_list(parentId: string){
@@ -73,7 +68,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         :
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
                         (album.ImageTags?.Primary ? album.Id : album.ParentBackdropItemId) +
-                        (album.ImageTags?.Primary ? '/Images/Primary?tag=' : '/Images/Backdrop?tag=') +
+                        (album.ImageTags?.Primary ? '/Images/Primary?fillWidth=122&fillHeight=122&tag=' : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
                         (album.ImageTags?.Primary ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
                         '&api_key=' + store_server_user_model.authorization_of_Je;
                 store_view_home_page_info.home_Files_temporary_maximum_playback.push({
@@ -140,7 +135,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         :
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
                         (album.ImageTags?.Primary ? album.Id : album.ParentBackdropItemId) +
-                        (album.ImageTags?.Primary ? '/Images/Primary?tag=' : '/Images/Backdrop?tag=') +
+                        (album.ImageTags?.Primary ? '/Images/Primary?fillWidth=122&fillHeight=122&tag=' : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
                         (album.ImageTags?.Primary ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
                         '&api_key=' + store_server_user_model.authorization_of_Je;
                 store_view_home_page_info.home_Files_temporary_random_search.push({
@@ -205,7 +200,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         :
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
                         (album.ImageTags?.Primary ? album.Id : album.ParentBackdropItemId) +
-                        (album.ImageTags?.Primary ? '/Images/Primary?tag=' : '/Images/Backdrop?tag=') +
+                        (album.ImageTags?.Primary ? '/Images/Primary?fillWidth=122&fillHeight=122&tag=' : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
                         (album.ImageTags?.Primary ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
                         '&api_key=' + store_server_user_model.authorization_of_Je;
                 store_view_home_page_info.home_Files_temporary_recently_added.push({
@@ -271,7 +266,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         :
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
                         (album.ImageTags?.Primary ? album.Id : album.ParentBackdropItemId) +
-                        (album.ImageTags?.Primary ? '/Images/Primary?tag=' : '/Images/Backdrop?tag=') +
+                        (album.ImageTags?.Primary ? '/Images/Primary?fillWidth=122&fillHeight=122&tag=' : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
                         (album.ImageTags?.Primary ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
                         '&api_key=' + store_server_user_model.authorization_of_Je;
                 store_view_home_page_info.home_Files_temporary_recently_played.push({
@@ -346,7 +341,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         :
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
                         (song.ImageTags?.Primary ? song.Id : song.ParentBackdropItemId) +
-                        (song.ImageTags?.Primary ? '/Images/Primary?tag=' : '/Images/Backdrop?tag=') +
+                        (song.ImageTags?.Primary ? '/Images/Primary?fillWidth=122&fillHeight=122&tag=' : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
                         (song.ImageTags?.Primary ?? song.ParentBackdropImageTags?.[0] ?? 'default') +
                         '&api_key=' + store_server_user_model.authorization_of_Je;
                 const blobUrl =
@@ -441,7 +436,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         :
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
                         (album.ImageTags?.Primary ? album.Id : album.ParentBackdropItemId) +
-                        (album.ImageTags?.Primary ? '/Images/Primary?tag=' : '/Images/Backdrop?tag=') +
+                        (album.ImageTags?.Primary ? '/Images/Primary?fillWidth=122&fillHeight=122&tag=' : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
                         (album.ImageTags?.Primary ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
                         '&api_key=' + store_server_user_model.authorization_of_Je;
                 store_view_album_page_info.album_File_metadata.push(album)
@@ -543,7 +538,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         :
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
                         (song.ImageTags?.Primary ? song.Id : song.ParentBackdropItemId) +
-                        (song.ImageTags?.Primary ? '/Images/Primary?tag=' : '/Images/Backdrop?tag=') +
+                        (song.ImageTags?.Primary ? '/Images/Primary?fillWidth=122&fillHeight=122&tag=' : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
                         (song.ImageTags?.Primary ?? song.ParentBackdropImageTags?.[0] ?? 'default') +
                         '&api_key=' + store_server_user_model.authorization_of_Je;
                 const blobUrl =
@@ -599,7 +594,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     lyrics: '',
                     bpm: 0,
                     channels: 0,
-                    order_title: '',
+                    order_title: song.PlaylistItemId,
                     mbz_release_track_id: '',
                     rg_album_gain: 0,
                     rg_album_peak: 0,
@@ -643,7 +638,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         :
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
                         (album.ImageTags?.Primary ? album.Id : album.ParentBackdropItemId) +
-                        (album.ImageTags?.Primary ? '/Images/Primary?tag=' : '/Images/Backdrop?tag=') +
+                        (album.ImageTags?.Primary ? '/Images/Primary?fillWidth=122&fillHeight=122&tag=' : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
                         (album.ImageTags?.Primary ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
                         '&api_key=' + store_server_user_model.authorization_of_Je;
                 store_view_album_page_info.album_File_metadata.push(album)
@@ -725,7 +720,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         :
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
                         (album.ImageTags?.Primary ? album.Id : album.ParentBackdropItemId) +
-                        (album.ImageTags?.Primary ? '/Images/Primary?tag=' : '/Images/Backdrop?tag=') +
+                        (album.ImageTags?.Primary ? '/Images/Primary?fillWidth=122&fillHeight=122&tag=' : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
                         (album.ImageTags?.Primary ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
                         '&api_key=' + store_server_user_model.authorization_of_Je;
                 store_view_album_page_info.album_File_metadata.push(album)
@@ -807,7 +802,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         :
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
                         (artist.ImageTags?.Primary ? artist.Id : artist.ParentBackdropItemId) +
-                        (artist.ImageTags?.Primary ? '/Images/Primary?tag=' : '/Images/Backdrop?tag=') +
+                        (artist.ImageTags?.Primary ? '/Images/Primary?fillWidth=122&fillHeight=122&tag=' : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
                         (artist.ImageTags?.Primary ?? artist.ParentBackdropImageTags?.[0] ?? 'default') +
                         '&api_key=' + store_server_user_model.authorization_of_Je;
                 store_view_artist_page_info.artist_File_metadata.push(artist)
@@ -845,16 +840,14 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
     ){
         let songlist = []
         if(playlist_id === '') {
-            const {data,totalCount} = await this.song_Lists_ApiWebService_of_ND.getMediaList_ALL(
+            songlist = await this.song_Lists_ApiWebService_of_ND.getMediaList_ALL(
                 _end, _order, _sort, _start, _search, _starred, _album_id, _artist_id
             );
-            songlist = data
         }else{
-            const {data,totalCount} = await this.song_Lists_ApiWebService_of_ND.getMediaList_of_Playlist(
+            songlist = await this.song_Lists_ApiWebService_of_ND.getMediaList_of_Playlist(
                 playlist_id,
                 _end, _order, _sort, _start
             )
-            songlist = data
         }
         if (Array.isArray(songlist) && songlist.length > 0) {
             if(_sort === 'playDate'){
@@ -1249,22 +1242,13 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
     }
 
     /// recently count
-    public async get_count_of_recently_media(
-        url: string,
-        username: string,token: string,salt: string
-    ){
+    public async get_count_of_recently_media(){
         store_view_media_page_info.media_recently_count = 0
     }
-    public async get_count_of_recently_album(
-        url: string,
-        username: string,token: string,salt: string
-    ){
+    public async get_count_of_recently_album(){
         store_view_album_page_info.album_recently_count = 0
     }
-    public async get_count_of_recently_artist(
-        url: string,
-        username: string,token: string,salt: string
-    ){
+    public async get_count_of_recently_artist(){
         store_view_artist_page_info.artist_recently_count = 0
     }
 }
