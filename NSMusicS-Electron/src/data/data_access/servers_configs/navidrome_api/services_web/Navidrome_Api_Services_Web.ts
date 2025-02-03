@@ -41,10 +41,12 @@ export class Navidrome_Api_Services_Web {
                         return response.data;
                     }
                 } catch (error: any) {
-                    return error.message;
+                    console.error(error);
+                    return undefined;
                 }
             } else {
-                return error.message;
+                console.error(error);
+                return undefined;
             }
         }
     }

@@ -89,7 +89,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     created_at: album.PremiereDate,
                     updated_at: '',
                     full_text: '',
-                    album_artist_id: '',
+                    album_artist_id: album.AlbumId,
                     order_album_name: '',
                     order_album_artist_name: '',
                     sort_album_name: '',
@@ -116,14 +116,28 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         }
     }
     public async get_home_list_of_random_search(parentId: string,){
-        const list = await this.items_ApiService_of_Je.getItems_List(
-            store_server_user_model.userid_of_Je, parentId, '',
-            'Random', 'Descending',
-            '18', '0',
-            'Audio',
-            'PrimaryImageAspectRatio', 'Primary%2CBackdrop%2CBanner%2CThumb', 'true', '1',
-            '', 'IsPlayed'
-        )
+        let list = []
+        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            list = await this.items_ApiService_of_Je.getItems_List(
+                store_server_user_model.userid_of_Je, parentId, '',
+                'Random', 'Descending',
+                '18', '0',
+                'Audio',
+                'PrimaryImageAspectRatio', 'Primary%2CBackdrop%2CBanner%2CThumb', 'true', '1',
+                '', 'IsPlayed'
+            );
+        }else {
+            const data = await axios(
+                store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Users/' +
+                store_server_user_model.userid_of_Je + '/Items?SortBy=Random&SortOrder=Descending&' +
+                'IncludeItemTypes=Audio&Limit=16&Recursive=true&Fields=BasicSyncInfo%2CCanDelete%2CPrimaryImageAspectRatio%2CProductionYear%2CStatus%2CEndDate%2CCommunityRating%2COfficialRating%2CCriticRating' +
+                '&Filters=IsPlayed' +
+                '&ParentId=' + parentId + '&ImageTypeLimit=1&EnableImageTypes=Primary%2CBackdrop%2CThumb' +
+                '&startIndex=0&RandomSeed=7916807' +
+                '&api_key=' + store_server_user_model.authorization_of_Je
+            );
+            list = data.data;
+        }
         const random_search  = list.Items;
         if(random_search != undefined && Array.isArray(random_search)) {
             random_search.map(async (album: any) => {
@@ -156,7 +170,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     created_at: album.PremiereDate,
                     updated_at: '',
                     full_text: '',
-                    album_artist_id: '',
+                    album_artist_id: album.AlbumId,
                     order_album_name: '',
                     order_album_artist_name: '',
                     sort_album_name: '',
@@ -221,7 +235,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     created_at: album.PremiereDate,
                     updated_at: '',
                     full_text: '',
-                    album_artist_id: '',
+                    album_artist_id: album.AlbumId,
                     order_album_name: '',
                     order_album_artist_name: '',
                     sort_album_name: '',
@@ -287,7 +301,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     created_at: album.PremiereDate,
                     updated_at: '',
                     full_text: '',
-                    album_artist_id: '',
+                    album_artist_id: album.AlbumId,
                     order_album_name: '',
                     order_album_artist_name: '',
                     sort_album_name: '',
@@ -408,81 +422,101 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             }));
         }
     }
-    public async get_album_list_of_artist(
-        _artist_id: string,
+
+    /// emby - home -> album_id -> media
+    public async get_media_list_of_album(
+        album_artist_id: string,
         limit: string, startIndex: string,
     ){
-        const response_album_list = await axios(
-            store_server_users.server_config_of_current_user_of_sqlite?.url + '/Users/' +
-            store_server_user_model.userid_of_Je + '/Items?AlbumArtistIds=' +
-            '46b1afb0b3217dfcabc2ad138e8011e9' + '&IncludeItemTypes=MusicAlbum&Recursive=true&' +
-            'Fields=ParentId%2CPrimaryImageAspectRatio%2CParentId%2CPrimaryImageAspectRatio&' +
-            'Limit=' + limit + '&StartIndex=' + startIndex + '&' +
-            'CollapseBoxSetItems=false&' +
-            'SortBy=PremiereDate%2CProductionYear%2CSortname&' +
-            'api_key=' + store_server_user_model.authorization_of_Je
+        const data = await axios(
+            store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Users/' +
+            store_server_user_model.userid_of_Je + '/Items?' +
+            'Fields=BasicSyncInfo%2CCanDelete%2CPrimaryImageAspectRatio%2CSyncStatus' +
+            '&EnableTotalRecordCount=false' +
+            '&Limit=' + limit + '&StartIndex=' + startIndex +
+            '&ParentId=' + album_artist_id + '&ImageTypeLimit=1&EnableImageTypes=Primary%2CBackdrop%2CThumb' +
+            '&api_key=' + store_server_user_model.authorization_of_Je
         );
-        let albumlist = response_album_list.data.Items;
-        store_view_album_page_info.album_item_count = response_album_list.data.TotalRecordCount
-        if (Array.isArray(albumlist) && albumlist.length > 0) {
-            let last_index = store_view_album_page_info.album_Files_temporary.length
-            store_view_album_page_info.album_File_metadata = []
-            albumlist.map(async (album: any, index: number) => {
+        let list = data.data;
+        let songlist = list.Items;
+        store_view_media_page_info.media_item_count = list.TotalRecordCount
+        if (Array.isArray(songlist) && songlist.length > 0) {
+            let last_index = store_view_media_page_info.media_Files_temporary.length
+            store_view_media_page_info.media_File_metadata = [];
+            await Promise.all(songlist.map(async (song: any, index: number) => {
                 const medium_image_url =
                     store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
                         ?
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
-                        album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                        song.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
                         :
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
-                        (album.ImageTags?.Primary ? album.Id : album.ParentBackdropItemId) +
-                        (album.ImageTags?.Primary ? '/Images/Primary?fillWidth=122&fillHeight=122&tag=' : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
-                        (album.ImageTags?.Primary ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
+                        (song.ImageTags?.Primary ? song.Id : song.ParentBackdropItemId) +
+                        (song.ImageTags?.Primary ? '/Images/Primary?fillWidth=122&fillHeight=122&tag=' : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
+                        (song.ImageTags?.Primary ?? song.ParentBackdropImageTags?.[0] ?? 'default') +
                         '&api_key=' + store_server_user_model.authorization_of_Je;
-                store_view_album_page_info.album_File_metadata.push(album)
-                store_view_album_page_info.album_Files_temporary.push({
+                const blobUrl =
+                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/Audio/' +
+                    song.Id + '/universal?UserId=' +
+                    store_server_user_model.userid_of_Je + '&MaxStreamingBitrate=1145761093&Container=opus%2Cwebm%7Copus%2Cts%7Cmp3%2Cmp3%2Caac%2Cm4a%7Caac%2Cm4b%7Caac%2Cflac%2Cwebma%2Cwebm%7Cwebma%2Cwav%2Cogg&TranscodingContainer=mp4&TranscodingProtocol=hls&AudioCodec=aac&api_key=' +
+                    store_server_user_model.authorization_of_Je + '&StartTimeTicks=0&EnableRedirection=true&EnableRemoteMedia=false&EnableAudioVbrEncoding=true';
+                //
+                store_view_media_page_info.media_File_metadata.push(song);
+                store_view_media_page_info.media_Files_temporary.push({
                     absoluteIndex: index + 1 + last_index,
-                    favorite: album.UserData.IsFavorite,
+                    favorite: song.UserData.IsFavorite,
                     rating: 0,
-                    id: album.Id,
-                    name: album.Name,
-                    artist_id: album.ArtistItems.length > 0 ? album.ArtistItems[0].Id : '',
-                    embed_art_path: '',
-                    artist: album.Artists.length > 0 ? album.Artists[0] : '',
+                    duration_txt: this.formatTime(song.RunTimeTicks),
+                    id: song.Id,
+                    title: song.Name,
+                    path: blobUrl,
+                    artist: song.Artists.length > 0 ? song.Artists[0] : '',
+                    album: song.Album,
+                    artist_id: song.ArtistItems.length > 0 ? song.ArtistItems[0].Id : '',
+                    album_id: song.AlbumId,
                     album_artist: '',
-                    min_year: album.ProductionYear,
-                    max_year: album.ProductionYear,
-                    compilation: 0,
-                    song_count: '',
-                    duration: album.RunTimeTicks,
+                    has_cover_art: 0,
+                    track_number: 0,
+                    disc_number: 0,
+                    year: song.ProductionYear,
+                    size: '',
+                    suffix: '',
+                    duration: song.RunTimeTicks,
+                    bit_rate: '',
                     genre: '',
-                    created_at: album.PremiereDate,
+                    compilation: 0,
+                    created_at: song.PremiereDate,
                     updated_at: '',
                     full_text: '',
                     album_artist_id: '',
                     order_album_name: '',
                     order_album_artist_name: '',
+                    order_artist_name: '',
                     sort_album_name: '',
                     sort_artist_name: '',
                     sort_album_artist_name: '',
-                    size: 0,
+                    sort_title: '',
+                    disc_subtitle: '',
+                    mbz_track_id: '',
                     mbz_album_id: '',
+                    mbz_artist_id: '',
                     mbz_album_artist_id: '',
                     mbz_album_type: '',
                     mbz_album_comment: '',
                     catalog_num: '',
                     comment: '',
-                    all_artist_ids: '',
-                    image_files: '',
-                    paths: '',
-                    description: '',
-                    small_image_url: '',
-                    medium_image_url: medium_image_url,
-                    large_image_url: '',
-                    external_url: '',
-                    external_info_updated_at: ''
-                })
-            })
+                    lyrics: '',
+                    bpm: 0,
+                    channels: 0,
+                    order_title: song.PlaylistItemId,
+                    mbz_release_track_id: '',
+                    rg_album_gain: 0,
+                    rg_album_peak: 0,
+                    rg_track_gain: 0,
+                    rg_track_peak: 0,
+                    medium_image_url: medium_image_url
+                });
+            }));
         }
     }
 
@@ -695,7 +729,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         fields: string, recursive: string,
         collapseBoxSetItems: string
     ){
-        const list = await this.items_ApiService_of_Je.getItems_List_Find_Artist_ALL_Album(
+        let list = await this.items_ApiService_of_Je.getItems_List_Find_Artist_ALL_Album(
             userId, albumArtistIds,
             sortBy, sortOrder,
             limit, startIndex,
@@ -1086,7 +1120,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         try{
             const list_audio = await this.items_ApiService_of_Je.getItems_List(
                 store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music, '',
-                '2CSortName', 'Descending',
+                'SortName', 'Descending',
                 '1', 0,
                 'Audio',
                 'PrimaryImageAspectRatio', 'Primary,Backdrop,Thumb', 'true', '1',
@@ -1101,7 +1135,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             //
             const list_album = await this.items_ApiService_of_Je.getItems_List(
                 store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music, '',
-                '2CSortName', 'Descending',
+                'SortName', 'Descending',
                 '1', 0,
                 'MusicAlbum',
                 'PrimaryImageAspectRatio', 'Primary,Backdrop,Thumb', 'true', '1',
@@ -1121,7 +1155,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         try{
             const list_audio = await this.items_ApiService_of_Je.getItems_List(
                 store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music, '',
-                '2CSortName', 'Descending',
+                'SortName', 'Descending',
                 '1', 0,
                 'Audio',
                 'PrimaryImageAspectRatio', 'Primary,Backdrop,Thumb', 'true', '1',
@@ -1131,7 +1165,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             //
             const list_album = await this.items_ApiService_of_Je.getItems_List(
                 store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music, '',
-                '2CSortName', 'Descending',
+                'SortName', 'Descending',
                 '1', 0,
                 'MusicAlbum',
                 'PrimaryImageAspectRatio', 'Primary,Backdrop,Thumb', 'true', '1',

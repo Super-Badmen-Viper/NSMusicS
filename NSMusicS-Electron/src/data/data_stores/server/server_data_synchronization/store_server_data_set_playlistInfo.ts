@@ -51,7 +51,7 @@ export const store_server_data_set_playlistInfo = reactive({
     },
     async Set_PlaylistInfo_To_Update_DeletePlaylist(id:string){
         if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
-            await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
+            return await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
                 .deletePlaylist_set(
                     store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
                     id
@@ -60,7 +60,9 @@ export const store_server_data_set_playlistInfo = reactive({
             store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
             store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
         ) {
-            await new Items_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).delItems_List_Quick(
+            return await new Items_ApiService_of_Je(
+                store_server_users.server_config_of_current_user_of_sqlite?.url
+            ).delItems_List_Quick(
                 id
             )
         }

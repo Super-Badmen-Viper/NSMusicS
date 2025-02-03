@@ -186,27 +186,62 @@ const scrollTo_recently_played = (value :number) => {
 }
 
 ////// go to media_view
-const Open_this_album_MediaList_click = (album_id:string) => {
+const Open_this_album_MediaList_click = (item: any, list_name: string) => {
+  let temp_id = '';
   if(store_server_user_model.model_server_type_of_web){
     store_player_appearance.player_mode_of_medialist_from_external_import = false
-    store_view_media_page_fetchData._album_id = album_id
-    store_view_media_page_logic.page_songlists_selected = 'song_list_all'
-    store_playlist_list_fetchData._album_id = album_id
+    if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'){
+      // jellyfin TMD 播放记录行为不返回 album_id，只有一个media_id
+      return;
+    }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'){
+      // Emby 中 我将album_artist_id设置为专辑的 id
+      if(list_name != 'recently_added') {
+        store_view_media_page_fetchData._album_artist_id = item.album_artist_id
+        store_playlist_list_fetchData._album_artist_id = item.album_artist_id
+        temp_id = item.album_artist_id
+      }else {
+        // 但是在recently_added中，id就是专辑的id，这几把为什么不统一规范呢，还得老子一个个调试才能发现
+        store_view_media_page_fetchData._album_artist_id = item.id
+        store_playlist_list_fetchData._album_artist_id = item.id
+        temp_id = item.id
+      }
+    }else{
+      store_view_media_page_fetchData._album_id = item.id
+      store_playlist_list_fetchData._album_id = item.id
+      temp_id = item.id
+    }
   }
-  console.log('media_list_of_album_id：'+album_id);
-  store_router_data_logic.get_media_list_of_album_id_by_album_info(album_id)
+  console.log('media_list_of_album_id：'+ temp_id);
+  store_router_data_logic.get_media_list_of_album_id_by_album_info(temp_id)
 }
-
-//////
-const Play_this_album_MediaList_click = async (album_id: string) => {
-  if(store_server_user_model.model_server_type_of_web){
-    store_view_media_page_fetchData._album_id = album_id
+const Play_this_album_MediaList_click = async (item: any, list_name: string) => {
+  let temp_id = '';
+  if (store_server_user_model.model_server_type_of_web) {
+    if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'){
+      // jellyfin TMD 播放记录行为不返回 album_id，只有一个media_id
+      return;
+    }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'){
+      // Emby 中 我将album_artist_id设置为专辑的 id
+      if(list_name != 'recently_added') {
+        store_view_media_page_fetchData._album_artist_id = item.album_artist_id
+        store_playlist_list_fetchData._album_artist_id = item.album_artist_id
+        temp_id = item.album_artist_id
+      }else {
+        // 但是在recently_added中，id就是专辑的id，这几把为什么不统一规范呢，还得老子一个个调试才能发现
+        store_view_media_page_fetchData._album_artist_id = item.id
+        store_playlist_list_fetchData._album_artist_id = item.id
+        temp_id = item.id
+      }
+    }else{
+      store_view_media_page_fetchData._album_id = item.id
+      store_playlist_list_fetchData._album_id = item.id
+      temp_id = item.id
+    }
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
-    store_playlist_list_fetchData._album_id = album_id
     store_server_user_model.random_play_model = false;
   }
-  console.log('play_this_album_click：' + album_id);
-  await store_view_album_page_fetchData.fetchData_This_Album_MediaList(album_id)
+  console.log('play_this_album_click：' + temp_id);
+  await store_view_album_page_fetchData.fetchData_This_Album_MediaList(temp_id)
 }
 const Play_Next_album_MediaList_click = (value: number) => {
   if(value === 1){
@@ -284,20 +319,21 @@ async function update_playlist_addAlbum(id: any, playlist_id: any){
   }
 }
 async function menu_item_add_to_playlist_end() {
-  await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(store_playlist_list_info.playlist_Menu_Item_Id);
-  const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
+  let matchingItems = []
+  await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(
+      store_playlist_list_info.playlist_Menu_Item_Id
+  );
+  matchingItems = store_view_media_page_info.media_Files_temporary.filter(
       (item: Media_File) => item.album_id === store_playlist_list_info.playlist_Menu_Item_Id
   );
-
+  //////
   store_view_media_page_info.media_Files_temporary = []
-
   for (let item of matchingItems) {
     const newItem: any = JSON.parse(JSON.stringify(item));
     newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000;
     store_playlist_list_info.playlist_MediaFiles_temporary.push(newItem);
     store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id);
   }
-
   store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
     item.absoluteIndex = index;
   });
@@ -353,7 +389,12 @@ onBeforeUnmount(() => {
     <n-space vertical style="margin-top: 20px;margin-left: 8px;">
       <div class="notice"
            v-contextmenu:contextmenu
-           @contextmenu.prevent="store_playlist_list_info.playlist_Menu_Item_Id = store_view_home_page_info.home_selected_top_album?.id">
+           @contextmenu.prevent="() => {
+             store_playlist_list_info.playlist_Menu_Item_Id =
+              store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'?
+               store_view_home_page_info.home_selected_top_album?.album_artist_id:
+                store_view_home_page_info.home_selected_top_album?.id
+           }">
         <div
           :style="{
             width: 'calc(100vw - ' + (collapsed_width - 20) + 'px)',
@@ -431,7 +472,11 @@ onBeforeUnmount(() => {
                 <ChevronLeft16Filled />
               </n-icon>
             </n-button>
-            <n-button quaternary @click="Play_this_album_MediaList_click(store_view_home_page_info.home_selected_top_album?.id)" style="margin-right: -6px;">
+            <n-button quaternary
+                      @click="()=>{
+                        Play_this_album_MediaList_click(item, 'random');
+                      }"
+                      style="margin-right: -6px;">
               <template #icon>
                 <n-icon :size="20" :depth="2"><Play/></n-icon>
               </template>
@@ -487,7 +532,11 @@ onBeforeUnmount(() => {
             :data-index="index"
             :data-active="active"
             v-contextmenu:contextmenu
-            @contextmenu.prevent="store_playlist_list_info.playlist_Menu_Item_Id = item.id"
+            @contextmenu.prevent="()=>{
+              store_playlist_list_info.playlist_Menu_Item_Id =
+              store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'?
+              item.album_artist_id:item.id
+            }"
           >
             <div
                 :key="item.id"
@@ -499,11 +548,14 @@ onBeforeUnmount(() => {
                     @error="handleImageError(item)"
                     style="objectFit: cover; objectPosition: center;border: 1.5px solid #FFFFFF20;"
                     :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"/>
-                <div class="hover-overlay" @dblclick="Open_this_album_MediaList_click(item.id)">
+                <div class="hover-overlay"
+                     @dblclick="Open_this_album_MediaList_click(item, 'maximum')">
                   <div class="hover-content">
                     <button
                         class="play_this_album"
-                        @click="Play_this_album_MediaList_click(item.id)"
+                        @click="()=>{
+                          Play_this_album_MediaList_click(item, 'maximum');
+                        }"
                         style="
                         border: 0px;background-color: transparent;
                         width: 50px;height: 50px;
@@ -533,7 +585,7 @@ onBeforeUnmount(() => {
                     <div class="hover_buttons_bottom">
                       <button
                           class="open_this_artist"
-                          @click="Open_this_album_MediaList_click(item.id)"
+                          @click="Open_this_album_MediaList_click(item, 'maximum')"
                           style="
                           border: 0px;background-color: transparent;
                           width: 28px;height: 28px;
@@ -627,7 +679,11 @@ onBeforeUnmount(() => {
               :data-index="index"
               :data-active="active"
               v-contextmenu:contextmenu
-              @contextmenu.prevent="store_playlist_list_info.playlist_Menu_Item_Id = item.id"
+              @contextmenu.prevent="()=>{
+                store_playlist_list_info.playlist_Menu_Item_Id =
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'?
+                item.album_artist_id:item.id
+              }"
           >
             <div
                 :key="item.id"
@@ -639,11 +695,14 @@ onBeforeUnmount(() => {
                     @error="handleImageError(item)"
                     style="objectFit: cover; objectPosition: center;border: 1.5px solid #FFFFFF20;"
                     :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"/>
-                <div class="hover-overlay" @dblclick="Open_this_album_MediaList_click(item.id)">
+                <div class="hover-overlay"
+                     @dblclick="Open_this_album_MediaList_click(item, 'random')">
                   <div class="hover-content">
                     <button
                         class="play_this_album"
-                        @click="Play_this_album_MediaList_click(item.id)"
+                        @click="()=>{
+                          Play_this_album_MediaList_click(item, 'random');
+                        }"
                         style="
                       border: 0px;background-color: transparent;
                       width: 50px;height: 50px;
@@ -673,7 +732,7 @@ onBeforeUnmount(() => {
                     <div class="hover_buttons_bottom">
                       <button
                           class="open_this_artist"
-                          @click="Open_this_album_MediaList_click(item.id)"
+                          @click="Open_this_album_MediaList_click(item, 'random')"
                           style="
                         border: 0px;background-color: transparent;
                         width: 28px;height: 28px;
@@ -766,8 +825,9 @@ onBeforeUnmount(() => {
               :data-index="index"
               :data-active="active"
               v-contextmenu:contextmenu
-              @contextmenu.prevent="store_playlist_list_info.playlist_Menu_Item_Id = item.id"
-          >
+              @contextmenu.prevent="()=>{
+                store_playlist_list_info.playlist_Menu_Item_Id = item.id
+              }">
             <div
                 :key="item.id"
                 class="album">
@@ -778,11 +838,14 @@ onBeforeUnmount(() => {
                     @error="handleImageError(item)"
                     style="objectFit: cover; objectPosition: center;border: 1.5px solid #FFFFFF20;"
                     :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"/>
-                <div class="hover-overlay" @dblclick="Open_this_album_MediaList_click(item.id)">
+                <div class="hover-overlay"
+                     @dblclick="Open_this_album_MediaList_click(item, 'recently_added')">
                   <div class="hover-content">
                     <button
                         class="play_this_album"
-                        @click="Play_this_album_MediaList_click(item.id)"
+                        @click="()=>{
+                          Play_this_album_MediaList_click(item, 'recently_added');
+                        }"
                         style="
                         border: 0px;background-color: transparent;
                         width: 50px;height: 50px;
@@ -812,7 +875,7 @@ onBeforeUnmount(() => {
                     <div class="hover_buttons_bottom">
                       <button
                           class="open_this_artist"
-                          @click="Open_this_album_MediaList_click(item.id)"
+                          @click="Open_this_album_MediaList_click(item, 'recently_added')"
                           style="
                           border: 0px;background-color: transparent;
                           width: 28px;height: 28px;
@@ -905,7 +968,11 @@ onBeforeUnmount(() => {
               :data-index="index"
               :data-active="active"
               v-contextmenu:contextmenu
-              @contextmenu.prevent="store_playlist_list_info.playlist_Menu_Item_Id = item.id"
+              @contextmenu.prevent="()=>{
+                store_playlist_list_info.playlist_Menu_Item_Id =
+                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'?
+                item.album_artist_id:item.id
+              }"
           >
             <div
                 :key="item.id"
@@ -917,11 +984,14 @@ onBeforeUnmount(() => {
                     @error="handleImageError(item)"
                     style="objectFit: cover; objectPosition: center;border: 1.5px solid #FFFFFF20;"
                     :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"/>
-                <div class="hover-overlay" @dblclick="Open_this_album_MediaList_click(item.id)">
+                <div class="hover-overlay"
+                     @dblclick="Open_this_album_MediaList_click(item, 'recently_played')">
                   <div class="hover-content">
                     <button
                         class="play_this_album"
-                        @click="Play_this_album_MediaList_click(item.id)"
+                        @click="()=>{
+                          Play_this_album_MediaList_click(item, 'recently_played');
+                        }"
                         style="
                       border: 0px;background-color: transparent;
                       width: 50px;height: 50px;
@@ -951,7 +1021,7 @@ onBeforeUnmount(() => {
                     <div class="hover_buttons_bottom">
                       <button
                           class="open_this_artist"
-                          @click="Open_this_album_MediaList_click(item.id)"
+                          @click="Open_this_album_MediaList_click(item, 'recently_played')"
                           style="
                         border: 0px;background-color: transparent;
                         width: 28px;height: 28px;

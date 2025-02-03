@@ -233,7 +233,8 @@ export const store_view_album_page_fetchData = reactive({
                 }
             }
             else if (store_server_user_model.model_server_type_of_web) {
-                await this.fetchData_Album_of_server_web_start()
+                store_view_album_page_info.album_Files_temporary = [];
+                await this.fetchData_Album_of_server_web_start();
             }
         } else {
             // other
@@ -298,6 +299,7 @@ export const store_view_album_page_fetchData = reactive({
 
         if(store_player_appearance.player_mode_of_medialist_from_external_import) {
             store_view_media_page_fetchData._album_id = ''
+            store_view_media_page_fetchData._album_artist_id = ''
             store_view_media_page_fetchData._artist_id = ''
             store_view_album_page_fetchData._artist_id = ''
         }

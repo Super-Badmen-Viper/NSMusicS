@@ -139,15 +139,18 @@ export const store_router_data_logic = reactive({
 
     get_media_list_of_album_id_by_album_info(value: any) {
         store_router_data_info.router.push('song')
-        store_view_media_page_logic.list_data_Hand_Search = true
-        store_view_media_page_logic.list_selected_Hand_click = false
+        // emby 已经设置了 album_artist_id
+        if(store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby') {
+            store_view_media_page_logic.list_data_Hand_Search = true
+            store_view_media_page_logic.list_selected_Hand_click = false
+            // open media_files model，keywords set
+            store_view_media_page_logic.page_songlists_keywordFilter = `WHERE album_id = '${value}'`
+            store_view_media_page_logic.page_songlists_get_keyword_model_num = 3
+            store_router_data_info.find_music_model = true
+            console.log('get_media_list_of_album_model：' + value)
+            store_view_media_page_logic.page_songlists_input_search_Value = value
+        }
         store_view_media_page_logic.page_songlists_selected = 'song_list_all'
-        // open media_files model，keywords set
-        store_view_media_page_logic.page_songlists_keywordFilter = `WHERE album_id = '${value}'`
-        store_view_media_page_logic.page_songlists_get_keyword_model_num = 3
-        store_router_data_info.find_music_model = true
-        console.log('get_media_list_of_album_model：'+value)
-        store_view_media_page_logic.page_songlists_input_search_Value = value
     },
     get_album_list_of_artist_id_by_artist_info(value: any) {
         store_router_data_info.router.push('album')

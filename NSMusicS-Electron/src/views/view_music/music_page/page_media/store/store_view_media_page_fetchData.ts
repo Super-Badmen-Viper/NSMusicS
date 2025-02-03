@@ -254,6 +254,7 @@ export const store_view_media_page_fetchData = reactive({
                 }
             }
             else if (store_server_user_model.model_server_type_of_web) {
+                store_view_media_page_info.media_Files_temporary = [];
                 await this.fetchData_Media_of_server_web_start()
             }
         } else {
@@ -399,6 +400,7 @@ export const store_view_media_page_fetchData = reactive({
     _end: 100,
     _album_id: '',
     _artist_id: '',
+    _album_artist_id: '',
     async fetchData_Media_of_server_web_start(){
         store_view_media_page_info.media_Files_temporary = [];
         this._start = 0;
@@ -407,6 +409,7 @@ export const store_view_media_page_fetchData = reactive({
 
         if(store_player_appearance.player_mode_of_medialist_from_external_import) {
             store_view_media_page_fetchData._album_id = ''
+            store_view_media_page_fetchData._album_artist_id = ''
             store_view_media_page_fetchData._artist_id = ''
             store_view_album_page_fetchData._artist_id = ''
         }
@@ -476,20 +479,28 @@ export const store_view_media_page_fetchData = reactive({
             const filter = _starred === 'true' ? 'IsFavorite' : ''
             // jellyfin not support search artist and album list of musicdata
             let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
+            // _album_id -> media_id -> Jellyfin+Emby
             if(this._artist_id.length === 0) {
-                const prarentId = this._album_id.length === 0
-                    ? store_server_user_model.parentid_of_Je_Music : this._album_id
-                await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list(
-                    playlist_id,
-                    store_server_user_model.userid_of_Je, prarentId,
-                    _search,
-                    sortBy, sortOrder,
-                    String(this._end - this._start), String(this._start),
-                    'Audio',
-                    'ParentId', 'Primary,Backdrop,Thumb', 'true', '1',
-                    store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : '',
-                    filter
-                )
+                if(this._album_artist_id.length === 0) { /// jellyfin+emby - all - action
+                    const prarentId = this._album_id.length === 0
+                        ? store_server_user_model.parentid_of_Je_Music : this._album_id
+                    await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list(
+                        playlist_id,
+                        store_server_user_model.userid_of_Je, prarentId,
+                        _search,
+                        sortBy, sortOrder,
+                        String(this._end - this._start), String(this._start),
+                        'Audio',
+                        'ParentId', 'Primary,Backdrop,Thumb', 'true', '1',
+                        store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : '',
+                        filter
+                    )
+                }else{ /// emby - home - action
+                    await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list_of_album(
+                        this._album_artist_id,
+                        String(this._end - this._start), String(this._start),
+                    )
+                }
             }else{
                 await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list_of_artist(
                     this._artist_id,

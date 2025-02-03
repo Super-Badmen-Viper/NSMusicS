@@ -187,6 +187,7 @@ const show_search_area = () => {
     }
     if(store_server_user_model.model_server_type_of_web) {
       store_view_media_page_fetchData._album_id = ''
+      store_view_media_page_fetchData._album_artist_id = ''
       store_view_media_page_fetchData._artist_id = ''
       store_view_album_page_fetchData._artist_id = ''
     }
@@ -381,6 +382,7 @@ const handleItemClick_artist = (artist:string) => {
     scrollTo(0)
   }else if(store_server_user_model.model_server_type_of_web){
     store_view_media_page_fetchData._album_id = ''
+    store_view_media_page_fetchData._album_artist_id = ''
     store_view_media_page_fetchData._artist_id = ''
     store_view_media_page_logic.page_songlists_bool_show_search_area = true
     store_view_media_page_logic.page_songlists_input_search_Value = artist
@@ -404,6 +406,7 @@ const handleItemClick_album = (album_id:string) => {
     scrollTo(0)
   }else if(store_server_user_model.model_server_type_of_web){
     store_view_media_page_fetchData._album_id = ''
+    store_view_media_page_fetchData._album_artist_id = ''
     store_view_media_page_fetchData._artist_id = ''
     store_view_media_page_logic.page_songlists_bool_show_search_area = true
     store_view_media_page_logic.page_songlists_input_search_Value = album_id
@@ -512,40 +515,43 @@ const playlist_set_of_addPlaylist_of_comment = ref('')
 const playlist_set_of_addPlaylist_of_public = ref(false)
 async function update_playlist_addPlaylist(){
   try{
+    Type_Add_Playlist.value = false;
     if(store_server_user_model.model_select === 'server'){
       // send json to server
       let getCreatePlaylist_set_id = await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_CreatePlaylist(
           playlist_set_of_addPlaylist_of_playlistname.value,
           playlist_set_of_addPlaylist_of_public.value
       )
-      console.log('CreatePlaylist_of_ND: ' + store_server_user_model.username + ': ' +
-          getCreatePlaylist_set_id
-      )
-      await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_SetPlaylist(
-          getCreatePlaylist_set_id,
-          playlist_set_of_addPlaylist_of_playlistname.value,
-          playlist_set_of_addPlaylist_of_comment.value,
-          playlist_set_of_addPlaylist_of_public.value
-      )
-      console.log('SetPlaylist_of_ND: ' + store_server_user_model.username + ': ' +
-          getCreatePlaylist_set_id
-      )
-      // get server all playlist
-      await store_server_user_model.Get_UserData_Synchronize_PlayList()
-      //
-      console.log('SetPlaylist_of_Local: '+
-          getCreatePlaylist_set_id + ': ' +
-          playlist_set_of_addPlaylist_of_playlistname.value + ': ' +
-          playlist_set_of_addPlaylist_of_comment.value + ': ' +
-          playlist_set_of_addPlaylist_of_public.value
-      )
+      if (getCreatePlaylist_set_id !== undefined && getCreatePlaylist_set_id !== "") {
+        console.log('CreatePlaylist_of_ND: ' + store_server_user_model.username + ': ' +
+            getCreatePlaylist_set_id
+        )
+        await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_SetPlaylist(
+            getCreatePlaylist_set_id,
+            playlist_set_of_addPlaylist_of_playlistname.value,
+            playlist_set_of_addPlaylist_of_comment.value,
+            playlist_set_of_addPlaylist_of_public.value
+        )
+        console.log('SetPlaylist_of_ND: ' + store_server_user_model.username + ': ' +
+            getCreatePlaylist_set_id
+        )
+        // get server all playlist
+        await store_server_user_model.Get_UserData_Synchronize_PlayList()
+        //
+        console.log('SetPlaylist_of_Local: ' +
+            getCreatePlaylist_set_id + ': ' +
+            playlist_set_of_addPlaylist_of_playlistname.value + ': ' +
+            playlist_set_of_addPlaylist_of_comment.value + ': ' +
+            playlist_set_of_addPlaylist_of_public.value
+        )
+        //
+        store_view_media_page_info.media_playlist_count++;
+      }
     }
     else {
       store_playlist_list_logic.get_playlist_tracks_temporary_add(playlist_set_of_addPlaylist_of_playlistname.value)
     }
-    Type_Add_Playlist.value = !Type_Add_Playlist.value
 
-    store_view_media_page_info.media_playlist_count++;
     page_songlists_statistic.value.forEach((item: any) => {
       if(item.id === 'song_list_all_PlayList') {
         item.song_count = store_view_media_page_info.media_playlist_count + ' *';
@@ -557,7 +563,7 @@ async function update_playlist_addPlaylist(){
 }
 /// update playlist
 const Type_Update_Playlist = ref(false)
-const playlist_update_emit_id = ref<string>()
+const playlist_update_emit_id = ref<string>('')
 const playlist_set_of_updatePlaylist_of_playlistcomment = ref('')
 const playlist_set_of_updatePlaylist_of_comment = ref('')
 const playlist_set_of_updatePlaylist_of_public = ref(false)
@@ -571,11 +577,13 @@ function update_playlist_set_of_updatePlaylist_of_playlistname(value: Array | st
 }
 async function update_playlist_updatePlaylist(){
   try{
+    Type_Update_Playlist.value = false;
+    playlist_set_of_updatePlaylist_of_playlistcomment.value = '';
+
     const playlist = {
       id: playlist_update_emit_id.value,
       name: playlist_set_of_updatePlaylist_of_playlistcomment.value
     }
-    Type_Update_Playlist.value = !Type_Update_Playlist.value
 
     if(store_server_user_model.model_select === 'server'){
       await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_SetPlaylist(
@@ -593,16 +601,18 @@ async function update_playlist_updatePlaylist(){
 }
 async function update_playlist_deletePlaylist(){
   try{
-    store_playlist_list_logic.get_playlist_tracks_temporary_delete(playlist_update_emit_id.value)
-    Type_Update_Playlist.value = !Type_Update_Playlist.value
+    Type_Update_Playlist.value = false;
+    playlist_set_of_updatePlaylist_of_playlistcomment.value = '';
 
+    store_playlist_list_logic.get_playlist_tracks_temporary_delete(playlist_update_emit_id.value)
     if(store_server_user_model.model_select === 'server'){
-      await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_DeletePlaylist(
+      const result = await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_DeletePlaylist(
           playlist_update_emit_id.value
       )
+      if (result !== undefined && result !== "") {
+        store_view_media_page_info.media_playlist_count--;
+      }
     }
-
-    store_view_media_page_info.media_playlist_count--;
     page_songlists_statistic.value.forEach((item: any) => {
       if(item.id === 'song_list_all_PlayList') {
         item.song_count = store_view_media_page_info.media_playlist_count + ' *';
@@ -631,10 +641,17 @@ async function update_playlist_deleteMediaFile(id: any){
     }else if(store_view_media_page_logic.page_songlists_selected === 'song_list_recently'){
 
     }else{
-      await store_local_data_set_mediaInfo.Set_MediaInfo_Delete_Selected_Playlist(
-          id,
-          store_view_media_page_logic.page_songlists_selected
-      )
+      if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'){
+        await store_local_data_set_mediaInfo.Set_MediaInfo_Delete_Selected_Playlist(
+            store_playlist_list_info.playlist_Menu_Item_IndexId,
+            store_view_media_page_logic.page_songlists_selected
+        )
+      }else{
+        await store_local_data_set_mediaInfo.Set_MediaInfo_Delete_Selected_Playlist(
+            id,
+            store_view_media_page_logic.page_songlists_selected
+        )
+      }
     }
     store_view_media_page_info.media_Files_temporary = store_view_media_page_info.media_Files_temporary.filter((media: any) => media.id !== id);
     message.success(t('common.delete'))
@@ -797,7 +814,8 @@ function menu_item_add_to_playlist_end() {
   }
 }
 function menu_item_add_to_playlist_next() {
-  const item: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find((mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id);
+  const item: Media_File | undefined =
+      store_view_media_page_info.media_Files_temporary.find((mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id);
   if (item != undefined && item != 'undefined') {
     let index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
         (item: any) => item.id === store_player_audio_info.this_audio_song_id
@@ -854,14 +872,15 @@ const onRefreshSharp = async () => {
         store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
     ) {
       store_player_appearance.player_mode_of_medialist_from_external_import = false;
-      store_view_media_page_fetchData._album_id = ''
-      store_view_media_page_fetchData._artist_id = ''
-      store_view_album_page_fetchData._artist_id = ''
-      store_view_media_page_logic.page_songlists_keyword = ''
-      input_search_InstRef.value?.clear()
-      store_view_media_page_logic.page_songlists_keywordFilter = ""
-      store_view_media_page_logic.page_songlists_bool_show_search_area = false
     }
+    store_view_media_page_fetchData._album_id = ''
+    store_view_media_page_fetchData._album_artist_id = ''
+    store_view_media_page_fetchData._artist_id = ''
+    store_view_album_page_fetchData._artist_id = ''
+    store_view_media_page_logic.page_songlists_keyword = ''
+    input_search_InstRef.value?.clear()
+    store_view_media_page_logic.page_songlists_keywordFilter = ""
+    store_view_media_page_logic.page_songlists_bool_show_search_area = false
     store_view_media_page_fetchData.fetchData_Media_of_server_web_start()
   }else if(store_server_user_model.model_server_type_of_local){
     store_view_media_page_logic.page_songlists_bool_show_search_area = true;
@@ -1427,12 +1446,9 @@ onBeforeUnmount(() => {
             v-contextmenu:contextmenu
             @contextmenu.prevent="
               () => {
-                if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'){
-                   store_playlist_list_info.playlist_Menu_Item_Id = item.order_title
-                }else{
-                  store_playlist_list_info.playlist_Menu_Item_Id = item.id;
-                }
+                store_playlist_list_info.playlist_Menu_Item_Id = item.id;
                 store_playlist_list_info.playlist_Menu_Item_Rating = item.rating;
+                store_playlist_list_info.playlist_Menu_Item_IndexId = item.order_title;
               }
             "
             class="message"
@@ -1632,7 +1648,11 @@ onBeforeUnmount(() => {
           vertical size="large" style="width: 400px;">
         <n-space justify="space-between">
           <span style="font-size: 20px;font-weight: 600;">{{ $t('common.manage') + $t('entity.playlist_other') }}</span>
-          <n-button tertiary size="small" @click="Type_Update_Playlist = !Type_Update_Playlist;playlist_set_of_updatePlaylist_of_playlistcomment = ''">
+          <n-button tertiary size="small"
+                    @click="()=>{
+                      Type_Update_Playlist = !Type_Update_Playlist;
+                      playlist_set_of_updatePlaylist_of_playlistcomment = '';
+                    }">
             <template #icon>
               <n-icon>
                 <Close />
@@ -1664,15 +1684,15 @@ onBeforeUnmount(() => {
           <n-button strong secondary type="error"
                     @click="() => {
                       update_playlist_deletePlaylist();
-                      Type_Update_Playlist = !Type_Update_Playlist;
-                      playlist_set_of_updatePlaylist_of_playlistcomment = '';
                     }">
             {{ $t('common.delete') }}
           </n-button>
           <n-button strong secondary type="info"
                     v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
                           store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'"
-                    @click="update_playlist_updatePlaylist();">
+                    @click="()=>{
+                      update_playlist_updatePlaylist();
+                    }">
             {{ $t('common.save') }}
           </n-button>
         </n-space>

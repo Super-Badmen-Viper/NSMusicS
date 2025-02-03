@@ -128,18 +128,20 @@ export const store_player_audio_logic = reactive({
                 const audio_ApiService_of_Je = new Audio_ApiService_of_Je(
                     store_server_users.server_config_of_current_user_of_sqlite?.url
                 )
-                let lyrics = []
-                if (store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
-                    const getAudio_lyrics_id_of_Je = await audio_ApiService_of_Je.getAudio_lyrics_id_of_Je(media_file.id);
-                    lyrics = getAudio_lyrics_id_of_Je != undefined
-                        ? this.convertToLRC_Array_of_Je(getAudio_lyrics_id_of_Je.Lyrics) : '';
-                } else if (store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby') {
-                    const getAudio_lyrics_id_of_Em = await audio_ApiService_of_Je.getAudio_lyrics_id_of_Em(media_file.id);
-                    // lyrics = getAudio_lyrics_id_of_Em != undefined
-                    //     ? this.convertToLRC_Array_of_Em(getAudio_lyrics_id_of_Em.Lyrics) : '';
-                    lyrics = getAudio_lyrics_id_of_Em.Lyrics;
+                let lyrics = [];
+                try {
+                    if (store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+                        const getAudio_lyrics_id_of_Je = await audio_ApiService_of_Je.getAudio_lyrics_id_of_Je(media_file.id);
+                        lyrics = getAudio_lyrics_id_of_Je?.Lyrics ? this.convertToLRC_Array_of_Je(getAudio_lyrics_id_of_Je.Lyrics) : "";
+                    } else if (store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby') {
+                        const getAudio_lyrics_id_of_Em = await audio_ApiService_of_Je.getAudio_lyrics_id_of_Em(media_file.id);
+                        lyrics = getAudio_lyrics_id_of_Em?.Lyrics || "";
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch lyrics:", error);
+                    lyrics = "";
                 }
-                store_player_audio_info.this_audio_lyrics_string = lyrics;
+                store_player_audio_info.this_audio_lyrics_string = lyrics.length > 0 ? lyrics : "";
             }catch{
                 store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
             }

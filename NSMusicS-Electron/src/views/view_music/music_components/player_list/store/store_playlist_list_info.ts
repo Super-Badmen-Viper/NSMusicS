@@ -13,6 +13,7 @@ export const store_playlist_list_info = reactive({
     playlist_DragSort_Model: false,
     playlist_Menu_Item_Id: '',
     playlist_Menu_Item_Rating: 0,
+    playlist_Menu_Item_IndexId: '',
     playlist_MediaFiles_temporary_Sort_Items: [],
     playlist_Sort_StartIndex: 0,
     playlist_Sort_EndIndex: 0,
@@ -64,7 +65,7 @@ export const store_playlist_list_info = reactive({
         store_app_configs_logic_save.save_system_playlist_item_id_config();
     },
 });
-watch(() => store_playlist_list_info.playlist_MediaFiles_temporary, async (newValue) => {
+watch(() => store_playlist_list_info.playlist_MediaFiles_temporary.length, async (newValue) => {
     store_playlist_list_fetchData._totalCount = newValue.length;
     store_app_configs_logic_save.save_system_playlist_item_id_config();
 });

@@ -27,7 +27,8 @@ export class Navidrome_Api_Services_Normal {
             const response = await axios.get(url);
             return response.data;
         } catch (error: any) {
-            return error.message;
+            console.error(error);
+            return undefined;
         }
     }
 }
