@@ -66,7 +66,6 @@ export const store_playlist_list_info = reactive({
     },
 });
 watch(() => store_playlist_list_info.playlist_MediaFiles_temporary.length, async (newValue) => {
-    store_playlist_list_fetchData._totalCount = newValue.length;
     store_app_configs_logic_save.save_system_playlist_item_id_config();
 });
 watch(() => store_playlist_list_info.playlist_MediaFiles_temporary_Sort_Items, async (newValue) => {

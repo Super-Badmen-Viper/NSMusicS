@@ -109,7 +109,9 @@ watch(() => store_player_audio_info.this_audio_file_path, (newValue) => {
                 if (!store_app_configs_logic_load.app_configs_loading) {
                     if(!store_playlist_appearance.playlist_show) {
                         if (store_playlist_list_logic.media_page_handleItemDbClick) {
-                            store_playlist_list_fetchData.fetchData_PlayList()
+                            if(!store_server_user_model.random_play_model) {
+                                store_playlist_list_fetchData.fetchData_PlayList()
+                            }
                         }
                     }
                 }

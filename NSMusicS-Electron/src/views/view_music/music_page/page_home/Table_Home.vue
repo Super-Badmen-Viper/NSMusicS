@@ -192,7 +192,7 @@ const Open_this_album_MediaList_click = (item: any, list_name: string) => {
     store_player_appearance.player_mode_of_medialist_from_external_import = false
     if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'){
       // jellyfin TMD 播放记录行为不返回 album_id，只有一个media_id
-      return;
+      store_view_media_page_fetchData._media_id = item.id;
     }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'){
       // Emby 中 我将album_artist_id设置为专辑的 id
       if(list_name != 'recently_added') {
@@ -219,7 +219,7 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
   if (store_server_user_model.model_server_type_of_web) {
     if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'){
       // jellyfin TMD 播放记录行为不返回 album_id，只有一个media_id
-      return;
+      store_view_media_page_fetchData._media_id = item.id;
     }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'){
       // Emby 中 我将album_artist_id设置为专辑的 id
       if(list_name != 'recently_added') {
@@ -294,6 +294,7 @@ import {store_player_audio_info} from "@/views/view_music/music_page/page_player
 import {store_player_appearance} from "@/views/view_music/music_page/page_player/store/store_player_appearance";
 import {store_view_media_page_logic} from "@/views/view_music/music_page/page_media/store/store_view_media_page_logic";
 import {store_playlist_list_fetchData} from "@/views/view_music/music_components/player_list/store/store_playlist_list_fetchData";
+import {store_player_audio_logic} from "@/views/view_music/music_page/page_player/store/store_player_audio_logic";
 const contextmenu = ref(null as any)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
 const message = useMessage()
@@ -386,7 +387,8 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <div class="home-wall-container">
-    <n-space vertical style="margin-top: 20px;margin-left: 8px;">
+    <n-space vertical
+             style="margin-top: 20px;margin-left: 8px;">
       <div class="notice"
            v-contextmenu:contextmenu
            @contextmenu.prevent="() => {
@@ -448,7 +450,12 @@ onBeforeUnmount(() => {
             width: 'calc(' + (store_app_configs_info.window_innerWidth - (collapsed_width + 300)) / (store_app_configs_info.window_innerHeight / 500) + 'px)',
           }">
           <div style="font-size: 16px;font-weight: 600;">
-            {{ $t('page.home.explore') }}
+            {{
+              $t('page.home.explore') + ' : ' +
+              (store_server_users.server_config_of_current_user_of_sqlite?.type != 'navidrome'
+                  ? $t('entity.track_other')
+                  : $t('entity.album_other'))
+            }}
           </div>
           <div
             style="
@@ -456,7 +463,7 @@ onBeforeUnmount(() => {
               font-weight: 900;font-size: 44px;
               overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
           ">
-            {{ store_view_home_page_info.home_selected_top_album?.name }}
+            {{ store_view_home_page_info.home_selected_top_album?.name ?? ($t('None') + $t('Play') + $t('Data')) }}
           </div>
           <div
             style="
@@ -464,28 +471,43 @@ onBeforeUnmount(() => {
               font-weight: 550;font-size: 18px;
               overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
           ">
-            {{ store_view_home_page_info.home_selected_top_album?.artist }}
+            {{ store_view_home_page_info.home_selected_top_album?.artist ?? ($t('None') + $t('Play') + $t('Data')) }}
           </div>
           <n-space style="margin-top: 6px;">
-            <n-button quaternary @click="Play_Next_album_MediaList_click(-1)" style="margin-right: -6px;">
-              <n-icon size="20" :depth="2">
-                <ChevronLeft16Filled />
-              </n-icon>
-            </n-button>
-            <n-button quaternary
-                      @click="()=>{
-                        Play_this_album_MediaList_click(item, 'random');
-                      }"
-                      style="margin-right: -6px;">
-              <template #icon>
-                <n-icon :size="20" :depth="2"><Play/></n-icon>
+            <n-tooltip trigger="hover" placement="top">
+              <template #trigger>
+                <n-button quaternary @click="Play_Next_album_MediaList_click(-1)" style="margin-right: -6px;">
+                  <n-icon size="20" :depth="2">
+                    <ChevronLeft16Filled />
+                  </n-icon>
+                </n-button>
               </template>
-            </n-button>
-            <n-button quaternary @click="Play_Next_album_MediaList_click(1)" style="margin-right: -6px;">
-              <n-icon size="20" :depth="2">
-                <ChevronRight16Filled />
-              </n-icon>
-            </n-button>
+              {{ $t('player.previous') }}
+            </n-tooltip>
+            <n-tooltip trigger="hover" placement="top">
+              <template #trigger>
+                <n-button quaternary
+                          @click="()=>{
+                        Play_this_album_MediaList_click(store_view_home_page_info.home_selected_top_album, 'random');
+                      }"
+                          style="margin-right: -6px;">
+                  <template #icon>
+                    <n-icon :size="20" :depth="2"><Play/></n-icon>
+                  </template>
+                </n-button>
+              </template>
+              {{ $t('Play') }}
+            </n-tooltip>
+            <n-tooltip trigger="hover" placement="top">
+              <template #trigger>
+                <n-button quaternary @click="Play_Next_album_MediaList_click(1)" style="margin-right: -6px;">
+                  <n-icon size="20" :depth="2">
+                    <ChevronRight16Filled />
+                  </n-icon>
+                </n-button>
+              </template>
+              {{ $t('player.next') }}
+            </n-tooltip>
           </n-space>
         </n-space>
       </n-space>
@@ -495,30 +517,54 @@ onBeforeUnmount(() => {
              style="margin-top: 10px;margin-left: 8px;">
       <n-space align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}">
         <span style="font-size: 16px;font-weight: 600;">
-          {{ $t('page.home.mostPlayed') }}
+          {{
+            $t('page.home.mostPlayed') + ' : ' +
+            (store_server_users.server_config_of_current_user_of_sqlite?.type != 'navidrome'
+                ? $t('entity.track_other')
+                : $t('entity.album_other'))
+          }}
         </span>
-        <n-button quaternary circle @click="store_view_home_page_fetchData.fetchData_Home_of_maximum_playback()">
-          <template #icon>
-            <n-icon :size="20"><RefreshSharp/></n-icon>
+        <n-tooltip trigger="hover" placement="top">
+          <template #trigger>
+            <n-button quaternary circle @click="store_view_home_page_fetchData.fetchData_Home_of_maximum_playback()">
+              <template #icon>
+                <n-icon :size="20"><RefreshSharp/></n-icon>
+              </template>
+            </n-button>
           </template>
-        </n-button>
-        <n-button quaternary circle
-                  @click="scrollTo_maximum_playback(-1)"
-                  style="margin-left: -5px;">
-          <n-icon size="20" :depth="2">
-            <ChevronLeft16Filled />
-          </n-icon>
-        </n-button>
-        <n-button quaternary circle
-                  @click="scrollTo_maximum_playback(1)"
-                  style="margin-left: -5px;">
-          <n-icon size="20" :depth="2">
-            <ChevronRight16Filled />
-          </n-icon>
-        </n-button>
+          {{ $t('common.refresh') }}
+        </n-tooltip>
+        <n-tooltip trigger="hover" placement="top">
+          <template #trigger>
+            <n-button quaternary circle
+                      @click="scrollTo_maximum_playback(-1)"
+                      style="margin-left: -5px;">
+              <n-icon size="20" :depth="2">
+                <ChevronLeft16Filled />
+              </n-icon>
+            </n-button>
+          </template>
+          {{ $t('common.backward') }}
+        </n-tooltip>
+        <n-tooltip trigger="hover" placement="top">
+          <template #trigger>
+            <n-button quaternary circle
+                      @click="scrollTo_maximum_playback(1)"
+                      style="margin-left: -5px;">
+              <n-icon size="20" :depth="2">
+                <ChevronRight16Filled />
+              </n-icon>
+            </n-button>
+          </template>
+          {{ $t('common.forward') }}
+        </n-tooltip>
+        <n-space v-if="store_view_home_page_info.home_Files_temporary_maximum_playback.length === 0">
+          {{ $t('None') + $t('Play') + $t('Data') }}
+        </n-space>
       </n-space>
       <DynamicScroller
           class="home-wall" ref="dynamicScroller_maximum_playback"
+          v-if="store_view_home_page_info.home_Files_temporary_maximum_playback.length != 0"
           :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + (store_server_user_model.model_select === 'local' ? 70 : 60) + 'px'}"
           :items="store_view_home_page_info.home_Files_temporary_maximum_playback"
           :itemSize="itemSize"
@@ -642,30 +688,54 @@ onBeforeUnmount(() => {
              style="margin-top: 36px;margin-left: 8px;">
       <n-space align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}">
         <span style="font-size: 16px;font-weight: 600;">
-          {{ $t('page.home.explore') }}
+          {{
+            $t('page.home.explore') + ' : ' +
+            (store_server_users.server_config_of_current_user_of_sqlite?.type != 'navidrome'
+                ? $t('entity.track_other')
+                : $t('entity.album_other'))
+          }}
         </span>
-        <n-button quaternary circle @click="store_view_home_page_fetchData.fetchData_Home_of_random_search()">
-          <template #icon>
-            <n-icon :size="20"><RefreshSharp/></n-icon>
+        <n-tooltip trigger="hover" placement="top">
+          <template #trigger>
+            <n-button quaternary circle @click="store_view_home_page_fetchData.fetchData_Home_of_random_search()">
+              <template #icon>
+                <n-icon :size="20"><RefreshSharp/></n-icon>
+              </template>
+            </n-button>
           </template>
-        </n-button>
-        <n-button quaternary circle
-                  @click="scrollTo_random_search(-1)"
-                  style="margin-left: -5px;">
-          <n-icon size="20" :depth="2">
-            <ChevronLeft16Filled />
-          </n-icon>
-        </n-button>
-        <n-button quaternary circle
-                  @click="scrollTo_random_search(1)"
-                  style="margin-left: -5px;">
-          <n-icon size="20" :depth="2">
-            <ChevronRight16Filled />
-          </n-icon>
-        </n-button>
+          {{ $t('common.refresh') }}
+        </n-tooltip>
+        <n-tooltip trigger="hover" placement="top">
+          <template #trigger>
+            <n-button quaternary circle
+                      @click="scrollTo_random_search(-1)"
+                      style="margin-left: -5px;">
+              <n-icon size="20" :depth="2">
+                <ChevronLeft16Filled />
+              </n-icon>
+            </n-button>
+          </template>
+          {{ $t('common.backward') }}
+        </n-tooltip>
+        <n-tooltip trigger="hover" placement="top">
+          <template #trigger>
+            <n-button quaternary circle
+                      @click="scrollTo_random_search(1)"
+                      style="margin-left: -5px;">
+              <n-icon size="20" :depth="2">
+                <ChevronRight16Filled />
+              </n-icon>
+            </n-button>
+          </template>
+          {{ $t('common.forward') }}
+        </n-tooltip>
+        <n-space v-if="store_view_home_page_info.home_Files_temporary_random_search.length === 0">
+          {{ $t('None') + $t('Play') + $t('Data') }}
+        </n-space>
       </n-space>
       <DynamicScroller
         class="home-wall" ref="dynamicScroller_random_search"
+        v-if="store_view_home_page_info.home_Files_temporary_random_search.length != 0"
         :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + (store_server_user_model.model_select === 'local' ? 70 : 60) + 'px'}"
         :items="store_view_home_page_info.home_Files_temporary_random_search"
         :itemSize="itemSize"
@@ -788,30 +858,54 @@ onBeforeUnmount(() => {
              style="margin-top: 36px;margin-left: 8px;">
       <n-space align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}">
         <span style="font-size: 16px;font-weight: 600;">
-          {{ $t('page.home.newlyAdded') }}
+          {{
+            $t('page.home.newlyAdded') + ' : ' +
+            (store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                ? $t('entity.track_other')
+                : $t('entity.album_other'))
+          }}
         </span>
-        <n-button quaternary circle @click="store_view_home_page_fetchData.fetchData_Home_of_recently_added()">
-          <template #icon>
-            <n-icon :size="20"><RefreshSharp/></n-icon>
+        <n-tooltip trigger="hover" placement="top">
+          <template #trigger>
+            <n-button quaternary circle @click="store_view_home_page_fetchData.fetchData_Home_of_recently_added()">
+              <template #icon>
+                <n-icon :size="20"><RefreshSharp/></n-icon>
+              </template>
+            </n-button>
           </template>
-        </n-button>
-        <n-button quaternary circle
-                  @click="scrollTo_recently_added(-1)"
-                  style="margin-left: -5px;">
-          <n-icon size="20" :depth="2">
-            <ChevronLeft16Filled />
-          </n-icon>
-        </n-button>
-        <n-button quaternary circle
-                  @click="scrollTo_recently_added(1)"
-                  style="margin-left: -5px;">
-          <n-icon size="20" :depth="2">
-            <ChevronRight16Filled />
-          </n-icon>
-        </n-button>
+          {{ $t('common.refresh') }}
+        </n-tooltip>
+        <n-tooltip trigger="hover" placement="top">
+          <template #trigger>
+            <n-button quaternary circle
+                      @click="scrollTo_recently_added(-1)"
+                      style="margin-left: -5px;">
+              <n-icon size="20" :depth="2">
+                <ChevronLeft16Filled />
+              </n-icon>
+            </n-button>
+          </template>
+          {{ $t('common.backward') }}
+        </n-tooltip>
+        <n-tooltip trigger="hover" placement="top">
+          <template #trigger>
+            <n-button quaternary circle
+                      @click="scrollTo_recently_added(1)"
+                      style="margin-left: -5px;">
+              <n-icon size="20" :depth="2">
+                <ChevronRight16Filled />
+              </n-icon>
+            </n-button>
+          </template>
+          {{ $t('common.forward') }}
+        </n-tooltip>
+        <n-space v-if="store_view_home_page_info.home_Files_temporary_recently_added.length === 0">
+          {{ $t('None') + $t('Play') + $t('Data') }}
+        </n-space>
       </n-space>
       <DynamicScroller
         class="home-wall" ref="dynamicScroller_recently_added"
+        v-if="store_view_home_page_info.home_Files_temporary_recently_added.length != 0"
         :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + (store_server_user_model.model_select === 'local' ? 70 : 60) + 'px'}"
         :items="store_view_home_page_info.home_Files_temporary_recently_added"
         :itemSize="itemSize"
@@ -931,30 +1025,54 @@ onBeforeUnmount(() => {
              style="margin-top: 36px;margin-left: 8px;">
       <n-space align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}">
         <span style="font-size: 16px;font-weight: 600;">
-          {{ $t('page.home.recentlyPlayed') }}
+          {{
+            $t('page.home.recentlyPlayed') + ' : ' +
+            (store_server_users.server_config_of_current_user_of_sqlite?.type != 'navidrome'
+                ? $t('entity.track_other')
+                : $t('entity.album_other'))
+          }}
         </span>
-        <n-button quaternary circle @click="store_view_home_page_fetchData.fetchData_Home_of_recently_played()">
-          <template #icon>
-            <n-icon :size="20"><RefreshSharp/></n-icon>
+        <n-tooltip trigger="hover" placement="top">
+          <template #trigger>
+            <n-button quaternary circle @click="store_view_home_page_fetchData.fetchData_Home_of_recently_played()">
+              <template #icon>
+                <n-icon :size="20"><RefreshSharp/></n-icon>
+              </template>
+            </n-button>
           </template>
-        </n-button>
-        <n-button quaternary circle
-                  @click="scrollTo_recently_played(-1)"
-                  style="margin-left: -5px;">
-          <n-icon size="20" :depth="2">
-            <ChevronLeft16Filled />
-          </n-icon>
-        </n-button>
-        <n-button quaternary circle
-                  @click="scrollTo_recently_played(1)"
-                  style="margin-left: -5px;">
-          <n-icon size="20" :depth="2">
-            <ChevronRight16Filled />
-          </n-icon>
-        </n-button>
+          {{ $t('common.refresh') }}
+        </n-tooltip>
+        <n-tooltip trigger="hover" placement="top">
+          <template #trigger>
+            <n-button quaternary circle
+                      @click="scrollTo_recently_played(-1)"
+                      style="margin-left: -5px;">
+              <n-icon size="20" :depth="2">
+                <ChevronLeft16Filled />
+              </n-icon>
+            </n-button>
+          </template>
+          {{ $t('common.backward') }}
+        </n-tooltip>
+        <n-tooltip trigger="hover" placement="top">
+          <template #trigger>
+            <n-button quaternary circle
+                      @click="scrollTo_recently_played(1)"
+                      style="margin-left: -5px;">
+              <n-icon size="20" :depth="2">
+                <ChevronRight16Filled />
+              </n-icon>
+            </n-button>
+          </template>
+          {{ $t('common.forward') }}
+        </n-tooltip>
+        <n-space v-if="store_view_home_page_info.home_Files_temporary_recently_played.length === 0">
+          {{ $t('None') + $t('Play') + $t('Data') }}
+        </n-space>
       </n-space>
       <DynamicScroller
         class="home-wall" ref="dynamicScroller_recently_played"
+        v-if="store_view_home_page_info.home_Files_temporary_recently_played.length != 0"
         :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + (store_server_user_model.model_select === 'local' ? 70 : 60) + 'px'}"
         :items="store_view_home_page_info.home_Files_temporary_recently_played"
         :itemSize="itemSize"

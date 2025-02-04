@@ -275,6 +275,7 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
                 year
             );
             songlist = data
+            store_playlist_list_fetchData._totalCount = totalCount
         }else{ // ! find_model
             const {data,totalCount} = await this.song_Lists_ApiWebService_of_ND.getMediaList_of_Playlist(
                 playlist_id,
@@ -282,6 +283,7 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
                 year
             )
             songlist = data
+            store_playlist_list_fetchData._totalCount = totalCount
         }
         if (Array.isArray(songlist) && songlist.length > 0) {
             if(_sort === 'playDate'){
@@ -575,7 +577,7 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
         let media_Retrieval_ApiService_of_ND = new Media_Retrieval_ApiService_of_ND(url);
         let songlist = getRandomSongs["subsonic-response"]["randomSongs"]["song"];
         if (Array.isArray(songlist) && songlist.length > 0) {
-            let last_index = 0
+            let last_index = 0;
             songlist.map(async (song: any, index: number) => {
                 const getLyrics_all = await media_Retrieval_ApiService_of_ND.getLyrics_all(username, token, salt, song.id);
                 let lyrics = undefined;
@@ -648,11 +650,12 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
                     await store_player_audio_logic.update_current_media_info(media_file, index)
                     store_playlist_list_logic.media_page_handleItemDbClick = false
                     store_player_audio_info.this_audio_restart_play = true
-
+                    //
                     store_server_user_model.random_play_model_add = false
                 }
             })
-            store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
+            store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
+                store_playlist_list_info.playlist_MediaFiles_temporary.map(item => item.id);
             store_app_configs_logic_save.save_system_playlist_item_id_config();
         }
     }

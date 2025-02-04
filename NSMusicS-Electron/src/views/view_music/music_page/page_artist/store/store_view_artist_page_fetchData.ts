@@ -258,10 +258,7 @@ export const store_view_artist_page_fetchData = reactive({
         await this.fetchData_Artist_of_server_web()
 
         if(store_player_appearance.player_mode_of_medialist_from_external_import) {
-            store_view_media_page_fetchData._album_id = ''
-            store_view_media_page_fetchData._album_artist_id = ''
-            store_view_media_page_fetchData._artist_id = ''
-            store_view_album_page_fetchData._artist_id = ''
+            store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_parms()
         }
     },
     async fetchData_Artist_of_server_web_end(){

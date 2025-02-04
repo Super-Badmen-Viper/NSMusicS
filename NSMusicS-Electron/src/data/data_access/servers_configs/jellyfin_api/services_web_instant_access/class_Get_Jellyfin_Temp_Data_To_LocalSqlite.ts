@@ -33,6 +33,9 @@ import axios from "axios";
 import {
     store_view_media_page_logic
 } from "../../../../../views/view_music/music_page/page_media/store/store_view_media_page_logic";
+import {
+    store_playlist_list_fetchData
+} from "../../../../../views/view_music/music_components/player_list/store/store_playlist_list_fetchData";
 
 export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
     private items_ApiService_of_Je = new Items_ApiService_of_Je(
@@ -131,7 +134,6 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                 store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Users/' +
                 store_server_user_model.userid_of_Je + '/Items?SortBy=Random&SortOrder=Descending&' +
                 'IncludeItemTypes=Audio&Limit=16&Recursive=true&Fields=BasicSyncInfo%2CCanDelete%2CPrimaryImageAspectRatio%2CProductionYear%2CStatus%2CEndDate%2CCommunityRating%2COfficialRating%2CCriticRating' +
-                '&Filters=IsPlayed' +
                 '&ParentId=' + parentId + '&ImageTypeLimit=1&EnableImageTypes=Primary%2CBackdrop%2CThumb' +
                 '&startIndex=0&RandomSeed=7916807' +
                 '&api_key=' + store_server_user_model.authorization_of_Je
@@ -343,6 +345,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             'api_key=' + store_server_user_model.authorization_of_Je
         );
         let songlist = response_media_list.data.Items;
+        store_playlist_list_fetchData._totalCount = response_media_list.data.TotalRecordCount
         if (Array.isArray(songlist) && songlist.length > 0) {
             let last_index = store_view_media_page_info.media_Files_temporary.length
             store_view_media_page_info.media_File_metadata = [];
@@ -423,8 +426,102 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         }
     }
 
+
+    /// jellyfin - home -> media_id -> media
+    public async get_media_list_of_home$media_of_Je(
+        media_id: string,
+        limit: string, startIndex: string,
+    ){
+        const data = await axios(
+            store_server_users.server_config_of_current_user_of_sqlite?.url + '/Users/' +
+            store_server_user_model.userid_of_Je + '/Items/' + media_id + '?' +
+            '&Limit=' + limit + '&StartIndex=' + startIndex +
+            '&api_key=' + store_server_user_model.authorization_of_Je
+        );
+        let songlist = [];songlist.push(data.data);
+        store_view_media_page_info.media_item_count = songlist.length // 1个
+        store_playlist_list_fetchData._totalCount = songlist.length // 1个
+        if (Array.isArray(songlist) && songlist.length > 0) {
+            let last_index = store_view_media_page_info.media_Files_temporary.length
+            store_view_media_page_info.media_File_metadata = [];
+            await Promise.all(songlist.map(async (song: any, index: number) => {
+                const medium_image_url =
+                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                        ?
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
+                        song.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                        :
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
+                        (song.ImageTags?.Primary ? song.Id : song.ParentBackdropItemId) +
+                        (song.ImageTags?.Primary ? '/Images/Primary?fillWidth=122&fillHeight=122&tag=' : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
+                        (song.ImageTags?.Primary ?? song.ParentBackdropImageTags?.[0] ?? 'default') +
+                        '&api_key=' + store_server_user_model.authorization_of_Je;
+                const blobUrl =
+                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/Audio/' +
+                    song.Id + '/universal?UserId=' +
+                    store_server_user_model.userid_of_Je + '&MaxStreamingBitrate=1145761093&Container=opus%2Cwebm%7Copus%2Cts%7Cmp3%2Cmp3%2Caac%2Cm4a%7Caac%2Cm4b%7Caac%2Cflac%2Cwebma%2Cwebm%7Cwebma%2Cwav%2Cogg&TranscodingContainer=mp4&TranscodingProtocol=hls&AudioCodec=aac&api_key=' +
+                    store_server_user_model.authorization_of_Je + '&StartTimeTicks=0&EnableRedirection=true&EnableRemoteMedia=false&EnableAudioVbrEncoding=true';
+                //
+                store_view_media_page_info.media_File_metadata.push(song);
+                store_view_media_page_info.media_Files_temporary.push({
+                    absoluteIndex: index + 1 + last_index,
+                    favorite: song.UserData.IsFavorite,
+                    rating: 0,
+                    duration_txt: this.formatTime(song.RunTimeTicks),
+                    id: song.Id,
+                    title: song.Name,
+                    path: blobUrl,
+                    artist: song.Artists.length > 0 ? song.Artists[0] : '',
+                    album: song.Album,
+                    artist_id: song.ArtistItems.length > 0 ? song.ArtistItems[0].Id : '',
+                    album_id: song.AlbumId,
+                    album_artist: '',
+                    has_cover_art: 0,
+                    track_number: 0,
+                    disc_number: 0,
+                    year: song.ProductionYear,
+                    size: '',
+                    suffix: '',
+                    duration: song.RunTimeTicks,
+                    bit_rate: '',
+                    genre: '',
+                    compilation: 0,
+                    created_at: song.PremiereDate,
+                    updated_at: '',
+                    full_text: '',
+                    album_artist_id: '',
+                    order_album_name: '',
+                    order_album_artist_name: '',
+                    order_artist_name: '',
+                    sort_album_name: '',
+                    sort_artist_name: '',
+                    sort_album_artist_name: '',
+                    sort_title: '',
+                    disc_subtitle: '',
+                    mbz_track_id: '',
+                    mbz_album_id: '',
+                    mbz_artist_id: '',
+                    mbz_album_artist_id: '',
+                    mbz_album_type: '',
+                    mbz_album_comment: '',
+                    catalog_num: '',
+                    comment: '',
+                    lyrics: '',
+                    bpm: 0,
+                    channels: 0,
+                    order_title: song.PlaylistItemId,
+                    mbz_release_track_id: '',
+                    rg_album_gain: 0,
+                    rg_album_peak: 0,
+                    rg_track_gain: 0,
+                    rg_track_peak: 0,
+                    medium_image_url: medium_image_url
+                });
+            }));
+        }
+    }
     /// emby - home -> album_id -> media
-    public async get_media_list_of_album(
+    public async get_media_list_of_home$album_of_Em(
         album_artist_id: string,
         limit: string, startIndex: string,
     ){
@@ -440,6 +537,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         let list = data.data;
         let songlist = list.Items;
         store_view_media_page_info.media_item_count = list.TotalRecordCount
+        store_playlist_list_fetchData._totalCount = list.TotalRecordCount
         if (Array.isArray(songlist) && songlist.length > 0) {
             let last_index = store_view_media_page_info.media_Files_temporary.length
             store_view_media_page_info.media_File_metadata = [];
@@ -541,6 +639,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             )
             songlist = list.Items;
             store_view_media_page_info.media_item_count = list.TotalRecordCount
+            store_playlist_list_fetchData._totalCount = list.TotalRecordCount
         }else{
             const response_playlMedias = await axios(
                 store_server_users.server_config_of_current_user_of_sqlite?.url + '/Playlists/' +
@@ -556,6 +655,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     songlist = []
                 }
             }
+            store_playlist_list_fetchData._totalCount = response_playlMedias.data.TotalRecordCount
         }
         if (Array.isArray(songlist) && songlist.length > 0) {
             if(sortBy === 'DatePlayed'){
@@ -862,194 +962,6 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     external_info_updated_at: '',
                 })
             })
-        }
-    }
-
-    public async get_play_list(
-        url: string,
-        username: string,token: string,salt: string,
-        _end:string, _order:string, _sort:string, _start: string, _search:string, _starred:string,
-        playlist_id: string,
-        _album_id:string, _artist_id:string
-    ){
-        let songlist = []
-        if(playlist_id === '') {
-            songlist = await this.song_Lists_ApiWebService_of_ND.getMediaList_ALL(
-                _end, _order, _sort, _start, _search, _starred, _album_id, _artist_id
-            );
-        }else{
-            songlist = await this.song_Lists_ApiWebService_of_ND.getMediaList_of_Playlist(
-                playlist_id,
-                _end, _order, _sort, _start
-            )
-        }
-        if (Array.isArray(songlist) && songlist.length > 0) {
-            if(_sort === 'playDate'){
-                songlist = songlist.filter(song => song.playCount > 0)
-            }
-            let last_index = store_view_media_page_info.media_Files_temporary.length
-            songlist.map(async (song: any, index: number) => {
-                let lyrics = this.convertToLRC(song.lyrics)
-                if(playlist_id !== '') {
-                    song.id = song.mediaFileId
-                }
-                const new_song = {
-                    absoluteIndex: index + 1 + last_index,
-                    favorite: song.UserData.IsFavorite,
-                    rating: 0,
-                    duration_txt: this.formatTime(song.duration),
-                    id: song.Id,
-                    title: song.title,
-                    path: url + '/stream?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + song.Id,
-                    artist: song.artist,
-                    album: song.album,
-                    artist_id: song.artistId,
-                    album_id: song.albumId,
-                    album_artist: '',
-                    has_cover_art: 0,
-                    track_number: song.track,
-                    disc_number: 0,
-                    year: song.ProductionYear,
-                    size: song.size,
-                    suffix: song.suffix,
-                    duration: song.RunTimeTicks,
-                    bit_rate: song.bitRate,
-                    genre: '',
-                    compilation: 0,
-                    created_at: song.PremiereDate,
-                    updated_at: '',
-                    full_text: '',
-                    album_artist_id: '',
-                    order_album_name: '',
-                    order_album_artist_name: '',
-                    order_artist_name: '',
-                    sort_album_name: '',
-                    sort_artist_name: '',
-                    sort_album_artist_name: '',
-                    sort_title: '',
-                    disc_subtitle: '',
-                    mbz_track_id: '',
-                    mbz_album_id: '',
-                    mbz_artist_id: '',
-                    mbz_album_artist_id: '',
-                    mbz_album_type: '',
-                    mbz_album_comment: '',
-                    catalog_num: '',
-                    comment: '',
-                    lyrics: lyrics,
-                    bpm: 0,
-                    channels: 0,
-                    order_title: '',
-                    mbz_release_track_id: '',
-                    rg_album_gain: 0,
-                    rg_album_peak: 0,
-                    rg_track_gain: 0,
-                    rg_track_peak: 0,
-                    medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + song.id
-                }
-                store_playlist_list_info.playlist_MediaFiles_temporary.push({
-                    ...new_song,
-                    play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
-                });
-            })
-            store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
-            store_app_configs_logic_save.save_system_playlist_item_id_config();
-        }
-    }
-    public async get_random_song_list(
-        url: string,
-        username: string,token: string,salt: string,
-        size: string,
-        fromYear: string, toYear: string
-    ){
-        let browsing_ApiService_of_ND = new Browsing_ApiService_of_ND(url);
-        const getRandomSongs = await browsing_ApiService_of_ND.getRandomSongs(
-            username, token, salt,
-            size,
-            fromYear, toYear
-        );
-        let media_Retrieval_ApiService_of_ND = new Media_Retrieval_ApiService_of_ND(url);
-        let songlist = getRandomSongs["subsonic-response"]["randomSongs"]["song"];
-        if (Array.isArray(songlist) && songlist.length > 0) {
-            let last_index = 0
-            songlist.map(async (song: any, index: number) => {
-                const getLyrics_all = await media_Retrieval_ApiService_of_ND.getLyrics_all(username, token, salt, song.id);
-                let lyrics = undefined;
-                try {
-                    lyrics = this.convertToLRC_Array(getLyrics_all["subsonic-response"]["lyricsList"]["structuredLyrics"][0]["line"]);
-                } catch {
-                }
-                const new_song = {
-                    absoluteIndex: index + 1 + last_index,
-                    favorite: song.UserData.IsFavorite,
-                    rating: 0,
-                    duration_txt: this.formatTime(song.duration),
-                    id: song.Id,
-                    title: song.title,
-                    path: url + '/stream?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + song.Id,
-                    artist: song.artist,
-                    album: song.album,
-                    artist_id: song.artistId,
-                    album_id: song.albumId,
-                    album_artist: '',
-                    has_cover_art: 0,
-                    track_number: song.track,
-                    disc_number: 0,
-                    year: song.ProductionYear,
-                    size: song.size,
-                    suffix: song.suffix,
-                    duration: song.RunTimeTicks,
-                    bit_rate: song.bitRate,
-                    genre: '',
-                    compilation: 0,
-                    created_at: song.PremiereDate,
-                    updated_at: '',
-                    full_text: '',
-                    album_artist_id: '',
-                    order_album_name: '',
-                    order_album_artist_name: '',
-                    order_artist_name: '',
-                    sort_album_name: '',
-                    sort_artist_name: '',
-                    sort_album_artist_name: '',
-                    sort_title: '',
-                    disc_subtitle: '',
-                    mbz_track_id: '',
-                    mbz_album_id: '',
-                    mbz_artist_id: '',
-                    mbz_album_artist_id: '',
-                    mbz_album_type: '',
-                    mbz_album_comment: '',
-                    catalog_num: '',
-                    comment: '',
-                    lyrics: lyrics,
-                    bpm: 0,
-                    channels: 0,
-                    order_title: '',
-                    mbz_release_track_id: '',
-                    rg_album_gain: 0,
-                    rg_album_peak: 0,
-                    rg_track_gain: 0,
-                    rg_track_peak: 0,
-                    medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + song.id
-                }
-                store_playlist_list_info.playlist_MediaFiles_temporary.push({
-                    ...new_song,
-                    play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
-                });
-                if(index === songlist.length - 1){
-                    const index = store_server_user_model.random_play_model_add
-                        ? store_playlist_list_info.playlist_MediaFiles_temporary.length - 10: 0
-                    const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[index]
-                    await store_player_audio_logic.update_current_media_info(media_file, index)
-                    store_playlist_list_logic.media_page_handleItemDbClick = false
-                    store_player_audio_info.this_audio_restart_play = true
-
-                    store_server_user_model.random_play_model_add = false
-                }
-            })
-            store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
-            store_app_configs_logic_save.save_system_playlist_item_id_config();
         }
     }
 

@@ -205,6 +205,11 @@ export const store_view_media_page_logic = reactive({
             store_app_configs_logic_save.save_system_config_of_View_Router_History()
             store_view_media_page_logic.page_songlists_keyword = '';
         }
+    },
+
+    get_media_item_info_of_Je(item: any){
+
+
     }
 });
 watch(() => store_view_media_page_logic.page_songlists_options_Sort_key, async (newValue) => {

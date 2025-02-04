@@ -186,10 +186,7 @@ const show_search_area = () => {
       scrollTo(0)
     }
     if(store_server_user_model.model_server_type_of_web) {
-      store_view_media_page_fetchData._album_id = ''
-      store_view_media_page_fetchData._album_artist_id = ''
-      store_view_media_page_fetchData._artist_id = ''
-      store_view_album_page_fetchData._artist_id = ''
+      store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_parms()
     }
     input_search_InstRef.value?.clear()
     store_view_media_page_logic.page_songlists_keywordFilter = ""
@@ -381,9 +378,7 @@ const handleItemClick_artist = (artist:string) => {
     click_search()
     scrollTo(0)
   }else if(store_server_user_model.model_server_type_of_web){
-    store_view_media_page_fetchData._album_id = ''
-    store_view_media_page_fetchData._album_artist_id = ''
-    store_view_media_page_fetchData._artist_id = ''
+    store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_parms()
     store_view_media_page_logic.page_songlists_bool_show_search_area = true
     store_view_media_page_logic.page_songlists_input_search_Value = artist
     store_view_media_page_logic.get_page_songlists_keyword(artist)
@@ -405,9 +400,7 @@ const handleItemClick_album = (album_id:string) => {
     click_search()
     scrollTo(0)
   }else if(store_server_user_model.model_server_type_of_web){
-    store_view_media_page_fetchData._album_id = ''
-    store_view_media_page_fetchData._album_artist_id = ''
-    store_view_media_page_fetchData._artist_id = ''
+    store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_parms()
     store_view_media_page_logic.page_songlists_bool_show_search_area = true
     store_view_media_page_logic.page_songlists_input_search_Value = album_id
     store_view_media_page_logic.get_page_songlists_keyword(album_id)
@@ -781,7 +774,8 @@ const begin_select_MediaList_ALL_Line_of_playback = (key: string | number) => {
 };
 async function begin_random_play_model() {
   click_count = 2;
-  store_playlist_list_info.playlist_MediaFiles_temporary = []
+  store_playlist_list_info.playlist_MediaFiles_temporary = [];
+  store_player_audio_logic.play_order = 'playback-4';
   let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
   await get_Navidrome_Temp_Data_To_LocalSqlite.get_random_song_list(
       store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
@@ -873,10 +867,7 @@ const onRefreshSharp = async () => {
     ) {
       store_player_appearance.player_mode_of_medialist_from_external_import = false;
     }
-    store_view_media_page_fetchData._album_id = ''
-    store_view_media_page_fetchData._album_artist_id = ''
-    store_view_media_page_fetchData._artist_id = ''
-    store_view_album_page_fetchData._artist_id = ''
+    store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_parms()
     store_view_media_page_logic.page_songlists_keyword = ''
     input_search_InstRef.value?.clear()
     store_view_media_page_logic.page_songlists_keywordFilter = ""

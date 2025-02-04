@@ -415,11 +415,14 @@ const backpanel_order_click = () => {
 async function Play_Media_Order(model_num: string, increased: number) {
   let last_index = 0
   if(store_server_user_model.model_server_type_of_local){
+    // local获取的该列表项总数，一次性加载不刷新
     last_index = store_playlist_list_info.playlist_MediaFiles_temporary.length
   }else if(store_server_user_model.model_server_type_of_web){
     if(!store_server_user_model.random_play_model) {
-      last_index = store_playlist_list_fetchData._totalCount || store_playlist_list_info.playlist_MediaFiles_temporary.length
+      // web获取的该列表项总数，触底加载不刷新
+      last_index = store_playlist_list_fetchData._totalCount
     }else{
+      // web随机获取，设置为固定10项，触底加载刷新+10
       last_index = store_playlist_list_info.playlist_MediaFiles_temporary.length
     }
   }
@@ -461,10 +464,13 @@ async function Play_Media_Order(model_num: string, increased: number) {
         }
       } else if (model_num === 'playback-4') {
         if(!store_server_user_model.random_play_model) {
+          // 不设置last_index，是因为web触底刷新目前只能依次顺序加载，而不能虚拟化跳过加载
+          // 虚拟化待支持，在NSMusicS-GO中实现
           index = Math.floor(
               Math.random() * store_playlist_list_info.playlist_MediaFiles_temporary.length
           );
         }else{
+          // navidrome random_play_model
           index += increased;
           if (index >= last_index) {
             store_server_user_model.random_play_model_add = true
@@ -760,6 +766,13 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
     store_player_audio_logic.player_click_state_of_play_skip_forward = false
   }
 })
+watch(() => store_server_user_model.random_play_model, (newValue) => {
+  if(newValue) {
+    message.success(t('ButtonStart') + ' navidrome ' + t('Shuffle'))
+  }else{
+    message.success(t('Off') + ' navidrome ' + t('Shuffle'))
+  }
+});
 </script>
 <template>
   <n-space
@@ -1017,6 +1030,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
                     @click="() => {
                       store_player_audio_logic.play_order = 'playback-1';
                       store_player_audio_logic.drawer_order_show = false;
+                      store_server_user_model.random_play_model = false;
                     }"
                     :style="{
                       minWidth: store_player_audio_logic.orderButonWidath + 'px',
@@ -1036,6 +1050,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
                     @click="() => {
                       store_player_audio_logic.play_order = 'playback-2';
                       store_player_audio_logic.drawer_order_show = false;
+                      store_server_user_model.random_play_model = false;
                     }"
                     :style="{
                       minWidth: store_player_audio_logic.orderButonWidath + 'px',
@@ -1055,6 +1070,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
                     @click="() => {
                       store_player_audio_logic.play_order = 'playback-3';
                       store_player_audio_logic.drawer_order_show = false;
+                      store_server_user_model.random_play_model = false;
                     }"
                     :style="{
                       minWidth: store_player_audio_logic.orderButonWidath + 'px',
@@ -1074,6 +1090,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
                     @click="() => {
                       store_player_audio_logic.play_order = 'playback-4';
                       store_player_audio_logic.drawer_order_show = false;
+                      store_server_user_model.random_play_model = false;
                     }"
                     :style="{
                       minWidth: store_player_audio_logic.orderButonWidath + 'px',
