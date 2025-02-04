@@ -20,6 +20,15 @@ import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 import {
     Get_Jellyfin_Temp_Data_To_LocalSqlite
 } from "../../data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
+import {
+    store_view_media_page_logic
+} from "../../../views/view_music/music_page/page_media/store/store_view_media_page_logic";
+import {
+    store_view_album_page_logic
+} from "../../../views/view_music/music_page/page_album/store/store_view_album_page_logic";
+import {
+    store_view_artist_page_logic
+} from "../../../views/view_music/music_page/page_artist/store/store_view_artist_page_logic";
 
 export const store_server_user_model = reactive({
     model_select: 'server',
@@ -82,7 +91,10 @@ export const store_server_user_model = reactive({
     async switchToMode(){
         if(!store_app_configs_logic_load.app_configs_loading) {
             // Refresh Current AudioInfo
-            await store_player_audio_info.reset_data()
+            await store_player_audio_info.reset_data();
+            store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+            store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
+            store_view_artist_page_logic.page_artistlists_selected = 'artist_list_all'
             if(store_player_audio_logic.player_select === 'mpv') {
                 if(isElectron) {
                     await ipcRenderer.invoke('mpv-stopped');

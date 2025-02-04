@@ -23,7 +23,16 @@ onMounted(() => {
 const handleItemDbClick = async (media_file:any,index:number) => {
   if(store_server_user_model.model_server_type_of_web){
     /// Data synchronization
-    store_playlist_list_fetchData.fetchData_PlayList_of_data_synchronization_to_Media()
+    store_playlist_list_info.playlist_MediaFiles_temporary.forEach((row) => {
+      const existingIndex = store_view_media_page_info.media_Files_temporary.findIndex(
+          (item) => item.id === row.id
+      );
+      if (existingIndex === -1) {
+        const newRow = { ...row };
+        delete newRow.play_id;
+        store_view_media_page_info.media_Files_temporary.push(newRow);
+      }
+    });
   }
   await store_player_audio_logic.update_current_media_info(media_file, index)
   store_playlist_list_logic.media_page_handleItemDbClick = false
@@ -99,6 +108,7 @@ import {
 } from "@/views/view_music/music_page/page_media/store/store_view_media_page_fetchData";
 import {store_view_media_page_logic} from "@/views/view_music/music_page/page_media/store/store_view_media_page_logic";
 import {store_player_audio_logic} from "@/views/view_music/music_page/page_player/store/store_player_audio_logic";
+import {store_view_media_page_info} from "@/views/view_music/music_page/page_media/store/store_view_media_page_info";
 const contextmenu = inject("playlist_contextmenu", null);
 async function update_playlist_addMediaFile(id: any, playlist_id: any){
   try{
@@ -193,7 +203,9 @@ const onScrollEnd = async () => {
   if (isScrolling.value) return;
   isScrolling.value = true;
   if (store_server_user_model.model_server_type_of_web) {
-    await store_playlist_list_fetchData.fetchData_PlayList_of_server_web_end()
+    store_view_media_page_fetchData._load_model = 'play'
+    await store_view_media_page_fetchData.fetchData_Media_of_server_web_end()
+    store_view_media_page_fetchData._load_model = 'search'
   }
   isScrolling.value = false;
 };
@@ -277,7 +289,7 @@ onMounted(()=>{
                   {{ item.title }}
                 </span>
                 <br>
-                <template v-for="artist in item.artist.split('/')">
+                <template v-for="artist in item.artist.split(/[\/|｜]/)">
                   <span @click="handleItemClick_artist(artist)">{{ artist + '&nbsp' }}</span>
                 </template>
               </div>
@@ -328,7 +340,7 @@ onMounted(()=>{
                   {{ item.title }}
                 </span>
                 <br>
-                <template v-for="artist in item.artist.split('/')">
+                <template v-for="artist in item.artist.split(/[\/|｜]/)">
                   <span @click="handleItemClick_artist(artist)">{{ artist + '&nbsp' }}</span>
                 </template>
               </div>

@@ -390,7 +390,6 @@ const Open_this_artist_all_artist_list_click = (artist_id:string) => {
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
     store_view_album_page_fetchData._artist_id = artist_id
     store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
-    store_playlist_list_fetchData._artist_id = artist_id
   }
   if(
       store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
@@ -413,7 +412,6 @@ const Play_this_artist_all_media_list_click = async (artist_id: string) => {
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
     store_view_album_page_fetchData._artist_id = artist_id
     store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
-    store_playlist_list_fetchData._artist_id = artist_id
     store_server_user_model.random_play_model = false;
   }
   console.log('play_this_artist_song_list：' + artist_id);

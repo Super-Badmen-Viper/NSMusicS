@@ -23,6 +23,9 @@ import {
     store_playlist_list_logic
 } from "../../../../../views/view_music/music_components/player_list/store/store_playlist_list_logic";
 import {store_player_audio_info} from "../../../../../views/view_music/music_page/page_player/store/store_player_audio_info";
+import {
+    store_view_media_page_fetchData
+} from "../../../../../views/view_music/music_page/page_media/store/store_view_media_page_fetchData";
 
 export class Get_Navidrome_Temp_Data_To_LocalSqlite{
     private home_Lists_ApiWebService_of_ND = new Home_Lists_ApiWebService_of_ND(
@@ -289,73 +292,84 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
             if(_sort === 'playDate'){
                 songlist = songlist.filter(song => song.playCount > 0)
             }
-            let last_index = store_view_media_page_info.media_Files_temporary.length
+            let last_index = store_view_media_page_fetchData._load_model === 'search' ?
+                store_view_media_page_info.media_Files_temporary.length :
+                store_playlist_list_info.playlist_MediaFiles_temporary.length
             store_view_media_page_info.media_File_metadata = [];
             songlist.map(async (song: any, index: number) => {
                 let lyrics = this.convertToLRC(song.lyrics)
                 if(playlist_id !== '') {
                     song.id = song.mediaFileId
                 }
-                store_view_media_page_info.media_File_metadata.push(
-                    song
-                )
-                store_view_media_page_info.media_Files_temporary.push(
-                    {
-                        absoluteIndex: index + 1 + last_index,
-                        favorite: song.starred,
-                        rating: song.rating,
-                        duration_txt: this.formatTime(song.duration),
-                        id: song.id,
-                        title: song.title,
-                        path: url + '/stream?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + song.id,
-                        artist: song.artist,
-                        album: song.album,
-                        artist_id: song.artistId,
-                        album_id: song.albumId,
-                        album_artist: '',
-                        has_cover_art: 0,
-                        track_number: song.track,
-                        disc_number: 0,
-                        year: song.year,
-                        size: song.size,
-                        suffix: song.suffix,
-                        duration: song.duration,
-                        bit_rate: song.bitRate,
-                        genre: '',
-                        compilation: 0,
-                        created_at: song.created,
-                        updated_at: '',
-                        full_text: '',
-                        album_artist_id: '',
-                        order_album_name: '',
-                        order_album_artist_name: '',
-                        order_artist_name: '',
-                        sort_album_name: '',
-                        sort_artist_name: '',
-                        sort_album_artist_name: '',
-                        sort_title: '',
-                        disc_subtitle: '',
-                        mbz_track_id: '',
-                        mbz_album_id: '',
-                        mbz_artist_id: '',
-                        mbz_album_artist_id: '',
-                        mbz_album_type: '',
-                        mbz_album_comment: '',
-                        catalog_num: '',
-                        comment: '',
-                        lyrics: lyrics,
-                        bpm: 0,
-                        channels: 0,
-                        order_title: '',
-                        mbz_release_track_id: '',
-                        rg_album_gain: 0,
-                        rg_album_peak: 0,
-                        rg_track_gain: 0,
-                        rg_track_peak: 0,
-                        medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + song.id
-                    }
-                )
-            })
+                const newsong = {
+                    absoluteIndex: index + 1 + last_index,
+                    favorite: song.starred,
+                    rating: song.rating,
+                    duration_txt: this.formatTime(song.duration),
+                    id: song.id,
+                    title: song.title,
+                    path: url + '/stream?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + song.id,
+                    artist: song.artist,
+                    album: song.album,
+                    artist_id: song.artistId,
+                    album_id: song.albumId,
+                    album_artist: '',
+                    has_cover_art: 0,
+                    track_number: song.track,
+                    disc_number: 0,
+                    year: song.year,
+                    size: song.size,
+                    suffix: song.suffix,
+                    duration: song.duration,
+                    bit_rate: song.bitRate,
+                    genre: '',
+                    compilation: 0,
+                    created_at: song.created,
+                    updated_at: '',
+                    full_text: '',
+                    album_artist_id: '',
+                    order_album_name: '',
+                    order_album_artist_name: '',
+                    order_artist_name: '',
+                    sort_album_name: '',
+                    sort_artist_name: '',
+                    sort_album_artist_name: '',
+                    sort_title: '',
+                    disc_subtitle: '',
+                    mbz_track_id: '',
+                    mbz_album_id: '',
+                    mbz_artist_id: '',
+                    mbz_album_artist_id: '',
+                    mbz_album_type: '',
+                    mbz_album_comment: '',
+                    catalog_num: '',
+                    comment: '',
+                    lyrics: lyrics,
+                    bpm: 0,
+                    channels: 0,
+                    order_title: '',
+                    mbz_release_track_id: '',
+                    rg_album_gain: 0,
+                    rg_album_peak: 0,
+                    rg_track_gain: 0,
+                    rg_track_peak: 0,
+                    medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + song.id
+                }
+                if(store_view_media_page_fetchData._load_model === 'search') {
+                    store_view_media_page_info.media_File_metadata.push(song)
+                    store_view_media_page_info.media_Files_temporary.push(newsong)
+                }else{
+                    store_playlist_list_info.playlist_MediaFiles_temporary.push({
+                        ...newsong,
+                        play_id: newsong.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
+                    });
+                }
+            });
+            if(store_view_media_page_fetchData._load_model === 'play') {
+                store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
+                    store_view_media_page_info.media_Files_temporary.map(item => item.id);
+                store_app_configs_logic_save.save_system_playlist_item_id_config();
+            }
         }
     }
     public async get_album_list(

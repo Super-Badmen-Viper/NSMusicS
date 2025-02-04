@@ -36,6 +36,9 @@ import {
 import {
     store_playlist_list_fetchData
 } from "../../../../../views/view_music/music_components/player_list/store/store_playlist_list_fetchData";
+import {
+    store_view_media_page_fetchData
+} from "../../../../../views/view_music/music_page/page_media/store/store_view_media_page_fetchData";
 
 export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
     private items_ApiService_of_Je = new Items_ApiService_of_Je(
@@ -60,7 +63,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             '&ParentId=' + parentId + '&ImageTypeLimit=1&EnableImageTypes=Primary%2CBackdrop%2CBanner%2CThumb&EnableTotalRecordCount=false' +
             '&api_key=' + store_server_user_model.authorization_of_Je
         );
-        const maximum_playback  = response_list_of_maximum_playback.data.Items;
+        const maximum_playback = response_list_of_maximum_playback.data.Items;
         if(maximum_playback != undefined && Array.isArray(maximum_playback)) {
             maximum_playback.map(async (album: any) => {
                 const medium_image_url =
@@ -347,7 +350,9 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         let songlist = response_media_list.data.Items;
         store_playlist_list_fetchData._totalCount = response_media_list.data.TotalRecordCount
         if (Array.isArray(songlist) && songlist.length > 0) {
-            let last_index = store_view_media_page_info.media_Files_temporary.length
+            let last_index = store_view_media_page_fetchData._load_model === 'search' ?
+                store_view_media_page_info.media_Files_temporary.length :
+                store_playlist_list_info.playlist_MediaFiles_temporary.length
             store_view_media_page_info.media_File_metadata = [];
             await Promise.all(songlist.map(async (song: any, index: number) => {
                 const medium_image_url =
@@ -366,9 +371,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     song.Id + '/universal?UserId=' +
                     store_server_user_model.userid_of_Je + '&MaxStreamingBitrate=1145761093&Container=opus%2Cwebm%7Copus%2Cts%7Cmp3%2Cmp3%2Caac%2Cm4a%7Caac%2Cm4b%7Caac%2Cflac%2Cwebma%2Cwebm%7Cwebma%2Cwav%2Cogg&TranscodingContainer=mp4&TranscodingProtocol=hls&AudioCodec=aac&api_key=' +
                     store_server_user_model.authorization_of_Je + '&StartTimeTicks=0&EnableRedirection=true&EnableRemoteMedia=false&EnableAudioVbrEncoding=true';
-                //
-                store_view_media_page_info.media_File_metadata.push(song);
-                store_view_media_page_info.media_Files_temporary.push({
+                const newsong = {
                     absoluteIndex: index + 1 + last_index,
                     favorite: song.UserData.IsFavorite,
                     rating: 0,
@@ -414,15 +417,29 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     lyrics: '',
                     bpm: 0,
                     channels: 0,
-                    order_title: '',
+                    order_title: song.PlaylistItemId,
                     mbz_release_track_id: '',
                     rg_album_gain: 0,
                     rg_album_peak: 0,
                     rg_track_gain: 0,
                     rg_track_peak: 0,
                     medium_image_url: medium_image_url
-                });
+                };
+                if(store_view_media_page_fetchData._load_model === 'search') {
+                    store_view_media_page_info.media_File_metadata.push(song);
+                    store_view_media_page_info.media_Files_temporary.push(newsong);
+                }else{
+                    store_playlist_list_info.playlist_MediaFiles_temporary.push({
+                        ...newsong,
+                        play_id: newsong.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
+                    });
+                }
             }));
+            if(store_view_media_page_fetchData._load_model === 'play') {
+                store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
+                    store_view_media_page_info.media_Files_temporary.map(item => item.id);
+                store_app_configs_logic_save.save_system_playlist_item_id_config();
+            }
         }
     }
 
@@ -442,7 +459,9 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         store_view_media_page_info.media_item_count = songlist.length // 1个
         store_playlist_list_fetchData._totalCount = songlist.length // 1个
         if (Array.isArray(songlist) && songlist.length > 0) {
-            let last_index = store_view_media_page_info.media_Files_temporary.length
+            let last_index = store_view_media_page_fetchData._load_model === 'search' ?
+                store_view_media_page_info.media_Files_temporary.length :
+                store_playlist_list_info.playlist_MediaFiles_temporary.length
             store_view_media_page_info.media_File_metadata = [];
             await Promise.all(songlist.map(async (song: any, index: number) => {
                 const medium_image_url =
@@ -461,9 +480,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     song.Id + '/universal?UserId=' +
                     store_server_user_model.userid_of_Je + '&MaxStreamingBitrate=1145761093&Container=opus%2Cwebm%7Copus%2Cts%7Cmp3%2Cmp3%2Caac%2Cm4a%7Caac%2Cm4b%7Caac%2Cflac%2Cwebma%2Cwebm%7Cwebma%2Cwav%2Cogg&TranscodingContainer=mp4&TranscodingProtocol=hls&AudioCodec=aac&api_key=' +
                     store_server_user_model.authorization_of_Je + '&StartTimeTicks=0&EnableRedirection=true&EnableRemoteMedia=false&EnableAudioVbrEncoding=true';
-                //
-                store_view_media_page_info.media_File_metadata.push(song);
-                store_view_media_page_info.media_Files_temporary.push({
+                const newsong = {
                     absoluteIndex: index + 1 + last_index,
                     favorite: song.UserData.IsFavorite,
                     rating: 0,
@@ -516,8 +533,22 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     rg_track_gain: 0,
                     rg_track_peak: 0,
                     medium_image_url: medium_image_url
-                });
+                };
+                if(store_view_media_page_fetchData._load_model === 'search') {
+                    store_view_media_page_info.media_File_metadata.push(song);
+                    store_view_media_page_info.media_Files_temporary.push(newsong);
+                }else{
+                    store_playlist_list_info.playlist_MediaFiles_temporary.push({
+                        ...newsong,
+                        play_id: newsong.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
+                    });
+                }
             }));
+            if(store_view_media_page_fetchData._load_model === 'play') {
+                store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
+                    store_view_media_page_info.media_Files_temporary.map(item => item.id);
+                store_app_configs_logic_save.save_system_playlist_item_id_config();
+            }
         }
     }
     /// emby - home -> album_id -> media
@@ -536,10 +567,13 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         );
         let list = data.data;
         let songlist = list.Items;
-        store_view_media_page_info.media_item_count = list.TotalRecordCount
-        store_playlist_list_fetchData._totalCount = list.TotalRecordCount
+        // 此处list.TotalRecordCount为0，Emby的api返回BUG
+        store_view_media_page_info.media_item_count = list.Items.length
+        store_playlist_list_fetchData._totalCount = list.Items.length
         if (Array.isArray(songlist) && songlist.length > 0) {
-            let last_index = store_view_media_page_info.media_Files_temporary.length
+            let last_index = store_view_media_page_fetchData._load_model === 'search' ?
+                store_view_media_page_info.media_Files_temporary.length :
+                store_playlist_list_info.playlist_MediaFiles_temporary.length
             store_view_media_page_info.media_File_metadata = [];
             await Promise.all(songlist.map(async (song: any, index: number) => {
                 const medium_image_url =
@@ -558,9 +592,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     song.Id + '/universal?UserId=' +
                     store_server_user_model.userid_of_Je + '&MaxStreamingBitrate=1145761093&Container=opus%2Cwebm%7Copus%2Cts%7Cmp3%2Cmp3%2Caac%2Cm4a%7Caac%2Cm4b%7Caac%2Cflac%2Cwebma%2Cwebm%7Cwebma%2Cwav%2Cogg&TranscodingContainer=mp4&TranscodingProtocol=hls&AudioCodec=aac&api_key=' +
                     store_server_user_model.authorization_of_Je + '&StartTimeTicks=0&EnableRedirection=true&EnableRemoteMedia=false&EnableAudioVbrEncoding=true';
-                //
-                store_view_media_page_info.media_File_metadata.push(song);
-                store_view_media_page_info.media_Files_temporary.push({
+                const newsong = {
                     absoluteIndex: index + 1 + last_index,
                     favorite: song.UserData.IsFavorite,
                     rating: 0,
@@ -613,8 +645,22 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     rg_track_gain: 0,
                     rg_track_peak: 0,
                     medium_image_url: medium_image_url
-                });
+                };
+                if(store_view_media_page_fetchData._load_model === 'search') {
+                    store_view_media_page_info.media_File_metadata.push(song);
+                    store_view_media_page_info.media_Files_temporary.push(newsong);
+                }else{
+                    store_playlist_list_info.playlist_MediaFiles_temporary.push({
+                        ...newsong,
+                        play_id: newsong.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
+                    });
+                }
             }));
+            if(store_view_media_page_fetchData._load_model === 'play') {
+                store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
+                    store_view_media_page_info.media_Files_temporary.map(item => item.id);
+                store_app_configs_logic_save.save_system_playlist_item_id_config();
+            }
         }
     }
 
@@ -661,7 +707,9 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             if(sortBy === 'DatePlayed'){
                 songlist = songlist.filter(song => song.UserData.PlayCount > 0)
             }
-            let last_index = store_view_media_page_info.media_Files_temporary.length
+            let last_index = store_view_media_page_fetchData._load_model === 'search' ?
+                store_view_media_page_info.media_Files_temporary.length :
+                store_playlist_list_info.playlist_MediaFiles_temporary.length
             store_view_media_page_info.media_File_metadata = [];
             await Promise.all(songlist.map(async (song: any, index: number) => {
                 const medium_image_url =
@@ -680,9 +728,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     song.Id + '/universal?UserId=' +
                     store_server_user_model.userid_of_Je + '&MaxStreamingBitrate=1145761093&Container=opus%2Cwebm%7Copus%2Cts%7Cmp3%2Cmp3%2Caac%2Cm4a%7Caac%2Cm4b%7Caac%2Cflac%2Cwebma%2Cwebm%7Cwebma%2Cwav%2Cogg&TranscodingContainer=mp4&TranscodingProtocol=hls&AudioCodec=aac&api_key=' +
                     store_server_user_model.authorization_of_Je + '&StartTimeTicks=0&EnableRedirection=true&EnableRemoteMedia=false&EnableAudioVbrEncoding=true';
-                //
-                store_view_media_page_info.media_File_metadata.push(song);
-                store_view_media_page_info.media_Files_temporary.push({
+                const newsong = {
                     absoluteIndex: index + 1 + last_index,
                     favorite: song.UserData.IsFavorite,
                     rating: 0,
@@ -735,8 +781,22 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     rg_track_gain: 0,
                     rg_track_peak: 0,
                     medium_image_url: medium_image_url
-                });
+                };
+                if(store_view_media_page_fetchData._load_model === 'search') {
+                    store_view_media_page_info.media_File_metadata.push(song);
+                    store_view_media_page_info.media_Files_temporary.push(newsong);
+                }else{
+                    store_playlist_list_info.playlist_MediaFiles_temporary.push({
+                        ...newsong,
+                        play_id: newsong.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
+                    });
+                }
             }));
+            if(store_view_media_page_fetchData._load_model === 'play') {
+                store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
+                    store_view_media_page_info.media_Files_temporary.map(item => item.id);
+                store_app_configs_logic_save.save_system_playlist_item_id_config();
+            }
         }
     }
     public async get_album_list(
@@ -975,57 +1035,6 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
 
         return `${formattedMinutes}:${formattedSeconds}`;
     }
-    private convertToLRC(lyrics: string): string {
-        let lrcLines: string[] = [];
-
-        let lyricsArray;
-        try {
-            lyricsArray = JSON.parse(lyrics);
-        } catch {
-            try {
-                return lyrics;
-            } catch (e) {
-                console.error("Failed to parse lyrics JSON:", e);
-            }
-            return '';
-        }
-
-        if (!Array.isArray(lyricsArray)) {
-            return '';
-        }
-
-        for (const langBlock of lyricsArray) {
-            if (langBlock.synced && Array.isArray(langBlock.line)) {
-                for (const line of langBlock.line) {
-                    const minutes = Math.floor(line.start / 60000);
-                    const seconds = Math.floor((line.start % 60000) / 1000);
-                    const milliseconds = (line.start % 1000).toString().padStart(3, '0').slice(0, 2);
-
-                    const timeTag = `[${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds}]`;
-                    lrcLines.push(`${timeTag}${line.value}`);
-                }
-            }
-        }
-
-        return lrcLines.join('\n');
-    }
-    private convertToLRC_Array(lyrics: {
-        Text: string;
-        Start: number;
-    }[]): string {
-        const SCALE_FACTOR = 0.0000001;
-        const lrcLines = lyrics
-            .map((item) => {
-                const totalSeconds = item.Start * SCALE_FACTOR;
-                const minutes = Math.floor(totalSeconds / 60);
-                const seconds = Math.floor(totalSeconds % 60);
-                const centiseconds = Math.floor((totalSeconds * 100) % 100);
-                const time = `[${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(centiseconds).padStart(2, '0')}]`;
-                return `${time}${item.Text}`;
-            })
-            .join('\n');
-        return `${lrcLines}`;
-    }
 
     /// file count
     public async get_count_of_media_file(){
@@ -1033,7 +1042,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             const list_audio = await this.items_ApiService_of_Je.getItems_List(
                 store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music, '',
                 'SortName', 'Descending',
-                '1', 0,
+                '1', '0',
                 'Audio',
                 'PrimaryImageAspectRatio', 'Primary,Backdrop,Thumb', 'true', '1',
                 '', ''
@@ -1048,7 +1057,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             const list_album = await this.items_ApiService_of_Je.getItems_List(
                 store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music, '',
                 'SortName', 'Descending',
-                '1', 0,
+                '1', '0',
                 'MusicAlbum',
                 'PrimaryImageAspectRatio', 'Primary,Backdrop,Thumb', 'true', '1',
                 '', ''
@@ -1068,7 +1077,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             const list_audio = await this.items_ApiService_of_Je.getItems_List(
                 store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music, '',
                 'SortName', 'Descending',
-                '1', 0,
+                '1', '0',
                 'Audio',
                 'PrimaryImageAspectRatio', 'Primary,Backdrop,Thumb', 'true', '1',
                 '', 'IsFavorite'
@@ -1078,7 +1087,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             const list_album = await this.items_ApiService_of_Je.getItems_List(
                 store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music, '',
                 'SortName', 'Descending',
-                '1', 0,
+                '1', '0',
                 'MusicAlbum',
                 'PrimaryImageAspectRatio', 'Primary,Backdrop,Thumb', 'true', '1',
                 '', 'IsFavorite'

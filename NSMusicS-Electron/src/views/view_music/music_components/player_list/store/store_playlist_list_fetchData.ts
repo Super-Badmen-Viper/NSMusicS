@@ -10,6 +10,9 @@ import {store_view_media_page_fetchData} from "../../../music_page/page_media/st
 import {store_playlist_list_info} from "./store_playlist_list_info"
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 import {store_player_audio_info} from "../../../music_page/page_player/store/store_player_audio_info";
+import {
+    Get_Jellyfin_Temp_Data_To_LocalSqlite
+} from "../../../../../data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
 
 export const store_playlist_list_fetchData = reactive({
     async fetchData_PlayList(){
@@ -25,73 +28,15 @@ export const store_playlist_list_fetchData = reactive({
         if (media_file) {
             store_player_audio_info.this_audio_play_id = media_file.play_id;
         }
-        store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
+        store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
+            store_view_media_page_info.media_Files_temporary.map(
+                item => item.id
+            );
         store_app_configs_logic_save.save_system_playlist_item_id_config();
     },
 
     _totalCount: 0,
+
     _start: 0,
-    _end: 100,
-    _album_id: '',
-    _artist_id: '',
-    _album_artist_id: '',
-    async fetchData_PlayList_of_server_web_end(){
-        if(!store_server_user_model.random_play_model) {
-            this._start += 30;
-            this._end += 30;
-            await this.fetchData_PlayList_of_server_web()
-        }
-    },
-    async fetchData_PlayList_of_server_web(){
-        const _search = (store_view_media_page_logic.page_songlists_keywordFilter || '').match(/%([^%]+)%/)?.[1] || '';
-        const selected = store_view_media_page_logic.page_songlists_selected;
-        ///
-        let _sort = store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 && store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default' ?
-            store_view_media_page_logic.page_songlists_options_Sort_key[0].columnKey : 'id';
-        let _order = store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 && store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default' ?
-            store_view_media_page_logic.page_songlists_options_Sort_key[0].order.replace('end', '') : 'ASC';
-        ///
-        let _starred = '';
-        let playlist_id = '';
-        if (selected === 'song_list_love') {
-            _starred = 'true'
-        } else if (selected === 'song_list_recently') {
-            _order = 'desc'
-            _sort = 'playDate'
-            if(
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
-            ) {
-                _sort = 'DatePlayed'
-            }
-        } else if (selected != 'song_list_all') {
-            playlist_id = selected
-        }
-        let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
-        await get_Navidrome_Temp_Data_To_LocalSqlite.get_play_list(
-            store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-            store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-            store_server_user_model.token,
-            store_server_user_model.salt,
-            String(this._end),_order,_sort,String(this._start),
-            _search,_starred,playlist_id,
-            this._album_id,this._artist_id
-        )
-    },
-    fetchData_PlayList_of_data_synchronization_to_Media(){
-        store_playlist_list_info.playlist_MediaFiles_temporary.forEach((row) => {
-            const existingIndex = store_view_media_page_info.media_Files_temporary.findIndex(
-                (item) => item.id === row.id
-            );
-            if (existingIndex === -1) {
-                const newRow = { ...row };
-                delete newRow.play_id;
-                store_view_media_page_info.media_Files_temporary.push(newRow);
-            }
-        });
-        store_view_media_page_fetchData._start = store_playlist_list_fetchData._start
-        store_view_media_page_fetchData._end = store_playlist_list_fetchData._end
-        store_view_media_page_fetchData._album_id = store_playlist_list_fetchData._album_id
-        store_view_media_page_fetchData._artist_id = store_playlist_list_fetchData._artist_id
-    }
+    _end: 30
 });

@@ -359,6 +359,7 @@
           }else if(user_config?.type === 'emby'){
             store_server_user_model.server_select_kind = 'emby'
           }
+          store_server_user_model.switchToMode()
         } else {
           message.error(t('error.invalidServer'), {duration: 3000})
         }

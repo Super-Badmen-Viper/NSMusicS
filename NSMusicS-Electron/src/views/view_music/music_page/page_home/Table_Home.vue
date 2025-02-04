@@ -197,17 +197,14 @@ const Open_this_album_MediaList_click = (item: any, list_name: string) => {
       // Emby 中 我将album_artist_id设置为专辑的 id
       if(list_name != 'recently_added') {
         store_view_media_page_fetchData._album_artist_id = item.album_artist_id
-        store_playlist_list_fetchData._album_artist_id = item.album_artist_id
         temp_id = item.album_artist_id
       }else {
         // 但是在recently_added中，id就是专辑的id，这几把为什么不统一规范呢，还得老子一个个调试才能发现
         store_view_media_page_fetchData._album_artist_id = item.id
-        store_playlist_list_fetchData._album_artist_id = item.id
         temp_id = item.id
       }
     }else{
       store_view_media_page_fetchData._album_id = item.id
-      store_playlist_list_fetchData._album_id = item.id
       temp_id = item.id
     }
   }
@@ -224,17 +221,14 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
       // Emby 中 我将album_artist_id设置为专辑的 id
       if(list_name != 'recently_added') {
         store_view_media_page_fetchData._album_artist_id = item.album_artist_id
-        store_playlist_list_fetchData._album_artist_id = item.album_artist_id
         temp_id = item.album_artist_id
       }else {
         // 但是在recently_added中，id就是专辑的id，这几把为什么不统一规范呢，还得老子一个个调试才能发现
         store_view_media_page_fetchData._album_artist_id = item.id
-        store_playlist_list_fetchData._album_artist_id = item.id
         temp_id = item.id
       }
     }else{
       store_view_media_page_fetchData._album_id = item.id
-      store_playlist_list_fetchData._album_id = item.id
       temp_id = item.id
     }
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'

@@ -1,4 +1,4 @@
-import {reactive} from 'vue'
+import {reactive, watch} from 'vue'
 import {store_player_appearance} from "../../page_player/store/store_player_appearance";
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
 import {store_router_data_info} from "@/router/router_store/store_router_data_info";
@@ -18,6 +18,7 @@ import { isElectron } from '@/utils/electron/isElectron';
 import {
     Get_Jellyfin_Temp_Data_To_LocalSqlite
 } from "../../../../../data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
+import {store_playlist_appearance} from "../../../music_components/player_list/store/store_playlist_appearance";
 
 export const store_view_media_page_fetchData = reactive({
     async fetchData_Media(){
@@ -295,8 +296,7 @@ export const store_view_media_page_fetchData = reactive({
                         item.absoluteIndex = index + 1;
                     });
                 }else if (store_server_user_model.model_server_type_of_web) {
-                    this._start = 0;
-                    this._end = 30;
+                    this.fetchData_Media_of_server_web_clear_index()
                     this._album_id = id
                     await this.fetchData_Media_of_server_web(true)
                     this._album_id = ''
@@ -305,8 +305,7 @@ export const store_view_media_page_fetchData = reactive({
                 store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
                 store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
             ) {
-                this._start = 0;
-                this._end = 30;
+                this.fetchData_Media_of_server_web_clear_index()
                 this._album_id = id
                 await this.fetchData_Media_of_server_web(true)
                 this._album_id = ''
@@ -351,8 +350,7 @@ export const store_view_media_page_fetchData = reactive({
                     });
                 }
                 else if (store_server_user_model.model_server_type_of_web) {
-                    this._start = 0;
-                    this._end = 30;
+                    this.fetchData_Media_of_server_web_clear_index()
                     this._artist_id = id
                     await this.fetchData_Media_of_server_web(true)
                     this._artist_id = ''
@@ -362,8 +360,7 @@ export const store_view_media_page_fetchData = reactive({
                 store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
                 store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
             ) {
-                this._start = 0;
-                this._end = 30;
+                this.fetchData_Media_of_server_web_clear_index()
                 this._artist_id = id
                 await this.fetchData_Media_of_server_web(true)
                 this._artist_id = ''
@@ -397,11 +394,12 @@ export const store_view_media_page_fetchData = reactive({
     },
 
     _start: 0,
-    _end: 100,
+    _end: 30,
     _album_id: '',
     _artist_id: '',
     _media_id: '', // Jellyfin Home$Media
     _album_artist_id: '', // Emby Home$Album
+    _load_model: 'search', // 'search' and 'play'
     fetchData_Media_of_server_web_clear_parms(){
         store_view_media_page_fetchData._album_id = ''
         store_view_media_page_fetchData._artist_id = ''
@@ -410,26 +408,46 @@ export const store_view_media_page_fetchData = reactive({
         store_view_media_page_fetchData._album_artist_id = ''
         store_view_media_page_fetchData._media_id = ''
     },
+    fetchData_Media_of_server_web_clear_index(){
+        if(this._load_model === 'search') {
+            this._start = 0;
+            this._end = 30;
+        }else{
+            store_playlist_list_fetchData._start = 0;
+            store_playlist_list_fetchData._end = 30;
+        }
+    },
     async fetchData_Media_of_server_web_start(){
         store_view_media_page_info.media_Files_temporary = [];
         this._start = 0;
         this._end = 30;
+        store_playlist_list_fetchData._start = 0;
+        store_playlist_list_fetchData._end = 30;
         await this.fetchData_Media_of_server_web(false)
-
         if(store_player_appearance.player_mode_of_medialist_from_external_import) {
             this.fetchData_Media_of_server_web_clear_parms()
         }
     },
     async fetchData_Media_of_server_web_end(){
         if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
-            this._start += 30;
-            this._end += 30;
+            if(this._load_model === 'search') {
+                this._start += 30;
+                this._end += 30;
+            }else{
+                store_playlist_list_fetchData._start += 30;
+                store_playlist_list_fetchData._end += 30;
+            }
         }else if(
             store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
             store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
         ) {
-            this._end += 30;
-            this._start = this._end - 29;
+            if(this._load_model === 'search') {
+                this._end += 30;
+                this._start = this._end - 30;
+            }else{
+                store_playlist_list_fetchData._end += 30;
+                store_playlist_list_fetchData._start = store_playlist_list_fetchData._end - 30;
+            }
         }
         await this.fetchData_Media_of_server_web(false)
     },
@@ -463,13 +481,19 @@ export const store_view_media_page_fetchData = reactive({
             }
         }
         if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+            const limit = this._load_model === 'search' ?
+                String(this._end) :
+                String(store_playlist_list_fetchData._end)
+            const startIndex = this._load_model === 'search' ?
+                String(this._start) :
+                String(store_playlist_list_fetchData._start)
             let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
             await get_Navidrome_Temp_Data_To_LocalSqlite.get_media_list(
                 store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
                 store_server_users.server_config_of_current_user_of_sqlite?.user_name,
                 store_server_user_model.token,
                 store_server_user_model.salt,
-                String(this._end), _order, _sort, String(this._start),
+                limit, _order, _sort, startIndex,
                 _search, _starred, playlist_id,
                 this._album_id, this._artist_id,
                 store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : ''
@@ -483,6 +507,12 @@ export const store_view_media_page_fetchData = reactive({
             const sortOrder = _sort === 'DatePlayed'
                 ? 'Descending' : (_order === 'desc' ? 'Descending' : 'Ascending');
             const filter = _starred === 'true' ? 'IsFavorite' : ''
+            const limit = this._load_model === 'search' ?
+                String(this._end - this._start) :
+                String(store_playlist_list_fetchData._end - store_playlist_list_fetchData._start)
+            const startIndex = this._load_model === 'search' ?
+                String(this._start) :
+                String(store_playlist_list_fetchData._start)
             // jellyfin not support search artist and album list of musicdata
             let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
             if(this._media_id.length === 0) {
@@ -496,7 +526,7 @@ export const store_view_media_page_fetchData = reactive({
                             store_server_user_model.userid_of_Je, prarentId,
                             _search,
                             sortBy, sortOrder,
-                            String(this._end - this._start), String(this._start),
+                            limit, startIndex,
                             'Audio',
                             'ParentId', 'Primary,Backdrop,Thumb', 'true', '1',
                             store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : '',
@@ -505,20 +535,20 @@ export const store_view_media_page_fetchData = reactive({
                     } else { /// emby - home - action
                         await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list_of_home$album_of_Em(
                             this._album_artist_id,
-                            String(this._end - this._start), String(this._start),
+                            limit, startIndex,
                         )
                     }
                 } else {
                     await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list_of_artist(
                         this._artist_id,
-                        String(this._end - this._start), String(this._start),
+                        limit, startIndex,
                     )
                 }
             }
             else{
                 await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list_of_home$media_of_Je(
                     this._media_id,
-                    String(this._end - this._start), String(this._start),
+                    limit, startIndex,
                 )
             }
         }
@@ -536,13 +566,12 @@ export const store_view_media_page_fetchData = reactive({
                 store_playlist_list_info.playlist_MediaFiles_temporary.push(newRow);
             }
         });
-        store_playlist_list_fetchData._start = store_view_media_page_fetchData._start
-        store_playlist_list_fetchData._end = store_view_media_page_fetchData._end
-        store_playlist_list_fetchData._album_id = store_view_media_page_fetchData._album_id
-        store_playlist_list_fetchData._artist_id = store_view_media_page_fetchData._artist_id
-        store_playlist_list_fetchData._start = store_view_media_page_fetchData._start
-        store_playlist_list_fetchData._end = store_view_media_page_fetchData._end
-        store_playlist_list_fetchData._album_id = store_view_media_page_fetchData._album_id
-        store_playlist_list_fetchData._artist_id = store_view_media_page_fetchData._artist_id
+    }
+});
+watch(() => store_playlist_appearance.playlist_show, async (newValue) => {
+    if(newValue){
+        store_view_media_page_fetchData._load_model = 'play'
+    }else{
+        store_view_media_page_fetchData._load_model = 'search'
     }
 });

@@ -420,7 +420,7 @@ async function Play_Media_Order(model_num: string, increased: number) {
   }else if(store_server_user_model.model_server_type_of_web){
     if(!store_server_user_model.random_play_model) {
       // web获取的该列表项总数，触底加载不刷新
-      last_index = store_playlist_list_fetchData._totalCount
+      last_index = store_playlist_list_fetchData._totalCount ?? store_playlist_list_info.playlist_MediaFiles_temporary.length
     }else{
       // web随机获取，设置为固定10项，触底加载刷新+10
       last_index = store_playlist_list_info.playlist_MediaFiles_temporary.length
@@ -494,7 +494,9 @@ async function Play_Media_Order(model_num: string, increased: number) {
         if (!stop_play) {
           if (store_server_user_model.model_server_type_of_web) {
             if (index >= store_playlist_list_info.playlist_MediaFiles_temporary.length) {
-              await store_playlist_list_fetchData.fetchData_PlayList_of_server_web_end();
+              store_view_media_page_fetchData._load_model = 'play'
+              await store_view_media_page_fetchData.fetchData_Media_of_server_web_end();
+              store_view_media_page_fetchData._load_model = 'search'
             }
           }
           const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[index]
@@ -651,6 +653,9 @@ import {
   Get_Navidrome_Temp_Data_To_LocalSqlite
 } from "@/data/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
+import {
+  store_view_media_page_fetchData
+} from "@/views/view_music/music_page/page_media/store/store_view_media_page_fetchData";
 
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   if(id != null && id.length > 0 && id != 'undefined') {
