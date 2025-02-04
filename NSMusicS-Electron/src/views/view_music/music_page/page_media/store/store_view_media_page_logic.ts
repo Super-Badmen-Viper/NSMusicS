@@ -111,7 +111,7 @@ export const store_view_media_page_logic = reactive({
 
         if (store_server_user_model.model_select === 'server') {
             await store_server_data_set_playlistInfo.Set_Selected_MediaInfo_Delete_Selected_Playlist(
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby' ?
+                store_server_users.server_select_kind === 'emby' ?
                     store_view_media_page_info.media_Files_selected.map((file: any) => file.order_title) :
                     store_view_media_page_info.media_Files_selected.map((file: any) => file.id),
                 value

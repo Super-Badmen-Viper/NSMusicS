@@ -40,7 +40,7 @@ export const store_app_configs_logic_save = reactive({
                     app_view_left_menu_collapsed: String(store_app_configs_info.app_view_left_menu_collapsed),
                     model_select: String(store_server_user_model.model_select),
                     server_select: String(store_server_user_model.server_select),
-                    server_select_kind: String(store_server_user_model.server_select_kind),
+                    server_select_kind: String(store_server_users.server_select_kind),
                     username: String(store_server_user_model.username),
                     password: String(store_server_user_model.password),
                     play_order: String(store_player_audio_logic.play_order),

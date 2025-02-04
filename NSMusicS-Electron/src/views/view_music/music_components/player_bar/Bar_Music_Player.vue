@@ -974,7 +974,7 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
         <n-space
             style="width: 460px;"
             :style="{
-              marginTop: store_player_appearance.player_show === false
+              marginTop: !store_player_appearance.player_show
               ||
               (store_player_appearance.player_show && store_player_appearance.player_background_model_num === 3)
               ? '-2px' : '30px'
@@ -1172,8 +1172,7 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
         >
           <n-space
               justify="end"
-              v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-                    store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'
+              v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
             ">
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
@@ -1186,8 +1185,7 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
           </n-space>
           <n-space justify="space-between"
                    :style="{
-                      marginTop:store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-                                store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'
+                      marginTop:(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
                       ? '6px' : '16px'
                    }">
             <n-tooltip trigger="hover" placement="top"
@@ -1198,8 +1196,7 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
                   @click="store_player_audio_logic.drawer_theme_show = !store_player_audio_logic.drawer_theme_show">
                   <template #icon>
                     <n-icon
-                        :size="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-                               store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'
+                        :size="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
                         ? 22 : 25">
                       <Settings24Regular />
                     </n-icon>
@@ -1209,8 +1206,8 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
               {{ $t('Play') + $t('nsmusics.view_player.view_seting.viewSeting')}}
             </n-tooltip>
             <n-tooltip trigger="hover" placement="top"
-                       v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-                             store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'">
+                       v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
+            ">
               <template #trigger>
                 <n-button size="tiny" text
                           @click="() => {
@@ -1235,15 +1232,13 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
                 <n-button size="tiny" text @click="handleItemClick_Favorite(store_player_audio_info.this_audio_song_id,store_player_audio_info.this_audio_song_favorite);">
                   <template #icon>
                     <n-icon v-if="store_player_audio_info.this_audio_song_favorite"
-                            :size="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-                                   store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'
+                            :size="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
                             ? 22 : 25"
                             color="red">
                       <Heart28Filled/>
                     </n-icon>
                     <n-icon v-else
-                            :size="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-                                   store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'
+                            :size="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
                             ? 22 : 25">
                       <Heart24Regular/>
                     </n-icon>
@@ -1256,8 +1251,7 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
               <template #trigger>
                 <n-button size="tiny" text @click="Set_Player_Show_Sound_effects">
                   <template #icon>
-                    <n-icon :size="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-                                   store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'
+                    <n-icon :size="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
                             ? 22 : 25">
                       <DeviceEq24Filled/>
                     </n-icon>
@@ -1270,8 +1264,7 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
               <template #trigger>
                 <n-button size="tiny" text @click="Set_Player_Show_Sound_speed">
                   <template #icon>
-                    <n-icon :size="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-                                   store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'
+                    <n-icon :size="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
                             ? 22 : 25">
                       <TopSpeed20Regular/>
                     </n-icon>
@@ -1284,8 +1277,7 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
               <template #trigger>
                 <n-button size="tiny" text @click="Set_Player_Show_Sound_more">
                   <template #icon>
-                    <n-icon :size="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-                                   store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'
+                    <n-icon :size="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
                             ? 22 : 25">
                       <MoreCircle32Regular/>
                     </n-icon>

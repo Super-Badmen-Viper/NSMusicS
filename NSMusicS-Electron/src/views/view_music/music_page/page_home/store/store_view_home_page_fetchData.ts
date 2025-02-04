@@ -27,7 +27,7 @@ export const store_view_home_page_fetchData = reactive({
             store_view_home_page_info.home_Files_temporary_recently_added = get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Recently_Added()
             store_view_home_page_info.home_Files_temporary_recently_played = get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Recently_Played()
         }else if(store_server_user_model.model_server_type_of_web){
-            if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+            if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
                 let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
                 await get_Navidrome_Temp_Data_To_LocalSqlite.get_home_list(
                     store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
@@ -36,8 +36,7 @@ export const store_view_home_page_fetchData = reactive({
                     store_server_user_model.salt,
                 )
             }else if(
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+                store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
             ) {
                 await new Get_Jellyfin_Temp_Data_To_LocalSqlite().get_home_list(
                     store_server_user_model.parentid_of_Je_Music
@@ -56,7 +55,7 @@ export const store_view_home_page_fetchData = reactive({
             let get_HomeDataInfos_From_LocalSqlite = new Get_HomeDataInfos_From_LocalSqlite()
             store_view_home_page_info.home_Files_temporary_maximum_playback = get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Maximum_Playback()
         }else if(store_server_user_model.model_server_type_of_web){
-            if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+            if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
                 let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
                 await get_Navidrome_Temp_Data_To_LocalSqlite.get_home_list_of_maximum_playback(
                     store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
@@ -65,8 +64,7 @@ export const store_view_home_page_fetchData = reactive({
                     store_server_user_model.salt,
                 )
             }else if(
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+                store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
             ) {
                 await new Get_Jellyfin_Temp_Data_To_LocalSqlite().get_home_list_of_maximum_playback(
                     store_server_user_model.parentid_of_Je_Music
@@ -81,7 +79,7 @@ export const store_view_home_page_fetchData = reactive({
             let get_HomeDataInfos_From_LocalSqlite = new Get_HomeDataInfos_From_LocalSqlite()
             store_view_home_page_info.home_Files_temporary_random_search = get_HomeDataInfos_From_LocalSqlite.Get_AlbumFiles_Random_Search()
         }else if(store_server_user_model.model_server_type_of_web){
-            if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+            if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
                 let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
                 await get_Navidrome_Temp_Data_To_LocalSqlite.get_home_list_of_random_search(
                     store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
@@ -90,8 +88,7 @@ export const store_view_home_page_fetchData = reactive({
                     store_server_user_model.salt,
                 )
             }else if(
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+                store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
             ) {
                 await new Get_Jellyfin_Temp_Data_To_LocalSqlite().get_home_list_of_random_search(
                     store_server_user_model.parentid_of_Je_Music
@@ -109,7 +106,7 @@ export const store_view_home_page_fetchData = reactive({
             let get_HomeDataInfos_From_LocalSqlite = new Get_HomeDataInfos_From_LocalSqlite()
             store_view_home_page_info.home_Files_temporary_recently_added = get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Recently_Added()
         }else if(store_server_user_model.model_server_type_of_web){
-            if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+            if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
                 let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
                 await get_Navidrome_Temp_Data_To_LocalSqlite.get_home_list_of_recently_added(
                     store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
@@ -118,8 +115,7 @@ export const store_view_home_page_fetchData = reactive({
                     store_server_user_model.salt,
                 )
             }else if(
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+                store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
             ) {
                 await new Get_Jellyfin_Temp_Data_To_LocalSqlite().get_home_list_of_recently_added(
                     store_server_user_model.parentid_of_Je_Music
@@ -133,7 +129,7 @@ export const store_view_home_page_fetchData = reactive({
             let get_HomeDataInfos_From_LocalSqlite = new Get_HomeDataInfos_From_LocalSqlite()
             store_view_home_page_info.home_Files_temporary_recently_played = get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Recently_Played()
         }else if(store_server_user_model.model_server_type_of_web){
-            if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+            if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
                 let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
                 await get_Navidrome_Temp_Data_To_LocalSqlite.get_home_list_of_recently_played(
                     store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
@@ -142,8 +138,7 @@ export const store_view_home_page_fetchData = reactive({
                     store_server_user_model.salt,
                 )
             }else if(
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+                store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
             ) {
                 await new Get_Jellyfin_Temp_Data_To_LocalSqlite().get_home_list_of_recently_played(
                     store_server_user_model.parentid_of_Je_Music

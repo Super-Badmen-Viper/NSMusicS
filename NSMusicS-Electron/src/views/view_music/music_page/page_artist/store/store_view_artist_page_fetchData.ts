@@ -211,8 +211,8 @@ export const store_view_artist_page_fetchData = reactive({
     },
     async fetchData_This_Artist_MediaList(artist_id:any){
         if(
-            store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' ||
-            store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'
+            store_server_users.server_select_kind != 'jellyfin' ||
+            store_server_users.server_select_kind != 'emby'
         ) {
             store_player_appearance.player_mode_of_medialist_from_external_import = true;
         }
@@ -283,15 +283,14 @@ export const store_view_artist_page_fetchData = reactive({
             _order = 'desc'
             _sort = 'playDate'
             if(
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+                store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
             ) {
                 _sort = 'DatePlayed'
             }
         } else if (selected != 'artist_list_all') {
             playlist_id = selected
         }
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
             let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
             await get_Navidrome_Temp_Data_To_LocalSqlite.get_artist_list(
                 store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
@@ -302,8 +301,7 @@ export const store_view_artist_page_fetchData = reactive({
                 _search, _starred
             )
         }else if(
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
         ) {
             const filter = _starred === 'true' ? 'IsFavorite' : ''
             let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()

@@ -20,7 +20,7 @@ import {
 
 export const store_server_data_set_mediaInfo = reactive({
     async Set_MediaInfo_To_Favorite(id: string, value: Boolean){
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
             if(!value) {
                 await new Media_Annotation_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
                     .set_star(
@@ -33,8 +33,7 @@ export const store_server_data_set_mediaInfo = reactive({
                         id,'','');
             }
         }else if(
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
         ) {
             if (!value) {
                 await new UserFavoriteItems_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).getUserFavoriteItems_Quick(
@@ -50,28 +49,26 @@ export const store_server_data_set_mediaInfo = reactive({
         }
     },
     async Set_MediaInfo_To_Rating(id: any, value: number){
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
             await new Media_Annotation_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
                 .set_rating(
                     store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
                     id,
                     String(value));
         }else if(
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
         ) {
             // Jellyfin does not support rating
         }
     },
     async Set_MediaInfo_To_PlayCount_of_Media_File(item_id: any){
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
             await new Media_Annotation_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
                 .set_scrobble(
                     store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
                     item_id, '', '');
         }else if(
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
         ) {
             await new UserPlayedItems_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).getUserPlayedItems_Quick(
                 store_server_user_model.userid_of_Je,
@@ -86,14 +83,13 @@ export const store_server_data_set_mediaInfo = reactive({
     },
 
     async Set_MediaInfo_Add_Selected_Playlist(media_file_id: any, playlist_id: any){
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
             await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
                 .updatePlaylist_songIdToAdd(
                     store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
                     playlist_id, media_file_id);
         }else if(
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
         ) {
             await new Playlists_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).postPlaylists_Add(
                 playlist_id,
@@ -103,7 +99,7 @@ export const store_server_data_set_mediaInfo = reactive({
         }
     },
     async Set_MediaInfo_Delete_Selected_Playlist(media_file_id: any, playlist_id: any){
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
             const index = await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_GetPlaylist_MediaIndex(
                 playlist_id, [media_file_id]
             )
@@ -112,8 +108,7 @@ export const store_server_data_set_mediaInfo = reactive({
                     store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
                     playlist_id, index[0]);
         }else if(
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
         ) {
             await new Playlists_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).delPlaylists_Remove(
                 playlist_id,

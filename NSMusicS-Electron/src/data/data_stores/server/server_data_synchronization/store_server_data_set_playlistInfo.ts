@@ -11,7 +11,7 @@ import {
 
 export const store_server_data_set_playlistInfo = reactive({
     async Set_PlaylistInfo_To_Update_CreatePlaylist(name: string, _public_: boolean){
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
             const getCreatePlaylist_set_id = await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
                 .createPlaylist_set(
                     store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
@@ -23,8 +23,7 @@ export const store_server_data_set_playlistInfo = reactive({
                 return ''
             }
         }else if(
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
         ) {
             return await new Playlists_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).postPlaylists_Create(
                 name, '', 'Audio',
@@ -33,15 +32,14 @@ export const store_server_data_set_playlistInfo = reactive({
         }
     },
     async Set_PlaylistInfo_To_Update_SetPlaylist(id: string, name: string,comment: string, _public_: boolean,){
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
             await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
                 .updatePlaylist_infoUpdate(
                     store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
                     id, name, comment, String(_public_)
                 );
         }else if(
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
         ) {
             // Jellyfin-api does not support updating playlist information
             // await new Playlists_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).postPlaylists_Update(
@@ -50,15 +48,14 @@ export const store_server_data_set_playlistInfo = reactive({
         }
     },
     async Set_PlaylistInfo_To_Update_DeletePlaylist(id:string){
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
             return await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
                 .deletePlaylist_set(
                     store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
                     id
                 );
         }else if(
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
         ) {
             return await new Items_ApiService_of_Je(
                 store_server_users.server_config_of_current_user_of_sqlite?.url
@@ -69,7 +66,7 @@ export const store_server_data_set_playlistInfo = reactive({
     },
 
     async Set_Selected_MediaInfo_Add_Selected_Playlist(ids: string[], playlist_id: string){
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
             for (const id of ids) {
                 await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
                     .updatePlaylist_songIdToAdd(
@@ -77,8 +74,7 @@ export const store_server_data_set_playlistInfo = reactive({
                         playlist_id, id);
             }
         }else if(
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
         ) {
             await new Playlists_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).postPlaylists_Add(
                 playlist_id,
@@ -88,7 +84,7 @@ export const store_server_data_set_playlistInfo = reactive({
         }
     },
     async Set_Selected_MediaInfo_Delete_Selected_Playlist(ids: string[], playlist_id: string){
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
             const indexs = await this.Set_PlaylistInfo_To_Update_GetPlaylist_MediaIndex(
                 playlist_id, ids
             );
@@ -105,8 +101,7 @@ export const store_server_data_set_playlistInfo = reactive({
                 }
             }
         }else if(
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
         ) {
             await new Playlists_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).delPlaylists_Remove(
                 playlist_id,
@@ -125,7 +120,7 @@ export const store_server_data_set_playlistInfo = reactive({
     },
 
     async Set_PlaylistInfo_To_Update_GetPlaylist_MediaIndex(playlist_id: string, ids: string[]) {
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
             const getPlaylist_id = await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
                 .getPlaylist_id(
                     store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
@@ -145,8 +140,7 @@ export const store_server_data_set_playlistInfo = reactive({
                 return [];
             }
         }else if(
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
         ) {
 
         }

@@ -38,7 +38,7 @@ export const store_app_configs_logic_load = reactive({
             /// App_Configs load
             this.app_configs_loading = true
             store_server_user_model.server_select = '' + system_Configs_Read.app_Configs.value['server_select']
-            store_server_user_model.server_select_kind = '' + system_Configs_Read.app_Configs.value['server_select_kind']
+            store_server_users.server_select_kind = '' + system_Configs_Read.app_Configs.value['server_select_kind']
             store_server_user_model.username = '' + system_Configs_Read.app_Configs.value['username']
             store_server_user_model.password = '' + system_Configs_Read.app_Configs.value['password']
             store_server_user_model.model_server_type_of_web = '' + system_Configs_Read.app_Configs.value['model_server_type_of_web'] === 'true'
@@ -268,50 +268,7 @@ export const store_app_configs_logic_load = reactive({
             store_server_user_model.username = username
             store_server_user_model.salt = salt
             store_server_user_model.token = token
-            if(
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
-            ) {
-                store_server_user_model.authorization_of_Je =
-                    store_server_users.server_config_of_current_user_of_sqlite?.user_name
-                // load User
-                const userService = new Users_ApiService_of_Je(
-                    store_server_users.server_config_of_current_user_of_sqlite?.url
-                )
-                const result = await userService.getUsers_ALL()
-                let server_set_of_addUser_of_apikey_user_option = []
-                store_server_user_model.userid_of_Je = ''
-                if(result) {
-                    if(Array.isArray(result) && result.length > 0) {
-                        result.forEach((row: any, index: number) => {
-                            server_set_of_addUser_of_apikey_user_option.push({
-                                label: row.Name,
-                                value: row.Id
-                            });
-                        });
-                        store_server_user_model.userid_of_Je = server_set_of_addUser_of_apikey_user_option[0].value
-                        // load Library parentid_of_Je
-                        const library_ApiService_of_Je = new Library_ApiService_of_Je(
-                            store_server_users.server_config_of_current_user_of_sqlite?.url
-                        )
-                        const result_parentIds = await library_ApiService_of_Je.getLibrary_MediaFolders_ALL()
-                        store_server_user_model.parentid_of_Je = []
-                        if(result_parentIds.Items){
-                            if(Array.isArray(result_parentIds.Items) && result_parentIds.Items.length > 0) {
-                                result_parentIds.Items.forEach((row: any, index: number) => {
-                                    store_server_user_model.parentid_of_Je.push({
-                                        label: row.Name,
-                                        value: row.Id
-                                    });
-                                    if(row.CollectionType === 'music'){
-                                        store_server_user_model.parentid_of_Je_Music = row.Id
-                                    }
-                                });
-                            }
-                        }
-                    }
-                }
-            }
+            await store_server_user_model.switchToMode_Server()
 
             /// playlist media_file_id_of_list
             if(store_server_user_model.model_server_type_of_local) {
@@ -439,26 +396,6 @@ export const store_app_configs_logic_load = reactive({
         if(store_server_user_model.model_server_type_of_web){
             store_player_audio_logic.this_audio_initial_trigger = true
         }
-    },
-    handleUpdate_selectd_props_app_sidebar_Value(value: number[]){
-        let allMenuOptions = store_app_configs_info.app_view_menuOptions;
-        let removeFlags = new Array(allMenuOptions.length).fill(true);
-        value.forEach(index => {
-            if (index < allMenuOptions.length) {
-                removeFlags[index] = false;
-            }
-        });
-        removeFlags[0] = false;
-        removeFlags[1] = false;
-        removeFlags[3] = removeFlags[2];
-        if(removeFlags[4] && removeFlags[5] && removeFlags[6] && removeFlags[7])
-            removeFlags[8] = true;
-        else
-            removeFlags[8] = false;
-        let app_view_menuOptions = allMenuOptions.filter((option, index) => {
-            return !removeFlags[index];
-        });
-        store_app_configs_info.app_view_menuOptions = app_view_menuOptions
     },
     extractFolderName(fullPath: string): string | null {
         if (!fullPath) return null;

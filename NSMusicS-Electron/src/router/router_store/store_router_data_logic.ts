@@ -139,8 +139,7 @@ export const store_router_data_logic = reactive({
 
     get_media_list_of_album_id_by_album_info(value: any) {
         store_router_data_info.router.push('song')
-        // emby 已经设置了 album_artist_id
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby') {
+        if(store_server_user_model.model_server_type_of_local) {
             store_view_media_page_logic.list_data_Hand_Search = true
             store_view_media_page_logic.list_selected_Hand_click = false
             // open media_files model，keywords set
@@ -269,7 +268,7 @@ export const store_router_data_logic = reactive({
                 }
             }
             else if (store_server_user_model.model_server_type_of_web) {
-                if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+                if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
                     let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
                     await get_Navidrome_Temp_Data_To_LocalSqlite.get_count_of_media_file(
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
@@ -297,8 +296,7 @@ export const store_router_data_logic = reactive({
                     )
                 }
                 else if(
-                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+                    store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
                 ){
                     let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
                     await get_Jellyfin_Temp_Data_To_LocalSqlite.get_count_of_media_file()

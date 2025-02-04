@@ -353,13 +353,12 @@
         if (result) {
           message.success(t('form.updateServer.success'))
           if(user_config?.type === 'navidrome'){
-            store_server_user_model.server_select_kind = 'navidrome'
+            store_server_users.server_select_kind = 'navidrome'
           }else if(user_config?.type === 'jellyfin'){
-            store_server_user_model.server_select_kind = 'jellyfin'
+            store_server_users.server_select_kind = 'jellyfin'
           }else if(user_config?.type === 'emby'){
-            store_server_user_model.server_select_kind = 'emby'
+            store_server_users.server_select_kind = 'emby'
           }
-          store_server_user_model.switchToMode()
         } else {
           message.error(t('error.invalidServer'), {duration: 3000})
         }
@@ -368,6 +367,10 @@
       }
     }
     store_server_users.percentage_of_nd = 0
+    // Refresh Playlist(Local / Server)
+    store_playlist_list_info.playlist_MediaFiles_temporary = [];
+    await store_player_audio_logic.player.pause();
+    store_player_audio_info.reset_data()
   }
 
   ////// local
@@ -725,6 +728,13 @@
   import {
     Library_ApiService_of_Je
   } from "@/data/data_access/servers_configs/jellyfin_api/services_web/Library/index_service";
+  import {
+    store_playlist_list_logic
+  } from "@/views/view_music/music_components/player_list/store/store_playlist_list_logic";
+  import {
+    store_playlist_list_info
+  } from "@/views/view_music/music_components/player_list/store/store_playlist_list_info";
+  import {store_player_audio_info} from "@/views/view_music/music_page/page_player/store/store_player_audio_info";
 </script>
 <template>
   <div class="view">

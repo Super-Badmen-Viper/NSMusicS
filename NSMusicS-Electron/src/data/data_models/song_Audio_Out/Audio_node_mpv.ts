@@ -31,7 +31,10 @@ export class Audio_node_mpv {
                 // other
             }
             this.isPlaying = true;
-        }catch{}
+        }catch{
+            // 重新加载node-mpv，这玩意挺不稳重的
+            await store_player_audio_logic.init_player()
+        }
 
         try {
             if(isElectron) {

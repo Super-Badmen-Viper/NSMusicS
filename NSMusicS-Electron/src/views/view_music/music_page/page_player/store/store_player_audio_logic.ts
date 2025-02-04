@@ -10,6 +10,7 @@ import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {
     Audio_ApiService_of_Je
 } from "../../../../../data/data_access/servers_configs/jellyfin_api/services_web/Audio/index_service";
+import {store_server_user_model} from "../../../../../data/data_stores/server/store_server_user_model";
 
 export const store_player_audio_logic = reactive({
     player: new Audio_node_mpv(),
@@ -80,6 +81,29 @@ export const store_player_audio_logic = reactive({
     boolHandleItemClick_Favorite: false,
     boolHandleItemClick_Played: false,
 
+    async init_player(){
+        if (store_player_audio_logic.player_select === 'mpv') {
+            if (isElectron) {
+                await ipcRenderer.invoke('mpv-quit');
+                await ipcRenderer.invoke('mpv-init');
+                store_player_audio_logic.player = new Audio_node_mpv();
+            } else {
+                // TODO: 添加非 Electron 环境下的处理逻辑
+                console.log("Non-Electron environment logic not implemented yet.");
+            }
+        } else if (store_player_audio_logic.player_select === 'web') {
+            if (store_player_audio_logic.player && store_player_audio_logic.player.howl) {
+                store_player_audio_logic.player.howl.unload();
+            }
+            store_player_audio_logic.player = new Audio_howler();
+        } else {
+            // 采用web输出，更加稳定
+            if (store_player_audio_logic.player && store_player_audio_logic.player.howl) {
+                store_player_audio_logic.player.howl.unload();
+            }
+            store_player_audio_logic.player = new Audio_howler();
+        }
+    },
     formatTime(currentTime: number): string {
         const minutes = Math.floor(currentTime / 60);
         const seconds = Math.floor(currentTime % 60);
@@ -120,32 +144,36 @@ export const store_player_audio_logic = reactive({
         }
     },
     async update_current_media_info(media_file:any,index:number){
-        if(
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
-        ) {
-            try {
-                const audio_ApiService_of_Je = new Audio_ApiService_of_Je(
-                    store_server_users.server_config_of_current_user_of_sqlite?.url
-                )
-                let lyrics = [];
+        if(store_server_user_model.model_server_type_of_web){
+            if(
+                store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
+            ) {
                 try {
-                    if (store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
-                        const getAudio_lyrics_id_of_Je = await audio_ApiService_of_Je.getAudio_lyrics_id_of_Je(media_file.id);
-                        lyrics = getAudio_lyrics_id_of_Je?.Lyrics ? this.convertToLRC_Array_of_Je(getAudio_lyrics_id_of_Je.Lyrics) : "";
-                    } else if (store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby') {
-                        const getAudio_lyrics_id_of_Em = await audio_ApiService_of_Je.getAudio_lyrics_id_of_Em(media_file.id);
-                        lyrics = getAudio_lyrics_id_of_Em?.Lyrics || "";
+                    const audio_ApiService_of_Je = new Audio_ApiService_of_Je(
+                        store_server_users.server_config_of_current_user_of_sqlite?.url
+                    )
+                    let lyrics = [];
+                    try {
+                        if (store_server_users.server_select_kind === 'jellyfin') {
+                            const getAudio_lyrics_id_of_Je = await audio_ApiService_of_Je.getAudio_lyrics_id_of_Je(media_file.id);
+                            lyrics = getAudio_lyrics_id_of_Je?.Lyrics ? this.convertToLRC_Array_of_Je(getAudio_lyrics_id_of_Je.Lyrics) : "";
+                        } else if (store_server_users.server_select_kind === 'emby') {
+                            const getAudio_lyrics_id_of_Em = await audio_ApiService_of_Je.getAudio_lyrics_id_of_Em(media_file.id);
+                            lyrics = getAudio_lyrics_id_of_Em?.Lyrics || "";
+                        }
+                    } catch (error) {
+                        console.error("Failed to fetch lyrics:", error);
+                        lyrics = "";
                     }
-                } catch (error) {
-                    console.error("Failed to fetch lyrics:", error);
-                    lyrics = "";
+                    store_player_audio_info.this_audio_lyrics_string = lyrics.length > 0 ? lyrics : "";
                 }
-                store_player_audio_info.this_audio_lyrics_string = lyrics.length > 0 ? lyrics : "";
-            }catch{
+                catch{
+                    store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
+                }
+            }else{
                 store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
             }
-        }else{
+        }else if(store_server_user_model.model_server_type_of_local){
             store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
         }
         //
@@ -183,18 +211,6 @@ export const store_player_audio_logic = reactive({
             .join('\n');
         return `${lrcLines}`;
     },
-    convertToLRC_Array_of_Em(lyrics: any[]) {
-        const SCALE_FACTOR = 0.0000001;
-        return lyrics.map((item) => {
-            const startTotalSeconds = item.StartPositionTicks * SCALE_FACTOR;
-            const minutes = Math.floor(startTotalSeconds / 60);
-            const seconds = Math.floor(startTotalSeconds % 60);
-            const centiseconds = Math.floor((startTotalSeconds * 100) % 100);
-            const time = `[${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(centiseconds).padStart(2, '0')}]`;
-            return `${time}${item.Text}`;
-        })
-        .join('\n');
-    }
 });
 watch(() => store_player_audio_logic.player_select, async (newValue) => {
     await store_player_audio_info.reset_data();

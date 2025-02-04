@@ -12,7 +12,7 @@ import {
 
 export const store_server_data_set_artistInfo = reactive({
     async Set_ArtistInfo_To_Favorite(id: string, value: Boolean) {
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
             if (!value) {
                 await new Media_Annotation_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
                     .set_star(
@@ -25,8 +25,7 @@ export const store_server_data_set_artistInfo = reactive({
                         '', '', id);
             }
         }else if(
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
         ) {
             if (!value) {
                 await new UserFavoriteItems_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).getUserFavoriteItems_Quick(
@@ -42,15 +41,14 @@ export const store_server_data_set_artistInfo = reactive({
         }
     },
     async Set_ArtistInfo_To_Rating(id: any, value: number) {
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
             await new Media_Annotation_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
                 .set_rating(
                     store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
                     id,
                     String(value));
         }else if(
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
         ) {
             // Jellyfin does not support rating
         }

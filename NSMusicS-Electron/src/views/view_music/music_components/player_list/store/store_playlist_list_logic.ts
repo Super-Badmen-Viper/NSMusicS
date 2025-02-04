@@ -101,7 +101,7 @@ export const store_playlist_list_logic = reactive({
     async get_playlist_tracks_temporary_update_media_file(value: any){
         store_playlist_list_info.playlist_names_ALLLists = []
         store_playlist_list_info.playlist_tracks_temporary_of_ALLLists = []
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
             let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
             get_PlaylistInfo_From_LocalSqlite.Get_Playlist().forEach((item: Play_List) => {
                 store_playlist_list_info.playlist_names_ALLLists.push({
@@ -114,8 +114,7 @@ export const store_playlist_list_logic = reactive({
                 })
             });
         }else if(
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
         ) {
             const response_playlists = await axios(
                 store_server_users.server_config_of_current_user_of_sqlite?.url + '/Users/' +

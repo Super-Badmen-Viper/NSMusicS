@@ -322,13 +322,12 @@ export const store_view_album_page_fetchData = reactive({
             _order = 'desc'
             _sort = 'playDate'
             if(
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+                store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
             ) {
                 _sort = 'DatePlayed'
             }
         }
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
             let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
             await get_Navidrome_Temp_Data_To_LocalSqlite.get_album_list(
                 store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
@@ -340,11 +339,10 @@ export const store_view_album_page_fetchData = reactive({
                 this._artist_id
             )
         }else if(
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
         ) {
             const sortBy = _sort === 'DatePlayed'
-                ? 'DatePlayed,SortName' : (_sort != 'id' ? _sort : 'IndexNumber');
+                ? 'DatePlayed,SortName' : (_sort != 'id' ? _sort : 'SortName');
             const sortOrder = _sort === 'DatePlayed'
                 ? 'Descending' : (_order === 'desc' ? 'Descending' : 'Ascending');
             const filter = _starred === 'true' ? 'IsFavorite' : ''

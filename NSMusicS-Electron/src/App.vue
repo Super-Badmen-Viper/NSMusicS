@@ -591,8 +591,9 @@
     store_view_album_page_logic.page_albumlists.push(temp_Play_List_Love)
     //////
     if(
-        store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-        store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'
+        (store_server_users.server_select_kind != 'jellyfin' &&
+        store_server_users.server_select_kind != 'emby') ||
+        store_server_user_model.model_server_type_of_local
     ) {
       const temp_Play_List_Recently: Play_List = {
         label: computed(() => t('nsmusics.view_page.recentPlay')),
@@ -686,8 +687,9 @@
     store_view_artist_page_logic.page_artistlists.push(temp_Play_List_Love)
     //////
     if(
-        store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-        store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'
+        (store_server_users.server_select_kind != 'jellyfin' &&
+        store_server_users.server_select_kind != 'emby') ||
+        store_server_user_model.model_server_type_of_local
     ) {
       const temp_Play_List_Recently: Play_List = {
         label: computed(() => t('nsmusics.view_page.recentPlay')),

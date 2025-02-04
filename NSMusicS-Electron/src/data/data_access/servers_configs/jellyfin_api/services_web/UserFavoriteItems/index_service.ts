@@ -7,7 +7,7 @@ export class UserFavoriteItems_ApiService_of_Je extends Jellyfin_Api_Services_We
     public async getUserFavoriteItems_Quick(
         userId: string, itemId: string,
     ): Promise<any> {
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+        if(store_server_users.server_select_kind === 'jellyfin') {
             return this.sendRequest(
                 'POST',
                 `UserFavoriteItems/${itemId}`,
@@ -27,7 +27,7 @@ export class UserFavoriteItems_ApiService_of_Je extends Jellyfin_Api_Services_We
     public async delUserFavoriteItems_Quick(
         userId: string, itemId: string,
     ): Promise<any> {
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+        if(store_server_users.server_select_kind === 'jellyfin') {
             return this.sendRequest(
                 'DELETE',
                 `UserFavoriteItems/${itemId}`,

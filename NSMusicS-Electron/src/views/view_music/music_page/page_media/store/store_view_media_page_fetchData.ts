@@ -136,15 +136,7 @@ export const store_view_media_page_fetchData = reactive({
                         row.absoluteIndex = index;
                         row.selected = false;
                         row.duration_txt = store_view_media_page_logic.get_duration_formatTime(row.duration);
-                        if (row.medium_image_url == null || row.medium_image_url == undefined || row.medium_image_url.length == 0) {
-                            if(row.path) {
-                                const fileName = row.path.split(/[\\/]/).pop(); // 兼容 Windows 和 Unix 路径分隔符
-                                const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg');
-                                row.medium_image_url = `${store_app_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`;
-                            }else{
-                                row.medium_image_url = error_album
-                            }
-                        }
+                        this.setMediumImageUrl(row);
                         store_view_media_page_info.media_Files_temporary.push(row);
                     });
                     ////// find favorite for media_Files_temporary
@@ -264,7 +256,7 @@ export const store_view_media_page_fetchData = reactive({
     },
     async fetchData_Media_Find_This_Album(id: string){
         if(isElectron) {
-            if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+            if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
                 if (store_server_user_model.model_server_type_of_local) {
                     let db: any = null;
                     db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
@@ -272,24 +264,17 @@ export const store_view_media_page_fetchData = reactive({
                     db.exec('PRAGMA foreign_keys = OFF');
                     let stmt_media_file = null;
                     let stmt_media_file_string = '';
-                    stmt_media_file_string = `SELECT *
-                                              FROM ${store_server_user_model.media_file}
-                                              WHERE album_id = '${id}'`;
-                    stmt_media_file = db.prepare(stmt_media_file_string);
-                    const rows = stmt_media_file.all();
+                    ///
+                    stmt_media_file_string =
+                        `SELECT * FROM ${store_server_user_model.media_file} WHERE album_id = ?`;
+                    stmt_media_file =
+                        db.prepare(stmt_media_file_string);
+                    const rows = stmt_media_file.all(id);
                     rows.forEach((row: Media_File, index: number) => {
                         row.absoluteIndex = index;
                         row.selected = false;
                         row.duration_txt = store_view_media_page_logic.get_duration_formatTime(row.duration);
-                        if (row.medium_image_url == null || row.medium_image_url.length == 0) {
-                            if (row.medium_image_url) {
-                                const fileName = row.medium_image_url.split(/[\\/]/).pop(); // 兼容 Windows 和 Unix 路径分隔符
-                                const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg');
-                                row.medium_image_url = `${store_app_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`;
-                            } else {
-                                row.medium_image_url = error_album
-                            }
-                        }
+                        this.setMediumImageUrl(row);
                         store_view_media_page_info.media_Files_temporary.push(row);
                     });
                     store_view_media_page_info.media_Files_temporary.forEach((item: any, index: number) => {
@@ -302,8 +287,7 @@ export const store_view_media_page_fetchData = reactive({
                     this._album_id = ''
                 }
             }else if(
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+                store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
             ) {
                 this.fetchData_Media_of_server_web_clear_index()
                 this._album_id = id
@@ -317,7 +301,7 @@ export const store_view_media_page_fetchData = reactive({
     },
     async fetchData_Media_Find_This_Artist(id: string){
         if(isElectron) {
-            if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+            if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
                 if (store_server_user_model.model_server_type_of_local) {
                     let db: any = null;
                     db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
@@ -334,15 +318,7 @@ export const store_view_media_page_fetchData = reactive({
                         row.absoluteIndex = index;
                         row.selected = false;
                         row.duration_txt = store_view_media_page_logic.get_duration_formatTime(row.duration);
-                        if (row.medium_image_url == null || row.medium_image_url.length == 0) {
-                            if (row.medium_image_url) {
-                                const fileName = row.medium_image_url.split(/[\\/]/).pop(); // 兼容 Windows 和 Unix 路径分隔符
-                                const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg');
-                                row.medium_image_url = `${store_app_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`;
-                            } else {
-                                row.medium_image_url = error_album
-                            }
-                        }
+                        this.setMediumImageUrl(row);
                         store_view_media_page_info.media_Files_temporary.push(row);
                     });
                     store_view_media_page_info.media_Files_temporary.forEach((item: any, index: number) => {
@@ -357,8 +333,7 @@ export const store_view_media_page_fetchData = reactive({
                 }
             }
             else if (
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+                store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
             ) {
                 this.fetchData_Media_of_server_web_clear_index()
                 this._artist_id = id
@@ -368,6 +343,18 @@ export const store_view_media_page_fetchData = reactive({
         }
         else {
             // other
+        }
+    },
+    setMediumImageUrl(row: Media_File) {
+        if (!row.medium_image_url?.trim()) {
+            const path = row.path || row.medium_image_url;
+            if (path) {
+                const fileName = path.split(/[\\/]/).pop()!;
+                const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg');
+                row.medium_image_url = `${store_app_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`;
+            } else {
+                row.medium_image_url = error_album;
+            }
         }
     },
     removeCondition(filter, condition) {
@@ -429,7 +416,7 @@ export const store_view_media_page_fetchData = reactive({
         }
     },
     async fetchData_Media_of_server_web_end(){
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
             if(this._load_model === 'search') {
                 this._start += 30;
                 this._end += 30;
@@ -438,8 +425,7 @@ export const store_view_media_page_fetchData = reactive({
                 store_playlist_list_fetchData._end += 30;
             }
         }else if(
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
         ) {
             if(this._load_model === 'search') {
                 this._end += 30;
@@ -470,8 +456,7 @@ export const store_view_media_page_fetchData = reactive({
             _order = 'desc'
             _sort = 'playDate'
             if(
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+                store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
             ) {
                 _sort = 'DatePlayed'
             }
@@ -480,7 +465,7 @@ export const store_view_media_page_fetchData = reactive({
                 playlist_id = selected
             }
         }
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
             const limit = this._load_model === 'search' ?
                 String(this._end) :
                 String(store_playlist_list_fetchData._end)
@@ -499,11 +484,10 @@ export const store_view_media_page_fetchData = reactive({
                 store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : ''
             )
         }else if(
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
         ) {
             const sortBy = _sort === 'DatePlayed'
-                ? 'DatePlayed,SortName' : (_sort != 'id' ? _sort : 'IndexNumber');
+                ? 'DatePlayed,SortName' : (_sort != 'id' ? _sort : 'SortName');
             const sortOrder = _sort === 'DatePlayed'
                 ? 'Descending' : (_order === 'desc' ? 'Descending' : 'Ascending');
             const filter = _starred === 'true' ? 'IsFavorite' : ''

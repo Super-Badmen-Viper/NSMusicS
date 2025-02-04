@@ -187,56 +187,39 @@ const scrollTo_recently_played = (value :number) => {
 
 ////// go to media_view
 const Open_this_album_MediaList_click = (item: any, list_name: string) => {
-  let temp_id = '';
-  if(store_server_user_model.model_server_type_of_web){
-    store_player_appearance.player_mode_of_medialist_from_external_import = false
-    if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'){
-      // jellyfin TMD 播放记录行为不返回 album_id，只有一个media_id
-      store_view_media_page_fetchData._media_id = item.id;
-    }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'){
-      // Emby 中 我将album_artist_id设置为专辑的 id
-      if(list_name != 'recently_added') {
-        store_view_media_page_fetchData._album_artist_id = item.album_artist_id
-        temp_id = item.album_artist_id
-      }else {
-        // 但是在recently_added中，id就是专辑的id，这几把为什么不统一规范呢，还得老子一个个调试才能发现
-        store_view_media_page_fetchData._album_artist_id = item.id
-        temp_id = item.id
-      }
-    }else{
-      store_view_media_page_fetchData._album_id = item.id
-      temp_id = item.id
-    }
-  }
-  console.log('media_list_of_album_id：'+ temp_id);
-  store_router_data_logic.get_media_list_of_album_id_by_album_info(temp_id)
-}
-const Play_this_album_MediaList_click = async (item: any, list_name: string) => {
-  let temp_id = '';
   if (store_server_user_model.model_server_type_of_web) {
-    if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'){
-      // jellyfin TMD 播放记录行为不返回 album_id，只有一个media_id
-      store_view_media_page_fetchData._media_id = item.id;
-    }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'){
-      // Emby 中 我将album_artist_id设置为专辑的 id
-      if(list_name != 'recently_added') {
-        store_view_media_page_fetchData._album_artist_id = item.album_artist_id
-        temp_id = item.album_artist_id
-      }else {
-        // 但是在recently_added中，id就是专辑的id，这几把为什么不统一规范呢，还得老子一个个调试才能发现
-        store_view_media_page_fetchData._album_artist_id = item.id
-        temp_id = item.id
-      }
-    }else{
-      store_view_media_page_fetchData._album_id = item.id
-      temp_id = item.id
-    }
-    store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+    store_player_appearance.player_mode_of_medialist_from_external_import = false;
+  }
+  const temp_id = Get_this_album_info(item, list_name);
+  console.log('media_list_of_album_id：' + temp_id);
+  store_router_data_logic.get_media_list_of_album_id_by_album_info(temp_id);
+};
+const Play_this_album_MediaList_click = async (item: any, list_name: string) => {
+  const temp_id = Get_this_album_info(item, list_name);
+  if (store_server_user_model.model_server_type_of_web) {
+    store_view_media_page_logic.page_songlists_selected = 'song_list_all';
     store_server_user_model.random_play_model = false;
   }
   console.log('play_this_album_click：' + temp_id);
-  await store_view_album_page_fetchData.fetchData_This_Album_MediaList(temp_id)
-}
+  await store_view_album_page_fetchData.fetchData_This_Album_MediaList(temp_id);
+};
+const Get_this_album_info = (item: any, list_name: string): string => {
+  let temp_id = item.id;
+  if (store_server_user_model.model_server_type_of_web) {
+    if (store_server_users.server_select_kind === 'jellyfin') {
+      // Jellyfin 使用 media_id
+      store_view_media_page_fetchData._media_id = item.id;
+    } else if (store_server_users.server_select_kind === 'emby') {
+      // Emby 根据列表类型设置 album_artist_id
+      store_view_media_page_fetchData._album_artist_id = list_name === 'recently_added' ? item.id : item.album_artist_id;
+      temp_id = store_view_media_page_fetchData._album_artist_id;
+    } else {
+      // 其他服务器使用 album_id
+      store_view_media_page_fetchData._album_id = item.id;
+    }
+  }
+  return temp_id;
+};
 const Play_Next_album_MediaList_click = (value: number) => {
   if(value === 1){
     if(store_view_home_page_info.home_selected_top_album_subscript >= 17){
@@ -387,7 +370,7 @@ onBeforeUnmount(() => {
            v-contextmenu:contextmenu
            @contextmenu.prevent="() => {
              store_playlist_list_info.playlist_Menu_Item_Id =
-              store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'?
+              store_server_users.server_select_kind === 'emby'?
                store_view_home_page_info.home_selected_top_album?.album_artist_id:
                 store_view_home_page_info.home_selected_top_album?.id
            }">
@@ -446,7 +429,7 @@ onBeforeUnmount(() => {
           <div style="font-size: 16px;font-weight: 600;">
             {{
               $t('page.home.explore') + ' : ' +
-              (store_server_users.server_config_of_current_user_of_sqlite?.type != 'navidrome'
+              (store_server_users.server_select_kind != 'navidrome'
                   ? $t('entity.track_other')
                   : $t('entity.album_other'))
             }}
@@ -513,7 +496,7 @@ onBeforeUnmount(() => {
         <span style="font-size: 16px;font-weight: 600;">
           {{
             $t('page.home.mostPlayed') + ' : ' +
-            (store_server_users.server_config_of_current_user_of_sqlite?.type != 'navidrome'
+            (store_server_users.server_select_kind != 'navidrome'
                 ? $t('entity.track_other')
                 : $t('entity.album_other'))
           }}
@@ -574,7 +557,7 @@ onBeforeUnmount(() => {
             v-contextmenu:contextmenu
             @contextmenu.prevent="()=>{
               store_playlist_list_info.playlist_Menu_Item_Id =
-              store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'?
+              store_server_users.server_select_kind === 'emby'?
               item.album_artist_id:item.id
             }"
           >
@@ -605,8 +588,8 @@ onBeforeUnmount(() => {
                       <icon :size="42" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><PlayCircle24Regular/></icon>
                     </button>
                     <div class="hover_buttons_top"
-                         v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-                               store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'">
+                         v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
+                               ">
                       <rate
                           class="viaSlot" style="margin-right: 8px;"
                           :length="5"
@@ -684,7 +667,7 @@ onBeforeUnmount(() => {
         <span style="font-size: 16px;font-weight: 600;">
           {{
             $t('page.home.explore') + ' : ' +
-            (store_server_users.server_config_of_current_user_of_sqlite?.type != 'navidrome'
+            (store_server_users.server_select_kind != 'navidrome'
                 ? $t('entity.track_other')
                 : $t('entity.album_other'))
           }}
@@ -745,7 +728,7 @@ onBeforeUnmount(() => {
               v-contextmenu:contextmenu
               @contextmenu.prevent="()=>{
                 store_playlist_list_info.playlist_Menu_Item_Id =
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'?
+                store_server_users.server_select_kind === 'emby'?
                 item.album_artist_id:item.id
               }"
           >
@@ -776,8 +759,8 @@ onBeforeUnmount(() => {
                       <icon :size="42" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><PlayCircle24Regular/></icon>
                     </button>
                     <div class="hover_buttons_top"
-                         v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-                               store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'">
+                         v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
+                               ">
                       <rate
                           class="viaSlot" style="margin-right: 8px;"
                           :length="5"
@@ -854,7 +837,7 @@ onBeforeUnmount(() => {
         <span style="font-size: 16px;font-weight: 600;">
           {{
             $t('page.home.newlyAdded') + ' : ' +
-            (store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+            (store_server_users.server_select_kind === 'jellyfin'
                 ? $t('entity.track_other')
                 : $t('entity.album_other'))
           }}
@@ -943,8 +926,8 @@ onBeforeUnmount(() => {
                       <icon :size="42" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><PlayCircle24Regular/></icon>
                     </button>
                     <div class="hover_buttons_top"
-                         v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-                               store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'">
+                         v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
+                               ">
                       <rate
                           class="viaSlot" style="margin-right: 8px;"
                           :length="5"
@@ -1021,7 +1004,7 @@ onBeforeUnmount(() => {
         <span style="font-size: 16px;font-weight: 600;">
           {{
             $t('page.home.recentlyPlayed') + ' : ' +
-            (store_server_users.server_config_of_current_user_of_sqlite?.type != 'navidrome'
+            (store_server_users.server_select_kind != 'navidrome'
                 ? $t('entity.track_other')
                 : $t('entity.album_other'))
           }}
@@ -1082,7 +1065,7 @@ onBeforeUnmount(() => {
               v-contextmenu:contextmenu
               @contextmenu.prevent="()=>{
                 store_playlist_list_info.playlist_Menu_Item_Id =
-                store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'?
+                store_server_users.server_select_kind === 'emby'?
                 item.album_artist_id:item.id
               }"
           >
@@ -1113,8 +1096,8 @@ onBeforeUnmount(() => {
                       <icon :size="42" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><PlayCircle24Regular/></icon>
                     </button>
                     <div class="hover_buttons_top"
-                         v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-                               store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'">
+                         v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
+                               ">
                       <rate
                           class="viaSlot" style="margin-right: 8px;"
                           :length="5"

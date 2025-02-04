@@ -147,7 +147,7 @@ type SortItem = {
   state_Sort: state_Sort;
 };
 const options_Sort_key = ref<SortItem[]>([]);
-if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
   options_Sort_key.value = [
     {label:computed(() => t('entity.album_other')), key: 'name', state_Sort: state_Sort.Default },
     {label:computed(() => t('entity.artist_other')), key: 'artist', state_Sort: state_Sort.Default },
@@ -157,8 +157,7 @@ if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidro
     {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
   ]
 }else if(
-    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-    store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+  store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
 ){
   options_Sort_key.value = [
     {label:computed(() => t('OptionTrackName')), key: 'Name', state_Sort: state_Sort.Default },
@@ -343,8 +342,7 @@ onMounted(() => {
     scrollTo(store_router_history_data_of_album.router_history_model_of_Album_scroller_value)
   }else if (store_server_user_model.model_server_type_of_web) {
     if(
-        store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-        store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
     ) {
       /// 兼容行为：打开指定艺术家，直接跳转乐曲页面，路由刷新到专辑页面需要清空数据
       store_player_appearance.player_mode_of_medialist_from_external_import = true
@@ -358,8 +356,7 @@ const breadcrumbItems = ref('所有专辑');
 const page_albumlists_handleSelected_updateValue = (value: any) => {
   // clear search，防止出现Jellyfin模式下列表切换未清除搜素数据
   if(
-      store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-      store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+      store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
   ) {
     store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_parms()
     input_search_InstRef.value?.clear()
@@ -386,28 +383,24 @@ const get_router_history_model_next = () =>  {
 ////// go to media_view
 const handleItemClick_album = (album:string) => {
   if(store_server_user_model.model_server_type_of_local) {
-    bool_show_search_area.value = false
-    show_search_area()
-    click_search()
-    scrollTo(0)
+    bool_show_search_area.value = true
+    store_view_album_page_logic.page_albumlists_keyword = album
+    store_view_album_page_logic.page_albumlists_input_search_Value = album
+    store_view_media_page_logic.page_songlists_input_search_Value = album
   }else if(store_server_user_model.model_server_type_of_web){
     store_view_album_page_fetchData._artist_id = ''
     bool_show_search_area.value = true
   }
-  store_view_album_page_logic.page_albumlists_keyword = album
-  store_view_album_page_logic.page_albumlists_input_search_Value = album
-  store_view_media_page_logic.page_songlists_input_search_Value = album
 }
 const handleItemClick_artist = (artist_id:string) => {
   if(store_server_user_model.model_server_type_of_local) {
-    bool_show_search_area.value = false
-    show_search_area()
-    click_search()
-    scrollTo(0)
+    bool_show_search_area.value = true;
+    store_view_album_page_logic.page_albumlists_keyword = artist_id
+    store_view_album_page_logic.page_albumlists_input_search_Value = artist_id
+    store_view_media_page_logic.page_songlists_input_search_Value = artist_id
   }else if(store_server_user_model.model_server_type_of_web){
     if(
-        store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-        store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'
+      (store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
     ) {
       store_view_album_page_fetchData._artist_id = ''
     }else{
@@ -415,9 +408,6 @@ const handleItemClick_artist = (artist_id:string) => {
     }
     bool_show_search_area.value = true
   }
-  store_view_album_page_logic.page_albumlists_keyword = artist_id
-  store_view_album_page_logic.page_albumlists_input_search_Value = artist_id
-  store_view_media_page_logic.page_songlists_input_search_Value = artist_id
 }
 const Open_this_album_MediaList_click = (album_id:string) => {
   if(store_server_user_model.model_server_type_of_web){
@@ -564,8 +554,7 @@ const onScroll = async () => {
 const onRefreshSharp = async () => {
   if(store_server_user_model.model_server_type_of_web){
     if(
-        store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-        store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
     ) {
       store_view_album_page_logic.page_albumlists_keyword = ''
       input_search_InstRef.value?.clear()
@@ -573,7 +562,8 @@ const onRefreshSharp = async () => {
     }
     store_view_album_page_fetchData.fetchData_Album_of_server_web_start()
   }else if(store_server_user_model.model_server_type_of_local){
-    scrollTo(0)
+    input_search_InstRef.value?.clear()
+    bool_show_search_area.value = false
     store_view_album_page_logic.page_albumlists_keyword = ""
     store_view_album_page_fetchData.fetchData_Album()
   }
@@ -972,8 +962,8 @@ onBeforeUnmount(() => {
                     </button>
                     <div class="hover_buttons_top"
                          v-if="
-                         store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' ||
-                         store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'">
+                         store_server_users.server_select_kind != 'jellyfin' ||
+                         store_server_users.server_select_kind != 'emby'">
                       <rate
                         class="viaSlot" style="margin-right: 8px;"
                         :length="5"
@@ -1037,8 +1027,7 @@ onBeforeUnmount(() => {
                           handleItemClick_artist(item.artist_id)
                         }else if(store_server_user_model.model_server_type_of_web) {
                           if(
-                              store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-                              store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+                              store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
                           ) {
                             handleItemClick_artist(item.artist_id)
                           }else{
@@ -1074,8 +1063,8 @@ onBeforeUnmount(() => {
           {{ $t('player.addNext') }}
         </v-contextmenu-item>
         <v-contextmenu-item
-            v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-                  store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'"
+            v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
+        ">
             @click="menu_item_edit_selected_media_tags">
           {{ $t('page.contextMenu.showDetails') }}
         </v-contextmenu-item>

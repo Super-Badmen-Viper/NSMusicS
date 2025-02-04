@@ -6,7 +6,7 @@ export class UserPlayedItems_ApiService_of_Je extends Jellyfin_Api_Services_Web 
     public async getUserPlayedItems_Quick(
         userId: string, itemId: string, datePlayed: string
     ): Promise<any> {
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+        if(store_server_users.server_select_kind === 'jellyfin') {
             return this.sendRequest(
                 'POST',
                 `UserPlayedItems/${itemId}`,

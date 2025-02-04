@@ -6,7 +6,7 @@ export const store_server_users = reactive({
     percentage_of_local: 0,
     percentage_of_nd: 0,
 
-    server_select: '',
+    server_select_kind: '',
     
     server_config_of_current_user_of_sqlite: undefined as Server_Configs_Props | undefined,
     server_config_of_all_user_of_sqlite: [] as Server_Configs_Props[],
@@ -42,15 +42,14 @@ export const store_server_users = reactive({
     },
 
     get_init_login_parms(){
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
             const username = store_server_user_model.username
             const {salt, token} = store_server_users.navidrome_get_EncryptedPassword(
                 store_server_user_model.password
             );
             return {username, salt, token}
         }else if(
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-            store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
         ){
 
         }
@@ -73,22 +72,5 @@ export const store_server_users = reactive({
             // other
         }
         return undefined
-    },
-    subsonic_get_EncryptedPassword(password: string): { salt: string, token: string } {
-        if(isElectron) {
-            const saltLength = 6;
-            const characters = 'dfeVYUY9iu239iBUYHuji46h39BHUJ8u42nmrfhDD3r4ouj123890fvn48u95h';
-            let randomString = '';
-            for (let i = 0; i < saltLength; i++) {
-                const randomIndex = Math.floor(Math.random() * characters.length);
-                randomString += characters[randomIndex];
-            }
-            const salt = randomString;
-            const crypto = require('crypto');
-            const token = crypto.createHash('md5').update(password + salt, 'utf8').digest('hex');
-            return {salt, token};
-        } else {
-            // other
-        }
-    },
+    }
 });

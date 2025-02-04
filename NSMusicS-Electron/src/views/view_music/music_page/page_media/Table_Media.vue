@@ -78,7 +78,7 @@ type SortItem = {
   state_Sort: state_Sort;
 };
 const options_Sort_key = ref<SortItem[]>([]);
-if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
   options_Sort_key.value = [
     {label:computed(() => t('filter.title')), key: 'title', state_Sort: state_Sort.Default },
     {label:computed(() => t('entity.artist_other')), key: 'artist', state_Sort: state_Sort.Default },
@@ -89,8 +89,7 @@ if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidro
     {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
   ]
 }else if(
-    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-    store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+    store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
 ){
   options_Sort_key.value = [
     {label:computed(() => t('OptionTrackName')), key: 'Name', state_Sort: state_Sort.Default },
@@ -361,8 +360,7 @@ const handleItemClick_title = (title:string) => {
     store_view_media_page_logic.page_songlists_input_search_Value = title
     store_view_media_page_logic.get_page_songlists_keyword(title)
     if(
-        store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-        store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
     ) {
 
     }
@@ -383,8 +381,7 @@ const handleItemClick_artist = (artist:string) => {
     store_view_media_page_logic.page_songlists_input_search_Value = artist
     store_view_media_page_logic.get_page_songlists_keyword(artist)
     if(
-        store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-        store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
     ) {
 
     }
@@ -634,7 +631,7 @@ async function update_playlist_deleteMediaFile(id: any){
     }else if(store_view_media_page_logic.page_songlists_selected === 'song_list_recently'){
 
     }else{
-      if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'){
+      if(store_server_users.server_select_kind === 'emby'){
         await store_local_data_set_mediaInfo.Set_MediaInfo_Delete_Selected_Playlist(
             store_playlist_list_info.playlist_Menu_Item_IndexId,
             store_view_media_page_logic.page_songlists_selected
@@ -862,8 +859,7 @@ const onScroll = async () => {
 const onRefreshSharp = async () => {
   if(store_server_user_model.model_server_type_of_web){
     if(
-        store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin' ||
-        store_server_users.server_config_of_current_user_of_sqlite?.type === 'emby'
+        store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
     ) {
       store_player_appearance.player_mode_of_medialist_from_external_import = false;
     }
@@ -876,10 +872,9 @@ const onRefreshSharp = async () => {
   }else if(store_server_user_model.model_server_type_of_local){
     store_view_media_page_logic.page_songlists_bool_show_search_area = true;
     show_search_area();
-    scrollTo(0)
     store_view_media_page_logic.page_songlists_keywordFilter = ""
     store_view_media_page_logic.list_selected_Hand_click = false
-    store_view_media_page_fetchData.fetchData_Media()
+    // store_view_media_page_fetchData.fetchData_Media()
   }
 }
 
@@ -1145,8 +1140,8 @@ onBeforeUnmount(() => {
 
           <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
           <n-dropdown
-            v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-                  store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby' &&
+            v-if="store_server_users.server_select_kind != 'jellyfin' &&
+                  store_server_users.server_select_kind != 'emby' &&
                   store_server_user_model.model_server_type_of_local"
             trigger="click" :show-arrow="true"
             :options="options_dropdown_play_mode"
@@ -1165,9 +1160,8 @@ onBeforeUnmount(() => {
             </n-tooltip>
           </n-dropdown>
           <n-tooltip
-            v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-                  store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby' &&
-                  store_server_user_model.model_server_type_of_web"
+            v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
+            "
             trigger="hover" placement="top">
             <template #trigger>
               <div>
@@ -1199,8 +1193,8 @@ onBeforeUnmount(() => {
             {{ $t('Shuffle') + ' ' + $t('HeaderLibraries') + ' ' + $t('nsmusics.view_page.allMedia') }}
           </n-tooltip>
           <n-divider
-              v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-                    store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'"
+              v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
+                    "
               vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
 
           <n-tooltip trigger="hover" placement="top">
@@ -1591,17 +1585,17 @@ onBeforeUnmount(() => {
           {{ $t('player.addNext') }}
         </v-contextmenu-item>
         <v-contextmenu-item
-            v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-                  store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'"
+            v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
+                  "
             @click="menu_item_edit_selected_media_tags">
           {{ $t('page.contextMenu.showDetails') }}
         </v-contextmenu-item>
         <v-contextmenu-divider
-            v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-                  store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'"/>
+            v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
+                  "/>
         <v-contextmenu-item
-          v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-                store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'">
+          v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
+                ">
           <rate
             class="viaSlot"
             style="margin-left: -12px;margin-top: -12px;height: 16px;"
@@ -1656,8 +1650,8 @@ onBeforeUnmount(() => {
           @update:value="update_playlist_set_of_updatePlaylist_of_playlistname" />
         <n-form>
           <n-space
-              v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-                    store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'"
+              v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
+                    "
               vertical style="margin-bottom: 10px;">
             <span>{{ $t('common.name') }}</span>
             <n-input clearable placeholder="" v-model:value="playlist_set_of_updatePlaylist_of_playlistcomment"/>
@@ -1679,8 +1673,8 @@ onBeforeUnmount(() => {
             {{ $t('common.delete') }}
           </n-button>
           <n-button strong secondary type="info"
-                    v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin' &&
-                          store_server_users.server_config_of_current_user_of_sqlite?.type != 'emby'"
+                    v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
+                          "
                     @click="()=>{
                       update_playlist_updatePlaylist();
                     }">

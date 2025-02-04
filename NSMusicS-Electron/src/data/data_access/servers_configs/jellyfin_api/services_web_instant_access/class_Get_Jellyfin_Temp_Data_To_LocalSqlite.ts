@@ -67,7 +67,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         if(maximum_playback != undefined && Array.isArray(maximum_playback)) {
             maximum_playback.map(async (album: any) => {
                 const medium_image_url =
-                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                    store_server_users.server_select_kind === 'jellyfin'
                         ?
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
                         album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
@@ -123,7 +123,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
     }
     public async get_home_list_of_random_search(parentId: string,){
         let list = []
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+        if(store_server_users.server_select_kind === 'jellyfin') {
             list = await this.items_ApiService_of_Je.getItems_List(
                 store_server_user_model.userid_of_Je, parentId, '',
                 'Random', 'Descending',
@@ -147,7 +147,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         if(random_search != undefined && Array.isArray(random_search)) {
             random_search.map(async (album: any) => {
                 const medium_image_url =
-                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                    store_server_users.server_select_kind === 'jellyfin'
                         ?
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
                         album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
@@ -212,7 +212,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         if(recently_added != undefined && Array.isArray(recently_added)) {
             recently_added.map(async (album: any) => {
                 const medium_image_url =
-                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                    store_server_users.server_select_kind === 'jellyfin'
                         ?
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
                         album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
@@ -278,7 +278,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         if(recently_played != undefined && Array.isArray(recently_played)) {
             recently_played.map(async (album: any) => {
                 const medium_image_url =
-                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                    store_server_users.server_select_kind === 'jellyfin'
                         ?
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
                         album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
@@ -356,7 +356,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             store_view_media_page_info.media_File_metadata = [];
             await Promise.all(songlist.map(async (song: any, index: number) => {
                 const medium_image_url =
-                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                    store_server_users.server_select_kind === 'jellyfin'
                         ?
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
                         song.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
@@ -465,7 +465,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             store_view_media_page_info.media_File_metadata = [];
             await Promise.all(songlist.map(async (song: any, index: number) => {
                 const medium_image_url =
-                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                    store_server_users.server_select_kind === 'jellyfin'
                         ?
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
                         song.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
@@ -577,7 +577,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             store_view_media_page_info.media_File_metadata = [];
             await Promise.all(songlist.map(async (song: any, index: number) => {
                 const medium_image_url =
-                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                    store_server_users.server_select_kind === 'jellyfin'
                         ?
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
                         song.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
@@ -713,7 +713,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             store_view_media_page_info.media_File_metadata = [];
             await Promise.all(songlist.map(async (song: any, index: number) => {
                 const medium_image_url =
-                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                    store_server_users.server_select_kind === 'jellyfin'
                         ?
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
                         song.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
@@ -825,7 +825,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             store_view_album_page_info.album_File_metadata = []
             albumlist.map(async (album: any, index: number) => {
                 const medium_image_url =
-                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                    store_server_users.server_select_kind === 'jellyfin'
                         ?
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
                         album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
@@ -907,7 +907,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             store_view_album_page_info.album_File_metadata = []
             albumlist.map(async (album: any, index: number) => {
                 const medium_image_url =
-                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                    store_server_users.server_select_kind === 'jellyfin'
                         ?
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
                         album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
@@ -989,7 +989,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             store_view_artist_page_info.artist_File_metadata = [];
             artistlist.map(async (artist: any, index: number) => {
                 const medium_image_url =
-                    store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'
+                    store_server_users.server_select_kind === 'jellyfin'
                         ?
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
                         artist.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
