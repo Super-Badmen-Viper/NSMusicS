@@ -414,6 +414,8 @@ const Open_this_album_MediaList_click = (album_id:string) => {
     store_player_appearance.player_mode_of_medialist_from_external_import = false
     store_view_media_page_fetchData._album_id = album_id
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+    // emby
+    store_playlist_list_fetchData._album_id = album_id
   }
   console.log('media_list_of_album_id：'+album_id);
   store_router_data_logic.get_media_list_of_album_id_by_album_info(album_id)
@@ -423,6 +425,8 @@ const Play_this_album_MediaList_click = async (album_id: string) => {
     store_view_media_page_fetchData._album_id = album_id
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
     store_server_user_model.random_play_model = false;
+    // emby
+    store_playlist_list_fetchData._album_id = album_id
   }
   console.log('play_this_album_click：' + album_id);
   await store_view_album_page_fetchData.fetchData_This_Album_MediaList(album_id)

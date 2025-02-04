@@ -502,9 +502,17 @@ export const store_view_media_page_fetchData = reactive({
             if(this._media_id.length === 0) {
                 // _album_id -> media_id -> Jellyfin+Emby
                 if (this._artist_id.length === 0) {
-                    if (this._album_artist_id.length === 0) { /// jellyfin+emby - all - action
-                        const prarentId = this._album_id.length === 0
-                            ? store_server_user_model.parentid_of_Je_Music : this._album_id
+                    /// emby
+                    const _album_artist_id = this._load_model === 'search' ?
+                        this._album_artist_id : store_playlist_list_fetchData._album_artist_id
+                    /// jellyfin+emby - all - action
+                    if (_album_artist_id.length === 0) {
+                        /// emby
+                        const _album_id = this._load_model === 'search' ?
+                            this._album_id : store_playlist_list_fetchData._album_id
+                        /// jellyfin+emby - all - action
+                        const prarentId = _album_id.length === 0
+                            ? store_server_user_model.parentid_of_Je_Music : _album_id
                         await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list(
                             playlist_id,
                             store_server_user_model.userid_of_Je, prarentId,
@@ -518,7 +526,7 @@ export const store_view_media_page_fetchData = reactive({
                         )
                     } else { /// emby - home - action
                         await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list_of_home$album_of_Em(
-                            this._album_artist_id,
+                            _album_artist_id,
                             limit, startIndex,
                         )
                     }
