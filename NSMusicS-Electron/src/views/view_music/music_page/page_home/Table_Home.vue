@@ -211,8 +211,9 @@ const Get_this_album_info = (item: any, list_name: string): string => {
       store_view_media_page_fetchData._media_id = item.id;
     } else if (store_server_users.server_select_kind === 'emby') {
       // Emby 根据列表类型设置 album_artist_id
-      store_view_media_page_fetchData._album_artist_id = list_name === 'recently_added'
-          ? item.id : item.album_artist_id;
+      store_view_media_page_fetchData.set_album_artist_id(
+          list_name === 'recently_added' ? item.id : item.album_artist_id
+      );
       // 由于播放列表与歌单加载逻辑已合并，防止album_artist_id丢失
       store_playlist_list_fetchData._album_artist_id = list_name === 'recently_added'
           ? item.id : item.album_artist_id;

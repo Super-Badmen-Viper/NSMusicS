@@ -19,7 +19,14 @@ import {
     Get_Jellyfin_Temp_Data_To_LocalSqlite
 } from "../../../../../data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
 import {store_playlist_appearance} from "../../../music_components/player_list/store/store_playlist_appearance";
-
+/**
+ * -> 歌单加载: LoadList、歌曲列表: PlayList -> 合并联合查询
+ * local歌单加载：一次性全局加载
+ * -> PlayList直接复制LoadList
+ * web歌单加载：根据数标状态位 -> 触底加载
+ * -> PlayList独立于LoadList -> 数标状态位随LoadList数标状态位刷新
+ * -> 数标状态位：【_start、_end】【_album_id、_artist_id、_album_artist_id】
+ */
 export const store_view_media_page_fetchData = reactive({
     async fetchData_Media(){
         if(isElectron) {
@@ -383,9 +390,27 @@ export const store_view_media_page_fetchData = reactive({
     _start: 0,
     _end: 30,
     _album_id: '',
+    set_album_id(id: string){
+        store_view_media_page_fetchData._album_id = id
+        store_playlist_list_fetchData._album_id = id
+        store_playlist_list_fetchData._artist_id = ''
+        store_playlist_list_fetchData._album_artist_id = ''
+    },
     _artist_id: '',
-    _media_id: '', // Jellyfin Home$Media
+    set_artist_id(id: string){
+        store_view_media_page_fetchData._artist_id = id
+        store_playlist_list_fetchData._album_id = ''
+        store_playlist_list_fetchData._artist_id = id
+        store_playlist_list_fetchData._album_artist_id = ''
+    },
     _album_artist_id: '', // Emby Home$Album
+    set_album_artist_id(id: string){
+        store_view_media_page_fetchData._album_artist_id = id
+        store_playlist_list_fetchData._album_id = ''
+        store_playlist_list_fetchData._artist_id = ''
+        store_playlist_list_fetchData._album_artist_id = id
+    },
+    _media_id: '', // Jellyfin Home$Media
     _load_model: 'search', // 'search' and 'play'
     fetchData_Media_of_server_web_clear_parms(){
         store_view_media_page_fetchData._album_id = ''
@@ -500,14 +525,14 @@ export const store_view_media_page_fetchData = reactive({
             // jellyfin not support search artist and album list of musicdata
             let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
             if(this._media_id.length === 0) {
+                const _artist_id = this._load_model === 'search' ?
+                    this._artist_id : store_playlist_list_fetchData._artist_id
                 // _album_id -> media_id -> Jellyfin+Emby
-                if (this._artist_id.length === 0) {
-                    /// emby
+                if (_artist_id.length === 0) {
                     const _album_artist_id = this._load_model === 'search' ?
                         this._album_artist_id : store_playlist_list_fetchData._album_artist_id
                     /// jellyfin+emby - all - action
                     if (_album_artist_id.length === 0) {
-                        /// emby
                         const _album_id = this._load_model === 'search' ?
                             this._album_id : store_playlist_list_fetchData._album_id
                         /// jellyfin+emby - all - action
@@ -532,7 +557,7 @@ export const store_view_media_page_fetchData = reactive({
                     }
                 } else {
                     await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list_of_artist(
-                        this._artist_id,
+                        _artist_id,
                         limit, startIndex,
                     )
                 }

@@ -42,6 +42,5 @@ export const store_playlist_list_fetchData = reactive({
 
     _album_id: '',
     _artist_id: '',
-    _media_id: '', // Jellyfin Home$Media
     _album_artist_id: '', // Emby Home$Album
 });

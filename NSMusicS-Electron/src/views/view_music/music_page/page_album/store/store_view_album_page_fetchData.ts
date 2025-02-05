@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import {reactive, watch} from 'vue'
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
 import {store_router_data_info} from "@/router/router_store/store_router_data_info";
 import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
@@ -291,6 +291,12 @@ export const store_view_album_page_fetchData = reactive({
     _start: 0,
     _end: 100,
     _artist_id: '',
+    set_artist_id(id: string){
+        store_view_album_page_fetchData._artist_id = id
+        store_playlist_list_fetchData._album_id = ''
+        store_playlist_list_fetchData._artist_id = id
+        store_playlist_list_fetchData._album_artist_id = ''
+    },
     async fetchData_Album_of_server_web_start(){
         store_view_album_page_info.album_Files_temporary = [];
         this._start = 0;

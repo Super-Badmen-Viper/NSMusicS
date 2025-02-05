@@ -385,9 +385,9 @@ const get_router_history_model_next = () =>  {
 ////// go to media_view
 const Open_this_artist_all_artist_list_click = (artist_id:string) => {
   if(store_server_user_model.model_server_type_of_web){
-    store_view_media_page_fetchData._artist_id = artist_id
+    store_view_media_page_fetchData.set_artist_id(artist_id)
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
-    store_view_album_page_fetchData._artist_id = artist_id
+    store_view_album_page_fetchData.set_artist_id(artist_id)
     store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
   }
   if(
@@ -406,9 +406,9 @@ const Open_this_artist_all_artist_list_click = (artist_id:string) => {
 }
 const Play_this_artist_all_media_list_click = async (artist_id: string) => {
   if(store_server_user_model.model_server_type_of_web){
-    store_view_media_page_fetchData._artist_id = artist_id
+    store_view_media_page_fetchData.set_artist_id(artist_id)
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
-    store_view_album_page_fetchData._artist_id = artist_id
+    store_view_album_page_fetchData.set_artist_id(artist_id)
     store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
     store_server_user_model.random_play_model = false;
   }
