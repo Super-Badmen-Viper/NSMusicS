@@ -27,7 +27,7 @@ export class Set_MediaInfo_To_LocalSqlite {
         ).replace(/\//g, '-');
     }
 
-    public Set_MediaInfo_To_Favorite(id: string, value: Boolean) {
+    public Set_MediaInfo_To_Favorite_Local(id: string, value: Boolean) {
         if(isElectron) {
             let ann_id = null;
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
@@ -64,7 +64,7 @@ export class Set_MediaInfo_To_LocalSqlite {
         }
         return undefined
     }
-    public Set_MediaInfo_To_Rating(id: any, value: number) {
+    public Set_MediaInfo_To_Rating_Local(id: any, value: number) {
         if(isElectron) {
             let ann_id = null;
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
@@ -91,7 +91,7 @@ export class Set_MediaInfo_To_LocalSqlite {
             // other
         }
     }
-    public Set_MediaInfo_To_PlayCount_of_Media_File(item_id: any) {
+    public Set_MediaInfo_To_PlayCount_of_Media_File_Local(item_id: any) {
         if(isElectron) {
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             db.pragma('journal_mode = WAL');
@@ -144,7 +144,7 @@ export class Set_MediaInfo_To_LocalSqlite {
             // other
         }
     }
-    public Set_MediaInfo_Add_Selected_Playlist(media_file_id: any, playlist_id: any) {
+    public Set_MediaInfo_Add_Selected_Playlist_Local(media_file_id: any, playlist_id: any) {
         if(isElectron) {
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             db.pragma('journal_mode = WAL');
@@ -169,7 +169,7 @@ export class Set_MediaInfo_To_LocalSqlite {
         }
         return undefined
     }
-    public Set_MediaInfo_Delete_Selected_Playlist(media_file_id: any, playlist_id: any) {
+    public Set_MediaInfo_Delete_Selected_Playlist_Local(media_file_id: any, playlist_id: any) {
         if(isElectron) {
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             db.pragma('journal_mode = WAL');

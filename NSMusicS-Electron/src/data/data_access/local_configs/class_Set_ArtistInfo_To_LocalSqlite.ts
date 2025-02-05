@@ -27,7 +27,7 @@ export class Set_ArtistInfo_To_LocalSqlite {
         ).replace(/\//g, '-');
     }
 
-    public Set_ArtistInfo_To_Favorite(id: string, value: Boolean) {
+    public Set_ArtistInfo_To_Favorite_Local(id: string, value: Boolean) {
         if(isElectron) {
             let ann_id = null;
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
@@ -62,7 +62,7 @@ export class Set_ArtistInfo_To_LocalSqlite {
             // other
         }
     }
-    public Set_ArtistInfo_To_Rating(id: any, value: number) {
+    public Set_ArtistInfo_To_Rating_Local(id: any, value: number) {
         if(isElectron) {
             let ann_id = null;
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
@@ -89,7 +89,7 @@ export class Set_ArtistInfo_To_LocalSqlite {
             // other
         }
     }
-    public Set_ArtistInfo_To_PlayCount_of_Artist(item_id: any) {
+    public Set_ArtistInfo_To_PlayCount_of_Artist_Local(item_id: any) {
         if(isElectron) {
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             db.pragma('journal_mode = WAL');

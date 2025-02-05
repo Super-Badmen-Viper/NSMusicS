@@ -6,7 +6,7 @@ import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 
 export const store_server_data_set_annotionInfo = reactive({
-    async Set_MediaInfo_Add_Selected_Favorite(ids: string[], value: Boolean) {
+    async Set_MediaInfo_Add_Selected_Favorite_Server(ids: string[], value: Boolean) {
         for (const id of ids) {
             await new Media_Annotation_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
                 .set_star(
@@ -14,7 +14,7 @@ export const store_server_data_set_annotionInfo = reactive({
                     id,'','');
         }
     },
-    async Set_MediaInfo_Delete_Selected_Favorite(ids: string[], value: Boolean) {
+    async Set_MediaInfo_Delete_Selected_Favorite_Server(ids: string[], value: Boolean) {
         for (const id of ids) {
             await new Media_Annotation_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
                 .set_unstar(

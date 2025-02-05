@@ -7,21 +7,21 @@ import {store_server_user_model} from "@/data/data_stores/server/store_server_us
 const set_AlbumInfo_To_LocalSqlite = new Set_AlbumInfo_To_LocalSqlite()
 export const store_local_data_set_albumInfo = reactive({
     Set_AlbumInfo_To_Favorite(id: string, value: Boolean) {
-        set_AlbumInfo_To_LocalSqlite.Set_AlbumInfo_To_Favorite(id, value)
+        set_AlbumInfo_To_LocalSqlite.Set_AlbumInfo_To_Favorite_Local(id, value)
         if(store_server_user_model.model_select === 'server') {
-            store_server_data_set_albumInfo.Set_AlbumInfo_To_Favorite(id, value)
+            store_server_data_set_albumInfo.Set_AlbumInfo_To_Favorite_Server(id, value)
         }
     },
     Set_AlbumInfo_To_Rating(id: any, value: number) {
-        set_AlbumInfo_To_LocalSqlite.Set_AlbumInfo_To_Rating(id, value)
+        set_AlbumInfo_To_LocalSqlite.Set_AlbumInfo_To_Rating_Local(id, value)
         if(store_server_user_model.model_select === 'server') {
-            store_server_data_set_albumInfo.Set_AlbumInfo_To_Rating(id, value)
+            store_server_data_set_albumInfo.Set_AlbumInfo_To_Rating_Server(id, value)
         }
     },
     Set_AlbumInfo_To_PlayCount_of_Album(item_id: any) {
-        set_AlbumInfo_To_LocalSqlite.Set_AlbumInfo_To_PlayCount_of_Album(item_id)
+        set_AlbumInfo_To_LocalSqlite.Set_AlbumInfo_To_PlayCount_of_Album_Local(item_id)
         if(store_server_user_model.model_select === 'server') {
-            store_server_data_set_albumInfo.Set_AlbumInfo_To_PlayCount_of_Album(item_id)
+            store_server_data_set_albumInfo.Set_AlbumInfo_To_PlayCount_of_Album_Server(item_id)
         }
     }
 });

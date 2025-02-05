@@ -10,7 +10,7 @@ import {
 } from "../../../data_access/servers_configs/jellyfin_api/services_web/Items/index_service";
 
 export const store_server_data_set_playlistInfo = reactive({
-    async Set_PlaylistInfo_To_Update_CreatePlaylist(name: string, _public_: boolean){
+    async Set_PlaylistInfo_To_Update_CreatePlaylist_Server(name: string, _public_: boolean){
         if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
             const getCreatePlaylist_set_id = await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
                 .createPlaylist_set(

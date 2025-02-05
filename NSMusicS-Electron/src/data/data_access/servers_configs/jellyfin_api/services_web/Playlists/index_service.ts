@@ -35,6 +35,7 @@ export class Playlists_ApiService_of_Je extends Jellyfin_Api_Services_Web {
     }
     public async delPlaylists_Remove(playlistId: string, entryIds: string): Promise<any> {
         if(store_server_users.server_select_kind === 'jellyfin') {
+            /// BUG of Del-PlayList-Item
             return this.sendRequest(
                 'DELETE',
                 `Playlists/${playlistId}/Items`,

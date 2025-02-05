@@ -26,7 +26,7 @@ export class Set_PlaylistInfo_To_LocalSqlite {
             }
         ).replace(/\//g, '-');
     }
-    public Set_PlaylistInfo_To_Update_CreatePlaylist(name: string,comment: string, duration: number,song_count: number, _public_: number,owner_id: string) {
+    public Set_PlaylistInfo_To_Update_CreatePlaylist_Local(name: string,comment: string, duration: number,song_count: number, _public_: number,owner_id: string) {
         if(isElectron) {
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             ///
@@ -68,7 +68,7 @@ export class Set_PlaylistInfo_To_LocalSqlite {
         }
         return undefined
     }
-    public Set_PlaylistInfo_To_Update_SetPlaylist(id: string, name: string,comment: string, duration: number,song_count: number, _public_: number,owner_id: string) {
+    public Set_PlaylistInfo_To_Update_SetPlaylist_Local(id: string, name: string,comment: string, duration: number,song_count: number, _public_: number,owner_id: string) {
         if(isElectron) {
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             db.pragma('journal_mode = WAL');
@@ -121,7 +121,7 @@ export class Set_PlaylistInfo_To_LocalSqlite {
         }
         return undefined
     }
-    public Set_PlaylistInfo_To_Update_DeletePlaylist(id:string) {
+    public Set_PlaylistInfo_To_Update_DeletePlaylist_Local(id:string) {
         if(isElectron) {
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             db.pragma('journal_mode = WAL');
@@ -145,7 +145,7 @@ export class Set_PlaylistInfo_To_LocalSqlite {
         }
     }
 
-    public Set_Selected_MediaInfo_Add_Selected_Playlist(ids: string[], playlist_id: string) {
+    public Set_Selected_MediaInfo_Add_Selected_Playlist_Local(ids: string[], playlist_id: string) {
         if(isElectron) {
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             db.pragma('journal_mode = WAL');
@@ -179,7 +179,7 @@ export class Set_PlaylistInfo_To_LocalSqlite {
             // other
         }
     }
-    public Set_Selected_MediaInfo_Delete_Selected_Playlist(ids: string[], playlist_id: string) {
+    public Set_Selected_MediaInfo_Delete_Selected_Playlist_Local(ids: string[], playlist_id: string) {
         if(isElectron) {
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             db.pragma('journal_mode = WAL');

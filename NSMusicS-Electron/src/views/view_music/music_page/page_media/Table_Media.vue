@@ -89,17 +89,40 @@ if(store_server_user_model.model_server_type_of_local || (store_server_users.ser
     {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
   ]
 }else if(
-    store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
+    store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin')
 ){
   options_Sort_key.value = [
-    {label:computed(() => t('OptionTrackName')), key: 'Name', state_Sort: state_Sort.Default },
-    {label:computed(() => t('AlbumArtist')), key: 'AlbumArtist', state_Sort: state_Sort.Default },
-    {label:computed(() => t('Artist')), key: 'Artist', state_Sort: state_Sort.Default },
-    {label:computed(() => t('Album')), key: 'Album', state_Sort: state_Sort.Default },
-    {label:computed(() => t('DateAdded')), key: 'DateCreated', state_Sort: state_Sort.Default },
-    {label:computed(() => t('PlayCount')), key: 'PlayCount', state_Sort: state_Sort.Default },
-    {label:computed(() => t('ReleaseDate')), key: 'PremiereDate', state_Sort: state_Sort.Default },
-    {label:computed(() => t('Runtime')), key: 'Runtime', state_Sort: state_Sort.Default },
+    {label:computed(() => t('OptionTrackName')), key: 'Album,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('Album')), key: 'Album,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('AlbumArtist')), key: 'AlbumArtist,Album,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('Artist')), key: 'Artist,Album,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('DateAdded')), key: 'DateCreated,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('DatePlayed')), key: 'DatePlayed,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('PlayCount')), key: 'PlayCount,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('ReleaseDate')), key: 'PremiereDate,AlbumArtist,Album,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('Runtime')), key: 'Runtime,AlbumArtist,Album,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('OptionRandom')), key: 'Random,SortName', state_Sort: state_Sort.Default },
+  ]
+}else if(store_server_users.server_select_kind === 'emby'){
+  options_Sort_key.value = [
+    {label:computed(() => t('Album')), key: 'Album,ParentIndexNumber,IndexNumber', state_Sort: state_Sort.Default },
+    {label:computed(() => t('AlbumArtist')), key: 'AlbumArtist,Album,ParentIndexNumber,IndexNumber,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('Composer')), key: 'Composer,Album,ParentIndexNumber,IndexNumber,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('LabelCommunityRating')), key: 'CommunityRating,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('LabelDateAdded')), key: 'DateCreated,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('LabelReleaseDate')), key: 'ProductionYear,PremiereDate,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('LabelSize')), key: 'Size,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('HeaderMedia') + t('MediaInfoContainer')), key: 'Container,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('LabelParentalRating')), key: 'OfficialRating,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('LabelYear')), key: 'ProductionYear,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('Play')), key: 'PlayCount,SortName', state_Sort: state_Sort.Default },
+    // {label:computed(() => t('DatePlayed')), key: 'DatePlayed,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('Runtime')), key: 'Runtime,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('File')), key: 'IsFolder,Filename', state_Sort: state_Sort.Default },
+    // {label:computed(() => t('LabelTitle')), key: 'SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('LabelAudioBitrate')), key: 'TotalBitrate,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('LabelNumber')), key: 'ParentIndexNumber,IndexNumber,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('Artist')), key: 'Artist,Album,ParentIndexNumber,IndexNumber,SortName', state_Sort: state_Sort.Default },
     {label:computed(() => t('OptionRandom')), key: 'Random', state_Sort: state_Sort.Default },
   ]
 }
@@ -306,6 +329,16 @@ onMounted(() => {
 ////// select Dtatsource of artistlists
 const breadcrumbItems = ref('所有歌曲');
 const page_songlists_handleselected_updatevalue = (value: any) => {
+  /// jellyfin/emby not search_model
+  if(
+      store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
+  ) {
+    store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_parms()
+    store_view_media_page_logic.page_songlists_keyword = ''
+    input_search_InstRef.value?.clear()
+    store_view_media_page_logic.page_songlists_bool_show_search_area = false
+  }
+  /// navidrome/local
   store_view_media_page_logic.set_media_Files_selected_all(false)
   store_view_media_page_logic.list_selected_Hand_click = true
   store_view_media_page_logic.get_page_songlists_selected(value)
@@ -508,7 +541,7 @@ async function update_playlist_addPlaylist(){
     Type_Add_Playlist.value = false;
     if(store_server_user_model.model_select === 'server'){
       // send json to server
-      let getCreatePlaylist_set_id = await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_CreatePlaylist(
+      let getCreatePlaylist_set_id = await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_CreatePlaylist_Server(
           playlist_set_of_addPlaylist_of_playlistname.value,
           playlist_set_of_addPlaylist_of_public.value
       )
@@ -1005,6 +1038,7 @@ onBeforeUnmount(() => {
 
           <n-dropdown
               trigger="click" :show-arrow="true"
+              :dropdown-props="{ style: { maxHeight: '200px', overflowY: 'auto' } }"
               :options="options_Sort" @select="handleSelect_Sort">
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>

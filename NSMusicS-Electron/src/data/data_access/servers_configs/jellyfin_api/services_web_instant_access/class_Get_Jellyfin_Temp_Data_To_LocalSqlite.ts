@@ -60,7 +60,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             store_server_user_model.userid_of_Je + '/Items?SortBy=PlayCount&SortOrder=Descending&' +
             'IncludeItemTypes=Audio&Limit=16&Recursive=true&Fields=PrimaryImageAspectRatio' +
             '&Filters=IsPlayed' +
-            '&ParentId=' + parentId + '&ImageTypeLimit=1&EnableImageTypes=Primary%2CBackdrop%2CBanner%2CThumb&EnableTotalRecordCount=false' +
+            '&ParentId=' + parentId + '&ImageTypeLimit=1&EnableImageTypes=Primary%2CBackdrop%2CBanner%2CThumb' +
             '&api_key=' + store_server_user_model.authorization_of_Je
         );
         const maximum_playback = response_list_of_maximum_playback.data.Items;
@@ -205,7 +205,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         const response_list_of_recently_added = await axios(
             store_server_users.server_config_of_current_user_of_sqlite?.url + '/Users/' +
             store_server_user_model.userid_of_Je + '/Items/Latest?IncludeItemTypes=Audio&Limit=16&Fields=PrimaryImageAspectRatio' +
-            '&ParentId=' + parentId + '&ImageTypeLimit=1&EnableImageTypes=Primary%2CBackdrop%2CBanner%2CThumb&EnableTotalRecordCount=false' +
+            '&ParentId=' + parentId + '&ImageTypeLimit=1&EnableImageTypes=Primary%2CBackdrop%2CBanner%2CThumb' +
             '&api_key=' + store_server_user_model.authorization_of_Je
         );
         const recently_added  = response_list_of_recently_added.data;
@@ -271,7 +271,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             store_server_users.server_config_of_current_user_of_sqlite?.url + '/Users/' +
             store_server_user_model.userid_of_Je + '/Items?SortBy=DatePlayed&SortOrder=Descending&IncludeItemTypes=Audio&Limit=16&Fields=PrimaryImageAspectRatio' +
             '&Filters=IsPlayed' +
-            '&ParentId=' + parentId + '&ImageTypeLimit=1&EnableImageTypes=Primary%2CBackdrop%2CBanner%2CThumb&EnableTotalRecordCount=false' +
+            '&ParentId=' + parentId + '&ImageTypeLimit=1&EnableImageTypes=Primary%2CBackdrop%2CBanner%2CThumb' +
             '&api_key=' + store_server_user_model.authorization_of_Je
         );
         const recently_played  = response_list_of_recently_played.data.Items;
@@ -344,7 +344,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             'Limit=' + limit + '&StartIndex=' + startIndex + '&' +
             'MediaTypes=Audio&SortOrder=Ascending&' +
             'Fields=Chapters%2CTrickplay&ExcludeLocationTypes=Virtual&' +
-            'EnableTotalRecordCount=false&CollapseBoxSetItems=false&' +
+            'CollapseBoxSetItems=false&' +
             'api_key=' + store_server_user_model.authorization_of_Je
         );
         let songlist = response_media_list.data.Items;
@@ -456,7 +456,6 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             '&api_key=' + store_server_user_model.authorization_of_Je
         );
         let songlist = [];songlist.push(data.data);
-        store_view_media_page_info.media_item_count = songlist.length // 1个
         store_playlist_list_fetchData._totalCount = songlist.length // 1个
         if (Array.isArray(songlist) && songlist.length > 0) {
             let last_index = store_view_media_page_fetchData._load_model === 'search' ?
@@ -560,16 +559,14 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Users/' +
             store_server_user_model.userid_of_Je + '/Items?' +
             'Fields=BasicSyncInfo%2CCanDelete%2CPrimaryImageAspectRatio%2CSyncStatus' +
-            '&EnableTotalRecordCount=false' +
             '&Limit=' + limit + '&StartIndex=' + startIndex +
             '&ParentId=' + album_artist_id + '&ImageTypeLimit=1&EnableImageTypes=Primary%2CBackdrop%2CThumb' +
             '&api_key=' + store_server_user_model.authorization_of_Je
         );
         let list = data.data;
         let songlist = list.Items;
-        // 此处list.TotalRecordCount为0，Emby的api返回BUG
-        store_view_media_page_info.media_item_count = list.Items.length
-        store_playlist_list_fetchData._totalCount = list.Items.length
+        store_playlist_list_fetchData._totalCount =
+            (typeof list.TotalRecordCount !== 'undefined' && list.TotalRecordCount != 0) ? list.TotalRecordCount : list.Items.length;
         if (Array.isArray(songlist) && songlist.length > 0) {
             let last_index = store_view_media_page_fetchData._load_model === 'search' ?
                 store_view_media_page_info.media_Files_temporary.length :
@@ -684,7 +681,6 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                 years, filters
             )
             songlist = list.Items;
-            store_view_media_page_info.media_item_count = list.TotalRecordCount
             store_playlist_list_fetchData._totalCount = list.TotalRecordCount
         }else{
             const response_playlMedias = await axios(

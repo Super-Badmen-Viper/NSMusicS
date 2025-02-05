@@ -26,7 +26,7 @@ export class Set_AnnotationInfo_To_LocalSqlite {
             }
         ).replace(/\//g, '-');
     }
-    public Set_MediaInfo_Add_Selected_Favorite(ids: string[], value: Boolean) {
+    public Set_MediaInfo_Add_Selected_Favorite_Local(ids: string[], value: Boolean) {
         if(isElectron) {
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             db.pragma('journal_mode = WAL');
@@ -70,7 +70,7 @@ export class Set_AnnotationInfo_To_LocalSqlite {
             // other
         }
     }
-    public Set_MediaInfo_Delete_Selected_Favorite(ids: string[], value: Boolean) {
+    public Set_MediaInfo_Delete_Selected_Favorite_Local(ids: string[], value: Boolean) {
         if(isElectron) {
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             db.pragma('journal_mode = WAL');
@@ -98,7 +98,7 @@ export class Set_AnnotationInfo_To_LocalSqlite {
             // other
         }
     }
-    public Set_MediaInfo_To_Selected_PlayCount_of_Delete(ids: string[], value: Boolean) {
+    public Set_MediaInfo_To_Selected_PlayCount_of_Delete_Local(ids: string[], value: Boolean) {
         if(isElectron) {
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             db.pragma('journal_mode = WAL');

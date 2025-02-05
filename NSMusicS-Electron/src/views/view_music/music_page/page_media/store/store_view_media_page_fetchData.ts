@@ -455,10 +455,10 @@ export const store_view_media_page_fetchData = reactive({
         } else if (selected === 'song_list_recently') {
             _order = 'desc'
             _sort = 'playDate'
-            if(
-                store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-            ) {
+            if(store_server_users.server_select_kind === 'jellyfin') {
                 _sort = 'DatePlayed'
+            }else if(store_server_users.server_select_kind === 'emby') {
+                _sort = 'DatePlayed,SortName'
             }
         } else if (selected != 'song_list_all') {
             if(!find_model) {

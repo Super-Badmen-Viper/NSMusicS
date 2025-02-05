@@ -42,6 +42,17 @@ export class Items_ApiService_of_Je extends Jellyfin_Api_Services_Web {
             }
         );
     }
+    public async getItems_PlaybackInfo(
+        userId: string, itemId: string,
+    ): Promise<any> {
+        return this.sendRequest(
+            'GET',
+            `Items/${itemId}/PlaybackInfo`,
+            {
+                userId
+            }
+        );
+    }
 
     public async getItems_List(
         userId: string, parentId: string, searchTerm: string,
@@ -96,6 +107,7 @@ export class Items_ApiService_of_Je extends Jellyfin_Api_Services_Web {
                 `Items/${itemId}`
             );
         }else{
+            /// BUG of Del-PlayList
             const Ids = itemId
             return this.sendRequest(
                 'POST',

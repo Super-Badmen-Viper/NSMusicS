@@ -157,15 +157,30 @@ if(store_server_user_model.model_server_type_of_local || (store_server_users.ser
     {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
   ]
 }else if(
-  store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
+  store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin')
 ){
   options_Sort_key.value = [
-    {label:computed(() => t('OptionTrackName')), key: 'Name', state_Sort: state_Sort.Default },
-    {label:computed(() => t('AlbumArtist')), key: 'AlbumArtist', state_Sort: state_Sort.Default },
-    {label:computed(() => t('CommunityRating')), key: 'CommunityRating', state_Sort: state_Sort.Default },
-    {label:computed(() => t('OptionCriticRating')), key: 'CriticRating', state_Sort: state_Sort.Default },
-    {label:computed(() => t('OptionDateAdded')), key: 'DateCreated', state_Sort: state_Sort.Default },
-    {label:computed(() => t('OptionReleaseDate')), key: 'ProductionYear', state_Sort: state_Sort.Default },
+    {label:computed(() => t('OptionTrackName')), key: 'SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('AlbumArtist')), key: 'AlbumArtist,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('CommunityRating')), key: 'CommunityRating,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('OptionCriticRating')), key: 'CriticRating,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('OptionDateAdded')), key: 'DateCreated,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('OptionReleaseDate')), key: 'ProductionYear,PremiereDate,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('OptionRandom')), key: 'Random,SortName', state_Sort: state_Sort.Default },
+  ]
+}else if(store_server_users.server_select_kind === 'emby'){
+  options_Sort_key.value = [
+    {label:computed(() => t('AlbumArtist')), key: 'AlbumArtist,Album,ParentIndexNumber,IndexNumber,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('Composer')), key: 'Composer,Album,ParentIndexNumber,IndexNumber,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('LabelCommunityRating')), key: 'CommunityRating,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('LabelDateAdded')), key: 'DateCreated,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('LabelReleaseDate')), key: 'ProductionYear,PremiereDate,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('LabelParentalRating')), key: 'OfficialRating,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('LabelYear')), key: 'ProductionYear,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('Runtime')), key: 'Runtime,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('LabelCriticRating')), key: 'CriticRating,SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('LabelTitle')), key: 'SortName', state_Sort: state_Sort.Default },
+    {label:computed(() => t('Artist')), key: 'Artist,Album,ParentIndexNumber,IndexNumber,SortName', state_Sort: state_Sort.Default },
     {label:computed(() => t('OptionRandom')), key: 'Random', state_Sort: state_Sort.Default },
   ]
 }
