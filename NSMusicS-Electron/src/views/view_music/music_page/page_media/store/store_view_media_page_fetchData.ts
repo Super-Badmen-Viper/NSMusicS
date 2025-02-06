@@ -393,21 +393,15 @@ export const store_view_media_page_fetchData = reactive({
     set_album_id(id: string){
         store_view_media_page_fetchData._album_id = id
         store_playlist_list_fetchData._album_id = id
-        store_playlist_list_fetchData._artist_id = ''
-        store_playlist_list_fetchData._album_artist_id = ''
     },
     _artist_id: '',
     set_artist_id(id: string){
         store_view_media_page_fetchData._artist_id = id
-        store_playlist_list_fetchData._album_id = ''
         store_playlist_list_fetchData._artist_id = id
-        store_playlist_list_fetchData._album_artist_id = ''
     },
     _album_artist_id: '', // Emby Home$Album
     set_album_artist_id(id: string){
         store_view_media_page_fetchData._album_artist_id = id
-        store_playlist_list_fetchData._album_id = ''
-        store_playlist_list_fetchData._artist_id = ''
         store_playlist_list_fetchData._album_artist_id = id
     },
     _media_id: '', // Jellyfin Home$Media

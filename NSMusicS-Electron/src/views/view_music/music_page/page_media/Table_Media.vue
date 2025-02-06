@@ -400,40 +400,48 @@ const handleItemClick_title = (title:string) => {
   }
 }
 const handleItemClick_artist = (artist:string) => {
-  click_count = 0;
-  if(store_server_user_model.model_server_type_of_local) {
-    store_view_media_page_logic.page_songlists_input_search_Value = artist//+'accurate_search'+'__artist__'//artist不参与精确搜索
-    store_view_media_page_logic.get_page_songlists_keyword(artist)
-    store_view_media_page_logic.page_songlists_bool_show_search_area = false
-    show_search_area()
-    click_search()
-    scrollTo(0)
-  }else if(store_server_user_model.model_server_type_of_web){
-    store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_parms()
-    store_view_media_page_logic.page_songlists_bool_show_search_area = true
-    store_view_media_page_logic.page_songlists_input_search_Value = artist
-    store_view_media_page_logic.get_page_songlists_keyword(artist)
-    if(
-        store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-    ) {
+  if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
+    click_count = 0;
+    if (store_server_user_model.model_server_type_of_local) {
+      store_view_media_page_logic.page_songlists_input_search_Value = artist//+'accurate_search'+'__artist__'//artist不参与精确搜索
+      store_view_media_page_logic.get_page_songlists_keyword(artist)
+      store_view_media_page_logic.page_songlists_bool_show_search_area = false
+      show_search_area()
+      click_search()
+      scrollTo(0)
+    } else if (store_server_user_model.model_server_type_of_web) {
+      store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_parms()
+      store_view_media_page_logic.page_songlists_bool_show_search_area = true
+      store_view_media_page_logic.page_songlists_input_search_Value = artist
+      store_view_media_page_logic.get_page_songlists_keyword(artist)
+      if (
+          store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
+      ) {
 
+      }
     }
+  }else{
+    message.warning('Jellyfin / Emby ' + t('ContainerNotSupported') + ' ' + t('setting.hotkey_localSearch'))
   }
 }
 const handleItemClick_album = (album_id:string) => {
-  click_count = 0;
-  if(store_server_user_model.model_server_type_of_local) {
-    store_view_media_page_logic.page_songlists_input_search_Value = album_id + 'accurate_search' + '__album__'
-    store_view_media_page_logic.get_page_songlists_keyword(album_id + 'accurate_search' + '__album__')
-    store_view_media_page_logic.page_songlists_bool_show_search_area = false
-    show_search_area()
-    click_search()
-    scrollTo(0)
-  }else if(store_server_user_model.model_server_type_of_web){
-    store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_parms()
-    store_view_media_page_logic.page_songlists_bool_show_search_area = true
-    store_view_media_page_logic.page_songlists_input_search_Value = album_id
-    store_view_media_page_logic.get_page_songlists_keyword(album_id)
+  if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
+    click_count = 0;
+    if (store_server_user_model.model_server_type_of_local) {
+      store_view_media_page_logic.page_songlists_input_search_Value = album_id + 'accurate_search' + '__album__'
+      store_view_media_page_logic.get_page_songlists_keyword(album_id + 'accurate_search' + '__album__')
+      store_view_media_page_logic.page_songlists_bool_show_search_area = false
+      show_search_area()
+      click_search()
+      scrollTo(0)
+    } else if (store_server_user_model.model_server_type_of_web) {
+      store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_parms()
+      store_view_media_page_logic.page_songlists_bool_show_search_area = true
+      store_view_media_page_logic.page_songlists_input_search_Value = album_id
+      store_view_media_page_logic.get_page_songlists_keyword(album_id)
+    }
+  }else{
+    message.warning('Jellyfin / Emby ' + t('ContainerNotSupported') + ' ' + t('setting.hotkey_localSearch'))
   }
 }
 
@@ -626,21 +634,22 @@ async function update_playlist_deletePlaylist(){
   try{
     Type_Update_Playlist.value = false;
     playlist_set_of_updatePlaylist_of_playlistcomment.value = '';
-
-    store_playlist_list_logic.get_playlist_tracks_temporary_delete(playlist_update_emit_id.value)
-    if(store_server_user_model.model_select === 'server'){
-      const result = await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_DeletePlaylist(
-          playlist_update_emit_id.value
-      )
-      if (result !== undefined && result !== "") {
-        store_view_media_page_info.media_playlist_count--;
+    if(playlist_update_emit_id.value.length > 0) {
+      store_playlist_list_logic.get_playlist_tracks_temporary_delete(playlist_update_emit_id.value)
+      if (store_server_user_model.model_select === 'server') {
+        const result = await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_DeletePlaylist(
+            playlist_update_emit_id.value
+        )
+        if (result !== undefined) {
+          store_view_media_page_info.media_playlist_count--;
+        }
       }
+      page_songlists_statistic.value.forEach((item: any) => {
+        if (item.id === 'song_list_all_PlayList') {
+          item.song_count = store_view_media_page_info.media_playlist_count + ' *';
+        }
+      });
     }
-    page_songlists_statistic.value.forEach((item: any) => {
-      if(item.id === 'song_list_all_PlayList') {
-        item.song_count = store_view_media_page_info.media_playlist_count + ' *';
-      }
-    });
   }catch (e) {
     console.error(e)
   }
@@ -664,7 +673,7 @@ async function update_playlist_deleteMediaFile(id: any){
     }else if(store_view_media_page_logic.page_songlists_selected === 'song_list_recently'){
 
     }else{
-      if(store_server_users.server_select_kind === 'emby'){
+      if(store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby'){
         await store_local_data_set_mediaInfo.Set_MediaInfo_Delete_Selected_Playlist(
             store_playlist_list_info.playlist_Menu_Item_IndexId,
             store_view_media_page_logic.page_songlists_selected

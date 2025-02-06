@@ -293,9 +293,7 @@ export const store_view_album_page_fetchData = reactive({
     _artist_id: '',
     set_artist_id(id: string){
         store_view_album_page_fetchData._artist_id = id
-        store_playlist_list_fetchData._album_id = ''
         store_playlist_list_fetchData._artist_id = id
-        store_playlist_list_fetchData._album_artist_id = ''
     },
     async fetchData_Album_of_server_web_start(){
         store_view_album_page_info.album_Files_temporary = [];

@@ -399,30 +399,26 @@ const get_router_history_model_next = () =>  {
 const handleItemClick_album = (album:string) => {
   if(store_server_user_model.model_server_type_of_local) {
     bool_show_search_area.value = true
-    store_view_album_page_logic.page_albumlists_keyword = album
-    store_view_album_page_logic.page_albumlists_input_search_Value = album
-    store_view_media_page_logic.page_songlists_input_search_Value = album
   }else if(store_server_user_model.model_server_type_of_web){
     store_view_album_page_fetchData._artist_id = ''
     bool_show_search_area.value = true
   }
+  store_view_album_page_logic.page_albumlists_keyword = album
+  store_view_album_page_logic.page_albumlists_input_search_Value = album
+  store_view_media_page_logic.page_songlists_input_search_Value = album
 }
 const handleItemClick_artist = (artist_id:string) => {
   if(store_server_user_model.model_server_type_of_local) {
     bool_show_search_area.value = true;
-    store_view_album_page_logic.page_albumlists_keyword = artist_id
-    store_view_album_page_logic.page_albumlists_input_search_Value = artist_id
-    store_view_media_page_logic.page_songlists_input_search_Value = artist_id
   }else if(store_server_user_model.model_server_type_of_web){
-    if(
-      (store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
-    ) {
-      store_view_album_page_fetchData._artist_id = ''
-    }else{
+    if(store_server_users.server_select_kind != 'navidrome') {
       store_view_album_page_fetchData.set_artist_id(artist_id)
     }
     bool_show_search_area.value = true
   }
+  store_view_album_page_logic.page_albumlists_keyword = artist_id
+  store_view_album_page_logic.page_albumlists_input_search_Value = artist_id
+  store_view_media_page_logic.page_songlists_input_search_Value = artist_id
 }
 const Open_this_album_MediaList_click = (album_id:string) => {
   if(store_server_user_model.model_server_type_of_web){
@@ -568,13 +564,9 @@ const onScroll = async () => {
 //////
 const onRefreshSharp = async () => {
   if(store_server_user_model.model_server_type_of_web){
-    if(
-        store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-    ) {
-      store_view_album_page_logic.page_albumlists_keyword = ''
-      input_search_InstRef.value?.clear()
-      bool_show_search_area.value = false
-    }
+    store_view_album_page_logic.page_albumlists_keyword = ''
+    input_search_InstRef.value?.clear()
+    bool_show_search_area.value = false
     store_view_album_page_fetchData.fetchData_Album_of_server_web_start()
   }else if(store_server_user_model.model_server_type_of_local){
     input_search_InstRef.value?.clear()

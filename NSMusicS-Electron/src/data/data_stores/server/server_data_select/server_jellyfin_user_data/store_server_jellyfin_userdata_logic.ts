@@ -23,17 +23,17 @@ export const store_server_jellyfin_userdata_logic = reactive({
     async jellyfin_update_server_addUser(
         server_set_of_addUser_of_servername: string,
         server_set_of_addUser_of_url: string,
-        server_set_of_addUser_of_apikey: string,
-        server_set_of_addUser_of_userid: string,
+        server_set_of_addUser_of_username$apikey: string,
+        server_set_of_addUser_of_password$userid: string,
         type: string
     ) {
         try{
             let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
-            const data:Server_Configs_Props = set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_CreateUser(
+            const data = set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_CreateUser(
                 server_set_of_addUser_of_servername,
                 server_set_of_addUser_of_url,
-                server_set_of_addUser_of_apikey,
-                server_set_of_addUser_of_userid,
+                server_set_of_addUser_of_username$apikey,
+                server_set_of_addUser_of_password$userid,
                 type
             );
             const new_data: Server_Configs_Props[] = store_server_users.server_config_of_all_user_of_sqlite;
@@ -52,23 +52,28 @@ export const store_server_jellyfin_userdata_logic = reactive({
         type: string
     ) {
         try{
+            await this.jellyfin_get_server_config_of_current_user_of_sqlite({
+                id, server_name, url,
+                user_name, password,
+                type
+            })
             const userService = new Users_ApiService_of_Je(
                 url
             )
             const result = await userService.getUsers_id(
-                password
+                store_server_user_model.userid_of_Je
             )
             if(result.status != undefined && result.status === '400'){
                 return false;
             }
             let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
-            const data:Server_Configs_Props = set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_SetUser(
+            const data = set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_SetUser(
                 id,
                 server_name, url,
                 user_name, password,
                 type
             );
-            const new_data: Server_Configs_Props[] = store_server_users.server_config_of_all_user_of_sqlite;
+            const new_data: any[] = store_server_users.server_config_of_all_user_of_sqlite;
             const index = new_data.findIndex(item => item.id === data.id);
             if (index !== -1) {
                 new_data[index] = data;
@@ -101,7 +106,7 @@ export const store_server_jellyfin_userdata_logic = reactive({
                 store_server_users.server_config_of_all_user_of_sqlite[index].url
             )
             const result = await userService.getUsers_id(
-                store_server_users.server_config_of_all_user_of_sqlite[index].password
+                store_server_user_model.userid_of_Je
             )
             if(result.status != undefined && result.status === '400'){
                 return false;
@@ -120,8 +125,24 @@ export const store_server_jellyfin_userdata_logic = reactive({
             };
         store_server_users.server_config_of_current_user_of_select_servername = value.type + ' - ' + value.server_name
         store_server_user_model.server_select = value.id
-        store_server_user_model.authorization_of_Je = value.user_name
-        store_server_user_model.userid_of_Je = value.password
+        if(store_server_user_model.server_login_model_of_apikey) {
+            store_server_user_model.authorization_of_Je = value.user_name
+            store_server_user_model.userid_of_Je = value.password
+        }else {
+            store_server_user_model.username =
+                store_server_users.server_config_of_current_user_of_sqlite?.user_name
+            store_server_user_model.password =
+                store_server_users.server_config_of_current_user_of_sqlite?.password
+            const data = await new Users_ApiService_of_Je(
+                store_server_users.server_config_of_current_user_of_sqlite?.url
+            ).authenticateUserByName(
+                store_server_users.server_config_of_current_user_of_sqlite?.url,
+                store_server_user_model.username,
+                store_server_user_model.password
+            )
+            store_server_user_model.authorization_of_Je = data.AccessToken
+            store_server_user_model.userid_of_Je = data.User.Id
+        }
         ///
         const result_parentIds = await new Library_ApiService_of_Je(
             store_server_users.server_config_of_current_user_of_sqlite?.url

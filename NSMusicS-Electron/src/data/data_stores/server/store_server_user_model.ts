@@ -45,6 +45,7 @@ export const store_server_user_model = reactive({
     password: '',
     authorization_of_nd: '',
 
+    server_login_model_of_apikey: false,
     userid_of_Je: '',
     authorization_of_Je: '',
     parentid_of_Je: [],
@@ -91,50 +92,6 @@ export const store_server_user_model = reactive({
 
         store_server_user_model.model_select = 'server'
         await this.switchToMode()
-
-        if(
-            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-        ) {
-            store_server_user_model.authorization_of_Je =
-                store_server_users.server_config_of_current_user_of_sqlite?.user_name
-            // load User
-            const userService = new Users_ApiService_of_Je(
-                store_server_users.server_config_of_current_user_of_sqlite?.url
-            )
-            const result = await userService.getUsers_ALL()
-            let server_set_of_addUser_of_apikey_user_option = []
-            store_server_user_model.userid_of_Je = ''
-            if(result) {
-                if(Array.isArray(result) && result.length > 0) {
-                    result.forEach((row: any, index: number) => {
-                        server_set_of_addUser_of_apikey_user_option.push({
-                            label: row.Name,
-                            value: row.Id
-                        });
-                    });
-                    store_server_user_model.userid_of_Je = server_set_of_addUser_of_apikey_user_option[0].value
-                    // load Library parentid_of_Je
-                    const library_ApiService_of_Je = new Library_ApiService_of_Je(
-                        store_server_users.server_config_of_current_user_of_sqlite?.url
-                    )
-                    const result_parentIds = await library_ApiService_of_Je.getLibrary_MediaFolders_ALL()
-                    store_server_user_model.parentid_of_Je = []
-                    if(result_parentIds.Items){
-                        if(Array.isArray(result_parentIds.Items) && result_parentIds.Items.length > 0) {
-                            result_parentIds.Items.forEach((row: any, index: number) => {
-                                store_server_user_model.parentid_of_Je.push({
-                                    label: row.Name,
-                                    value: row.Id
-                                });
-                                if(row.CollectionType === 'music'){
-                                    store_server_user_model.parentid_of_Je_Music = row.Id
-                                }
-                            });
-                        }
-                    }
-                }
-            }
-        }
     },
     async switchToMode(){
         if(!store_app_configs_logic_load.app_configs_loading) {

@@ -189,106 +189,122 @@
   });
   const server_set_of_addUser_of_type = ref(Type_Server_Kinds[2].value)
   let unwatch_server_set_of_addUser_of_type = watch(() => server_set_of_addUser_of_type.value, (newValue) => {
-    server_login_model_of_apikey.value = newValue === 'jellyfin' || newValue === 'emby';
+    // store_server_user_model.server_login_model_of_apikey = newValue === 'jellyfin' || newValue === 'emby';
+    // 不再启用apikey登录模式
+    // 因为TM Jellyfin和Emby 都有apikey权限无法执行：Jellyfin播放列表项删除/Emby播放列表删除的问题
+    store_server_user_model.server_login_model_of_apikey = false;
   });
+  // normal login
   const server_set_of_addUser_of_servername = ref('')
   const server_set_of_addUser_of_url = ref('')
   const server_set_of_addUser_of_username = ref('')
   const server_set_of_addUser_of_password = ref('')
-  const server_login_model_of_apikey = ref(false)
+  // apikey login
   const server_set_of_addUser_of_apikey = ref('')
   const server_set_of_addUser_of_apikey_user_option = ref([])
   const server_set_of_addUser_of_apikey_load_complete = ref(false)
   async function update_server_apikey_user_option(data: any) {
-    store_server_user_model.authorization_of_Je =
-        data.apikey.length > 0
-            ? data.apikey : server_set_of_addUser_of_apikey.value
-    // load User
-    const userService = new Users_ApiService_of_Je(
-        data.url.length > 0
-            ? data.url : server_set_of_addUser_of_url.value
-    )
-    const result = await userService.getUsers_ALL()
-    server_set_of_addUser_of_apikey_user_option.value = []
-    store_server_user_model.userid_of_Je = ''
-    server_set_of_addUser_of_apikey_load_complete.value = false
-    if(result) {
-      if(Array.isArray(result) && result.length > 0) {
-        result.forEach((row: any) => {
-          server_set_of_addUser_of_apikey_user_option.value.push({
-            label: row.Name,
-            value: row.Id
-          });
-        });
-        if(data.init === true || data.init === 'true') {
-          store_server_user_model.userid_of_Je =
-              server_set_of_addUser_of_apikey_user_option.value[0].value
-        }else{
-          store_server_user_model.userid_of_Je = data.userid
-        }
-        // load Library parentid_of_Je
-        const library_ApiService_of_Je = new Library_ApiService_of_Je(server_set_of_addUser_of_url.value)
-        const result_parentIds = await library_ApiService_of_Je.getLibrary_MediaFolders_ALL()
-        store_server_user_model.parentid_of_Je = []
-        if(result_parentIds.Items){
-          if(Array.isArray(result_parentIds.Items) && result_parentIds.Items.length > 0) {
-            result_parentIds.Items.forEach((row: any) => {
-              store_server_user_model.parentid_of_Je.push({
-                label: row.Name,
-                value: row.Id
-              });
-              if(row.CollectionType === 'music'){
-                store_server_user_model.parentid_of_Je_Music = row.Id
-              }
+    if(store_server_user_model.server_login_model_of_apikey) {
+      store_server_user_model.authorization_of_Je =
+          data.apikey.length > 0
+              ? data.apikey : server_set_of_addUser_of_apikey.value
+      // load User
+      const userService = new Users_ApiService_of_Je(
+          data.url.length > 0
+              ? data.url : server_set_of_addUser_of_url.value
+      )
+      const result = await userService.getUsers_ALL()
+      server_set_of_addUser_of_apikey_user_option.value = []
+      store_server_user_model.userid_of_Je = ''
+      server_set_of_addUser_of_apikey_load_complete.value = false
+      if (result) {
+        if (Array.isArray(result) && result.length > 0) {
+          result.forEach((row: any) => {
+            server_set_of_addUser_of_apikey_user_option.value.push({
+              label: row.Name,
+              value: row.Id
             });
+          });
+          if (data.init === true || data.init === 'true') {
+            store_server_user_model.userid_of_Je =
+                server_set_of_addUser_of_apikey_user_option.value[0].value
+          } else {
+            store_server_user_model.userid_of_Je = data.userid
           }
+          // load Library parentid_of_Je
+          const library_ApiService_of_Je = new Library_ApiService_of_Je(server_set_of_addUser_of_url.value)
+          const result_parentIds = await library_ApiService_of_Je.getLibrary_MediaFolders_ALL()
+          store_server_user_model.parentid_of_Je = []
+          if (result_parentIds.Items) {
+            if (Array.isArray(result_parentIds.Items) && result_parentIds.Items.length > 0) {
+              result_parentIds.Items.forEach((row: any) => {
+                store_server_user_model.parentid_of_Je.push({
+                  label: row.Name,
+                  value: row.Id
+                });
+                if (row.CollectionType === 'music') {
+                  store_server_user_model.parentid_of_Je_Music = row.Id
+                }
+              });
+            }
+          }
+          // complete
+          server_set_of_addUser_of_apikey_load_complete.value = true
         }
-        // complete
-        server_set_of_addUser_of_apikey_load_complete.value = true
       }
+    }
+    else{
+
     }
   }
   /// server add
   async function update_server_addUser() {
-    try{
-      server_set_of_addUser_of_url.value = server_set_of_addUser_of_url.value.replace(/\/$/, '')
+    try {
+      server_set_of_addUser_of_url.value = server_set_of_addUser_of_url.value.replace(/\/$/, '');
+      const params = {
+        servername: server_set_of_addUser_of_servername.value,
+        url: server_set_of_addUser_of_url.value,
+        type: server_set_of_addUser_of_type.value,
+        username: server_set_of_addUser_of_username.value,
+        password: server_set_of_addUser_of_password.value,
+        apikey: server_set_of_addUser_of_apikey.value,
+        userid: store_server_user_model.userid_of_Je,
+      };
       let result = null;
-      if(server_set_of_addUser_of_type.value === 'navidrome') {
-        result = await store_server_data_select_logic.update_server_addUser(
-            server_set_of_addUser_of_servername.value,
-            server_set_of_addUser_of_url.value,
-            server_set_of_addUser_of_username.value,
-            server_set_of_addUser_of_password.value,
-            server_set_of_addUser_of_type.value
-        )
-      }else if(
-          server_set_of_addUser_of_type.value === 'jellyfin' ||
-          server_set_of_addUser_of_type.value === 'emby'
-      ) {
-        if(server_set_of_addUser_of_apikey.value.length > 0 &&
-            store_server_user_model.userid_of_Je.length > 0){
-          if(server_set_of_addUser_of_apikey_load_complete.value) {
-            result = await store_server_data_select_logic.update_server_addUser(
-                server_set_of_addUser_of_servername.value,
-                server_set_of_addUser_of_url.value,
-
-                server_set_of_addUser_of_apikey.value,
-                store_server_user_model.userid_of_Je,
-
-                server_set_of_addUser_of_type.value
-            )
-          }
+      if (store_server_user_model.server_login_model_of_apikey) {
+        if (
+            (server_set_of_addUser_of_type.value === 'jellyfin' || server_set_of_addUser_of_type.value === 'emby') &&
+            params.apikey?.length > 0 &&
+            params.userid?.length > 0 &&
+            server_set_of_addUser_of_apikey_load_complete.value
+        ) {
+          result = await store_server_data_select_logic.update_server_addUser(
+              params.servername,
+              params.url,
+              params.apikey,
+              params.userid,
+              params.type
+          );
         }
+      } else {
+        result = await store_server_data_select_logic.update_server_addUser(
+            params.servername,
+            params.url,
+            params.username,
+            params.password,
+            params.type
+        );
       }
       if (result) {
-        message.success(t('form.addServer.success'))
+        message.success(t('form.addServer.success'));
       } else {
-        message.error(t('error.invalidServer'), {duration: 3000})
+        message.error(t('error.invalidServer'), { duration: 3000 });
       }
-    }catch (e) {
-      message.error(t('error.invalidServer'),{ duration: 3000 })
+    } catch (e) {
+      message.error(t('error.invalidServer'), { duration: 3000 });
+    } finally {
+      Type_Server_Add.value = !Type_Server_Add.value;
     }
-    Type_Server_Add.value = !Type_Server_Add.value
   }
   /// server delete
   async function update_server_deleteUser(id: string, type: string) {
@@ -314,22 +330,24 @@
   ) {
     try {
       let result = null;
-      if(server_set_of_addUser_of_type.value === 'navidrome') {
+      if(store_server_user_model.server_login_model_of_apikey) {
+        if (server_set_of_addUser_of_type.value === 'jellyfin' || server_set_of_addUser_of_type.value === 'emby') {
+          if (server_set_of_addUser_of_apikey_load_complete.value) {
+            result = await store_server_data_select_logic.update_server_setUser(
+                id,
+                server_name, url,
+                user_name, password,
+                type
+            )
+          }
+        }
+      }else{
         result = await store_server_data_select_logic.update_server_setUser(
             id,
             server_name, url,
             user_name, password,
             type
         )
-      }else if(server_set_of_addUser_of_type.value === 'jellyfin' || server_set_of_addUser_of_type.value === 'emby') {
-        if(server_set_of_addUser_of_apikey_load_complete.value){
-          result = await store_server_data_select_logic.update_server_setUser(
-              id,
-              server_name, url,
-              user_name, password,
-              type
-          )
-        }
       }
       if(result){
         message.success(t('form.updateServer.success'))
@@ -359,6 +377,7 @@
           }else if(user_config?.type === 'emby'){
             store_server_users.server_select_kind = 'emby'
           }
+          store_app_configs_logic_save.save_system_config_of_App_Configs()
         } else {
           message.error(t('error.invalidServer'), {duration: 3000})
         }
@@ -823,19 +842,20 @@
                                       class="server_item_info"
                                       @click="() => {
                                         item.show = !item.show;
-                                        if(item.type === 'jellyfin' || item.type === 'emby'){
-                                          server_login_model_of_apikey = true
-                                          server_set_of_addUser_of_apikey = item.user_name
-                                          update_server_apikey_user_option({
-                                            servername: item.server_name,
-                                            url: item.url,
-                                            apikey: item.user_name,
-                                            userid: item.password,
-                                            init: false
-                                          });
-                                        }else{
-                                          server_login_model_of_apikey = false
-                                        }
+                                        // if(item.type === 'jellyfin' || item.type === 'emby'){
+                                        //   store_server_user_model.server_login_model_of_apikey = true
+                                        //   server_set_of_addUser_of_apikey = item.user_name
+                                        //   update_server_apikey_user_option({
+                                        //     servername: item.server_name,
+                                        //     url: item.url,
+                                        //     apikey: item.user_name,
+                                        //     userid: item.password,
+                                        //     init: false
+                                        //   });
+                                        // }else{
+                                        //   store_server_user_model.server_login_model_of_apikey = false
+                                        // }
+                                        store_server_user_model.server_login_model_of_apikey = false
                                       }"
                                       style="
                             width: 230px;
@@ -882,7 +902,7 @@
                                               </n-input-group>
                                             </n-space>
                                           </n-form>
-                                          <n-form v-if="server_login_model_of_apikey" style="margin-top: -12px;">
+                                          <n-form v-if="store_server_user_model.server_login_model_of_apikey" style="margin-top: -12px;">
                                             <n-space vertical style="margin-bottom: 10px;">
                                               <span>{{ $t('HeaderApiKey') }}</span>
                                               <n-input clearable placeholder="" v-model:value="item.user_name"/>
@@ -931,10 +951,14 @@
                                                     server_set_of_addUser_of_type = 'navidrome'
                                                   }else if (item.type === 'jellyfin'){
                                                     server_set_of_addUser_of_type = 'jellyfin'
-                                                    item.password = store_server_user_model.userid_of_Je
+                                                    if(store_server_user_model.server_login_model_of_apikey) {
+                                                      item.password = store_server_user_model.userid_of_Je
+                                                    }
                                                   }else if (item.type === 'emby'){
                                                     server_set_of_addUser_of_type = 'emby'
-                                                    item.password = store_server_user_model.userid_of_Je
+                                                    if(store_server_user_model.server_login_model_of_apikey) {
+                                                      item.password = store_server_user_model.userid_of_Je
+                                                    }
                                                   }
                                                   update_server_setUser(
                                                       item.id,
@@ -1342,7 +1366,7 @@
                           </n-input-group>
                         </n-space>
                       </n-form>
-                      <n-form v-if="server_login_model_of_apikey" style="margin-top: -12px;">
+                      <n-form v-if="store_server_user_model.server_login_model_of_apikey" style="margin-top: -12px;">
                         <n-space vertical style="margin-bottom: 10px;">
                           <span>{{ $t('HeaderApiKey') }}</span>
                           <n-input clearable placeholder="" v-model:value="server_set_of_addUser_of_apikey"/>

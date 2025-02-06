@@ -13,27 +13,32 @@ export class Jellyfin_Api_Services_Web {
      * @param method 请求方法（GET、POST、DELETE 等）
      * @param endpoint API 端点
      * @param params 查询参数
+     * @param data
      * @returns 响应数据
      */
     protected async sendRequest(
         method: 'GET' | 'POST' | 'DELETE' | 'PUT' | 'PATCH',
         endpoint: string,
-        params?: Record<string, string>
+        params?: Record<string, string>,
+        data?: any,
     ): Promise<any> {
-        const headers = {
-            'Authorization': `MediaBrowser Token="${store_server_user_model.authorization_of_Je}", Client="Electron Desktop", Device="NSMusicS", DeviceId="NSMusicS-GO", Version="1.2.2"`
-        };
-        const queryString = params ? new URLSearchParams(params).toString() : '';
-        const url = `${this.baseUrl}/${endpoint}${queryString ? `?${queryString}` : ''}`;
         try {
+            const headers = {
+                'Authorization': `MediaBrowser Token="${store_server_user_model.authorization_of_Je}", Client="Electron Desktop", Device="NSMusicS", DeviceId="NSMusicS-GO", Version="1.2.2"`
+            };
+
+            const queryString = params ? new URLSearchParams(params).toString() : '';
+            const url = `${this.baseUrl}/${endpoint}${queryString ? `?${queryString}` : ''}`;
+
             const response = await axios({
                 method,
                 url,
                 headers,
+                data,
             });
             return response.data;
         } catch (e) {
-            console.error(e);
+            console.error('请求失败:', e);
             return undefined;
         }
     }
