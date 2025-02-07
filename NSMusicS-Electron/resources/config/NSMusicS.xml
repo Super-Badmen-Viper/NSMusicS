@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <item>
-<version>1.2.2</version>
+<version>1.3.0</version>
 <url> </url>
 <changelog>https://github.com/Super-Badmen-Viper/NSMusicS/releases</changelog>
 <changelog_explain>
     后续将更新的内容;
-    初步构建Emby-Jellyfin的多媒体媒体库(仅UI界面，未开放)至当前NSMusicS-Electron版本中[进行中];
     优化NSMusicS产品用户友好性，构建引导程序，逐步引导初次安装的用户完成应用配置操作[进行中];
     为专辑-乐曲-艺术家页面添加高级筛选: 年份，流派，目录.....[任意条件][进行中];
     增加对Docker-Web客户端的支持[进行中];
-    增加服务器配置种类，兼容emby-api[进行中];
-    增加服务器配置种类，兼容jellyfin-api[进行中];
     增加迷你播放窗口，竖向模式为仿制AppleMusic迷你播放悬浮窗，横向模式为桌面歌词[进行中];
-    1.2.2已更新内容;
+    1.3.0已更新内容;
+    增加服务器配置种类，兼容emby-api[√];
+    增加服务器配置种类，兼容jellyfin-api[√];
     优化本地模式的音乐库管理逻辑，使其更加符合本地用户的使用习惯[√];
     按媒体库文件夹目录对歌曲进行筛选[√];
     为每一个按钮都添加鼠标悬浮国际化提示说明，提高用户使用友好性[√];
