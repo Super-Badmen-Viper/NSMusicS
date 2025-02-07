@@ -55,6 +55,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         await this.get_home_list_of_recently_played(parentId)
     }
     public async get_home_list_of_maximum_playback(parentId: string){
+        let maximum_playback = []
         const response_list_of_maximum_playback = await axios(
             store_server_users.server_config_of_current_user_of_sqlite?.url + '/Users/' +
             store_server_user_model.userid_of_Je + '/Items?SortBy=PlayCount&SortOrder=Descending&' +
@@ -63,7 +64,9 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             '&ParentId=' + parentId + '&ImageTypeLimit=1&EnableImageTypes=Primary%2CBackdrop%2CBanner%2CThumb' +
             '&api_key=' + store_server_user_model.authorization_of_Je
         );
-        const maximum_playback = response_list_of_maximum_playback.data.Items;
+        if(response_list_of_maximum_playback != undefined) {
+            maximum_playback = response_list_of_maximum_playback.data.Items;
+        }
         if(maximum_playback != undefined && Array.isArray(maximum_playback)) {
             maximum_playback.map(async (album: any) => {
                 const medium_image_url =
@@ -123,6 +126,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
     }
     public async get_home_list_of_random_search(parentId: string,){
         let list = []
+        let random_search = []
         if(store_server_users.server_select_kind === 'jellyfin') {
             list = await this.items_ApiService_of_Je.getItems_List(
                 store_server_user_model.userid_of_Je, parentId, '',
@@ -143,7 +147,9 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             );
             list = data.data;
         }
-        const random_search  = list.Items;
+        if(list != undefined) {
+            random_search = list.Items;
+        }
         if(random_search != undefined && Array.isArray(random_search)) {
             random_search.map(async (album: any) => {
                 const medium_image_url =
@@ -267,6 +273,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         }
     }
     public async get_home_list_of_recently_played(parentId: string,){
+        let recently_played = []
         const response_list_of_recently_played = await axios(
             store_server_users.server_config_of_current_user_of_sqlite?.url + '/Users/' +
             store_server_user_model.userid_of_Je + '/Items?SortBy=DatePlayed&SortOrder=Descending&IncludeItemTypes=Audio&Limit=16&Fields=PrimaryImageAspectRatio' +
@@ -274,7 +281,9 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             '&ParentId=' + parentId + '&ImageTypeLimit=1&EnableImageTypes=Primary%2CBackdrop%2CBanner%2CThumb' +
             '&api_key=' + store_server_user_model.authorization_of_Je
         );
-        const recently_played  = response_list_of_recently_played.data.Items;
+        if(response_list_of_recently_played != undefined) {
+            recently_played = response_list_of_recently_played.data.Items;
+        }
         if(recently_played != undefined && Array.isArray(recently_played)) {
             recently_played.map(async (album: any) => {
                 const medium_image_url =
@@ -337,6 +346,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         _artist_id: string,
         limit: string, startIndex: string,
     ){
+        let songlist = []
         const response_media_list = await axios(
             store_server_users.server_config_of_current_user_of_sqlite?.url + '/Users/' +
             store_server_user_model.userid_of_Je + '/Items?ArtistIds=' +
@@ -347,8 +357,10 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             'CollapseBoxSetItems=false&' +
             'api_key=' + store_server_user_model.authorization_of_Je
         );
-        let songlist = response_media_list.data.Items;
-        store_playlist_list_fetchData._totalCount = response_media_list.data.TotalRecordCount
+        if(response_media_list != undefined) {
+            songlist = response_media_list.data.Items;
+            store_playlist_list_fetchData._totalCount = response_media_list.data.TotalRecordCount
+        }
         if (Array.isArray(songlist) && songlist.length > 0) {
             let last_index = store_view_media_page_fetchData._load_model === 'search' ?
                 store_view_media_page_info.media_Files_temporary.length :
@@ -555,6 +567,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         album_artist_id: string,
         limit: string, startIndex: string,
     ){
+        let songlist = []
         const data = await axios(
             store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Users/' +
             store_server_user_model.userid_of_Je + '/Items?' +
@@ -563,10 +576,12 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             '&ParentId=' + album_artist_id + '&ImageTypeLimit=1&EnableImageTypes=Primary%2CBackdrop%2CThumb' +
             '&api_key=' + store_server_user_model.authorization_of_Je
         );
-        let list = data.data;
-        let songlist = list.Items;
-        store_playlist_list_fetchData._totalCount =
-            (typeof list.TotalRecordCount !== 'undefined' && list.TotalRecordCount != 0) ? list.TotalRecordCount : list.Items.length;
+        if(data != undefined) {
+            let list = data.data;
+            songlist = list.Items;
+            store_playlist_list_fetchData._totalCount =
+                (typeof list.TotalRecordCount !== 'undefined' && list.TotalRecordCount != 0) ? list.TotalRecordCount : list.Items.length;
+        }
         if (Array.isArray(songlist) && songlist.length > 0) {
             let last_index = store_view_media_page_fetchData._load_model === 'search' ?
                 store_view_media_page_info.media_Files_temporary.length :
@@ -680,8 +695,10 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                 fields, enableImageTypes, recursive, imageTypeLimit,
                 years, filters
             )
-            songlist = list.Items;
-            store_playlist_list_fetchData._totalCount = list.TotalRecordCount
+            if(list != undefined) {
+                songlist = list.Items;
+                store_playlist_list_fetchData._totalCount = list.TotalRecordCount
+            }
         }else{
             const response_playlMedias = await axios(
                 store_server_users.server_config_of_current_user_of_sqlite?.url + '/Playlists/' +
@@ -689,15 +706,17 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                 store_server_user_model.userid_of_Je + '&api_key=' +
                 store_server_user_model.authorization_of_Je
             );
-            songlist = Array.isArray(response_playlMedias.data.Items)
-                ? response_playlMedias.data.Items
-                : [];
-            if(store_view_media_page_info.media_Files_temporary.length > 0 && songlist.length > 0){
-                if(store_view_media_page_info.media_Files_temporary[0].id === songlist[0].Id){
-                    songlist = []
+            if(response_playlMedias != undefined) {
+                songlist = Array.isArray(response_playlMedias.data.Items)
+                    ? response_playlMedias.data.Items
+                    : [];
+                if (store_view_media_page_info.media_Files_temporary.length > 0 && songlist.length > 0) {
+                    if (store_view_media_page_info.media_Files_temporary[0].id === songlist[0].Id) {
+                        songlist = []
+                    }
                 }
+                store_playlist_list_fetchData._totalCount = response_playlMedias.data.TotalRecordCount
             }
-            store_playlist_list_fetchData._totalCount = response_playlMedias.data.TotalRecordCount
         }
         if (Array.isArray(songlist) && songlist.length > 0) {
             if(sortBy === 'DatePlayed'){
@@ -803,6 +822,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         fields: string, enableImageTypes: string, recursive: string, imageTypeLimit: string,
         years: string, filters: string
     ){
+        let albumlist = []
         const list = await this.items_ApiService_of_Je.getItems_List(
             userId, parentId, searchTerm,
             sortBy, sortOrder,
@@ -811,8 +831,10 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             fields, enableImageTypes, recursive, imageTypeLimit,
             years, filters
         )
-        let albumlist = list.Items;
-        store_view_album_page_info.album_item_count = list.TotalRecordCount
+        if(list != undefined) {
+            albumlist = list.Items;
+            store_view_album_page_info.album_item_count = list.TotalRecordCount
+        }
         if (Array.isArray(albumlist) && albumlist.length > 0) {
             if(sortBy === 'DatePlayed'){
                 albumlist = albumlist.filter(album => album.UserData.PlayCount > 0)
@@ -885,6 +907,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         fields: string, recursive: string,
         collapseBoxSetItems: string
     ){
+        let albumlist = []
         let list = await this.items_ApiService_of_Je.getItems_List_Find_Artist_ALL_Album(
             userId, albumArtistIds,
             sortBy, sortOrder,
@@ -893,8 +916,10 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             fields, recursive,
             collapseBoxSetItems
         )
-        let albumlist = list.Items;
-        store_view_album_page_info.album_item_count = list.TotalRecordCount
+        if(list != undefined) {
+            albumlist = list.Items;
+            store_view_album_page_info.album_item_count = list.TotalRecordCount
+        }
         if (Array.isArray(albumlist) && albumlist.length > 0) {
             if(sortBy === 'DatePlayed'){
                 albumlist = albumlist.filter(album => album.UserData.PlayCount > 0)
@@ -967,6 +992,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         fields: string, enableImageTypes: string, recursive: string, imageTypeLimit: string,
         years: string, filters: string
     ){
+        let artistlist = []
         const list = await this.artists_ApiService_of_Je.getAlbumArtists_ALL(
             userId, parentId, searchTerm,
             sortBy, sortOrder,
@@ -975,8 +1001,10 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             fields, enableImageTypes, recursive, imageTypeLimit,
             years, filters
         )
-        let artistlist = list.Items;
-        store_view_artist_page_info.artist_item_count = list.TotalRecordCount
+        if(list != undefined) {
+            artistlist = list.Items;
+            store_view_artist_page_info.artist_item_count = list.TotalRecordCount
+        }
         if (Array.isArray(artistlist) && artistlist.length > 0) {
             if(sortBy === 'DatePlayed'){
                 artistlist = artistlist.filter(artist => artist.UserData.PlayCount > 0)
@@ -1110,14 +1138,17 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
     }
 
     public async get_playlist_je(){
+        let playlists = []
         const response_playlists = await axios(
             store_server_users.server_config_of_current_user_of_sqlite?.url + '/Users/' +
             store_server_user_model.userid_of_Je + '/Items?IncludeItemTypes=Playlist&Recursive=true&api_key=' +
             store_server_user_model.authorization_of_Je
         );
-        const playlists = response_playlists.data.Items;
-        store_playlist_list_info.playlist_names_ALLLists = [];
-        store_playlist_list_info.playlist_tracks_temporary_of_ALLLists = [];
+        if(response_playlists != undefined) {
+            playlists = response_playlists.data.Items;
+            store_playlist_list_info.playlist_names_ALLLists = [];
+            store_playlist_list_info.playlist_tracks_temporary_of_ALLLists = [];
+        }
         if (playlists != null) {
             for (const playlist of playlists) {
                 let playlist_tracks = []

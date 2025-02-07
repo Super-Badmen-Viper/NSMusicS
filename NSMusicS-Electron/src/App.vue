@@ -92,56 +92,76 @@
     return () => h(RouterLink, {to: { name: nameValue }}, { default: () => defaultValue })
   }
   async function create_menuOptions_appBar(){
-    const node_env = await ipcRenderer.invoke('window-get-node-env')
-    if(node_env) {
-      store_app_configs_info.app_view_menuOptions = []
-      store_app_configs_info.app_view_menuOptions.push(
-          {
-            label: computed(() => renderRouterLink('apps', t('LabelSystem') + t('common.setting'))),
-            key: 'apps',
-            icon: renderIcon(Settings48Regular),
-          },
-          {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
-      )
-      store_app_configs_info.app_view_menuOptions.push(
-          {
-            label: computed(() => renderRouterLink('home', t('common.home'))),
-            key: 'home',
-            icon: renderIcon(Home28Regular),
-          },
-          {
-            label: computed(() => renderRouterLink('album', t('entity.album_other'))),
-            key: 'album',
-            icon: renderIcon(AlbumFilled)
-          },
-          {
-            label: computed(() => renderRouterLink('song', t('entity.track_other'))),
-            key: 'song',
-            icon: renderIcon(MusicNoteRound)
-          },
-          {
-            label: computed(() => renderRouterLink('artist', t('entity.artist_other'))),
-            key: 'artist',
-            icon: renderIcon(UserAvatarFilledAlt)
-          },
-          {
-            label: computed(() => renderRouterLink('genre', t('entity.genre_other'))),
-            key: 'genre',
-            icon: renderIcon(TagMultiple24Regular)
-          },
-          // {
-          //   label: computed(() => t('TabMusic')),
-          //   icon: renderIcon(LibraryMusicOutlined),
-          //   children: [
-          //
-          //   ]
-          // },
-      )
-      /// 兼容性代码，在更新多模态模式之后，将删除方法部分代码
-      store_app_configs_info.menuOptions_selectd_model_1 = false
-      store_app_configs_info.menuOptions_selectd_model_2 = false
-      store_app_configs_info.menuOptions_selectd_model_3 = false
-      store_app_configs_info.menuOptions_selectd_model_4 = false
+    store_app_configs_info.app_view_menuOptions = []
+    store_app_configs_info.app_view_menuOptions.push(
+        {
+          label: computed(() => renderRouterLink('apps', t('LabelSystem') + t('common.setting'))),
+          key: 'apps',
+          icon: renderIcon(Settings48Regular),
+        },
+        {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
+    )
+    store_app_configs_info.app_view_menuOptions.push(
+        {
+          label: computed(() => renderRouterLink('home', t('common.home'))),
+          key: 'home',
+          icon: renderIcon(Home28Regular),
+        },
+        {
+          label: computed(() => renderRouterLink('album', t('entity.album_other'))),
+          key: 'album',
+          icon: renderIcon(AlbumFilled)
+        },
+        {
+          label: computed(() => renderRouterLink('song', t('entity.track_other'))),
+          key: 'song',
+          icon: renderIcon(MusicNoteRound)
+        },
+        {
+          label: computed(() => renderRouterLink('artist', t('entity.artist_other'))),
+          key: 'artist',
+          icon: renderIcon(UserAvatarFilledAlt)
+        },
+        {
+          label: computed(() => renderRouterLink('genre', t('entity.genre_other'))),
+          key: 'genre',
+          icon: renderIcon(TagMultiple24Regular)
+        },
+        // {
+        //   label: computed(() => t('TabMusic')),
+        //   icon: renderIcon(LibraryMusicOutlined),
+        //   children: [
+        //
+        //   ]
+        // },
+    )
+    /// 兼容性代码，在更新多模态模式之后，将删除方法部分代码
+    store_app_configs_info.menuOptions_selectd_model_1 = false
+    store_app_configs_info.menuOptions_selectd_model_2 = false
+    store_app_configs_info.menuOptions_selectd_model_3 = false
+    store_app_configs_info.menuOptions_selectd_model_4 = false
+    store_app_configs_info.app_view_menuOptions.push(
+        {
+          label: computed(() => renderRouterLink('update', t('nsmusics.siderbar_menu.karaoke'))),
+          key: 'update',
+          icon: renderIcon(SlideMicrophone32Regular)
+        },
+    )
+    store_app_configs_info.app_view_menuOptions.push(
+        {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
+        {
+          label: computed(() => renderRouterLink('servers', t('page.appMenu.manageServers'))),
+          key: 'servers',
+          icon: renderIcon(BareMetalServer)
+        },
+        {
+          label: computed(() => renderRouterLink('update', t('HeaderLibraries'))),
+          key: 'library',
+          icon: renderIcon(MediaLibrary)
+        },
+    )
+    ///
+    if (store_app_configs_info.menuOptions_selectd_model_2)
       store_app_configs_info.app_view_menuOptions.push(
           {
             label: computed(() => renderRouterLink('update', t('nsmusics.siderbar_menu.karaoke'))),
@@ -149,6 +169,7 @@
             icon: renderIcon(SlideMicrophone32Regular)
           },
       )
+    if (store_app_configs_info.menuOptions_selectd_model_1)
       store_app_configs_info.app_view_menuOptions.push(
           {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
           {
@@ -162,99 +183,33 @@
             icon: renderIcon(MediaLibrary)
           },
       )
-      ///
-      if (store_app_configs_info.menuOptions_selectd_model_2)
-        store_app_configs_info.app_view_menuOptions.push(
-            {
-              label: computed(() => renderRouterLink('update', t('nsmusics.siderbar_menu.karaoke'))),
-              key: 'update',
-              icon: renderIcon(SlideMicrophone32Regular)
-            },
-        )
-      if (store_app_configs_info.menuOptions_selectd_model_1)
-        store_app_configs_info.app_view_menuOptions.push(
-            {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
-            {
-              label: computed(() => renderRouterLink('servers', t('page.appMenu.manageServers'))),
-              key: 'servers',
-              icon: renderIcon(BareMetalServer)
-            },
-            {
-              label: computed(() => renderRouterLink('update', t('HeaderLibraries'))),
-              key: 'library',
-              icon: renderIcon(MediaLibrary)
-            },
-        )
-      if (store_app_configs_info.menuOptions_selectd_model_3)
-        store_app_configs_info.app_view_menuOptions.push(
-            {
-              label: computed(() =>
-                  renderRouterLink('update', t('HeaderVideos'))),
-              key: 'update',
-              icon: renderIcon(VideoLibraryOutlined)
-            },
-            {
-              label: computed(() =>
-                  renderRouterLink('update', t('Photo'))),
-              key: 'update',
-              icon: renderIcon(PhotoLibraryOutlined)
-            },
-            {
-              label: computed(() =>
-                  renderRouterLink('update', t('Books'))),
-              key: 'update',
-              icon: renderIcon(LibraryBooksOutlined)
-            },
-            {
-              label: computed(() =>
-                  renderRouterLink('update', t('Folders'))),
-              key: 'update',
-              icon: renderIcon(LocalLibraryOutlined)
-            },
-        )
-    }
-    else{
-      store_app_configs_info.app_view_menuOptions = []
+    if (store_app_configs_info.menuOptions_selectd_model_3)
       store_app_configs_info.app_view_menuOptions.push(
-          {label: computed(() => renderRouterLink('apps',t('common.setting'))), key: 'apps', icon: renderIcon(Settings48Regular),},
-          {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
+          {
+            label: computed(() =>
+                renderRouterLink('update', t('HeaderVideos'))),
+            key: 'update',
+            icon: renderIcon(VideoLibraryOutlined)
+          },
+          {
+            label: computed(() =>
+                renderRouterLink('update', t('Photo'))),
+            key: 'update',
+            icon: renderIcon(PhotoLibraryOutlined)
+          },
+          {
+            label: computed(() =>
+                renderRouterLink('update', t('Books'))),
+            key: 'update',
+            icon: renderIcon(LibraryBooksOutlined)
+          },
+          {
+            label: computed(() =>
+                renderRouterLink('update', t('Folders'))),
+            key: 'update',
+            icon: renderIcon(LocalLibraryOutlined)
+          },
       )
-      store_app_configs_info.app_view_menuOptions.push(
-          {label: computed(() => renderRouterLink('home',t('common.home'))),key: 'home',icon: renderIcon(Home28Regular),},
-          {label: computed(() => renderRouterLink('album',t('entity.album_other'))),key: 'album',icon: renderIcon(AlbumFilled)},
-          {label: computed(() => renderRouterLink('song',t('entity.track_other'))),key: 'song',icon: renderIcon(MusicNoteRound)},
-          {label: computed(() => renderRouterLink('artist',t('entity.artist_other'))),key: 'artist',icon: renderIcon(UserAvatarFilledAlt)},
-          {label: computed(() => renderRouterLink('genre',t('entity.genre_other'))),key: 'genre',icon: renderIcon(TagMultiple24Regular)},
-          // {label: computed(() => renderRouterLink('update',t('entity.genre_other'))),key: 'View_Genre_List_ALL',icon: renderIcon(Flag16Regular)},
-      )
-      if(store_app_configs_info.menuOptions_selectd_model_1)
-        store_app_configs_info.app_view_menuOptions.push(
-            {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-            {label: computed(() => renderRouterLink('servers',t('page.appMenu.manageServers'))),key: 'servers',icon: renderIcon(BareMetalServer)},
-            {label: computed(() => renderRouterLink('library',t('HeaderLibraries'))),key: 'library',icon: renderIcon(MediaCast)},
-        )
-      // if (store_app_configs_info.menuOptions_selectd_model_3)
-      //   store_app_configs_info.app_view_menuOptions.push(
-      //       {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
-      //       {
-      //         label: computed(() => renderRouterLink('update', t('nsmusics.siderbar_menu.guessLike'))),
-      //         key: 'update',
-      //         icon: renderIcon(DocumentHeart20Regular)
-      //       },
-      //       // {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.identifyMedia'))),key: 'update',icon: renderIcon(Hearing)},
-      //       // {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'update',icon: renderIcon(QueueMusicRound)},
-      //       // {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'update',icon: renderIcon(TextIndentIncreaseLtr20Filled)},
-      //   )
-      // if (store_app_configs_info.menuOptions_selectd_model_4)
-      //   store_app_configs_info.app_view_menuOptions.push(
-      //       {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
-      //       {
-      //         label: computed(() => renderRouterLink('update', t('nsmusics.siderbar_menu.musicCommunity'))),
-      //         key: 'update',
-      //         icon: renderIcon(PeopleCommunity16Regular)
-      //       },
-      //   )
-    }
   }
 
   ////// player view

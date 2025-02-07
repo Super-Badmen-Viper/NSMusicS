@@ -24,10 +24,6 @@ import {store_view_media_page_fetchData} from "../../../views/view_music/music_p
 import error_album from '@/assets/img/error_album.jpg'
 import {store_local_db_info} from "@/data/data_stores/local/store_local_db_info";
 import {isElectron} from "@/utils/electron/isElectron";
-import {Users_ApiService_of_Je} from "../../data_access/servers_configs/jellyfin_api/services_web/Users/index_service";
-import {
-    Library_ApiService_of_Je
-} from "../../data_access/servers_configs/jellyfin_api/services_web/Library/index_service";
 
 export const store_app_configs_logic_load = reactive({
     app_configs_loading: false,
@@ -61,7 +57,7 @@ export const store_app_configs_logic_load = reactive({
                     store_router_data_logic[key] = false;
                 }
             });
-            if(
+            if (
                 !store_router_data_logic.clear_Memory_Model &&
                 !store_router_data_logic.clear_UserExperience_Model &&
                 !store_router_data_logic.clear_Equilibrium_Model
@@ -69,14 +65,14 @@ export const store_app_configs_logic_load = reactive({
                 store_router_data_logic.clear_Equilibrium_Model = true
             }
             /////
-            if(process.platform === 'win32') {
+            if (process.platform === 'win32') {
                 store_server_user_model.model_select = '' + system_Configs_Read.app_Configs.value['model_select']
                 if (store_server_user_model.model_select === 'server') {
                     await store_server_user_model.switchToMode_Server()
-                }else{
+                } else {
                     await store_server_user_model.switchToMode_Local()
                 }
-            }else{
+            } else {
                 await store_server_user_model.switchToMode_Server()
             }
             //
@@ -84,14 +80,20 @@ export const store_app_configs_logic_load = reactive({
                 store_server_users.percentage_of_nd = 100
                 store_server_users.percentage_of_local = 0
                 //
-                if(store_server_user_model.model_server_type_of_local){
+                if (store_server_user_model.model_server_type_of_local) {
                     store_router_data_info.store_router_history_data_of_local = true
                     store_router_data_info.store_router_history_data_of_web = false
-                }else if(store_server_user_model.model_server_type_of_web){
+                } else if (store_server_user_model.model_server_type_of_web) {
                     store_router_data_info.store_router_history_data_of_local = false
                     store_router_data_info.store_router_history_data_of_web = true
                 }
             }
+            console.log('1: local/server model：load complete')
+        }
+        catch (e) {
+            console.error(e)
+        }
+        try{
             //
             if (('' + system_Configs_Read.app_Configs.value['theme']) === 'lightTheme') {
                 store_app_configs_info.update_theme = false;
@@ -177,24 +179,30 @@ export const store_app_configs_logic_load = reactive({
                     }
                 }
             }
+            console.log('2: app setting：load complete')
+        }
+        catch (e) {
+            console.error(e)
+        }
+        try {
             /// player_Configs_For_UI
             store_player_appearance.player_collapsed_album = '' + system_Configs_Read.player_Configs_of_UI.value['player_collapsed_album'] === 'true'
             store_player_appearance.player_collapsed_skin = '' + system_Configs_Read.player_Configs_of_UI.value['player_collapsed_skin'] === 'true'
             store_player_appearance.player_lyric_fontSize = '' + system_Configs_Read.player_Configs_of_UI.value['player_lyric_fontSize']
-            if(store_player_appearance.player_lyric_fontSize != undefined && store_player_appearance.player_lyric_fontSize.length > 0){
-                store_player_appearance.player_lyric_fontSize_Num = Number(store_player_appearance.player_lyric_fontSize.replace('px',''))
+            if (store_player_appearance.player_lyric_fontSize != undefined && store_player_appearance.player_lyric_fontSize.length > 0) {
+                store_player_appearance.player_lyric_fontSize_Num = Number(store_player_appearance.player_lyric_fontSize.replace('px', ''))
             }
             store_player_appearance.player_lyric_fontWeight = '' + system_Configs_Read.player_Configs_of_UI.value['player_lyric_fontWeight']
             store_player_appearance.player_lyric_color = '' + system_Configs_Read.player_Configs_of_UI.value['player_lyric_color']
             store_player_appearance.player_theme_Styles_Selected = Number('' + system_Configs_Read.player_Configs_of_UI.value['player_theme_Styles_Selected'])
             store_player_appearance.player_background_model_num = Number('' + system_Configs_Read.player_Configs_of_UI.value['player_background_model_num'])
             store_player_appearance.player_use_lottie_animation = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_lottie_animation'] === 'true'
-            if(
+            if (
                 '' + system_Configs_Read.player_Configs_of_UI.value['player_use_lyric_skip_forward'] === 'true' ||
                 '' + system_Configs_Read.player_Configs_of_UI.value['player_use_lyric_skip_forward'] === 'false'
             ) {
                 store_player_appearance.player_use_lyric_skip_forward = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_lyric_skip_forward'] === 'true'
-            }else{
+            } else {
                 store_player_appearance.player_use_lyric_skip_forward = true
             }
             store_player_appearance.player_use_background_filter_blur = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_background_filter_blur'] === 'true'
@@ -205,10 +213,11 @@ export const store_app_configs_logic_load = reactive({
                     '' + system_Configs_Read.player_Configs_of_UI.value['player_use_playbar_auto_hide'] !== 'false';
             /// player_Configs_of_Audio_Info
             store_player_audio_info.this_audio_file_path = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_path']
-            store_player_audio_info.this_audio_file_medium_image_url = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_medium_image_url']
-            if(store_player_audio_info.this_audio_file_medium_image_url === undefined || store_player_audio_info.this_audio_file_medium_image_url.length === 0){
-                store_player_audio_info.this_audio_file_medium_image_url = error_album;
-            }
+            // store_player_audio_info.this_audio_file_medium_image_url = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_medium_image_url']
+            // if(store_player_audio_info.this_audio_file_medium_image_url === undefined || store_player_audio_info.this_audio_file_medium_image_url.length === 0){
+            //     store_player_audio_info.this_audio_file_medium_image_url = error_album;
+            // }
+            store_player_audio_info.this_audio_file_medium_image_url = error_album;
             store_player_audio_info.this_audio_lyrics_string = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_lyric']
             store_player_audio_info.this_audio_artist_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_artist_id']
             store_player_audio_info.this_audio_artist_name = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_artist_name']
@@ -227,8 +236,12 @@ export const store_app_configs_logic_load = reactive({
             //
             store_player_appearance.player_mode_of_lock_playlist = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['player_mode_of_lock_playlist'] === 'true'
             store_player_appearance.player_mode_of_medialist_from_external_import = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['player_mode_of_medialist_from_external_import'] === 'true'
-
-
+            console.log('3: player info：load complete')
+        }
+        catch (e) {
+            console.error(e)
+        }
+        try{
             /// view_router_history
             // init media music_page router_music histtory
             store_view_media_page_logic.page_songlists_keywordFilter = ""
@@ -286,6 +299,7 @@ export const store_app_configs_logic_load = reactive({
             }else if(store_server_user_model.model_server_type_of_web){
 
             }
+            console.log('4: server login：load complete')
         } catch (e) {
             console.error(e)
         }
