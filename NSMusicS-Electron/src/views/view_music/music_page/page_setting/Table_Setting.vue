@@ -390,6 +390,10 @@
     store_playlist_list_info.playlist_MediaFiles_temporary = [];
     await store_player_audio_logic.player.pause();
     store_player_audio_info.reset_data()
+    // Close navidrome random model
+    store_server_user_model.random_play_model = false
+    // Refresh play_order(Local / Server)
+    store_player_audio_logic.play_order = 'playback-2'
   }
 
   ////// local
@@ -1535,7 +1539,7 @@
                     </n-switch>
                   </n-space>
                   <n-divider style="margin: 0;"/>
-                  <n-space vertical :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                  <n-space v-if="false" vertical :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                     <n-space justify="space-between" align="center">
                       <n-space vertical>
                         <span style="font-size:16px;font-weight: 600;">{{ $t('setting.sidebarConfiguration') }}</span>

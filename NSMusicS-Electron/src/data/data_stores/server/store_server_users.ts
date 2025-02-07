@@ -5,6 +5,7 @@ import {Users_ApiService_of_Je} from "../../data_access/servers_configs/jellyfin
 import {
     Library_ApiService_of_Je
 } from "../../data_access/servers_configs/jellyfin_api/services_web/Library/index_service";
+import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
 
 export const store_server_users = reactive({
     percentage_of_local: 0,
@@ -110,6 +111,7 @@ export const store_server_users = reactive({
                 )
                 store_server_user_model.authorization_of_Je = data.AccessToken
                 store_server_user_model.userid_of_Je = data.User.Id
+                await store_router_data_logic.get_page_top_info()
                 // load Library parentid_of_Je
                 const library_ApiService_of_Je = new Library_ApiService_of_Je(
                     store_server_users.server_config_of_current_user_of_sqlite?.url

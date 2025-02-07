@@ -137,6 +137,32 @@
           //   ]
           // },
       )
+      /// 兼容性代码，在更新多模态模式之后，将删除方法部分代码
+      store_app_configs_info.menuOptions_selectd_model_1 = false
+      store_app_configs_info.menuOptions_selectd_model_2 = false
+      store_app_configs_info.menuOptions_selectd_model_3 = false
+      store_app_configs_info.menuOptions_selectd_model_4 = false
+      store_app_configs_info.app_view_menuOptions.push(
+          {
+            label: computed(() => renderRouterLink('update', t('nsmusics.siderbar_menu.karaoke'))),
+            key: 'update',
+            icon: renderIcon(SlideMicrophone32Regular)
+          },
+      )
+      store_app_configs_info.app_view_menuOptions.push(
+          {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
+          {
+            label: computed(() => renderRouterLink('servers', t('page.appMenu.manageServers'))),
+            key: 'servers',
+            icon: renderIcon(BareMetalServer)
+          },
+          {
+            label: computed(() => renderRouterLink('update', t('HeaderLibraries'))),
+            key: 'library',
+            icon: renderIcon(MediaLibrary)
+          },
+      )
+      ///
       if (store_app_configs_info.menuOptions_selectd_model_2)
         store_app_configs_info.app_view_menuOptions.push(
             {

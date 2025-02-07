@@ -74,9 +74,7 @@ export const store_server_data_set_mediaInfo = reactive({
                     store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
                     item_id, '', '');
         }else if(store_server_user_model.model_server_type_of_web) {
-            const date = new Date(
-                new Date().getTime() - new Date().getTimezoneOffset() * 60000
-            );
+            const date = new Date(new Date().getTime() - 8 * 60 * 60 * 1000);
             if(store_server_users.server_select_kind === 'jellyfin') {
                 const formattedDate = date.toISOString().replace(/\.\d{3}Z$/, '.' + String(new Date().getMilliseconds()).padEnd(7, '0') + 'Z').replace(/%3A/g, ':')
                 await new UserPlayedItems_ApiService_of_Je(

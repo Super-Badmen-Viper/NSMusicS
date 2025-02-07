@@ -484,6 +484,12 @@ export const store_view_media_page_fetchData = reactive({
                 playlist_id = selected
             }
         }
+        const _artist_id = this._load_model === 'search' ?
+            this._artist_id : store_playlist_list_fetchData._artist_id
+        const _album_id = this._load_model === 'search' ?
+            this._album_id : store_playlist_list_fetchData._album_id
+        const _album_artist_id = this._load_model === 'search' ?
+            this._album_artist_id : store_playlist_list_fetchData._album_artist_id
         if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
             const limit = this._load_model === 'search' ?
                 String(this._end) :
@@ -499,7 +505,7 @@ export const store_view_media_page_fetchData = reactive({
                 store_server_user_model.salt,
                 limit, _order, _sort, startIndex,
                 _search, _starred, playlist_id,
-                this._album_id, this._artist_id,
+                _album_id, _artist_id,
                 store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : ''
             )
         }else if(
@@ -519,16 +525,10 @@ export const store_view_media_page_fetchData = reactive({
             // jellyfin not support search artist and album list of musicdata
             let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
             if(this._media_id.length === 0) {
-                const _artist_id = this._load_model === 'search' ?
-                    this._artist_id : store_playlist_list_fetchData._artist_id
                 // _album_id -> media_id -> Jellyfin+Emby
                 if (_artist_id.length === 0) {
-                    const _album_artist_id = this._load_model === 'search' ?
-                        this._album_artist_id : store_playlist_list_fetchData._album_artist_id
                     /// jellyfin+emby - all - action
                     if (_album_artist_id.length === 0) {
-                        const _album_id = this._load_model === 'search' ?
-                            this._album_id : store_playlist_list_fetchData._album_id
                         /// jellyfin+emby - all - action
                         const prarentId = _album_id.length === 0
                             ? store_server_user_model.parentid_of_Je_Music : _album_id
