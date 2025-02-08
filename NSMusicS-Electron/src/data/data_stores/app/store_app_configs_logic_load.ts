@@ -242,16 +242,6 @@ export const store_app_configs_logic_load = reactive({
             console.error(e)
         }
         try{
-            /// view_router_history
-            // init media music_page router_music histtory
-            store_view_media_page_logic.page_songlists_keywordFilter = ""
-            await store_view_media_page_fetchData.fetchData_Media()
-            store_view_media_page_logic.page_songlists_selected = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_songlists_selected']
-            //
-            store_router_history_data_of_media.router_select_history_date_of_Media = system_Configs_Read.view_Media_History_select_Configs.value
-            store_router_history_data_of_album.router_select_history_date_of_Album = system_Configs_Read.view_Media_History_select_Configs.value
-            store_router_history_data_of_artist.router_select_history_date_of_Artist = system_Configs_Read.view_Media_History_select_Configs.value
-
             /// server
             store_server_users.server_config_of_all_user_of_sqlite = system_Configs_Read.server_Configs.value
             store_server_users.server_config_of_all_user_of_select = [];
@@ -296,9 +286,21 @@ export const store_app_configs_logic_load = reactive({
                 if (media_file) {
                     store_player_audio_info.this_audio_play_id = media_file.play_id;
                 }
-            }else if(store_server_user_model.model_server_type_of_web){
+            }
+            else if(store_server_user_model.model_server_type_of_web){
 
             }
+
+            /// view_router_history
+            // init media music_page router_music histtory
+            store_view_media_page_logic.page_songlists_keywordFilter = ""
+            await store_view_media_page_fetchData.fetchData_Media()
+            store_view_media_page_logic.page_songlists_selected = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_songlists_selected']
+            //
+            store_router_history_data_of_media.router_select_history_date_of_Media = system_Configs_Read.view_Media_History_select_Configs.value
+            store_router_history_data_of_album.router_select_history_date_of_Album = system_Configs_Read.view_Media_History_select_Configs.value
+            store_router_history_data_of_artist.router_select_history_date_of_Artist = system_Configs_Read.view_Media_History_select_Configs.value
+            //
             console.log('4: server login：load complete')
         } catch (e) {
             console.error(e)

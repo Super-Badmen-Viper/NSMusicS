@@ -23,20 +23,24 @@ export class Jellyfin_Api_Services_Web {
         data?: any,
     ): Promise<any> {
         try {
-            const headers = {
-                'Authorization': `MediaBrowser Token="${store_server_user_model.authorization_of_Je}", Client="Electron Desktop", Device="NSMusicS", DeviceId="NSMusicS-GO", Version="1.3.0"`
-            };
+            if(store_server_user_model.authorization_of_Je != undefined &&
+                store_server_user_model.authorization_of_Je.length > 0) {
+                const headers = {
+                    'Authorization': `MediaBrowser Token="${store_server_user_model.authorization_of_Je}", Client="Electron Desktop", Device="NSMusicS", DeviceId="NSMusicS-GO", Version="1.3.0"`
+                };
 
-            const queryString = params ? new URLSearchParams(params).toString() : '';
-            const url = `${this.baseUrl}/${endpoint}${queryString ? `?${queryString}` : ''}`;
+                const queryString = params ? new URLSearchParams(params).toString() : '';
+                const url = `${this.baseUrl}/${endpoint}${queryString ? `?${queryString}` : ''}`;
 
-            const response = await axios({
-                method,
-                url,
-                headers,
-                data,
-            });
-            return response.data;
+                const response = await axios({
+                    method,
+                    url,
+                    headers,
+                    data,
+                });
+                return response.data;
+            }
+            return undefined;
         } catch (e) {
             console.error('请求失败:', e);
             return undefined;
