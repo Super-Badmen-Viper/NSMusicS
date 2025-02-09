@@ -37,8 +37,20 @@ export default defineConfig({
   base:'./', //默认绝对路径改为相对路径 否则打包白屏
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      // crypto: 'crypto-browserify',
+      // os: 'os-browserify/browser',
+      // path: 'path-browserify',
     }
-  }
+  },
+  // build: {
+  //   rollupOptions: {
+  //     external: ['crypto', 'os', 'path'],
+  //   },
+  // },
+  // server: {
+  //   host: '0.0.0.0', // 允许外部访问
+  //   port: 5173, // 确保端口与 Docker 映射一致
+  // },
 })
 

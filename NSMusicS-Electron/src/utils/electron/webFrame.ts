@@ -1,4 +1,7 @@
-const isElectron = window && window.process && window.process.type === 'renderer';
+const isElectron = (
+    typeof window !== 'undefined' &&
+    window.navigator.userAgent.includes('Electron')
+);
 
 let webFrame = null;
 if (isElectron) {

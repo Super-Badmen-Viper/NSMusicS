@@ -1,0 +1,10 @@
+**/node_modules
+**/.git
+**/.env
+**/dist
+**/Dockerfile
+**/docker-compose.yml
+**/.DS_Store
+**/Thumbs.db
+**/.idea
+**/*.log

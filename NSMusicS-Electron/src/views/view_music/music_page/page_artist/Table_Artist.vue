@@ -857,7 +857,7 @@ onBeforeUnmount(() => {
                   :src="item.medium_image_url"
                   @error="handleImageError(item)"
                   style="objectFit: cover; objectPosition: center;border: 1.5px solid #FFFFFF20;"
-                  :style="{ width: item_artist_image + 'px', height: item_artist_image + 'px', borderRadius: '6px' }"/>
+                  :style="{ width: item_artist_image + 'px', height: item_artist_image + 'px', borderRadius: '600px' }"/>
                 <div class="hover-overlay" @dblclick="Open_this_artist_all_artist_list_click(item.id)">
                   <div class="hover-content">
                     <button

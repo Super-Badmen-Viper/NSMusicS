@@ -92,6 +92,99 @@ export const store_player_audio_info = reactive({
         this.this_audio_lyrics_info_byte_time = [] as any[];
 
         this.this_audio_lyrics_info_line_num = 28;
+    },
+    async set_lyric(newValue :string){
+        store_player_audio_info.this_audio_lyrics_string = newValue
+        store_player_audio_info.this_audio_lyrics_loaded_complete = false
+        if(newValue === undefined || newValue === 'undefined' || newValue.length === 0){
+            if(isElectron){
+                store_player_audio_info.this_audio_lyrics_string = await ipcRenderer.invoke('window-get-LyricPath',
+                    store_player_audio_info.this_audio_file_path
+                );
+                if(store_player_audio_info.this_audio_lyrics_string.length === 0){
+                    store_player_audio_info.this_audio_lyrics_null = true
+                    store_player_audio_info.this_audio_lyrics_string = '[00:01.00]未找到可用歌词\n'
+                }else{
+                    store_player_audio_info.this_audio_lyrics_null = false
+                }
+            } else {
+                // other
+            }
+        }
+        ////// split lyrics
+        store_player_audio_info.this_audio_lyrics_info_line_font = []
+        for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_line_num; i++) {
+            store_player_audio_info.this_audio_lyrics_info_line_font.push('')
+        }
+        //
+        let line_all = newValue.split('\n');
+        let line_times = [];
+        line_all.forEach(line => {
+            try {
+                let timestampMatch = line.match(/^\[(\d+,\d+)\]/);
+                if (timestampMatch) {
+                    let [startMs, durationMs] = timestampMatch[1].split(',').map(Number);
+                    let minutes = Math.floor(startMs / 60000);
+                    let seconds = Math.floor((startMs % 60000) / 1000);
+                    let milliseconds = Math.floor((startMs % 1000) / 10);
+                    let timestamp = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(milliseconds).padStart(2, '0')}`;
+                    line_times.push(timestamp);
+                    let lyricsContent = line.replace(timestampMatch[0], '');
+                    store_player_audio_info.this_audio_lyrics_info_line_font.push(lyricsContent);
+                } else {
+                    let temp = line.split(']')
+                    if (temp.length > 1) {
+                        line_times.push(temp[0].replace('[', ''))
+                        store_player_audio_info.this_audio_lyrics_info_line_font.push(temp[1])
+                    }
+                }
+            }catch{}
+        });
+        //////
+        store_player_audio_info.this_audio_lyrics_info_byte_model = false
+        if (store_player_audio_info.this_audio_lyrics_info_line_font && store_player_audio_info.this_audio_lyrics_info_line_font.length > 0) {
+            store_player_audio_info.this_audio_lyrics_info_line_font.forEach((element, index) => {
+                let timeFontMatches = element.match(/<(\d+,\d+,\d+)>([^<]+)/g);
+                if (timeFontMatches) {
+                    store_player_audio_info.this_audio_lyrics_info_byte_time[index] = [];
+                    store_player_audio_info.this_audio_lyrics_info_byte_font[index] = [];
+                    let timeFontPairs = timeFontMatches.map(match => {
+                        let [time, font] = match.split('>');
+                        time = time.replace('<', '');
+                        return [time.split(',').map(Number), font];
+                    });
+                    for (let i = 0; i < timeFontPairs.length; i++) {
+                        let [startMs, durationMs, unknown] = timeFontPairs[i][0];
+                        let nextStartMs = i < timeFontPairs.length - 1 ? timeFontPairs[i + 1][0][0] : Infinity;
+
+                        if (nextStartMs < startMs + durationMs) {
+                            // durationMs = nextStartMs - startMs - 100;
+                            durationMs = 100;
+                        }
+
+                        store_player_audio_info.this_audio_lyrics_info_byte_time[index].push(`${startMs},${durationMs}`);
+                        store_player_audio_info.this_audio_lyrics_info_byte_font[index].push(timeFontPairs[i][1]);
+                    }
+
+                    store_player_audio_info.this_audio_lyrics_info_byte_model = true;
+                    /// temp
+                    store_player_audio_info.this_audio_lyrics_info_line_font[index] =
+                        store_player_audio_info.this_audio_lyrics_info_byte_font[index].join('');
+                    ///
+                }
+            });
+        }
+        ///
+        for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_line_num; i++) {
+            store_player_audio_info.this_audio_lyrics_info_line_font.push('')
+        }
+        ////// split time of line
+        store_player_audio_info.this_audio_lyrics_info_line_time = []
+        for (let i = 0; i < line_times.length; i++) {
+            const [minutes, seconds] = line_times[i].split(':');
+            store_player_audio_info.this_audio_lyrics_info_line_time[i] = (parseInt(minutes) * 60 + parseInt(seconds)) * 1000;
+        }
+        store_player_audio_info.this_audio_lyrics_loaded_complete = true
     }
 });
 watch(() => store_player_audio_info.this_audio_file_path, (newValue) => {
@@ -207,94 +300,4 @@ watch(() => store_player_audio_info.this_audio_artist_id, (newValue) => {
             get_AnnotationInfo_To_LocalSqlite.Get_Annotation_ItemInfo_Play_Count('artist')
         store_player_audio_logic.boolHandleItemClick_Played = true
     }
-});
-watch(() => store_player_audio_info.this_audio_lyrics_string, async (newValue) => {
-    store_player_audio_info.this_audio_lyrics_loaded_complete = false
-    if(newValue === undefined || newValue === 'undefined' || newValue.length === 0){
-        if(isElectron){
-            store_player_audio_info.this_audio_lyrics_string = await ipcRenderer.invoke('window-get-LyricPath',
-                store_player_audio_info.this_audio_file_path
-            );
-            if(store_player_audio_info.this_audio_lyrics_string.length === 0){
-                store_player_audio_info.this_audio_lyrics_null = true
-                store_player_audio_info.this_audio_lyrics_string = '[00:01.00]未找到可用歌词\n'
-            }else{
-                store_player_audio_info.this_audio_lyrics_null = false
-            }
-        } else {
-            // other
-        }
-    }
-    ////// split lyrics
-    store_player_audio_info.this_audio_lyrics_info_line_font = []
-    for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_line_num; i++) {
-        store_player_audio_info.this_audio_lyrics_info_line_font.push('')
-    }
-    //
-    let line_all = newValue.split('\n');
-    let line_times = [];
-    line_all.forEach(line => {
-        let timestampMatch = line.match(/^\[(\d+,\d+)\]/);
-        if (timestampMatch) {
-            let [startMs, durationMs] = timestampMatch[1].split(',').map(Number);
-            let minutes = Math.floor(startMs / 60000);
-            let seconds = Math.floor((startMs % 60000) / 1000);
-            let milliseconds = Math.floor((startMs % 1000) / 10);
-            let timestamp = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(milliseconds).padStart(2, '0')}`;
-            line_times.push(timestamp);
-            let lyricsContent = line.replace(timestampMatch[0], '');
-            store_player_audio_info.this_audio_lyrics_info_line_font.push(lyricsContent);
-        }else{
-            let temp = line.split(']')
-            if (temp.length > 1) {
-                line_times.push(temp[0].replace('[', ''))
-                store_player_audio_info.this_audio_lyrics_info_line_font.push(temp[1])
-            }
-        }
-    });
-    //////
-    store_player_audio_info.this_audio_lyrics_info_byte_model = false
-    if (store_player_audio_info.this_audio_lyrics_info_line_font && store_player_audio_info.this_audio_lyrics_info_line_font.length > 0) {
-        store_player_audio_info.this_audio_lyrics_info_line_font.forEach((element, index) => {
-            let timeFontMatches = element.match(/<(\d+,\d+,\d+)>([^<]+)/g);
-            if (timeFontMatches) {
-                store_player_audio_info.this_audio_lyrics_info_byte_time[index] = [];
-                store_player_audio_info.this_audio_lyrics_info_byte_font[index] = [];
-                let timeFontPairs = timeFontMatches.map(match => {
-                    let [time, font] = match.split('>');
-                    time = time.replace('<', '');
-                    return [time.split(',').map(Number), font];
-                });
-                for (let i = 0; i < timeFontPairs.length; i++) {
-                    let [startMs, durationMs, unknown] = timeFontPairs[i][0];
-                    let nextStartMs = i < timeFontPairs.length - 1 ? timeFontPairs[i + 1][0][0] : Infinity;
-
-                    if (nextStartMs < startMs + durationMs) {
-                        // durationMs = nextStartMs - startMs - 100;
-                        durationMs = 100;
-                    }
-
-                    store_player_audio_info.this_audio_lyrics_info_byte_time[index].push(`${startMs},${durationMs}`);
-                    store_player_audio_info.this_audio_lyrics_info_byte_font[index].push(timeFontPairs[i][1]);
-                }
-
-                store_player_audio_info.this_audio_lyrics_info_byte_model = true;
-                /// temp
-                store_player_audio_info.this_audio_lyrics_info_line_font[index] =
-                    store_player_audio_info.this_audio_lyrics_info_byte_font[index].join('');
-                ///
-            }
-        });
-    }
-    ///
-    for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_line_num; i++) {
-        store_player_audio_info.this_audio_lyrics_info_line_font.push('')
-    }
-    ////// split time of line
-    store_player_audio_info.this_audio_lyrics_info_line_time = []
-    for (let i = 0; i < line_times.length; i++) {
-        const [minutes, seconds] = line_times[i].split(':');
-        store_player_audio_info.this_audio_lyrics_info_line_time[i] = (parseInt(minutes) * 60 + parseInt(seconds)) * 1000;
-    }
-    store_player_audio_info.this_audio_lyrics_loaded_complete = true
 });

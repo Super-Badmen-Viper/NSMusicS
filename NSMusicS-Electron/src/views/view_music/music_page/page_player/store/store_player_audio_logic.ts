@@ -165,16 +165,24 @@ export const store_player_audio_logic = reactive({
                         console.error("Failed to fetch lyrics:", error);
                         lyrics = "";
                     }
-                    store_player_audio_info.this_audio_lyrics_string = lyrics.length > 0 ? lyrics : "";
+                    await store_player_audio_info.set_lyric(
+                        lyrics.length > 0 ? lyrics : ""
+                    )
                 }
                 catch{
-                    store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
+                    await store_player_audio_info.set_lyric(
+                        media_file.lyrics
+                    )
                 }
             }else{
-                store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
+                await store_player_audio_info.set_lyric(
+                    media_file.lyrics
+                )
             }
         }else if(store_server_user_model.model_server_type_of_local){
-            store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
+            await store_player_audio_info.set_lyric(
+                media_file.lyrics
+            )
         }
         //
         store_player_audio_info.this_audio_play_id = media_file.play_id
