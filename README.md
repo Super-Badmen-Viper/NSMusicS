@@ -20,8 +20,8 @@
 - [x] supporting the Windows10+、MacOS(arm、x64)、Linux platform (which will soon support Docker)
 - [x] music library management
 - [ ] network cloud drives (webdev , onedriver....)
-- [x] compatible with streaming media servers (navidrome)
-- [ ] compatible with streaming media servers (jellyfin , emby , NSMusicS-GO)
+- [x] compatible with streaming media servers (navidrome , jellyfin , emby)
+- [ ] compatible with streaming media servers (NSMusicS-GO)
 - [x] compatible with local music libraries (win10+) 
 - [ ] compatible with local music libraries (which will soon support MacOS(arm、x64)、Linux、Docker) 
 - [x] [mpv](https://github.com/mpv-player/mpv) -play (win10+、MacOS(arm、x64)) 
