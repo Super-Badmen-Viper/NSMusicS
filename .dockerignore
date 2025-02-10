@@ -1,0 +1,18 @@
+# 忽略 Node.js 和 Electron 的常见文件和目录
+NSMusicS-Electron/node_modules/
+NSMusicS-Electron/dist/
+NSMusicS-Electron/release/
+NSMusicS-Electron/.idea/
+
+# 忽略 Go 的常见文件和目录
+NSMusicS-GO/bin/
+NSMusicS-GO/pkg/
+NSMusicS-GO/.idea/
+
+# 忽略其他常见文件和目录
+.git/
+.gitignore
+.prettierrc
+.dockerignore
+Dockerfile*
+*.log

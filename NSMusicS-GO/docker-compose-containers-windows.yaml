@@ -16,6 +16,19 @@ services:
     volumes:
       - E:\0_Music:/container/data
 
+  # electron:
+  #   build:
+  #     context: ../  # 设置构建上下文为上一级目录
+  #     dockerfile: NSMusicS-GO/Dockerfile-electron
+  #   image: electron
+  #   container_name: electron
+  #   restart: unless-stopped
+  #   env_file: .env
+  #   ports:
+  #     - "5173:5173"
+  #   volumes:
+  #     - E:\0_Music:/container/data
+
   mongodb:
     image: mongo:6.0
     container_name: mongodb

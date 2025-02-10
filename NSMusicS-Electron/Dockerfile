@@ -27,14 +27,10 @@ RUN npm config set registry https://registry.npmmirror.com && \
     npm install electron && \
     npm install && \
     npm cache clean --force && \
-    rm -rf /tmp/* /var/cache/apk/*
+    rm -rf /var/lib/apt/lists/*
 
 # 拷贝应用代码
 COPY . .
-
-# 设置健康检查
-HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
-    CMD curl -f http://localhost:5173 || exit 1
 
 # 声明端口和数据卷
 EXPOSE 5173
