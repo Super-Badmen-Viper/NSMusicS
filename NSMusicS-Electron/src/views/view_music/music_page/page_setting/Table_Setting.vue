@@ -1309,7 +1309,6 @@
                       <n-radio-group v-model:value="server_set_of_addUser_of_type">
                         <n-radio-button
                             style="text-align: center;width: 133px;"
-                            disabled
                             :key="Type_Server_Kinds[0].value"
                             :value="Type_Server_Kinds[0].value"
                             :label="Type_Server_Kinds[0].label"

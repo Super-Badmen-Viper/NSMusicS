@@ -44,8 +44,15 @@ export default defineConfig({
     }
   },
   build: {
+    outDir: 'dist',
+    assetsDir: 'static',
     rollupOptions: {
       external: ['crypto', 'os', 'path'],
+      input: 'src/main.ts',
+      output: {
+        format: 'iife',
+        name: 'NSMusicS',
+      },
     },
   },
   server: {

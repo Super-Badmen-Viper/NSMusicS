@@ -5,8 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: app
-    container_name: app
+    image: nsmusics-go
+    container_name: nsmusics-go
     restart: unless-stopped
     env_file: .env
     ports:

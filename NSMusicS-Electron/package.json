@@ -13,7 +13,8 @@
   "scripts": {
     "dev": "vite",
     "preview": "vite preview",
-    "build-only": "vite build",
+    "build": "vite build",
+    "clean": "rm -rf node_modules/.cache dist",
     "type-check": "vue-tsc --build --force"
   },
   "dependencies": {

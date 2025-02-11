@@ -110,7 +110,7 @@ npm run dev # Direct operation NSMusicS\NSMusicS-Electron
 ```
 ```sh
 cd NSMusicS\NSMusicS-Electron
-npm run build-only # Package into the current system_configs's software package (such as exe)
+npm run build # Package into the current system_configs's software package (such as exe)
 ```
 
 ## Related projects:
