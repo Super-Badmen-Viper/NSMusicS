@@ -266,7 +266,7 @@ const show_search_area = () => {
       scrollTo(0)
     }
     if(store_server_user_model.model_server_type_of_web) {
-      store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_parms()
+      store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_search_parms()
     }
     input_search_InstRef.value?.clear()
     store_view_album_page_logic.page_albumlists_keyword = ""
@@ -361,7 +361,7 @@ onMounted(() => {
     ) {
       /// 兼容行为：打开指定艺术家，直接跳转乐曲页面，路由刷新到专辑页面需要清空数据
       store_player_appearance.player_mode_of_medialist_from_external_import = true
-      store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_parms()
+      store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_search_parms()
     }
   }
 });
@@ -373,7 +373,7 @@ const page_albumlists_handleSelected_updateValue = (value: any) => {
   if(
       store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
   ) {
-    store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_parms()
+    store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_search_parms()
     input_search_InstRef.value?.clear()
     store_view_album_page_logic.page_albumlists_keyword = ""
   }

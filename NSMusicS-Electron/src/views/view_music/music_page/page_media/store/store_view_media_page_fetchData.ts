@@ -406,9 +406,20 @@ export const store_view_media_page_fetchData = reactive({
         store_view_media_page_fetchData._album_artist_id = id
         store_playlist_list_fetchData._album_artist_id = id
     },
+    fetchData_Media_of_server_web_clear_all_parms(){
+        store_view_media_page_fetchData._album_id = ''
+        store_view_media_page_fetchData._artist_id = ''
+        store_view_album_page_fetchData._artist_id = ''
+        store_view_media_page_fetchData._album_artist_id = ''
+        store_view_media_page_fetchData._media_id = ''
+
+        store_playlist_list_fetchData._album_id = ''
+        store_playlist_list_fetchData._artist_id = ''
+        store_playlist_list_fetchData._album_artist_id = ''
+    },
     _media_id: '', // Jellyfin Home$Media
     _load_model: 'search', // 'search' and 'play'
-    fetchData_Media_of_server_web_clear_parms(){
+    fetchData_Media_of_server_web_clear_search_parms(){
         store_view_media_page_fetchData._album_id = ''
         store_view_media_page_fetchData._artist_id = ''
         store_view_album_page_fetchData._artist_id = ''
@@ -433,7 +444,7 @@ export const store_view_media_page_fetchData = reactive({
         store_playlist_list_fetchData._end = 30;
         await this.fetchData_Media_of_server_web(false)
         if(store_player_appearance.player_mode_of_medialist_from_external_import) {
-            this.fetchData_Media_of_server_web_clear_parms()
+            this.fetchData_Media_of_server_web_clear_search_parms()
         }
     },
     async fetchData_Media_of_server_web_end(){

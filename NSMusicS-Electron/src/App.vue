@@ -833,6 +833,7 @@
                   :collapsed-icon-size="22"
                   :icon-size="20"
                   :options="store_app_configs_info.app_view_menuOptions"
+                  @click="store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_all_parms()"
                 />
                 <div></div>
               </n-flex>
@@ -865,6 +866,7 @@
                   :collapsed-icon-size="22"
                   :icon-size="20"
                   :options="store_app_configs_info.app_view_menuOptions"
+                  @click="store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_all_parms()"
                 />
                 <div></div>
               </n-flex>

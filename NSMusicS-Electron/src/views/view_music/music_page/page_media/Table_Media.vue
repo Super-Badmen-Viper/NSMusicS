@@ -208,7 +208,7 @@ const show_search_area = () => {
       scrollTo(0)
     }
     if(store_server_user_model.model_server_type_of_web) {
-      store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_parms()
+      store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_search_parms()
     }
     input_search_InstRef.value?.clear()
     store_view_media_page_logic.page_songlists_keywordFilter = ""
@@ -333,7 +333,7 @@ const page_songlists_handleselected_updatevalue = (value: any) => {
   if(
       store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
   ) {
-    store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_parms()
+    store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_search_parms()
     store_view_media_page_logic.page_songlists_keyword = ''
     input_search_InstRef.value?.clear()
     store_view_media_page_logic.page_songlists_bool_show_search_area = false
@@ -410,7 +410,7 @@ const handleItemClick_artist = (artist:string) => {
       click_search()
       scrollTo(0)
     } else if (store_server_user_model.model_server_type_of_web) {
-      store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_parms()
+      store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_search_parms()
       store_view_media_page_logic.page_songlists_bool_show_search_area = true
       store_view_media_page_logic.page_songlists_input_search_Value = artist
       store_view_media_page_logic.get_page_songlists_keyword(artist)
@@ -435,7 +435,7 @@ const handleItemClick_album = (album_id:string) => {
       click_search()
       scrollTo(0)
     } else if (store_server_user_model.model_server_type_of_web) {
-      store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_parms()
+      store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_search_parms()
       store_view_media_page_logic.page_songlists_bool_show_search_area = true
       store_view_media_page_logic.page_songlists_input_search_Value = album_id
       store_view_media_page_logic.get_page_songlists_keyword(album_id)
@@ -905,7 +905,7 @@ const onRefreshSharp = async () => {
     ) {
       store_player_appearance.player_mode_of_medialist_from_external_import = false;
     }
-    store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_parms()
+    store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_search_parms()
     store_view_media_page_logic.page_songlists_keyword = ''
     input_search_InstRef.value?.clear()
     store_view_media_page_logic.page_songlists_keywordFilter = ""
