@@ -7,7 +7,7 @@
     "email": "1774148579@qq.com"
   },
   "description": "NSMusicS For Web(Electron+Vue3+TS),Multi platform Multi mode Super Music Software (Full stack development, audio processing, artificial intelligence, natural language processing)",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "private": true,
   "license": "AGPL - 3.0",
   "scripts": {
@@ -29,7 +29,7 @@
     "@vue/compiler-sfc": "^3.5.13",
 
     "axios": "^1.7.7",
-    "better-sqlite3": "^11.3.0",
+    "better-sqlite3": "^11.3.1",
     "bindings": "^1.5.0",
     "clone": "^2.1.2",
     "electron-updater": "^6.3.0-alpha.6",
@@ -46,15 +46,12 @@
     "uuid": "^9.0.1",
     "v-contextmenu": "^3.2.0",
 
-    "vue": "^3.5.13",
     "vue-draggable-plus": "^0.5.3",
     "vue-i18n": "next",
     "vue-rate": "next",
-    "vue-virtual-scroller": "next",
-    "vue-router": "^4.2.5",
-    "vue-tsc": "^1.8.25",
-    "vite": "latest",
-
+    "vue-virtual-scroller": "next"
+  },
+  "devDependencies": {
     "@tsconfig/node18": "^18.2.2",
     "@types/md5": "^2.3.5",
     "@types/node": "^20.11.8",
@@ -73,9 +70,11 @@
     "unplugin-auto-import": "^0.17.5",
     "unplugin-icons": "^0.18.3",
     "unplugin-vue-components": "^0.26.0",
-    "vfonts": "^0.0.3"
-  },
-  "devDependencies": {
+    "vfonts": "^0.0.3",
 
+    "vite": "latest",
+    "vue": "^3.5.13",
+    "vue-router": "^4.2.5",
+    "vue-tsc": "^1.8.25"
   }
 }

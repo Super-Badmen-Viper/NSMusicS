@@ -444,6 +444,25 @@ const handleItemClick_album = (album_id:string) => {
     message.warning('Jellyfin / Emby ' + t('ContainerNotSupported') + ' ' + t('setting.hotkey_localSearch'))
   }
 }
+const Open_this_artist_all_artist_list_click = (artist_id:string) => {
+  if(store_server_user_model.model_server_type_of_web){
+    store_view_media_page_fetchData.set_artist_id(artist_id)
+    store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+    store_view_album_page_fetchData.set_artist_id(artist_id)
+    store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
+  }
+  if(
+      (store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
+  ) {
+    console.log('artist_list_of_artist_id_artist_click：' + artist_id);
+    store_router_data_logic.get_album_list_of_artist_id_by_artist_info(artist_id)
+  }else{
+    // Jellyfin 有相当一部分flac媒体无法识别为专辑
+    store_player_appearance.player_mode_of_medialist_from_external_import = false
+    store_view_media_page_logic.page_songlists_keyword = artist_id
+    store_router_data_info.router.push('song')
+  }
+}
 
 ////// changed_data write to sqlite
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
@@ -539,6 +558,8 @@ import {
   Get_Navidrome_Temp_Data_To_LocalSqlite
 } from "@/data/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
+import {store_view_album_page_logic} from "@/views/view_music/music_page/page_album/store/store_view_album_page_logic";
+import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
 
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
@@ -1477,6 +1498,7 @@ onBeforeUnmount(() => {
                 store_playlist_list_info.playlist_Menu_Item_Id = item.id;
                 store_playlist_list_info.playlist_Menu_Item_Rating = item.rating;
                 store_playlist_list_info.playlist_Menu_Item_IndexId = item.order_title;
+                store_playlist_list_info.playlist_Menu_Item = item;
               }
             "
             class="message"
@@ -1614,6 +1636,51 @@ onBeforeUnmount(() => {
         </v-contextmenu-submenu>
         <v-contextmenu-divider />
         <v-contextmenu-item
+            v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local"
+            @click="()=>{
+              handleItemClick_title(
+                store_playlist_list_info.playlist_Menu_Item.title
+              )
+            }">
+          {{ $t('Search') + $t('LabelTitle') }}
+        </v-contextmenu-item>
+        <v-contextmenu-item
+            v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local"
+            @click="()=>{
+              if(store_server_user_model.model_server_type_of_local) {
+                handleItemClick_album(
+                  store_playlist_list_info.playlist_Menu_Item.album_id
+                )
+              }else if(store_server_user_model.model_server_type_of_web) {
+                handleItemClick_album(
+                  store_playlist_list_info.playlist_Menu_Item.album
+                )
+              }
+            }">
+          {{ $t('ViewAlbum') }}
+        </v-contextmenu-item>
+        <template
+            v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local"
+            v-for="artist in store_playlist_list_info.playlist_Menu_Item.artist.split(/[\/|｜]/)">
+          <v-contextmenu-item>
+            <span
+                style="font-size: 14px;font-weight: 400;"
+                @click="handleItemClick_artist(artist)">
+              {{ $t('ViewAlbumArtist') + ' | ' + artist + '&nbsp' }}
+            </span>
+          </v-contextmenu-item>
+        </template>
+        <v-contextmenu-item
+            v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local"
+            @click="()=>{
+              Open_this_artist_all_artist_list_click(
+                store_playlist_list_info.playlist_Menu_Item.artist_id
+              )
+            }">
+          {{ $t('ViewAlbumArtist') + ' | ' + $t('nsmusics.view_page.allAlbum') }}
+        </v-contextmenu-item>
+        <v-contextmenu-divider v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local"/>
+        <v-contextmenu-item
           v-if="
             store_view_media_page_logic.page_songlists_selected !== 'song_list_all' &&
             store_view_media_page_logic.page_songlists_selected !== 'song_list_love' &&
@@ -1628,8 +1695,7 @@ onBeforeUnmount(() => {
           {{ $t('player.addNext') }}
         </v-contextmenu-item>
         <v-contextmenu-item
-            v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
-                  "
+            v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local"
             @click="menu_item_edit_selected_media_tags">
           {{ $t('page.contextMenu.showDetails') }}
         </v-contextmenu-item>

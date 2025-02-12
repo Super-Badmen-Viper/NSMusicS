@@ -396,9 +396,7 @@ const Open_this_artist_all_artist_list_click = (artist_id:string) => {
     console.log('artist_list_of_artist_id_artist_click：' + artist_id);
     store_router_data_logic.get_album_list_of_artist_id_by_artist_info(artist_id)
   }else{
-    // Jellyfin 有相当一部分flac媒体无法识别为专辑，艺术家只有歌曲没有专辑也是666，属实是垃圾得很，歌单列表项只能添加不能删除是什么牛马操作？
-    // NSMusicS-GO 即将强势霸取Github开源音乐生态江山榜首
-    // 直接在乐曲页面打开，而非是专辑页面，因为这几把根本就识别不了
+    // Jellyfin 有相当一部分flac媒体无法识别为专辑
     store_player_appearance.player_mode_of_medialist_from_external_import = false
     store_view_media_page_logic.page_songlists_keyword = artist_id
     store_router_data_info.router.push('song')

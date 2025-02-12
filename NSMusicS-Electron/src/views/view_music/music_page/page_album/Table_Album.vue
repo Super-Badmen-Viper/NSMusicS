@@ -564,9 +564,10 @@ const onScroll = async () => {
 //////
 const onRefreshSharp = async () => {
   if(store_server_user_model.model_server_type_of_web){
-    store_view_album_page_logic.page_albumlists_keyword = ''
+    store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_search_parms()
     input_search_InstRef.value?.clear()
     bool_show_search_area.value = false
+    store_view_album_page_logic.page_albumlists_keyword = ""
     store_view_album_page_fetchData.fetchData_Album_of_server_web_start()
   }else if(store_server_user_model.model_server_type_of_local){
     input_search_InstRef.value?.clear()
@@ -939,7 +940,10 @@ onBeforeUnmount(() => {
             :data-index="index"
             :data-active="active"
             v-contextmenu:contextmenu
-            @contextmenu.prevent="store_playlist_list_info.playlist_Menu_Item_Id = item.id"
+            @contextmenu.prevent="()=>{
+              store_playlist_list_info.playlist_Menu_Item_Id = item.id
+              store_playlist_list_info.playlist_Menu_Item = item
+            }"
           >
             <div
               :key="item.id"
@@ -1063,6 +1067,34 @@ onBeforeUnmount(() => {
           </v-contextmenu-item>
         </v-contextmenu-submenu>
         <v-contextmenu-divider />
+        <v-contextmenu-item
+          v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local"
+          @click="()=>{
+            handleItemClick_album(
+              store_playlist_list_info.playlist_Menu_Item.name
+            )
+          }">
+          {{ $t('Search') + $t('LabelTitle') }}
+        </v-contextmenu-item>
+        <v-contextmenu-item
+          v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local"
+          @click="()=>{
+            if(store_server_user_model.model_server_type_of_local) {
+              handleItemClick_artist(store_playlist_list_info.playlist_Menu_Item.artist_id)
+            }else if(store_server_user_model.model_server_type_of_web) {
+              if(
+                  store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
+              ) {
+                handleItemClick_artist(store_playlist_list_info.playlist_Menu_Item.artist_id)
+              }else{
+                handleItemClick_artist(store_playlist_list_info.playlist_Menu_Item.artist)
+              }
+            }
+          }"
+        >
+          {{ $t('ViewAlbumArtist') + ' | ' + $t('nsmusics.view_page.allAlbum') }}
+        </v-contextmenu-item>
+        <v-contextmenu-divider v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local"/>
         <v-contextmenu-item @click="menu_item_add_to_playlist_end">
           {{ $t('player.addLast') }}
         </v-contextmenu-item>
@@ -1070,9 +1102,9 @@ onBeforeUnmount(() => {
           {{ $t('player.addNext') }}
         </v-contextmenu-item>
         <v-contextmenu-item
-            v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
-        ">
-            @click="menu_item_edit_selected_media_tags">
+          v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local"
+          @click="menu_item_edit_selected_media_tags"
+        >
           {{ $t('page.contextMenu.showDetails') }}
         </v-contextmenu-item>
       </v-contextmenu>

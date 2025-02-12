@@ -712,28 +712,36 @@ const handleItemClick_title = (title:string) => {
   store_player_audio_logic.player_back_ChevronDouble = player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow;
 }
 const handleItemClick_artist = (artist:string) => {
-  store_view_media_page_logic.page_songlists_bool_show_search_area = true
-  store_view_media_page_logic.page_songlists_input_search_Value = artist
-  if(store_server_user_model.model_server_type_of_local) {
-    store_view_media_page_logic.get_page_songlists_keyword(artist + 'accurate_search' + '__artist__')
-  }else if(store_server_user_model.model_server_type_of_web){
-    store_view_media_page_logic.get_page_songlists_keyword(artist)
+  if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
+    store_view_media_page_logic.page_songlists_bool_show_search_area = true
+    store_view_media_page_logic.page_songlists_input_search_Value = artist
+    if (store_server_user_model.model_server_type_of_local) {
+      store_view_media_page_logic.get_page_songlists_keyword(artist + 'accurate_search' + '__artist__')
+    } else if (store_server_user_model.model_server_type_of_web) {
+      store_view_media_page_logic.get_page_songlists_keyword(artist)
+    }
+    player_show_hight_animation_value.value = 670;
+    get_playerbar_to_switch_playerview(player_show_hight_animation_value.value);
+    store_player_audio_logic.player_back_ChevronDouble = player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow;
+  }else{
+    message.warning('Jellyfin / Emby ' + t('ContainerNotSupported') + ' ' + t('setting.hotkey_localSearch'))
   }
-  player_show_hight_animation_value.value = 670;
-  get_playerbar_to_switch_playerview(player_show_hight_animation_value.value);
-  store_player_audio_logic.player_back_ChevronDouble = player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow;
 }
 const handleItemClick_album = (album:string) => {
-  store_view_media_page_logic.page_songlists_bool_show_search_area = true
-  store_view_media_page_logic.page_songlists_input_search_Value = album
-  if(store_server_user_model.model_server_type_of_local) {
-    store_view_media_page_logic.get_page_songlists_keyword(album+'accurate_search'+'__album__')
-  }else if(store_server_user_model.model_server_type_of_web){
-    store_view_media_page_logic.get_page_songlists_keyword(album)
+  if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
+    store_view_media_page_logic.page_songlists_bool_show_search_area = true
+    store_view_media_page_logic.page_songlists_input_search_Value = album
+    if (store_server_user_model.model_server_type_of_local) {
+      store_view_media_page_logic.get_page_songlists_keyword(album + 'accurate_search' + '__album__')
+    } else if (store_server_user_model.model_server_type_of_web) {
+      store_view_media_page_logic.get_page_songlists_keyword(album)
+    }
+    player_show_hight_animation_value.value = 670;
+    get_playerbar_to_switch_playerview(player_show_hight_animation_value.value);
+    store_player_audio_logic.player_back_ChevronDouble = player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow;
+  }else{
+    message.warning('Jellyfin / Emby ' + t('ContainerNotSupported') + ' ' + t('setting.hotkey_localSearch'))
   }
-  player_show_hight_animation_value.value = 670;
-  get_playerbar_to_switch_playerview(player_show_hight_animation_value.value);
-  store_player_audio_logic.player_back_ChevronDouble = player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow;
 }
 
 ////// view albumlist_view Remove data

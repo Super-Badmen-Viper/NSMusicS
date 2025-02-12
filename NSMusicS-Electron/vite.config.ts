@@ -38,26 +38,26 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      crypto: 'crypto-browserify',
-      os: 'os-browserify/browser',
-      path: 'path-browserify',
+      // crypto: 'crypto-browserify',
+      // os: 'os-browserify/browser',
+      // path: 'path-browserify',
     }
   },
-  build: {
-    outDir: 'dist',
-    assetsDir: 'static',
-    rollupOptions: {
-      external: ['crypto', 'os', 'path'],
-      input: 'src/main.ts',
-      output: {
-        format: 'iife',
-        name: 'NSMusicS',
-      },
-    },
-  },
-  server: {
-    host: '0.0.0.0', // 允许外部访问
-    port: 5173, // 确保端口与 Docker 映射一致
-  },
+  // build: {
+  //   outDir: 'dist',
+  //   assetsDir: 'static',
+  //   rollupOptions: {
+  //     external: ['crypto', 'os', 'path'],
+  //     input: 'src/main.ts',
+  //     output: {
+  //       format: 'iife',
+  //       name: 'NSMusicS',
+  //     },
+  //   },
+  // },
+  // server: {
+  //   host: '0.0.0.0', // 允许外部访问
+  //   port: 5173, // 确保端口与 Docker 映射一致
+  // },
 })
 
