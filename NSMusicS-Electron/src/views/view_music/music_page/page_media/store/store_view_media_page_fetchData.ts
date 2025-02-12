@@ -599,6 +599,11 @@ export const store_view_media_page_fetchData = reactive({
 watch(() => store_playlist_appearance.playlist_show, async (newValue) => {
     if(newValue){
         store_view_media_page_fetchData._load_model = 'play'
+        const index = store_playlist_list_info.playlist_MediaFiles_temporary.length / 30
+        if(index > 0){
+            store_playlist_list_fetchData._start = 30 * index - 30;
+            store_playlist_list_fetchData._end = 30 * index;
+        }
     }else{
         store_view_media_page_fetchData._load_model = 'search'
     }

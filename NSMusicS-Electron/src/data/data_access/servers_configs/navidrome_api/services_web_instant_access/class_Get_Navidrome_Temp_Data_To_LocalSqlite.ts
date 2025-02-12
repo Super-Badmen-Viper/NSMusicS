@@ -270,28 +270,47 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
         _album_id:string, _artist_id:string,
         year:string
     ){
-        let songlist = []
-        if(playlist_id === '') { // find_model
-            const {data,totalCount} = await this.song_Lists_ApiWebService_of_ND.getMediaList_ALL(
+        let songlist = [];
+        let totalCount = 0;
+        if (playlist_id === '') {
+            const { data, count } = await this.song_Lists_ApiWebService_of_ND.getMediaList_ALL(
                 _end, _order, _sort, _start,
                 _search, _starred, _album_id, _artist_id,
                 year
             );
-            songlist = data
-            store_playlist_list_fetchData._totalCount = totalCount
-        }else{ // ! find_model
-            const {data,totalCount} = await this.song_Lists_ApiWebService_of_ND.getMediaList_of_Playlist(
+            songlist = data;
+            totalCount = count;
+        } else {
+            const { data, count } = await this.song_Lists_ApiWebService_of_ND.getMediaList_of_Playlist(
                 playlist_id,
                 _end, _order, _sort, _start,
                 year
-            )
-            songlist = data
-            store_playlist_list_fetchData._totalCount = totalCount
+            );
+            songlist = data;
+            totalCount = count;
         }
+        ///
+        if (Array.isArray(songlist) && songlist.length > 0) {
+            if (store_view_media_page_fetchData._load_model === 'search') {
+                const existingSong = store_view_media_page_info.media_Files_temporary.find(item => item.id === songlist[0].id);
+                if (existingSong) {
+                    return;
+                }
+            } else {
+                const existingSong = store_playlist_list_info.playlist_MediaFiles_temporary.find(item => item.id === songlist[0].id);
+                if (existingSong) {
+                    return;
+                }
+            }
+        }else{
+            return;
+        }
+        ///
         if (Array.isArray(songlist) && songlist.length > 0) {
             if(_sort === 'playDate'){
                 songlist = songlist.filter(song => song.playCount > 0)
             }
+            store_playlist_list_fetchData._totalCount = totalCount
             let last_index = store_view_media_page_fetchData._load_model === 'search' ?
                 store_view_media_page_info.media_Files_temporary.length :
                 store_playlist_list_info.playlist_MediaFiles_temporary.length

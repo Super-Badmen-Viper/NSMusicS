@@ -381,6 +381,23 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             );
             if (response_media_list != undefined) {
                 songlist = response_media_list.data.Items;
+                ///
+                if (Array.isArray(songlist) && songlist.length > 0) {
+                    if (store_view_media_page_fetchData._load_model === 'search') {
+                        const existingSong = store_view_media_page_info.media_Files_temporary.find(item => item.id === songlist[0].id);
+                        if (existingSong) {
+                            return;
+                        }
+                    } else {
+                        const existingSong = store_playlist_list_info.playlist_MediaFiles_temporary.find(item => item.id === songlist[0].id);
+                        if (existingSong) {
+                            return;
+                        }
+                    }
+                }else{
+                    return;
+                }
+                ///
                 store_playlist_list_fetchData._totalCount = response_media_list.data.TotalRecordCount
             }
             if (Array.isArray(songlist) && songlist.length > 0) {
@@ -612,6 +629,23 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             if (data != undefined) {
                 let list = data.data;
                 songlist = list.Items;
+                ///
+                if (Array.isArray(songlist) && songlist.length > 0) {
+                    if (store_view_media_page_fetchData._load_model === 'search') {
+                        const existingSong = store_view_media_page_info.media_Files_temporary.find(item => item.id === songlist[0].id);
+                        if (existingSong) {
+                            return;
+                        }
+                    } else {
+                        const existingSong = store_playlist_list_info.playlist_MediaFiles_temporary.find(item => item.id === songlist[0].id);
+                        if (existingSong) {
+                            return;
+                        }
+                    }
+                }else{
+                    return;
+                }
+                ///
                 store_playlist_list_fetchData._totalCount =
                     (typeof list.TotalRecordCount !== 'undefined' && list.TotalRecordCount != 0) ? list.TotalRecordCount : list.Items.length;
             }
@@ -753,6 +787,23 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                             songlist = []
                         }
                     }
+                    ///
+                    if (Array.isArray(songlist) && songlist.length > 0) {
+                        if (store_view_media_page_fetchData._load_model === 'search') {
+                            const existingSong = store_view_media_page_info.media_Files_temporary.find(item => item.id === songlist[0].id);
+                            if (existingSong) {
+                                return;
+                            }
+                        } else {
+                            const existingSong = store_playlist_list_info.playlist_MediaFiles_temporary.find(item => item.id === songlist[0].id);
+                            if (existingSong) {
+                                return;
+                            }
+                        }
+                    }else{
+                        return;
+                    }
+                    ///
                     store_playlist_list_fetchData._totalCount = response_playlMedias.data.TotalRecordCount
                 }
             }
@@ -893,9 +944,9 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                             album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
                             :
                             store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
-                            (album.ImageTags?.Primary ? album.Id : album.ParentBackdropItemId) +
-                            (album.ImageTags?.Primary ? '/Images/Primary?fillWidth=122&fillHeight=122&tag=' : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
-                            (album.ImageTags?.Primary ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
+                            (album.PrimaryImageItemId ? album.PrimaryImageItemId : album.ParentBackdropItemId) +
+                            (album.PrimaryImageItemId ? '/Images/Primary?fillWidth=122&fillHeight=122&tag=' : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
+                            (album.PrimaryImageItemId ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
                             '&api_key=' + store_server_user_model.authorization_of_Je
                         ) : undefined
                     store_view_album_page_info.album_File_metadata.push(album)

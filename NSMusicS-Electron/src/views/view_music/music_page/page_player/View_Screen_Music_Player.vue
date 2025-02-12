@@ -1002,7 +1002,7 @@ onBeforeUnmount(() => {
           </div>
         </n-flex>
       </n-flex>
-      <n-space vertical>
+      <n-space vertical justify="center">
         <!-- middle area -->
         <n-config-provider :theme="darkTheme">
           <n-flex
@@ -1067,15 +1067,15 @@ onBeforeUnmount(() => {
                         :style="{
                         '--background-image': `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`
                       }"
-                        style="
+                      style="
                         width: 66vh;height: 66vh;
-                        margin-top: calc(22vh - 182px);
+                        margin-top: calc(22vh - 186px);
                       "
                     >
                     </lottie-player>
                     <div
                         style="
-                          width: 32vh;margin-top: -14vh;color: #E7E5E5;
+                          width: 32vh;margin-top: -13vh;color: #E7E5E5;
                           font-weight: 900;font-size: calc(2.2vh + 4px);
                           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                           text-align: center;">
@@ -1159,25 +1159,25 @@ onBeforeUnmount(() => {
                         transition: 'margin 0.4s, left 0.4s, opacity 0.8s'
                       }">
                     <lottie-player
-                        ref="animationInstance_model_2_wave"
+                      ref="animationInstance_model_2_wave"
                         class="animate__rotate_fast"
                         :class="{
                         'animate__rotate_fast_paused': store_player_appearance.player_background_model_num !== 2 || !store_player_audio_logic.player.isPlaying
                       }"
-                        v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
-                        speed="0.8"
-                        autoplay
-                        loop
-                        mode="normal"
-                        :src="JSON.parse(JSON.stringify(Animation_1715417974362))"
-                        style="
+                      v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
+                      speed="0.8"
+                      autoplay
+                      loop
+                      mode="normal"
+                      :src="JSON.parse(JSON.stringify(Animation_1715417974362))"
+                      style="
                         width: calc(56vh);
                         height: calc(56vh);
                         margin-top: calc(32vh - 154px);
                         position: absolute;
                         transition: margin 0.4s, opacity 0.4s;;
                       "
-                        :style="{
+                      :style="{
                         '--background-image': `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`,
                         marginLeft: store_player_audio_logic.player.isPlaying
                         ? 'calc(-56vh)' : 'calc(-70vh)',
@@ -1211,7 +1211,7 @@ onBeforeUnmount(() => {
                         width: calc(46vh); height: calc(46vh);">
                       <!-- 图片 -->
                       <img
-                          style="
+                        style="
                           width: 100%;height: 100%;
                           border: 1.5px solid #FFFFFF20;
                           border-radius: 10px;
@@ -1221,29 +1221,29 @@ onBeforeUnmount(() => {
                           box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
                           -webkit-mask-image: radial-gradient(
                             circle at 100% 50%, /* 圆形洞的位置（右侧居中） */
-                            transparent 4%,   /* 圆形洞的大小 */
-                            black 4.2%          /* 遮罩其余部分 */
+                            transparent 3%,   /* 圆形洞的大小 */
+                            black 3.2%          /* 遮罩其余部分 */
                           );
                           mask-image: radial-gradient(
                             circle at 100% 50%, /* 圆形洞的位置（右侧居中） */
-                            transparent 4%,   /* 圆形洞的大小 */
-                            black 4.2%          /* 遮罩其余部分 */
+                            transparent 3%,   /* 圆形洞的大小 */
+                            black 3.2%          /* 遮罩其余部分 */
                           );
                         "
                           :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
                           alt=""
                       />
                       <div
-                          style="
-                          width: 4vh;height: 4vh;
+                        style="
+                          width: 3vh;height: 3vh;
                           border-radius: 6vh;border: 2px solid #FFFFFF40;
-                          position: absolute;top: calc(50% - 2vh);right: calc(-2vh);
+                          position: absolute;top: calc(50% - 1.5vh);
                           background-color: #DCDBDD20;
                           transition: right 0.4s, opacity 0.4s;
                         "
                           :style="{
                           right: store_player_audio_logic.player.isPlaying
-                          ? 'calc(-2vh)' : 'calc(12vh)',
+                          ? 'calc(-1.5vh)' : 'calc(12vh)',
                           opacity: store_player_audio_logic.player.isPlaying
                           ? 1 : 0,
                         }"
@@ -1251,10 +1251,10 @@ onBeforeUnmount(() => {
 
                       </div>
                       <div
-                          style="
+                        style="
                           width: 2vh;height: 2vh;
                           border-radius: 2vh;border: 1.5px solid #FFFFFF40;
-                          position: absolute;top: calc(50% - 1vh);right: calc(-1vh);
+                          position: absolute;top: calc(50% - 1vh);
                           background-color: #181818;
                           transition: right 0.4s, opacity 0.4s;
                         "
@@ -1326,7 +1326,7 @@ onBeforeUnmount(() => {
                   style="background-color: transparent;overflow: hidden;"
                   :style="{
                     marginLeft: store_player_appearance.player_background_model_num != 3
-                    ? '-3vw' : '2vw',
+                    ? '-1.5vw' : '2vw',
                   }"
               >
                 <div
