@@ -420,7 +420,11 @@ async function Play_Media_Order(model_num: string, increased: number) {
   }else if(store_server_user_model.model_server_type_of_web){
     if(!store_server_user_model.random_play_model) {
       // web获取的该列表项总数，触底加载不刷新
-      if(store_playlist_list_fetchData._totalCount < store_playlist_list_info.playlist_MediaFiles_temporary.length){
+      if(store_playlist_list_fetchData._totalCount != undefined) {
+        if (store_playlist_list_fetchData._totalCount < store_playlist_list_info.playlist_MediaFiles_temporary.length) {
+          store_playlist_list_fetchData._totalCount = store_playlist_list_info.playlist_MediaFiles_temporary.length
+        }
+      }else{
         store_playlist_list_fetchData._totalCount = store_playlist_list_info.playlist_MediaFiles_temporary.length
       }
       last_index = store_playlist_list_fetchData._totalCount;
