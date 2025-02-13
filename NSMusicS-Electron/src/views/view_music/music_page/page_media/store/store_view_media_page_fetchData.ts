@@ -403,6 +403,7 @@ export const store_view_media_page_fetchData = reactive({
     },
     _album_artist_id: '', // Emby Home$Album
     set_album_artist_id(id: string){
+        this.fetchData_Media_of_server_web_clear_all_parms()
         store_view_media_page_fetchData._album_artist_id = id
         store_playlist_list_fetchData._album_artist_id = id
     },

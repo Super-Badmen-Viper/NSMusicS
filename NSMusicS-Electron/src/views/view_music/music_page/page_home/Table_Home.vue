@@ -116,6 +116,9 @@ onMounted(() => {
 
 ////// dynamicScroller of albumlist_view
 import {store_view_home_page_fetchData} from "@/views/view_music/music_page/page_home/store/store_view_home_page_fetchData";
+import {
+  store_view_media_page_fetchData
+} from "@/views/view_music/music_page/page_media/store/store_view_media_page_fetchData";
 const dynamicScroller_maximum_playback = ref(null as any);
 let offset_maximum_playback = 0;
 const scrollTo_maximum_playback = (value :number) => {
@@ -189,6 +192,11 @@ const scrollTo_recently_played = (value :number) => {
 const Open_this_album_MediaList_click = (item: any, list_name: string) => {
   if (store_server_user_model.model_server_type_of_web) {
     store_player_appearance.player_mode_of_medialist_from_external_import = false;
+    if (store_server_users.server_select_kind === 'emby') {
+      if (list_name != 'recently_added') {
+        return;
+      }
+    }
   }
   const temp_id = Get_this_album_info(item, list_name);
   console.log('media_list_of_album_id：' + temp_id);
@@ -214,10 +222,13 @@ const Get_this_album_info = (item: any, list_name: string): string => {
       store_view_media_page_fetchData.set_album_artist_id(
           list_name === 'recently_added' ? item.id : item.album_artist_id
       );
-      // 由于播放列表与歌单加载逻辑已合并，防止album_artist_id丢失
-      store_playlist_list_fetchData._album_artist_id = list_name === 'recently_added'
-          ? item.id : item.album_artist_id;
-      temp_id = store_view_media_page_fetchData._album_artist_id;
+      if(list_name === 'recently_added'){
+        store_playlist_list_fetchData._album_artist_id = item.album_artist_id;
+        temp_id = item.album_artist_id;
+      }else{
+        store_view_media_page_fetchData._media_id = item.id;
+        temp_id = item.id;
+      }
     } else {
       // 其他服务器使用 album_id
       store_view_media_page_fetchData._album_id = item.id;
@@ -280,19 +291,42 @@ import {store_player_audio_logic} from "@/views/view_music/music_page/page_playe
 const contextmenu = ref(null as any)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
 const message = useMessage()
+const recently_added_contextmenu_of_emby = ref(false)
 async function update_playlist_addAlbum(id: any, playlist_id: any){
   try{
-    await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(id)
-    const matchingIds: string[] = [];
-    store_view_media_page_info.media_Files_temporary.forEach((item: Media_File) => {
-      if (item.album_id === id) {
-        matchingIds.push(item.id);
+    let result_album = false
+    if((store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
+    ) {
+      result_album = true;
+    }else{
+      if(store_server_users.server_select_kind === 'jellyfin'){
+        result_album = false
+      }else if(store_server_users.server_select_kind === 'emby'){
+        result_album = recently_added_contextmenu_of_emby.value
       }
-    });
-    store_view_media_page_info.media_Files_temporary = []
-    for (let item_id of matchingIds) {
-      ////
-      await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(item_id,playlist_id)
+    }
+    recently_added_contextmenu_of_emby.value = false
+    if(result_album) {
+      await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(id)
+      const matchingIds: string[] = [];
+      store_view_media_page_info.media_Files_temporary.forEach((item: Media_File) => {
+        if (item.album_id === id) {
+          matchingIds.push(item.id);
+        }
+      });
+      store_view_media_page_info.media_Files_temporary = []
+      for (let item_id of matchingIds) {
+        ////
+        await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(
+            item_id,
+            playlist_id
+        )
+      }
+    }else{
+      await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(
+          id,
+          playlist_id
+      )
     }
     ////
     message.success(t('common.add'))
@@ -302,14 +336,34 @@ async function update_playlist_addAlbum(id: any, playlist_id: any){
   }
 }
 async function menu_item_add_to_playlist_end() {
+  let result_album = false
+  if((store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
+  ) {
+    result_album = true;
+  }else{
+    if(store_server_users.server_select_kind === 'jellyfin'){
+      result_album = false
+    }else if(store_server_users.server_select_kind === 'emby'){
+      result_album = recently_added_contextmenu_of_emby.value
+    }
+  }
+  recently_added_contextmenu_of_emby.value = false
   let matchingItems = []
-  await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(
-      store_playlist_list_info.playlist_Menu_Item_Id
-  );
-  matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-      (item: Media_File) => item.album_id === store_playlist_list_info.playlist_Menu_Item_Id
-  );
-  //////
+  if(result_album) {
+    await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(
+        store_playlist_list_info.playlist_Menu_Item_Id
+    );
+    matchingItems = store_view_media_page_info.media_Files_temporary.filter(
+        (item: Media_File) => item.album_id === store_playlist_list_info.playlist_Menu_Item_Id
+    );
+  }else{
+    store_view_media_page_fetchData._media_id = store_playlist_list_info.playlist_Menu_Item_Id
+    await store_view_media_page_fetchData.fetchData_Media();
+    matchingItems = store_view_media_page_info.media_Files_temporary.filter(
+        (item: Media_File) => item.id === store_playlist_list_info.playlist_Menu_Item_Id
+    );
+  }
+  ///
   store_view_media_page_info.media_Files_temporary = []
   for (let item of matchingItems) {
     const newItem: any = JSON.parse(JSON.stringify(item));
@@ -317,6 +371,7 @@ async function menu_item_add_to_playlist_end() {
     store_playlist_list_info.playlist_MediaFiles_temporary.push(newItem);
     store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id);
   }
+  ///
   store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
     item.absoluteIndex = index;
   });
@@ -324,17 +379,35 @@ async function menu_item_add_to_playlist_end() {
   contextmenu.value.hide()
 }
 async function menu_item_add_to_playlist_next() {
-  await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(store_playlist_list_info.playlist_Menu_Item_Id);
-  const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-      (item: Media_File) => item.album_id === store_playlist_list_info.playlist_Menu_Item_Id
-  );
-
+  let result_album = false
+  if((store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
+  ) {
+    result_album = true;
+  }else{
+    if(store_server_users.server_select_kind === 'jellyfin'){
+      result_album = false
+    }else if(store_server_users.server_select_kind === 'emby'){
+      result_album = recently_added_contextmenu_of_emby.value
+    }
+  }
+  recently_added_contextmenu_of_emby.value = false
+  let matchingItems = []
+  if(result_album) {
+    await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(store_playlist_list_info.playlist_Menu_Item_Id);
+    matchingItems = store_view_media_page_info.media_Files_temporary.filter(
+        (item: Media_File) => item.album_id === store_playlist_list_info.playlist_Menu_Item_Id
+    );
+  }else{
+    store_view_media_page_fetchData._media_id = store_playlist_list_info.playlist_Menu_Item_Id
+    await store_view_media_page_fetchData.fetchData_Media();
+    matchingItems = store_view_media_page_info.media_Files_temporary.filter(
+        (item: Media_File) => item.id === store_playlist_list_info.playlist_Menu_Item_Id
+    );
+  }
   store_view_media_page_info.media_Files_temporary = [];
-
   const index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
       (item: any) => item.id === store_player_audio_info.this_audio_song_id
   );
-
   if (index !== -1) {
     matchingItems.forEach((item: Media_File, i: number) => {
       const newItem = JSON.parse(JSON.stringify(item));
@@ -342,15 +415,14 @@ async function menu_item_add_to_playlist_next() {
       store_playlist_list_info.playlist_MediaFiles_temporary.splice(index + 1 + i, 0, newItem);
       store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.splice(index + 1 + i, 0, newItem.id);
     });
-
-    store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
-      item.absoluteIndex = index;
-    });
-    store_app_configs_logic_save.save_system_playlist_item_id_config();
-    contextmenu.value.hide();
   } else {
     console.error('Current audio song not found in playlist');
   }
+  store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+    item.absoluteIndex = index;
+  });
+  store_app_configs_logic_save.save_system_playlist_item_id_config();
+  contextmenu.value.hide();
 }
 
 ////// view albumlist_view Remove data
@@ -374,10 +446,8 @@ onBeforeUnmount(() => {
       <div class="notice"
            v-contextmenu:contextmenu
            @contextmenu.prevent="() => {
-             store_playlist_list_info.playlist_Menu_Item_Id =
-              store_server_users.server_select_kind === 'emby'?
-               store_view_home_page_info.home_selected_top_album?.album_artist_id:
-                store_view_home_page_info.home_selected_top_album?.id
+             store_playlist_list_info.playlist_Menu_Item = store_view_home_page_info.home_selected_top_album;
+             store_playlist_list_info.playlist_Menu_Item_Id =store_view_home_page_info.home_selected_top_album?.id
            }">
         <div
           :style="{
@@ -561,9 +631,8 @@ onBeforeUnmount(() => {
             :data-active="active"
             v-contextmenu:contextmenu
             @contextmenu.prevent="()=>{
-              store_playlist_list_info.playlist_Menu_Item_Id =
-              store_server_users.server_select_kind === 'emby'?
-              item.album_artist_id:item.id
+              store_playlist_list_info.playlist_Menu_Item = item;
+              store_playlist_list_info.playlist_Menu_Item_Id =item.id
             }"
           >
             <div
@@ -612,6 +681,7 @@ onBeforeUnmount(() => {
                     </div>
                     <div class="hover_buttons_bottom">
                       <button
+                          v-if="store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind != 'jellyfin' && store_server_users.server_select_kind != 'emby')"
                           class="open_this_artist"
                           @click="Open_this_album_MediaList_click(item, 'maximum')"
                           style="
@@ -732,9 +802,8 @@ onBeforeUnmount(() => {
               :data-active="active"
               v-contextmenu:contextmenu
               @contextmenu.prevent="()=>{
-                store_playlist_list_info.playlist_Menu_Item_Id =
-                store_server_users.server_select_kind === 'emby'?
-                item.album_artist_id:item.id
+                store_playlist_list_info.playlist_Menu_Item = item;
+                store_playlist_list_info.playlist_Menu_Item_Id =item.id
               }"
           >
             <div
@@ -783,6 +852,7 @@ onBeforeUnmount(() => {
                     </div>
                     <div class="hover_buttons_bottom">
                       <button
+                          v-if="store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind != 'jellyfin' && store_server_users.server_select_kind != 'emby')"
                           class="open_this_artist"
                           @click="Open_this_album_MediaList_click(item, 'random')"
                           style="
@@ -902,7 +972,9 @@ onBeforeUnmount(() => {
               :data-active="active"
               v-contextmenu:contextmenu
               @contextmenu.prevent="()=>{
-                store_playlist_list_info.playlist_Menu_Item_Id = item.id
+                store_playlist_list_info.playlist_Menu_Item = item;
+                store_playlist_list_info.playlist_Menu_Item_Id =item.id
+                recently_added_contextmenu_of_emby = true
               }">
             <div
                 :key="item.id"
@@ -950,6 +1022,7 @@ onBeforeUnmount(() => {
                     </div>
                     <div class="hover_buttons_bottom">
                       <button
+                          v-if="store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind != 'jellyfin')"
                           class="open_this_artist"
                           @click="Open_this_album_MediaList_click(item, 'recently_added')"
                           style="
@@ -1069,9 +1142,8 @@ onBeforeUnmount(() => {
               :data-active="active"
               v-contextmenu:contextmenu
               @contextmenu.prevent="()=>{
-                store_playlist_list_info.playlist_Menu_Item_Id =
-                store_server_users.server_select_kind === 'emby'?
-                item.album_artist_id:item.id
+                store_playlist_list_info.playlist_Menu_Item = item;
+                store_playlist_list_info.playlist_Menu_Item_Id =item.id
               }"
           >
             <div
@@ -1120,6 +1192,7 @@ onBeforeUnmount(() => {
                     </div>
                     <div class="hover_buttons_bottom">
                       <button
+                          v-if="store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind != 'jellyfin' && store_server_users.server_select_kind != 'emby')"
                           class="open_this_artist"
                           @click="Open_this_album_MediaList_click(item, 'recently_played')"
                           style="
@@ -1176,9 +1249,12 @@ onBeforeUnmount(() => {
     <v-contextmenu ref="contextmenu" class="v-contextmenu-item v-contextmenu-item--hover" style="z-index: 999">
       <v-contextmenu-submenu :title="menu_item_add_to_songlist">
         <v-contextmenu-item
-            v-for="n in store_playlist_list_info.playlist_names_ALLLists"
-            :key="n.value"
-            @click="update_playlist_addAlbum(store_playlist_list_info.playlist_Menu_Item_Id,n.value)"
+          v-for="n in store_playlist_list_info.playlist_names_ALLLists"
+          :key="n.value"
+          @click="update_playlist_addAlbum(
+              store_playlist_list_info.playlist_Menu_Item_Id,
+              n.value
+          )"
         >
           {{ n.label }}
         </v-contextmenu-item>

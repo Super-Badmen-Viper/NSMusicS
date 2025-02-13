@@ -232,15 +232,15 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     const medium_image_url =
                         album.Id != undefined ? (
                             store_server_users.server_select_kind === 'jellyfin'
-                            ?
-                            store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
-                            album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
-                            :
-                            store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
-                            (album.ImageTags?.Primary ? album.Id : album.ParentBackdropItemId) +
-                            (album.ImageTags?.Primary ? '/Images/Primary?fillWidth=122&fillHeight=122&tag=' : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
-                            (album.ImageTags?.Primary ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
-                            '&api_key=' + store_server_user_model.authorization_of_Je
+                                ?
+                                store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
+                                album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                                :
+                                store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
+                                (album.PrimaryImageItemId ? album.PrimaryImageItemId : album.ParentBackdropItemId) +
+                                (album.PrimaryImageItemId ? '/Images/Primary?fillWidth=122&fillHeight=122&tag=' : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
+                                (album.PrimaryImageItemId ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
+                                '&api_key=' + store_server_user_model.authorization_of_Je
                         ) : undefined
                     store_view_home_page_info.home_Files_temporary_recently_added.push({
                         favorite: album.UserData.IsFavorite,
@@ -1029,15 +1029,15 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     const medium_image_url =
                         album.Id != undefined ? (
                             store_server_users.server_select_kind === 'jellyfin'
-                            ?
-                            store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
-                            album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
-                            :
-                            store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
-                            (album.ImageTags?.Primary ? album.Id : album.ParentBackdropItemId) +
-                            (album.ImageTags?.Primary ? '/Images/Primary?fillWidth=122&fillHeight=122&tag=' : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
-                            (album.ImageTags?.Primary ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
-                            '&api_key=' + store_server_user_model.authorization_of_Je
+                                ?
+                                store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
+                                album.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
+                                :
+                                store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
+                                (album.PrimaryImageItemId ? album.PrimaryImageItemId : album.ParentBackdropItemId) +
+                                (album.PrimaryImageItemId ? '/Images/Primary?fillWidth=122&fillHeight=122&tag=' : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
+                                (album.PrimaryImageItemId ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
+                                '&api_key=' + store_server_user_model.authorization_of_Je
                         ) : undefined
                     store_view_album_page_info.album_File_metadata.push(album)
                     store_view_album_page_info.album_Files_temporary.push({

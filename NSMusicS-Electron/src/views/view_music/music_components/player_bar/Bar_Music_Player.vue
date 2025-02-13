@@ -420,7 +420,10 @@ async function Play_Media_Order(model_num: string, increased: number) {
   }else if(store_server_user_model.model_server_type_of_web){
     if(!store_server_user_model.random_play_model) {
       // web获取的该列表项总数，触底加载不刷新
-      last_index = store_playlist_list_fetchData._totalCount || store_playlist_list_info.playlist_MediaFiles_temporary.length;
+      if(store_playlist_list_fetchData._totalCount < store_playlist_list_info.playlist_MediaFiles_temporary.length){
+        store_playlist_list_fetchData._totalCount = store_playlist_list_info.playlist_MediaFiles_temporary.length
+      }
+      last_index = store_playlist_list_fetchData._totalCount;
     }else{
       // web随机获取，设置为固定10项，触底加载刷新+10
       last_index = store_playlist_list_info.playlist_MediaFiles_temporary.length
@@ -604,7 +607,7 @@ let unwatch_play_go_index_time =  watch(() => store_player_audio_logic.player_go
 
 ////// open playList
 const Set_Playlist_Show = () => {
-  store_playlist_appearance.playlist_show = true
+  store_playlist_appearance.playlist_show = !store_playlist_appearance.playlist_show
 }
 ////// open sound effects
 const Set_Player_Show_Sound_effects= () => {
@@ -1162,7 +1165,8 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-badge :value="store_playlist_list_info.playlist_MediaFiles_temporary.length" show-zero :max="9999" :offset="[-7, 3]">
-                <n-button strong secondary class="gird_Right_current_playlist_button_area_of_button" @click="Set_Playlist_Show">
+                <n-button strong secondary class="gird_Right_current_playlist_button_area_of_button"
+                          @click="Set_Playlist_Show">
                   <template #icon>
                     <n-icon :size="42"><QueueMusicRound/></n-icon>
                   </template>

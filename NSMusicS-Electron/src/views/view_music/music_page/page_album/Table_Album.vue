@@ -972,9 +972,8 @@ onBeforeUnmount(() => {
                       <icon :size="42" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><PlayCircle24Regular/></icon>
                     </button>
                     <div class="hover_buttons_top"
-                         v-if="
-                         store_server_users.server_select_kind != 'jellyfin' ||
-                         store_server_users.server_select_kind != 'emby'">
+                         v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local"
+                    >
                       <rate
                         class="viaSlot" style="margin-right: 8px;"
                         :length="5"

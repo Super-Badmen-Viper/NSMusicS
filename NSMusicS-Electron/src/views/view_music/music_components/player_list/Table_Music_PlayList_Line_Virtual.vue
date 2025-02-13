@@ -109,7 +109,7 @@ import {
 import {store_view_media_page_logic} from "@/views/view_music/music_page/page_media/store/store_view_media_page_logic";
 import {store_player_audio_logic} from "@/views/view_music/music_page/page_player/store/store_player_audio_logic";
 import {store_view_media_page_info} from "@/views/view_music/music_page/page_media/store/store_view_media_page_info";
-const contextmenu = ref(null as any)// inject("playlist_contextmenu", null);
+const contextmenu = inject("playlist_contextmenu", null);
 async function update_playlist_addMediaFile(id: any, playlist_id: any){
   try{
     await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(id,playlist_id)
@@ -220,7 +220,7 @@ onMounted(()=>{
       <v-contextmenu v-if="!store_playlist_list_info.playlist_DragSort_Model"
                      ref="contextmenu"
                      class="v-contextmenu-item v-contextmenu-item--hover"
-                     style="z-index: 9999;">
+                     style="z-index: 9999;position: absolute;">
         <v-contextmenu-submenu :title="menu_item_add_to_songlist">
           <v-contextmenu-item
               v-for="n in store_playlist_list_info.playlist_names_ALLLists"

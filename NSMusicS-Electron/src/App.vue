@@ -122,11 +122,11 @@
           key: 'artist',
           icon: renderIcon(UserAvatarFilledAlt)
         },
-        {
-          label: computed(() => renderRouterLink('genre', t('entity.genre_other'))),
-          key: 'genre',
-          icon: renderIcon(TagMultiple24Regular)
-        },
+        // {
+        //   label: computed(() => renderRouterLink('genre', t('entity.genre_other'))),
+        //   key: 'genre',
+        //   icon: renderIcon(TagMultiple24Regular)
+        // },
         // {
         //   label: computed(() => t('TabMusic')),
         //   icon: renderIcon(LibraryMusicOutlined),
@@ -779,7 +779,7 @@
     }
 
     try {
-      store_app_configs_info.version = '1.3.2';
+      store_app_configs_info.version = '1.3.3';
       console.log('Current Version:', store_app_configs_info.version);
       const xmlUrl = 'https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-Update/NSMusicS.xml';
       await store_app_configs_logic_update.fetchAndParseXML(xmlUrl);
@@ -1083,19 +1083,17 @@
       <n-drawer
         v-model:show="store_playlist_appearance.playlist_show"
         :width="520"
+        z-index="100"
         style="
           border-radius: 12px 0 0 12px;
           border: 1.5px solid #FFFFFF20;
           background-color: rgba(127, 127, 127, 0.1);
           backdrop-filter: blur(10px);
           margin-top: 88px;margin-bottom:88px;
-          z-index: 100;
         ">
         <n-drawer-content style="z-index: 100;">
           <template #default>
-            <Bar_Music_PlayList
-                v-if="store_playlist_appearance.playlist_show"
-                style="z-index: 100;">
+            <Bar_Music_PlayList style="z-index: 100;">
             </Bar_Music_PlayList>
           </template>
         </n-drawer-content>
