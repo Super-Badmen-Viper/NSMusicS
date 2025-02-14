@@ -99,17 +99,12 @@ import {NIcon, useMessage} from 'naive-ui'
 const message = useMessage()
 
 ////// right menu
-import { inject } from "vue";
-import {store_player_tag_modify} from "@/views/view_music/music_page/page_player/store/store_player_tag_modify";
-import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
-import {store_router_history_data_of_media} from "@/router/router_store/store_router_history_data_of_media";
 import {
   store_view_media_page_fetchData
 } from "@/views/view_music/music_page/page_media/store/store_view_media_page_fetchData";
-import {store_view_media_page_logic} from "@/views/view_music/music_page/page_media/store/store_view_media_page_logic";
 import {store_player_audio_logic} from "@/views/view_music/music_page/page_player/store/store_player_audio_logic";
 import {store_view_media_page_info} from "@/views/view_music/music_page/page_media/store/store_view_media_page_info";
-const contextmenu = inject("playlist_contextmenu", null);
+const contextmenu = ref(null)
 async function update_playlist_addMediaFile(id: any, playlist_id: any){
   try{
     await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(id,playlist_id)
@@ -203,9 +198,11 @@ const onScrollEnd = async () => {
   if (isScrolling.value) return;
   isScrolling.value = true;
   if (store_server_user_model.model_server_type_of_web) {
-    store_view_media_page_fetchData._load_model = 'play'
-    await store_view_media_page_fetchData.fetchData_Media_of_server_web_end()
-    store_view_media_page_fetchData._load_model = 'search'
+    if (!store_server_user_model.random_play_model) {
+      store_view_media_page_fetchData._load_model = 'play'
+      await store_view_media_page_fetchData.fetchData_Media_of_server_web_end()
+      store_view_media_page_fetchData._load_model = 'search'
+    }
   }
   isScrolling.value = false;
 };

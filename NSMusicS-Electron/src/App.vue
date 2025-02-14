@@ -722,8 +722,6 @@
   import {store_player_tag_modify} from "@/views/view_music/music_page/page_player/store/store_player_tag_modify";
   import View_Edit_Tag from "@/views/view_music/music_drawer/View_Edit_Tag.vue";
   import View_Player_Effect from "@/views/view_music/music_drawer/View_Player_Effect.vue";
-  const playlist_contextmenu = ref(null as any)
-  provide("message", playlist_contextmenu);
 
   ////// Load Configs
   const { locale } = useI18n({

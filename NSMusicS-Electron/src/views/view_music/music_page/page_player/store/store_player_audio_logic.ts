@@ -7,6 +7,7 @@ import {store_player_view} from "./store_player_view";
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 import {store_player_tag_modify} from "./store_player_tag_modify";
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
+import error_album from '@/assets/img/error_album.jpg'
 import {
     Audio_ApiService_of_Je
 } from "../../../../../data/data_access/servers_configs/jellyfin_api/services_web/Audio/index_service";
@@ -185,22 +186,22 @@ export const store_player_audio_logic = reactive({
             )
         }
         //
-        store_player_audio_info.this_audio_play_id = media_file.play_id
-        store_player_audio_info.this_audio_file_path = media_file.path
-        store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url
-        store_player_audio_info.this_audio_artist_name = media_file.artist
-        store_player_audio_info.this_audio_artist_id = media_file.artist_id
-        store_player_audio_info.this_audio_song_name = media_file.title
-        store_player_audio_info.this_audio_song_id = media_file.id
-        store_player_audio_info.this_audio_song_rating = media_file.rating
-        store_player_audio_info.this_audio_song_favorite = media_file.favorite
-        store_player_audio_info.this_audio_album_id = media_file.album_id
-        store_player_audio_info.this_audio_album_name = media_file.album
+        store_player_audio_info.this_audio_play_id = media_file.play_id ?? ''
+        store_player_audio_info.this_audio_file_path = media_file.path ?? ''
+        store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url ?? error_album
+        store_player_audio_info.this_audio_artist_name = media_file.artist ?? ''
+        store_player_audio_info.this_audio_artist_id = media_file.artist_id ?? ''
+        store_player_audio_info.this_audio_song_name = media_file.title ?? ''
+        store_player_audio_info.this_audio_song_id = media_file.id ?? ''
+        store_player_audio_info.this_audio_song_rating = media_file.rating ?? 0
+        store_player_audio_info.this_audio_song_favorite = media_file.favorite ?? false
+        store_player_audio_info.this_audio_album_id = media_file.album_id ?? ''
+        store_player_audio_info.this_audio_album_name = media_file.album ?? ''
         store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = index
         //
-        store_player_tag_modify.player_current_media_starred = media_file.favorite
-        store_player_tag_modify.player_current_media_playCount = media_file.play_count
-        store_player_tag_modify.player_current_media_playDate = media_file.play_date
+        store_player_tag_modify.player_current_media_starred = media_file.favorite ?? false
+        store_player_tag_modify.player_current_media_playCount = media_file.play_count ?? 0
+        store_player_tag_modify.player_current_media_playDate = media_file.play_date ?? ''
     },
     convertToLRC_Array_of_Je(lyrics: {
         Text: string;

@@ -39,8 +39,6 @@ export const store_playlist_list_logic = reactive({
     playlist_names_StartUpdate: false,
     media_page_handleItemDbClick: false,
 
-    playlist_contextmenu: ref(null as any),
-
     get_playlist_tracks_temporary_add(value: any){
         const playlist = store_local_data_set_playlistInfo.Set_PlaylistInfo_To_Update_CreatePlaylist(
             value,

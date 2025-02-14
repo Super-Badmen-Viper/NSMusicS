@@ -360,8 +360,8 @@ async function createWindow() {
         context.mainWindow = await new BrowserWindow({
             width: 1100,
             height: 720,
-            minWidth: 1100,
-            minHeight: 720,
+            minWidth: 346,
+            minHeight: 620,
             frame:false,
             resizable: true,
             webPreferences: {
@@ -376,7 +376,7 @@ async function createWindow() {
             width: 1100,
             height: 720,
             minWidth: 1100,
-            minHeight: 720,
+            minHeight: 620,
             frame:false,
             resizable: true,
             webPreferences: {
