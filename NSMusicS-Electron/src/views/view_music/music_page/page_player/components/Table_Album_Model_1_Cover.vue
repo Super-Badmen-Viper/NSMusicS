@@ -99,7 +99,7 @@ function getAssetImage(firstImage: string) {
         @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
         @mouseup="store_player_audio_logic.player_range_duration_isDragging = false">
         <template #thumb>
-          <n-icon-wrapper :size="0" />
+          <n-icon-wrapper color="white" :size="12" />
         </template>
       </n-slider>
     </n-space>

@@ -328,12 +328,17 @@ export const store_app_configs_logic_load = reactive({
                     store_player_audio_logic.player_fade_value = 2000;
                 }
             } else {
-                if('' + system_Configs_Read.app_Configs.value['player_select'] === 'mpv'){
-                    store_player_audio_logic.player_select = 'mpv'
-                }else if('' + system_Configs_Read.app_Configs.value['player_select'] === 'web'){
-                    store_player_audio_logic.player_select = 'web'
+                if(process.platform != 'linux') {
+                    if ('' + system_Configs_Read.app_Configs.value['player_select'] === 'mpv') {
+                        store_player_audio_logic.player_select = 'mpv'
+                    } else if ('' + system_Configs_Read.app_Configs.value['player_select'] === 'web') {
+                        store_player_audio_logic.player_select = 'web'
+                    } else {
+                        store_player_audio_logic.player_select = 'web'
+                    }
                 }else{
                     store_player_audio_logic.player_select = 'web'
+                    store_player_audio_logic.player_fade_value = 2000;
                 }
             }
         }catch {

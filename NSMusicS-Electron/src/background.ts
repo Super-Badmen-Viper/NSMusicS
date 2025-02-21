@@ -14,25 +14,25 @@ import {
 const electron = require('electron')
 const ipc = electron.ipcMain
 const { session } = require('electron');
-const context = {
+const context_MainWin = {
     allowQuitting: false,
     mainWindow: null
 }
-const showWindow = () => {
-    if (context.mainWindow && !context.mainWindow.isDestroyed()) {
-        context.mainWindow.show()
-        context.mainWindow.focus();
+const showWindow = (mainWindow: any) => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.show()
+        mainWindow.focus();
     }
 }
-const hideWindow = () => {
-    if (context.mainWindow && !context.mainWindow.isDestroyed()) {
-        if (process.platform === 'darwin' && context.mainWindow.isFullScreen()) {
-            context.mainWindow.setFullScreen(false);
-            context.mainWindow.once('leave-full-screen', () => {
-                context.mainWindow.hide();
+const hideWindow = (mainWindow: any) => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+        if (process.platform === 'darwin' && mainWindow.isFullScreen()) {
+            mainWindow.setFullScreen(false);
+            mainWindow.once('leave-full-screen', () => {
+                mainWindow.hide();
             });
         } else {
-            context.mainWindow.hide();
+            mainWindow.hide();
         }
     }
 };
@@ -42,10 +42,10 @@ if (!app.requestSingleInstanceLock()) {
 else {
     app.on('ready', async () => {
         globalShortcut.register('CommandOrControl+Shift+I', () => {
-            if (context.mainWindow.webContents.isDevToolsOpened()) {
-                context.mainWindow.webContents.closeDevTools();
+            if (context_MainWin.mainWindow.webContents.isDevToolsOpened()) {
+                context_MainWin.mainWindow.webContents.closeDevTools();
             } else {
-                context.mainWindow.webContents.openDevTools({
+                context_MainWin.mainWindow.webContents.openDevTools({
                     mode:'detach'
                 });
             }
@@ -62,10 +62,10 @@ else {
         }
 
         app.on('activate', () => {
-            if (context.mainWindow === undefined) {
+            if (context_MainWin.mainWindow === undefined) {
                 createWindow()
             } else {
-                showWindow()
+                showWindow(context_MainWin.mainWindow)
             }
         })
 
@@ -85,11 +85,11 @@ else {
     });
 }
 app.on('second-instance', (event, commandLine, workingDirectory) => {
-    if (context.mainWindow) {
-        showWindow()
+    if (context_MainWin.mainWindow) {
+        showWindow(context_MainWin.mainWindow)
     }
 });
-app.on('before-quit', () => (context.allowQuitting = true))
+app.on('before-quit', () => (context_MainWin.allowQuitting = true))
 app.on('window-all-closed', async () => {
     if (process.platform !== 'darwin') {
         try {
@@ -173,7 +173,7 @@ async function createTray(){
             {
                 label: get_tray_truncateText(tray_menu_label_music, 10),
                 click: () => {
-                    showWindow()
+                    showWindow(context_MainWin.mainWindow)
                 },
                 icon: musicIcon
             },
@@ -183,7 +183,7 @@ async function createTray(){
                 click: () => {
                     if(tray_loading_state) {
                         tray_menu_label_music_check_enter = true
-                        context.mainWindow.webContents.send("tray-music-prev", true);
+                        context_MainWin.mainWindow.webContents.send("tray-music-prev", true);
                     }
                 },
                 icon: prevIcon
@@ -192,7 +192,7 @@ async function createTray(){
                 label: String(tray_menu_label_pause),
                 click: () => {
                     if(tray_loading_state) {
-                        context.mainWindow.webContents.send("tray-music-pause", tray_music_play);
+                        context_MainWin.mainWindow.webContents.send("tray-music-pause", tray_music_play);
                     }
                 },
                 icon: pauseIcon
@@ -202,7 +202,7 @@ async function createTray(){
                 click: () => {
                     if(tray_loading_state) {
                         tray_menu_label_music_check_enter = true
-                        context.mainWindow.webContents.send("tray-music-next", true);
+                        context_MainWin.mainWindow.webContents.send("tray-music-next", true);
                     }
                 },
                 icon: nextIcon
@@ -218,7 +218,7 @@ async function createTray(){
                             if(tray_loading_state) {
                                 tray_template[6].icon = order1Icon;
                                 tray_music_order = 'playback-1'
-                                context.mainWindow.webContents.send("tray-music-order", tray_music_order);
+                                context_MainWin.mainWindow.webContents.send("tray-music-order", tray_music_order);
                             }
                         },
                         icon: order1Icon
@@ -229,7 +229,7 @@ async function createTray(){
                             if(tray_loading_state) {
                                 tray_template[6].icon = order2Icon;
                                 tray_music_order = 'playback-2'
-                                context.mainWindow.webContents.send("tray-music-order", tray_music_order);
+                                context_MainWin.mainWindow.webContents.send("tray-music-order", tray_music_order);
                             }
                         },
                         icon: order2Icon
@@ -240,7 +240,7 @@ async function createTray(){
                             if(tray_loading_state) {
                                 tray_template[6].icon = order3Icon;
                                 tray_music_order = 'playback-3'
-                                context.mainWindow.webContents.send("tray-music-order", tray_music_order);
+                                context_MainWin.mainWindow.webContents.send("tray-music-order", tray_music_order);
                             }
                         },
                         icon: order3Icon
@@ -251,7 +251,7 @@ async function createTray(){
                             if(tray_loading_state) {
                                 tray_template[6].icon = order4Icon;
                                 tray_music_order = 'playback-4'
-                                context.mainWindow.webContents.send("tray-music-order", tray_music_order);
+                                context_MainWin.mainWindow.webContents.send("tray-music-order", tray_music_order);
                             }
                         },
                         icon: order4Icon
@@ -274,8 +274,12 @@ async function createTray(){
                         if(mpv != undefined){
                             await mpv.quit();
                         }
-                    }catch{}
-                    app.quit();
+                    }catch{
+
+                    }finally {
+                        app.quit();
+                    }
+
                 },
                 icon: shutIcon
             },
@@ -290,7 +294,7 @@ async function createTray(){
     let tray_template = get_tray_template();
     let trayContextMenu = Menu.buildFromTemplate(tray_template);
     tray.on('click', () => {
-        showWindow()
+        showWindow(context_MainWin.mainWindow)
     });
     tray.on('right-click', () => {
         get_tray_Icon()
@@ -353,17 +357,19 @@ async function createTray(){
         }
     });
 }
-/// electron-window
+
+/// electron-window-normal
 async function createWindow() {
     /// init BrowserWindow
     if(process.platform != 'darwin') {
-        context.mainWindow = await new BrowserWindow({
+        context_MainWin.mainWindow = await new BrowserWindow({
             width: 1100,
             height: 720,
-            minWidth: 346,
-            minHeight: 620,
+            minWidth: 1100,
+            minHeight: 720,
             frame:false,
             resizable: true,
+            alwaysOnTop: false,
             webPreferences: {
                 nodeIntegration: true,
                 contextIsolation: false,
@@ -372,13 +378,14 @@ async function createWindow() {
         })
     }
     else{
-        context.mainWindow = await new BrowserWindow({
+        context_MainWin.mainWindow = await new BrowserWindow({
             width: 1100,
             height: 720,
             minWidth: 1100,
-            minHeight: 620,
+            minHeight: 720,
             frame:false,
             resizable: true,
+            alwaysOnTop: false,
             webPreferences: {
                 nodeIntegration: true,
                 contextIsolation: false,
@@ -389,22 +396,22 @@ async function createWindow() {
         })
     }
 
-    context.mainWindow.on('close', (event) => {
-        if (!context.allowQuitting) {
+    context_MainWin.mainWindow.on('close', (event) => {
+        if (!context_MainWin.allowQuitting) {
             event.preventDefault()
-            hideWindow()
+            hideWindow(context_MainWin.mainWindow)
         } else {
-            context.mainWindow = undefined
+            context_MainWin.mainWindow = undefined
         }
     })
-    context.mainWindow.setMenu(null)
-    context.mainWindow.setMaximizable(false)
+    context_MainWin.mainWindow.setMenu(null)
+    context_MainWin.mainWindow.setMaximizable(false)
     process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
     if (process.argv[2]) {
-        context.mainWindow.loadURL(process.argv[2])
+        context_MainWin.mainWindow.loadURL(process.argv[2])
     }
     else {
-        context.mainWindow.loadFile('index.html')
+        context_MainWin.mainWindow.loadFile('index.html')
     }
     ///
     ipc.handle('window-get-node-env', async (event) => {
@@ -414,36 +421,36 @@ async function createWindow() {
     let originalBounds: any = null;
     let isFullscreen = false;
     ipc.on('window-min', function () {
-        context.mainWindow.minimize();
+        context_MainWin.mainWindow.minimize();
     });
     ipc.on('window-max', function () {
         if (isFullscreen) {
-            context.mainWindow.setBounds(originalBounds);
+            context_MainWin.mainWindow.setBounds(originalBounds);
             originalBounds = null;
             isFullscreen = false;
-            context.mainWindow.restore();
-        } else if (context.mainWindow.isMaximized()) {
+            context_MainWin.mainWindow.restore();
+        } else if (context_MainWin.mainWindow.isMaximized()) {
             isFullscreen = false;
-            context.mainWindow.restore();
+            context_MainWin.mainWindow.restore();
         } else {
             isFullscreen = false;
-            context.mainWindow.maximize();
+            context_MainWin.mainWindow.maximize();
         }
     });
     ipc.on('window-fullscreen', function () {
         if (isFullscreen) {
-            context.mainWindow.setBounds(originalBounds);
+            context_MainWin.mainWindow.setBounds(originalBounds);
             originalBounds = null;
             isFullscreen = false;
         } else {
-            context.mainWindow.restore();
-            originalBounds = context.mainWindow.getBounds();
+            context_MainWin.mainWindow.restore();
+            originalBounds = context_MainWin.mainWindow.getBounds();
 
             const cursorScreenPoint = screen.getCursorScreenPoint();
             const currentDisplay = screen.getDisplayNearestPoint(cursorScreenPoint);
             const { width, height, x, y } = currentDisplay.bounds;
 
-            context.mainWindow.setBounds({
+            context_MainWin.mainWindow.setBounds({
                 x: x - 1,
                 y: y - 1,
                 width: width + 2,
@@ -454,15 +461,15 @@ async function createWindow() {
     });
     ipc.on('window-close', function () {
         if(process.platform === 'win32'){
-            hideWindow()
+            hideWindow(context_MainWin.mainWindow)
         } else if(process.platform === 'darwin'){
-            hideWindow()
+            hideWindow(context_MainWin.mainWindow)
         } else if(process.platform === 'linux'){
             app.quit();
         }
     })
     ipc.on('window-gc', function () {
-        context.mainWindow.webContents.session.flushStorageData();
+        context_MainWin.mainWindow.webContents.session.flushStorageData();
         setTimeout(clearSessionClearCache, 5000);
     })
     let lastResetTime: number | null = null;
@@ -471,16 +478,16 @@ async function createWindow() {
         const currentTime = Date.now();
         if (!lastResetTime || currentTime - lastResetTime >= RESET_DEBOUNCE_TIME) {
             lastResetTime = currentTime;
-            context.mainWindow.webContents.loadURL('about:blank');
+            context_MainWin.mainWindow.webContents.loadURL('about:blank');
             if (process.argv[2]) {
-                context.mainWindow.loadURL(process.argv[2])
+                context_MainWin.mainWindow.loadURL(process.argv[2])
             } else {
-                context.mainWindow.loadFile('index.html')
+                context_MainWin.mainWindow.loadFile('index.html')
             }
         }
     });
     ipc.on('window-reset-context.mainWindow', function () {
-        context.mainWindow.close();
+        context_MainWin.mainWindow.close();
         createWindow();
     })
     ipc.on('window-reset-all', () => {
@@ -638,6 +645,66 @@ async function createWindow() {
         }catch{ return false }
     });
 }
+/// electron-window-miniplayer
+ipc.on('window-state-normal', function () {
+    context_MainWin.mainWindow.setBounds({
+        width: 1100,
+        height: 720,
+        minWidth: 1100,
+        minHeight: 720,
+        resizable: true,
+        alwaysOnTop: false,
+    });
+});
+// 请不要更改这段诡异的代码，它依靠Electron的BUG运行，呵呵
+let window_state_miniplayer = false
+let window_state_normal_click = 0
+let window_state_miniplayer_click = 0
+let window_state_miniplayer_dbclick = 0
+ipc.on('window-state-miniplayer', () => {
+    const {x, y} = context_MainWin.mainWindow.getBounds();
+    // 每执行一次'window-state-miniplayer'的次数累加才能触发setBounds的正确效果
+    // (3,4：双击)(7：单击)(10)
+    if(window_state_miniplayer){
+        context_MainWin.mainWindow.setBounds({
+            x: x,
+            y: y,
+            width: 1100,
+            height: 720
+        });
+        context_MainWin.mainWindow.setResizable(true);
+        context_MainWin.mainWindow.setAlwaysOnTop(false);
+        if(window_state_normal_click >= 2){
+            window_state_miniplayer_dbclick++;
+            if(window_state_miniplayer_dbclick >= 2){
+                window_state_miniplayer_dbclick = 0;
+                return;
+            }
+            window_state_miniplayer = false
+            window_state_miniplayer_click = 0
+        }
+    }
+    // (1,2：双击)(5,6：双击)(8,9)
+    else{
+        context_MainWin.mainWindow.setBounds({
+            x: x,
+            y: y,
+            width: 346,
+            height: 620
+        });
+        context_MainWin.mainWindow.setResizable(false);
+        context_MainWin.mainWindow.setAlwaysOnTop(true, 'floating', 1);
+        if(window_state_miniplayer_click >= 2){
+            window_state_miniplayer = true;
+            window_state_miniplayer_click = 0;
+        }
+    }
+    window_state_miniplayer_click++;
+    window_state_normal_click++;
+});
+ipc.handle('get-window-state-miniplayer', async (event) => {
+    try { return window_state_miniplayer }catch{ return false }
+});
 
 /// node-mpv
 const mpvAPI = require('node-mpv');
@@ -935,12 +1002,12 @@ async function initNodeMpv(){
         await mpv.start();
         await mpv.pause();
         mpv.on('stopped', () => {
-            context.mainWindow.webContents.send("mpv-stopped", true);
+            context_MainWin.mainWindow.webContents.send("mpv-stopped", true);
         });
     }
 }
 async function createNodeMpv(){
-    ////// mpv services for context.mainWindow
+    ////// mpv services for context_MainWin.mainWindow
     ipc.handle('mpv-init', async (event,filePath) => {
         await initNodeMpv()
     });
@@ -952,7 +1019,7 @@ async function createNodeMpv(){
                     isPlaying = false;
                     if(tray_loading_state) {
                         tray_music_play = false;
-                        context.mainWindow.webContents.send("tray-music-pause", tray_music_play);
+                        context_MainWin.mainWindow.webContents.send("tray-music-pause", tray_music_play);
                     }
                     ///
                     ///

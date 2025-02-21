@@ -88,7 +88,8 @@
                 "player_use_lottie_explain": "(实验性)在播放界面中启用播放动画(会导致占用内存不稳定)",
                 "player_use_playbar_auto_hide": "自动隐藏播放器控制栏",
                 "player_use_playbar_auto_hide_explain": "播放界面中播放器控制栏会自动收起"
-            }
+            },
+            "view_player_mini" : "切换到迷你播放程序"
         }
     }
 }

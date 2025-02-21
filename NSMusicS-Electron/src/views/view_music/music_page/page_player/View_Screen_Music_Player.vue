@@ -1131,7 +1131,7 @@ onBeforeUnmount(() => {
                           @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
                           @mouseup="store_player_audio_logic.player_range_duration_isDragging = false">
                         <template #thumb>
-                          <n-icon-wrapper :size="0" />
+                          <n-icon-wrapper color="white" :size="12" />
                         </template>
                       </n-slider>
                       <n-space style="width: 46px;">
@@ -1285,34 +1285,34 @@ onBeforeUnmount(() => {
                       {{ store_player_audio_info.this_audio_artist_name }} - {{ store_player_audio_info.this_audio_album_name }}
                     </div>
                     <n-slider
-                        style="
-                        width: 46vh;
-                        --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
-                        --n-rail-height: 4px;
-                        --n-handle-size: 20px;
-                        margin-top: -6px;margin-left: calc(-74vh);
-                        border-radius: 10px;"
-                        v-model:value="store_player_audio_logic.slider_singleValue"
-                        :min="0" :max="100"
-                        :format-tooltip="(value) => {
+                      style="
+                      width: 46vh;
+                      --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
+                      --n-rail-height: 4px;
+                      --n-handle-size: 20px;
+                      margin-top: -6px;margin-left: calc(-74vh);
+                      border-radius: 10px;"
+                      v-model:value="store_player_audio_logic.slider_singleValue"
+                      :min="0" :max="100"
+                      :format-tooltip="(value) => {
                         return store_player_audio_logic.formatTime(
                           (value / 100) * store_player_audio_logic.player.isDuration
                         );
                       }"
-                        :on-dragend="()=>{
+                      :on-dragend="()=>{
                         if(store_player_audio_logic.slider_singleValue >= 99.5 || store_player_audio_logic.slider_singleValue == 0){
                           store_player_audio_logic.player_is_play_ended = true;
                           store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
                         }
                         store_player_audio_logic.player_range_duration_isDragging = false;
                       }"
-                        @click="()=>{
+                      @click="()=>{
                         store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
                       }"
-                        @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
-                        @mouseup="store_player_audio_logic.player_range_duration_isDragging = false">
+                      @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
+                      @mouseup="store_player_audio_logic.player_range_duration_isDragging = false">
                       <template #thumb>
-                        <n-icon-wrapper :size="0" />
+                        <n-icon-wrapper color="white" :size="12" />
                       </template>
                     </n-slider>
                     <div style="width: 46vh;text-align: left;margin-top: -4px;margin-left: calc(-74vh);">

@@ -10,7 +10,7 @@
     SlideMicrophone32Regular,
     TextIndentIncreaseLtr20Filled,
     Settings48Regular,
-    TagMultiple24Regular,
+    WindowNew16Regular,
   } from '@vicons/fluent'
   import {
     AlbumFilled,
@@ -722,6 +722,7 @@
   import {store_player_tag_modify} from "@/views/view_music/music_page/page_player/store/store_player_tag_modify";
   import View_Edit_Tag from "@/views/view_music/music_drawer/View_Edit_Tag.vue";
   import View_Player_Effect from "@/views/view_music/music_drawer/View_Player_Effect.vue";
+  import View_Mini_Music_Player from "@/views/view_music/music_page/page_player/View_Mini_Music_Player.vue";
 
   ////// Load Configs
   const { locale } = useI18n({
@@ -909,13 +910,14 @@
             <!--Top Bar-->
             <div class="bar_top_setapp"
                  style="background-color: transparent">
-              <n-tooltip trigger="hover" placement="top">
+              <n-tooltip trigger="hover" placement="top"
+                         v-if="!store_app_configs_info.window_state_miniplayer">
                 <template #trigger>
                   <n-badge :value="store_app_configs_info.version_updated" :offset="[-17, -4]"
                            :type="store_app_configs_info.version_updated === 1 ? 'error' : 'info'"
                            :style="{
                           marginRight: isElectron
-                            ? (store_app_configs_info.desktop_system_kind !== 'darwin' ? '222px' : '74px')
+                            ? (store_app_configs_info.desktop_system_kind !== 'darwin' ? '257px' : '99px')
                             : '46px'
                        }"
                            style="
@@ -955,7 +957,8 @@
 <!--                  </template>-->
 <!--                  &lt;!&ndash;<span style="font-weight: 500;">{{ $t('setting.clearQueryCache') }}</span>&ndash;&gt;-->
 <!--                </n-button>-->
-                <n-tooltip trigger="hover" placement="top">
+                <n-tooltip trigger="hover" placement="top"
+                           v-if="!store_app_configs_info.window_state_miniplayer">
                   <template #trigger>
                     <n-button quaternary circle
                               :style="{ marginRight: store_app_configs_info.desktop_system_kind != 'darwin' ? '4px' : '30px' }"
@@ -968,7 +971,7 @@
                   {{ $t('LabelDashboardTheme') }}
                 </n-tooltip>
                 <n-tooltip trigger="hover" placement="top"
-                           v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'">
+                           v-if="isElectron && !store_app_configs_info.window_state_miniplayer && store_app_configs_info.desktop_system_kind != 'darwin'">
                   <template #trigger>
                     <n-button quaternary circle style="margin-right:4px;"
                               @click="() => {
@@ -991,6 +994,27 @@
                     </n-button>
                   </template>
                   {{ $t('ButtonFullscreen') }}
+                </n-tooltip>
+                <n-tooltip trigger="hover" placement="top"
+                           v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'">
+                  <template #trigger>
+                    <n-button quaternary circle style="margin-right:4px"
+                              @click="async () => {
+                            if(isElectron) {
+                              // 请不要更改这段诡异的代码，它依靠Electron的BUG运行，呵呵
+                              ipcRenderer.send('window-state-miniplayer');
+                              ipcRenderer.send('window-state-miniplayer');
+                              //
+                              store_app_configs_info.window_state_miniplayer = !store_app_configs_info.window_state_miniplayer
+                              //await ipcRenderer.invoke('get-window-state-miniplayer');
+                            }
+                          }">
+                      <template #icon>
+                        <n-icon size="24" :depth="2"><WindowNew16Regular/></n-icon>
+                      </template>
+                    </n-button>
+                  </template>
+                  {{ $t('nsmusics.view_player.view_player_mini') }}
                 </n-tooltip>
                 <n-tooltip trigger="hover" placement="top"
                            v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'">
@@ -1070,6 +1094,15 @@
                 v-if="store_player_appearance.player_show"
                 :style="{ height: `calc(100vh - ${store_player_appearance.player_show_hight_animation_value}vh)` }">
             </View_Screen_Music_Player>
+          </n-config-provider>
+          <!-- bottom PlayerBar and PlayerView -->
+          <n-config-provider
+              :theme="store_app_configs_info.theme_app"
+              style="z-index: 211;">
+            <View_Mini_Music_Player
+                v-if="store_app_configs_info.window_state_miniplayer"
+                class="view_music_player" style="height: 100vh;">
+            </View_Mini_Music_Player>
           </n-config-provider>
         </n-layout>
       </n-message-provider>
