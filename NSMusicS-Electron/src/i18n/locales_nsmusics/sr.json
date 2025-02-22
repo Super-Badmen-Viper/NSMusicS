@@ -88,7 +88,8 @@
                 "player_use_lottie_explain": "(Eksperimentalno) Omogućite animaciju u interfejsu za reprodukovanje (može dovesti do nestabilnog korišćenja memorije)",
                 "player_use_playbar_auto_hide": "Аутоматски сакрај контролну траку плејера",
                 "player_use_playbar_auto_hide_explain": "Контролна трака плејера ће се аутоматски сажимати у интерфејсу пуштања"
-            }
+            },
+            "view_player_mini": "Пређи на мини пројектор"
         }
     }
 }

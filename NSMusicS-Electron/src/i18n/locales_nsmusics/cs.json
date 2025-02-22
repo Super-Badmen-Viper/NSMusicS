@@ -88,7 +88,8 @@
                 "player_use_lottie_explain": "(Experimentální) Povolit animace při přehrávání na rozhraní (může způsobit nestabilní využití paměti)",
                 "player_use_playbar_auto_hide": "Automaticky skrýt ovládací pruhu přehrávače",
                 "player_use_playbar_auto_hide_explain": "Ovládací pruh přehrávače se automaticky sbalí v přehrávacím rozhraní"
-            }
+            },
+            "view_player_mini": "Přepnout na minipřehrávač"
         }
     }
 }

@@ -15,6 +15,9 @@ import {store_server_user_model} from "../../../../../data/data_stores/server/st
 
 export const store_player_audio_logic = reactive({
     player: new Audio_node_mpv(),
+    player_state_play_click: false,
+    player_state_skip_back_click: false,
+    player_state_skip_forward_click: false,
 
     player_kind: [
         { label: 'mpv', value: 'mpv' },

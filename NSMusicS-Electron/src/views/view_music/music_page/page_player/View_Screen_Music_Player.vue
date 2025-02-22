@@ -2,7 +2,7 @@
 ////// this_view resource
 import {
   FullScreenMaximize24Filled,
-  FullScreenMinimize24Filled,
+  FullScreenMinimize24Filled, WindowNew16Regular,
 } from '@vicons/fluent'
 import {
   MotionPhotosAutoOutlined,
@@ -423,6 +423,7 @@ import player_theme_4_png from '@/assets/img/player_theme_4.png'
 import Animation_1715591164841 from '@/assets/lottie_json/Animation - 1715591164841.json'
 import Animation_1715392202806 from '@/assets/lottie_json/Animation - 1715392202806.json'
 import Animation_1715417974362 from '@/assets/lottie_json/Animation - 1715417974362.json'
+import {store_player_appearance} from "@/views/view_music/music_page/page_player/store/store_player_appearance";
 const player_theme_1 = ref<PlayerTheme_LyricItem>(
     {
       id: 0,
@@ -557,8 +558,10 @@ const handleMouseMove = () => {
   store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false
   clearInterval(timer_auto_hidden);
   timer_auto_hidden = setInterval(() => {
-    if(store_player_appearance.player_use_playbar_auto_hide) {
-      store_player_appearance.player_collapsed_action_bar_of_Immersion_model = true
+    if(store_player_appearance.player_show) {
+      if (store_player_appearance.player_use_playbar_auto_hide) {
+        store_player_appearance.player_collapsed_action_bar_of_Immersion_model = true
+      }
     }
   }, 1000);
 };
@@ -944,6 +947,30 @@ onBeforeUnmount(() => {
                 </n-button>
               </template>
               {{ $t('ButtonFullscreen') }}
+            </n-tooltip>
+            <n-tooltip trigger="hover" placement="top"
+                       v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'">
+              <template #trigger>
+                <n-button quaternary circle style="margin-right:4px"
+                          @click="async () => {
+                              if(isElectron) {
+                                // 请不要更改这段诡异的代码，它依靠Electron的BUG运行，呵呵
+                                store_app_configs_info.window_state_miniplayer_card = false
+                                store_app_configs_info.window_state_miniplayer_desktop_lyric = false
+                                store_app_configs_info.window_state_miniplayer_album = false
+                                ipcRenderer.send('window-state-miniplayer');
+                                ipcRenderer.send('window-state-miniplayer');
+                                //
+                                store_app_configs_info.window_state_miniplayer = !store_app_configs_info.window_state_miniplayer
+                                //await ipcRenderer.invoke('get-window-state-miniplayer');
+                              }
+                            }">
+                  <template #icon>
+                    <n-icon size="24" :depth="3"><WindowNew16Regular/></n-icon>
+                  </template>
+                </n-button>
+              </template>
+              {{ $t('nsmusics.view_player.view_player_mini') }}
             </n-tooltip>
             <n-tooltip trigger="hover" placement="top"
                        v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'">
@@ -1364,8 +1391,8 @@ onBeforeUnmount(() => {
                       <n-list-item
                           class="lyrics_info"
                           :style="{
-                          textAlign: store_player_appearance.player_collapsed_album ? 'center' : 'left',
-                        }"
+                            textAlign: store_player_appearance.player_collapsed_album ? 'center' : 'left',
+                          }"
                           v-for="(item, index) in store_player_audio_info.this_audio_lyrics_info_line_font"
                           @click="handleItemDbClick(index)">
                         <div class="lyrics_text_active">

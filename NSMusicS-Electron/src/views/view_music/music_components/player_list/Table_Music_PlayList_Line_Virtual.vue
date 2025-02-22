@@ -104,6 +104,7 @@ import {
 } from "@/views/view_music/music_page/page_media/store/store_view_media_page_fetchData";
 import {store_player_audio_logic} from "@/views/view_music/music_page/page_player/store/store_player_audio_logic";
 import {store_view_media_page_info} from "@/views/view_music/music_page/page_media/store/store_view_media_page_info";
+import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
 const contextmenu = ref(null)
 async function update_playlist_addMediaFile(id: any, playlist_id: any){
   try{
@@ -245,7 +246,9 @@ onMounted(()=>{
       </v-contextmenu>
       <DynamicScroller v-if="!store_playlist_list_info.playlist_DragSort_Model"
         class="table" ref="scrollbar"
-        style="width: 488px;z-index: 0"
+        :style="{
+          width: store_app_configs_info.window_state_miniplayer_playlist ? '280px' : '488px',
+        }"
         :items="store_playlist_list_info.playlist_MediaFiles_temporary"
         key-field="play_id"
         :minItemSize="50"
@@ -260,7 +263,12 @@ onMounted(()=>{
             class="message"
             v-contextmenu:contextmenu @contextmenu.prevent="store_playlist_list_info.playlist_Menu_Item_Id = item.id"
             @Dblclick="handleItemDbClick(item,index)">
-            <div class="media_info">
+            <div
+              :style="{
+                width: store_app_configs_info.window_state_miniplayer_playlist ? '280px' : '488px',
+                height: store_app_configs_info.window_state_miniplayer_playlist ? '46px' : '70px'
+              }"
+              class="media_info">
               <div class="lottie_pkay_inlist" v-show="item.playing"
                 style="
                   position: absolute;bottom:14px;right:36px;
@@ -269,8 +277,12 @@ onMounted(()=>{
 
               </div>
               <div
-                style="margin-left: 10px;
-                  width: 58px;height: 58px;
+                :style="{
+                  width: store_app_configs_info.window_state_miniplayer_playlist ? '40px' : '58px',
+                  height: store_app_configs_info.window_state_miniplayer_playlist ? '40px' : '58px',
+                  marginLeft: store_app_configs_info.window_state_miniplayer_playlist ? '4px' : '10px',
+                }"
+                style="
                   border-radius: 4px; border: 1.5px solid #FFFFFF20;
                   overflow: hidden;">
                 <img
@@ -279,19 +291,44 @@ onMounted(()=>{
                   @error="handleImageError(item)"
                   style="width: 100%; height: 100%; object-fit: cover;"/>
               </div>
-              <div class="title_playlist" style="width: 240px;">
+              <div
+                :style="{
+                  width: store_app_configs_info.window_state_miniplayer_playlist ? '150px' : '240px',
+                  fontSize: store_app_configs_info.window_state_miniplayer_playlist ? '13px' : '15px',
+                }"
+                class="title_playlist">
                 <span
-                    style="font-size: 16px;font-weight: 600;"
-                    @click="handleItemClick_title(item.title)">
+                  :style="{
+                    fontSize: store_app_configs_info.window_state_miniplayer_playlist ? '13px' : '16px',
+                    fontWeight: store_app_configs_info.window_state_miniplayer_playlist ? '400' : '600',
+                  }"
+                  @click="handleItemClick_title(item.title)">
                   {{ item.title }}
                 </span>
                 <br>
                 <template v-for="artist in item.artist.split(/[\/|｜]/)">
-                  <span @click="handleItemClick_artist(artist)">{{ artist + '&nbsp' }}</span>
+                  <span
+                    :style="{
+                      color: store_app_configs_info.window_state_miniplayer_playlist ? '#A4A4A4' : '#FFFFFF',
+                    }"
+                    @click="handleItemClick_artist(artist)">
+                    {{ artist + '&nbsp' }}
+                  </span>
                 </template>
               </div>
-              <span class="duration_txt" style="text-align: left;font-size: 15px;">{{ item.duration_txt }}</span>
-              <span class="index" style="text-align: left;font-size: 15px;">{{ index + 1 }}</span>
+              <span class="duration_txt"
+                    :style="{
+                      fontSize: store_app_configs_info.window_state_miniplayer_playlist ? '13px' : '15px',
+                      color: store_app_configs_info.window_state_miniplayer_playlist ? '#A4A4A4' : '#FFFFFF',
+                    }"
+                    style="text-align: left;">
+                {{ item.duration_txt }}
+              </span>
+              <span class="index"
+                    v-if="!store_app_configs_info.window_state_miniplayer_playlist"
+                    style="text-align: left;font-size: 15px;">
+                {{ index + 1 }}
+              </span>
             </div>
           </DynamicScrollerItem>
         </template>
@@ -311,8 +348,10 @@ onMounted(()=>{
         <VueDraggable
           class="table"
           :animation="150"
+          :style="{
+            width: store_app_configs_info.window_state_miniplayer_playlist ? '250px' : '460px',
+          }"
           style="
-            width: 460px;
             position: absolute;
             overflow-y: auto;overflow-x: hidden"
           @update="onChange"
@@ -321,28 +360,60 @@ onMounted(()=>{
               v-for="(item, index) in store_playlist_list_info.playlist_MediaFiles_temporary_Sort_Items"
               :key="item.id"
               class="message">
-            <div class="media_info">
-              <div style="margin-left: 10px;
-                          width: 58px;height: 58px;
-                          border-radius: 4px; border: 1.5px solid #FFFFFF20;
-                          overflow: hidden;">
+            <div
+              :style="{
+                width: store_app_configs_info.window_state_miniplayer_playlist ? '280px' : '488px',
+                height: store_app_configs_info.window_state_miniplayer_playlist ? '46px' : '70px'
+              }"
+              class="media_info">
+              <div
+                  :style="{
+                    width: store_app_configs_info.window_state_miniplayer_playlist ? '40px' : '58px',
+                    height: store_app_configs_info.window_state_miniplayer_playlist ? '40px' : '58px',
+                    marginLeft: store_app_configs_info.window_state_miniplayer_playlist ? '4px' : '10px',
+                  }"
+                  style="
+                  border-radius: 4px; border: 1.5px solid #FFFFFF20;
+                  overflow: hidden;">
                 <img
                     :key="item.absoluteIndex"
                     :src="item.medium_image_url"
                     @error="handleImageError(item)"
                     style="width: 100%; height: 100%; object-fit: cover;"/>
               </div>
-              <div class="title_playlist">
+              <div
+                :style="{
+                  width: store_app_configs_info.window_state_miniplayer_playlist ? '100px' : '200px',
+                  fontSize: store_app_configs_info.window_state_miniplayer_playlist ? '13px' : '15px',
+                }"
+                class="title_playlist">
                 <span @click="handleItemClick_title(item.title)">
                   {{ item.title }}
                 </span>
                 <br>
                 <template v-for="artist in item.artist.split(/[\/|｜]/)">
-                  <span @click="handleItemClick_artist(artist)">{{ artist + '&nbsp' }}</span>
+                  <span
+                    :style="{
+                      color: store_app_configs_info.window_state_miniplayer_playlist ? '#A4A4A4' : '#FFFFFF',
+                    }"
+                    @click="handleItemClick_artist(artist)">
+                    {{ artist + '&nbsp' }}
+                  </span>
                 </template>
               </div>
-              <span class="duration_txt" style="text-align: left;font-size: 15px;">{{ item.duration_txt }}</span>
-              <span class="index" style="text-align: left;font-size: 15px;">{{ item.absoluteIndex }}</span>
+              <span class="duration_txt"
+                    :style="{
+                      fontSize: store_app_configs_info.window_state_miniplayer_playlist ? '13px' : '15px',
+                      color: store_app_configs_info.window_state_miniplayer_playlist ? '#A4A4A4' : '#FFFFFF',
+                    }"
+                    style="text-align: left;">
+                {{ item.duration_txt }}
+              </span>
+              <span class="index"
+                    v-if="!store_app_configs_info.window_state_miniplayer_playlist"
+                    style="text-align: left;font-size: 15px;">
+                {{ index + 1 }}
+              </span>
             </div>
           </div>
         </VueDraggable>
@@ -365,7 +436,6 @@ onMounted(()=>{
   align-items: left;
 }
 .media_info {
-  height: 70px;
   display: flex;
   align-items: center;
   border-radius: 4px;
@@ -386,8 +456,6 @@ onMounted(()=>{
 .title_playlist{
   margin-left: 10px;
   text-align: left;
-  width: 200px;
-  font-size: 15px;
   overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
 }
 .title_playlist :hover{

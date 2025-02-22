@@ -17,7 +17,12 @@ export const store_app_configs_info = reactive({
     window_innerHeight: 765,
     window_max: false,
     window_full: false,
+
     window_state_miniplayer: false,
+    window_state_miniplayer_card: false,
+    window_state_miniplayer_desktop_lyric: false,
+    window_state_miniplayer_album: false,
+    window_state_miniplayer_playlist: false,
 
     update_show: false,
     version: '',

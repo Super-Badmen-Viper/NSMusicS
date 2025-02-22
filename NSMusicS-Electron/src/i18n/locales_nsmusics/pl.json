@@ -88,7 +88,8 @@
                 "player_use_lottie_explain": "(Eksperymentalne) Włącz animację odtwarzania w interfejsie (może powodować niestabilne zużycie pamięci)",
                 "player_use_playbar_auto_hide": "Automatycznie ukryj pasek sterowania odtwarzaczem",
                 "player_use_playbar_auto_hide_explain": "Pasek sterowania odtwarzaczem będzie automatycznie zwijał się w interfejsie odtwarzania"
-            }
+            },
+            "view_player_mini": "Przełącz na mini odtwarzacz"
         }
     }
 }

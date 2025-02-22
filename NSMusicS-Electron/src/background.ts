@@ -661,7 +661,7 @@ let window_state_miniplayer = false
 let window_state_normal_click = 0
 let window_state_miniplayer_click = 0
 let window_state_miniplayer_dbclick = 0
-ipc.on('window-state-miniplayer', () => {
+ipc.on('window-state-miniplayer', function (){
     const {x, y} = context_MainWin.mainWindow.getBounds();
     // 每执行一次'window-state-miniplayer'的次数累加才能触发setBounds的正确效果
     // (3,4：双击)(7：单击)(10)
@@ -701,10 +701,49 @@ ipc.on('window-state-miniplayer', () => {
     }
     window_state_miniplayer_click++;
     window_state_normal_click++;
+    context_MainWin.mainWindow.setOpacity(1)
 });
-ipc.handle('get-window-state-miniplayer', async (event) => {
-    try { return window_state_miniplayer }catch{ return false }
+ipc.handle('window-state-miniplayer-show', async (event) => {
+    const {x, y} = context_MainWin.mainWindow.getBounds();
+    context_MainWin.mainWindow.setBounds({
+        x: x,
+        y: y,
+        width: 346,
+        height: 620
+    });
+    context_MainWin.mainWindow.setOpacity(1)
 });
+ipc.handle('window-state-miniplayer-card-show', async (event) => {
+    const {x, y} = context_MainWin.mainWindow.getBounds();
+    context_MainWin.mainWindow.setBounds({
+        x: x,
+        y: y,
+        width: 346,
+        height: 150
+    });
+    context_MainWin.mainWindow.setOpacity(1)
+});
+ipc.handle('window-state-miniplayer-desktop-lyric-show', async (event) => {
+    const {x, y} = context_MainWin.mainWindow.getBounds();
+    context_MainWin.mainWindow.setBounds({
+        x: x,
+        y: y,
+        width: 1100,
+        height: 200
+    });
+    context_MainWin.mainWindow.setOpacity(0.75)
+});
+ipc.handle('window-state-miniplayer-album-show', async (event) => {
+    const {x, y} = context_MainWin.mainWindow.getBounds();
+    context_MainWin.mainWindow.setBounds({
+        x: x,
+        y: y,
+        width: 346,
+        height: 334
+    });
+    context_MainWin.mainWindow.setOpacity(1)
+});
+
 
 /// node-mpv
 const mpvAPI = require('node-mpv');

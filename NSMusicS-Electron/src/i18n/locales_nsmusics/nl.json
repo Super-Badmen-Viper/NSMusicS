@@ -88,7 +88,8 @@
                 "player_use_lottie_explain": "(Experimenteel) Schakel animatie in tijdens afspelen in de interface (kan leiden tot onstabiele geheugengebruik)",
                 "player_use_playbar_auto_hide": "Verberg automatisch de besturingsbalken van de speler",
                 "player_use_playbar_auto_hide_explain": "De besturingsbalken van de speler zal automatisch inklappen in de afspeelinterface"
-            }
+            },
+            "view_player_mini": "Wissel naar minivormgeving"
         }
     }
 }

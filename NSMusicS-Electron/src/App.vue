@@ -1002,11 +1002,15 @@
                               @click="async () => {
                             if(isElectron) {
                               // 请不要更改这段诡异的代码，它依靠Electron的BUG运行，呵呵
+                              store_app_configs_info.window_state_miniplayer_card = false
+                              store_app_configs_info.window_state_miniplayer_desktop_lyric = false
+                              store_app_configs_info.window_state_miniplayer_album = false
                               ipcRenderer.send('window-state-miniplayer');
                               ipcRenderer.send('window-state-miniplayer');
                               //
                               store_app_configs_info.window_state_miniplayer = !store_app_configs_info.window_state_miniplayer
                               //await ipcRenderer.invoke('get-window-state-miniplayer');
+                              store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false
                             }
                           }">
                       <template #icon>
@@ -1091,7 +1095,7 @@
               style="z-index: 203;">
             <View_Screen_Music_Player
                 class="view_music_player"
-                v-if="store_player_appearance.player_show"
+                v-if="store_player_appearance.player_show && !store_app_configs_info.window_state_miniplayer"
                 :style="{ height: `calc(100vh - ${store_player_appearance.player_show_hight_animation_value}vh)` }">
             </View_Screen_Music_Player>
           </n-config-provider>
@@ -1104,9 +1108,29 @@
                 class="view_music_player" style="height: 100vh;">
             </View_Mini_Music_Player>
           </n-config-provider>
+          <n-config-provider :theme="darkTheme">
+            <n-drawer
+              v-model:show="store_app_configs_info.window_state_miniplayer_playlist"
+              :width="310"
+              z-index="100"
+              style="
+                  border-radius: 12px 0 0 12px;
+                  border: 1.5px solid #FFFFFF20;
+                  background-color: rgba(127, 127, 127, 0.1);
+                  backdrop-filter: blur(10px);
+                  margin-top: 88px;margin-bottom:88px;
+                ">
+              <n-drawer-content style="z-index: 100;">
+                <template #default>
+                  <Bar_Music_PlayList style="z-index: 100;">
+                  </Bar_Music_PlayList>
+                </template>
+              </n-drawer-content>
+            </n-drawer>
+          </n-config-provider>
         </n-layout>
       </n-message-provider>
-    </n-config-provider  >
+    </n-config-provider>
 
     <!-- right drwaer -->
     <n-config-provider :theme="darkTheme">

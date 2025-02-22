@@ -371,6 +371,19 @@ if(isElectron) {
     store_player_audio_logic.play_order = order;
   });
 }
+let unwatch_player_state_play_click = watch(() => store_player_audio_logic.player_state_play_click, (newValue) => {
+  Init_Audio_Player()
+});
+let unwatch_player_click_state_of_play_skip_back = watch(() => store_player_audio_logic.player_click_state_of_play_skip_back, (newValue) => {
+  debounce(async (event, args) => {
+    await play_skip_back_click(), 300
+  })
+});
+let unwatch_player_click_state_of_play_skip_forward = watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (newValue) => {
+  debounce(async (event, args) => {
+    await play_skip_forward_click(), 300
+  })
+});
 ////// player_configs player_button order area
 import { useMessage } from 'naive-ui'
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";

@@ -88,7 +88,8 @@
                 "player_use_lottie_explain": "(Expérimental) Activez l'animation de lecture dans l'interface (peut causer une utilisation de la mémoire instable)",
                 "player_use_playbar_auto_hide": "Masquer automatiquement la barre de contrôle du lecteur",
                 "player_use_playbar_auto_hide_explain": "La barre de contrôle du lecteur se rétractera automatiquement dans l'interface de lecture"
-            }
+            },
+            "view_player_mini": "Passer au lecteur mini"
         }
     }
 }

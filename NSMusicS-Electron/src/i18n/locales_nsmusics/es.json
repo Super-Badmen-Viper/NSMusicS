@@ -88,7 +88,8 @@
                 "player_use_lottie_explain": "(Experimental) Habilita la animación de reproducción en la interfaz (puede causar un uso de memoria inestable)",
                 "player_use_playbar_auto_hide": "Ocultar automáticamente la barra de control del reproductor",
                 "player_use_playbar_auto_hide_explain": "La barra de control del reproductor se retractará automáticamente en la interfaz de reproducción"
-            }
+            },
+            "view_player_mini": "Cambiar a Reproductor Mini"
         }
     }
 }
