@@ -74,12 +74,10 @@ else {
 
         await initModifyMediaTag();
 
-        const devInnerHeight: number = 1080.0;
-        const devDevicePixelRatio: number = 1.0;
-        const devScaleFactor: number = 1.3;
-        const scaleFactor: number = require('electron').screen.getPrimaryDisplay().scaleFactor;
-        const zoomFactor: number = (window.innerHeight / devInnerHeight) * (window.devicePixelRatio / devDevicePixelRatio) * (devScaleFactor / scaleFactor);
-        require('electron').webFrame.setZoomFactor(zoomFactor);
+        context_MainWin.mainWindow.once('ready-to-show', () => {
+            context_MainWin.mainWindow.webContents.setZoomFactor(1);
+            context_MainWin.mainWindow.show()
+        })
 
         setTimeout(clearSessionClearCache, 5000);
     });
@@ -368,6 +366,7 @@ async function createWindow() {
             minWidth: 1100,
             minHeight: 720,
             frame:false,
+            show: false,
             resizable: true,
             alwaysOnTop: false,
             webPreferences: {
@@ -384,6 +383,7 @@ async function createWindow() {
             minWidth: 1100,
             minHeight: 720,
             frame:false,
+            show: false,
             resizable: true,
             alwaysOnTop: false,
             webPreferences: {
@@ -646,64 +646,11 @@ async function createWindow() {
     });
 }
 /// electron-window-miniplayer
-ipc.on('window-state-normal', function () {
-    context_MainWin.mainWindow.setBounds({
-        width: 1100,
-        height: 720,
-        minWidth: 1100,
-        minHeight: 720,
-        resizable: true,
-        alwaysOnTop: false,
-    });
-});
 // 请不要更改这段诡异的代码，它依靠Electron的BUG运行，呵呵
-let window_state_miniplayer = false
-let window_state_normal_click = 0
-let window_state_miniplayer_click = 0
-let window_state_miniplayer_dbclick = 0
-ipc.on('window-state-miniplayer', function (){
-    const {x, y} = context_MainWin.mainWindow.getBounds();
-    // 每执行一次'window-state-miniplayer'的次数累加才能触发setBounds的正确效果
-    // (3,4：双击)(7：单击)(10)
-    if(window_state_miniplayer){
-        context_MainWin.mainWindow.setBounds({
-            x: x,
-            y: y,
-            width: 1100,
-            height: 720
-        });
-        context_MainWin.mainWindow.setResizable(true);
-        context_MainWin.mainWindow.setAlwaysOnTop(false);
-        if(window_state_normal_click >= 2){
-            window_state_miniplayer_dbclick++;
-            if(window_state_miniplayer_dbclick >= 2){
-                window_state_miniplayer_dbclick = 0;
-                return;
-            }
-            window_state_miniplayer = false
-            window_state_miniplayer_click = 0
-        }
-    }
-    // (1,2：双击)(5,6：双击)(8,9)
-    else{
-        context_MainWin.mainWindow.setBounds({
-            x: x,
-            y: y,
-            width: 346,
-            height: 620
-        });
-        context_MainWin.mainWindow.setResizable(false);
-        context_MainWin.mainWindow.setAlwaysOnTop(true, 'floating', 1);
-        if(window_state_miniplayer_click >= 2){
-            window_state_miniplayer = true;
-            window_state_miniplayer_click = 0;
-        }
-    }
-    window_state_miniplayer_click++;
-    window_state_normal_click++;
-    context_MainWin.mainWindow.setOpacity(1)
-});
-ipc.handle('window-state-miniplayer-show', async (event) => {
+ipc.on('window-state-miniplayer-open', function (){
+    context_MainWin.mainWindow.setResizable(false);
+    context_MainWin.mainWindow.setAlwaysOnTop(true, 'floating', 1);
+    context_MainWin.mainWindow.setMinimumSize(346, 620);
     const {x, y} = context_MainWin.mainWindow.getBounds();
     context_MainWin.mainWindow.setBounds({
         x: x,
@@ -713,7 +660,32 @@ ipc.handle('window-state-miniplayer-show', async (event) => {
     });
     context_MainWin.mainWindow.setOpacity(1)
 });
+ipc.on('window-state-miniplayer-hidden', function (){
+    context_MainWin.mainWindow.setResizable(true);
+    context_MainWin.mainWindow.setAlwaysOnTop(false);
+    context_MainWin.mainWindow.setMinimumSize(1100, 720);
+    const {x, y} = context_MainWin.mainWindow.getBounds();
+    context_MainWin.mainWindow.setBounds({
+        x: x,
+        y: y,
+        width: 1100,
+        height: 720
+    });
+    context_MainWin.mainWindow.setOpacity(1)
+});
+ipc.handle('window-state-miniplayer-show', async (event) => {
+    const {x, y} = context_MainWin.mainWindow.getBounds();
+    context_MainWin.mainWindow.setMinimumSize(346, 620);
+    context_MainWin.mainWindow.setBounds({
+        x: x,
+        y: y,
+        width: 346,
+        height: 620
+    });
+    context_MainWin.mainWindow.setOpacity(1)
+});
 ipc.handle('window-state-miniplayer-card-show', async (event) => {
+    context_MainWin.mainWindow.setMinimumSize(346, 150);
     const {x, y} = context_MainWin.mainWindow.getBounds();
     context_MainWin.mainWindow.setBounds({
         x: x,
@@ -724,6 +696,7 @@ ipc.handle('window-state-miniplayer-card-show', async (event) => {
     context_MainWin.mainWindow.setOpacity(1)
 });
 ipc.handle('window-state-miniplayer-desktop-lyric-show', async (event) => {
+    context_MainWin.mainWindow.setMinimumSize(1100, 200);
     const {x, y} = context_MainWin.mainWindow.getBounds();
     context_MainWin.mainWindow.setBounds({
         x: x,
@@ -734,6 +707,7 @@ ipc.handle('window-state-miniplayer-desktop-lyric-show', async (event) => {
     context_MainWin.mainWindow.setOpacity(0.75)
 });
 ipc.handle('window-state-miniplayer-album-show', async (event) => {
+    context_MainWin.mainWindow.setMinimumSize(346, 334);
     const {x, y} = context_MainWin.mainWindow.getBounds();
     context_MainWin.mainWindow.setBounds({
         x: x,

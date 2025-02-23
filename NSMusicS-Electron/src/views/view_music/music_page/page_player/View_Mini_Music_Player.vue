@@ -677,8 +677,8 @@ onBeforeUnmount(() => {
                                 store_app_configs_info.window_state_miniplayer_album = false
                                 show_mini_album_model = false
                                 collapsed_action_bar = true
-                                ipcRenderer.send('window-state-miniplayer');
-                                ipcRenderer.send('window-state-miniplayer');
+                                ipcRenderer.send('window-state-miniplayer-hidden');
+                                ipcRenderer.send('window-state-miniplayer-hidden');
                                 //
                                 store_app_configs_info.window_state_miniplayer = !store_app_configs_info.window_state_miniplayer
                                 //await ipcRenderer.invoke('get-window-state-miniplayer');

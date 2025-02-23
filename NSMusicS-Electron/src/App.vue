@@ -1005,8 +1005,8 @@
                               store_app_configs_info.window_state_miniplayer_card = false
                               store_app_configs_info.window_state_miniplayer_desktop_lyric = false
                               store_app_configs_info.window_state_miniplayer_album = false
-                              ipcRenderer.send('window-state-miniplayer');
-                              ipcRenderer.send('window-state-miniplayer');
+                              ipcRenderer.send('window-state-miniplayer-open');
+                              ipcRenderer.send('window-state-miniplayer-open');
                               //
                               store_app_configs_info.window_state_miniplayer = !store_app_configs_info.window_state_miniplayer
                               //await ipcRenderer.invoke('get-window-state-miniplayer');
