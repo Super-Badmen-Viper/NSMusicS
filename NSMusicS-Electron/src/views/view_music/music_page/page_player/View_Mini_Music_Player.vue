@@ -1110,7 +1110,18 @@ onBeforeUnmount(() => {
                     <template #trigger>
                       <n-button quaternary size="small"
                                 style="margin-left: 10px;"
-                                @click="show_more_options = !show_more_options">
+                                @click="async ()=>{
+                                  store_app_configs_info.window_state_miniplayer_card = false
+                                  store_app_configs_info.window_state_miniplayer_desktop_lyric = false
+                                  store_app_configs_info.window_state_miniplayer_album = false
+                                  show_mini_album_model = false
+                                  collapsed_action_bar = true
+                                  await ipcRenderer.invoke('window-state-miniplayer-show');
+                                  await ipcRenderer.invoke('window-state-miniplayer-show');
+                                  store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false
+                                  ///
+                                  show_more_options = !show_more_options
+                                }">
                         <template #icon>
                           <n-icon :size="20"><MoreHorizontal24Filled/></n-icon>
                         </template>
