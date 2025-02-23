@@ -649,7 +649,8 @@ async function createWindow() {
 // 请不要更改这段诡异的代码，它依靠Electron的BUG运行，呵呵
 ipc.on('window-state-miniplayer-open', function (){
     context_MainWin.mainWindow.setResizable(false);
-    context_MainWin.mainWindow.setAlwaysOnTop(true, 'floating', 1);
+    context_MainWin.mainWindow.setAlwaysOnTop(true, "screen-saver");
+    context_MainWin.mainWindow.setVisibleOnAllWorkspaces(true);
     context_MainWin.mainWindow.setMinimumSize(346, 620);
     const {x, y} = context_MainWin.mainWindow.getBounds();
     context_MainWin.mainWindow.setBounds({
@@ -663,6 +664,7 @@ ipc.on('window-state-miniplayer-open', function (){
 ipc.on('window-state-miniplayer-hidden', function (){
     context_MainWin.mainWindow.setResizable(true);
     context_MainWin.mainWindow.setAlwaysOnTop(false);
+    context_MainWin.mainWindow.setVisibleOnAllWorkspaces(false);
     context_MainWin.mainWindow.setMinimumSize(1100, 720);
     const {x, y} = context_MainWin.mainWindow.getBounds();
     context_MainWin.mainWindow.setBounds({
