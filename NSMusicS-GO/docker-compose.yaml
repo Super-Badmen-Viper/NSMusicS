@@ -15,10 +15,9 @@ services:
       - mongodb
     volumes:
       - E:\0_Music:/container/data
-
   mongodb:
     image: mongo:6.0
-    container_name: mongodb
+    container_name: nsmusics-mongodb
     restart: unless-stopped
     env_file: .env
     environment:
@@ -28,6 +27,5 @@ services:
       - "${DB_PORT}:${DB_PORT}"
     volumes:
       - C:\Users\Public\Documents\NSMusicS-GO\MongoDB:/data/db
-
-volumes:
-  C:\Users\Public\Documents\NSMusicS-GO\MongoDB:
+    # volumes:
+    #   - dbdata:/data/db

@@ -3,37 +3,27 @@ The goal of NSMusicS is to achieve internationalization+cloud native+streaming m
 
 A Go (Golang) Backend Clean Architecture project with Gin, MongoDB, JWT Authentication Middleware, Test, and Docker.
 
-![Go Backend Clean Architecture](https://github.com/amitshekhariitbhu/go-backend-clean-architecture/blob/main/assets/go-backend-clean-architecture.png?raw=true)
-
-## Architecture Layers of the project
-
-- Router
-- Controller
-- Usecase
-- Repository
-- Domain
-
-![Go Backend Clean Architecture Diagram](https://github.com/amitshekhariitbhu/go-backend-clean-architecture/blob/main/assets/go-backend-arch-diagram.png?raw=true)
-
-## Major Packages used in this project
-
-- **gin**: Gin is an HTTP web framework written in Go (Golang). It features a Martini-like API with much better performance -- up to 40 times faster. If you need a smashing performance, get yourself some Gin.
-- **mongo go driver**: The Official Golang driver for MongoDB.
-- **jwt**: JSON Web Tokens are an open, industry-standard RFC 7519 method for representing claims securely between two parties. Used for Access Token and Refresh Token.
-- **viper**: For loading configuration from the `.env` file. Go configuration with fangs. Find, load, and unmarshal a configuration file in JSON, TOML, YAML, HCL, INI, envfile, or Java properties formats.
-- **bcrypt**: Package bcrypt implements Provos and Mazières's bcrypt adaptive hashing algorithm.
-- **testify**: A toolkit with common assertions and mocks that plays nicely with the standard library.
-- **mockery**: A mock code autogenerator for Golang used in testing.
-- Check more packages in `go.mod`.
-
-### Public API Request Flow without JWT Authentication Middleware
-
-![Public API Request Flow](https://github.com/amitshekhariitbhu/go-backend-clean-architecture/blob/main/assets/go-arch-public-api-request-flow.png?raw=true)
-
-### Private API Request Flow with JWT Authentication Middleware
-
-> JWT Authentication Middleware for Access Token Validation.
-
-![Private API Request Flow](https://github.com/amitshekhariitbhu/go-backend-clean-architecture/blob/main/assets/go-arch-private-api-request-flow.png?raw=true)
-
-### The Complete Project Folder Structure
+## local debug run
+ - modify: .env
+   - DB_HOST=localhost
+   - not local MongoDB_DATA_VOLUME
+     - modify: docker-compose-local-windows.ps1 
+       - $env:MongoDB_DATA_VOLUME = "C:\Users\Public\Documents\NSMusicS-GO\MongoDB"
+       - $env:SQLITE_DATA_VOLUME = "C:\Users\Public\Documents\NSMusicS-GO\Sqlite"
+       - $env:MUSIC_DATA_VOLUME = "E:\0_Music"
+     - run: docker-compose-local-windows.ps1
+     - await create: $env:MongoDB_DATA_VOLUME...
+   - have local MongoDB_DATA_VOLUME
+     - run: docker-compose-mongodb.yaml
+ - go install github.com/air-verse/air@latest
+ - run: air
+   
+## docker build run
+ - modify: .env
+   - DB_HOST=mongodb
+   - DB_USER=jiuge01
+   - DB_PASS=jiuge01
+ - modify: docker-compose.yaml
+   - web: volumes
+   - mongodb: volumes
+ - run: docker-compose.yaml

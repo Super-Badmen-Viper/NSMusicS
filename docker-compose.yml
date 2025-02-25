@@ -26,7 +26,7 @@ services:
 
   mongodb:
     image: mongo:6.0
-    container_name: mongodb
+    container_name: nsmusics-mongodb
     restart: unless-stopped
     env_file:
       - .env 
