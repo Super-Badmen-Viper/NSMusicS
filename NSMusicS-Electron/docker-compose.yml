@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  nsmusics:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nsmusics
+    container_name: nsmusics
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    volumes:
+      - E:\0_Music:/container/data
