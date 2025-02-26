@@ -4,7 +4,7 @@ const isElectron = (
 );
 
 const openLink = (url) => {
-    if (isElectron) {
+    if(isElectron) {
         const { shell } = require('electron');
         shell.openExternal(url);
     } else {

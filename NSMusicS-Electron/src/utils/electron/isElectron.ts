@@ -6,7 +6,7 @@ const isElectron = (
 console.log('isElectron:', isElectron);
 
 let ipcRenderer = null;
-if (isElectron) {
+if(isElectron) {
     const { ipcRenderer: electronIpcRenderer } = require('electron');
     ipcRenderer = electronIpcRenderer;
 }

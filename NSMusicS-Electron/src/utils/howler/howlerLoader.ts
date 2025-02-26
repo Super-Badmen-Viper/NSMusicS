@@ -2,7 +2,7 @@ let Howl;
 
 const isElectron = window && window.process && window.process.type === 'renderer';
 
-if (isElectron) {
+if(isElectron) {
     Howl = require('howler').Howl;
 } else {
     import('howler').then((module) => {

@@ -4,7 +4,7 @@ const isElectron = (
 );
 
 let webFrame = null;
-if (isElectron) {
+if(isElectron) {
     const { webFrame: electronWebFrame } = require('electron');
     webFrame = electronWebFrame;
 }

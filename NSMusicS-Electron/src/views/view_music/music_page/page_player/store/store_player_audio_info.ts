@@ -97,7 +97,7 @@ export const store_player_audio_info = reactive({
         store_player_audio_info.this_audio_lyrics_string = newValue
         store_player_audio_info.this_audio_lyrics_loaded_complete = false
         if(newValue === undefined || newValue === 'undefined' || newValue.length === 0){
-            if(isElectron){
+            if(isElectron) {
                 store_player_audio_info.this_audio_lyrics_string = await ipcRenderer.invoke('window-get-LyricPath',
                     store_player_audio_info.this_audio_file_path
                 );

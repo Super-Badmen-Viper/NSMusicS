@@ -11,6 +11,7 @@ import {
 import { User_ApiService_of_ND } from "../../../../data_access/servers_configs/navidrome_api/services_normal/user_management/index_service";
 import { Set_ServerInfo_To_LocalSqlite } from "../../../../data_access/local_configs/class_Set_ServerInfo_To_LocalSqlite";
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
+import { hash } from 'spark-md5';
 
 export const store_server_navidrome_userdata_logic = reactive({
     /// server add
@@ -23,7 +24,7 @@ export const store_server_navidrome_userdata_logic = reactive({
     ) {
         try{
             const userService = new User_ApiService_of_ND(server_set_of_addUser_of_url +'/rest');
-            const {salt, token} = this.navidrome_generateEncryptedPassword(server_set_of_addUser_of_password);
+            const {salt, token} = this.navidrome_get_EncryptedPassword(server_set_of_addUser_of_password);
             const userData = await userService.getUser(server_set_of_addUser_of_username, token, salt);
             if (userData["subsonic-response"]["status"] === 'ok'){
                 let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
@@ -50,7 +51,7 @@ export const store_server_navidrome_userdata_logic = reactive({
         type: string
     ) {
         const userService = new User_ApiService_of_ND(url+'/rest');
-        const {salt, token} = this.navidrome_generateEncryptedPassword(password);
+        const {salt, token} = this.navidrome_get_EncryptedPassword(password);
         const userData = await userService.getUser(user_name, token, salt);
         if (userData["subsonic-response"]["status"] === 'ok'){
             let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
@@ -115,9 +116,7 @@ export const store_server_navidrome_userdata_logic = reactive({
         store_server_user_model.password = value.password
         store_app_configs_logic_save.save_system_config_of_Servers_Config()
 
-        const {salt, token} = store_server_users.navidrome_get_EncryptedPassword(
-            store_server_users.server_config_of_current_user_of_sqlite?.password
-        );
+        const {salt, token} = this.navidrome_get_EncryptedPassword(store_server_users.server_config_of_current_user_of_sqlite?.password);
         store_server_user_model.salt = salt
         store_server_user_model.token = token
 
@@ -136,36 +135,16 @@ export const store_server_navidrome_userdata_logic = reactive({
         }
     },
     /// server get token
-    navidrome_generateEncryptedPassword(password: string): { salt: string, token: string } {
-        if(isElectron) {
-            const saltLength = 6;
-            const salt = this.navidrome_generateRandomString(saltLength);
-            const crypto = require('crypto');
-            const token = crypto.createHash('md5').update(password + salt, 'utf8').digest('hex');
-            return {salt, token};
-        } else {
-            // other
-        }
-        return undefined
-    },
-    navidrome_generateRandomString(length: number): string {
+    navidrome_get_EncryptedPassword(password: string): { salt: string, token: string } {
+        const saltLength = 6;
         const characters = 'dfeVYUY9iu239iBUYHuji46h39BHUJ8u42nmrfhDD3r4ouj123890fvn48u95h';
         let randomString = '';
-        for (let i = 0; i < length; i++) {
+        for (let i = 0; i < saltLength; i++) {
             const randomIndex = Math.floor(Math.random() * characters.length);
             randomString += characters[randomIndex];
         }
-        return randomString;
+        const salt = randomString;
+        const token = hash(password + salt);
+        return { salt, token };
     },
-
-    fixUrlFormat(url: string): string {
-        const match = url.match(/^(https?:\/\/[^:/]+):(\d+)(.*)?$/);
-        if (match) {
-            const host = match[1];
-            const port = match[2];
-            return `${host}:${port}`;
-        } else {
-            return url;
-        }
-    }
 });

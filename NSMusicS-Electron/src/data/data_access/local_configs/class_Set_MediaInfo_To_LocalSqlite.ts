@@ -29,7 +29,6 @@ export class Set_MediaInfo_To_LocalSqlite {
 
     public Set_MediaInfo_To_Favorite_Local(id: string, value: Boolean) {
         if(isElectron) {
-            let ann_id = null;
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             db.pragma('journal_mode = WAL');
             db.exec('PRAGMA foreign_keys = OFF');
@@ -66,7 +65,6 @@ export class Set_MediaInfo_To_LocalSqlite {
     }
     public Set_MediaInfo_To_Rating_Local(id: any, value: number) {
         if(isElectron) {
-            let ann_id = null;
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             db.pragma('journal_mode = WAL');
             db.exec('PRAGMA foreign_keys = OFF');

@@ -6,6 +6,9 @@ import {
     Library_ApiService_of_Je
 } from "../../data_access/servers_configs/jellyfin_api/services_web/Library/index_service";
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
+import {
+    store_server_navidrome_userdata_logic
+} from "./server_data_select/server_navidrome_user_data/store_server_navidrome_userdata_logic";
 
 export const store_server_users = reactive({
     percentage_of_local: 0,
@@ -46,9 +49,9 @@ export const store_server_users = reactive({
         }
     },
 
-    async get_init_login_parms_of_Nd(){
+    async get_init_login_server(){
         if(store_server_users.server_select_kind === 'navidrome') {
-            const {salt, token} = store_server_users.navidrome_get_EncryptedPassword(
+            const {salt, token} = store_server_navidrome_userdata_logic.navidrome_get_EncryptedPassword(
                 store_server_user_model.password
             );
             store_server_user_model.salt = salt
@@ -134,22 +137,4 @@ export const store_server_users = reactive({
             }
         }
     },
-    navidrome_get_EncryptedPassword(password: string): { salt: string, token: string } {
-        if(isElectron) {
-            const saltLength = 6;
-            const characters = 'dfeVYUY9iu239iBUYHuji46h39BHUJ8u42nmrfhDD3r4ouj123890fvn48u95h';
-            let randomString = '';
-            for (let i = 0; i < saltLength; i++) {
-                const randomIndex = Math.floor(Math.random() * characters.length);
-                randomString += characters[randomIndex];
-            }
-            const salt = randomString;
-            const crypto = require('crypto');
-            const token = crypto.createHash('md5').update(password + salt, 'utf8').digest('hex');
-            return {salt, token};
-        } else {
-            // other
-        }
-        return undefined
-    }
 });

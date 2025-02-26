@@ -197,6 +197,7 @@ function onChange(){
 const isScrolling = ref(false);
 const onScrollEnd = async () => {
   if (isScrolling.value) return;
+  if (store_playlist_list_info.playlist_MediaFiles_metadata.length < 30) return;
   isScrolling.value = true;
   if (store_server_user_model.model_server_type_of_web) {
     if (!store_server_user_model.random_play_model) {

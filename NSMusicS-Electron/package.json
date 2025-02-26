@@ -27,7 +27,6 @@
     "@vicons/tabler": "^0.13.0",
     "@vicons/utils": "^0.1.4",
     "@vue/compiler-sfc": "^3.5.13",
-
     "axios": "^1.7.7",
     "better-sqlite3": "^11.3.1",
     "bindings": "^1.5.0",
@@ -43,9 +42,9 @@
     "node-taglib-sharp": "^5.2.3",
     "prebuild-install": "^7.1.1",
     "reflect-metadata": "^0.2.2",
+    "spark-md5": "^3.0.2",
     "uuid": "^9.0.1",
     "v-contextmenu": "^3.2.0",
-
     "vue-draggable-plus": "^0.5.3",
     "vue-i18n": "next",
     "vue-rate": "next",
@@ -57,21 +56,17 @@
     "@types/node": "^20.11.8",
     "@vitejs/plugin-vue": "latest",
     "@vue/tsconfig": "^0.5.1",
-
     "electron": "^32.1.0",
     "electron-builder": "^24.12.0",
     "electron-store": "^8.1.0",
-    "esbuild": "^0.19.12",
-
+    "esbuild": "^0.25.0",
     "naive-ui": "^2.38.2",
     "rebuild": "^0.1.2",
     "typescript": "^5.3.3",
-
     "unplugin-auto-import": "^0.17.5",
     "unplugin-icons": "^0.18.3",
     "unplugin-vue-components": "^0.26.0",
     "vfonts": "^0.0.3",
-
     "vite": "latest",
     "vue": "^3.5.13",
     "vue-router": "^4.2.5",

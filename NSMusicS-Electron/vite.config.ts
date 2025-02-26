@@ -38,7 +38,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      // crypto: 'crypto-browserify',
       // os: 'os-browserify/browser',
       // path: 'path-browserify',
     }
@@ -47,7 +46,7 @@ export default defineConfig({
   //   outDir: 'dist',
   //   assetsDir: 'static',
   //   rollupOptions: {
-  //     external: ['crypto', 'os', 'path'],
+  //     external: ['os', 'path'],
   //     input: 'src/main.ts',
   //     output: {
   //       format: 'iife',

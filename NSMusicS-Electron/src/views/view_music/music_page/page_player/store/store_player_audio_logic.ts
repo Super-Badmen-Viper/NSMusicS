@@ -87,7 +87,7 @@ export const store_player_audio_logic = reactive({
 
     async init_player(){
         if (store_player_audio_logic.player_select === 'mpv') {
-            if (isElectron) {
+            if(isElectron) {
                 await ipcRenderer.invoke('mpv-quit');
                 await ipcRenderer.invoke('mpv-init');
                 store_player_audio_logic.player = new Audio_node_mpv();

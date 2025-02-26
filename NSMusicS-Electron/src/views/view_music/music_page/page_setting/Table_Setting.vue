@@ -1214,7 +1214,7 @@
                             </div>
                             <n-button size="small"
                                       @click="async () => {
-                                        if(isElectron){
+                                        if(isElectron) {
                                           message.success(t('ButtonStart') + t('setting.clearQueryCache'))
                                           await ipcRenderer.invoke('node-taglib-sharp-clear')
                                         }

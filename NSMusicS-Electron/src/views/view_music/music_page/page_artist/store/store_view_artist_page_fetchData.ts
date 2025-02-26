@@ -32,8 +32,8 @@ export const store_view_artist_page_fetchData = reactive({
         // clear RouterView of vue-virtual-scroller data
         store_router_data_logic.clear_Files_temporary()
         store_router_data_info.router_select_model_artist = true;
-        if(isElectron) {
-            if (store_server_user_model.model_server_type_of_local) {
+        if (store_server_user_model.model_server_type_of_local) {
+            if(isElectron) {
                 let db: any = null;
                 try {
                     db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
@@ -51,7 +51,7 @@ export const store_view_artist_page_fetchData = reactive({
                             store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order.replace('end', '') : '';
                         let keywordFilter = store_view_artist_page_logic.page_artistlists_keyword.length > 0 ?
                             `WHERE name LIKE '%${store_view_artist_page_logic.page_artistlists_keyword}%' 
-                    OR external_info_updated_at LIKE '%${store_view_artist_page_logic.page_artistlists_keyword}%'` :
+                OR external_info_updated_at LIKE '%${store_view_artist_page_logic.page_artistlists_keyword}%'` :
                             '';
                         stmt_artist_string = `SELECT *
                                               FROM ${store_server_user_model.artist} ${keywordFilter}
@@ -106,11 +106,11 @@ export const store_view_artist_page_fetchData = reactive({
                         for (let j = 0; j < pathfiles.length; j++) {
                             if (pathfiles[j].artist_id === row.id) {
                                 if (row.medium_image_url == null || row.medium_image_url == undefined || row.medium_image_url.length == 0) {
-                                    if(pathfiles[j].path) {
+                                    if (pathfiles[j].path) {
                                         const fileName = pathfiles[j].path.split(/[\\/]/).pop(); // 兼容 Windows 和 Unix 路径分隔符
                                         const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg');
                                         row.medium_image_url = `${store_app_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`;
-                                    }else{
+                                    } else {
                                         row.medium_image_url = error_album
                                     }
                                 }
@@ -200,13 +200,13 @@ export const store_view_artist_page_fetchData = reactive({
                     console.log('db.close().......');
                     db = null;
                 }
+            }else{
+                // other
             }
-            else if (store_server_user_model.model_server_type_of_web) {
-                store_view_artist_page_info.artist_Files_temporary = [];
-                await this.fetchData_Artist_of_server_web_start();
-            }
-        } else {
-            // other
+        }
+        else if (store_server_user_model.model_server_type_of_web) {
+            store_view_artist_page_info.artist_Files_temporary = [];
+            await this.fetchData_Artist_of_server_web_start();
         }
     },
     async fetchData_This_Artist_MediaList(artist_id:any){

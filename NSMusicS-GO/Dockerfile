@@ -1,11 +1,12 @@
+# Build Normal Model
 # FROM golang:1.24.0-alpine
 # RUN mkdir /app
 # ADD . /app
 # WORKDIR /app
-
 # RUN go build -o main cmd/main.go
 # CMD ["/app/main"]
 
+# Build Simplify Model
 FROM golang:1.24.0-alpine AS builder
 WORKDIR /app
 ADD . /app

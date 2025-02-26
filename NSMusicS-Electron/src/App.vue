@@ -735,6 +735,8 @@
       store_app_configs_info.nsmusics_db = await ipcRenderer.invoke('window-get-nsmusics-db');
       console.log(store_app_configs_info.navidrome_db)
       console.log(store_app_configs_info.nsmusics_db)
+    }else{
+      // other
     }
 
     try {

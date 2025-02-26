@@ -8,7 +8,7 @@ export class Set_LibraryInfo_To_LocalSqlite{
         local_name: string,
         local_url: string
     ): boolean {
-        if (isElectron) {
+        if(isElectron) {
             const db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
             db.pragma('journal_mode = WAL');
             db.exec('PRAGMA foreign_keys = OFF');
@@ -47,7 +47,7 @@ export class Set_LibraryInfo_To_LocalSqlite{
     public Set_LibraryInfo_Delete_Folder(
         id: string
     ): boolean {
-        if (isElectron) {
+        if(isElectron) {
             const db_nsmusics = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
             db_nsmusics.pragma('journal_mode = WAL');
             db_nsmusics.exec('PRAGMA foreign_keys = OFF');

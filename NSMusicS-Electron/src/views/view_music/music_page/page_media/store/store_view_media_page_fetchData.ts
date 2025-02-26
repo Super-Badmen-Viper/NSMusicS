@@ -30,8 +30,8 @@ import {store_playlist_appearance} from "../../../music_components/player_list/s
 export const store_view_media_page_fetchData = reactive({
     async fetchData_Media(){
         try {
-            if (isElectron) {
-                if (store_server_user_model.model_server_type_of_local) {
+            if (store_server_user_model.model_server_type_of_local) {
+                if(isElectron) {
                     let db: any = null;
                     // clear RouterView of vue-virtual-scroller data
                     if (store_player_appearance.player_mode_of_medialist_from_external_import) {
@@ -252,21 +252,23 @@ export const store_view_media_page_fetchData = reactive({
                         console.log('db.close().......');
                         db = null;
                     }
-                } else if (store_server_user_model.model_server_type_of_web) {
-                    store_view_media_page_info.media_Files_temporary = [];
-                    await this.fetchData_Media_of_server_web_start()
                 }
-            } else {
-                // other
+                else{
+                    // other
+                }
+            }
+            else if (store_server_user_model.model_server_type_of_web) {
+                store_view_media_page_info.media_Files_temporary = [];
+                await this.fetchData_Media_of_server_web_start()
             }
         }catch (e) {
             console.error('fetchData_Media: ' + e)
         }
     },
     async fetchData_Media_Find_This_Album(id: string){
-        if(isElectron) {
-            if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
-                if (store_server_user_model.model_server_type_of_local) {
+        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
+            if (store_server_user_model.model_server_type_of_local) {
+                if(isElectron) {
                     let db: any = null;
                     db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
                     db.pragma('journal_mode = WAL');
@@ -275,7 +277,9 @@ export const store_view_media_page_fetchData = reactive({
                     let stmt_media_file_string = '';
                     ///
                     stmt_media_file_string =
-                        `SELECT * FROM ${store_server_user_model.media_file} WHERE album_id = ?`;
+                        `SELECT *
+                         FROM ${store_server_user_model.media_file}
+                         WHERE album_id = ?`;
                     stmt_media_file =
                         db.prepare(stmt_media_file_string);
                     const rows = stmt_media_file.all(id);
@@ -289,29 +293,30 @@ export const store_view_media_page_fetchData = reactive({
                     store_view_media_page_info.media_Files_temporary.forEach((item: any, index: number) => {
                         item.absoluteIndex = index + 1;
                     });
-                }else if (store_server_user_model.model_server_type_of_web) {
-                    this.fetchData_Media_of_server_web_clear_index()
-                    this._album_id = id
-                    await this.fetchData_Media_of_server_web(true)
-                    this._album_id = ''
+                }else{
+                    // other
                 }
-            }else if(
-                store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-            ) {
+            }
+            else if (store_server_user_model.model_server_type_of_web) {
                 this.fetchData_Media_of_server_web_clear_index()
                 this._album_id = id
                 await this.fetchData_Media_of_server_web(true)
                 this._album_id = ''
             }
         }
-        else {
-            // other
+        else if(
+            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
+        ) {
+            this.fetchData_Media_of_server_web_clear_index()
+            this._album_id = id
+            await this.fetchData_Media_of_server_web(true)
+            this._album_id = ''
         }
     },
     async fetchData_Media_Find_This_Artist(id: string){
-        if(isElectron) {
-            if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
-                if (store_server_user_model.model_server_type_of_local) {
+        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
+            if (store_server_user_model.model_server_type_of_local) {
+                if(isElectron) {
                     let db: any = null;
                     db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
                     db.pragma('journal_mode = WAL');
@@ -333,25 +338,24 @@ export const store_view_media_page_fetchData = reactive({
                     store_view_media_page_info.media_Files_temporary.forEach((item: any, index: number) => {
                         item.absoluteIndex = index + 1;
                     });
-                }
-                else if (store_server_user_model.model_server_type_of_web) {
-                    this.fetchData_Media_of_server_web_clear_index()
-                    this._artist_id = id
-                    await this.fetchData_Media_of_server_web(true)
-                    this._artist_id = ''
+                }else{
+                    // other
                 }
             }
-            else if (
-                store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-            ) {
+            else if (store_server_user_model.model_server_type_of_web) {
                 this.fetchData_Media_of_server_web_clear_index()
                 this._artist_id = id
                 await this.fetchData_Media_of_server_web(true)
                 this._artist_id = ''
             }
         }
-        else {
-            // other
+        else if (
+            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
+        ) {
+            this.fetchData_Media_of_server_web_clear_index()
+            this._artist_id = id
+            await this.fetchData_Media_of_server_web(true)
+            this._artist_id = ''
         }
     },
     setMediumImageUrl(row: Media_File) {
