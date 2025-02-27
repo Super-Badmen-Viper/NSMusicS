@@ -7,15 +7,14 @@
     "email": "1774148579@qq.com"
   },
   "description": "NSMusicS For Web(Electron+Vue3+TS),Multi platform Multi mode Super Music Software (Full stack development, audio processing, artificial intelligence, natural language processing)",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "private": true,
   "license": "AGPL - 3.0",
   "scripts": {
     "dev": "vite",
-    "preview": "vite preview",
     "build": "vite build",
-    "clean": "rm -rf node_modules/.cache dist",
-    "type-check": "vue-tsc --build --force"
+    "preview": "vite preview",
+    "server": "nodemon server.js"
   },
   "dependencies": {
     "@lottiefiles/lottie-player": "^2.0.4",
@@ -48,7 +47,12 @@
     "vue-draggable-plus": "^0.5.3",
     "vue-i18n": "next",
     "vue-rate": "next",
-    "vue-virtual-scroller": "next"
+    "vue-virtual-scroller": "next",
+    "@koa/cors": "^3.3.0",
+    "koa": "^2.13.4",
+    "koa-bodyparser": "^4.3.0",
+    "koa-router": "^12.0.0",
+    "mongodb": "^4.9.0"
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.2",

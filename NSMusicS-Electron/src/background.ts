@@ -74,10 +74,8 @@ else {
 
         await initModifyMediaTag();
 
-        context_MainWin.mainWindow.once('ready-to-show', () => {
-            context_MainWin.mainWindow.webContents.setZoomFactor(1);
-            context_MainWin.mainWindow.show()
-        })
+        context_MainWin.mainWindow.webContents.setZoomFactor(1);
+        context_MainWin.mainWindow.show()
 
         setTimeout(clearSessionClearCache, 5000);
     });

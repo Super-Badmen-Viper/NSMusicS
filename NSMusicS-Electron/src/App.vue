@@ -729,6 +729,7 @@
     inheritLocale: true,
     useScope: 'global'
   })
+  import axios from "axios";
   onMounted(async () => {
     if(isElectron) {
       store_app_configs_info.navidrome_db = await ipcRenderer.invoke('window-get-navidrome-db');
@@ -780,7 +781,7 @@
     }
 
     try {
-      store_app_configs_info.version = '1.4.1';
+      store_app_configs_info.version = '1.4.2';
       console.log('Current Version:', store_app_configs_info.version);
       const xmlUrl = 'https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-Update/NSMusicS.xml';
       await store_app_configs_logic_update.fetchAndParseXML(xmlUrl);
@@ -793,6 +794,8 @@
     }catch {
       store_app_configs_info.version_updated = 0;
     }
+    const data = await axios('http://localhost:27017/');
+    console.log(data);
   });
 </script>
 <template>
