@@ -794,8 +794,12 @@
     }catch {
       store_app_configs_info.version_updated = 0;
     }
-    const data = await axios('http://localhost:27017/');
-    console.log(data);
+    const response = await axios.post('/api/login', {
+      email: 'test@gmail.com',
+      password: 'test',
+      name: 'Test Name'
+    });
+    console.log(response.data); 
   });
 </script>
 <template>
