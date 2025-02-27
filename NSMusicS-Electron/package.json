@@ -58,7 +58,7 @@
     "electron": "^32.1.0",
     "electron-builder": "^24.12.0",
     "electron-store": "^8.1.0",
-    "esbuild": "^0.25.0",
+    "esbuild": "^0.24.2",
     "naive-ui": "^2.38.2",
     "rebuild": "^0.1.2",
     "typescript": "^5.3.3",
