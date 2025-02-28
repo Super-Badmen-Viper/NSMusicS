@@ -1,53 +1,53 @@
-import { fileURLToPath, URL } from 'node:url'
+import { defineConfig, loadEnv } from 'vite';
+import vue from '@vitejs/plugin-vue';
 
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { fileURLToPath, URL } from 'node:url'
 import {viteElectronDev} from './plugins/vite.electron.dev'
 import {viteElectronBuild} from './plugins/vite.electron.build'
 
-// 自动引入
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
-    vue({ template: { compilerOptions: { hoistStatic: false } } }),
-    viteElectronDev(),
-    viteElectronBuild(),
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
 
-    AutoImport({
-      imports: [
-        'vue',
-        {
-          'naive-ui': [
-            'useDialog',
-            'useMessage',
-            'useNotification',
-            'useLoadingBar'
-          ]
+  return {
+    plugins: [
+      vue({ template: { compilerOptions: { hoistStatic: false } } }),
+      viteElectronDev(),
+      viteElectronBuild(),
+      AutoImport({
+        imports: [
+          'vue',
+          {
+            'naive-ui': [
+              'useDialog',
+              'useMessage',
+              'useNotification',
+              'useLoadingBar'
+            ]
+          }
+        ]
+      }),
+      Components({
+        resolvers: [NaiveUiResolver()]
+      })
+    ],
+    base: './',
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url))
+      }
+    },
+    server: {
+      proxy: {
+        '/api': {
+          target: env.BACKEND_SERVICE || 'http://localhost:8089',
+          changeOrigin: true,
+          rewrite: path => path.replace(/^\/api/, '')
         }
-      ]
-    }),
-    Components({
-      resolvers: [NaiveUiResolver()]
-    })
-  ],
-  base:'./', //默认绝对路径改为相对路径 否则打包白屏
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
-  },
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8089',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
-  }
-})
-
+  };
+});

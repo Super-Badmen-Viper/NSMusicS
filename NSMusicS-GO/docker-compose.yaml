@@ -7,20 +7,17 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-      - NGINX_PORT=${APP_PORT}                                # 前端监听端口
-      - BACKEND_SERVICE=${WEB_CONTAINER_NAME}:${SERVER_PORT}  # 后端服务地址
+      - NGINX_PORT=${APP_PORT}
+      - BACKEND_SERVICE=${WEB_CONTAINER_NAME}:${SERVER_PORT}
     ports:
       - "${APP_PORT}:${APP_PORT}"
-    networks:
-      - app-network
+    volumes:
+      - ./.env:/app/.env
     depends_on:
       - backend
       - mongodb
 
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
     image: nsmusics-go
     container_name: ${WEB_CONTAINER_NAME}
     restart: unless-stopped
@@ -28,9 +25,8 @@ services:
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
     volumes:
-      - "${MUSIC_DATA_PATH}:/container/data"
-    networks:
-      - app-network
+      - ./.env:/app/.env
+      - "library:/data/library"
     depends_on:
       - mongodb
 
@@ -43,7 +39,7 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
       - MONGO_INITDB_ROOT_PASSWORD=${DB_PASS}
     ports:
-      - "${DB_PORT}:27017"  # 固定容器内端口为27017
+      - "${DB_PORT}:27017"
     volumes:
       - dbdata:/data/db
     healthcheck:
@@ -51,10 +47,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    networks:
-      - app-network
+
 volumes:
+  library:
   dbdata:
-networks:
-  app-network:
-    driver: bridge
