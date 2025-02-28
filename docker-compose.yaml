@@ -1,27 +1,36 @@
 version: "3.8"
 
 services:
-  app:
+  frontend:
     image: nsmusics
     container_name: ${APP_CONTAINER_NAME}
     restart: unless-stopped
     env_file: .env
+    environment:
+      - NGINX_PORT=${APP_PORT}                   # 前端监听端口
+      - BACKEND_SERVICE=${WEB_CONTAINER_NAME}:${SERVER_PORT} # 后端服务地址
     ports:
       - "${APP_PORT}:${APP_PORT}"
+    networks:
+      - app-network
     depends_on:
+      - backend
       - mongodb
 
-  web:
+  backend:
     image: nsmusics-go
     container_name: ${WEB_CONTAINER_NAME}
     restart: unless-stopped
     env_file: .env
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
-    depends_on:
-      - mongodb
     volumes:
       - "${MUSIC_DATA_PATH}:/container/data"
+    networks:
+      - app-network
+    depends_on:
+      mongodb:
+        condition: service_healthy
 
   mongodb:
     image: mongo:6.0
@@ -31,7 +40,19 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
       - MONGO_INITDB_ROOT_PASSWORD=${DB_PASS}
+      - MONGO_INITDB_DATABASE=${DB_NAME}
     ports:
-      - "${DB_PORT}:${DB_PORT}"
+      - "${DB_PORT}:27017"  # 固定容器内端口为27017
     volumes:
       - "${MONGO_DATA_PATH}:/data/db"
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh --quiet -u $${MONGO_INITDB_ROOT_USERNAME} -p $${MONGO_INITDB_ROOT_PASSWORD} --authenticationDatabase admin | grep 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
