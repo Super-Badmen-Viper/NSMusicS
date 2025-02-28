@@ -7,8 +7,8 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-      - NGINX_PORT=${APP_PORT}                   # 前端监听端口
-      - BACKEND_SERVICE=${WEB_CONTAINER_NAME}:${SERVER_PORT} # 后端服务地址
+      - NGINX_PORT=${APP_PORT}                                # 前端监听端口
+      - BACKEND_SERVICE=${WEB_CONTAINER_NAME}:${SERVER_PORT}  # 后端服务地址
     ports:
       - "${APP_PORT}:${APP_PORT}"
     networks:
@@ -18,6 +18,9 @@ services:
       - mongodb
 
   backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: nsmusics-go
     container_name: ${WEB_CONTAINER_NAME}
     restart: unless-stopped
@@ -29,8 +32,7 @@ services:
     networks:
       - app-network
     depends_on:
-      mongodb:
-        condition: service_healthy
+      - mongodb
 
   mongodb:
     image: mongo:6.0
@@ -40,11 +42,10 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
       - MONGO_INITDB_ROOT_PASSWORD=${DB_PASS}
-      - MONGO_INITDB_DATABASE=${DB_NAME}
     ports:
       - "${DB_PORT}:27017"  # 固定容器内端口为27017
     volumes:
-      - "${MONGO_DATA_PATH}:/data/db"
+      - dbdata:/data/db
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh --quiet -u $${MONGO_INITDB_ROOT_USERNAME} -p $${MONGO_INITDB_ROOT_PASSWORD} --authenticationDatabase admin | grep 1
       interval: 10s
@@ -52,7 +53,8 @@ services:
       retries: 5
     networks:
       - app-network
-
+volumes:
+  dbdata:
 networks:
   app-network:
     driver: bridge
