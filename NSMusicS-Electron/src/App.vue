@@ -807,14 +807,9 @@
 </script>
 <template>
   <n-message-provider>
-    <!-- server login-->
-    <RouterView
-        class="this_App"
-        v-if="store_router_data_info.router_select_model_server_login">
-    </RouterView>
     <!-- Player Bady View-->
     <n-config-provider
-        class="this_App"
+        class="this_App" v-if="!store_router_data_info.router_select_model_server_login"
         :theme="store_app_configs_info.theme">
       <n-global-style />
       <n-message-provider class="this_App">
@@ -1140,6 +1135,11 @@
         </n-layout>
       </n-message-provider>
     </n-config-provider>
+    <!-- server login-->
+    <RouterView
+        class="this_App"
+        v-if="store_router_data_info.router_select_model_server_login">
+    </RouterView>
 
     <!-- right drwaer -->
     <n-config-provider :theme="darkTheme">
