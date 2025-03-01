@@ -108,7 +108,8 @@ export const store_player_audio_info = reactive({
                     store_player_audio_info.this_audio_lyrics_null = false
                 }
             } else {
-                // other
+                store_player_audio_info.this_audio_lyrics_null = true
+                store_player_audio_info.this_audio_lyrics_string = '[00:01.00]未找到可用歌词\n'
             }
         }
         ////// split lyrics

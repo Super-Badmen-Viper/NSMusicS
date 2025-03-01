@@ -28,6 +28,7 @@ export const store_router_data_info = reactive({
     router_select_model_album: false,
     router_select_model_artist: false,
     router_select_model_genre: false,
+    router_select_model_server_login: false,
     router_select_model_server_setting: false,
     router_select_model_server_library: false
 });

@@ -140,13 +140,13 @@
     store_app_configs_info.menuOptions_selectd_model_2 = false
     store_app_configs_info.menuOptions_selectd_model_3 = false
     store_app_configs_info.menuOptions_selectd_model_4 = false
-    store_app_configs_info.app_view_menuOptions.push(
-        {
-          label: computed(() => renderRouterLink('update', t('nsmusics.siderbar_menu.karaoke'))),
-          key: 'update',
-          icon: renderIcon(SlideMicrophone32Regular)
-        },
-    )
+    // store_app_configs_info.app_view_menuOptions.push(
+    //     {
+    //       label: computed(() => renderRouterLink('update', t('nsmusics.siderbar_menu.karaoke'))),
+    //       key: 'update',
+    //       icon: renderIcon(SlideMicrophone32Regular)
+    //     },
+    // )
     store_app_configs_info.app_view_menuOptions.push(
         {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
         {
@@ -278,6 +278,10 @@
         fetchDataIfNeeded('artist');
         store_router_data_info.router_select_model_artist = true;
       },
+      'login': () => {
+        clearFilesIfNeeded();
+        store_router_data_info.router_select_model_server_login = true;
+      },
       'servers': () => {
         clearFilesIfNeeded();
         store_router_data_info.router_select_model_server_setting = true;
@@ -366,6 +370,11 @@
       }else if(to.name === 'genre'){
         store_router_data_info.router_select_model_genre = true
         store_router_data_info.router_name = to.name
+      }else if(to.name === 'login') {
+        if(!isElectron) {
+          store_router_data_info.router_select_model_server_login = true
+          store_router_data_info.router_name = to.name
+        }
       }else if(to.name === 'servers'){
         store_router_data_info.router_select_model_server_setting = true
         store_router_data_info.router_name = to.name
@@ -373,6 +382,7 @@
         store_router_data_info.router_select_model_server_setting = true
         store_router_data_info.router_name = to.name
       }
+      ///
       store_app_configs_info.app_view_left_menu_select_activeKey = to.name
       console.log(to.name)
       store_app_configs_logic_save.save_system_config_of_View_Router_History()
@@ -387,8 +397,6 @@
               if (memoryUsage.rss > store_router_data_info.MEMORY_THRESHOLD) {
                 ipcRenderer.send('window-reset-data')
               }
-            }else{
-              // other
             }
           } catch { }
         }
@@ -729,34 +737,35 @@
     inheritLocale: true,
     useScope: 'global'
   })
-  import axios from "axios";
+  import {store_server_login_logic} from "@/views/view_server/page_server/page_login/store/store_server_login_logic";
   onMounted(async () => {
     if(isElectron) {
       store_app_configs_info.navidrome_db = await ipcRenderer.invoke('window-get-navidrome-db');
       store_app_configs_info.nsmusics_db = await ipcRenderer.invoke('window-get-nsmusics-db');
       console.log(store_app_configs_info.navidrome_db)
       console.log(store_app_configs_info.nsmusics_db)
+      // noLogin
+      store_router_data_info.router_select_model_server_login = false;
+    }else{
+      // isLogin
+      store_server_login_logic.checkLoginStatus();
+    }
+    if(isElectron) {
+      // 等待数据库初始化进程结束
+      if (await ipcRenderer.invoke('window-init-db')) {
+        // init read
+        await store_app_configs_logic_load.load_app_config()
+        // init lang
+        locale.value = store_app_configs_info.lang
+      }
     }else{
       // other
     }
 
-    try {
-      if(isElectron) {
-        // 等待数据库初始化进程结束
-        if (await ipcRenderer.invoke('window-init-db')) {
-          // init read
-          await store_app_configs_logic_load.load_app_config()
-          // init lang
-          locale.value = store_app_configs_info.lang
-        }
-      }else{
-        // other
-      }
-    }catch{  }
-
-    create_menuOptions_appBar()
+    await create_menuOptions_appBar()
 
     if(isElectron) {
+      /// init tray
       try {
         await ipcRenderer.invoke('i18n-tray-label-menu',
             [
@@ -778,35 +787,35 @@
       } catch (e) {
         console.log(e);
       }
-    }
-
-    try {
-      store_app_configs_info.version = '1.4.2';
-      console.log('Current Version:', store_app_configs_info.version);
-      const xmlUrl = 'https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-Update/NSMusicS.xml';
-      await store_app_configs_logic_update.fetchAndParseXML(xmlUrl);
-      console.log('Last Version:', store_app_configs_logic_update.getVersion());
-      store_app_configs_info.version_update_explain = store_app_configs_logic_update.changelog_explain.replace(/;/g, '<br>')
-      store_app_configs_info.version_update_address = store_app_configs_logic_update.url
-      if (store_app_configs_info.version < store_app_configs_logic_update.getVersion()) {
-        store_app_configs_info.version_updated = 1;
+      /// update_info
+      try {
+        store_app_configs_info.version = '1.4.2';
+        console.log('Current Version:', store_app_configs_info.version);
+        const xmlUrl = 'https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-Update/NSMusicS.xml';
+        await store_app_configs_logic_update.fetchAndParseXML(xmlUrl);
+        console.log('Last Version:', store_app_configs_logic_update.getVersion());
+        store_app_configs_info.version_update_explain = store_app_configs_logic_update.changelog_explain.replace(/;/g, '<br>')
+        store_app_configs_info.version_update_address = store_app_configs_logic_update.url
+        if (store_app_configs_info.version < store_app_configs_logic_update.getVersion()) {
+          store_app_configs_info.version_updated = 1;
+        }
+      } catch {
+        store_app_configs_info.version_updated = 0;
       }
-    }catch {
-      store_app_configs_info.version_updated = 0;
     }
-    // 
-    const response = await axios.post('/api/login', {
-      email: 'test@gmail.com',
-      password: 'test',
-      name: 'Test Name'
-    });
-    console.log(response.data); 
   });
 </script>
 <template>
   <n-message-provider>
+    <!-- server login-->
+    <RouterView
+        class="this_App"
+        v-if="store_router_data_info.router_select_model_server_login">
+    </RouterView>
     <!-- Player Bady View-->
-    <n-config-provider class="this_App" :theme="store_app_configs_info.theme">
+    <n-config-provider
+        class="this_App"
+        :theme="store_app_configs_info.theme">
       <n-global-style />
       <n-message-provider class="this_App">
         <n-layout
@@ -926,10 +935,10 @@
                   <n-badge :value="store_app_configs_info.version_updated" :offset="[-17, -4]"
                            :type="store_app_configs_info.version_updated === 1 ? 'error' : 'info'"
                            :style="{
-                          marginRight: isElectron
-                            ? (store_app_configs_info.desktop_system_kind !== 'darwin' ? '257px' : '99px')
-                            : '46px'
-                       }"
+                              marginRight: isElectron
+                                ? (store_app_configs_info.desktop_system_kind !== 'darwin' ? '257px' : '99px')
+                                : '76px'
+                           }"
                            style="
                           z-index: 100;
                           margin-top: 34px;
@@ -953,25 +962,15 @@
                   text-align:center;
                   z-index: 99;
                 ">
-<!--                <n-button-->
-<!--                  quaternary circle-->
-<!--                  style="margin-right:4px;"-->
-<!--                  @click="async () => {-->
-<!--                    if(store_server_user_model.model_server_type_of_web){-->
-<!--                      await ipcRenderer.invoke('mpv-stopped');-->
-<!--                    }-->
-<!--                    ipcRenderer.send('window-reset-data');-->
-<!--                  }">-->
-<!--                  <template #icon>-->
-<!--                    <n-icon size="20" :depth="2"><clean/></n-icon>-->
-<!--                  </template>-->
-<!--                  &lt;!&ndash;<span style="font-weight: 500;">{{ $t('setting.clearQueryCache') }}</span>&ndash;&gt;-->
-<!--                </n-button>-->
                 <n-tooltip trigger="hover" placement="top"
                            v-if="!store_app_configs_info.window_state_miniplayer">
                   <template #trigger>
                     <n-button quaternary circle
-                              :style="{ marginRight: store_app_configs_info.desktop_system_kind != 'darwin' ? '4px' : '30px' }"
+                              :style="{
+                                marginRight:
+                                  isElectron ?
+                                  (store_app_configs_info.desktop_system_kind != 'darwin' ? '4px' : '30px') : '36px'
+                              }"
                               @click="store_app_configs_logic_theme.theme_mode_change_click()">
                       <template #icon>
                         <n-icon size="20" :depth="2"><DarkTheme24Filled/></n-icon>

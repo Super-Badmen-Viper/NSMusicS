@@ -63,7 +63,7 @@ const handleImageError = async (event) => {
     }
     store_player_audio_info.page_top_album_image_url = result_src;
   } else {
-    // other
+    store_player_audio_info.page_top_album_image_url = error_album;
   }
 };
 import { debounce } from 'lodash';

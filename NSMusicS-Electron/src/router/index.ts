@@ -4,6 +4,21 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/',
+      redirect: '/login',
+      meta: {
+        cleanup: true
+      }
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('@/router/router_views/router_server/View_Server_Login.vue'),
+      meta: {
+        cleanup: true
+      }
+    },
+    {
       path: '/home',
       name: 'home',
       component: () => import('@/router/router_views/router_music/Router_Home.vue'),

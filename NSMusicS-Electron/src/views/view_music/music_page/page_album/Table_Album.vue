@@ -85,7 +85,7 @@ const handleImageError = async (item: any) => {
       item.medium_image_url = result_src;
     }
   } else {
-    // other
+    item.medium_image_url = error_album;
   }
 };
 function getAssetImage(firstImage: string) {
@@ -834,16 +834,18 @@ onBeforeUnmount(() => {
               background-color: transparent;
               ">
               <img
-                  :style="{
+                :style="{
                   width: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
                   height: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
+                  minHeight: '280px',
                   WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 100%)'
                 }"
-                  style="
-                  margin-left: 200px; margin-top: -300px;
+                style="
+                  margin-left: 200px;transform: translateY(-25%);
                   object-fit: cover;object-position: center;
                 "
-                  :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                alt=""
               />
             </div>
             <n-page-header

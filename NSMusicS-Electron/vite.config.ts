@@ -43,7 +43,7 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         '/api': {
-          target: env.BACKEND_SERVICE || 'http://localhost:8089',
+          target: env.BACKEND_SERVICE || 'http://localhost:8082',
           changeOrigin: true,
           rewrite: path => path.replace(/^\/api/, '')
         }

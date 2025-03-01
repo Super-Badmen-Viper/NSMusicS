@@ -19,7 +19,7 @@ export const store_app_configs_logic_update = reactive<UpdateInfo>({
 
     async fetchAndParseXML(xmlUrl: string) {
         try {
-            const response = await axios.get(xmlUrl);
+            const response = await axios.post(xmlUrl);
             const xmlData = response.data;
             const parser = new XMLParser();
             const result = parser.parse(xmlData);

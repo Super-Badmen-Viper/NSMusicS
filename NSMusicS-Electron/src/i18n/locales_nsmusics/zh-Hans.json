@@ -90,6 +90,9 @@
                 "player_use_playbar_auto_hide_explain": "播放界面中播放器控制栏会自动收起"
             },
             "view_player_mini" : "切换到迷你播放程序"
+        },
+        "server_page": {
+            "server_email": "邮箱"
         }
     }
 }

@@ -77,7 +77,7 @@ const handleImageError = async (item: any) => {
       item.medium_image_url = result_src;
     }
   } else {
-    // other
+    item.medium_image_url = error_album;
   }
 };
 

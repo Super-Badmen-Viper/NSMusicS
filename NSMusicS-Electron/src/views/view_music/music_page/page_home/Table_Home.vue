@@ -63,7 +63,7 @@ const handleImageError = async (item: any) => {
       item.medium_image_url = result_src;
     }
   } else {
-    // other
+    item.medium_image_url = error_album
   }
 };
 function getAssetImage(firstImage: string) {
@@ -442,6 +442,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="home-wall-container">
     <n-space vertical
+             v-if="store_view_home_page_info.home_selected_top_album != undefined"
              style="margin-top: 20px;margin-left: 8px;">
       <div class="notice"
            v-contextmenu:contextmenu
@@ -481,7 +482,6 @@ onBeforeUnmount(() => {
           </div>
         </div>
       </div>
-
       <n-space
         :style="{
         transform: `scale(${store_app_configs_info.window_innerHeight / 760})`,
