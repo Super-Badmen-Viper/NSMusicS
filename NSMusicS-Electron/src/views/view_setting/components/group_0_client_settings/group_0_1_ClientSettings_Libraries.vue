@@ -559,6 +559,9 @@ import {store_player_audio_info} from "@/views/view_music/music_page/page_player
       style="overflow-y: auto;overflow-x:hidden;margin-top: 9px;">
     <!-- 媒体库管理 -->
     <n-space vertical>
+      <span style="font-weight: 600;font-size: 16px;">
+        {{ $t('HeaderLibraries') }} >
+      </span>
       <n-space vertical>
         <n-steps vertical
                  style="margin-left: 2px;margin-top: 2px;"

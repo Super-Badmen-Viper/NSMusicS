@@ -161,6 +161,9 @@ import { openLink } from '@/utils/electron/openLink';
 <template>
   <n-scrollbar style="overflow-y: auto;margin-top: 9px;" >
     <n-space vertical>
+      <span style="font-weight: 600;font-size: 16px;">
+        {{ $t('page.setting.playbackTab') }} >
+      </span>
       <n-space justify="space-between" align="center">
         <n-space vertical>
           <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioPlayer') }}</span>

@@ -244,7 +244,7 @@
         "playbackStyle_optionCrossFade": "淡入淡出",
         "hotkey_rate3": "评为 3 星",
         "mpvExtraParameters": "mpv 参数",
-        "replayGainMode_optionTrack": "$t(entity.track_one)",
+        "replayGainMode_optionTrack": "",
         "themeLight_description": "应用将使用浅色主题",
         "hotkey_toggleFullScreenPlayer": "全屏播放",
         "hotkey_localSearch": "页面内搜索",

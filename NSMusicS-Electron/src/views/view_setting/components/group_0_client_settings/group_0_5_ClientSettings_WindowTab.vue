@@ -39,6 +39,15 @@ const player_lyric_panel_fontfamily_options = ref([
 <template>
   <n-scrollbar style="overflow-y: auto;margin-top: 9px;" >
     <n-space vertical>
+      <n-space vertical>
+        <span style="font-weight: 600;font-size: 16px;">
+          {{ $t('page.setting.windowTab') }} >
+        </span>
+        <n-space vertical>
+          <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
+        </n-space>
+        <br>
+      </n-space>
       <n-space v-if="false" justify="space-between" align="center">
         <n-space vertical>
           <span style="font-size:16px;font-weight: 600;">{{ $t('setting.windowBarStyle') }}</span>
@@ -87,7 +96,6 @@ const player_lyric_panel_fontfamily_options = ref([
             v-model:value="disabled">
         </n-switch>
       </n-space>
-      <n-divider style="margin: 0;"/>
       <n-space v-if="false" justify="space-between" align="center">
         <n-space vertical>
           <span style="font-size:16px;font-weight: 600;">{{ $t('setting.disableAutomaticUpdates') }}</span>

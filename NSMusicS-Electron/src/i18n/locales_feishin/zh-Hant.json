@@ -333,7 +333,7 @@
         "replayGainMode_description": "根據樂曲元數據中存儲的ReplayGain值調整音量增益",
         "replayGainMode_optionAlbum": "$t(entity.album_one)",
         "replayGainMode_optionNone": "$t(common.none)",
-        "replayGainMode_optionTrack": "$t(entity.track_one)",
+        "replayGainMode_optionTrack": "",
         "replayGainPreamp": "ReplayGain前置放大（分貝）",
         "replayGainPreamp_description": "調整應用在ReplayGain值上的前置放大增益",
         "savePlayQueue": "保存播放列表",
