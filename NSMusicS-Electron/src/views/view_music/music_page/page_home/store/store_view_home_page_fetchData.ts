@@ -12,6 +12,7 @@ import {
     Get_Jellyfin_Temp_Data_To_LocalSqlite
 } from "../../../../../data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
 import {store_view_media_page_logic} from "../../page_media/store/store_view_media_page_logic";
+import error_album from "@/assets/img/error_album.jpg";
 
 export const store_view_home_page_fetchData = reactive({
     async fetchData_Home(){

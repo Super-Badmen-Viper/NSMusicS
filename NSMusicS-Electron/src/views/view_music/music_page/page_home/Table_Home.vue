@@ -442,7 +442,6 @@ onBeforeUnmount(() => {
 <template>
   <div class="home-wall-container">
     <n-space vertical
-             v-if="store_view_home_page_info.home_selected_top_album != undefined"
              style="margin-top: 20px;margin-left: 8px;">
       <div class="notice"
            v-contextmenu:contextmenu
@@ -469,14 +468,13 @@ onBeforeUnmount(() => {
                 width: 'calc(100vw - ' + (collapsed_width - 20) + 'px)',
                 height: 'calc(100vw - ' + (collapsed_width - 20) + 'px)',
                 WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 1) 100%)',
-                marginTop: 'calc(-500px)'
               }"
               style="
-                position: absolute;
+                position: absolute;transform: translateY(-25%);
                 object-fit: cover;object-position: center;
                 border: 1.5px solid #FFFFFF20;
               "
-              :src="getAssetImage(store_view_home_page_info.home_selected_top_album?.medium_image_url)"
+              :src="getAssetImage(store_view_home_page_info.home_selected_top_album_medium_image_url)"
               @error="handleImageError(store_view_home_page_info.home_selected_top_album)"
             />
           </div>
@@ -490,7 +488,7 @@ onBeforeUnmount(() => {
         }"
         style="margin-left: 0px;margin-top: -202px;">
         <img
-          :src="getAssetImage(store_view_home_page_info.home_selected_top_album?.medium_image_url)"
+          :src="getAssetImage(store_view_home_page_info.home_selected_top_album_medium_image_url)"
           @error="handleImageError(store_view_home_page_info.home_selected_top_album)"
           style="
             object-fit: cover; object-position: center;

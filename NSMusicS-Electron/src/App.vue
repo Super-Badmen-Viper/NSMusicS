@@ -95,12 +95,20 @@
     store_app_configs_info.app_view_menuOptions = []
     store_app_configs_info.app_view_menuOptions.push(
         {
-          label: computed(() => renderRouterLink('apps', t('LabelSystem') + t('common.setting'))),
-          key: 'apps',
-          icon: renderIcon(Settings48Regular),
+          label: computed(() => renderRouterLink('servers', t('HeaderAdmin') + t('Console'))),
+          key: 'servers',
+          icon: renderIcon(Settings48Regular)
         },
         {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
     )
+    // store_app_configs_info.app_view_menuOptions.push(
+    //     {
+    //       label: computed(() => renderRouterLink('apps', t('LabelSystem') + t('common.setting'))),
+    //       key: 'apps',
+    //       icon: renderIcon(Settings48Regular),
+    //     },
+    //     {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
+    // )
     store_app_configs_info.app_view_menuOptions.push(
         {
           label: computed(() => renderRouterLink('home', t('common.home'))),
@@ -140,6 +148,14 @@
     store_app_configs_info.menuOptions_selectd_model_2 = false
     store_app_configs_info.menuOptions_selectd_model_3 = false
     store_app_configs_info.menuOptions_selectd_model_4 = false
+    store_app_configs_info.app_view_menuOptions.push(
+        {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
+        {
+          label: computed(() => renderRouterLink('update', t('HeaderLibraries'))),
+          key: 'library',
+          icon: renderIcon(MediaLibrary)
+        },
+    )
     // store_app_configs_info.app_view_menuOptions.push(
     //     {
     //       label: computed(() => renderRouterLink('update', t('nsmusics.siderbar_menu.karaoke'))),
@@ -147,19 +163,6 @@
     //       icon: renderIcon(SlideMicrophone32Regular)
     //     },
     // )
-    store_app_configs_info.app_view_menuOptions.push(
-        {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
-        {
-          label: computed(() => renderRouterLink('servers', t('page.appMenu.manageServers'))),
-          key: 'servers',
-          icon: renderIcon(BareMetalServer)
-        },
-        {
-          label: computed(() => renderRouterLink('update', t('HeaderLibraries'))),
-          key: 'library',
-          icon: renderIcon(MediaLibrary)
-        },
-    )
     ///
     if (store_app_configs_info.menuOptions_selectd_model_2)
       store_app_configs_info.app_view_menuOptions.push(

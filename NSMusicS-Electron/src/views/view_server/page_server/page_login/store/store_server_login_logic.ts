@@ -42,8 +42,6 @@ export const store_server_login_logic = reactive({
             sessionStorage.setItem("jwt_token", token);
             sessionStorage.setItem("jwt_expire_time", expireTime.toString());
 
-            document.cookie = `jwt_token=${token}; path=/; HttpOnly; Secure; SameSite=Strict; max-age=60`;
-
             store_router_data_info.router_select_model_server_login = false;
             store_router_data_info.router.push("/home");
             return true;
@@ -55,7 +53,7 @@ export const store_server_login_logic = reactive({
     server_logout() {
         sessionStorage.removeItem("jwt_token");
         sessionStorage.removeItem("jwt_expire_time");
-        document.cookie = `jwt_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; Secure; SameSite=Strict`;
+
         store_router_data_info.router.push("/login");
         console.log("已退出登录");
     }

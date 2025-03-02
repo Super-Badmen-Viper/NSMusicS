@@ -734,7 +734,6 @@
 
   //////
   import type { StepsProps } from 'naive-ui'
-  const current = ref(1)
   const currentStatus = ref<StepsProps['status']>('process')
   /// server model
   const model_server_step_1 = computed(() => t('nsmusics.view_page.modelSelect'));
@@ -1249,7 +1248,7 @@
                                   </n-icon>
                                 </template>
                                 <div style="font-size:15px;font-weight: 600;">
-                                  {{ $t('nsmusics.view_page.mediaLibrary_begin_import') }}
+                                  {{ $t('HeaderLibraries') }}
                                 </div>
                               </n-button>
                             </n-space>
@@ -1274,7 +1273,7 @@
                                   </n-icon>
                                 </template>
                                 <div style="font-size:15px;font-weight: 600;">
-                                  {{ $t('nsmusics.view_page.mediaLibrary_begin_import') }}
+                                  {{ $t('HeaderLibraries') }}
                                 </div>
                               </n-button>
                             </n-space>
