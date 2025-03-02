@@ -3,9 +3,9 @@
 </script>
 <template>
   <n-space vertical>
-    <span style="font-weight: 600;font-size: 16px;">
+    <div style="font-weight: 600;font-size: 16px;margin-bottom: 4px;">
       {{ $t('TabCatalog') }} >
-    </span>
+    </div>
     <n-space vertical>
       <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
     </n-space>

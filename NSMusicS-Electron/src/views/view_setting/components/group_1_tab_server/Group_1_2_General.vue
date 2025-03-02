@@ -4,9 +4,9 @@ import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_i
 
 <template>
   <n-space vertical>
-    <span style="font-weight: 600;font-size: 16px;">
+    <div style="font-weight: 600;font-size: 16px;margin-bottom: 4px;">
       {{ $t('Settings') }} >
-    </span>
+    </div>
     <n-space vertical>
       <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
     </n-space>
@@ -25,9 +25,9 @@ import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_i
       </n-space>
       <span style="font-size: 13px;margin-left: 0px;">{{ $t('LabelDisplayLanguageHelp') }}</span>
     </n-space>
-    <span style="font-weight: 600;font-size: 16px;">
+    <div style="font-weight: 600;font-size: 16px;margin-bottom: 4px;">
       {{ $t('LabelPath') }} >
-    </span>
+    </div>
     <n-space vertical style="margin-left: 20px;">
       <!---->
       <n-space align="center">
@@ -42,9 +42,9 @@ import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_i
       </n-space>
       <span style="font-size: 13px;margin-left: 0px;">{{ $t('LabelMetadataPathHelp') }}</span>
     </n-space>
-    <span style="font-weight: 600;font-size: 16px;">
+    <div style="font-weight: 600;font-size: 16px;margin-bottom: 4px;">
       {{ $t('QuickConnect') }} >
-    </span>
+    </div>
     <n-space vertical style="margin-left: 20px;">
       <!---->
       <n-space align="center">
@@ -52,9 +52,9 @@ import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_i
         <span style="font-size: 16px;font-weight: 600;">{{ $t('EnableQuickConnect') }}</span>
       </n-space>
     </n-space>
-    <span style="font-weight: 600;font-size: 16px;">
+    <div style="font-weight: 600;font-size: 16px;margin-bottom: 4px;">
       {{ $t('HeaderBranding') }} >
-    </span>
+    </div>
     <n-space vertical style="margin-left: 20px;">
       <!---->
       <n-space align="center">
@@ -69,9 +69,9 @@ import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_i
       </n-space>
       <span style="font-size: 13px;margin-left: 0px;">{{ $t('LabelCustomCssHelp') }}</span>
     </n-space>
-    <span style="font-weight: 600;font-size: 16px;">
+    <div style="font-weight: 600;font-size: 16px;margin-bottom: 4px;">
       {{ $t('HeaderPerformance') }} >
-    </span>
+    </div>
     <n-space vertical style="margin-left: 20px;">
       <!---->
       <n-space align="center">

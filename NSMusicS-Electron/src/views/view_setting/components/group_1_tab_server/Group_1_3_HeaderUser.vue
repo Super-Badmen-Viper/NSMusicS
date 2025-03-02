@@ -5,7 +5,7 @@ import {
 } from '@vicons/fluent'
 //////
 import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
-import {store_player_audio_info} from "@/views/view_music/music_page/page_player/store/store_player_audio_info";
+import {store_player_audio_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_info";
 import {NButton, NIcon} from "naive-ui";
 
 //////
@@ -16,9 +16,9 @@ function getAssetImage(firstImage: string) {
 
 <template>
   <n-space vertical>
-    <span style="font-weight: 600;font-size: 16px;">
+    <div style="font-weight: 600;font-size: 16px;margin-bottom: 4px;">
       {{ $t('HeaderUser') }} >
-    </span>
+    </div>
     <n-space vertical>
       <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
     </n-space>

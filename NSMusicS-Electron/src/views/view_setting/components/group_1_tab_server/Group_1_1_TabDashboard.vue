@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
-import {store_player_audio_info} from "@/views/view_music/music_page/page_player/store/store_player_audio_info";
+import {store_player_audio_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_info";
 import {NButton, NIcon} from "naive-ui";
 import {MoreCircle32Regular} from "@vicons/fluent";
 </script>
 
 <template>
   <n-space vertical>
-    <span style="font-weight: 600;font-size: 16px;">
+    <div style="font-weight: 600;font-size: 16px;margin-bottom: 4px;">
       {{ $t('TabServer') }} >
-    </span>
+    </div>
     <n-space vertical>
       <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
     </n-space>
@@ -73,9 +73,9 @@ import {MoreCircle32Regular} from "@vicons/fluent";
         {{ $t('ButtonShutdown') }}
       </n-button>
     </n-space>
-    <span style="font-weight: 600;font-size: 16px;">
+    <div style="font-weight: 600;font-size: 16px;margin-bottom: 4px;">
       {{ $t('HeaderActiveDevices') }} >
-    </span>
+    </div>
     <n-card style="width: 200px;height: 160px;margin-left: 20px;">
       <div style="width: 180px;height: 250px;">
         <n-space vertical style="margin-left: 10px;">
@@ -95,21 +95,21 @@ import {MoreCircle32Regular} from "@vicons/fluent";
         </n-space>
       </div>
     </n-card>
-    <span style="font-weight: 600;font-size: 16px;">
+    <div style="font-weight: 600;font-size: 16px;margin-bottom: 4px;">
       {{ $t('HeaderActivity') }} >
-    </span>
+    </div>
     <n-card style="width: 680px;height: 120px;margin-left: 20px;">
 
     </n-card>
-    <span style="font-weight: 600;font-size: 16px;">
+    <div style="font-weight: 600;font-size: 16px;margin-bottom: 4px;">
       {{ $t('Alerts') }} >
-    </span>
+    </div>
     <n-card style="width: 680px;height: 40px;margin-left: 20px;">
 
     </n-card>
-    <span style="font-weight: 600;font-size: 16px;">
+    <div style="font-weight: 600;font-size: 16px;margin-bottom: 4px;">
       {{ $t('HeaderPaths') }} >
-    </span>
+    </div>
     <n-card style="width: 680px;margin-left: 20px;">
       <n-space vertical>
         <span>

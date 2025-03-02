@@ -1,14 +1,13 @@
 <script setup lang="ts">
 ////// this_view resource of vicons_svg
-import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
 
 //////
 import { useI18n } from 'vue-i18n'
 import error_album from "@/assets/img/error_album.jpg";
 import NSMusicS from "@/assets/img/NSMusicS.png";
 import {darkTheme, NConfigProvider, useMessage} from "naive-ui";
-import {store_server_login_info} from "@/views/view_server/page_server/page_login/store/store_server_login_info";
-import {store_server_login_logic} from "@/views/view_server/page_server/page_login/store/store_server_login_logic";
+import {store_server_login_info} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+import {store_server_login_logic} from "@/views/view_server/page_metadata/page_login/store/store_server_login_logic";
 const { t } = useI18n({
   inheritLocale: true
 })

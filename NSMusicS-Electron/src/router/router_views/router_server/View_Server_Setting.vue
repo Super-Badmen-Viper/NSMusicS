@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import servers from '@/views/view_setting/Table_Server_Setting.vue'
+import setting from '@/views/view_setting/Table_All_Setting.vue'
 import {store_router_data_info} from "@/router/router_store/store_router_data_info";
 
 onMounted(async () => {
-  store_router_data_info.router_select = 'servers'
+  store_router_data_info.router_select = 'setting'
 });
 </script>
 <template>
   <div class="view_show">
-    <servers/>
+    <setting/>
   </div>
 </template>
 

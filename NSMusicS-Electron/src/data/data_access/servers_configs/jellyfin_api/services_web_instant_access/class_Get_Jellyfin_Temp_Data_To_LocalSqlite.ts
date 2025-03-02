@@ -1,44 +1,44 @@
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {
     store_view_home_page_info
-} from "../../../../../views/view_music/music_page/page_home/store/store_view_home_page_info";
+} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_home/store/store_view_home_page_info";
 import {
     store_view_artist_page_info
-} from "../../../../../views/view_music/music_page/page_artist/store/store_view_artist_page_info"
+} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_info"
 import {
     store_view_album_page_info
-} from "../../../../../views/view_music/music_page/page_album/store/store_view_album_page_info";
+} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_info";
 import {
     store_view_media_page_info
-} from "../../../../../views/view_music/music_page/page_media/store/store_view_media_page_info";
+} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
 import {Browsing_ApiService_of_ND} from "../../navidrome_api/services_normal/browsing/index_service";
 import {
     store_playlist_list_info
-} from "../../../../../views/view_music/music_components/player_list/store/store_playlist_list_info"
+} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info"
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 import {Media_Retrieval_ApiService_of_ND} from "../../navidrome_api/services_normal/media_retrieval/index_service";
 import {
     store_player_audio_logic
-} from "../../../../../views/view_music/music_page/page_player/store/store_player_audio_logic";
+} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
 import {store_server_user_model} from "../../../../data_stores/server/store_server_user_model";
 import {
     store_playlist_list_logic
-} from "../../../../../views/view_music/music_components/player_list/store/store_playlist_list_logic";
+} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_logic";
 import {
     store_player_audio_info
-} from "../../../../../views/view_music/music_page/page_player/store/store_player_audio_info";
+} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_info";
 import {Items_ApiService_of_Je} from "../services_web/Items/index_service";
 import {Artists_ApiService_of_Je} from "../services_web/Artists/index_service";
 import axios from "axios";
 import {
     store_view_media_page_logic
-} from "../../../../../views/view_music/music_page/page_media/store/store_view_media_page_logic";
+} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
 import {
     store_playlist_list_fetchData
-} from "../../../../../views/view_music/music_components/player_list/store/store_playlist_list_fetchData";
+} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_fetchData";
 import {
     store_view_media_page_fetchData
-} from "../../../../../views/view_music/music_page/page_media/store/store_view_media_page_fetchData";
+} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_fetchData";
 
 export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
     private items_ApiService_of_Je = new Items_ApiService_of_Je(

@@ -14,9 +14,9 @@ import {
     store_local_data_set_artistInfo
 } from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_artistInfo";
 import {store_local_data_set_mediaInfo} from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_mediaInfo";
-import {store_playlist_list_info} from "../../../../../views/view_music/music_components/player_list/store/store_playlist_list_info"
+import {store_playlist_list_info} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info"
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
-import {store_playlist_list_logic} from "../../../../../views/view_music/music_components/player_list/store/store_playlist_list_logic"
+import {store_playlist_list_logic} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_logic"
 import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
 import { isElectron } from '@/utils/electron/isElectron';
 

@@ -41,31 +41,31 @@
   import {darkTheme, NConfigProvider, NIcon} from 'naive-ui'
   import {h, onMounted, computed, watch, provide, ref} from 'vue';
   import {RouterLink, RouterView, useRouter} from 'vue-router';
-  import Bar_Music_Player from '@/views/view_music/music_components/player_bar/Bar_Music_Player.vue'
-  import Bar_Music_PlayList from '@/views/view_music/music_drawer/View_Player_PlayList.vue'
-  import View_Screen_Music_Player from '@/views/view_music/music_page/page_player/View_Screen_Music_Player.vue'
+  import Bar_Music_Player from '@/views/view_app/page_metadata/page_folder/page_music/music_components/player_bar/Bar_Music_Player.vue'
+  import Bar_Music_PlayList from '@/views/view_app/page_metadata/page_folder/page_music/music_drawer/View_Player_PlayList.vue'
+  import View_Screen_Music_Player from '@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/View_Screen_Music_Player.vue'
   import {store_app_configs_info} from '@/data/data_stores/app/store_app_configs_info'
-  import {store_player_appearance} from "@/views/view_music/music_page/page_player/store/store_player_appearance";
-  import {store_player_sound_effects} from "@/views/view_music/music_page/page_player/store/store_player_sound_effects";
-  import {store_player_sound_speed} from "@/views/view_music/music_page/page_player/store/store_player_sound_speed";
-  import {store_player_sound_more} from "@/views/view_music/music_page/page_player/store/store_player_sound_more";
-  import {store_playlist_appearance} from '@/views/view_music/music_components/player_list/store/store_playlist_appearance'
-  import {store_playlist_list_info} from "@/views/view_music/music_components/player_list/store/store_playlist_list_info"
-  import {store_playlist_list_logic} from "@/views/view_music/music_components/player_list/store/store_playlist_list_logic"
+  import {store_player_appearance} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_appearance";
+  import {store_player_sound_effects} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_sound_effects";
+  import {store_player_sound_speed} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_sound_speed";
+  import {store_player_sound_more} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_sound_more";
+  import {store_playlist_appearance} from '@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_appearance'
+  import {store_playlist_list_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info"
+  import {store_playlist_list_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_logic"
   import {store_server_user_model} from '@/data/data_stores/server/store_server_user_model'
-  import {store_view_media_page_logic} from "@/views/view_music/music_page/page_media/store/store_view_media_page_logic";
-  import {store_view_album_page_logic} from "@/views/view_music/music_page/page_album/store/store_view_album_page_logic"
-  import {store_view_artist_page_info} from "@/views/view_music/music_page/page_artist/store/store_view_artist_page_info"
-  import {store_view_artist_page_logic} from "@/views/view_music/music_page/page_artist/store/store_view_artist_page_logic"
+  import {store_view_media_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
+  import {store_view_album_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_logic"
+  import {store_view_artist_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_info"
+  import {store_view_artist_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_logic"
   import {store_router_data_info} from "@/router/router_store/store_router_data_info";
   import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
   import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
   import {store_app_configs_logic_load} from "@/data/data_stores/app/store_app_configs_logic_load";
   import {store_app_configs_logic_theme} from "@/data/data_stores/app/store_app_configs_logic_theme";
-  import {store_view_media_page_fetchData} from "@/views/view_music/music_page/page_media/store/store_view_media_page_fetchData";
-  import {store_view_home_page_fetchData} from "@/views/view_music/music_page/page_home/store/store_view_home_page_fetchData";
-  import {store_view_album_page_fetchData} from "@/views/view_music/music_page/page_album/store/store_view_album_page_fetchData";
-  import {store_view_artist_page_fetchData} from "@/views/view_music/music_page/page_artist/store/store_view_artist_page_fetchData";
+  import {store_view_media_page_fetchData} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_fetchData";
+  import {store_view_home_page_fetchData} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_home/store/store_view_home_page_fetchData";
+  import {store_view_album_page_fetchData} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_fetchData";
+  import {store_view_artist_page_fetchData} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_fetchData";
 
   ////// BrowserWindow
   import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
@@ -95,8 +95,8 @@
     store_app_configs_info.app_view_menuOptions = []
     store_app_configs_info.app_view_menuOptions.push(
         {
-          label: computed(() => renderRouterLink('servers', t('HeaderAdmin') + t('Console'))),
-          key: 'servers',
+          label: computed(() => renderRouterLink('setting', t('HeaderAdmin') + t('Console'))),
+          key: 'setting',
           icon: renderIcon(Settings48Regular)
         },
         {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
@@ -176,8 +176,8 @@
       store_app_configs_info.app_view_menuOptions.push(
           {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
           {
-            label: computed(() => renderRouterLink('servers', t('page.appMenu.manageServers'))),
-            key: 'servers',
+            label: computed(() => renderRouterLink('setting', t('page.appMenu.manageServers'))),
+            key: 'setting',
             icon: renderIcon(BareMetalServer)
           },
           {
@@ -253,10 +253,6 @@
   }
   async function handleMenuSelection() {
     const menuActions: { [key: string]: () => void | Promise<void> } = {
-      'apps': () => {
-        clearFilesIfNeeded();
-        store_router_data_info.router_select_model_menu = true;
-      },
       'home': () => {
         clearFilesIfNeeded('home');
         store_router_data_info.router_select_model_home = true;
@@ -285,7 +281,7 @@
         clearFilesIfNeeded();
         store_router_data_info.router_select_model_server_login = true;
       },
-      'servers': () => {
+      'setting': () => {
         clearFilesIfNeeded();
         store_router_data_info.router_select_model_server_setting = true;
       },
@@ -333,9 +329,9 @@
   store_router_data_info.router = useRouter();
   import routers from './router'
   import {store_app_configs_logic_update} from "@/data/data_stores/app/store_app_configs_logic_update";
-  import {store_player_audio_logic} from "@/views/view_music/music_page/page_player/store/store_player_audio_logic";
-  import {store_view_media_page_info} from "@/views/view_music/music_page/page_media/store/store_view_media_page_info";
-  import {store_view_album_page_info} from "@/views/view_music/music_page/page_album/store/store_view_album_page_info";
+  import {store_player_audio_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
+  import {store_view_media_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
+  import {store_view_album_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_info";
   import {store_server_users} from "@/data/data_stores/server/store_server_users";
   routers.beforeEach((to, from, next) => {
     if(to.name !== from.name){
@@ -349,10 +345,7 @@
         store_router_data_logic.get_page_top_info()
       }catch{}
       store_router_data_logic.clear_Files_temporary()
-      if(to.name === 'apps'){
-        store_router_data_info.router_select_model_menu = true
-        store_router_data_info.router_name = to.name
-      }else if(to.name === 'home'){
+      if(to.name === 'home'){
         store_router_data_info.router_select_model_home = true
         store_router_data_info.router_name = to.name
       }else if(to.name === 'update'){
@@ -378,10 +371,10 @@
           store_router_data_info.router_select_model_server_login = true
           store_router_data_info.router_name = to.name
         }
-      }else if(to.name === 'servers'){
+      }else if(to.name === 'library'){
         store_router_data_info.router_select_model_server_setting = true
         store_router_data_info.router_name = to.name
-      } else if(to.name === 'library'){
+      }else{ //  if(to.name === 'setting')
         store_router_data_info.router_select_model_server_setting = true
         store_router_data_info.router_name = to.name
       }
@@ -730,17 +723,17 @@
   const computed_i18n_Label_Update = computed(() => t('filter.recentlyUpdated'));
 
   ////
-  import {store_player_tag_modify} from "@/views/view_music/music_page/page_player/store/store_player_tag_modify";
-  import View_Edit_Tag from "@/views/view_music/music_drawer/View_Edit_Tag.vue";
-  import View_Player_Effect from "@/views/view_music/music_drawer/View_Player_Effect.vue";
-  import View_Mini_Music_Player from "@/views/view_music/music_page/page_player/View_Mini_Music_Player.vue";
+  import {store_player_tag_modify} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_tag_modify";
+  import View_Edit_Tag from "@/views/view_app/page_metadata/page_folder/page_music/music_drawer/View_Edit_Tag.vue";
+  import View_Player_Effect from "@/views/view_app/page_metadata/page_folder/page_music/music_drawer/View_Player_Effect.vue";
+  import View_Mini_Music_Player from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/View_Mini_Music_Player.vue";
 
   ////// Load Configs
   const { locale } = useI18n({
     inheritLocale: true,
     useScope: 'global'
   })
-  import {store_server_login_logic} from "@/views/view_server/page_server/page_login/store/store_server_login_logic";
+  import {store_server_login_logic} from "@/views/view_server/page_metadata/page_login/store/store_server_login_logic";
   onMounted(async () => {
     if(isElectron) {
       store_app_configs_info.navidrome_db = await ipcRenderer.invoke('window-get-navidrome-db');
@@ -792,7 +785,7 @@
       }
       /// update_info
       try {
-        store_app_configs_info.version = '1.4.2';
+        store_app_configs_info.version = '1.4.3';
         console.log('Current Version:', store_app_configs_info.version);
         const xmlUrl = 'https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-Update/NSMusicS.xml';
         await store_app_configs_logic_update.fetchAndParseXML(xmlUrl);
