@@ -644,7 +644,6 @@ async function createWindow() {
     });
 }
 /// electron-window-miniplayer
-// 请不要更改这段诡异的代码，它依靠Electron的BUG运行，呵呵
 ipc.on('window-state-miniplayer-open', function (){
     context_MainWin.mainWindow.setResizable(false);
     context_MainWin.mainWindow.setAlwaysOnTop(true, "screen-saver");

@@ -293,7 +293,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             let recently_played = []
             const response_list_of_recently_played = await axios(
                 store_server_users.server_config_of_current_user_of_sqlite?.url + '/Users/' +
-                store_server_user_model.userid_of_Je + '/Items?SortBy=DatePlayed&SortOrder=Descending&IncludeItemTypes=Audio&Limit=16&Fields=PrimaryImageAspectRatio' +
+                store_server_user_model.userid_of_Je + '/Items?SortBy=DatePlayed&SortOrder=Descending&IncludeItemTypes=Audio&Limit=16&Recursive=true&Fields=PrimaryImageAspectRatio' +
                 '&Filters=IsPlayed' +
                 '&ParentId=' + parentId + '&ImageTypeLimit=1&EnableImageTypes=Primary%2CBackdrop%2CBanner%2CThumb' +
                 '&api_key=' + store_server_user_model.authorization_of_Je

@@ -344,6 +344,9 @@ async function update_server_setUser(
     }else{
       message.error(t('error.invalidServer'),{ duration: 3000 })
     }
+    if(store_server_user_model.parentid_of_Je_Music === undefined){
+      message.error(t('error.invalidServer') + t('TabMusic'),{ duration: 6000 })
+    }
   }catch{
     message.error(t('error.invalidServer'),{ duration: 3000 })
   }
@@ -370,6 +373,9 @@ async function update_server_config_of_current_user_of_sqlite(value: any, select
         store_app_configs_logic_save.save_system_config_of_App_Configs()
       } else {
         message.error(t('error.invalidServer'), {duration: 3000})
+      }
+      if(store_server_user_model.parentid_of_Je_Music === undefined){
+        message.error(t('error.invalidServer') + t('TabMusic'),{ duration: 6000 })
       }
     } catch (e) {
       message.error(t('error.invalidServer'), {duration: 3000})

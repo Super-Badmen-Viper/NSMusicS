@@ -1,4 +1,4 @@
-import {Jellyfin_Api_Services_Web} from "../Jellyfin_Api_Services_Web";
+import { Jellyfin_Api_Services_Web } from "../Jellyfin_Api_Services_Web";
 import axios from "axios";
 
 export class Users_ApiService_of_Je extends Jellyfin_Api_Services_Web {
@@ -8,6 +8,7 @@ export class Users_ApiService_of_Je extends Jellyfin_Api_Services_Web {
             'Users'
         );
     }
+
     public async getUsers_id(userId: string): Promise<any> {
         return this.sendRequest(
             'GET',
@@ -16,11 +17,13 @@ export class Users_ApiService_of_Je extends Jellyfin_Api_Services_Web {
     }
 
     public async authenticateUserByName(
-        baseUrl: string, username: string,password: string
+        baseUrl: string,
+        username: string,
+        password: string
     ): Promise<any> {
         try {
-            const method = 'POST'
-            const endpoint = 'Users/AuthenticateByName'
+            const method = 'POST';
+            const endpoint = 'Users/AuthenticateByName';
             const url = `${baseUrl}/${endpoint}`;
             const AccessToken = '27ec731cc56344159d05822f13bfef75';
             const headers = {
@@ -30,18 +33,19 @@ export class Users_ApiService_of_Je extends Jellyfin_Api_Services_Web {
                 Username: username,
                 Pw: password,
             };
-            const test = await axios({
+            const response = await axios({
                 method,
                 url,
                 headers,
                 data,
             });
             return {
-                AccessToken: test.data.AccessToken,
-                User: test.data.User
+                AccessToken: response.data.AccessToken,
+                User: response.data.User
             };
-        }catch{
-            return undefined
+        } catch (error) {
+            console.error('认证失败:', error);
+            return undefined;
         }
     }
 }

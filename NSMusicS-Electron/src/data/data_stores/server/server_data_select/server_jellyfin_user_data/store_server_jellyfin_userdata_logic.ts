@@ -146,11 +146,28 @@ export const store_server_jellyfin_userdata_logic = reactive({
             await store_router_data_logic.get_page_top_info()
         }
         ///
-        const result_parentIds = await new Library_ApiService_of_Je(
+        const library_ApiService = new Library_ApiService_of_Je(
             store_server_users.server_config_of_current_user_of_sqlite?.url
-        ).getLibrary_MediaFolders_ALL()
+        )
+        let result_parentIds = await library_ApiService.getLibrary_MediaFolders_ALL()
         store_server_user_model.parentid_of_Je = []
-        if(result_parentIds.Items){
+        ///
+        let Library_Find = false;
+        if(result_parentIds && result_parentIds.Items){
+            Library_Find = true;
+        }else{
+            if(store_server_user_model.userid_of_Je != undefined) {
+                result_parentIds = await library_ApiService.getLibrary_MediaFolders_ALL_Other(
+                    store_server_user_model.userid_of_Je
+                )
+                if(result_parentIds && result_parentIds.Items){
+                    Library_Find = true;
+                }
+            }else{
+                Library_Find = false;
+            }
+        }
+        if(Library_Find){
             if(Array.isArray(result_parentIds.Items) && result_parentIds.Items.length > 0) {
                 result_parentIds.Items.forEach((row: any, index: number) => {
                     store_server_user_model.parentid_of_Je.push({
@@ -162,6 +179,8 @@ export const store_server_jellyfin_userdata_logic = reactive({
                     }
                 });
             }
+        }else{
+            store_server_user_model.parentid_of_Je_Music = undefined
         }
         ///
         store_app_configs_logic_save.save_system_config_of_Servers_Config()
