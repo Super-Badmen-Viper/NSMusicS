@@ -91,7 +91,7 @@
   function renderRouterLink (nameValue: any, defaultValue: any){
     return () => h(RouterLink, {to: { name: nameValue }}, { default: () => defaultValue })
   }
-  async function create_menuOptions_appBar(){
+  function create_menuOptions_appBar(){
     store_app_configs_info.app_view_menuOptions = []
     store_app_configs_info.app_view_menuOptions.push(
         {
@@ -101,14 +101,6 @@
         },
         {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
     )
-    // store_app_configs_info.app_view_menuOptions.push(
-    //     {
-    //       label: computed(() => renderRouterLink('apps', t('LabelSystem') + t('common.setting'))),
-    //       key: 'apps',
-    //       icon: renderIcon(Settings48Regular),
-    //     },
-    //     {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
-    // )
     store_app_configs_info.app_view_menuOptions.push(
         {
           label: computed(() => renderRouterLink('home', t('common.home'))),
@@ -735,30 +727,35 @@
   })
   import {store_server_login_logic} from "@/views/view_server/page_metadata/page_login/store/store_server_login_logic";
   onMounted(async () => {
-    if(isElectron) {
+    //// init db path
+    if (isElectron) {
       store_app_configs_info.navidrome_db = await ipcRenderer.invoke('window-get-navidrome-db');
       store_app_configs_info.nsmusics_db = await ipcRenderer.invoke('window-get-nsmusics-db');
       console.log(store_app_configs_info.navidrome_db)
       console.log(store_app_configs_info.nsmusics_db)
       // noLogin
       store_router_data_info.router_select_model_server_login = false;
-    }else{
+    } else {
       // isLogin
       store_server_login_logic.checkLoginStatus();
     }
-    if(isElectron) {
-      // 等待数据库初始化进程结束
-      if (await ipcRenderer.invoke('window-init-db')) {
-        // init read
-        await store_app_configs_logic_load.load_app_config()
-        // init lang
-        locale.value = store_app_configs_info.lang
+    //// init db data
+    try {
+      if (isElectron) {
+        // 等待数据库初始化进程结束
+        if (await ipcRenderer.invoke('window-init-db')) {
+          // init read
+          await store_app_configs_logic_load.load_app_config()
+          // init lang
+          locale.value = store_app_configs_info.lang
+        }
+      } else {
+        // other
       }
-    }else{
-      // other
-    }
+    }catch{
 
-    await create_menuOptions_appBar()
+    }
+    create_menuOptions_appBar()
 
     if(isElectron) {
       /// init tray
@@ -785,7 +782,7 @@
       }
       /// update_info
       try {
-        store_app_configs_info.version = '1.4.4';
+        store_app_configs_info.version = '1.4.5';
         console.log('Current Version:', store_app_configs_info.version);
         const xmlUrl = 'https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-Update/NSMusicS.xml';
         await store_app_configs_logic_update.fetchAndParseXML(xmlUrl);

@@ -642,6 +642,33 @@ async function createWindow() {
             });
         }catch{ return false }
     });
+    ipc.handle('reset-nsmusics-use-data', async (event) => {
+        try {
+            const resourcesPath = process.env.NODE_ENV === 'development'
+                ? path.resolve('resources')
+                : path.join(process.resourcesPath);
+            const platform = os.platform();
+            if (platform === 'win32') {
+                fs.copyFile(
+                    path.join(resourcesPath, 'nsmusics.db'),
+                    driveDbPath_2,
+                    (copyErr) => {   });
+            } else if (platform === 'linux') {
+                const linuxDbDir = path.join(os.homedir(), '.NSMusicS'); // Linux 路径
+                fs.copyFile(
+                    path.join(resourcesPath, 'nsmusics.db'),
+                    path.join(linuxDbDir, 'nsmusics.db'),
+                    (copyErr) => {   });
+            } else if (platform === 'darwin') {
+                const macosDbDir = path.join(os.homedir(), 'Applications', 'NSMusicS'); // macOS 路径
+                fs.copyFile(
+                    path.join(resourcesPath, 'nsmusics.db'),
+                    path.join(macosDbDir, 'nsmusics.db'),
+                    (copyErr) => {   });
+            }
+            await initSqlite3();
+        }catch{ return false }
+    });
 }
 /// electron-window-miniplayer
 ipc.on('window-state-miniplayer-open', function (){

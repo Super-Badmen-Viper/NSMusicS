@@ -308,15 +308,19 @@ export const store_app_configs_logic_load = reactive({
             console.error(e)
         }
 
-        /// playlist configs
-        await store_playlist_list_logic.reset_data()
-
-        /// player
-        store_player_audio_logic.play_order = '' + system_Configs_Read.app_Configs.value['play_order']
-        store_player_audio_logic.play_volume = Number('' + system_Configs_Read.app_Configs.value['play_volume'])
-        if(store_player_audio_logic.play_volume === 0 || store_player_audio_logic.play_volume === undefined){
-            store_player_audio_logic.play_volume = 100;
+        try {
+            /// playlist configs
+            await store_playlist_list_logic.reset_data()
+            /// player
+            store_player_audio_logic.play_order = '' + system_Configs_Read.app_Configs.value['play_order']
+            store_player_audio_logic.play_volume = Number('' + system_Configs_Read.app_Configs.value['play_volume'])
+            if (store_player_audio_logic.play_volume === 0 || store_player_audio_logic.play_volume === undefined) {
+                store_player_audio_logic.play_volume = 100;
+            }
+        }catch (e) {
+            console.error(e)
         }
+
         //
         try {
             if ('' + system_Configs_Read.app_Configs.value['player_select'] === null || '' + system_Configs_Read.app_Configs.value['player_select'].length < 0) {
@@ -407,7 +411,10 @@ export const store_app_configs_logic_load = reactive({
         }catch{ }
         store_app_configs_info.app_view_left_menu_select_activeKey = '' + system_Configs_Read.app_Configs.value['app_view_left_menu_select_activeKey']
         store_router_data_info.router_name = '' + system_Configs_Read.app_Configs.value['router_name']
-        if(store_router_data_info.router_name === ''){
+        if(
+            store_router_data_info.router_name === '' ||
+            store_router_data_info.router_name === 'app'
+        ){
             store_app_configs_info.app_view_left_menu_select_activeKey = 'setting'
             store_router_data_info.router_name = 'setting'
         }
