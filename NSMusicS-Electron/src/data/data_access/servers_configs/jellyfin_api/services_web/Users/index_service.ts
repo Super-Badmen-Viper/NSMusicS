@@ -27,7 +27,7 @@ export class Users_ApiService_of_Je extends Jellyfin_Api_Services_Web {
             const url = `${baseUrl}/${endpoint}`;
             const AccessToken = '27ec731cc56344159d05822f13bfef75';
             const headers = {
-                'Authorization': `MediaBrowser Token="${AccessToken}", Client="Electron Desktop", Device="NSMusicS", DeviceId="NSMusicS-GO", Version="1.4.3"`
+                'Authorization': `MediaBrowser Token="${AccessToken}", Client="Electron Desktop", Device="NSMusicS", DeviceId="NSMusicS-GO", Version="1.4.4"`
             };
             const data = {
                 Username: username,

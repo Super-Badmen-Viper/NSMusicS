@@ -26,7 +26,7 @@ export class Jellyfin_Api_Services_Web {
             if(store_server_user_model.authorization_of_Je != undefined &&
                 store_server_user_model.authorization_of_Je.length > 0) {
                 const headers = {
-                    'Authorization': `MediaBrowser Token="${store_server_user_model.authorization_of_Je}", Client="NSMusicS", Device="Desktop Client", DeviceId="NSMusicS-GO", Version="1.4.3"`
+                    'Authorization': `MediaBrowser Token="${store_server_user_model.authorization_of_Je}", Client="NSMusicS", Device="Desktop Client", DeviceId="NSMusicS-GO", Version="1.4.4"`
                 };
 
                 const queryString = params ? new URLSearchParams(params).toString() : '';
