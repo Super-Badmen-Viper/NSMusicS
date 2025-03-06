@@ -167,9 +167,11 @@ const Play_This_Audio_Path = () => {
           Number(store_player_audio_logic.play_volume)
       )
       await store_player_audio_logic.player.play();
-      if (store_player_audio_logic.slider_init_singleValue != 0) {
-        store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_init_singleValue, true);
-        store_player_audio_logic.slider_init_singleValue = 0;
+      if(store_player_audio_logic.player_select === 'mpv') {
+        if (store_player_audio_logic.slider_init_singleValue != 0) {
+          store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_init_singleValue, true);
+          store_player_audio_logic.slider_init_singleValue = 0;
+        }
       }
       Set_MediaInfo_To_PlayCount();
     }
@@ -220,6 +222,12 @@ const init_player_howler = async () => {
                 store_player_audio_logic.player_device_select = 'default'
               });
         }
+      }
+
+      if (store_player_audio_logic.slider_init_singleValue != 0) {
+        store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_init_singleValue, true);
+        store_player_audio_logic.slider_init_singleValue = 0;
+        store_player_audio_logic.player.pause()
       }
     },
     onpause: async () => {
@@ -592,16 +600,6 @@ const Play_Media_Switching = async () => {
 watch(() => store_player_audio_logic.slider_init_singleValue, (newValue, oldValue) => {
   if (newValue !== oldValue && newValue > 0) {
     store_player_audio_logic.slider_singleValue = newValue;
-  }
-});
-watch(() => store_player_audio_logic.player.isPlaying, (newValue, oldValue) => {
-  if (newValue) {
-    setTimeout(() => {
-      // if (store_player_audio_logic.slider_init_singleValue != 0) {
-      //   store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_init_singleValue, true);
-      //   store_player_audio_logic.slider_init_singleValue = 0;
-      // }
-    }, 500); // 500 毫秒 = 0.5 秒
   }
 });
 const set_slider_singleValue = async () => {
