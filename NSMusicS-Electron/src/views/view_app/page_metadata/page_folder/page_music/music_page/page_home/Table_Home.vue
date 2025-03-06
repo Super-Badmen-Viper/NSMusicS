@@ -205,6 +205,7 @@ const Open_this_album_MediaList_click = (item: any, list_name: string) => {
 const Play_this_album_MediaList_click = async (item: any, list_name: string) => {
   const temp_id = Get_this_album_info(item, list_name);
   if (store_server_user_model.model_server_type_of_web) {
+    store_view_media_page_fetchData.set_album_id(item.id)
     store_view_media_page_logic.page_songlists_selected = 'song_list_all';
     store_server_user_model.random_play_model = false;
   }
@@ -287,7 +288,6 @@ import {store_player_audio_info} from "@/views/view_app/page_metadata/page_folde
 import {store_player_appearance} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_appearance";
 import {store_view_media_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
 import {store_playlist_list_fetchData} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_fetchData";
-import {store_player_audio_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
 const contextmenu = ref(null as any)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
 const message = useMessage()

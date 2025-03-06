@@ -20,7 +20,6 @@ export class Audio_howler {
         try {
             if (this.howl) {
                 this.howl.play();
-                this.isPlaying = true;
             }
         }catch{  }
 

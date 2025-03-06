@@ -16,6 +16,7 @@ import {store_router_history_data_of_media} from "@/router/router_store/store_ro
 import {store_view_media_page_info} from "../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
 import {store_view_album_page_info} from "../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_info";
 import {store_view_artist_page_info} from "../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_info"
+import {store_playlist_list_fetchData} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_fetchData";
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
 import { isElectron } from '@/utils/electron/isElectron';
 import {store_local_db_info} from "../local/store_local_db_info";
@@ -143,57 +144,36 @@ export const store_app_configs_logic_save = reactive({
             db.exec('PRAGMA foreign_keys = OFF');
 
             let player_Configs_of_Audio_Info = null
-            if (store_server_user_model.model_server_type_of_web) {
-                player_Configs_of_Audio_Info = ref(
-                    new Player_Configs_of_Audio_Info({
-                        this_audio_file_path: String(''),
-                        this_audio_file_medium_image_url: String(''),
-                        this_audio_file_lyric: String(''),
-                        this_audio_artist_name: String(''),
-                        this_audio_artist_id: String(''),
-                        this_audio_song_name: String(''),
-                        this_audio_song_id: String(''),
-                        this_audio_song_rating: String(0),
-                        this_audio_song_favorite: String(false),
-                        this_audio_album_name: String(''),
-                        this_audio_album_id: String(''),
-                        this_audio_Index_of_absolute_positioning_in_list: String(0),
+            player_Configs_of_Audio_Info = ref(
+                new Player_Configs_of_Audio_Info({
+                    this_audio_file_path: String(store_player_audio_info.this_audio_file_path),
+                    this_audio_file_medium_image_url: String(store_player_audio_info.this_audio_file_medium_image_url),
+                    this_audio_file_lyric: String(store_player_audio_info.this_audio_lyrics_string),
+                    this_audio_artist_name: String(store_player_audio_info.this_audio_artist_name),
+                    this_audio_artist_id: String(store_player_audio_info.this_audio_artist_id),
+                    this_audio_song_name: String(store_player_audio_info.this_audio_song_name),
+                    this_audio_song_id: String(store_player_audio_info.this_audio_song_id),
+                    this_audio_song_rating: String(store_player_audio_info.this_audio_song_rating),
+                    this_audio_song_favorite: String(store_player_audio_info.this_audio_song_favorite),
+                    this_audio_album_name: String(store_player_audio_info.this_audio_album_name),
+                    this_audio_album_id: String(store_player_audio_info.this_audio_album_id),
+                    this_audio_Index_of_absolute_positioning_in_list: String(store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list),
 
-                        page_top_album_image_url: String(store_player_audio_info.page_top_album_image_url),
-                        page_top_album_id: String(store_player_audio_info.page_top_album_id),
-                        page_top_album_name: String(store_player_audio_info.page_top_album_name),
+                    page_top_album_image_url: String(store_player_audio_info.page_top_album_image_url),
+                    page_top_album_id: String(store_player_audio_info.page_top_album_id),
+                    page_top_album_name: String(store_player_audio_info.page_top_album_name),
 
-                        page_songlists_selected: String(store_view_media_page_logic.page_songlists_selected),
+                    slider_singleValue: String(store_player_audio_logic.slider_singleValue),
 
-                        player_mode_of_lock_playlist: String(store_player_appearance.player_mode_of_lock_playlist),
-                        player_mode_of_medialist_from_external_import: String(store_player_appearance.player_mode_of_medialist_from_external_import),
-                    }));
-            } else {
-                player_Configs_of_Audio_Info = ref(
-                    new Player_Configs_of_Audio_Info({
-                        this_audio_file_path: String(store_player_audio_info.this_audio_file_path),
-                        this_audio_file_medium_image_url: String(store_player_audio_info.this_audio_file_medium_image_url),
-                        this_audio_file_lyric: String(store_player_audio_info.this_audio_lyrics_string),
-                        this_audio_artist_name: String(store_player_audio_info.this_audio_artist_name),
-                        this_audio_artist_id: String(store_player_audio_info.this_audio_artist_id),
-                        this_audio_song_name: String(store_player_audio_info.this_audio_song_name),
-                        this_audio_song_id: String(store_player_audio_info.this_audio_song_id),
-                        this_audio_song_rating: String(store_player_audio_info.this_audio_song_rating),
-                        this_audio_song_favorite: String(store_player_audio_info.this_audio_song_favorite),
-                        this_audio_album_name: String(store_player_audio_info.this_audio_album_name),
-                        this_audio_album_id: String(store_player_audio_info.this_audio_album_id),
-                        this_audio_Index_of_absolute_positioning_in_list: String(store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list),
+                    playlist_artist_id: String(store_playlist_list_fetchData._artist_id),
+                    playlist_album_id: String(store_playlist_list_fetchData._album_id),
+                    playlist_album_artist_id: String(store_playlist_list_fetchData._album_artist_id),
 
-                        page_top_album_image_url: String(store_player_audio_info.page_top_album_image_url),
-                        page_top_album_id: String(store_player_audio_info.page_top_album_id),
-                        page_top_album_name: String(store_player_audio_info.page_top_album_name),
+                    page_songlists_selected: String(store_view_media_page_logic.page_songlists_selected),
 
-                        page_songlists_selected: String(store_view_media_page_logic.page_songlists_selected),
-
-                        player_mode_of_lock_playlist: String(store_player_appearance.player_mode_of_lock_playlist),
-                        player_mode_of_medialist_from_external_import: String(store_player_appearance.player_mode_of_medialist_from_external_import),
-                    }));
-            }
+                    player_mode_of_lock_playlist: String(store_player_appearance.player_mode_of_lock_playlist),
+                    player_mode_of_medialist_from_external_import: String(store_player_appearance.player_mode_of_medialist_from_external_import),
+                }));
             let system_Configs_Write = new Class_Set_System_Configs_Write()
             system_Configs_Write.system_player_config_of_audio(
                 db,
@@ -208,15 +188,27 @@ export const store_app_configs_logic_save = reactive({
     save_system_playlist_item_id_config(){
         if(isElectron) {
             let db: any = null;
-            db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
-            db.pragma('journal_mode = WAL');
-            db.exec('PRAGMA foreign_keys = OFF');
+            if(store_server_user_model.model_server_type_of_local) {
+                db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
+                db.pragma('journal_mode = WAL');
+                db.exec('PRAGMA foreign_keys = OFF');
 
-            let system_Configs_Write = new Class_Set_System_Configs_Write();
-            system_Configs_Write.system_playlist_item_id_config(
-                db,
-                store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds
-            )
+                let system_Configs_Write = new Class_Set_System_Configs_Write();
+                system_Configs_Write.system_playlist_item_id_config(
+                    db,
+                    store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds
+                )
+            }else{
+                db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
+                db.pragma('journal_mode = WAL');
+                db.exec('PRAGMA foreign_keys = OFF');
+
+                let system_Configs_Write = new Class_Set_System_Configs_Write();
+                system_Configs_Write.system_playlist_item_config(
+                    db,
+                    store_playlist_list_info.playlist_MediaFiles_temporary
+                )
+            }
             this.save_system_config_of_App_Configs()
             db.close();
             db = null;

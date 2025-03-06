@@ -16,6 +16,12 @@ interface Player_Configs_of_Audio_Info_Props {
   page_top_album_id: string,
   page_top_album_name: string,
 
+  slider_singleValue: any,
+
+  playlist_artist_id: string,
+  playlist_album_id: string,
+  playlist_album_artist_id: string,
+
   page_songlists_selected: string,
 
   player_mode_of_lock_playlist: any,

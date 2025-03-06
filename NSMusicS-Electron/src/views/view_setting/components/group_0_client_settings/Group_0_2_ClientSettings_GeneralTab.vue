@@ -308,12 +308,12 @@ onMounted(() => {
         </n-switch>
       </n-space>
       <n-divider style="margin: 0;"/>
-      <n-space justify="space-between" align="center">
+      <n-space v-if="false" justify="space-between" align="center">
         <n-space vertical>
           <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.routerModel') }}</span>
         </n-space>
       </n-space>
-      <n-space justify="space-between" align="center"
+      <n-space v-if="false" justify="space-between" align="center"
                style="margin-left: 30px;">
         <n-space vertical>
           <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.routerModel_type_1') }}</span>
@@ -328,7 +328,7 @@ onMounted(() => {
         >
         </n-switch>
       </n-space>
-      <n-space justify="space-between" align="center"
+      <n-space v-if="false" justify="space-between" align="center"
                style="margin-left: 30px;"
       >
         <n-space vertical>
@@ -344,7 +344,7 @@ onMounted(() => {
         >
         </n-switch>
       </n-space>
-      <n-space justify="space-between" align="center"
+      <n-space v-if="false" justify="space-between" align="center"
                style="margin-left: 30px;"
       >
         <n-space vertical>
@@ -359,7 +359,7 @@ onMounted(() => {
         >
         </n-switch>
       </n-space>
-      <n-divider style="margin: 0;"/>
+      <n-divider v-if="false" style="margin: 0;"/>
       <n-space v-if="false" vertical :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
         <n-space justify="space-between" align="center">
           <n-space vertical>

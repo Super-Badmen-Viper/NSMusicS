@@ -75,7 +75,6 @@ else {
         await initModifyMediaTag();
 
         context_MainWin.mainWindow.webContents.setZoomFactor(1);
-        context_MainWin.mainWindow.show()
 
         setTimeout(clearSessionClearCache, 5000);
     });
@@ -89,8 +88,10 @@ app.on('before-quit', () => (context_MainWin.allowQuitting = true))
 app.on('window-all-closed', async () => {
     if (process.platform !== 'darwin') {
         try {
-            if(mpv != undefined){
-                await mpv.quit();
+            if(mpv != undefined) {
+                if (mpv.isRunning()) {
+                    await mpv.quit();
+                }
             }
         }catch{}
         app.quit();
@@ -267,15 +268,17 @@ async function createTray(){
                 label: String(tray_menu_label_shut),
                 click: async() => {
                     try {
-                        if(mpv != undefined){
-                            await mpv.quit();
+                        context_MainWin.mainWindow.webContents.send("tray-app-quit");
+                        if(mpv != undefined) {
+                            if (mpv.isRunning()) {
+                                await mpv.quit();
+                            }
                         }
                     }catch{
 
                     }finally {
                         app.quit();
                     }
-
                 },
                 icon: shutIcon
             },
@@ -355,6 +358,8 @@ async function createTray(){
 }
 
 /// electron-window-normal
+let originalBounds: any = null;
+let isFullscreen = false;
 async function createWindow() {
     /// init BrowserWindow
     if(process.platform != 'darwin') {
@@ -364,7 +369,6 @@ async function createWindow() {
             minWidth: 1100,
             minHeight: 720,
             frame:false,
-            show: false,
             resizable: true,
             alwaysOnTop: false,
             webPreferences: {
@@ -381,7 +385,6 @@ async function createWindow() {
             minWidth: 1100,
             minHeight: 720,
             frame:false,
-            show: false,
             resizable: true,
             alwaysOnTop: false,
             webPreferences: {
@@ -416,8 +419,6 @@ async function createWindow() {
         return process.env.NODE_ENV === 'development'
     });
     /// electron
-    let originalBounds: any = null;
-    let isFullscreen = false;
     ipc.on('window-min', function () {
         context_MainWin.mainWindow.minimize();
     });
@@ -684,6 +685,7 @@ ipc.on('window-state-miniplayer-open', function (){
         height: 620
     });
     context_MainWin.mainWindow.setOpacity(1)
+    isFullscreen = false
 });
 ipc.on('window-state-miniplayer-hidden', function (){
     context_MainWin.mainWindow.setResizable(true);

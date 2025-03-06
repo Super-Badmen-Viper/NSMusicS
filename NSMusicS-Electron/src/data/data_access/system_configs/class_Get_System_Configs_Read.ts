@@ -2,10 +2,7 @@ import { ref } from 'vue'
 import { App_Configs } from '../../data_models/app_Configs/class_App_Configs';
 import { Player_Configs_of_Audio_Info } from '../../data_models/app_Configs/class_Player_Configs_of_Audio_Info';
 import { Player_Configs_of_UI } from '../../data_models/app_Configs/class_Player_Configs_of_UI';
-import {Library_Configs} from "../../data_models/app_Configs/class_Library_Configs";
 import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
-import {store_player_audio_logic} from "../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
-import shrink_up_arrow from '@/assets/svg/shrink_up_arrow.svg'
 import { isElectron } from '@/utils/electron/isElectron';``
 
 export class Class_Get_System_Configs_Read {
@@ -94,6 +91,12 @@ export class Class_Get_System_Configs_Read {
             page_top_album_id: '',
             page_top_album_name: '',
 
+            slider_singleValue: '',
+
+            playlist_artist_id: '',
+            playlist_album_id: '',
+            playlist_album_artist_id: '',
+
             page_songlists_selected: '',
         
             player_mode_of_lock_playlist: null,
@@ -126,8 +129,6 @@ export class Class_Get_System_Configs_Read {
                 } else {
                     store_app_configs_info.driveDbPath = path.join(os.homedir(), '.NSMusicS');
                 }
-                // init image
-                store_player_audio_logic.player_back_ChevronDouble = shrink_up_arrow
                 //
                 store_app_configs_info.navidrome_db = path.join(store_app_configs_info.driveDbPath, 'navidrome.db')
                 store_app_configs_info.nsmusics_db = path.join(store_app_configs_info.driveDbPath, 'nsmusics.db')

@@ -58,40 +58,42 @@ export const store_player_audio_info = reactive({
     this_audio_lyrics_info_line_num: 28,
 
     async reset_data() {
-        this.this_audio_file_path = '';
-        this.this_audio_file_medium_image_url = error_album;
-        this.page_top_album_image_url = error_album;
-        this.this_audio_restart_play = false;
+        if(!store_app_configs_logic_load.app_configs_loading) {
+            this.this_audio_file_path = '';
+            this.this_audio_file_medium_image_url = error_album;
+            this.page_top_album_image_url = error_album;
+            this.this_audio_restart_play = false;
 
-        this.this_audio_artist_name = '';
-        this.this_audio_artist_id = '';
-        this.this_audio_song_name = '';
-        this.this_audio_song_id = '';
-        this.this_audio_album_name = '';
-        this.this_audio_album_id = '';
+            this.this_audio_artist_name = '';
+            this.this_audio_artist_id = '';
+            this.this_audio_song_name = '';
+            this.this_audio_song_id = '';
+            this.this_audio_album_name = '';
+            this.this_audio_album_id = '';
 
-        this.this_audio_Index_of_absolute_positioning_in_list = -1;
+            this.this_audio_Index_of_absolute_positioning_in_list = -1;
 
-        this.this_audio_song_rating = 0;
-        this.this_audio_song_favorite = 0;
-        this.this_audio_album_rating = '';
-        this.this_audio_album_favorite = '';
-        this.this_audio_artist_rating = 0;
-        this.this_audio_artist_favorite = 0;
+            this.this_audio_song_rating = 0;
+            this.this_audio_song_favorite = 0;
+            this.this_audio_album_rating = '';
+            this.this_audio_album_favorite = '';
+            this.this_audio_artist_rating = 0;
+            this.this_audio_artist_favorite = 0;
 
-        this.page_top_album_image_url = error_album;
-        this.page_top_album_id = '';
-        this.page_top_album_name = '';
+            this.page_top_album_image_url = error_album;
+            this.page_top_album_id = '';
+            this.page_top_album_name = '';
 
-        this.this_audio_lyrics_string = '';
-        this.this_audio_lyrics_info_line_font = [] as any[];
-        this.this_audio_lyrics_info_line_time = [] as any[];
+            this.this_audio_lyrics_string = '';
+            this.this_audio_lyrics_info_line_font = [] as any[];
+            this.this_audio_lyrics_info_line_time = [] as any[];
 
-        this.this_audio_lyrics_info_byte_model = false;
-        this.this_audio_lyrics_info_byte_font = [] as any[];
-        this.this_audio_lyrics_info_byte_time = [] as any[];
+            this.this_audio_lyrics_info_byte_model = false;
+            this.this_audio_lyrics_info_byte_font = [] as any[];
+            this.this_audio_lyrics_info_byte_time = [] as any[];
 
-        this.this_audio_lyrics_info_line_num = 28;
+            this.this_audio_lyrics_info_line_num = 28;
+        }
     },
     async set_lyric(newValue :string){
         store_player_audio_info.this_audio_lyrics_string = newValue
@@ -198,7 +200,9 @@ watch(() => store_player_audio_info.this_audio_file_path, (newValue) => {
         if (store_view_media_page_info.media_Files_temporary != undefined
             && store_view_media_page_info.media_Files_temporary.length != 0
         ) {
-            store_player_audio_info.this_audio_restart_play = true
+            if(!store_app_configs_logic_load.app_configs_loading) {
+                store_player_audio_info.this_audio_restart_play = true;
+            }
             if (!store_player_appearance.player_mode_of_lock_playlist) {
                 if (!store_app_configs_logic_load.app_configs_loading) {
                     if(!store_playlist_appearance.playlist_show) {
@@ -237,7 +241,9 @@ watch(() => store_player_audio_info.this_audio_file_medium_image_url, async (new
             const response = await fetch(newValue);
             const blob = await response.blob();
             store_player_audio_info.page_top_album_image_url = URL.createObjectURL(blob); // 使用 Object URL
-            store_player_audio_info.this_audio_restart_play = true;
+            if(!store_app_configs_logic_load.app_configs_loading) {
+                store_player_audio_info.this_audio_restart_play = true;
+            }
         } catch (error) {
             console.error('Failed to load image:', error);
             store_player_audio_info.page_top_album_image_url = error_album

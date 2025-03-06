@@ -797,6 +797,9 @@
       }
     }
   });
+  ipcRenderer.on('tray-app-quit', ()=>{
+    store_app_configs_logic_save.save_system_config_of_Player_Configs_of_Audio_Info()
+  });
 </script>
 <template>
   <n-message-provider>
@@ -1008,6 +1011,9 @@
                               store_app_configs_info.window_state_miniplayer = !store_app_configs_info.window_state_miniplayer
                               //await ipcRenderer.invoke('get-window-state-miniplayer');
                               store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false
+                              //
+                              store_app_configs_info.window_full = false;
+                              store_app_configs_info.window_max = false;
                             }
                           }">
                       <template #icon>
@@ -1039,7 +1045,11 @@
                     <n-button quaternary circle style="margin-right:4px"
                           @click="() => {
                             if(isElectron) {
-                              ipcRenderer.send('window-max');
+                              if(store_app_configs_info.desktop_system_kind === 'linux'){
+                                ipcRenderer.send('window-fullscreen');
+                              }else{
+                                ipcRenderer.send('window-max');
+                              }
                             }
                             store_app_configs_info.window_max = !store_app_configs_info.window_max;
                             store_app_configs_info.window_full = false;

@@ -103,6 +103,59 @@ export class Class_Set_System_Configs_Write {
         });
     }
 
+    public system_playlist_item_config(
+        db: any,
+        media_file_of_list: Record<string, any>[],  // 假设 media_file_of_list 是对象数组
+    ) {
+        db.exec("DELETE FROM server_media_file");
+
+        const excludedFields = new Set([
+            'play_id',
+            'favorite',
+            'rating',
+            'play_count',
+            'play_date',
+            'duration_txt',
+            'absoluteIndex',
+            'selected',
+            'playing'
+        ]);
+        const filteredData = media_file_of_list.map(item => {
+            return Object.keys(item)
+                .filter(key => !excludedFields.has(key))
+                .reduce((obj: Record<string, any>, key) => {
+                    obj[key] = item[key];
+                    return obj;
+                }, {});
+        });
+        if (filteredData.length === 0) {
+            return;
+        }
+        const columns = Object.keys(filteredData[0]).join(', ');
+        const placeholders = filteredData.map(() =>
+            `(${Array(Object.keys(filteredData[0]).length).fill('?').join(', ')})`
+        ).join(', ');
+        const values = filteredData.flatMap(item =>
+            Object.values(item).map(value => {
+                // 如果值是对象且有 id 字段，提取 id
+                if (typeof value === 'object' && value !== null && 'id' in value) {
+                    return value.id;
+                }
+                return String(value);
+            })
+        );
+        const sql = `
+            INSERT INTO server_media_file (${columns})
+            VALUES ${placeholders}
+        `;
+        try {
+            const stmt = db.prepare(sql);
+            stmt.run(...values);  // 展开一维数组作为参数
+        } catch (error) {
+            console.error('Error inserting data:', error);
+        }
+    }
+
     system_view_history(
         db: any,
         view_Media_History_select_Configs: any,

@@ -428,7 +428,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         absoluteIndex: index + 1 + last_index,
                         favorite: song.UserData.IsFavorite,
                         rating: 0,
-                        duration_txt: this.formatTime(song.RunTimeTicks),
+                        duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.RunTimeTicks),
                         id: song.Id,
                         title: song.Name,
                         path: blobUrl,
@@ -542,7 +542,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         absoluteIndex: index + 1 + last_index,
                         favorite: song.UserData.IsFavorite,
                         rating: 0,
-                        duration_txt: this.formatTime(song.RunTimeTicks),
+                        duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.RunTimeTicks),
                         id: song.Id,
                         title: song.Name,
                         path: blobUrl,
@@ -677,7 +677,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         absoluteIndex: index + 1 + last_index,
                         favorite: song.UserData.IsFavorite,
                         rating: 0,
-                        duration_txt: this.formatTime(song.RunTimeTicks),
+                        duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.RunTimeTicks),
                         id: song.Id,
                         title: song.Name,
                         path: blobUrl,
@@ -838,7 +838,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         absoluteIndex: index + 1 + last_index,
                         favorite: song.UserData.IsFavorite,
                         rating: 0,
-                        duration_txt: this.formatTime(song.RunTimeTicks),
+                        duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.RunTimeTicks),
                         id: song.Id,
                         title: song.Name,
                         path: blobUrl,
@@ -1154,17 +1154,6 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             })
         }
         }
-    }
-
-    private formatTime(timestamp: number): string {
-        const milliseconds = Math.floor(timestamp / 10000);
-        const totalSeconds = Math.floor(milliseconds / 1000);
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = Math.floor(totalSeconds % 60);
-        const formattedMinutes = String(minutes).padStart(2, '0');
-        const formattedSeconds = String(seconds).padStart(2, '0');
-
-        return `${formattedMinutes}:${formattedSeconds}`;
     }
 
     /// file count

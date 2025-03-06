@@ -92,7 +92,7 @@ const click_back_svg = () => {
     store_player_audio_logic.player_back_ChevronDouble = player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow;
   }
 };
-let unwatch_player_show_click = watch(() => store_player_appearance.player_show_click, (newValue) => {
+watch(() => store_player_appearance.player_show_click, (newValue) => {
   if (newValue) {
     player_show_hight_animation_value.value = 670;
     get_playerbar_to_switch_playerview(player_show_hight_animation_value.value)
@@ -105,7 +105,7 @@ let unwatch_player_show_click = watch(() => store_player_appearance.player_show_
 ////// audio_player
 const timer_this_audio_restart_play = ref<NodeJS.Timeout>();
 const lastTriggerValue = ref<any>(null);// 延迟触发：接收大量数据时，仅触发最后一个值
-let unwatch_this_audio_restart_play = watch(() => store_player_audio_info.this_audio_restart_play, (newValue) => {
+watch(() => store_player_audio_info.this_audio_restart_play, (newValue) => {
   if (newValue) {
     lastTriggerValue.value = newValue; // 更新最后一个触发的值
     clearTimeout(timer_this_audio_restart_play.value);
@@ -128,14 +128,13 @@ const handleAudioFilePathChange = async () => {
 
     await Init_Audio_Player()
   }
-  // Prevent triggering events captured by "vue3 watch" during data initialization
   store_player_audio_logic.this_audio_initial_trigger = true
 };
 const this_audio_buffer_file = ref<any>()
 const timer_this_audio_player = ref<NodeJS.Timeout>();// 延迟触发：接收大量数据时，仅触发最后一个值
 import { Howl } from '@/utils/howler/howlerLoader';
 import { clearCache } from '@/utils/electron/webFrame';
-let unwatch_this_audio_buffer_file =  watch(() => this_audio_buffer_file.value, (newValue, oldValue) => {
+watch(() => this_audio_buffer_file.value, (newValue, oldValue) => {
   if (newValue !== oldValue) {
     Play_This_Audio_Path()
   }
@@ -168,7 +167,10 @@ const Play_This_Audio_Path = () => {
           Number(store_player_audio_logic.play_volume)
       )
       await store_player_audio_logic.player.play();
-
+      if (store_player_audio_logic.slider_init_singleValue != 0) {
+        store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_init_singleValue, true);
+        store_player_audio_logic.slider_init_singleValue = 0;
+      }
       Set_MediaInfo_To_PlayCount();
     }
   }, 400);
@@ -311,7 +313,6 @@ if(isElectron) {
 }
 ///
 onMounted(async () => {
-  console.log(store_player_audio_logic.player_back_ChevronDouble);
   timer = setInterval(synchronize_playback_time, 200);
   await store_player_audio_logic.player.IsPlaying()
   await store_player_audio_logic.player.setVolume(Number(store_player_audio_logic.play_volume))
@@ -371,15 +372,15 @@ if(isElectron) {
     store_player_audio_logic.play_order = order;
   });
 }
-let unwatch_player_state_play_click = watch(() => store_player_audio_logic.player_state_play_click, (newValue) => {
+watch(() => store_player_audio_logic.player_state_play_click, (newValue) => {
   Init_Audio_Player()
 });
-let unwatch_player_click_state_of_play_skip_back = watch(() => store_player_audio_logic.player_click_state_of_play_skip_back, (newValue) => {
+watch(() => store_player_audio_logic.player_click_state_of_play_skip_back, (newValue) => {
   debounce(async (event, args) => {
     await play_skip_back_click(), 300
   })
 });
-let unwatch_player_click_state_of_play_skip_forward = watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (newValue) => {
+watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (newValue) => {
   debounce(async (event, args) => {
     await play_skip_forward_click(), 300
   })
@@ -588,6 +589,21 @@ const Play_Media_Switching = async () => {
 };
 
 ////// player_configs slider formatTime area
+watch(() => store_player_audio_logic.slider_init_singleValue, (newValue, oldValue) => {
+  if (newValue !== oldValue && newValue > 0) {
+    store_player_audio_logic.slider_singleValue = newValue;
+  }
+});
+watch(() => store_player_audio_logic.player.isPlaying, (newValue, oldValue) => {
+  if (newValue) {
+    setTimeout(() => {
+      // if (store_player_audio_logic.slider_init_singleValue != 0) {
+      //   store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_init_singleValue, true);
+      //   store_player_audio_logic.slider_init_singleValue = 0;
+      // }
+    }, 500); // 500 毫秒 = 0.5 秒
+  }
+});
 const set_slider_singleValue = async () => {
   if (!store_player_audio_logic.player_range_duration_isDragging) {
     const currentTime = await store_player_audio_logic.player.getCurrentTime();
@@ -618,7 +634,7 @@ const synchronize_playback_time = () => {
   }catch{}
 }
 let timer: string | number | NodeJS.Timeout | undefined;
-let unwatch_play_go_index_time =  watch(() => store_player_audio_logic.player_go_lyric_line_index_of_audio_play_progress, () => {
+watch(() => store_player_audio_logic.player_go_lyric_line_index_of_audio_play_progress, () => {
   store_player_audio_logic.play_go_duration(store_player_audio_logic.player_go_lyric_line_index_of_audio_play_progress,false)
 });
 
@@ -767,12 +783,6 @@ const handleItemClick_album = (album:string) => {
 ////// view albumlist_view Remove data
 onBeforeUnmount(() => {
   clearInterval(timer);
-});
-onBeforeUnmount(() => {
-  unwatch_player_show_click()
-  unwatch_this_audio_restart_play()
-  unwatch_this_audio_buffer_file()
-  unwatch_play_go_index_time()
 });
 //
 watch(() => store_player_audio_logic.player_click_state_of_order, (newValue) => {

@@ -21,7 +21,8 @@ import {store_router_history_data_of_album} from "@/router/router_store/store_ro
 import {store_router_history_data_of_artist} from "@/router/router_store/store_router_history_data_of_artist";
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 import {store_view_media_page_fetchData} from "../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_fetchData";
-import error_album from '@/assets/img/error_album.jpg'
+import {store_playlist_list_fetchData} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_fetchData";
+import shrink_up_arrow from '@/assets/svg/shrink_up_arrow.svg'
 import {store_local_db_info} from "@/data/data_stores/local/store_local_db_info";
 import {isElectron} from "@/utils/electron/isElectron";
 
@@ -46,24 +47,25 @@ export const store_app_configs_logic_load = reactive({
             store_view_album_page_info.album_page_sizes = Number('' + system_Configs_Read.app_Configs.value['album_page_sizes'])
             store_view_artist_page_info.artist_page_sizes = Number('' + system_Configs_Read.app_Configs.value['artist_page_sizes'])
             ////// clear_UserExperience_Model
-            const configKeys = ['clear_Memory_Model', 'clear_Equilibrium_Model', 'clear_UserExperience_Model'];
-            let foundTrue = false;
-            configKeys.forEach(key => {
-                const value = '' + system_Configs_Read.app_Configs.value[key] === 'true';
-                if (value && !foundTrue) {
-                    foundTrue = true;
-                    store_router_data_logic[key] = true;
-                } else {
-                    store_router_data_logic[key] = false;
-                }
-            });
-            if (
-                !store_router_data_logic.clear_Memory_Model &&
-                !store_router_data_logic.clear_UserExperience_Model &&
-                !store_router_data_logic.clear_Equilibrium_Model
-            ) {
-                store_router_data_logic.clear_Equilibrium_Model = true
-            }
+            // const configKeys = ['clear_Memory_Model', 'clear_Equilibrium_Model', 'clear_UserExperience_Model'];
+            // let foundTrue = false;
+            // configKeys.forEach(key => {
+            //     const value = '' + system_Configs_Read.app_Configs.value[key] === 'true';
+            //     if (value && !foundTrue) {
+            //         foundTrue = true;
+            //         store_router_data_logic[key] = true;
+            //     } else {
+            //         store_router_data_logic[key] = false;
+            //     }
+            // });
+            // if (
+            //     !store_router_data_logic.clear_Memory_Model &&
+            //     !store_router_data_logic.clear_UserExperience_Model &&
+            //     !store_router_data_logic.clear_Equilibrium_Model
+            // ) {
+            //     store_router_data_logic.clear_Equilibrium_Model = true
+            // }
+            store_router_data_logic.clear_UserExperience_Model = true
             /////
             if (process.platform === 'win32') {
                 store_server_user_model.model_select = '' + system_Configs_Read.app_Configs.value['model_select']
@@ -184,6 +186,7 @@ export const store_app_configs_logic_load = reactive({
         catch (e) {
             console.error(e)
         }
+
         try {
             /// player_Configs_For_UI
             store_player_appearance.player_collapsed_album = '' + system_Configs_Read.player_Configs_of_UI.value['player_collapsed_album'] === 'true'
@@ -213,11 +216,8 @@ export const store_app_configs_logic_load = reactive({
                     '' + system_Configs_Read.player_Configs_of_UI.value['player_use_playbar_auto_hide'] !== 'false';
             /// player_Configs_of_Audio_Info
             store_player_audio_info.this_audio_file_path = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_path']
+            store_player_audio_info.this_audio_file_medium_image_url = '';
             // store_player_audio_info.this_audio_file_medium_image_url = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_medium_image_url']
-            // if(store_player_audio_info.this_audio_file_medium_image_url === undefined || store_player_audio_info.this_audio_file_medium_image_url.length === 0){
-            //     store_player_audio_info.this_audio_file_medium_image_url = error_album;
-            // }
-            store_player_audio_info.this_audio_file_medium_image_url = error_album;
             await store_player_audio_info.set_lyric(
                 '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_lyric']
             )
@@ -236,6 +236,12 @@ export const store_app_configs_logic_load = reactive({
             store_player_audio_info.page_top_album_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_id']
             store_player_audio_info.page_top_album_name = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_name']
             //
+            store_playlist_list_fetchData._artist_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['playlist_artist_id']
+            store_playlist_list_fetchData._album_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['playlist_album_id']
+            store_playlist_list_fetchData._album_artist_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['playlist_album_artist_id']
+            //
+            store_player_audio_logic.slider_init_singleValue = Number('' + system_Configs_Read.player_Configs_of_Audio_Info.value['slider_singleValue'])
+            //
             store_player_appearance.player_mode_of_lock_playlist = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['player_mode_of_lock_playlist'] === 'true'
             store_player_appearance.player_mode_of_medialist_from_external_import = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['player_mode_of_medialist_from_external_import'] === 'true'
             console.log('3: player info：load complete')
@@ -243,6 +249,7 @@ export const store_app_configs_logic_load = reactive({
         catch (e) {
             console.error(e)
         }
+
         try{
             /// server
             store_server_users.server_config_of_all_user_of_sqlite = system_Configs_Read.server_Configs.value
@@ -272,25 +279,6 @@ export const store_app_configs_logic_load = reactive({
             /// server login
             if(store_server_user_model.model_server_type_of_web) {
                 await store_server_users.get_init_login_server();
-            }
-
-            /// playlist media_file_id_of_list
-            if(store_server_user_model.model_server_type_of_local) {
-                store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = system_Configs_Read.playlist_File_Configs.value
-                let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
-                store_playlist_list_info.playlist_MediaFiles_temporary = get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Media_File_Id_of_list(
-                    store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds
-                )
-                // Get Play_Id
-                const media_file = store_playlist_list_info.playlist_MediaFiles_temporary.find(
-                    (row) => row.id === store_player_audio_info.this_audio_song_id
-                );
-                if (media_file) {
-                    store_player_audio_info.this_audio_play_id = media_file.play_id;
-                }
-            }
-            else if(store_server_user_model.model_server_type_of_web){
-
             }
 
             /// view_router_history
@@ -345,7 +333,8 @@ export const store_app_configs_logic_load = reactive({
                     store_player_audio_logic.player_fade_value = 2000;
                 }
             }
-        }catch {
+        }
+        catch {
             if(process.platform != 'linux') {
                 store_player_audio_logic.player_select = 'mpv'
                 store_player_audio_logic.player_fade_value = 0;
@@ -389,7 +378,8 @@ export const store_app_configs_logic_load = reactive({
                     }
                 }
             }
-        }catch{
+        }
+        catch{
             store_player_audio_logic.player_dolby = true;
             store_player_audio_logic.player_audio_channel = '5.1';
             store_player_audio_logic.player_samp_value = 48000;
@@ -405,6 +395,61 @@ export const store_app_configs_logic_load = reactive({
             store_player_audio_logic.player_audio_channel = '5.1';
         }
 
+        /// playlist media_file_id_of_list
+        try {
+            store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = system_Configs_Read.playlist_File_Configs.value
+            let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
+            if(store_server_user_model.model_server_type_of_local) {
+                store_playlist_list_info.playlist_MediaFiles_temporary = get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Media_File_Id_of_list(
+                    store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds
+                )
+            }else if(store_server_user_model.model_server_type_of_web) {
+                store_playlist_list_info.playlist_MediaFiles_temporary =
+                    get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Media_File_of_list()
+            }
+            // Get Play_Id
+            const media_file = store_playlist_list_info.playlist_MediaFiles_temporary.find(
+                (row) => row.id === store_player_audio_info.this_audio_song_id
+            );
+            if (media_file) {
+                store_player_audio_info.this_audio_play_id = media_file.play_id;
+                store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url
+            }
+            // replace apikey
+            if(
+                store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
+            ) {
+                if (store_server_user_model.authorization_of_Je != undefined){
+                    const regex = /api_key=([^&]+)/;
+                    store_player_audio_info.this_audio_file_path =
+                        store_player_audio_info.this_audio_file_path.replace(
+                            regex,
+                            'api_key=' + store_server_user_model.authorization_of_Je
+                        );
+                    store_player_audio_info.this_audio_file_medium_image_url =
+                        store_player_audio_info.this_audio_file_medium_image_url.replace(
+                            regex,
+                            'api_key=' + store_server_user_model.authorization_of_Je
+                        );
+                    store_playlist_list_info.playlist_MediaFiles_temporary.forEach(item => {
+                        if (item.medium_image_url) {
+                            item.medium_image_url = item.medium_image_url
+                                .replace(regex, 'api_key=' + store_server_user_model.authorization_of_Je);
+                        }
+                        if (item.path) {
+                            item.path = item.path
+                                .replace(regex, 'api_key=' + store_server_user_model.authorization_of_Je);
+                        }
+                        if (item.duration) {
+                            item.duration_txt = store_player_audio_logic.formatTime_RunTimeTicks(item.duration);
+                        }
+                    });
+                }
+            }
+        }catch (e) {
+            console.error(e)
+        }
+
         /// close
         try {
             await store_router_data_logic.get_page_top_info()
@@ -417,14 +462,23 @@ export const store_app_configs_logic_load = reactive({
         ){
             store_app_configs_info.app_view_left_menu_select_activeKey = 'setting'
             store_router_data_info.router_name = 'setting'
+        }else{
+            store_app_configs_info.app_view_left_menu_select_activeKey = 'home'
+            store_router_data_info.router_name = 'home'
         }
+        ///
         store_router_data_info.router.push(store_router_data_info.router_name)
-        this.app_configs_loading = false
+
+        // init image
+        store_player_audio_logic.player_back_ChevronDouble = shrink_up_arrow
 
         // await store_player_audio_logic.player.pause();
         if(store_server_user_model.model_server_type_of_web){
             store_player_audio_logic.this_audio_initial_trigger = true
         }
+
+        // end
+        this.app_configs_loading = false
     },
     extractFolderName(fullPath: string): string | null {
         if (!fullPath) return null;
