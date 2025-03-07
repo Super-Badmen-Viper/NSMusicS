@@ -727,6 +727,7 @@
   })
   import {store_server_login_logic} from "@/views/view_server/page_metadata/page_login/store/store_server_login_logic";
   onMounted(async () => {
+    store_app_configs_info.desktop_system_kind = process.platform;
     //// init db path
     if (isElectron) {
       store_app_configs_info.navidrome_db = await ipcRenderer.invoke('window-get-navidrome-db');
@@ -1047,12 +1048,14 @@
                             if(isElectron) {
                               if(store_app_configs_info.desktop_system_kind === 'linux'){
                                 ipcRenderer.send('window-fullscreen');
+                                store_app_configs_info.window_full = !store_app_configs_info.window_full;
+                                store_app_configs_info.window_max = store_app_configs_info.window_full;
                               }else{
                                 ipcRenderer.send('window-max');
+                                store_app_configs_info.window_max = !store_app_configs_info.window_max;
+                                store_app_configs_info.window_full = false;
                               }
                             }
-                            store_app_configs_info.window_max = !store_app_configs_info.window_max;
-                            store_app_configs_info.window_full = false;
                           }">
                       <template #icon>
                         <n-icon size="20" :depth="2" v-if="store_app_configs_info.window_max"><FullScreenMinimize24Filled/></n-icon>
