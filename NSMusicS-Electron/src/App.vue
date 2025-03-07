@@ -928,7 +928,7 @@
                            :type="store_app_configs_info.version_updated === 1 ? 'error' : 'info'"
                            :style="{
                               marginRight: isElectron
-                                ? (store_app_configs_info.desktop_system_kind !== 'darwin' ? '257px' : '99px')
+                                ? (store_app_configs_info.desktop_system_kind !== 'darwin' ? '257px' : '76px')
                                 : '76px'
                            }"
                            style="
