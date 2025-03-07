@@ -93,9 +93,9 @@ npm install  /or/  cnpm install # Recommended use cnpm install
 ```sh
 # You need to recompile the native module better sqlite3 to allow the sqlite database to read normally
 # You can use either of the following two methods (Choose method A or B)
-## method A.
+## method A. -> Recommend this, Ensure that the node version is 20.15.0
     Delete the files in the following path first: NSMusicS\NSMusicS-Electron\node_modules\better-sqlite3\build\Release\better_sqlite3.node
-    Then copy the file from the following path: NSMusicS\NSMusicS-Electron\resources\better_sqlite3.node
+    Then copy the file from the following path: NSMusicS\NSMusicS-Electron\resources\node\win | linux | macos -> better-sqlite3.node
     Paste the copied file to the following path: NSMusicS\NSMusicS-Electron\node_modules\better-sqlite3\build\Release
 ## method B.
     cd NSMusicS/NSMusicS-Electron/node_modules/better-sqlite3 
