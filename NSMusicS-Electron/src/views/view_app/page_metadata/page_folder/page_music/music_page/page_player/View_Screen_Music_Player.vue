@@ -951,7 +951,11 @@ onBeforeUnmount(() => {
             <n-tooltip trigger="hover" placement="top"
                        v-if="isElectron">
               <template #trigger>
-                <n-button quaternary circle style="margin-right:4px"
+                <n-button quaternary circle
+                          :style="{
+                            marginRight:
+                              store_app_configs_info.desktop_system_kind != 'darwin' ? '4px' : '36px'
+                          }"
                           @click="async () => {
                               if(isElectron) {
                                 // 请不要更改这段诡异的代码，它依靠Electron的BUG运行，呵呵

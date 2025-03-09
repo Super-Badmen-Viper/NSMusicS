@@ -928,7 +928,7 @@
                            :type="store_app_configs_info.version_updated === 1 ? 'error' : 'info'"
                            :style="{
                               marginRight: isElectron
-                                ? (store_app_configs_info.desktop_system_kind !== 'darwin' ? '257px' : '76px')
+                                ? (store_app_configs_info.desktop_system_kind !== 'darwin' ? '257px' : '106px')
                                 : '76px'
                            }"
                            style="
@@ -961,7 +961,7 @@
                               :style="{
                                 marginRight:
                                   isElectron ?
-                                  (store_app_configs_info.desktop_system_kind != 'darwin' ? '4px' : '30px') : '36px'
+                                  (store_app_configs_info.desktop_system_kind != 'darwin' ? '4px' : '4px') : '36px'
                               }"
                               @click="store_app_configs_logic_theme.theme_mode_change_click()">
                       <template #icon>
@@ -999,8 +999,12 @@
                 <n-tooltip trigger="hover" placement="top"
                            v-if="isElectron">
                   <template #trigger>
-                    <n-button quaternary circle style="margin-right:4px"
-                              @click="async () => {
+                    <n-button quaternary circle 
+                              :style="{
+                                marginRight:
+                                  store_app_configs_info.desktop_system_kind != 'darwin' ? '4px' : '30px'
+                              }"
+                            @click="async () => {
                             if(isElectron) {
                               // 请不要更改这段诡异的代码，它依靠Electron的BUG运行，呵呵
                               store_app_configs_info.window_state_miniplayer_card = false
@@ -1043,7 +1047,9 @@
                 <n-tooltip trigger="hover" placement="top"
                            v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'">
                   <template #trigger>
-                    <n-button quaternary circle style="margin-right:4px"
+                    <n-button 
+                        quaternary circle 
+                        style="margin-right:4px"
                           @click="() => {
                             if(isElectron) {
                               if(store_app_configs_info.desktop_system_kind === 'linux'){
