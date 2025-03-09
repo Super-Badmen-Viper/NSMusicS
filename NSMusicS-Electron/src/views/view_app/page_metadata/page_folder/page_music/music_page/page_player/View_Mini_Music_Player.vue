@@ -666,7 +666,7 @@ onBeforeUnmount(() => {
               }"
               style="-webkit-app-region: no-drag;margin-top: 10px;">
               <n-tooltip trigger="hover" placement="top"
-                         v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'">
+                         v-if="isElectron">
                 <template #trigger>
                   <n-button quaternary circle style="margin-right:4px"
                             @click="async () => {
