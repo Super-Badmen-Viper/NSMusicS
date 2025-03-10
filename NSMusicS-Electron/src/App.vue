@@ -727,9 +727,10 @@
   })
   import {store_server_login_logic} from "@/views/view_server/page_metadata/page_login/store/store_server_login_logic";
   onMounted(async () => {
-    store_app_configs_info.desktop_system_kind = process.platform;
     //// init db path
     if (isElectron) {
+      store_app_configs_info.desktop_system_kind = process.platform;
+      //
       store_app_configs_info.navidrome_db = await ipcRenderer.invoke('window-get-navidrome-db');
       store_app_configs_info.nsmusics_db = await ipcRenderer.invoke('window-get-nsmusics-db');
       console.log(store_app_configs_info.navidrome_db)
@@ -739,6 +740,8 @@
     } else {
       // isLogin
       store_server_login_logic.checkLoginStatus();
+      //
+      store_app_configs_info.desktop_system_kind = 'docker'
     }
     //// init db data
     try {
@@ -798,9 +801,11 @@
       }
     }
   });
-  ipcRenderer.on('tray-app-quit', ()=>{
-    store_app_configs_logic_save.save_system_config_of_Player_Configs_of_Audio_Info()
-  });
+  if(isElectron) {
+    ipcRenderer.on('tray-app-quit', () => {
+      store_app_configs_logic_save.save_system_config_of_Player_Configs_of_Audio_Info()
+    });
+  }
 </script>
 <template>
   <n-message-provider>

@@ -254,8 +254,8 @@
             "input_name": "nazwa serwera",
             "success": "serwer dodany pomyślnie",
             "input_savePassword": "zapisz hasło",
-            "ignoreSsl": "zignoruj ssl ($t(common.restartRequired))",
-            "ignoreCors": "zignoruj cors ($t(common.restartRequired))",
+            "ignoreSsl": "zignoruj ssl",
+            "ignoreCors": "zignoruj cors",
             "error_savePassword": "wystąpił błąd podczas próby zapisania hasła"
         },
         "addToPlaylist": {
@@ -490,7 +490,7 @@
         "fontType_optionCustom": "czcionka niestandardowa",
         "audioExclusiveMode": "wyłączny tryb audio",
         "lyricFetchProvider": "dostawcy tekstów internetowych",
-        "language_description": "ustaw język dla aplikacji ($t(common.restartRequired))",
+        "language_description": "ustaw język dla aplikacji",
         "hotkey_rate3": "oceń na 3 gwiazdki",
         "font": "czcionka",
         "hotkey_toggleFullScreenPlayer": "przełącz tryb pełnoekranowy",

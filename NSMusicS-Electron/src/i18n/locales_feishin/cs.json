@@ -102,7 +102,7 @@
         "audioExclusiveMode": "režim výhradního výstupu",
         "remotePassword": "heslo serveru pro vzdálené ovládání",
         "lyricFetchProvider": "poskytovatelé textů",
-        "language_description": "nastavení jazyka aplikace ($t(common.restartRequired))",
+        "language_description": "nastavení jazyka aplikace",
         "playbackStyle_optionCrossFade": "křížové prolnutí",
         "hotkey_rate3": "hodnocení 3 hvězdami",
         "font": "písmo",
@@ -669,8 +669,8 @@
             "input_name": "název serveru",
             "success": "server úspěšně přidán",
             "input_savePassword": "uložit heslo",
-            "ignoreSsl": "ignorovat SSL $t(common.restartRequired)",
-            "ignoreCors": "ignorovat CORS $t(common.restartRequired)",
+            "ignoreSsl": "ignorovat SSL",
+            "ignoreCors": "ignorovat CORS",
             "error_savePassword": "při ukládání hesla se vyskytla chyba"
         },
         "addToPlaylist": {

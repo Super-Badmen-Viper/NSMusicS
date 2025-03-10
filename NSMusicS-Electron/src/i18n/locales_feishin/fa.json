@@ -58,7 +58,7 @@
         "discordUpdateInterval_description": "فاصلهٔ بین هر به روزرسانی به ثانیه (حداقل ۱۵ ثانیه)",
         "audioExclusiveMode": "حالت اختصاصی صدا",
         "remotePassword": "رمز عبور کنترل از راه دور",
-        "language_description": "زبان اپلیکیشن را معین می‌کند $t(common.restartRequired)",
+        "language_description": "زبان اپلیکیشن را معین می‌کند",
         "hotkey_rate3": "امتیاز ۳ ستاره",
         "font": "قلم",
         "replayGainMode_optionTrack": "",

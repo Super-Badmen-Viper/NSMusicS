@@ -101,7 +101,7 @@
         "audioExclusiveMode": "オーディオ排他モード",
         "remotePassword": "リモートコントロール サーバー パスワード",
         "lyricFetchProvider": "歌詞取得先",
-        "language_description": "アプリケーションの言語を設定します ($t(common.restartRequired))",
+        "language_description": "アプリケーションの言語を設定します",
         "playbackStyle_optionCrossFade": "クロスフェード",
         "hotkey_rate3": "3つ星で評価",
         "font": "フォント",
@@ -548,8 +548,8 @@
             "input_name": "サーバー名",
             "success": "サーバーが追加されました",
             "input_savePassword": "パスワードを保存",
-            "ignoreSsl": "SSLを無視 ($t(common.restartRequired))",
-            "ignoreCors": "CORSを無視 ($t(common.restartRequired))",
+            "ignoreSsl": "SSLを無視",
+            "ignoreCors": "CORSを無視",
             "error_savePassword": "パスワードを保存する際にエラーが発生しました"
         },
         "addToPlaylist": {

@@ -220,8 +220,8 @@
     "form": {
         "addServer": {
             "error_savePassword": "an error occurred when trying to save the password",
-            "ignoreCors": "ignore cors ($t(common.restartRequired))",
-            "ignoreSsl": "ignore ssl ($t(common.restartRequired))",
+            "ignoreCors": "ignore cors",
+            "ignoreSsl": "ignore ssl",
             "input_legacyAuthentication": "enable legacy authentication",
             "input_name": "server name",
             "input_password": "password",
@@ -564,7 +564,7 @@
         "imageAspectRatio": "use native cover art aspect ratio",
         "imageAspectRatio_description": "if enabled, cover art will be shown using their native aspect ratio. for art that is not 1:1, the remaining space will be empty",
         "language": "language",
-        "language_description": "sets the language for the application ($t(common.restartRequired))",
+        "language_description": "sets the language for the application",
         "lyricFetch": "fetch lyrics from the internet",
         "lyricFetch_description": "fetch lyrics from various internet sources",
         "lyricFetchProvider": "providers to fetch lyrics from",

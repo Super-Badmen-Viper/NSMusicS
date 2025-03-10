@@ -53,7 +53,7 @@
     "@tsconfig/node18": "^18.2.2",
     "@types/md5": "^2.3.5",
     "@types/node": "^20.11.8",
-    "@vitejs/plugin-vue": "latest",
+    "@vitejs/plugin-vue": "^5.2.1",
     "@vue/tsconfig": "^0.5.1",
     "electron": "^32.1.0",
     "electron-builder": "^24.12.0",
@@ -66,7 +66,7 @@
     "unplugin-icons": "^0.18.3",
     "unplugin-vue-components": "^0.26.0",
     "vfonts": "^0.0.3",
-    "vite": "latest",
+    "vite": "^6.2.0",
     "vue": "^3.5.13",
     "vue-router": "^4.2.5",
     "vue-tsc": "^1.8.25"

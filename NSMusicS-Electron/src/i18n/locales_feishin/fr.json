@@ -407,7 +407,7 @@
         "fontType_optionCustom": "police personnalisée",
         "remotePassword": "mot de passe du serveur de contrôle à distance",
         "lyricFetchProvider": "fournisseur depuis lequel récupérer les paroles",
-        "language_description": "définit la langue de l'application ($t(common.restartRequired))",
+        "language_description": "définit la langue de l'application",
         "playbackStyle_optionCrossFade": "fondu enchaîné",
         "hotkey_rate3": "noter 3 étoiles",
         "font": "police",
@@ -563,8 +563,8 @@
             "input_name": "nom du serveur",
             "success": "serveur ajouté avec succès",
             "input_savePassword": "enregister le mot de passe",
-            "ignoreSsl": "ignorer ssl $t(common.restartRequired)",
-            "ignoreCors": "ignorer cors $t(common.restartRequired)",
+            "ignoreSsl": "ignorer ssl",
+            "ignoreCors": "ignorer cors",
             "error_savePassword": "une erreur s’est produite lors de la tentative de sauvegarde du mot de passe"
         },
         "addToPlaylist": {

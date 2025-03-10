@@ -99,7 +99,7 @@
         "audioExclusiveMode": "modo de audio exclusivo",
         "remotePassword": "contraseña del control remoto del servidor",
         "lyricFetchProvider": "proveedores para buscar letras",
-        "language_description": "establece el idioma de la aplicación ($t(common.restartRequired))",
+        "language_description": "establece el idioma de la aplicación",
         "playbackStyle_optionCrossFade": "crossfade",
         "hotkey_rate3": "calificar con 3 estrellas",
         "font": "fuente",
@@ -595,8 +595,8 @@
             "input_name": "nombre del servidor",
             "success": "servidor añadido correctamente",
             "input_savePassword": "guardar contraseña",
-            "ignoreSsl": "ignorar ssl ($t(common.restartRequired))",
-            "ignoreCors": "ignorar cors ($t(common.restartRequired))",
+            "ignoreSsl": "ignorar ssl",
+            "ignoreCors": "ignorar cors",
             "error_savePassword": "un error ocurrió cuando se intentó guardar la contraseña"
         },
         "addToPlaylist": {

@@ -483,8 +483,8 @@
             "input_name": "название сервера",
             "success": "сервер добавлен успешно",
             "input_savePassword": "сохранить пароль",
-            "ignoreSsl": "игнорирование ssl ($t(common.restartRequired))",
-            "ignoreCors": "игнорирование корсетов ($t(common.restartRequired))",
+            "ignoreSsl": "игнорирование ssl",
+            "ignoreCors": "игнорирование корсетов",
             "error_savePassword": "произошла ошибка во время попытки сохранения пароля"
         },
         "addToPlaylist": {
@@ -665,7 +665,7 @@
         "externalLinks_description": "включает отображение внешних ссылок (Last.fm, MusicBrainz) на страницах альбомов и артистов",
         "floatingQueueArea_description": "включить отображение иконки наведения на правой части экрана, чтобы показать очередь воспроизведения",
         "followLyric_description": "прокручивать текст трека до текущей позиции воспроизведения",
-        "language_description": "устанавливает язык приложения ($t(common.restartRequired))",
+        "language_description": "устанавливает язык приложения",
         "lyricFetch_description": "получать тексты треков из различных интернет-источников",
         "lyricFetchProvider": "источник текстов треков",
         "minimumScrobbleSeconds": "минимальное время для скробблинга (в секундах)",

@@ -185,8 +185,8 @@
             "input_name": "server namn",
             "success": "servern har lagts till",
             "input_savePassword": "spara lösenord",
-            "ignoreSsl": "ignorera ssl ($t(common.restartRequired))",
-            "ignoreCors": "ignorera cors ($t(common.restartRequired))",
+            "ignoreSsl": "ignorera ssl",
+            "ignoreCors": "ignorera cors",
             "error_savePassword": "ett fel uppstod när lösenordet skulle sparas"
         },
         "addToPlaylist": {

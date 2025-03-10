@@ -200,8 +200,8 @@
             "input_name": "Server Name",
             "success": "Server erfolgreich hinzugefügt",
             "input_savePassword": "Passwort speichern",
-            "ignoreSsl": "ignoriere ssl $t(common.restartRequired)",
-            "ignoreCors": "ignoriere cors $t(common.restartRequired)",
+            "ignoreSsl": "ignoriere ssl",
+            "ignoreCors": "ignoriere cors",
             "error_savePassword": "Beim Versuch, das Passwort zu speichern, ist ein Fehler aufgetreten"
         },
         "addToPlaylist": {
@@ -544,7 +544,7 @@
         "themeDark_description": "Legt das dunkle Design fest, das für die Anwendung verwendet werden soll",
         "remotePassword": "Passwort des Fernsteuerungsservers",
         "lyricFetchProvider": "Anbieter, von denen Liedtexte abgerufen werden können",
-        "language_description": "Legt die Sprache für die Anwendung fest $t(common.restartRequired)",
+        "language_description": "Legt die Sprache für die Anwendung fest",
         "playbackStyle_optionCrossFade": "Überblendung",
         "hotkey_rate3": "Bewertung 3 Sterne",
         "mpvExtraParameters": "mpv Parameter",

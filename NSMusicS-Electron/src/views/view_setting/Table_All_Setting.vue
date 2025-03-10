@@ -5,9 +5,9 @@ import {
   NotificationsOutline
 } from '@vicons/ionicons5'
 import {
-  BareMetalServer,BlockStorageAlt,Settings,UserMultiple,MediaLibrary,Devices,
-  Activity,SendBackward,Video,
-  ContentDeliveryNetwork,Catalog,Timer
+  BareMetalServer, BlockStorageAlt, Settings, UserMultiple, MediaLibrary, Devices,
+  Activity, SendBackward, Video,
+  ContentDeliveryNetwork, Catalog, Timer, Close
 } from '@vicons/carbon'
 import {
   PlayCircle16Regular, LauncherSettings24Regular, Key24Regular, PlugConnected20Regular, Settings48Regular
@@ -18,8 +18,8 @@ import {
 import {
   AppWindow, Keyboard
 } from '@vicons/tabler'
-import {h, computed, reactive} from "vue";
-import {NIcon} from "naive-ui";
+import {h, computed, reactive, ref, onMounted} from "vue";
+import {NButton, NIcon} from "naive-ui";
 
 //////
 import Group01ClientSettingsLibraries from "@/views/view_setting/components/group_0_client_settings/Group_0_1_ClientSettings_Libraries.vue"
@@ -55,14 +55,17 @@ function renderIcon (icon: any) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
 import { useI18n } from 'vue-i18n'
+import {store_server_users} from "@/data/data_stores/server/store_server_users";
+import {store_local_db_info} from "@/data/data_stores/local/store_local_db_info";
+import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 const { t } = useI18n({
   inheritLocale: true
 })
 const menuOptions: any[] = reactive([
   {label: computed(() => t('ClientSettings')), key: 'type-group-0', icon: renderIcon(Settings48Regular),
     children: [
-      {label: computed(() => t('HeaderLibraries')), key: 'type-group-0-1', icon: renderIcon(MediaLibrary)},
-      {label: computed(() => t('page.setting.generalTab')), key: 'type-group-0-2', icon: renderIcon(Settings)},
+      {label: computed(() => t('page.setting.generalTab')), key: 'type-group-0-1', icon: renderIcon(Settings)},
+      {label: computed(() => t('HeaderLibraries')), key: 'type-group-0-2', icon: renderIcon(MediaLibrary)},
       {label: computed(() => t('page.setting.playbackTab')), key: 'type-group-0-3', icon: renderIcon(PlayCircle16Regular)},
       {label: computed(() => t('page.setting.hotkeysTab')), key: 'type-group-0-4', icon: renderIcon(Keyboard)},
       {label: computed(() => t('page.setting.windowTab')), key: 'type-group-0-5', icon: renderIcon(AppWindow)},
@@ -126,6 +129,17 @@ const menuOptions: any[] = reactive([
   }
 ]);
 const defaultExpandedKeys = ['type-group-0', 'type-group-1', 'type-group-2', 'type-group-3', 'type-group-4']
+
+///
+const init_config_model = ref(false)
+onMounted(()=>{
+  if(
+      store_server_users.server_config_of_all_user_of_sqlite.length === 0 &&
+      store_local_db_info.local_config_of_all_user_of_sqlite.length === 0
+  ){
+    init_config_model.value = true;
+  }
+})
 </script>
 <template>
   <div class="view">
@@ -154,10 +168,10 @@ const defaultExpandedKeys = ['type-group-0', 'type-group-1', 'type-group-2', 'ty
           <n-layout embedded style="overflow-y: auto;border-radius: 4px;">
             <div style="margin-left: 14px;margin-top: 10px;margin-right: 14px;">
               <!--客户端-->
-              <Group01ClientSettingsLibraries
+              <Group02ClientSettingsGeneralTab
                   v-if="store_app_configs_info.app_view_server_client_setting_select_tab_name === 'type-group-0-1'"
               />
-              <Group02ClientSettingsGeneralTab
+              <Group01ClientSettingsLibraries
                   v-if="store_app_configs_info.app_view_server_client_setting_select_tab_name === 'type-group-0-2'"
               />
               <Group03ClientSettingsPlaybackTab
@@ -247,6 +261,35 @@ const defaultExpandedKeys = ['type-group-0', 'type-group-1', 'type-group-2', 'ty
         </n-layout>
       </n-card>
     </n-layout>
+    <!-- 初始化配置 -->
+    <n-modal
+        v-model:show="init_config_model">
+      <n-card style="width: 700px;border-radius: 4px;">
+        <n-space vertical size="large">
+          <n-space align="center" justify="space-between">
+            <span style="font-size:16px;font-weight: 600;">{{ $t('ThisWizardWillGuideYou') }}</span>
+            <n-button
+                strong secondary type="error"
+                @click="init_config_model = false;">
+              {{ $t('ButtonSignOut') }}
+            </n-button>
+          </n-space>
+          <Group02ClientSettingsGeneralTab style="padding-left: 20px;"/>
+          <n-space vertical>
+            <span style="font-size:16px;font-weight: 600;">{{ $t('HeaderSetupLibrary') }}</span>
+          </n-space>
+          <Group01ClientSettingsLibraries style="padding-left: 20px;"/>
+          <n-space align="center" justify="space-between">
+            <span style="font-size:16px;font-weight: 600;">{{ $t('LabelYoureDone') }}</span>
+            <n-button
+                strong secondary type="success"
+                @click="init_config_model = false;">
+              {{ $t('ButtonOk') }}
+            </n-button>
+          </n-space>
+        </n-space>
+      </n-card>
+    </n-modal>
   </div>
 </template>
 <style scoped>

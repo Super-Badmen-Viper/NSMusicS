@@ -120,7 +120,7 @@
             "input_password": "senha",
             "input_legacyAuthentication": "habilitar autenticação legada",
             "error_savePassword": "um erro ocorreu ao tentar salvar a senha",
-            "ignoreSsl": "ignorar ssl ($t(common.restartRequired))",
+            "ignoreSsl": "ignorar ssl",
             "input_savePassword": "salvar senha",
             "input_url": "url",
             "success": "servidor adicionado com sucesso",

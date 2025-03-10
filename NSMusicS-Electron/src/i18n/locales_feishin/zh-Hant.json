@@ -306,7 +306,7 @@
         "hotkey_zoomIn": "放大",
         "hotkey_zoomOut": "縮小",
         "language": "語言",
-        "language_description": "設置應用的語言（$t(common.restartRequired)）",
+        "language_description": "設置應用的語言",
         "lyricFetch": "從互聯網獲取歌詞",
         "lyricFetch_description": "從多個互聯網源獲取歌詞",
         "lyricFetchProvider": "歌詞源",
@@ -559,8 +559,8 @@
             "success": "服務器添加成功",
             "title": "添加服務器",
             "error_savePassword": "保存密碼時出現錯誤",
-            "ignoreCors": "忽略 cors $t(common.restartRequired)",
-            "ignoreSsl": "忽略 ssl $t(common.restartRequired)"
+            "ignoreCors": "忽略 cors",
+            "ignoreSsl": "忽略 ssl"
         },
         "addToPlaylist": {
             "input_playlists": "$t(entity.playlist_other)",
