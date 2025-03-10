@@ -264,30 +264,25 @@ onMounted(()=>{
     <!-- 初始化配置 -->
     <n-modal
         v-model:show="init_config_model">
-      <n-card style="width: 700px;border-radius: 4px;">
-        <n-space vertical size="large">
+      <n-card style="width: 752px;border-radius: 4px;">
+        <n-scrollbar vertical style="height: 76vh;overflow-y: auto;margin-top: 9px;padding-right: 32px;">
           <n-space align="center" justify="space-between">
-            <span style="font-size:16px;font-weight: 600;">{{ $t('ThisWizardWillGuideYou') }}</span>
-            <n-button
-                strong secondary type="error"
-                @click="init_config_model = false;">
-              {{ $t('ButtonSignOut') }}
-            </n-button>
+            <span style="font-size:16px;font-weight: 600;">{{ '1. ' + $t('ThisWizardWillGuideYou') }}</span>
           </n-space>
-          <Group02ClientSettingsGeneralTab style="padding-left: 20px;"/>
+          <Group02ClientSettingsGeneralTab style="padding-left: 20px;margin-top: -6px;"/>
           <n-space vertical>
-            <span style="font-size:16px;font-weight: 600;">{{ $t('HeaderSetupLibrary') }}</span>
+            <span style="font-size:16px;font-weight: 600;">{{ '2. ' + $t('HeaderSetupLibrary') }}</span>
           </n-space>
-          <Group01ClientSettingsLibraries style="padding-left: 20px;"/>
+          <Group01ClientSettingsLibraries style="padding-left: 20px;margin-top: -2px;"/>
           <n-space align="center" justify="space-between">
-            <span style="font-size:16px;font-weight: 600;">{{ $t('LabelYoureDone') }}</span>
+            <span style="font-size:16px;font-weight: 600;">{{ '3. ' + $t('LabelYoureDone') }}</span>
             <n-button
                 strong secondary type="success"
                 @click="init_config_model = false;">
               {{ $t('ButtonOk') }}
             </n-button>
           </n-space>
-        </n-space>
+        </n-scrollbar>
       </n-card>
     </n-modal>
   </div>

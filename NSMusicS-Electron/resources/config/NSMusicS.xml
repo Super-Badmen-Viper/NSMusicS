@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <item>
-<version>1.4.6</version>
+<version>1.4.7</version>
 <url> </url>
 <changelog>https://github.com/Super-Badmen-Viper/NSMusicS/releases</changelog>
 <changelog_explain>
-    1.4.3已更新内容;
+    1.4.7已更新内容;
     增加迷你播放窗口，竖向模式为仿制AppleMusic迷你播放悬浮窗，横向模式为桌面歌词[进行中];
     增加服务器配置种类，兼容emby-api[√];
     增加服务器配置种类，兼容jellyfin-api[√];
