@@ -408,9 +408,6 @@ type PlayerTheme_Style = {
   player_collapsed_album: any;
   player_collapsed_skin: any;
 };
-type PlayerTheme_HoverStyle = {
-  colorHover:any;
-};
 type PlayerTheme_LyricItem = {
   id: any;
   name: any;

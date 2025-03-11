@@ -247,9 +247,9 @@ onMounted(() => {
       </div>
       <n-space justify="space-between" align="center">
         <n-space vertical>
-          <span style="font-size:16px;font-weight: 600;">{{ $t('setting.language') }}</span>
+          <span style="font-size:16px;font-weight: 600;">{{ $t('setting.language') + ' | 语言' }}</span>
           <div style="margin-top: -10px;">
-            <span style="font-size:12px;">{{ $t('setting.language_description') }}</span>
+            <span style="font-size:12px;">{{ $t('setting.language_description') + ' | 设置应用的语言' }}</span>
           </div>
         </n-space>
         <n-select

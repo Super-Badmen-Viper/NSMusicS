@@ -15,12 +15,6 @@ import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_i
         <n-input style="width: 400px;"/>
       </n-space>
       <span style="font-size: 13px;margin-left: 0px;">{{ $t('LabelServerNameHelp') }}</span>
-      <!---->
-      <n-space align="center">
-        <span style="font-size: 16px;font-weight: 600;">{{ $t('LabelPreferredDisplayLanguage') }}</span>
-        <n-input style="width: 400px;"/>
-      </n-space>
-      <span style="font-size: 13px;margin-left: 0px;">{{ $t('LabelDisplayLanguageHelp') }}</span>
     </n-space>
 
     <n-space vertical style="margin-bottom: 20px;">
@@ -42,60 +36,6 @@ import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_i
         <span style="font-size: 13px;margin-left: 0px;">{{ $t('LabelMetadataPathHelp') }}</span>
       </n-space>
     </n-space>
-
-    <n-space vertical style="margin-bottom: 20px;">
-      <div style="font-weight: 600;font-size: 16px;margin-bottom: 4px;">
-        {{ $t('QuickConnect') }} >
-      </div>
-      <n-space vertical>
-        <!---->
-        <n-space align="center">
-          <n-checkbox/>
-          <span style="font-size: 16px;font-weight: 600;">{{ $t('EnableQuickConnect') }}</span>
-        </n-space>
-      </n-space>
-    </n-space>
-
-    <n-space vertical style="margin-bottom: 20px;">
-      <div style="font-weight: 600;font-size: 16px;margin-bottom: 4px;">
-        {{ $t('HeaderBranding') }} >
-      </div>
-      <n-space vertical>
-        <!---->
-        <n-space align="center">
-          <span style="font-size: 16px;font-weight: 600;">{{ $t('LabelLoginDisclaimer') }}</span>
-          <n-input style="width: 400px;"/>
-        </n-space>
-        <span style="font-size: 13px;margin-left: 0px;">{{ $t('LabelLoginDisclaimerHelp') }}</span>
-        <!---->
-        <n-space align="center">
-          <span style="font-size: 16px;font-weight: 600;">{{ $t('LabelCustomCss') }}</span>
-          <n-input style="width: 400px;"/>
-        </n-space>
-        <span style="font-size: 13px;margin-left: 0px;">{{ $t('LabelCustomCssHelp') }}</span>
-      </n-space>
-    </n-space>
-
-    <n-space vertical style="margin-bottom: 20px;">
-      <div style="font-weight: 600;font-size: 16px;margin-bottom: 4px;">
-        {{ $t('HeaderPerformance') }} >
-      </div>
-      <n-space vertical>
-        <!---->
-        <n-space align="center">
-          <span style="font-size: 16px;font-weight: 600;">{{ $t('LibraryScanFanoutConcurrency') }}</span>
-          <n-input style="width: 400px;"/>
-        </n-space>
-        <span style="font-size: 13px;margin-left: 0px;">{{ $t('LibraryScanFanoutConcurrencyHelp') }}</span>
-        <!---->
-        <n-space align="center">
-          <span style="font-size: 16px;font-weight: 600;">{{ $t('LabelParallelImageEncodingLimit') }}</span>
-          <n-input style="width: 400px;"/>
-        </n-space>
-        <span style="font-size: 13px;margin-left: 0px;">{{ $t('LabelParallelImageEncodingLimitHelp') }}</span>
-      </n-space>
-    </n-space>
-    
   </n-space>
 </template>
 <style>

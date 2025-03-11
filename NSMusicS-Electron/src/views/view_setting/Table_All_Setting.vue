@@ -269,11 +269,11 @@ onMounted(()=>{
           <n-space align="center" justify="space-between">
             <span style="font-size:16px;font-weight: 600;">{{ '1. ' + $t('ThisWizardWillGuideYou') }}</span>
           </n-space>
-          <Group02ClientSettingsGeneralTab style="padding-left: 20px;margin-top: -6px;"/>
+          <Group02ClientSettingsGeneralTab style="padding-left: 20px;"/>
           <n-space vertical>
             <span style="font-size:16px;font-weight: 600;">{{ '2. ' + $t('HeaderSetupLibrary') }}</span>
           </n-space>
-          <Group01ClientSettingsLibraries style="padding-left: 20px;margin-top: -2px;"/>
+          <Group01ClientSettingsLibraries style="padding-left: 20px;"/>
           <n-space align="center" justify="space-between">
             <span style="font-size:16px;font-weight: 600;">{{ '3. ' + $t('LabelYoureDone') }}</span>
             <n-button

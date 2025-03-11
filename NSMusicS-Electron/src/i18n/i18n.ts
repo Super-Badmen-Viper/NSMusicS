@@ -56,7 +56,7 @@ export class Language{
     constructor() {
         const options: I18nOptions = {
             legacy: false,
-            locale: 'zhHans',
+            locale: 'en',
             messages: {
                 'zhHans': { ...zhHans, ...zhHans_n, ...zhHans_j },
                 'zhHant': { ...zhHant, ...zhHant_n, ...zhHant_j },
