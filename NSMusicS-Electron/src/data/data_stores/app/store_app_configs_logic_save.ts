@@ -157,7 +157,7 @@ export const store_app_configs_logic_save = reactive({
                     this_audio_song_favorite: String(store_player_audio_info.this_audio_song_favorite),
                     this_audio_album_name: String(store_player_audio_info.this_audio_album_name),
                     this_audio_album_id: String(store_player_audio_info.this_audio_album_id),
-                    this_audio_Index_of_absolute_positioning_in_list: String(store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list),
+                    this_audio_Index_of_play_list: String(store_player_audio_info.this_audio_Index_of_play_list),
 
                     page_top_album_image_url: String(store_player_audio_info.page_top_album_image_url),
                     page_top_album_id: String(store_player_audio_info.page_top_album_id),

@@ -230,7 +230,6 @@ export const store_app_configs_logic_load = reactive({
             store_player_audio_info.this_audio_album_name = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_name']
             store_player_audio_info.this_audio_album_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_id']
             store_player_audio_info.this_audio_album_favorite = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_favorite']
-            store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = Number('' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_Index_of_absolute_positioning_in_list'])
             //
             store_player_audio_info.page_top_album_image_url = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_image_url']
             store_player_audio_info.page_top_album_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_id']
@@ -449,6 +448,7 @@ export const store_app_configs_logic_load = reactive({
         }catch (e) {
             console.error(e)
         }
+        store_player_audio_info.this_audio_Index_of_play_list = Number('' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_Index_of_play_list'])
 
         /// close
         try {

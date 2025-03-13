@@ -211,88 +211,11 @@ export const store_player_audio_logic = reactive({
         store_player_audio_info.this_audio_song_favorite = media_file.favorite ?? false
         store_player_audio_info.this_audio_album_id = media_file.album_id ?? ''
         store_player_audio_info.this_audio_album_name = media_file.album ?? ''
-        store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = index
+        store_player_audio_info.this_audio_Index_of_play_list = index
         //
         store_player_tag_modify.player_current_media_starred = media_file.favorite ?? false
         store_player_tag_modify.player_current_media_playCount = media_file.play_count ?? 0
         store_player_tag_modify.player_current_media_playDate = media_file.play_date ?? ''
-        //
-        navigator.mediaSession.metadata = new MediaMetadata({
-            title: media_file.title,
-            artist: media_file.artist,
-            album: media_file.album,
-            artwork: [
-                {
-                    src: "https://dummyimage.com/96x96",
-                    sizes: "96x96",
-                    type: "image/png",
-                },
-                {
-                    src: "https://dummyimage.com/128x128",
-                    sizes: "128x128",
-                    type: "image/png",
-                },
-                {
-                    src: "https://dummyimage.com/192x192",
-                    sizes: "192x192",
-                    type: "image/png",
-                },
-                {
-                    src: "https://dummyimage.com/256x256",
-                    sizes: "256x256",
-                    type: "image/png",
-                },
-                {
-                    src: "https://dummyimage.com/384x384",
-                    sizes: "384x384",
-                    type: "image/png",
-                },
-                {
-                    src: "https://dummyimage.com/512x512",
-                    sizes: "512x512",
-                    type: "image/png",
-                },
-            ],
-        });
-        navigator.mediaSession.setActionHandler("play", async () => {
-            await store_player_audio_logic.player.play();
-        });
-        navigator.mediaSession.setActionHandler("pause", async () => {
-            await store_player_audio_logic.player.pause();
-        });
-        navigator.mediaSession.setActionHandler("stop", () => {
-            /* Code excerpted. */
-        });
-        navigator.mediaSession.setActionHandler("seekbackward", () => {
-            /* Code excerpted. */
-        });
-        navigator.mediaSession.setActionHandler("seekforward", () => {
-            /* Code excerpted. */
-        });
-        navigator.mediaSession.setActionHandler("seekto", () => {
-            /* Code excerpted. */
-        });
-        navigator.mediaSession.setActionHandler("previoustrack", () => {
-            /* Code excerpted. */
-        });
-        navigator.mediaSession.setActionHandler("nexttrack", () => {
-            /* Code excerpted. */
-        });
-        navigator.mediaSession.setActionHandler("skipad", () => {
-            /* Code excerpted. */
-        });
-        navigator.mediaSession.setActionHandler("togglecamera", () => {
-            /* Code excerpted. */
-        });
-        navigator.mediaSession.setActionHandler("togglemicrophone", () => {
-            /* Code excerpted. */
-        });
-        navigator.mediaSession.setActionHandler("hangup", () => {
-            /* Code excerpted. */
-        });
-        navigator.mediaSession.playbackState = "playing";
-        // navigator.mediaSession.playbackState = "paused";
-        // navigator.mediaSession.setPositionState({ position: 30, duration: 60 }) // 0:30 / 1:00
     },
     convertToLRC_Array_of_Je(lyrics: {
         Text: string;

@@ -14,7 +14,7 @@ const scrollbar = ref(null as any);
 onMounted(() => {
   if (scrollbar !== null) {
     setTimeout(() => {
-      scrollbar.value.scrollToItem(store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list);
+      scrollbar.value.scrollToItem(store_player_audio_info.this_audio_Index_of_play_list);
     }, 100);
   }
 });

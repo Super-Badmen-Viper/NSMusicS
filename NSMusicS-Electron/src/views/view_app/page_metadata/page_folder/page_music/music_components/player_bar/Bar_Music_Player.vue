@@ -393,6 +393,19 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
     await play_skip_forward_click(), 300
   })
 });
+watch(() => store_player_audio_info.this_audio_Index_of_play_list_carousel, (newValue, oldValue) => {
+  if(!store_player_audio_info.play_list_carousel_model) {
+    if (newValue - oldValue < 0) {
+      debounce(async (event, args) => {
+        await play_skip_back_click(), 300
+      })
+    } else {
+      debounce(async (event, args) => {
+        await play_skip_forward_click(), 300
+      })
+    }
+  }
+});
 ////// player_configs player_button order area
 import { useMessage } from 'naive-ui'
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";

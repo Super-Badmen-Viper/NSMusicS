@@ -85,7 +85,7 @@ export class Class_Get_System_Configs_Read {
             this_audio_song_favorite: '',
             this_audio_album_name: '',
             this_audio_album_id: '',
-            this_audio_Index_of_absolute_positioning_in_list: null,
+            this_audio_Index_of_play_list: null,
         
             page_top_album_image_url: '',
             page_top_album_id: '',

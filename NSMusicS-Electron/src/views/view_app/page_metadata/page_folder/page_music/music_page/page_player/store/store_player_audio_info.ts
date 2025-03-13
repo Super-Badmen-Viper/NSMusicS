@@ -32,7 +32,9 @@ export const store_player_audio_info = reactive({
 
     this_audio_play_id: '',
 
-    this_audio_Index_of_absolute_positioning_in_list: -1,
+    this_audio_Index_of_play_list: -1,
+    this_audio_Index_of_play_list_carousel: -1,
+    play_list_carousel_model: false,
 
     this_audio_song_rating: 0,
     this_audio_song_favorite: false,
@@ -71,7 +73,7 @@ export const store_player_audio_info = reactive({
             this.this_audio_album_name = '';
             this.this_audio_album_id = '';
 
-            this.this_audio_Index_of_absolute_positioning_in_list = -1;
+            this.this_audio_Index_of_play_list = -1;
 
             this.this_audio_song_rating = 0;
             this.this_audio_song_favorite = 0;
@@ -307,4 +309,7 @@ watch(() => store_player_audio_info.this_audio_artist_id, (newValue) => {
             get_AnnotationInfo_To_LocalSqlite.Get_Annotation_ItemInfo_Play_Count('artist')
         store_player_audio_logic.boolHandleItemClick_Played = true
     }
+});
+watch(() => store_player_audio_info.this_audio_Index_of_play_list, (newValue) => {
+    store_playlist_list_info.reset_carousel()
 });

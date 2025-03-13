@@ -575,7 +575,7 @@ import {store_player_audio_info} from "@/views/view_app/page_metadata/page_folde
 import {store_player_audio_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic"
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
-import Table_Album_Model_1_Cover from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/components/Table_Album_Model_1_Cover.vue";
+import TableAlbumModel1AlbumScroll from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/components/Table_Album_Model_1_AlbumScroll.vue";
 import {ArrowsMaximize, ArrowsMinimize} from "@vicons/tabler";
 const clear_lottie_animationInstance = ref(false)
 const animationInstance_model_1_spectrum = ref<any>(null);
@@ -1034,14 +1034,14 @@ onBeforeUnmount(() => {
         <!-- middle area -->
         <n-config-provider :theme="darkTheme">
           <n-flex
-              justify="center"
-              style="transition: margin 0.4s;overflow: hidden;"
-              :style="{
-                marginTop: store_player_appearance.player_use_lyric_skip_forward
-                ? '70px' : '50px',
-                marginLeft: store_player_appearance.player_background_model_num === 2
-                ? '36px' : '0px'
-              }">
+            justify="center"
+            style="transition: margin 0.4s;overflow: hidden;"
+            :style="{
+              marginTop: store_player_appearance.player_use_lyric_skip_forward
+              ? '70px' : '50px',
+              marginLeft: store_player_appearance.player_background_model_num === 2
+              ? '36px' : '0px'
+            }">
             <n-layout
                 has-sider
                 style="
@@ -1069,7 +1069,7 @@ onBeforeUnmount(() => {
                     }"
                     style="margin-right:8vw;">
                   <!-- 1 方形封面-->
-                  <Table_Album_Model_1_Cover/>
+                  <TableAlbumModel1AlbumScroll/>
                   <!-- 2 旋转封面-->
                   <n-flex vertical
                           align="center" justify="center"
@@ -1347,6 +1347,8 @@ onBeforeUnmount(() => {
                       {{ store_player_audio_logic.current_play_time }} &nbsp;:&nbsp; {{ store_player_audio_logic.total_play_time }}
                     </div>
                   </n-space>
+                  <!-- 5 专辑列表-->
+
                 </n-space>
               </n-layout-sider>
               <!-- right area -->

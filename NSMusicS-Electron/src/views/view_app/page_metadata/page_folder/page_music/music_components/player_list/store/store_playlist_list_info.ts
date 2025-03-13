@@ -1,6 +1,7 @@
 import {reactive, watch} from 'vue'
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 import {store_playlist_list_fetchData} from "@/views/view_app/music_components/player_list/store/store_playlist_list_fetchData";
+import {store_player_audio_info} from "../../../music_page/page_player/store/store_player_audio_info";
 
 export const store_playlist_list_info = reactive({
     playlist_names_ALLLists: [],
@@ -9,6 +10,7 @@ export const store_playlist_list_info = reactive({
 
     playlist_MediaFiles_metadata: [],
     playlist_MediaFiles_temporary: [],
+    playlist_MediaFiles_temporary_carousel: [],
 
     playlist_DragSort_Model: false,
     playlist_Menu_Item_Id: '',
@@ -66,8 +68,35 @@ export const store_playlist_list_info = reactive({
 
         store_app_configs_logic_save.save_system_playlist_item_id_config();
     },
+
+    reset_carousel(){
+        const hasSameAbsoluteIndex = store_playlist_list_info.playlist_MediaFiles_temporary_carousel.some(
+            (item) => item.path === store_player_audio_info.this_audio_file_path
+        );
+        if (hasSameAbsoluteIndex) {
+            return;
+        }
+        const startIndex = Math.max(
+            store_player_audio_info.this_audio_Index_of_play_list - 2,
+            0
+        );
+        const endIndex = Math.min(
+            startIndex + 5,
+            store_playlist_list_info.playlist_MediaFiles_temporary.length
+        );
+        store_playlist_list_info.playlist_MediaFiles_temporary_carousel =
+            store_playlist_list_info.playlist_MediaFiles_temporary.slice(startIndex, endIndex);
+        ///
+        // const index = store_playlist_list_info.playlist_MediaFiles_temporary_carousel.findIndex(
+        //     (item) => item.path === store_player_audio_info.this_audio_file_path
+        // );
+        // store_player_audio_info.this_audio_Index_of_play_list_carousel = index !== -1 ? index : 0
+        // store_player_audio_info.play_list_carousel_model = true
+    }
 });
 watch(() => store_playlist_list_info.playlist_MediaFiles_temporary.length, async (newValue) => {
+    store_playlist_list_info.reset_carousel()
+    ///
     store_app_configs_logic_save.save_system_playlist_item_id_config();
 });
 watch(() => store_playlist_list_info.playlist_MediaFiles_temporary_Sort_Items, async (newValue) => {

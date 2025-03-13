@@ -10,7 +10,7 @@ interface Player_Configs_of_Audio_Info_Props {
   this_audio_song_favorite: string,
   this_audio_album_name: string,
   this_audio_album_id: string,
-  this_audio_Index_of_absolute_positioning_in_list: any,
+  this_audio_Index_of_play_list: any,
 
   page_top_album_image_url: string,
   page_top_album_id: string,
