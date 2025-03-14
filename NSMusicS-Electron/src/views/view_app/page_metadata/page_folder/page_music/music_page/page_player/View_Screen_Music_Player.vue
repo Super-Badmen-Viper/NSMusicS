@@ -1069,7 +1069,14 @@ onBeforeUnmount(() => {
                     }"
                     style="margin-right:8vw;">
                   <!-- 1 方形封面-->
-                  <TableAlbumModel1AlbumScroll/>
+                  <TableAlbumModel1AlbumScroll
+                    @mouseover="() => {
+                      store_player_audio_info.play_list_carousel_model = true
+                    }"
+                    @mouseleave="() => {
+                      store_player_audio_info.play_list_carousel_model = false
+                    }"
+                  />
                   <!-- 2 旋转封面-->
                   <n-flex vertical
                           align="center" justify="center"
@@ -1360,11 +1367,11 @@ onBeforeUnmount(() => {
                   }"
               >
                 <div
-                    :style="{
+                  :style="{
                     height: store_player_appearance.player_use_lyric_skip_forward
                     ? 'calc(100vh - 100px)' : 'calc(100vh - 50px)',
                   }"
-                    style="
+                  style="
                     width: 40vw;
                     margin-top: -80px;
                     border-radius: 20px;
@@ -1374,16 +1381,16 @@ onBeforeUnmount(() => {
                     overflow: hidden;
                   ">
                   <n-list
-                      clickable
-                      :show-divider="false"
-                      ref="scrollbar"
-                      @wheel="handleWheel"
-                      @mouseleave="() => {
+                    clickable
+                    :show-divider="false"
+                    ref="scrollbar"
+                    @wheel="handleWheel"
+                    @mouseleave="() => {
                       handleLeave_Refresh_Lyric_Color();
                       store_player_view.currentScrollIndex = 0;
                       begin_lyrics_animation();
                     }"
-                      style="
+                    style="
                       width: calc(40vw);
                       max-height: calc(90vh);
                       margin-top: 120px;

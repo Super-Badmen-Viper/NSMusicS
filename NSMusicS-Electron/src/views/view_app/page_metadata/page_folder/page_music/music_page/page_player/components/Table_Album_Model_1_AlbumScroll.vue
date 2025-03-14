@@ -32,24 +32,6 @@ const nextSlideStyle = computed(() => {
       ? { transform: "translateX(60%) translateZ(-200px) rotateY(-50deg)" }
       : { transform: "translateY(60%) translateZ(-200px) rotateX(-50deg)" };
 });
-
-const items = computed(() => {
-  return store_playlist_list_info.playlist_MediaFiles_temporary[store_player_audio_info.this_audio_Index_of_play_list]
-})
-const currentIndex = computed(() => {
-  const index = store_playlist_list_info.playlist_MediaFiles_temporary_carousel.findIndex(
-      (item) => item.path === store_player_audio_info.this_audio_file_path
-  );
-  return index !== -1 ? index : 0;
-});
-
-onMounted(()=>{
-  if(store_playlist_list_info.playlist_MediaFiles_temporary_carousel.length === 0){
-    if(store_playlist_list_info.playlist_MediaFiles_temporary.length > 0){
-      store_playlist_list_info.reset_carousel()
-    }
-  }
-})
 </script>
 
 <template>
@@ -68,7 +50,7 @@ onMounted(()=>{
       effect="card"
       draggable
       show-arrow
-      :current-index="currentIndex"
+      v-model:current-index="store_player_audio_info.this_audio_Index_of_play_list_carousel"
       :mousewheel="mousewheelRef"
       :direction="directionRef"
       :dot-placement="placementRef"

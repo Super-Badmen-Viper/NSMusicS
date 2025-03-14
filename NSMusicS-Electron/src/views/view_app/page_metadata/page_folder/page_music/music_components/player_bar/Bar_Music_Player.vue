@@ -393,19 +393,39 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
     await play_skip_forward_click(), 300
   })
 });
-watch(() => store_player_audio_info.this_audio_Index_of_play_list_carousel, (newValue, oldValue) => {
-  if(!store_player_audio_info.play_list_carousel_model) {
-    if (newValue - oldValue < 0) {
-      debounce(async (event, args) => {
-        await play_skip_back_click(), 300
-      })
-    } else {
-      debounce(async (event, args) => {
-        await play_skip_forward_click(), 300
-      })
-    }
-  }
-});
+////// Naive UI n-carousel 无法执行 prev与next触发事件，用以下代码修复业务逻辑
+const cooldownDebounce = (fn, delay) => {
+  let isCooling = false;
+  return (...args) => {
+    if (isCooling) return;
+    fn(...args);
+    isCooling = true;
+    setTimeout(() => (isCooling = false), delay);
+  };
+};
+watch(
+    () => store_player_audio_info.this_audio_Index_of_play_list_carousel,
+    cooldownDebounce(async (newValue, oldValue) => {
+      if(store_player_audio_info.play_list_carousel_model) {
+        const index = store_playlist_list_info.playlist_MediaFiles_temporary_carousel.findIndex(
+            (item) => item.path === store_player_audio_info.this_audio_file_path
+        );
+        if (newValue !== index) {
+          if (newValue === 0 && oldValue === store_playlist_list_info.playlist_MediaFiles_temporary_carousel.length - 1) {
+            await play_skip_forward_click()
+          } else if (newValue === store_playlist_list_info.playlist_MediaFiles_temporary_carousel.length - 1 && oldValue === 0) {
+            await play_skip_back_click()
+          } else {
+            (newValue - oldValue < 0) ? await play_skip_back_click() : await play_skip_forward_click()
+          }
+        } else {
+          (newValue === store_playlist_list_info.playlist_MediaFiles_temporary_carousel.length)
+              ? await play_skip_forward_click()
+              : await play_skip_back_click();
+        }
+      }
+    }, 300)
+);
 ////// player_configs player_button order area
 import { useMessage } from 'naive-ui'
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";

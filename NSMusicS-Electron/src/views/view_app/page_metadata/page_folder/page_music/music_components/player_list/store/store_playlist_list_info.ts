@@ -86,12 +86,8 @@ export const store_playlist_list_info = reactive({
         );
         store_playlist_list_info.playlist_MediaFiles_temporary_carousel =
             store_playlist_list_info.playlist_MediaFiles_temporary.slice(startIndex, endIndex);
-        ///
-        // const index = store_playlist_list_info.playlist_MediaFiles_temporary_carousel.findIndex(
-        //     (item) => item.path === store_player_audio_info.this_audio_file_path
-        // );
-        // store_player_audio_info.this_audio_Index_of_play_list_carousel = index !== -1 ? index : 0
-        // store_player_audio_info.play_list_carousel_model = true
+        //
+        store_player_audio_info.set_carousel_index()
     }
 });
 watch(() => store_playlist_list_info.playlist_MediaFiles_temporary.length, async (newValue) => {

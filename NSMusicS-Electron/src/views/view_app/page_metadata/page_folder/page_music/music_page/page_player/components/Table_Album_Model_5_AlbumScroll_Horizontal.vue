@@ -42,14 +42,6 @@ const currentIndex = computed(() => {
   );
   return index !== -1 ? index : 0;
 });
-
-onMounted(()=>{
-  if(store_playlist_list_info.playlist_MediaFiles_temporary_carousel.length === 0){
-    if(store_playlist_list_info.playlist_MediaFiles_temporary.length > 0){
-      store_playlist_list_info.reset_carousel()
-    }
-  }
-})
 </script>
 
 <template>

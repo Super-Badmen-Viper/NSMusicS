@@ -22,7 +22,7 @@ export class Navidrome_Api_Services_Web {
             if (endpoint === 'song' || endpoint.indexOf('playlist/') >= 0) {
                 return {
                     data: response.data,
-                    totalCount: Number(response.headers['x-total-count'])
+                    count: Number(response.headers['x-total-count'])
                 };
             } else {
                 return response.data;
@@ -35,7 +35,7 @@ export class Navidrome_Api_Services_Web {
                     if (endpoint === 'song' || endpoint.indexOf('playlist/') >= 0) {
                         return {
                             data: response.data,
-                            totalCount: Number(response.headers['x-total-count'])
+                            count: Number(response.headers['x-total-count'])
                         };
                     } else {
                         return response.data;
