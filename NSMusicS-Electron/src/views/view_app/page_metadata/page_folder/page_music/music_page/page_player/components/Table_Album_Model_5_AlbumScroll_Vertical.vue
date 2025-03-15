@@ -33,10 +33,10 @@ const nextSlideStyle = computed(() => {
   <n-space vertical
            align="center"
            :style="{
-              marginTop: store_player_appearance.player_background_model_num === 0 ? '0px' : '100px',
-              opacity: store_player_appearance.player_background_model_num === 0 ? 1 : 0,
-              position: store_player_appearance.player_background_model_num === 0 ? 'relative' : 'absolute',
-              left: store_player_appearance.player_background_model_num === 0 ? '0' : '-100%',
+              marginTop: store_player_appearance.player_background_model_num === 5 ? '0px' : '100px',
+              opacity: store_player_appearance.player_background_model_num === 5 ? 1 : 0,
+              position: store_player_appearance.player_background_model_num === 5 ? 'relative' : 'absolute',
+              left: store_player_appearance.player_background_model_num === 5 ? '0' : '-100%',
               transition: 'margin 0.4s, opacity 0.8s'
            }"
            style="margin-right: 1vw;"
@@ -69,15 +69,23 @@ const nextSlideStyle = computed(() => {
         v-for="(item, index) in store_playlist_list_info.playlist_MediaFiles_temporary_carousel"
         :key="index"
         style="
-          width: 55vh;
-          height: 55vh;
+          width: 40vh;
+          height: 40vh;
         "
       >
         <div class="image-wrapper">
           <img
-              class="carousel-img"
-              :src="getAssetImage(item.medium_image_url)"
-              :alt="`Carousel Image ${index + 1}`"
+            style="
+              margin: 0 auto;
+              width: 40vh;
+              height: 40vh;
+              object-fit: cover;
+              border-radius: 12px;
+              position: relative;
+              z-index: 1;
+            "
+            :src="getAssetImage(item.medium_image_url)"
+            :alt="`Carousel Image ${index + 1}`"
           />
         </div>
       </n-carousel-item>
@@ -105,8 +113,8 @@ const nextSlideStyle = computed(() => {
     </n-space>
     <!--  -->
     <n-space
-      vertical
-      v-if="!store_player_appearance.player_collapsed_album">
+        vertical
+        v-if="!store_player_appearance.player_collapsed_album">
       <n-space justify="end" style="width: 55vh;margin-top: -29px;">
         <n-space>
           {{ store_player_audio_logic.current_play_time }}
@@ -117,32 +125,32 @@ const nextSlideStyle = computed(() => {
         </n-space>
       </n-space>
       <n-slider
-        style="
+          style="
           width: 55vh;
           --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
           --n-rail-height: 4px;
           --n-handle-size: 20px;
           margin-top: -12px;
           border-radius: 10px;"
-        v-model:value="store_player_audio_logic.slider_singleValue"
-        :min="0" :max="100"
-        :format-tooltip="(value) => {
+          v-model:value="store_player_audio_logic.slider_singleValue"
+          :min="0" :max="100"
+          :format-tooltip="(value) => {
           return store_player_audio_logic.formatTime(
             (value / 100) * store_player_audio_logic.player.isDuration
           );
         }"
-        :on-dragend="()=>{
+          :on-dragend="()=>{
           if(store_player_audio_logic.slider_singleValue >= 99.5 || store_player_audio_logic.slider_singleValue == 0){
             store_player_audio_logic.player_is_play_ended = true;
             store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
           }
           store_player_audio_logic.player_range_duration_isDragging = false;
         }"
-        @click="()=>{
+          @click="()=>{
           store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
         }"
-        @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
-        @mouseup="store_player_audio_logic.player_range_duration_isDragging = false">
+          @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
+          @mouseup="store_player_audio_logic.player_range_duration_isDragging = false">
         <template #thumb>
           <n-icon-wrapper color="white" :size="12" />
         </template>
@@ -157,16 +165,6 @@ const nextSlideStyle = computed(() => {
   display: inline-block;
   width: 55vh;
   height: 55vh;
-}
-
-.carousel-img {
-  margin: 0 auto;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 12px;
-  position: relative;
-  z-index: 1;
 }
 
 .image-wrapper::after {

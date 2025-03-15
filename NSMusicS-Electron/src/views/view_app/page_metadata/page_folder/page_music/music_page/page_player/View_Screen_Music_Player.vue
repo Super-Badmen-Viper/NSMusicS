@@ -17,7 +17,7 @@ function getAssetImage(firstImage: string) {
 
 ////// navie ui views_components
 // app theme
-import {darkTheme, NIcon, NSlider} from 'naive-ui'
+import {darkTheme, NCarousel, NCarouselItem, NIcon, NSlider} from 'naive-ui'
 // vue3 function
 import {ref, watch, watchEffect, onMounted, computed} from 'vue';
 import { onBeforeUnmount } from 'vue';
@@ -32,6 +32,9 @@ const computed_i18n_Label_ViewSetConfig_Cover_2 = computed(() => t('nsmusics.vie
 const computed_i18n_Label_ViewSetConfig_Cover_3 = computed(() => t('nsmusics.view_player.view_seting.coverBeaut_3'));
 const computed_i18n_Label_ViewSetConfig_Cover_4 = computed(() => t('nsmusics.view_player.view_seting.coverBase_4'));
 const computed_i18n_Label_Lyric_Not_Find = computed(() => t('HeaderNoLyrics'));
+//
+const computed_i18n_Label_ViewSetConfig_Cover_5 = computed(() => t('Albums')+t('List'));
+const computed_i18n_Label_ViewSetConfig_Cover_6 = computed(() => t('nsmusics.view_player.view_seting.coverBase_6'));
 
 // audio_class & player_bar & player_view
 import {store_player_view} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_view";
@@ -71,73 +74,75 @@ function load_lyrics() {
 }
 let isFirstRun = true;
 function begin_lyrics_animation() {
-  setTimeout(() => {
-    clearInterval(lyrics_animation);
-    lyrics_animation = setInterval(async () => {
-      for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_line_time.length; i++) {
-        if (store_player_audio_logic.player !== null && await store_player_audio_logic.player.getCurrentTime() !== undefined && await store_player_audio_logic.player.getCurrentTime() !== null) {
-          let currentTime = await store_player_audio_logic.player.getCurrentTime() * 1000;
-          if (currentTime <= store_player_audio_info.this_audio_lyrics_info_line_time[0]) {
-            if (lyrics_list_whell.value === false && (isFirstRun || store_player_view.currentScrollIndex !== 0)) {
-              store_player_view.currentScrollIndex = 0;
-              scrollToItem(store_player_audio_info.this_audio_lyrics_info_line_num);
-            }
-            break;
-          } else if (currentTime >= store_player_audio_info.this_audio_lyrics_info_line_time[i]) {
-            if (i === store_player_audio_info.this_audio_lyrics_info_line_time.length - 1) {
-              if (lyrics_list_whell.value === false && (isFirstRun || store_player_view.currentScrollIndex !== i)) {
-                store_player_view.currentScrollIndex = i;
-                scrollToItem(i + store_player_audio_info.this_audio_lyrics_info_line_num);
+  try {
+    setTimeout(() => {
+      clearInterval(lyrics_animation);
+      lyrics_animation = setInterval(async () => {
+        for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_line_time.length; i++) {
+          if (store_player_audio_logic.player !== null && await store_player_audio_logic.player.getCurrentTime() !== undefined && await store_player_audio_logic.player.getCurrentTime() !== null) {
+            let currentTime = await store_player_audio_logic.player.getCurrentTime() * 1000;
+            if (currentTime <= store_player_audio_info.this_audio_lyrics_info_line_time[0]) {
+              if (lyrics_list_whell.value === false && (isFirstRun || store_player_view.currentScrollIndex !== 0)) {
+                store_player_view.currentScrollIndex = 0;
+                scrollToItem(store_player_audio_info.this_audio_lyrics_info_line_num);
               }
               break;
-            } else if (currentTime < store_player_audio_info.this_audio_lyrics_info_line_time[i + 1]) {
-              if (lyrics_list_whell.value === false && (isFirstRun || store_player_view.currentScrollIndex !== i)) {
-                store_player_view.currentScrollIndex = i;
-                scrollToItem(i + store_player_audio_info.this_audio_lyrics_info_line_num);
+            } else if (currentTime >= store_player_audio_info.this_audio_lyrics_info_line_time[i]) {
+              if (i === store_player_audio_info.this_audio_lyrics_info_line_time.length - 1) {
+                if (lyrics_list_whell.value === false && (isFirstRun || store_player_view.currentScrollIndex !== i)) {
+                  store_player_view.currentScrollIndex = i;
+                  scrollToItem(i + store_player_audio_info.this_audio_lyrics_info_line_num);
+                }
+                break;
+              } else if (currentTime < store_player_audio_info.this_audio_lyrics_info_line_time[i + 1]) {
+                if (lyrics_list_whell.value === false && (isFirstRun || store_player_view.currentScrollIndex !== i)) {
+                  store_player_view.currentScrollIndex = i;
+                  scrollToItem(i + store_player_audio_info.this_audio_lyrics_info_line_num);
+                }
+                break;
               }
-              break;
             }
           }
         }
-      }
-      if (isFirstRun) {
-        isFirstRun = false;
-      }
-      if (store_player_audio_logic.player_slider_click) {
-        handleClear_Lyric_Color();
-        lyrics_list_whell.value = false;
-        store_player_audio_logic.player_slider_click = false;
-        const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
-        const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active');
-        let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2);
-        const index = store_player_view.currentScrollIndex + store_player_audio_info.this_audio_lyrics_info_line_num
-        scrollToItem(index);
-        for (let i = index - 16; i <= index + 16; i++) {
-          const colorValue = Math.max(
-              store_player_appearance.player_lyric_color_hidden_value -
-              (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient,
-              0
-          );
-          if (i < index) {
-            if(store_player_appearance.player_use_lyric_skip_forward){
-              itemElements[i].style.color = 'transparent'
-            }else{
+        if (isFirstRun) {
+          isFirstRun = false;
+        }
+        if (store_player_audio_logic.player_slider_click) {
+          handleClear_Lyric_Color();
+          lyrics_list_whell.value = false;
+          store_player_audio_logic.player_slider_click = false;
+          const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
+          const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active');
+          let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2);
+          const index = store_player_view.currentScrollIndex + store_player_audio_info.this_audio_lyrics_info_line_num
+          scrollToItem(index);
+          for (let i = index - 16; i <= index + 16; i++) {
+            const colorValue = Math.max(
+                store_player_appearance.player_lyric_color_hidden_value -
+                (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient,
+                0
+            );
+            if (i < index) {
+              if (store_player_appearance.player_use_lyric_skip_forward) {
+                itemElements[i].style.color = 'transparent'
+              } else {
+                itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+              }
+              itemElements[i].style.transform = 'scale(1)';
+              itemElements[i].style.textShadow = '0 0 0px transparent';
+              itemElements[i].style.width = 'calc(40vw)';
+            } else if (i !== index) {
               itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+              itemElements[i].style.transform = 'scale(1)';
+              itemElements[i].style.textShadow = '0 0 0px transparent';
+              itemElements[i].style.width = 'calc(40vw)';
+              itemElements_active[i].style.fontWeight = 400;
             }
-            itemElements[i].style.transform = 'scale(1)';
-            itemElements[i].style.textShadow = '0 0 0px transparent';
-            itemElements[i].style.width = 'calc(40vw)';
-          } else if (i !== index) {
-            itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
-            itemElements[i].style.transform = 'scale(1)';
-            itemElements[i].style.textShadow = '0 0 0px transparent';
-            itemElements[i].style.width = 'calc(40vw)';
-            itemElements_active[i].style.fontWeight = 400;
           }
         }
-      }
-    }, 50);
-  }, 500);// 防止在歌词列表数据未刷新显示完全而执行歌词项跳转，而导致的面板上移
+      }, 50);
+    }, 500);// 防止在歌词列表数据未刷新显示完全而执行歌词项跳转，而导致的面板上移
+  }catch{}
 }
 let lyrics_animation: string | number | NodeJS.Timeout | undefined;
 const handleItemDbClick = async (index: any) => {
@@ -158,181 +163,187 @@ const handleItemDbClick = async (index: any) => {
 const scrollbar = ref(null as any);
 const perviousIndex = ref(0);
 const scrollToItem = (index: number) => {
-  if (!scrollbar.value) {
-    return;
-  }
-  if(lyrics_list_whell.value){
-    return;
-  }
-  if(index === 0){
-    return;
-  }
+  try {
+    if (!scrollbar.value) {
+      return;
+    }
+    if (lyrics_list_whell.value) {
+      return;
+    }
+    if (index === 0) {
+      return;
+    }
 
-  const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active');
-  itemElements_active[index].style.fontSize = store_player_appearance.player_lyric_fontSize;
-  itemElements_active[index].style.fontWeight = store_player_appearance.player_lyric_fontWeight;
+    const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active');
+    itemElements_active[index].style.fontSize = store_player_appearance.player_lyric_fontSize;
+    itemElements_active[index].style.fontWeight = store_player_appearance.player_lyric_fontWeight;
 
-  const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
-  itemElements[index].style.color = store_player_appearance.player_lyric_colorHover;
-  itemElements[index].style.filter = 'blur(0px)';
-  itemElements[index].style.textShadow = '0 0 1px White';
-  itemElements[index].style.transition = 'color 0.5s, transform 0.5s';
-  if(!store_player_appearance.player_collapsed_album){
-    itemElements[index].style.transform = 'scale(1.1) translateY(0px)';
-    itemElements[index].style.transformOrigin = 'left center';
-    itemElements[index].style.width = 'calc(36.3vw)'
-  }else{
-    itemElements[index].style.transform = 'scale(1.1) translateX(0px)';
-    itemElements[index].style.transformOrigin = 'center';
-    itemElements[index].style.width = 'calc(40vw)'
-  }
-  if(store_player_view.currentScrollIndex === 0)
-    itemElements[index].scrollIntoView({ block: 'center', behavior: 'instant'});
-  else
-    itemElements[index].scrollIntoView({ block: 'center', behavior: 'smooth'});
-  // 设置前后16列的颜色
-  handleLeave_Refresh_Lyric_Color()
-  // 设置perviousIndex.value列的颜色
-  let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2);
-  for (let i = index - 16; i <= index + 16; i++) {
-    if (i < index) {
-      if(store_player_appearance.player_use_lyric_skip_forward) {
-        itemElements[i].style.color = 'transparent'
-      }else {
+    const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
+    itemElements[index].style.color = store_player_appearance.player_lyric_colorHover;
+    itemElements[index].style.filter = 'blur(0px)';
+    itemElements[index].style.textShadow = '0 0 1px White';
+    itemElements[index].style.transition = 'color 0.5s, transform 0.5s';
+    if (!store_player_appearance.player_collapsed_album) {
+      itemElements[index].style.transform = 'scale(1.1) translateY(0px)';
+      itemElements[index].style.transformOrigin = 'left center';
+      itemElements[index].style.width = 'calc(36.3vw)'
+    } else {
+      itemElements[index].style.transform = 'scale(1.1) translateX(0px)';
+      itemElements[index].style.transformOrigin = 'center';
+      itemElements[index].style.width = 'calc(40vw)'
+    }
+    if (store_player_view.currentScrollIndex === 0)
+      itemElements[index].scrollIntoView({block: 'center', behavior: 'instant'});
+    else
+      itemElements[index].scrollIntoView({block: 'center', behavior: 'smooth'});
+    // 设置前后16列的颜色
+    handleLeave_Refresh_Lyric_Color()
+    // 设置perviousIndex.value列的颜色
+    let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2);
+    for (let i = index - 16; i <= index + 16; i++) {
+      if (i < index) {
+        if (store_player_appearance.player_use_lyric_skip_forward) {
+          itemElements[i].style.color = 'transparent'
+        } else {
+          const colorValue = Math.max(store_player_appearance.player_lyric_color_hidden_value - (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
+          itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+        }
+        itemElements[i].style.transform = 'scale(1)';
+        itemElements[i].style.textShadow = '0 0 0px transparent';
+        itemElements[i].style.width = 'calc(40vw)'
+        itemElements_active[i].style.fontWeight = 400;
+      } else if (i != index) {
         const colorValue = Math.max(store_player_appearance.player_lyric_color_hidden_value - (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
         itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+        itemElements[i].style.transform = 'scale(1)';
+        itemElements[i].style.textShadow = '0 0 0px transparent';
+        itemElements[i].style.width = 'calc(40vw)';
+        itemElements_active[i].style.fontWeight = 400;
       }
-      itemElements[i].style.transform = 'scale(1)';
-      itemElements[i].style.textShadow = '0 0 0px transparent';
-      itemElements[i].style.width = 'calc(40vw)'
-      itemElements_active[i].style.fontWeight = 400;
-    } else if (i != index) {
-      const colorValue = Math.max(store_player_appearance.player_lyric_color_hidden_value - (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
-      itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
-      itemElements[i].style.transform = 'scale(1)';
-      itemElements[i].style.textShadow = '0 0 0px transparent';
-      itemElements[i].style.width = 'calc(40vw)';
-      itemElements_active[i].style.fontWeight = 400;
     }
-  }
-  perviousIndex.value = index;
+    perviousIndex.value = index;
 
-  if(isFirstRun) {
-    store_player_audio_logic.player_slider_click = true
-  }
+    if (isFirstRun) {
+      store_player_audio_logic.player_slider_click = true
+    }
 
-  // if(store_player_audio_info.this_audio_lyrics_info_byte_model) {
-  //   if(store_player_audio_logic.player.isPlaying) {
-  //     startByteAnimations(index, 0)
-  //   }
-  // }
+    // if(store_player_audio_info.this_audio_lyrics_info_byte_model) {
+    //   if(store_player_audio_logic.player.isPlaying) {
+    //     startByteAnimations(index, 0)
+    //   }
+    // }
+  }catch{}
 };
 
 const lastIndex = ref(-1);
 const startByteAnimations = (index: number, num: number) => {
-  const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active');
-  let position_i_length = store_player_audio_info.this_audio_lyrics_info_byte_time
-      .reduce((acc: any, curr: any) => {
-        return acc + curr.length;
-      }, 0);
-  let position_i_start = store_player_audio_info.this_audio_lyrics_info_byte_time
-      .slice(0, index)
-      .reduce((acc: any, curr: any) => {
-        return acc + curr.length;
-      }, 0);
-  let position_i_end = store_player_audio_info.this_audio_lyrics_info_byte_time
-      .slice(0, index + 1)
-      .reduce((acc: any, curr: any) => {
-        return acc + curr.length;
-      }, 0);
-
-  if (index === lastIndex.value) {
-    return;
-  }
-  lastIndex.value = index;
-
-  // Clear previous intervals
-  if (intervals.length > 0) {
-    intervals.forEach(clearInterval);
-    intervals = [];
-  }
-
-  // lyric width length
-  let elementWidth = 0;
-  for (let i = position_i_start; i < position_i_end; i++) {
-    const element = itemElements_active[i];
-    const computedStyle = window.getComputedStyle(element);
-    elementWidth += parseFloat(computedStyle.width);
-
-    itemElements_active[i].style.fontSize = store_player_appearance.player_lyric_fontSize;
-    itemElements_active[i].style.fontWeight = 400;
-
-    itemElements_active[i].style.filter = 'blur(0px)';
-    itemElements_active[i].style.transition = 'color 0.5s, transform 0.5s';
-    if (!store_player_appearance.player_collapsed_album) {
-      itemElements_active[i].style.transform = 'scale(1.1) translateY(0px)';
-      itemElements_active[i].style.transformOrigin = 'left center';
-      itemElements_active[i].style.width = 'calc(36.3vw)'
-    } else {
-      itemElements_active[i].style.transform = 'scale(1.1) translateX(0px)';
-      itemElements_active[i].style.transformOrigin = 'center';
-      itemElements_active[i].style.width = 'calc(40vw)'
-    }
-
-    let tempwidth = parseFloat(window.getComputedStyle(itemElements_active[i]).width);
-    itemElements_active[i].style.marginRight = `${tempwidth / 10}px`;
-  }
-
-  for (let i = position_i_start; i < position_i_end; i++) {
-    const byteTime = store_player_audio_info.this_audio_lyrics_info_byte_time[index][i - position_i_start];
-    const [startMs, durationMs] = byteTime.split(',').map(Number);
-    const start = startMs / 1000;
-    const duration = durationMs / 1000;``
-
-    setTimeout(() => {
-      itemElements_active[i].style.animationDuration = `${duration}s`;
-      let leftPx = 0;
-      const interval = setInterval(() => {
-        if (leftPx <= elementWidth) {
-          leftPx += 1;
-          itemElements_active[i].style.background = `linear-gradient(90deg, #FFFFFF ${leftPx}px, #FAFAFB60 0px) 0 0`;
-          itemElements_active[i].style.backgroundClip = `text`;
-          itemElements_active[i].style.color = `transparent`;
-          itemElements_active[i].style.textShadow = `0 0 2px rgba(255, 255, 255, 0.4)`;
-        } else {
-          clearInterval(interval);
-        }
-      }, (duration * 1000) / 30);
-
-      intervals.push(interval);
-    }, start * 1000);
-  }
-
   try {
-    let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2);
-    for (let i = 0; i < position_i_start; i++) {
-      const colorValue = Math.max(store_player_appearance.player_lyric_color_hidden_value - (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
-      itemElements_active[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
-      itemElements_active[i].style.transform = 'scale(1)';
-      itemElements_active[i].style.background = `linear-gradient(90deg, #FFFFFF 0px, #FAFAFB60 0px) 0 0`;
-      itemElements_active[i].style.backgroundClip = `text`;
-      itemElements_active[i].style.textShadow = `0 0 2px transparent`;
+    const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active');
+    let position_i_length = store_player_audio_info.this_audio_lyrics_info_byte_time
+        .reduce((acc: any, curr: any) => {
+          return acc + curr.length;
+        }, 0);
+    let position_i_start = store_player_audio_info.this_audio_lyrics_info_byte_time
+        .slice(0, index)
+        .reduce((acc: any, curr: any) => {
+          return acc + curr.length;
+        }, 0);
+    let position_i_end = store_player_audio_info.this_audio_lyrics_info_byte_time
+        .slice(0, index + 1)
+        .reduce((acc: any, curr: any) => {
+          return acc + curr.length;
+        }, 0);
 
-      itemElements_active[i].style.marginRight = `0px`;
-      itemElements_active[i].style.width = 'calc(40vw)'
+    if (index === lastIndex.value) {
+      return;
     }
-    for (let i = position_i_end; i <= position_i_length; i++) {
-      const colorValue = Math.max(store_player_appearance.player_lyric_color_hidden_value - (i - index) * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
-      itemElements_active[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
-      itemElements_active[i].style.transform = 'scale(1)';
-      itemElements_active[i].style.background = `linear-gradient(90deg, #FFFFFF 0px, #FAFAFB60 0px) 0 0`;
-      itemElements_active[i].style.backgroundClip = `text`;
-      itemElements_active[i].style.textShadow = `0 0 2px transparent`;
+    lastIndex.value = index;
 
-      itemElements_active[i].style.marginRight = `0px`;
-      itemElements_active[i].style.width = 'calc(40vw)'
+    // Clear previous intervals
+    if (intervals.length > 0) {
+      intervals.forEach(clearInterval);
+      intervals = [];
     }
-  }catch {}
+
+    // lyric width length
+    let elementWidth = 0;
+    for (let i = position_i_start; i < position_i_end; i++) {
+      const element = itemElements_active[i];
+      const computedStyle = window.getComputedStyle(element);
+      elementWidth += parseFloat(computedStyle.width);
+
+      itemElements_active[i].style.fontSize = store_player_appearance.player_lyric_fontSize;
+      itemElements_active[i].style.fontWeight = 400;
+
+      itemElements_active[i].style.filter = 'blur(0px)';
+      itemElements_active[i].style.transition = 'color 0.5s, transform 0.5s';
+      if (!store_player_appearance.player_collapsed_album) {
+        itemElements_active[i].style.transform = 'scale(1.1) translateY(0px)';
+        itemElements_active[i].style.transformOrigin = 'left center';
+        itemElements_active[i].style.width = 'calc(36.3vw)'
+      } else {
+        itemElements_active[i].style.transform = 'scale(1.1) translateX(0px)';
+        itemElements_active[i].style.transformOrigin = 'center';
+        itemElements_active[i].style.width = 'calc(40vw)'
+      }
+
+      let tempwidth = parseFloat(window.getComputedStyle(itemElements_active[i]).width);
+      itemElements_active[i].style.marginRight = `${tempwidth / 10}px`;
+    }
+
+    for (let i = position_i_start; i < position_i_end; i++) {
+      const byteTime = store_player_audio_info.this_audio_lyrics_info_byte_time[index][i - position_i_start];
+      const [startMs, durationMs] = byteTime.split(',').map(Number);
+      const start = startMs / 1000;
+      const duration = durationMs / 1000;
+      ``
+
+      setTimeout(() => {
+        itemElements_active[i].style.animationDuration = `${duration}s`;
+        let leftPx = 0;
+        const interval = setInterval(() => {
+          if (leftPx <= elementWidth) {
+            leftPx += 1;
+            itemElements_active[i].style.background = `linear-gradient(90deg, #FFFFFF ${leftPx}px, #FAFAFB60 0px) 0 0`;
+            itemElements_active[i].style.backgroundClip = `text`;
+            itemElements_active[i].style.color = `transparent`;
+            itemElements_active[i].style.textShadow = `0 0 2px rgba(255, 255, 255, 0.4)`;
+          } else {
+            clearInterval(interval);
+          }
+        }, (duration * 1000) / 30);
+
+        intervals.push(interval);
+      }, start * 1000);
+    }
+
+    try {
+      let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2);
+      for (let i = 0; i < position_i_start; i++) {
+        const colorValue = Math.max(store_player_appearance.player_lyric_color_hidden_value - (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
+        itemElements_active[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+        itemElements_active[i].style.transform = 'scale(1)';
+        itemElements_active[i].style.background = `linear-gradient(90deg, #FFFFFF 0px, #FAFAFB60 0px) 0 0`;
+        itemElements_active[i].style.backgroundClip = `text`;
+        itemElements_active[i].style.textShadow = `0 0 2px transparent`;
+
+        itemElements_active[i].style.marginRight = `0px`;
+        itemElements_active[i].style.width = 'calc(40vw)'
+      }
+      for (let i = position_i_end; i <= position_i_length; i++) {
+        const colorValue = Math.max(store_player_appearance.player_lyric_color_hidden_value - (i - index) * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
+        itemElements_active[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+        itemElements_active[i].style.transform = 'scale(1)';
+        itemElements_active[i].style.background = `linear-gradient(90deg, #FFFFFF 0px, #FAFAFB60 0px) 0 0`;
+        itemElements_active[i].style.backgroundClip = `text`;
+        itemElements_active[i].style.textShadow = `0 0 2px transparent`;
+
+        itemElements_active[i].style.marginRight = `0px`;
+        itemElements_active[i].style.width = 'calc(40vw)'
+      }
+    } catch {
+    }
+  }catch{}
 };
 let intervals = [];
 const lyrics_list_whell = ref(false);
@@ -340,59 +351,67 @@ const handleWheel = (event: any) => {
   handleClear_Lyric_Color()
 };
 function handleClear_Lyric_Color (){
-  lyrics_list_whell.value = true;
-  const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
-  for (let i = 0; i < itemElements.length; i++) {
-    itemElements[i].style.color = '#FFFFFF99';
-    itemElements[i].style.transform = 'scale(1)';
-    itemElements[i].style.filter = 'blur(0px)';
-    itemElements[i].style.width = 'calc(40vw)';
-  }
+  try {
+    lyrics_list_whell.value = true;
+    const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
+    for (let i = 0; i < itemElements.length; i++) {
+      itemElements[i].style.color = '#FFFFFF99';
+      itemElements[i].style.transform = 'scale(1)';
+      itemElements[i].style.filter = 'blur(0px)';
+      itemElements[i].style.width = 'calc(40vw)';
+    }
+  }catch{}
 }
 const handleLeave_Refresh_Lyric_Color = () => {
-  lyrics_list_whell.value = false;
-  const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
-  let lyric_bottom_hidden_num = store_player_appearance.player_use_lyric_skip_forward
-      ? 0 : 10
-  let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2);
-  for (let i = perviousIndex.value - 16; i <= perviousIndex.value + 16; i++) {
-    if (i < perviousIndex.value) {
-      const colorValue =
-          Math.max(store_player_appearance.player_lyric_color_hidden_value + lyric_bottom_hidden_num
-              - (perviousIndex.value - i)
-              * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
-      try {
-        if(store_player_appearance.player_use_lyric_skip_forward){
-          itemElements[i].style.color = 'transparent'
-        }else{
-          itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+  try {
+    lyrics_list_whell.value = false;
+    const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
+    let lyric_bottom_hidden_num = store_player_appearance.player_use_lyric_skip_forward
+        ? 0 : 10
+    let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2);
+    for (let i = perviousIndex.value - 16; i <= perviousIndex.value + 16; i++) {
+      if (i < perviousIndex.value) {
+        const colorValue =
+            Math.max(store_player_appearance.player_lyric_color_hidden_value + lyric_bottom_hidden_num
+                - (perviousIndex.value - i)
+                * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
+        try {
+          if (store_player_appearance.player_use_lyric_skip_forward) {
+            itemElements[i].style.color = 'transparent'
+          } else {
+            itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+          }
+        } catch {
         }
-      }catch{  }
-    } else {
-      const colorValue =
-          Math.max(store_player_appearance.player_lyric_color_hidden_value + lyric_bottom_hidden_num
-              - (i - perviousIndex.value)
-              * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
-      try {
-        itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
-      }catch{  }
+      } else {
+        const colorValue =
+            Math.max(store_player_appearance.player_lyric_color_hidden_value + lyric_bottom_hidden_num
+                - (i - perviousIndex.value)
+                * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
+        try {
+          itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+        } catch {
+        }
+      }
     }
-  }
+  }catch{}
 };
 const handleAuto_fontSize = (value: number) =>{
-  store_player_appearance.player_lyric_fontSize_Num = value;
-  store_player_appearance.player_lyric_fontSize = value + 'px';
-  const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active');
-  itemElements_active.forEach((itemElement) => {
-    itemElement.style.fontSize = store_player_appearance.player_lyric_fontSize;
-    itemElement.style.fontWeight = 400;
-  })
-  let marginTop = 6 + Math.floor((window.innerHeight - 880) / 200) * 0.5;
-  const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
-  itemElements.forEach((itemElement) => {
-    itemElement.style.marginTop = marginTop;
-    itemElement.style.lineHeight = marginTop * 2 * 0.1;
-  })
+  try {
+    store_player_appearance.player_lyric_fontSize_Num = value;
+    store_player_appearance.player_lyric_fontSize = value + 'px';
+    const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active');
+    itemElements_active.forEach((itemElement) => {
+      itemElement.style.fontSize = store_player_appearance.player_lyric_fontSize;
+      itemElement.style.fontWeight = 400;
+    })
+    let marginTop = 6 + Math.floor((window.innerHeight - 880) / 200) * 0.5;
+    const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
+    itemElements.forEach((itemElement) => {
+      itemElement.style.marginTop = marginTop;
+      itemElement.style.lineHeight = marginTop * 2 * 0.1;
+    })
+  }catch{}
 }
 watch(() => store_player_appearance.player_lyric_fontSize_Num, (newValue) => {
   handleLeave_Refresh_Lyric_Color()
@@ -420,7 +439,6 @@ import player_theme_4_png from '@/assets/img/player_theme_4.png'
 import Animation_1715591164841 from '@/assets/lottie_json/Animation - 1715591164841.json'
 import Animation_1715392202806 from '@/assets/lottie_json/Animation - 1715392202806.json'
 import Animation_1715417974362 from '@/assets/lottie_json/Animation - 1715417974362.json'
-import {store_player_appearance} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_appearance";
 const player_theme_1 = ref<PlayerTheme_LyricItem>(
     {
       id: 0,
@@ -480,14 +498,28 @@ const player_theme_4 = ref<PlayerTheme_LyricItem>(
 const player_theme_5 = ref<PlayerTheme_LyricItem>(
     {
       id: 4,
-      name: '皮肤底图',
+      name: computed_i18n_Label_ViewSetConfig_Cover_5.value,
       normalStyle: {
         image_url: player_theme_3_png,
 
         textAlign: false,
 
         player_collapsed_album: true,
-        player_collapsed_skin: false,
+        player_collapsed_skin: true,
+      }
+    }
+);
+const player_theme_6 = ref<PlayerTheme_LyricItem>(
+    {
+      id: 5,
+      name: computed_i18n_Label_ViewSetConfig_Cover_6.value,
+      normalStyle: {
+        image_url: player_theme_3_png,
+
+        textAlign: false,
+
+        player_collapsed_album: true,
+        player_collapsed_skin: true,
       }
     }
 );
@@ -497,7 +529,8 @@ const player_theme_Styles = ref<PlayerTheme_LyricItem[]>(
       player_theme_2.value,// play model 2 ：旋转封面
       player_theme_3.value,// play model 3 ：炫胶唱片
       player_theme_4.value,// play model 4 ：专辑底图
-      // player_theme_5.value, // play model 5 ：皮肤底图  :disabled
+      player_theme_5.value, // play model 5 ：皮肤底图  :disabled
+      player_theme_6.value, // play model 5 ：皮肤底图  :disabled
     ]
 );
 
@@ -506,28 +539,30 @@ const player_theme_0_bind_style = ref<PlayerTheme_LyricItem>(player_theme_Styles
     store_player_appearance.player_theme_Styles_Selected
     ]);
 const player_theme_set_theme = (index:number) => {
-  if(index < 0 || index >= player_theme_Styles.value.length){
-    return;
-  }
-  // set theme
-  player_theme_0_bind_style.value = player_theme_Styles.value[index];
+  try {
+    if (index < 0 || index >= player_theme_Styles.value.length) {
+      return;
+    }
+    // set theme
+    player_theme_0_bind_style.value = player_theme_Styles.value[index];
 
-  store_player_appearance.player_theme_Styles_Selected = index;
-  store_player_appearance.player_background_model_num = player_theme_0_bind_style.value.id;
-  store_player_appearance.player_collapsed_album = player_theme_0_bind_style.value.normalStyle.player_collapsed_album;
-  store_player_appearance.player_collapsed_skin = player_theme_0_bind_style.value.normalStyle.player_collapsed_skin;
+    store_player_appearance.player_theme_Styles_Selected = index;
+    store_player_appearance.player_background_model_num = player_theme_0_bind_style.value.id;
+    store_player_appearance.player_collapsed_album = player_theme_0_bind_style.value.normalStyle.player_collapsed_album;
+    store_player_appearance.player_collapsed_skin = player_theme_0_bind_style.value.normalStyle.player_collapsed_skin;
 
-  const index_lyric = store_player_view.currentScrollIndex + store_player_audio_info.this_audio_lyrics_info_line_num
-  const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
-  if(!store_player_appearance.player_collapsed_album){
-    itemElements[index_lyric].style.transformOrigin = 'left center';
-  }else{
-    itemElements[index_lyric].style.transformOrigin = 'center';
-  }
+    const index_lyric = store_player_view.currentScrollIndex + store_player_audio_info.this_audio_lyrics_info_line_num
+    const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
+    if (!store_player_appearance.player_collapsed_album) {
+      itemElements[index_lyric].style.transformOrigin = 'left center';
+    } else {
+      itemElements[index_lyric].style.transformOrigin = 'center';
+    }
 
-  init_player_theme()
+    init_player_theme()
 
-  store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()
+    store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()
+  }catch{}
 };
 function init_player_theme(){
   if(store_player_appearance.player_background_model_num === 0){
@@ -575,10 +610,15 @@ import {store_player_audio_info} from "@/views/view_app/page_metadata/page_folde
 import {store_player_audio_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic"
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
-import TableAlbumModel1AlbumScroll from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/components/Table_Album_Model_1_AlbumScroll.vue";
+import Table_Album_Model_1_AlbumScroll from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/components/Table_Album_Model_1_AlbumScroll.vue";
+import Table_Album_Model_5_AlbumScroll_Vertical from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/components/Table_Album_Model_5_AlbumScroll_Vertical.vue"
 import {ArrowsMaximize, ArrowsMinimize} from "@vicons/tabler";
+import {
+  store_playlist_list_info
+} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info";
 const clear_lottie_animationInstance = ref(false)
 const animationInstance_model_1_spectrum = ref<any>(null);
+const animationInstance_model_1_spectrum_copy = ref<any>(null);
 const animationInstance_model_1_wave = ref<any>(null);
 const animationInstance_model_2_wave = ref<any>(null);
 let unwatch_animationInstance = watch(() => store_player_audio_logic.player.isPlaying, (newValue) => {
@@ -588,15 +628,23 @@ let unwatch_animationInstance = watch(() => store_player_audio_logic.player.isPl
         animationInstance_model_1_spectrum.value.play();
         animationInstance_model_1_wave.value.play();
       }
-      if (store_player_appearance.player_background_model_num === 2)
+      if (store_player_appearance.player_background_model_num === 2) {
         animationInstance_model_2_wave.value.play();
+      }
+      if (store_player_appearance.player_background_model_num === 4){
+        animationInstance_model_1_spectrum_copy.value.play();
+      }
     } else {
       if (store_player_appearance.player_background_model_num === 1) {
         animationInstance_model_1_spectrum.value.pause();
         animationInstance_model_1_wave.value.pause();
       }
-      if (store_player_appearance.player_background_model_num === 2)
+      if (store_player_appearance.player_background_model_num === 2) {
         animationInstance_model_2_wave.value.pause();
+      }
+      if (store_player_appearance.player_background_model_num === 4){
+        animationInstance_model_1_spectrum_copy.value.pause();
+      }
     }
   }
 });
@@ -614,8 +662,11 @@ let unwatch_player_background_model_num = watch(() => store_player_audio_info.pl
       animationInstance_model_1_spectrum.value.pause();
       animationInstance_model_1_wave.value.pause();
     }
+    if (store_player_appearance.player_background_model_num === 4){
+      animationInstance_model_1_spectrum_copy.value.pause();
+    }
   }
-});
+})
 
 ////// player_configs Remove data
 onBeforeUnmount(() => {
@@ -627,6 +678,7 @@ onBeforeUnmount(() => {
   unwatch_player_background_model_num();
   if(store_player_appearance.player_use_lottie_animation) {
     animationInstance_model_1_spectrum.value.destroy()
+    animationInstance_model_1_spectrum_copy.value.destroy()
     animationInstance_model_1_wave.value.destroy()
     animationInstance_model_2_wave.value.destroy()
   }
@@ -1030,8 +1082,8 @@ onBeforeUnmount(() => {
           </div>
         </n-flex>
       </n-flex>
+      <!-- middle area -->
       <n-space vertical justify="center">
-        <!-- middle area -->
         <n-config-provider :theme="darkTheme">
           <n-flex
             justify="center"
@@ -1042,10 +1094,11 @@ onBeforeUnmount(() => {
               marginLeft: store_player_appearance.player_background_model_num === 2
               ? '36px' : '0px'
             }">
+            <!-- 1,2,3,4  -->
             <n-layout
                 has-sider
+                v-show="store_player_appearance.player_background_model_num != 4 && store_player_appearance.player_background_model_num != 5"
                 style="
-                  transition: margin 0.4s;
                   overflow: hidden;
                   background-color: transparent;">
               <!-- left area -->
@@ -1069,7 +1122,7 @@ onBeforeUnmount(() => {
                     }"
                     style="margin-right:8vw;">
                   <!-- 1 方形封面-->
-                  <TableAlbumModel1AlbumScroll
+                  <Table_Album_Model_1_AlbumScroll
                     @mouseover="() => {
                       store_player_audio_info.play_list_carousel_model = true
                     }"
@@ -1248,7 +1301,7 @@ onBeforeUnmount(() => {
                       <img
                         style="
                           width: 100%;height: 100%;
-                          border: 1.5px solid #FFFFFF20;
+                          border: 4px solid #FFFFFF20;
                           border-radius: 10px;
                           object-fit: cover;
                           object-position: center;
@@ -1354,8 +1407,6 @@ onBeforeUnmount(() => {
                       {{ store_player_audio_logic.current_play_time }} &nbsp;:&nbsp; {{ store_player_audio_logic.total_play_time }}
                     </div>
                   </n-space>
-                  <!-- 5 专辑列表-->
-
                 </n-space>
               </n-layout-sider>
               <!-- right area -->
@@ -1422,6 +1473,234 @@ onBeforeUnmount(() => {
                 </div>
               </n-layout-content>
             </n-layout>
+            <!-- 5 专辑列表-->
+            <n-space
+              v-show="store_player_appearance.player_background_model_num === 4"
+              style="
+              position: absolute;left: 0;
+              width: 100vw;height: 90vh;
+              overflow: hidden;
+              background-color: transparent;">
+              <n-space
+                vertical align="center"
+                @mouseover="() => {
+                  store_player_audio_info.play_list_carousel_model = true
+                }"
+                @mouseleave="() => {
+                  store_player_audio_info.play_list_carousel_model = false
+                }">
+                <n-carousel
+                  effect="card"
+                  draggable
+                  :show-arrow="false"
+                  :show-dots="false"
+                  v-model:current-index="store_player_audio_info.this_audio_Index_of_play_list_carousel"
+                  direction="horizontal"
+                  dot-placement="bottom"
+                  :prev-slide-style="{
+                    transform: 'translateX(-160%) translateZ(-140px) rotateY(40deg) scale(0.8)'
+                  }"
+                  :next-slide-style="{
+                    transform: 'translateX(60%) translateZ(-140px) rotateY(-40deg) scale(0.8)'
+                  }"
+                  style="
+                    transform-style: preserve-3d;
+                    width: 100vw;height: 50vh;
+                  "
+                  :style="{
+                    marginTop: 'calc(30vh - 182px)',
+                    transition: 'margin 0.4s, height 0.4s',
+                  }">
+                  <n-carousel-item
+                    v-for="(item, index) in store_playlist_list_info.playlist_MediaFiles_temporary_carousel"
+                    :key="index"
+                    style="
+                      width: 50vh;
+                      height: 50vh;
+                    "
+                  >
+                    <div class="image-wrapper">
+                      <img
+                        class="carousel-img"
+                        :src="getAssetImage(item.medium_image_url)"
+                        :alt="`Carousel Image ${index + 1}`"
+                      />
+                    </div>
+                  </n-carousel-item>
+                </n-carousel>
+                <n-space vertical
+                         style="width: 50vh;">
+                  <div
+                    style="
+                      width: 50vh;margin-top: 5px;
+                      color: #E7E5E5;
+                      font-weight: 900;font-size: calc(2.2vh + 4px);
+                      overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
+                      text-align: center;">
+                    {{ store_player_audio_info.this_audio_song_name }}
+                  </div>
+                  <div
+                    style="
+                      width: 50vh;
+                      margin-top: -6px;
+                      color: #989292;font-weight: 550;font-size: calc(1.4vh + 4px);
+                      overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
+                      text-align: center;">
+                    {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}
+                  </div>
+                </n-space>
+                <!--  -->
+                <lottie-player
+                    ref="animationInstance_model_1_spectrum_copy"
+                    v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
+                    autoplay
+                    loop
+                    mode="normal"
+                    :src="JSON.parse(JSON.stringify(Animation_1715392202806))"
+                    style="width: 54vh;height:calc(4.7vh);"
+                />
+                <!--  -->
+                <n-space
+                    align="center" justify="center"
+                    style="width: 100vh;margin-left: 0.3vw;"
+                    v-if="store_player_appearance.player_collapsed_album">
+                  <n-space style="width: 46px;margin-right: -10px;color: #ffffff99">
+                    {{ store_player_audio_logic.current_play_time }}
+                  </n-space>
+                  <n-slider
+                    style="
+                      width: calc(50vh - 46px * 2);
+                      --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
+                      --n-rail-height: 4px;
+                      --n-handle-size: 20px;
+                      border-radius: 10px;"
+                    v-model:value="store_player_audio_logic.slider_singleValue"
+                    :min="0" :max="100"
+                    :format-tooltip="(value) => {
+                      return store_player_audio_logic.formatTime(
+                        (value / 100) * store_player_audio_logic.player.isDuration
+                      );
+                    }"
+                    :on-dragend="()=>{
+                      if(store_player_audio_logic.slider_singleValue >= 99.5 || store_player_audio_logic.slider_singleValue == 0){
+                        store_player_audio_logic.player_is_play_ended = true;
+                        store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
+                      }
+                      store_player_audio_logic.player_range_duration_isDragging = false;
+                    }"
+                    @click="()=>{
+                      store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
+                    }"
+                    @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
+                    @mouseup="store_player_audio_logic.player_range_duration_isDragging = false">
+                    <template #thumb>
+                      <n-icon-wrapper color="white" :size="12" />
+                    </template>
+                  </n-slider>
+                  <n-space style="width: 46px;color: #ffffff99">
+                    {{ store_player_audio_logic.total_play_time }}
+                  </n-space>
+                </n-space>
+              </n-space>
+            </n-space>
+            <!-- 6 黑胶唱片-->
+            <n-space
+              v-show="store_player_appearance.player_background_model_num === 5"
+              vertical
+              align="end" justify="center"
+              style="
+                width: calc(100vw);height: calc(100vh - 20px);
+                position: absolute;left: 0;
+                overflow: hidden;"
+              :style="{
+                marginTop: store_player_appearance.player_background_model_num === 5
+                ? (store_player_appearance.player_use_lyric_skip_forward
+                ? 'calc(-6vh - 30px)' : 'calc(-6vh - 30px)') : '0px',
+                opacity: store_player_appearance.player_background_model_num === 5
+                ? 1 : 0,
+                transition: 'margin 0.4s, left 0.4s, opacity 0.8s'
+              }">
+              <lottie-player
+                ref="animationInstance_model_2_wave"
+                class="animate__rotate_fast"
+                :class="{
+                  'animate__rotate_fast_paused': store_player_appearance.player_background_model_num !== 5 || !store_player_audio_logic.player.isPlaying
+                }"
+                v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
+                speed="0.8"
+                autoplay
+                loop
+                mode="normal"
+                :src="JSON.parse(JSON.stringify(Animation_1715417974362))"
+                style="
+                  width: calc(90vh);
+                  height: calc(90vh);
+                  position: absolute;right: 7vh;top: 5vh;
+                  transition: margin 0.4s, opacity 0.4s;;
+                  z-index: 4;
+                "
+                :style="{
+                  '--background-image': `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`,
+                  marginLeft: store_player_audio_logic.player.isPlaying
+                  ? 'calc(0vh)' : 'calc(0vh)',
+                  opacity: store_player_audio_logic.player.isPlaying
+                    ? 1 : 0,
+                }"
+              />
+              <div
+                style="
+                  width: calc(80vh);
+                  height: calc(80vh);
+                  border-radius: 40vh;
+                  object-fit: cover;object-position: center;
+                  filter: blur(0px);
+                  position: absolute;right: 12vh;top: 10vh;
+                  z-index: 3;
+                  border: 1.5px solid #FFFFFF20;
+                  box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
+                  transition: margin 0.4s;
+                "
+                :style="{
+                  backgroundImage: `url(${getAssetImage(store_player_audio_info.page_top_vinyl_image_url)})`,
+                  marginLeft: store_player_audio_logic.player.isPlaying
+                  ? 'calc(0vh)' : 'calc(0vh)'
+                }">
+              </div>
+              <div
+                :style="{
+                  marginLeft: store_player_audio_logic.player.isPlaying ? '0vw' : '40vh',
+                  transition: 'margin 0.4s, transform 0.4s, opacity 0.8s',
+                  transform: store_player_audio_logic.player.isPlaying ? 'rotate(-2deg)' : 'rotate(0deg)',
+                }"
+                style="
+                  position: absolute;left: -3vw;top: 10vh;
+                  width: calc(80vh); height: calc(80vh);">
+                <!-- 图片 -->
+                <img
+                  style="
+                    width: 100%;height: 100%;
+                    border: 4px solid #FFFFFF20;
+                    border-radius: 10px;
+                    object-fit: cover;
+                    object-position: center;
+                    filter: blur(0);
+                    box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
+                    -webkit-mask-image: radial-gradient(
+                      circle at 100% 50%, /* 圆形洞的位置（右侧居中） */
+                      transparent 3%,   /* 圆形洞的大小 */
+                      black 3.2%          /* 遮罩其余部分 */
+                    );
+                    mask-image: radial-gradient(
+                      circle at 100% 50%, /* 圆形洞的位置（右侧居中） */
+                      transparent 6%,   /* 圆形洞的大小 */
+                      black 6.2%          /* 遮罩其余部分 */
+                    );
+                  "
+                  :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                  alt=""
+                />
+              </div>
+            </n-space>
           </n-flex>
         </n-config-provider>
         <n-flex justify="end">
@@ -1564,6 +1843,34 @@ onBeforeUnmount(() => {
   to {
     transform: rotate(360deg);
   }
+}
+
+.image-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 50vh;
+  height: 50vh;
+}
+.carousel-img {
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 4px solid #FFFFFF20;
+  position: relative;
+  z-index: 1;
+}
+.image-wrapper::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 15vh;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+  border-radius: 10px;
+  z-index: 2;
 }
 
 ::-webkit-scrollbar {

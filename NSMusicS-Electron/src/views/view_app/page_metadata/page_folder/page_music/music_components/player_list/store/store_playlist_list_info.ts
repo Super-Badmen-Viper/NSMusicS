@@ -77,11 +77,11 @@ export const store_playlist_list_info = reactive({
             return;
         }
         const startIndex = Math.max(
-            store_player_audio_info.this_audio_Index_of_play_list - 2,
+            store_player_audio_info.this_audio_Index_of_play_list - 14,
             0
         );
         const endIndex = Math.min(
-            startIndex + 5,
+            startIndex + 30,
             store_playlist_list_info.playlist_MediaFiles_temporary.length
         );
         store_playlist_list_info.playlist_MediaFiles_temporary_carousel =

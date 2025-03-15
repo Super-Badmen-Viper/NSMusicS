@@ -930,7 +930,9 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
                     margin: store_player_appearance.player_show === false ?
                       '10px auto 0'
                       :
-                      store_player_appearance.player_background_model_num === 3 ? '10px auto 0' : '22px auto 0',
+                      (store_player_appearance.player_background_model_num === 3 ||
+                      store_player_appearance.player_background_model_num === 5)
+                      ? '10px auto 0' : '22px auto 0',
                  }"
                  justify="center">
 
@@ -1045,7 +1047,10 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
             :style="{
               marginTop: !store_player_appearance.player_show
               ||
-              (store_player_appearance.player_show && store_player_appearance.player_background_model_num === 3)
+              (store_player_appearance.player_show
+              && (
+                  store_player_appearance.player_background_model_num === 3 ||
+                  store_player_appearance.player_background_model_num === 5))
               ? '-2px' : '30px'
             }"
             align="center" justify="center">
