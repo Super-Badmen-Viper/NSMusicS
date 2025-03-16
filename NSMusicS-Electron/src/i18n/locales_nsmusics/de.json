@@ -87,7 +87,8 @@
                 "player_use_lottie": "Animation Abspielen",
                 "player_use_lottie_explain": "(Experimentell) Aktiviere die Wiedergabeanimation im Interface (kann zu instabiler Speichernutzung führen)",
                 "player_use_playbar_auto_hide": "Die Steuerleiste des Players automatisch ausblenden",
-                "player_use_playbar_auto_hide_explain": "Die Steuerleiste des Players wird automatisch im Wiedergabebereich einklappen"
+                "player_use_playbar_auto_hide_explain": "Die Steuerleiste des Players wird automatisch im Wiedergabebereich einklappen",
+                "coverBase_6": "Schallplatte"
             },
             "view_player_mini": "Zum Minispieler wechseln"
         }

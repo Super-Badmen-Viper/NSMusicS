@@ -87,7 +87,8 @@
                 "player_use_lottie": "播放動效",
                 "player_use_lottie_explain": "(實驗性)在播放界面中啟用播放動畫(會導致佔用記憶體不穩定)",
                 "player_use_playbar_auto_hide": "自動隱藏播放器控制欄",
-                "player_use_playbar_auto_hide_explain": "播放介面中播放器控制欄會自動收起"
+                "player_use_playbar_auto_hide_explain": "播放介面中播放器控制欄會自動收起",
+                "coverBase_6": "黑膠唱片"
             },
             "view_player_mini": "切換到迷你播放程序"
         }

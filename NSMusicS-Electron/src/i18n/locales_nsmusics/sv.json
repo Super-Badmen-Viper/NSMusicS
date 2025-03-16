@@ -87,7 +87,8 @@
                 "player_use_lottie": "Spela upp Animation",
                 "player_use_lottie_explain": "(Experimentellt) Aktivera animering vid uppspelning i gränssnittet (kan orsaka osäker minnesanvändning)",
                 "player_use_playbar_auto_hide": "Dölj automatiskt spelarens kontrollfält",
-                "player_use_playbar_auto_hide_explain": "Spelarens kontrollfält kommer att automatiskt dra ihop sig i uppspelningsgränssnittet"
+                "player_use_playbar_auto_hide_explain": "Spelarens kontrollfält kommer att automatiskt dra ihop sig i uppspelningsgränssnittet",
+                "coverBase_6": "Vinylplatta"
             },
             "view_player_mini": "Byt till minispelare"
         }

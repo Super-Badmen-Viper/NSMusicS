@@ -87,7 +87,8 @@
                 "player_use_lottie": "Riprodurre Animazione",
                 "player_use_lottie_explain": "(Sperimentale) Abilita l'animazione di riproduzione nell'interfaccia (può causare un utilizzo di memoria instabile)",
                 "player_use_playbar_auto_hide": "Nascondi automaticamente la barra di controllo del player",
-                "player_use_playbar_auto_hide_explain": "La barra di controllo del player si ritorcerà automaticamente nell'interfaccia di riproduzione"
+                "player_use_playbar_auto_hide_explain": "La barra di controllo del player si ritorcerà automaticamente nell'interfaccia di riproduzione",
+                "coverBase_6": "Disco di Vinile"
             },
             "view_player_mini": "Passa al lettore mini"
         }

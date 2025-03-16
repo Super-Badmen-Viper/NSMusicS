@@ -87,7 +87,8 @@
                 "player_use_lottie": "アニメーション再生",
                 "player_use_lottie_explain": "(実験的)プレイヤーのインターフェースでアニメーションを有効化(メモリ使用量が不安定になる可能性があります)",
                 "player_use_playbar_auto_hide": "プレイヤーコントロールバーを自動的に非表示",
-                "player_use_playbar_auto_hide_explain": "プレイバックインターフェースでプレイヤーコントロールバーは自動的に折りたたみます"
+                "player_use_playbar_auto_hide_explain": "プレイバックインターフェースでプレイヤーコントロールバーは自動的に折りたたみます",
+                "coverBase_6": "ブラックレコード"
             },
             "view_player_mini": "ミニプレーヤーに切り替え"
         }

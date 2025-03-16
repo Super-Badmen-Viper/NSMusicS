@@ -17,7 +17,7 @@ import {store_player_audio_logic} from "./store_player_audio_logic";
 import {store_view_album_page_logic} from "../../page_album/store/store_view_album_page_logic"
 import {store_local_data_set_artistInfo} from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_artistInfo";
 import {store_view_artist_page_info} from "../../page_artist/store/store_view_artist_page_info"
-import vinyl from "@/assets/img/vinyl.png";
+import vinyl from '@/assets/img/vinyl.jpg';
 
 export const store_player_audio_info = reactive({
     this_audio_file_path: '',

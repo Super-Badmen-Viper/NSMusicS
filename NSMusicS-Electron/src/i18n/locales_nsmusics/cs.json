@@ -87,7 +87,8 @@
                 "player_use_lottie": "Přehrát Animace",
                 "player_use_lottie_explain": "(Experimentální) Povolit animace při přehrávání na rozhraní (může způsobit nestabilní využití paměti)",
                 "player_use_playbar_auto_hide": "Automaticky skrýt ovládací pruhu přehrávače",
-                "player_use_playbar_auto_hide_explain": "Ovládací pruh přehrávače se automaticky sbalí v přehrávacím rozhraní"
+                "player_use_playbar_auto_hide_explain": "Ovládací pruh přehrávače se automaticky sbalí v přehrávacím rozhraní",
+                "coverBase_6": "Vinýlový desek"
             },
             "view_player_mini": "Přepnout na minipřehrávač"
         }

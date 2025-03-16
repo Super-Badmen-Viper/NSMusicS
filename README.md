@@ -131,6 +131,7 @@ npm run build # Package into the current system_configs's software package (such
   - .......
 - NSMusicS Web ImageResource Thanks:
   - <a href="https://www.freepik.com/free-photo/black-retro-vinyl-record-design-element_12189639.htm#fromView=search&page=5&position=9&uuid=c046ed77-1d8d-4858-b3d8-e8a96afa3d8d">Image by rawpixel.com on Freepik</a>
+  - <a href="https://www.freepik.com/free-psd/black-vinyl-record-blank-label-music-nostalgia_411796139.htm#fromView=search&page=7&position=29&uuid=924b9d6f-166d-4abf-ae7a-91cb2c6f7d41&query=vinyl">Image by muhammad.abdullah on Freepik</a>
 - NSMusicS WPF Of Thanks:
   - [NAudio](https://github.com/naudio/NAudio)
   - [cscore](https://github.com/filoe/cscore)

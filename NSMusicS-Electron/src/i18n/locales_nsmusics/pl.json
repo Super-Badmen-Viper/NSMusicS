@@ -87,7 +87,8 @@
                 "player_use_lottie": "Odtwarzanie Animacji",
                 "player_use_lottie_explain": "(Eksperymentalne) Włącz animację odtwarzania w interfejsie (może powodować niestabilne zużycie pamięci)",
                 "player_use_playbar_auto_hide": "Automatycznie ukryj pasek sterowania odtwarzaczem",
-                "player_use_playbar_auto_hide_explain": "Pasek sterowania odtwarzaczem będzie automatycznie zwijał się w interfejsie odtwarzania"
+                "player_use_playbar_auto_hide_explain": "Pasek sterowania odtwarzaczem będzie automatycznie zwijał się w interfejsie odtwarzania",
+                "coverBase_6": "Płytka winylowa"
             },
             "view_player_mini": "Przełącz na mini odtwarzacz"
         }

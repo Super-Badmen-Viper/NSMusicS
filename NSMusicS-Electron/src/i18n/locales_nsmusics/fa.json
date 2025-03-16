@@ -87,7 +87,8 @@
         "player_use_lottie": "پخش انیمیشن",
         "player_use_lottie_explain": "(آزمایشی) در صفحه پخش انیمیشن را فعال کنید (ممکن است باعث ناپایداری مصرف حافظه شود)",
         "player_use_playbar_auto_hide": "خودکار پنهان کردن نوار کنترل پخش کننده",
-        "player_use_playbar_auto_hide_explain": "نوار کنترل پخش کننده به صورت خودکار در رابطه ی پخش باز خواهد شد"
+        "player_use_playbar_auto_hide_explain": "نوار کنترل پخش کننده به صورت خودکار در رابطه ی پخش باز خواهد شد",
+        "coverBase_6": "آلبوم وینیل"
       },
       "view_player_mini": "تغییر به پخش کننده کوچک"
     }

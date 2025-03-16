@@ -1188,7 +1188,7 @@ onBeforeUnmount(() => {
               ||
               (store_server_user_model.model_select === 'server'
                 && store_view_media_page_logic.page_songlists_selected !== 'song_list_all'
-                && store_server_user_model.model_server_type_of_web === false)
+                && !store_server_user_model.model_server_type_of_web)
              ">
               <template #trigger>
                 <n-button quaternary circle style="margin-left:4px" @click="update_button_deleteMediaFile_selected">

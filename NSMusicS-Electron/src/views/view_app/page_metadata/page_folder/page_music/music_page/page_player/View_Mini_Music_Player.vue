@@ -86,20 +86,20 @@ function begin_lyrics_animation() {
         if (store_player_audio_logic.player !== null && await store_player_audio_logic.player.getCurrentTime() !== undefined && await store_player_audio_logic.player.getCurrentTime() !== null) {
           let currentTime = await store_player_audio_logic.player.getCurrentTime() * 1000;
           if (currentTime <= store_player_audio_info.this_audio_lyrics_info_line_time[0]) {
-            if (lyrics_list_whell.value === false && (isFirstRun || store_player_view.currentScrollIndex !== 0)) {
+            if (!lyrics_list_whell.value && (isFirstRun || store_player_view.currentScrollIndex !== 0)) {
               store_player_view.currentScrollIndex = 0;
               scrollToItem(store_player_audio_info.this_audio_lyrics_info_line_num);
             }
             break;
           } else if (currentTime >= store_player_audio_info.this_audio_lyrics_info_line_time[i]) {
             if (i === store_player_audio_info.this_audio_lyrics_info_line_time.length - 1) {
-              if (lyrics_list_whell.value === false && (isFirstRun || store_player_view.currentScrollIndex !== i)) {
+              if (!lyrics_list_whell.value && (isFirstRun || store_player_view.currentScrollIndex !== i)) {
                 store_player_view.currentScrollIndex = i;
                 scrollToItem(i + store_player_audio_info.this_audio_lyrics_info_line_num);
               }
               break;
             } else if (currentTime < store_player_audio_info.this_audio_lyrics_info_line_time[i + 1]) {
-              if (lyrics_list_whell.value === false && (isFirstRun || store_player_view.currentScrollIndex !== i)) {
+              if (!lyrics_list_whell.value && (isFirstRun || store_player_view.currentScrollIndex !== i)) {
                 store_player_view.currentScrollIndex = i;
                 scrollToItem(i + store_player_audio_info.this_audio_lyrics_info_line_num);
               }
@@ -413,7 +413,7 @@ const handleMouseMove = () => {
   }, 1000);
 };
 const unwatch_player_collapsed = watchEffect(() => {
-  if (collapsed_action_bar.value === false) {
+  if (!collapsed_action_bar.value) {
     clearInterval(timer_auto_hidden);
   }
 });

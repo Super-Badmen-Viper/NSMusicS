@@ -11,6 +11,7 @@ export const store_playlist_list_info = reactive({
     playlist_MediaFiles_metadata: [],
     playlist_MediaFiles_temporary: [],
     playlist_MediaFiles_temporary_carousel: [],
+    playlist_MediaFiles_temporary_carousel_lyrics: [],
 
     playlist_DragSort_Model: false,
     playlist_Menu_Item_Id: '',

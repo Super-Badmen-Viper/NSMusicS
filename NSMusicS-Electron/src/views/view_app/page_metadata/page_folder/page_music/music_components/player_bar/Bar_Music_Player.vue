@@ -431,7 +431,7 @@ import { useMessage } from 'naive-ui'
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 const message = useMessage()
 const backpanel_order_leave = () => {
-  if(store_player_appearance.player_show === false) {
+  if(!store_player_appearance.player_show) {
     // store_player_audio_logic.drawer_order_show = false;
   }
 }
@@ -927,10 +927,11 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
         <!-- grid_Middle_button_area -->
         <n-space class="grid_Middle_button_area"
                  :style="{
-                    margin: store_player_appearance.player_show === false ?
+                    margin: !store_player_appearance.player_show ?
                       '10px auto 0'
                       :
                       (store_player_appearance.player_background_model_num === 3 ||
+                      store_player_appearance.player_background_model_num === 4 ||
                       store_player_appearance.player_background_model_num === 5)
                       ? '10px auto 0' : '22px auto 0',
                  }"
@@ -1050,7 +1051,8 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
               (store_player_appearance.player_show
               && (
                   store_player_appearance.player_background_model_num === 3 ||
-                  store_player_appearance.player_background_model_num === 5))
+                  store_player_appearance.player_background_model_num === 4 ||
+                      store_player_appearance.player_background_model_num === 5))
               ? '-2px' : '30px'
             }"
             align="center" justify="center">

@@ -87,7 +87,8 @@
                 "player_use_lottie": "Play Animation",
                 "player_use_lottie_explain": "(Experimental) Enable playback animation in the interface (may cause unstable memory usage)",
                 "player_use_playbar_auto_hide": "Automatically hide the player control bar",
-                "player_use_playbar_auto_hide_explain": "The player control bar will automatically retract in the playback interface"
+                "player_use_playbar_auto_hide_explain": "The player control bar will automatically retract in the playback interface",
+                "coverBase_6": "Vinyl Record"
             },
             "view_player_mini": "Switch to Mini Player"
         }
