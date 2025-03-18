@@ -6,14 +6,15 @@ A Go (Golang) Backend Clean Architecture project with Gin, MongoDB, JWT Authenti
 ## local debug run
  - modify: .env
    - DB_HOST=localhost
-   - not local MongoDB_DATA_VOLUME
+   - DB_PORT=27017
+   - if $not local MongoDB_DATA_VOLUME
      - modify: docker-compose-local-windows.ps1 
        - $env:MongoDB_DATA_VOLUME = "C:\Users\Public\Documents\NSMusicS-GO\MongoDB"
        - $env:SQLITE_DATA_VOLUME = "C:\Users\Public\Documents\NSMusicS-GO\Sqlite"
        - $env:MUSIC_DATA_VOLUME = "E:\0_Music"
      - run: docker-compose-local-windows.ps1
      - await create: $env:MongoDB_DATA_VOLUME...
-   - have local MongoDB_DATA_VOLUME
+   - else if $have local MongoDB_DATA_VOLUME
      - run: docker-compose-mongodb.yaml
  - go install github.com/air-verse/air@latest
  - run: air
