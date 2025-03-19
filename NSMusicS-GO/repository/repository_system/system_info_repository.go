@@ -21,44 +21,7 @@ type systemInfoRepo struct {
 }
 
 func NewSystemInfoRepository(env *bootstrap.Env, db mongo.Database, collection string) SystemInfoRepository {
-	//initDefaultSystemInfo(env, db, collection)
 	return &systemInfoRepo{db: db, collection: collection}
-}
-
-func initDefaultSystemInfo(env *bootstrap.Env, db mongo.Database, collection string, userId string) {
-	ctx := context.Background()
-	coll := db.Collection(collection)
-
-	var existing domain_system.SystemInfo
-	_ = coll.FindOne(ctx, bson.M{}).Decode(&existing)
-
-	if existing.ID.IsZero() {
-		defaultInfo := &domain_system.SystemInfo{
-			OperatingSystemDisplayName: "",
-			HasPendingRestart:          false,
-			IsShuttingDown:             false,
-			SupportsLibraryMonitor:     true,
-			WebSocketPortNumber:        8096,
-			CompletedInstallations:     []string{},
-			CanSelfRestart:             true,
-			CanLaunchWebBrowser:        false,
-			ProgramDataPath:            "C:\\ProgramData\\Jellyfin\\Server",
-			WebPath:                    "E:\\0_Jellyfin\\Server\\jellyfin-web",
-			ItemsByNamePath:            "C:\\ProgramData\\Jellyfin\\Server\\metadata",
-			CachePath:                  "C:\\ProgramData\\Jellyfin\\Server\\cache",
-			LogPath:                    "C:\\ProgramData\\Jellyfin\\Server\\log",
-			InternalMetadataPath:       "C:\\ProgramData\\Jellyfin\\Server\\metadata",
-			TranscodingTempPath:        "C:\\ProgramData\\Jellyfin\\Server\\cache\\transcodes",
-			HasUpdateAvailable:         false,
-			EncoderLocation:            "System",
-			SystemArchitecture:         "X64",
-			LocalAddress:               "http://127.0.0.1:8096",
-			ServerName:                 "XIANGCHENG007",
-			Version:                    "10.10.5",
-			OperatingSystem:            "",
-		}
-		_, _ = coll.InsertOne(ctx, defaultInfo)
-	}
 }
 
 func (r *systemInfoRepo) Find(ctx context.Context) (*domain_system.SystemInfo, error) {

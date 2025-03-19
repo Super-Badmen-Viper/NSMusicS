@@ -31,6 +31,7 @@ func RouterPublic(env *bootstrap.Env, timeout time.Duration, db mongo.Database, 
 }
 
 func RouterPrivate(env *bootstrap.Env, timeout time.Duration, db mongo.Database, protectedRouter *gin.RouterGroup) {
+	//
 	route_auth.NewProfileRouter(env, timeout, db, protectedRouter)
 	route_auth.NewTaskRouter(env, timeout, db, protectedRouter)
 	//
