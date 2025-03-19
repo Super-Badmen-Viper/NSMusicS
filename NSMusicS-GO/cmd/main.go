@@ -1,7 +1,7 @@
 package main
 
 import (
-	route "github.com/amitshekhariitbhu/go-backend-clean-architecture/api/route/system"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/api/route"
 	"time"
 
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/bootstrap"
@@ -19,5 +19,8 @@ func main() {
 	timeout := time.Duration(env.ContextTimeout) * time.Second
 	route.Setup(env, timeout, db, gin)
 
-	gin.Run(env.ServerAddress)
+	err := gin.Run(env.ServerAddress)
+	if err != nil {
+		return
+	}
 }
