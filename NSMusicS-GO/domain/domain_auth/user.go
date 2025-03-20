@@ -6,10 +6,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-const (
-	CollectionUser = "system_auth_users"
-)
-
 type User struct {
 	ID       primitive.ObjectID `bson:"_id"`
 	Name     string             `bson:"name"`

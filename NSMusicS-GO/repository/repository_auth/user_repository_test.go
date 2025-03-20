@@ -3,6 +3,7 @@ package repository_auth_test
 import (
 	"context"
 	"errors"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_auth"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/repository/repository_auth"
 	"testing"
@@ -21,7 +22,7 @@ func TestCreate(t *testing.T) {
 	databaseHelper = &mocks.Database{}
 	collectionHelper = &mocks.Collection{}
 
-	collectionName := domain_auth.CollectionUser
+	collectionName := domain.CollectionUser
 
 	mockUser := &domain_auth.User{
 		ID:       primitive.NewObjectID(),

@@ -5,10 +5,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-const (
-	CollectionSystemConfiguration = "system_configuration"
-)
-
 type SystemConfiguration struct {
 	ID                                 primitive.ObjectID `json:"ID" bson:"_id,omitempty"`
 	CachePath                          string             `json:"CachePath" bson:"cache_path"`

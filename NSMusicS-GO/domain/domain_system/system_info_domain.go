@@ -5,10 +5,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-const (
-	CollectionSystemInfo = "system_info"
-)
-
 type SystemInfo struct {
 	ID                         primitive.ObjectID `json:"id" bson:"_id,omitempty"`
 	OperatingSystemDisplayName string             `json:"operatingSystemDisplayName" bson:"operating_system_display_name"`

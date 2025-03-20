@@ -10,12 +10,12 @@ import (
 	"time"
 )
 
-func NewAppConfigRouter(timeout time.Duration, db mongo.Database, group *gin.RouterGroup) {
-	repo := repository_app.NewAppConfigRepository(db, domain.CollectionAppConfigs)
-	uc := usecase_app.NewAppConfigUsecase(repo, timeout)
-	ctrl := controller_app.NewAppConfigController(uc)
+func NewAppUIConfigRouter(timeout time.Duration, db mongo.Database, group *gin.RouterGroup) {
+	repo := repository_app.NewAppUIConfigRepository(db, domain.CollectionAppUIConfigs)
+	uc := usecase_app.NewAppUIConfigUsecase(repo, timeout)
+	ctrl := controller_app.NewAppUIConfigController(uc)
 
-	group.GET("/app/config", ctrl.GetAll)
-	group.POST("/app/config", ctrl.Create)
-	group.PUT("/app/config", ctrl.ReplaceAll)
+	group.GET("/app/ui", ctrl.GetAll)
+	group.POST("/app/ui", ctrl.Create)
+	group.PUT("/app/ui", ctrl.ReplaceAll)
 }

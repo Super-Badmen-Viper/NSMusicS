@@ -9,22 +9,22 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-type AppConfigRepository interface {
-	Create(ctx context.Context, configs []*domain_app.AppConfig) error
-	ReplaceAll(ctx context.Context, configs []*domain_app.AppConfig) error
-	GetAll(ctx context.Context) ([]*domain_app.AppConfig, error)
+type AppPlaylistIDConfigRepository interface {
+	Create(ctx context.Context, configs []*domain_app.AppPlaylistIDConfig) error
+	ReplaceAll(ctx context.Context, configs []*domain_app.AppPlaylistIDConfig) error
+	GetAll(ctx context.Context) ([]*domain_app.AppPlaylistIDConfig, error)
 }
 
-type appConfigRepo struct {
+type AppPlaylistIDConfigRepo struct {
 	db         mongo.Database
 	collection string
 }
 
-func NewAppConfigRepository(db mongo.Database, collection string) AppConfigRepository {
-	return &appConfigRepo{db: db, collection: collection}
+func NewAppPlaylistIDConfigRepository(db mongo.Database, collection string) AppPlaylistIDConfigRepository {
+	return &AppPlaylistIDConfigRepo{db: db, collection: collection}
 }
 
-func (r *appConfigRepo) ReplaceAll(ctx context.Context, configs []*domain_app.AppConfig) error {
+func (r *AppPlaylistIDConfigRepo) ReplaceAll(ctx context.Context, configs []*domain_app.AppPlaylistIDConfig) error {
 	coll := r.db.Collection(r.collection)
 
 	if _, err := coll.DeleteMany(ctx, bson.M{}); err != nil {
@@ -35,12 +35,12 @@ func (r *appConfigRepo) ReplaceAll(ctx context.Context, configs []*domain_app.Ap
 		return nil
 	}
 
-	if _, err := coll.InsertMany(ctx, convertToInterfaceSliceAppConfig(configs)); err != nil {
+	if _, err := coll.InsertMany(ctx, convertToInterfaceSliceAppPlaylistIDConfig(configs)); err != nil {
 		return fmt.Errorf("replaceAll failed to insert: %w", err)
 	}
 	return nil
 }
-func convertToInterfaceSliceAppConfig(configs []*domain_app.AppConfig) []interface{} {
+func convertToInterfaceSliceAppPlaylistIDConfig(configs []*domain_app.AppPlaylistIDConfig) []interface{} {
 	docs := make([]interface{}, len(configs))
 	for i, c := range configs {
 		docs[i] = c
@@ -48,7 +48,7 @@ func convertToInterfaceSliceAppConfig(configs []*domain_app.AppConfig) []interfa
 	return docs
 }
 
-func (r *appConfigRepo) Create(ctx context.Context, configs []*domain_app.AppConfig) error {
+func (r *AppPlaylistIDConfigRepo) Create(ctx context.Context, configs []*domain_app.AppPlaylistIDConfig) error {
 	documents := make([]interface{}, len(configs))
 	for i, c := range configs {
 		documents[i] = c
@@ -57,7 +57,7 @@ func (r *appConfigRepo) Create(ctx context.Context, configs []*domain_app.AppCon
 	return err
 }
 
-func (r *appConfigRepo) GetAll(ctx context.Context) ([]*domain_app.AppConfig, error) {
+func (r *AppPlaylistIDConfigRepo) GetAll(ctx context.Context) ([]*domain_app.AppPlaylistIDConfig, error) {
 	coll := r.db.Collection(r.collection)
 
 	cursor, err := coll.Find(ctx, bson.M{})
@@ -66,7 +66,7 @@ func (r *appConfigRepo) GetAll(ctx context.Context) ([]*domain_app.AppConfig, er
 	}
 	defer cursor.Close(ctx)
 
-	var configs []*domain_app.AppConfig
+	var configs []*domain_app.AppPlaylistIDConfig
 	if err := cursor.All(ctx, &configs); err != nil {
 		return nil, fmt.Errorf("decode failed: %w", err)
 	}

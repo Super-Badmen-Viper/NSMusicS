@@ -8,16 +8,16 @@ import (
 	"net/http"
 )
 
-type AppConfigController struct {
-	usecase domain_app.AppConfigUsecase
+type AppUIConfigController struct {
+	usecase domain_app.AppUIConfigUsecase
 }
 
-func NewAppConfigController(uc domain_app.AppConfigUsecase) *AppConfigController {
-	return &AppConfigController{usecase: uc}
+func NewAppUIConfigController(uc domain_app.AppUIConfigUsecase) *AppUIConfigController {
+	return &AppUIConfigController{usecase: uc}
 }
 
-func (ctrl *AppConfigController) Create(c *gin.Context) {
-	var req []*domain_app.AppConfig
+func (ctrl *AppUIConfigController) Create(c *gin.Context) {
+	var req []*domain_app.AppUIConfig
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request format"})
 		return
@@ -30,8 +30,8 @@ func (ctrl *AppConfigController) Create(c *gin.Context) {
 	c.Status(http.StatusCreated)
 }
 
-func (ctrl *AppConfigController) ReplaceAll(c *gin.Context) {
-	var req []*domain_app.AppConfig
+func (ctrl *AppUIConfigController) ReplaceAll(c *gin.Context) {
+	var req []*domain_app.AppUIConfig
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request format"})
 		return
@@ -44,7 +44,7 @@ func (ctrl *AppConfigController) ReplaceAll(c *gin.Context) {
 	c.Status(http.StatusNoContent)
 }
 
-func (ctrl *AppConfigController) GetAll(c *gin.Context) {
+func (ctrl *AppUIConfigController) GetAll(c *gin.Context) {
 	configs, err := ctrl.usecase.GetAll(c.Request.Context())
 	if err != nil {
 		if errors.Is(err, domain.ErrEmptyCollection) {

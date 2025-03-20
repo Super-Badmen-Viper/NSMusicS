@@ -26,7 +26,7 @@ func (uc *systemInfoUsecase) Get(ctx context.Context) (*domain_system.SystemInfo
 	}
 
 	return &domain_system.SystemInfo{
-		ID:                         info.ID.Hex(),
+		ID:                         info.ID,
 		OperatingSystemDisplayName: info.OperatingSystemDisplayName,
 		HasPendingRestart:          info.HasPendingRestart,
 		IsShuttingDown:             info.IsShuttingDown,

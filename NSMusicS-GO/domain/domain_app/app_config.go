@@ -2,16 +2,7 @@ package domain_app
 
 import (
 	"context"
-	"errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-)
-
-const (
-	CollectionAppConfigs = "app_configs"
-)
-
-var (
-	ErrEmptyCollection = errors.New("config collection is empty")
 )
 
 type AppConfig struct {

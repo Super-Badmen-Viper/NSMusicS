@@ -40,4 +40,6 @@ func RouterPrivate(env *bootstrap.Env, timeout time.Duration, db mongo.Database,
 	route_system.NewSystemConfigurationRouter(timeout, db, protectedRouter)
 	//
 	route_app.NewAppConfigRouter(timeout, db, protectedRouter)
+	route_app.NewAppLibraryConfigRouter(timeout, db, protectedRouter)
+	route_app.NewAppAudioConfigRouter(timeout, db, protectedRouter)
 }
