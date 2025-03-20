@@ -3,6 +3,8 @@ package bootstrap
 import (
 	"context"
 	"errors"
+	"fmt"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_app"
 	"golang.org/x/crypto/bcrypt"
 	"time"
 
@@ -40,6 +42,10 @@ func (si *Initializer) executeInitialization(ctx context.Context) error {
 		return err
 	}
 
+	if err := si.initAppConfigs(ctx); err != nil {
+		return err
+	}
+
 	if err := si.initDefaultSystemInfo(ctx, userID); err != nil {
 		return err
 	}
@@ -49,6 +55,15 @@ func (si *Initializer) executeInitialization(ctx context.Context) error {
 	}
 
 	return si.markInitialized(ctx)
+}
+
+func (si *Initializer) markInitialized(ctx context.Context) error {
+	_, err := si.db.Collection("system_init").InsertOne(ctx, bson.M{
+		"key":            "initialized",
+		"value":          true,
+		"initialized_at": time.Now(),
+	})
+	return err
 }
 
 func (si *Initializer) createAdminUser(ctx context.Context) (primitive.ObjectID, error) {
@@ -290,11 +305,59 @@ func (si *Initializer) initDefaultSystemConfiguration(ctx context.Context, userI
 	return nil
 }
 
-func (si *Initializer) markInitialized(ctx context.Context) error {
-	_, err := si.db.Collection("system_init").InsertOne(ctx, bson.M{
-		"key":            "initialized",
-		"value":          true,
-		"initialized_at": time.Now(),
-	})
-	return err
+func (si *Initializer) initAppConfigs(ctx context.Context) error {
+	coll := si.db.Collection(domain_app.CollectionAppConfigs)
+
+	initConfigs := []*domain_app.AppConfig{
+		{ConfigKey: "theme", ConfigValue: "lightTheme"},
+		{ConfigKey: "lang", ConfigValue: "zhHans"},
+		{ConfigKey: "router_name", ConfigValue: "home"},
+		{ConfigKey: "menuOptions_selectd_model_1", ConfigValue: "false"},
+		{ConfigKey: "menuOptions_selectd_model_2", ConfigValue: "false"},
+		{ConfigKey: "menuOptions_selectd_model_3", ConfigValue: "false"},
+		{ConfigKey: "menuOptions_selectd_model_4", ConfigValue: "false"},
+		{ConfigKey: "app_view_left_menu_select_activeKey", ConfigValue: "home"},
+		{ConfigKey: "app_view_left_menu_collapsed", ConfigValue: "true"},
+		{ConfigKey: "model_select", ConfigValue: "server"},
+		{ConfigKey: "server_select", ConfigValue: "2b876e61-a2a7-4ebc-97d1-b9bbd7a9592c"},
+		{ConfigKey: "server_select_kind", ConfigValue: "navidrome"},
+		{ConfigKey: "username", ConfigValue: "mozhi"},
+		{ConfigKey: "password", ConfigValue: "qwer1234"},
+		{ConfigKey: "play_order", ConfigValue: "playback-2"},
+		{ConfigKey: "play_volume", ConfigValue: "100"},
+		{ConfigKey: "model_server_type_of_web", ConfigValue: "true"},
+		{ConfigKey: "model_server_type_of_local", ConfigValue: "false"},
+		{ConfigKey: "model_server_type_of_local_server_download", ConfigValue: "false"},
+		{ConfigKey: "authorization_of_nd", ConfigValue: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG0iOnRydWUsImV4cCI6MTc0MjM1NDkwOCwiaWF0IjoxNzQyMjY4NTA4LCJpc3MiOiJORCIsInN1YiI6Im1vemhpIiwidWlkIjoiN2Y2ZjZkODctZGRmMC00MjlkLTllMjEtMjU3NGJiYTY3OTRkIn0.QFXT2ZNGLPT1XxFzzrjm6CbUnG9P61weqmEN0c8ZaKo"},
+		{ConfigKey: "client_unique_id", ConfigValue: "7f6f6d87-ddf0-429d-9e21-2574bba6794d"},
+		{ConfigKey: "media_page_sizes", ConfigValue: "15"},
+		{ConfigKey: "album_page_sizes", ConfigValue: "15"},
+		{ConfigKey: "artist_page_sizes", ConfigValue: "15"},
+		{ConfigKey: "clear_Memory_Model", ConfigValue: "false"},
+		{ConfigKey: "clear_Equilibrium_Model", ConfigValue: "false"},
+		{ConfigKey: "clear_UserExperience_Model", ConfigValue: "true"},
+		{ConfigKey: "theme_auto_system", ConfigValue: "false"},
+		{ConfigKey: "page_songlists_filter_year", ConfigValue: "0"},
+		{ConfigKey: "player_select", ConfigValue: "mpv"},
+		{ConfigKey: "player_fade_value", ConfigValue: "2000"},
+		{ConfigKey: "player_dolby", ConfigValue: "false"},
+		{ConfigKey: "player_samp_value", ConfigValue: "48000"},
+		{ConfigKey: "player_gaplessAudio", ConfigValue: "weak"},
+		{ConfigKey: "player_audioExclusiveMode", ConfigValue: "false"},
+		{ConfigKey: "player_replayGainMode", ConfigValue: "no"},
+		{ConfigKey: "player_replayGainPreamp", ConfigValue: "0"},
+		{ConfigKey: "player_replayGainClip", ConfigValue: "false"},
+		{ConfigKey: "player_replayGainFallback", ConfigValue: "0"},
+		{ConfigKey: "player_mpvExtraParameters", ConfigValue: ""},
+		{ConfigKey: "player_audio_channel", ConfigValue: ""},
+		{ConfigKey: "player_device_select", ConfigValue: "default"},
+	}
+
+	for _, cfg := range initConfigs {
+		_, err := coll.InsertOne(ctx, cfg)
+		if err != nil {
+			return fmt.Errorf("应用配置初始化失败: %w", err)
+		}
+	}
+	return nil
 }

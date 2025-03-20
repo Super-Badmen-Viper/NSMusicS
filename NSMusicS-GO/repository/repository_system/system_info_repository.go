@@ -3,7 +3,6 @@ package repository_system
 import (
 	"context"
 	"errors"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/bootstrap"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_system"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/mongo"
 	"go.mongodb.org/mongo-driver/bson"
@@ -20,7 +19,7 @@ type systemInfoRepo struct {
 	collection string
 }
 
-func NewSystemInfoRepository(env *bootstrap.Env, db mongo.Database, collection string) SystemInfoRepository {
+func NewSystemInfoRepository(db mongo.Database, collection string) SystemInfoRepository {
 	return &systemInfoRepo{db: db, collection: collection}
 }
 
@@ -35,6 +34,16 @@ func (r *systemInfoRepo) Find(ctx context.Context) (*domain_system.SystemInfo, e
 }
 
 func (r *systemInfoRepo) Update(ctx context.Context, info *domain_system.SystemInfo) error {
+	if info.ID.IsZero() {
+		return errors.New("requires non-empty user-id")
+	}
+	if userID, ok := ctx.Value("x-user-id").(string); ok {
+		if info.ID.Hex() != userID {
+			return errors.New("user mismatch with operation target")
+		}
+	} else {
+		return errors.New("authentication required")
+	}
 	coll := r.db.Collection(r.collection)
 	filter := bson.M{"_id": info.ID}
 	update := bson.M{"$set": info}

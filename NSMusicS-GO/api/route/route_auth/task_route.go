@@ -7,12 +7,11 @@ import (
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/usecase/usecase_auth"
 	"time"
 
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/bootstrap"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/mongo"
 	"github.com/gin-gonic/gin"
 )
 
-func NewTaskRouter(env *bootstrap.Env, timeout time.Duration, db mongo.Database, group *gin.RouterGroup) {
+func NewTaskRouter(timeout time.Duration, db mongo.Database, group *gin.RouterGroup) {
 	tr := repository_auth.NewTaskRepository(db, domain_auth.CollectionTask)
 	tc := &controller_auth.TaskController{
 		TaskUsecase: usecase_auth.NewTaskUsecase(tr, timeout),

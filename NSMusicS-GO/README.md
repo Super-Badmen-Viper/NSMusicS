@@ -3,6 +3,13 @@ The goal of NSMusicS is to achieve internationalization+cloud native+streaming m
 
 A Go (Golang) Backend Clean Architecture project with Gin, MongoDB, JWT Authentication Middleware, Test, and Docker.
 
+```sh
+HTTP请求 → Controller → Usecase（业务逻辑） → Repository（数据操作） → MongoDB  
+↑               ↑  
+定义接口         实现接口
+(domain)       (repository)
+```
+
 ## local debug run
  - modify: .env
    - DB_HOST=localhost
