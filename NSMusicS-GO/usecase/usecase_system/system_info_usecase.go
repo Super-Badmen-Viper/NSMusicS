@@ -16,7 +16,7 @@ func NewSystemInfoUsecase(repo repository_system.SystemInfoRepository, timeout t
 	return &systemInfoUsecase{repo: repo, timeout: timeout}
 }
 
-func (uc *systemInfoUsecase) Get(ctx context.Context) (*domain_system.SystemInfoResponse, error) {
+func (uc *systemInfoUsecase) Get(ctx context.Context) (*domain_system.SystemInfo, error) {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
 
@@ -25,7 +25,7 @@ func (uc *systemInfoUsecase) Get(ctx context.Context) (*domain_system.SystemInfo
 		return nil, err
 	}
 
-	return &domain_system.SystemInfoResponse{
+	return &domain_system.SystemInfo{
 		ID:                         info.ID.Hex(),
 		OperatingSystemDisplayName: info.OperatingSystemDisplayName,
 		HasPendingRestart:          info.HasPendingRestart,

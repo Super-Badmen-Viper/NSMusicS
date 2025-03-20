@@ -9,11 +9,6 @@ const (
 	CollectionSystemConfiguration = "system_configuration"
 )
 
-type SystemConfigurationUsecase interface {
-	Get(ctx context.Context) (*SystemConfigurationResponse, error)
-	Update(ctx context.Context, info *SystemConfiguration) error
-}
-
 type SystemConfiguration struct {
 	ID                                 primitive.ObjectID `json:"ID" bson:"_id,omitempty"`
 	CachePath                          string             `json:"CachePath" bson:"cache_path"`
@@ -112,97 +107,7 @@ type TrickplayConfig struct {
 	ProcessThreads               int    `json:"ProcessThreads" bson:"process_threads"`
 }
 
-type SystemConfigurationResponse struct {
-	ID                                 string                     `json:"ID"`
-	EnableMetrics                      bool                       `json:"EnableMetrics"`
-	EnableNormalizedItemByNameIds      bool                       `json:"EnableNormalizedItemByNameIds"`
-	IsPortAuthorized                   bool                       `json:"IsPortAuthorized"`
-	QuickConnectAvailable              bool                       `json:"QuickConnectAvailable"`
-	EnableCaseSensitiveItemIds         bool                       `json:"EnableCaseSensitiveItemIds"`
-	DisableLiveTvChannelUserDataName   bool                       `json:"DisableLiveTvChannelUserDataName"`
-	MetadataPath                       string                     `json:"MetadataPath"`
-	PreferredMetadataLanguage          string                     `json:"PreferredMetadataLanguage"`
-	MetadataCountryCode                string                     `json:"MetadataCountryCode"`
-	SortReplaceCharacters              []string                   `json:"SortReplaceCharacters"`
-	SortRemoveCharacters               []string                   `json:"SortRemoveCharacters"`
-	SortRemoveWords                    []string                   `json:"SortRemoveWords"`
-	MinResumePct                       int                        `json:"MinResumePct"`
-	MaxResumePct                       int                        `json:"MaxResumePct"`
-	MinResumeDurationSeconds           int                        `json:"MinResumeDurationSeconds"`
-	MinAudiobookResume                 int                        `json:"MinAudiobookResume"`
-	MaxAudiobookResume                 int                        `json:"MaxAudiobookResume"`
-	InactiveSessionThreshold           int                        `json:"InactiveSessionThreshold"`
-	LibraryMonitorDelay                int                        `json:"LibraryMonitorDelay"`
-	LibraryUpdateDuration              int                        `json:"LibraryUpdateDuration"`
-	ImageSavingConvention              string                     `json:"ImageSavingConvention"`
-	MetadataOptions                    []MetadataOptionResponse   `json:"MetadataOptions"`
-	SkipDeserializationForBasicTypes   bool                       `json:"SkipDeserializationForBasicTypes"`
-	ServerName                         string                     `json:"ServerName"`
-	UICulture                          string                     `json:"UICulture"`
-	SaveMetadataHidden                 bool                       `json:"SaveMetadataHidden"`
-	ContentTypes                       []ContentTypeResponse      `json:"ContentTypes"`
-	RemoteClientBitrateLimit           int                        `json:"RemoteClientBitrateLimit"`
-	EnableFolderView                   bool                       `json:"EnableFolderView"`
-	EnableGroupingIntoCollections      bool                       `json:"EnableGroupingIntoCollections"`
-	DisplaySpecialsWithinSeasons       bool                       `json:"DisplaySpecialsWithinSeasons"`
-	CodecsUsed                         []string                   `json:"CodecsUsed"`
-	PluginRepositories                 []RepositoryResponse       `json:"PluginRepositories"`
-	EnableExternalContentInSuggestions bool                       `json:"EnableExternalContentInSuggestions"`
-	ImageExtractionTimeoutMs           int                        `json:"ImageExtractionTimeoutMs"`
-	PathSubstitutions                  []PathSubstitutionResponse `json:"PathSubstitutions"`
-	EnableSlowResponseWarning          bool                       `json:"EnableSlowResponseWarning"`
-	SlowResponseThresholdMs            int                        `json:"SlowResponseThresholdMs"`
-	CorsHosts                          []string                   `json:"CorsHosts"`
-	ActivityLogRetentionDays           int                        `json:"ActivityLogRetentionDays"`
-	LibraryScanFanoutConcurrency       int                        `json:"LibraryScanFanoutConcurrency"`
-	LibraryMetadataRefreshConcurrency  int                        `json:"LibraryMetadataRefreshConcurrency"`
-	RemoveOldPlugins                   bool                       `json:"RemoveOldPlugins"`
-	AllowClientLogUpload               bool                       `json:"AllowClientLogUpload"`
-	DummyChapterDuration               int                        `json:"DummyChapterDuration"`
-	ChapterImageResolution             string                     `json:"ChapterImageResolution"`
-	ParallelImageEncodingLimit         int                        `json:"ParallelImageEncodingLimit"`
-	CastReceiverApplications           []CastAppResponse          `json:"CastReceiverApplications"`
-	TrickplayOptions                   TrickplayConfigResponse    `json:"TrickplayOptions"`
-	LogFileRetentionDays               int                        `json:"LogFileRetentionDays"`
-	IsStartupWizardCompleted           bool                       `json:"IsStartupWizardCompleted"`
-}
-type MetadataOptionResponse struct {
-	ItemType                 string   `json:"ItemType"`
-	DisabledMetadataSavers   []string `json:"DisabledMetadataSavers"`
-	LocalMetadataReaderOrder []string `json:"LocalMetadataReaderOrder"`
-	DisabledMetadataFetchers []string `json:"DisabledMetadataFetchers"`
-	MetadataFetcherOrder     []string `json:"MetadataFetcherOrder"`
-	DisabledImageFetchers    []string `json:"DisabledImageFetchers"`
-	ImageFetcherOrder        []string `json:"ImageFetcherOrder"`
-}
-type ContentTypeResponse struct {
-	Name  string `json:"Name"`
-	Value string `json:"Value"`
-}
-type RepositoryResponse struct {
-	Name    string `json:"Name"`
-	Url     string `json:"Url"`
-	Enabled bool   `json:"Enabled"`
-}
-type PathSubstitutionResponse struct {
-	From string `json:"From"`
-	To   string `json:"To"`
-}
-type CastAppResponse struct {
-	Id   string `json:"Id"`
-	Name string `json:"Name"`
-}
-type TrickplayConfigResponse struct {
-	EnableHwAcceleration         bool   `json:"EnableHwAcceleration"`
-	EnableHwEncoding             bool   `json:"EnableHwEncoding"`
-	EnableKeyFrameOnlyExtraction bool   `json:"EnableKeyFrameOnlyExtraction"`
-	ScanBehavior                 string `json:"ScanBehavior"`
-	ProcessPriority              string `json:"ProcessPriority"`
-	Interval                     int    `json:"Interval"`
-	WidthResolutions             []int  `json:"WidthResolutions"`
-	TileWidth                    int    `json:"TileWidth"`
-	TileHeight                   int    `json:"TileHeight"`
-	Qscale                       int    `json:"Qscale"`
-	JpegQuality                  int    `json:"JpegQuality"`
-	ProcessThreads               int    `json:"ProcessThreads"`
+type SystemConfigurationUsecase interface {
+	Get(ctx context.Context) (*SystemConfiguration, error)
+	Update(ctx context.Context, info *SystemConfiguration) error
 }

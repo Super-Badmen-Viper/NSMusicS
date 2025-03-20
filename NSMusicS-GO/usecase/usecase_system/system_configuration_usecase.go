@@ -17,7 +17,7 @@ func NewSystemConfigurationUsecase(repo repository_system.SystemConfigurationRep
 	return &systemConfigurationUsecase{repo: repo, timeout: timeout}
 }
 
-func (uc *systemConfigurationUsecase) Get(ctx context.Context) (*domain_system.SystemConfigurationResponse, error) {
+func (uc *systemConfigurationUsecase) Get(ctx context.Context) (*domain_system.SystemConfiguration, error) {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
 
@@ -26,8 +26,8 @@ func (uc *systemConfigurationUsecase) Get(ctx context.Context) (*domain_system.S
 		return nil, err
 	}
 
-	return &domain_system.SystemConfigurationResponse{
-		ID:                                 config.ID.Hex(),
+	return &domain_system.SystemConfiguration{
+		ID:                                 config.ID,
 		EnableMetrics:                      config.EnableMetrics,
 		EnableNormalizedItemByNameIds:      config.EnableNormalizedItemByNameIds,
 		IsPortAuthorized:                   config.IsPortAuthorized,
@@ -65,7 +65,7 @@ func (uc *systemConfigurationUsecase) Get(ctx context.Context) (*domain_system.S
 		ImageExtractionTimeoutMs:           config.ImageExtractionTimeoutMs,
 		PathSubstitutions:                  convertPathSubstitutions(config.PathSubstitutions),
 		EnableSlowResponseWarning:          config.EnableSlowResponseWarning,
-		SlowResponseThresholdMs:            int(config.SlowResponseThresholdMs),
+		SlowResponseThresholdMs:            config.SlowResponseThresholdMs,
 		CorsHosts:                          config.CorsHosts,
 		ActivityLogRetentionDays:           config.ActivityLogRetentionDays,
 		LibraryScanFanoutConcurrency:       config.LibraryScanFanoutConcurrency,
@@ -81,20 +81,20 @@ func (uc *systemConfigurationUsecase) Get(ctx context.Context) (*domain_system.S
 		IsStartupWizardCompleted:           config.IsStartupWizardCompleted,
 	}, nil
 }
-func convertContentTypes(contentTypes []domain_system.ContentType) []domain_system.ContentTypeResponse {
-	var result []domain_system.ContentTypeResponse
+func convertContentTypes(contentTypes []domain_system.ContentType) []domain_system.ContentType {
+	var result []domain_system.ContentType
 	for _, ct := range contentTypes {
-		result = append(result, domain_system.ContentTypeResponse{
+		result = append(result, domain_system.ContentType{
 			Name:  ct.Name,
 			Value: ct.Value,
 		})
 	}
 	return result
 }
-func convertMetadataOptions(options []domain_system.MetadataOption) []domain_system.MetadataOptionResponse {
-	var result []domain_system.MetadataOptionResponse
+func convertMetadataOptions(options []domain_system.MetadataOption) []domain_system.MetadataOption {
+	var result []domain_system.MetadataOption
 	for _, opt := range options {
-		result = append(result, domain_system.MetadataOptionResponse{
+		result = append(result, domain_system.MetadataOption{
 			ItemType:                 opt.ItemType,
 			DisabledMetadataSavers:   opt.DisabledMetadataSavers,
 			LocalMetadataReaderOrder: opt.LocalMetadataReaderOrder,
@@ -106,10 +106,10 @@ func convertMetadataOptions(options []domain_system.MetadataOption) []domain_sys
 	}
 	return result
 }
-func convertPluginRepositories(repos []domain_system.Repository) []domain_system.RepositoryResponse {
-	var result []domain_system.RepositoryResponse
+func convertPluginRepositories(repos []domain_system.Repository) []domain_system.Repository {
+	var result []domain_system.Repository
 	for _, repo := range repos {
-		result = append(result, domain_system.RepositoryResponse{
+		result = append(result, domain_system.Repository{
 			Name:    repo.Name,
 			Url:     repo.Url,
 			Enabled: repo.Enabled,
@@ -117,28 +117,28 @@ func convertPluginRepositories(repos []domain_system.Repository) []domain_system
 	}
 	return result
 }
-func convertPathSubstitutions(subs []domain_system.PathSubstitution) []domain_system.PathSubstitutionResponse {
-	var result []domain_system.PathSubstitutionResponse
+func convertPathSubstitutions(subs []domain_system.PathSubstitution) []domain_system.PathSubstitution {
+	var result []domain_system.PathSubstitution
 	for _, sub := range subs {
-		result = append(result, domain_system.PathSubstitutionResponse{
+		result = append(result, domain_system.PathSubstitution{
 			From: sub.From,
 			To:   sub.To,
 		})
 	}
 	return result
 }
-func convertCastApps(apps []domain_system.CastApp) []domain_system.CastAppResponse {
-	var result []domain_system.CastAppResponse
+func convertCastApps(apps []domain_system.CastApp) []domain_system.CastApp {
+	var result []domain_system.CastApp
 	for _, app := range apps {
-		result = append(result, domain_system.CastAppResponse{
+		result = append(result, domain_system.CastApp{
 			Id:   app.Id,
 			Name: app.Name,
 		})
 	}
 	return result
 }
-func convertTrickplayConfig(config domain_system.TrickplayConfig) domain_system.TrickplayConfigResponse {
-	return domain_system.TrickplayConfigResponse{
+func convertTrickplayConfig(config domain_system.TrickplayConfig) domain_system.TrickplayConfig {
+	return domain_system.TrickplayConfig{
 		EnableHwAcceleration:         config.EnableHwAcceleration,
 		EnableHwEncoding:             config.EnableHwEncoding,
 		EnableKeyFrameOnlyExtraction: config.EnableKeyFrameOnlyExtraction,

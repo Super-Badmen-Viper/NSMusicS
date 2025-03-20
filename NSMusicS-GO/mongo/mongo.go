@@ -58,7 +58,7 @@ type mongoClient struct {
 type mongoDatabase struct {
 	db *mongo.Database
 }
-type MongoCollection struct {
+type mongoCollection struct {
 	coll *mongo.Collection
 }
 
@@ -132,7 +132,7 @@ func (mc *mongoClient) Disconnect(ctx context.Context) error {
 
 func (md *mongoDatabase) Collection(colName string) Collection {
 	collection := md.db.Collection(colName)
-	return &MongoCollection{coll: collection}
+	return &mongoCollection{coll: collection}
 }
 
 func (md *mongoDatabase) Client() Client {
@@ -140,50 +140,50 @@ func (md *mongoDatabase) Client() Client {
 	return &mongoClient{cl: client}
 }
 
-func (mc *MongoCollection) FindOne(ctx context.Context, filter interface{}) SingleResult {
+func (mc *mongoCollection) FindOne(ctx context.Context, filter interface{}) SingleResult {
 	singleResult := mc.coll.FindOne(ctx, filter)
 	return &mongoSingleResult{sr: singleResult}
 }
 
-func (mc *MongoCollection) UpdateOne(ctx context.Context, filter interface{}, update interface{}, opts ...*options.UpdateOptions) (*mongo.UpdateResult, error) {
+func (mc *mongoCollection) UpdateOne(ctx context.Context, filter interface{}, update interface{}, opts ...*options.UpdateOptions) (*mongo.UpdateResult, error) {
 	return mc.coll.UpdateOne(ctx, filter, update, opts[:]...)
 }
 
-func (mc *MongoCollection) InsertOne(ctx context.Context, document interface{}) (interface{}, error) {
+func (mc *mongoCollection) InsertOne(ctx context.Context, document interface{}) (interface{}, error) {
 	id, err := mc.coll.InsertOne(ctx, document)
 	return id.InsertedID, err
 }
 
-func (mc *MongoCollection) InsertMany(ctx context.Context, document []interface{}) ([]interface{}, error) {
+func (mc *mongoCollection) InsertMany(ctx context.Context, document []interface{}) ([]interface{}, error) {
 	res, err := mc.coll.InsertMany(ctx, document)
 	return res.InsertedIDs, err
 }
 
-func (mc *MongoCollection) DeleteOne(ctx context.Context, filter interface{}) (int64, error) {
+func (mc *mongoCollection) DeleteOne(ctx context.Context, filter interface{}) (int64, error) {
 	count, err := mc.coll.DeleteOne(ctx, filter)
 	return count.DeletedCount, err
 }
 
-func (mc *MongoCollection) DeleteMany(ctx context.Context, filter interface{}) (int64, error) {
+func (mc *mongoCollection) DeleteMany(ctx context.Context, filter interface{}) (int64, error) {
 	count, err := mc.coll.DeleteMany(ctx, filter)
 	return count.DeletedCount, err
 }
 
-func (mc *MongoCollection) Find(ctx context.Context, filter interface{}, opts ...*options.FindOptions) (Cursor, error) {
+func (mc *mongoCollection) Find(ctx context.Context, filter interface{}, opts ...*options.FindOptions) (Cursor, error) {
 	findResult, err := mc.coll.Find(ctx, filter, opts...)
 	return &mongoCursor{mc: findResult}, err
 }
 
-func (mc *MongoCollection) Aggregate(ctx context.Context, pipeline interface{}) (Cursor, error) {
+func (mc *mongoCollection) Aggregate(ctx context.Context, pipeline interface{}) (Cursor, error) {
 	aggregateResult, err := mc.coll.Aggregate(ctx, pipeline)
 	return &mongoCursor{mc: aggregateResult}, err
 }
 
-func (mc *MongoCollection) UpdateMany(ctx context.Context, filter interface{}, update interface{}, opts ...*options.UpdateOptions) (*mongo.UpdateResult, error) {
+func (mc *mongoCollection) UpdateMany(ctx context.Context, filter interface{}, update interface{}, opts ...*options.UpdateOptions) (*mongo.UpdateResult, error) {
 	return mc.coll.UpdateMany(ctx, filter, update, opts[:]...)
 }
 
-func (mc *MongoCollection) CountDocuments(ctx context.Context, filter interface{}, opts ...*options.CountOptions) (int64, error) {
+func (mc *mongoCollection) CountDocuments(ctx context.Context, filter interface{}, opts ...*options.CountOptions) (int64, error) {
 	return mc.coll.CountDocuments(ctx, filter, opts...)
 }
 

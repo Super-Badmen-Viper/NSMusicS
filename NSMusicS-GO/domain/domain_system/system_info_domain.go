@@ -35,33 +35,7 @@ type SystemInfo struct {
 	OperatingSystem            string             `json:"operatingSystem" bson:"operating_system"`
 }
 
-type SystemInfoResponse struct {
-	ID                         string   `json:"id"`
-	OperatingSystemDisplayName string   `json:"operatingSystemDisplayName"`
-	HasPendingRestart          bool     `json:"hasPendingRestart"`
-	IsShuttingDown             bool     `json:"isShuttingDown"`
-	SupportsLibraryMonitor     bool     `json:"supportsLibraryMonitor"`
-	WebSocketPortNumber        int      `json:"webSocketPortNumber"`
-	CompletedInstallations     []string `json:"completedInstallations"`
-	CanSelfRestart             bool     `json:"canSelfRestart"`
-	CanLaunchWebBrowser        bool     `json:"canLaunchWebBrowser"`
-	ProgramDataPath            string   `json:"programDataPath"`
-	WebPath                    string   `json:"webPath"`
-	ItemsByNamePath            string   `json:"itemsByNamePath"`
-	CachePath                  string   `json:"cachePath"`
-	LogPath                    string   `json:"logPath"`
-	InternalMetadataPath       string   `json:"internalMetadataPath"`
-	TranscodingTempPath        string   `json:"transcodingTempPath"`
-	HasUpdateAvailable         bool     `json:"hasUpdateAvailable"`
-	EncoderLocation            string   `json:"encoderLocation"`
-	SystemArchitecture         string   `json:"systemArchitecture"`
-	LocalAddress               string   `json:"localAddress"`
-	ServerName                 string   `json:"serverName"`
-	Version                    string   `json:"version"`
-	OperatingSystem            string   `json:"operatingSystem"`
-}
-
 type SystemInfoUsecase interface {
-	Get(ctx context.Context) (*SystemInfoResponse, error)
+	Get(ctx context.Context) (*SystemInfo, error)
 	Update(ctx context.Context, info *SystemInfo) error
 }
