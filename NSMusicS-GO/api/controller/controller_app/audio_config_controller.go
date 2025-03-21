@@ -27,7 +27,7 @@ func (ctrl *AppAudioConfigController) ReplaceAll(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "update failed"})
 		return
 	}
-	c.Status(http.StatusNoContent)
+	c.JSON(http.StatusOK, gin.H{"message": "app config updated"})
 }
 
 func (ctrl *AppAudioConfigController) GetAll(c *gin.Context) {

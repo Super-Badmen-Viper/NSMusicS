@@ -27,7 +27,7 @@ func (ctrl *AppPlaylistIDConfigController) ReplaceAll(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "update failed"})
 		return
 	}
-	c.Status(http.StatusNoContent)
+	c.JSON(http.StatusOK, gin.H{"message": "app config updated"})
 }
 
 func (ctrl *AppPlaylistIDConfigController) GetAll(c *gin.Context) {

@@ -14,16 +14,16 @@ type AppConfigRepository interface {
 	GetAll(ctx context.Context) ([]*domain_app.AppConfig, error)
 }
 
-type appConfigRepo struct {
+type AppConfigRepo struct {
 	db         mongo.Database
 	collection string
 }
 
 func NewAppConfigRepository(db mongo.Database, collection string) AppConfigRepository {
-	return &appConfigRepo{db: db, collection: collection}
+	return &AppConfigRepo{db: db, collection: collection}
 }
 
-func (r *appConfigRepo) ReplaceAll(ctx context.Context, configs []*domain_app.AppConfig) error {
+func (r *AppConfigRepo) ReplaceAll(ctx context.Context, configs []*domain_app.AppConfig) error {
 	coll := r.db.Collection(r.collection)
 
 	if _, err := coll.DeleteMany(ctx, bson.M{}); err != nil {
@@ -47,7 +47,7 @@ func convertToInterfaceSliceAppConfig(configs []*domain_app.AppConfig) []interfa
 	return docs
 }
 
-func (r *appConfigRepo) GetAll(ctx context.Context) ([]*domain_app.AppConfig, error) {
+func (r *AppConfigRepo) GetAll(ctx context.Context) ([]*domain_app.AppConfig, error) {
 	coll := r.db.Collection(r.collection)
 
 	cursor, err := coll.Find(ctx, bson.M{})

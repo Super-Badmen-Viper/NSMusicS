@@ -13,3 +13,7 @@ services:
       - "${DB_PORT}:27017"
     volumes:
       - C:/Users/Public/Documents/NSMusicS-GO/MongoDB:/data/db
+    deploy:
+      resources:
+        limits:
+          memory: 128M

@@ -7,7 +7,7 @@ A Go (Golang) Backend Clean Architecture project with Gin, MongoDB, JWT Authenti
 HTTP请求 → Controller → Usecase（业务逻辑） → Repository（数据操作） → MongoDB  
 ↑               ↑  
 定义接口         实现接口
-(domain)       (repository)
+(Domain)       (Repository)
 ```
 
 ## local debug run

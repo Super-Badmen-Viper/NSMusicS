@@ -63,6 +63,10 @@ func (si *Initializer) executeInitialization(ctx context.Context) error {
 		return err
 	}
 
+	if err := si.initAppServerConfigs(ctx); err != nil {
+		return err
+	}
+
 	if err := si.initSystemInfo(ctx, userID); err != nil {
 		return err
 	}
@@ -496,6 +500,45 @@ func (si *Initializer) initAppPlaylistIDConfigs(ctx context.Context) error {
 		{ConfigKey: "017bb5e548d04bb0ac7bbf66382f5416", ConfigValue: "28"},
 		{ConfigKey: "0187f0489c56416fa11c007f8a868daf", ConfigValue: "29"},
 		{ConfigKey: "01938fb466454c8c86014df174be5924", ConfigValue: "30"},
+	}
+
+	for _, cfg := range initConfigs {
+		_, err := coll.InsertOne(ctx, cfg)
+		if err != nil {
+			return fmt.Errorf("应用配置初始化失败: %w", err)
+		}
+	}
+	return nil
+}
+
+func (si *Initializer) initAppServerConfigs(ctx context.Context) error {
+	coll := si.db.Collection(domain.CollectionAppServerConfigs)
+
+	initConfigs := []*domain_app.AppServerConfig{
+		{
+			ServerName:  "mozhi",
+			URL:         "http://localhost:4533",
+			UserName:    "mozhi",
+			Password:    "qwer1234",
+			LastLoginAt: time.Date(2025, 3, 14, 12, 0, 26, 0, time.UTC),
+			Type:        "navidrome",
+		},
+		{
+			ServerName:  "xiang",
+			URL:         "http://localhost:8096",
+			UserName:    "xiang",
+			Password:    "0707",
+			LastLoginAt: time.Date(2025, 3, 14, 12, 0, 26, 0, time.UTC),
+			Type:        "jellyfin",
+		},
+		{
+			ServerName:  "17741",
+			URL:         "http://localhost:8099",
+			UserName:    "17741",
+			Password:    "C24ckkT.cRZT7bS",
+			LastLoginAt: time.Date(2025, 3, 14, 12, 0, 26, 0, time.UTC),
+			Type:        "emby",
+		},
 	}
 
 	for _, cfg := range initConfigs {
