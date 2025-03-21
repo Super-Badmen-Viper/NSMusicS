@@ -727,33 +727,29 @@
   })
   import {store_server_login_logic} from "@/views/view_server/page_metadata/page_login/store/store_server_login_logic";
   onMounted(async () => {
-    //// init db path
-    if (isElectron) {
-      store_app_configs_info.desktop_system_kind = process.platform;
-      //
-      store_app_configs_info.navidrome_db = await ipcRenderer.invoke('window-get-navidrome-db');
-      store_app_configs_info.nsmusics_db = await ipcRenderer.invoke('window-get-nsmusics-db');
-      console.log(store_app_configs_info.navidrome_db)
-      console.log(store_app_configs_info.nsmusics_db)
-      // noLogin
-      store_router_data_info.router_select_model_server_login = false;
-    } else {
-      // isLogin
-      store_server_login_logic.checkLoginStatus();
-      //
-      store_app_configs_info.desktop_system_kind = 'docker'
-    }
     //// init db data
     try {
       if (isElectron) {
         // 等待数据库初始化进程结束
         if (await ipcRenderer.invoke('window-init-db')) {
+          store_app_configs_info.desktop_system_kind = process.platform;
+          //
+          store_app_configs_info.navidrome_db = await ipcRenderer.invoke('window-get-navidrome-db');
+          store_app_configs_info.nsmusics_db = await ipcRenderer.invoke('window-get-nsmusics-db');
+          console.log(store_app_configs_info.navidrome_db)
+          console.log(store_app_configs_info.nsmusics_db)
+          // noLogin
+          store_router_data_info.router_select_model_server_login = false;
           // init read
           await store_app_configs_logic_load.load_app_config()
           // init lang
           locale.value = store_app_configs_info.lang
         }
       } else {
+        // isLogin
+        store_server_login_logic.checkLoginStatus();
+        //
+        store_app_configs_info.desktop_system_kind = 'docker'
         // init read
         await store_app_configs_logic_load.load_app_config()
         // init lang

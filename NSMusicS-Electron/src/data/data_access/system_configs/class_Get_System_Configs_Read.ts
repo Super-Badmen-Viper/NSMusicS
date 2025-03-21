@@ -5,8 +5,6 @@ import { Player_Configs_of_UI } from '../../data_models/app_Configs/class_Player
 import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
 import { isElectron } from '@/utils/electron/isElectron';
 import axios from "axios";
-import path from "path";
-import os from "os";
 import {
     store_server_login_info
 } from "../../../views/view_server/page_metadata/page_login/store/store_server_login_info";
