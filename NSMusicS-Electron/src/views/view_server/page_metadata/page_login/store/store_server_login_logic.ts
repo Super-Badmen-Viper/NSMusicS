@@ -1,20 +1,21 @@
 import { reactive } from "vue";
 import { store_router_data_info } from "@/router/router_store/store_router_data_info";
 import axios from "axios";
+import {store_server_login_info} from "./store_server_login_info";
 
 export const store_server_login_logic = reactive({
     checkLoginStatus() {
         const currentTime = new Date().getTime();
-        const token = sessionStorage.getItem("jwt_token");
+        store_server_login_info.server_accessToken = sessionStorage.getItem("jwt_token");
         const expireTime = sessionStorage.getItem("jwt_expire_time");
 
-        if (token && expireTime) {
+        if (store_server_login_info.server_accessToken && expireTime) {
             const remainingTime = parseInt(expireTime) - currentTime;
             if (remainingTime > 0) {
                 sessionStorage.setItem("jwt_expire_time", currentTime + 60 * 60 * 1000); // 1 小时
                 store_router_data_info.router_select_model_server_login = false;
                 store_router_data_info.router.push("/home");
-                console.log("已登录: " + token);
+                console.log("已登录: " + store_server_login_info.server_accessToken);
             } else {
                 this.server_logout();
                 console.log("Token 已过期，需要重新登录");
@@ -34,12 +35,13 @@ export const store_server_login_logic = reactive({
                 password: password,
                 name: name
             });
-            const token = response.data.accessToken;
-            console.log("登录成功:", token);
+            store_server_login_info.server_accessToken = response.data.accessToken;
+            store_server_login_info.server_refreshToken = response.data.refreshToken;
+            console.log("登录成功:", name);
 
             const currentTime = new Date().getTime();
             const expireTime = currentTime + 60 * 60 * 1000; // 1 小时
-            sessionStorage.setItem("jwt_token", token);
+            sessionStorage.setItem("jwt_token", store_server_login_info.server_accessToken);
             sessionStorage.setItem("jwt_expire_time", expireTime.toString());
 
             store_router_data_info.router_select_model_server_login = false;

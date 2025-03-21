@@ -91,6 +91,9 @@
                 "coverBase_6": "Schallplatte"
             },
             "view_player_mini": "Zum Minispieler wechseln"
+        },
+        "server_page": {
+            "server_email": "E-Mail"
         }
     }
 }

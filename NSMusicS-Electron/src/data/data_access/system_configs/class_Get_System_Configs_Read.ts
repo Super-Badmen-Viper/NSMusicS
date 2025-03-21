@@ -3,7 +3,13 @@ import { App_Configs } from '../../data_models/app_Configs/class_App_Configs';
 import { Player_Configs_of_Audio_Info } from '../../data_models/app_Configs/class_Player_Configs_of_Audio_Info';
 import { Player_Configs_of_UI } from '../../data_models/app_Configs/class_Player_Configs_of_UI';
 import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
-import { isElectron } from '@/utils/electron/isElectron';``
+import { isElectron } from '@/utils/electron/isElectron';
+import axios from "axios";
+import path from "path";
+import os from "os";
+import {
+    store_server_login_info
+} from "../../../views/view_server/page_metadata/page_login/store/store_server_login_info";
 
 export class Class_Get_System_Configs_Read {
     public app_Configs = ref(
@@ -110,7 +116,7 @@ export class Class_Get_System_Configs_Read {
     public view_Album_History_select_Configs = ref<Interface_View_Router_Date>()
     public view_Artist_History_select_Configs = ref<Interface_View_Router_Date>()
 
-    constructor() {
+    public async init(){
         if(isElectron) {
             const os = require('os');
             const path = require('path');
@@ -254,8 +260,92 @@ export class Class_Get_System_Configs_Read {
 
             db.close();
             db = null;
-        } else {
-            // other
+        }
+        else {
+            const response_app_Configs = await axios.get("/api/app/config", {
+                headers: {
+                    Authorization: `Bearer ${store_server_login_info.server_accessToken}`
+                }
+            });
+            response_app_Configs.data.forEach((row: any) => {
+                const propertyName = row.ConfigKey;
+                const propertyValue = row.ConfigValue;
+                if (this.app_Configs.value.hasOwnProperty(propertyName)) {
+                    this.app_Configs.value[propertyName] = propertyValue;
+                }
+            });
+            //
+            const response_library = await axios.get("/api/app/library", {
+                headers: {
+                    Authorization: `Bearer ${store_server_login_info.server_accessToken}`
+                }
+            });
+            response_library.data.forEach((row: any) => {
+                const propertyName = row.ConfigKey;
+                const propertyValue = row.ConfigValue;
+                if (this.library_Configs.value.hasOwnProperty(propertyName)) {
+                    this.library_Configs.value[propertyName] = propertyValue;
+                }
+            });
+            //
+            const response_server_Configs = await axios.get("/api/app/server", {
+                headers: {
+                    Authorization: `Bearer ${store_server_login_info.server_accessToken}`
+                }
+            });
+            response_server_Configs.data.forEach((row: any) => {
+                const propertyName = row.ConfigKey;
+                const propertyValue = row.ConfigValue;
+                if (this.server_Configs.value.hasOwnProperty(propertyName)) {
+                    this.server_Configs.value[propertyName] = propertyValue;
+                }
+            });
+            response_server_Configs.data.forEach((row) => {
+                if (row.ID === '' + this.app_Configs.value['server_select']) {
+                    this.server_Configs_Current.value = {
+                        id: row.ID,
+                        server_name: row.ServerName,
+                        url: row.URL,
+                        user_name: row.UserName,
+                        password: row.Password,
+                        last_login_at: row.LastLoginAt,
+                        type: row.Type
+                    };
+                }
+            });
+            //
+            const response_player_Configs_of_Audio_Info = await axios.get("/api/app/audio", {
+                headers: {
+                    Authorization: `Bearer ${store_server_login_info.server_accessToken}`
+                }
+            });
+            response_player_Configs_of_Audio_Info.data.forEach((row: any) => {
+                const propertyName = row.ConfigKey;
+                const propertyValue = row.ConfigValue;
+                if (this.player_Configs_of_Audio_Info.value.hasOwnProperty(propertyName)) {
+                    this.player_Configs_of_Audio_Info.value[propertyName] = propertyValue;
+                }
+            });
+            //
+            const response_player_Configs_of_UI = await axios.get("/api/app/ui", {
+                headers: {
+                    Authorization: `Bearer ${store_server_login_info.server_accessToken}`
+                }
+            });
+            response_player_Configs_of_UI.data.forEach((row: any) => {
+                const propertyName = row.ConfigKey;
+                const propertyValue = row.ConfigValue;
+                if (this.player_Configs_of_UI.value.hasOwnProperty(propertyName)) {
+                    this.player_Configs_of_UI.value[propertyName] = propertyValue;
+                }
+            });
+            //
+            const response_playlist_File_Configs = await axios.get("/api/app/playlist", {
+                headers: {
+                    Authorization: `Bearer ${store_server_login_info.server_accessToken}`
+                }
+            });
+            this.playlist_File_Configs.value = response_playlist_File_Configs.data.map(item => item.ConfigKey);
         }
     }
 }

@@ -91,6 +91,9 @@
                 "coverBase_6": "黑膠唱片"
             },
             "view_player_mini": "切換到迷你播放程序"
+        },
+        "server_page": {
+            "server_email": "電子郵件"
         }
     }
 }

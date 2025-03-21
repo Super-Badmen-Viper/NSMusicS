@@ -91,6 +91,9 @@
                 "coverBase_6": "Винилска пласт"
             },
             "view_player_mini": "Пређи на мини пројектор"
+        },
+        "server_page": {
+            "server_email": "Е-маил"
         }
     }
 }

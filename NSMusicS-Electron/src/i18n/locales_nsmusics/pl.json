@@ -91,6 +91,9 @@
                 "coverBase_6": "Płytka winylowa"
             },
             "view_player_mini": "Przełącz na mini odtwarzacz"
+        },
+        "server_page": {
+            "server_email": "Adres e-mail"
         }
     }
 }

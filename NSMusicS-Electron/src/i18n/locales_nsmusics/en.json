@@ -91,6 +91,9 @@
                 "coverBase_6": "Vinyl Record"
             },
             "view_player_mini": "Switch to Mini Player"
+        },
+        "server_page": {
+            "server_email": "Email"
         }
     }
 }

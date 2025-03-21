@@ -91,6 +91,9 @@
                 "coverBase_6": "Disco de Vinilo"
             },
             "view_player_mini": "Cambiar a Reproductor Mini"
+        },
+        "server_page": {
+            "server_email": "Correo Electrónico"
         }
     }
 }

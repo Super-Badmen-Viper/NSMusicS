@@ -31,6 +31,7 @@ export const store_app_configs_logic_load = reactive({
     async load_app_config() {
         /// system configs
         let system_Configs_Read = new Class_Get_System_Configs_Read();
+        await system_Configs_Read.init();
         try {
             /// App_Configs load
             this.app_configs_loading = true
@@ -67,15 +68,21 @@ export const store_app_configs_logic_load = reactive({
             // }
             store_router_data_logic.clear_UserExperience_Model = true
             /////
-            if (process.platform === 'win32') {
-                store_server_user_model.model_select = '' + system_Configs_Read.app_Configs.value['model_select']
-                if (store_server_user_model.model_select === 'server') {
-                    await store_server_user_model.switchToMode_Server()
+            if (isElectron) {
+                if (process.platform === 'win32') {
+                    store_server_user_model.model_select = '' + system_Configs_Read.app_Configs.value['model_select']
+                    if (store_server_user_model.model_select === 'server') {
+                        await store_server_user_model.switchToMode_Server()
+                    } else {
+                        await store_server_user_model.switchToMode_Local()
+                    }
                 } else {
-                    await store_server_user_model.switchToMode_Local()
+                    await store_server_user_model.switchToMode_Server()
                 }
-            } else {
+            }else{
                 await store_server_user_model.switchToMode_Server()
+                store_server_user_model.model_select = true
+                store_server_user_model.model_server_type_of_web = true
             }
             //
             if (store_server_user_model.model_select === 'server') {
@@ -309,38 +316,42 @@ export const store_app_configs_logic_load = reactive({
         }
 
         //
-        try {
-            if ('' + system_Configs_Read.app_Configs.value['player_select'] === null || '' + system_Configs_Read.app_Configs.value['player_select'].length < 0) {
-                if(process.platform != 'linux') {
-                    store_player_audio_logic.player_select = 'mpv'
-                    store_player_audio_logic.player_fade_value = 0;
-                }else{
-                    store_player_audio_logic.player_select = 'web'
-                    store_player_audio_logic.player_fade_value = 2000;
-                }
-            } else {
-                if(process.platform != 'linux') {
-                    if ('' + system_Configs_Read.app_Configs.value['player_select'] === 'mpv') {
+        if (isElectron) {
+            try {
+                if ('' + system_Configs_Read.app_Configs.value['player_select'] === null || '' + system_Configs_Read.app_Configs.value['player_select'].length < 0) {
+                    if (process.platform != 'linux') {
                         store_player_audio_logic.player_select = 'mpv'
-                    } else if ('' + system_Configs_Read.app_Configs.value['player_select'] === 'web') {
-                        store_player_audio_logic.player_select = 'web'
+                        store_player_audio_logic.player_fade_value = 0;
                     } else {
                         store_player_audio_logic.player_select = 'web'
+                        store_player_audio_logic.player_fade_value = 2000;
                     }
-                }else{
+                } else {
+                    if (process.platform != 'linux') {
+                        if ('' + system_Configs_Read.app_Configs.value['player_select'] === 'mpv') {
+                            store_player_audio_logic.player_select = 'mpv'
+                        } else if ('' + system_Configs_Read.app_Configs.value['player_select'] === 'web') {
+                            store_player_audio_logic.player_select = 'web'
+                        } else {
+                            store_player_audio_logic.player_select = 'web'
+                        }
+                    } else {
+                        store_player_audio_logic.player_select = 'web'
+                        store_player_audio_logic.player_fade_value = 2000;
+                    }
+                }
+            } catch {
+                if (process.platform != 'linux') {
+                    store_player_audio_logic.player_select = 'mpv'
+                    store_player_audio_logic.player_fade_value = 0;
+                } else {
                     store_player_audio_logic.player_select = 'web'
                     store_player_audio_logic.player_fade_value = 2000;
                 }
             }
-        }
-        catch {
-            if(process.platform != 'linux') {
-                store_player_audio_logic.player_select = 'mpv'
-                store_player_audio_logic.player_fade_value = 0;
-            }else{
-                store_player_audio_logic.player_select = 'web'
-                store_player_audio_logic.player_fade_value = 2000;
-            }
+        }else {
+            store_player_audio_logic.player_select = 'web'
+            store_player_audio_logic.player_fade_value = 2000;
         }
         //
         store_player_audio_logic.player_fade_value = Number('' + system_Configs_Read.app_Configs.value['player_fade_value'])

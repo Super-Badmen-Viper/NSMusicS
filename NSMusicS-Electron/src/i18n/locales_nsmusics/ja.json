@@ -91,6 +91,9 @@
                 "coverBase_6": "ブラックレコード"
             },
             "view_player_mini": "ミニプレーヤーに切り替え"
+        },
+        "server_page": {
+            "server_email": "メールアドレス"
         }
     }
 }

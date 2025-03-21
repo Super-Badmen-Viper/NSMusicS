@@ -91,6 +91,9 @@
                 "coverBase_6": "Vinylplaat"
             },
             "view_player_mini": "Wissel naar minivormgeving"
+        },
+        "server_page": {
+            "server_email": "E-mail"
         }
     }
 }

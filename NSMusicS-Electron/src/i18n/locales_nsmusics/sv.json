@@ -91,6 +91,9 @@
                 "coverBase_6": "Vinylplatta"
             },
             "view_player_mini": "Byt till minispelare"
+        },
+        "server_page": {
+            "server_email": "E-post"
         }
     }
 }

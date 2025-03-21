@@ -91,6 +91,9 @@
                 "coverBase_6": "Vinýlový desek"
             },
             "view_player_mini": "Přepnout na minipřehrávač"
+        },
+        "server_page": {
+            "server_email": "E-mail"
         }
     }
 }

@@ -754,7 +754,10 @@
           locale.value = store_app_configs_info.lang
         }
       } else {
-        // other
+        // init read
+        await store_app_configs_logic_load.load_app_config()
+        // init lang
+        locale.value = store_app_configs_info.lang
       }
     }catch{
 

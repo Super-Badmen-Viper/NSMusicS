@@ -91,6 +91,9 @@
         "coverBase_6": "آلبوم وینیل"
       },
       "view_player_mini": "تغییر به پخش کننده کوچک"
+    },
+    "server_page": {
+      "server_email": "ایمیل"
     }
   }
 }
