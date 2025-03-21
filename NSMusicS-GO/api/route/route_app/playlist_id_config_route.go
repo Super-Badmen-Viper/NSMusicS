@@ -16,6 +16,5 @@ func NewAppPlaylistIDConfigRouter(timeout time.Duration, db mongo.Database, grou
 	ctrl := controller_app.NewAppPlaylistIDConfigController(uc)
 
 	group.GET("/app/playlist", ctrl.GetAll)
-	group.POST("/app/playlist", ctrl.Create)
 	group.PUT("/app/playlist", ctrl.ReplaceAll)
 }

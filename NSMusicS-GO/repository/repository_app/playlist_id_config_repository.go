@@ -10,7 +10,6 @@ import (
 )
 
 type AppPlaylistIDConfigRepository interface {
-	Create(ctx context.Context, configs []*domain_app.AppPlaylistIDConfig) error
 	ReplaceAll(ctx context.Context, configs []*domain_app.AppPlaylistIDConfig) error
 	GetAll(ctx context.Context) ([]*domain_app.AppPlaylistIDConfig, error)
 }
@@ -46,15 +45,6 @@ func convertToInterfaceSliceAppPlaylistIDConfig(configs []*domain_app.AppPlaylis
 		docs[i] = c
 	}
 	return docs
-}
-
-func (r *AppPlaylistIDConfigRepo) Create(ctx context.Context, configs []*domain_app.AppPlaylistIDConfig) error {
-	documents := make([]interface{}, len(configs))
-	for i, c := range configs {
-		documents[i] = c
-	}
-	_, err := r.db.Collection(r.collection).InsertMany(ctx, documents)
-	return err
 }
 
 func (r *AppPlaylistIDConfigRepo) GetAll(ctx context.Context) ([]*domain_app.AppPlaylistIDConfig, error) {

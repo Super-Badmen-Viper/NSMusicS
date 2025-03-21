@@ -16,20 +16,6 @@ func NewAppLibraryConfigController(uc domain_app.AppLibraryConfigUsecase) *AppLi
 	return &AppLibraryConfigController{usecase: uc}
 }
 
-func (ctrl *AppLibraryConfigController) Create(c *gin.Context) {
-	var req []*domain_app.AppLibraryConfig
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request format"})
-		return
-	}
-
-	if err := ctrl.usecase.Create(c.Request.Context(), req); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "creation failed"})
-		return
-	}
-	c.Status(http.StatusCreated)
-}
-
 func (ctrl *AppLibraryConfigController) ReplaceAll(c *gin.Context) {
 	var req []*domain_app.AppLibraryConfig
 	if err := c.ShouldBindJSON(&req); err != nil {

@@ -10,7 +10,6 @@ import (
 )
 
 type AppUIConfigRepository interface {
-	Create(ctx context.Context, configs []*domain_app.AppUIConfig) error
 	ReplaceAll(ctx context.Context, configs []*domain_app.AppUIConfig) error
 	GetAll(ctx context.Context) ([]*domain_app.AppUIConfig, error)
 }
@@ -46,15 +45,6 @@ func convertToInterfaceSliceAppUIConfig(configs []*domain_app.AppUIConfig) []int
 		docs[i] = c
 	}
 	return docs
-}
-
-func (r *AppUIConfigRepo) Create(ctx context.Context, configs []*domain_app.AppUIConfig) error {
-	documents := make([]interface{}, len(configs))
-	for i, c := range configs {
-		documents[i] = c
-	}
-	_, err := r.db.Collection(r.collection).InsertMany(ctx, documents)
-	return err
 }
 
 func (r *AppUIConfigRepo) GetAll(ctx context.Context) ([]*domain_app.AppUIConfig, error) {

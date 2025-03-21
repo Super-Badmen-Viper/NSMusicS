@@ -16,6 +16,5 @@ func NewAppLibraryConfigRouter(timeout time.Duration, db mongo.Database, group *
 	ctrl := controller_app.NewAppLibraryConfigController(uc)
 
 	group.GET("/app/library", ctrl.GetAll)
-	group.POST("/app/library", ctrl.Create)
 	group.PUT("/app/library", ctrl.ReplaceAll)
 }

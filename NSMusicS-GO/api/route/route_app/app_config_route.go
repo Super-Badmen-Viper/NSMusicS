@@ -16,6 +16,5 @@ func NewAppConfigRouter(timeout time.Duration, db mongo.Database, group *gin.Rou
 	ctrl := controller_app.NewAppConfigController(uc)
 
 	group.GET("/app/config", ctrl.GetAll)
-	group.POST("/app/config", ctrl.Create)
 	group.PUT("/app/config", ctrl.ReplaceAll)
 }

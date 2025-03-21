@@ -16,20 +16,6 @@ func NewAppPlaylistIDConfigController(uc domain_app.AppPlaylistIDConfigUsecase) 
 	return &AppPlaylistIDConfigController{usecase: uc}
 }
 
-func (ctrl *AppPlaylistIDConfigController) Create(c *gin.Context) {
-	var req []*domain_app.AppPlaylistIDConfig
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request format"})
-		return
-	}
-
-	if err := ctrl.usecase.Create(c.Request.Context(), req); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "creation failed"})
-		return
-	}
-	c.Status(http.StatusCreated)
-}
-
 func (ctrl *AppPlaylistIDConfigController) ReplaceAll(c *gin.Context) {
 	var req []*domain_app.AppPlaylistIDConfig
 	if err := c.ShouldBindJSON(&req); err != nil {

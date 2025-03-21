@@ -12,7 +12,6 @@ type AppAudioConfig struct {
 }
 
 type AppAudioConfigUsecase interface {
-	Create(ctx context.Context, configs []*AppAudioConfig) error
 	ReplaceAll(ctx context.Context, configs []*AppAudioConfig) error
 	GetAll(ctx context.Context) ([]*AppAudioConfig, error)
 }

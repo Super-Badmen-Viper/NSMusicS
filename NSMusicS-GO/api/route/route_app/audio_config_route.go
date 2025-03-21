@@ -16,6 +16,5 @@ func NewAppAudioConfigRouter(timeout time.Duration, db mongo.Database, group *gi
 	ctrl := controller_app.NewAppAudioConfigController(uc)
 
 	group.GET("/app/audio", ctrl.GetAll)
-	group.POST("/app/audio", ctrl.Create)
 	group.PUT("/app/audio", ctrl.ReplaceAll)
 }

@@ -16,20 +16,6 @@ func NewAppConfigController(uc domain_app.AppConfigUsecase) *AppConfigController
 	return &AppConfigController{usecase: uc}
 }
 
-func (ctrl *AppConfigController) Create(c *gin.Context) {
-	var req []*domain_app.AppConfig
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request format"})
-		return
-	}
-
-	if err := ctrl.usecase.Create(c.Request.Context(), req); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "creation failed"})
-		return
-	}
-	c.Status(http.StatusCreated)
-}
-
 func (ctrl *AppConfigController) ReplaceAll(c *gin.Context) {
 	var req []*domain_app.AppConfig
 	if err := c.ShouldBindJSON(&req); err != nil {

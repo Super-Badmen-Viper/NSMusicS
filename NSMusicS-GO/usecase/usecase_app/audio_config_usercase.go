@@ -16,12 +16,6 @@ func NewAppAudioConfigUsecase(repo repository_app.AppAudioConfigRepository, time
 	return &AppAudioConfigUsecase{repo: repo, timeout: timeout}
 }
 
-func (uc *AppAudioConfigUsecase) Create(ctx context.Context, configs []*domain_app.AppAudioConfig) error {
-	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
-	defer cancel()
-	return uc.repo.Create(ctx, configs)
-}
-
 func (uc *AppAudioConfigUsecase) ReplaceAll(ctx context.Context, configs []*domain_app.AppAudioConfig) error {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()

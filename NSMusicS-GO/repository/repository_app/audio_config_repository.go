@@ -10,7 +10,6 @@ import (
 )
 
 type AppAudioConfigRepository interface {
-	Create(ctx context.Context, configs []*domain_app.AppAudioConfig) error
 	ReplaceAll(ctx context.Context, configs []*domain_app.AppAudioConfig) error
 	GetAll(ctx context.Context) ([]*domain_app.AppAudioConfig, error)
 }
@@ -46,15 +45,6 @@ func convertToInterfaceSliceAppAudioConfig(configs []*domain_app.AppAudioConfig)
 		docs[i] = c
 	}
 	return docs
-}
-
-func (r *AppAudioConfigRepo) Create(ctx context.Context, configs []*domain_app.AppAudioConfig) error {
-	documents := make([]interface{}, len(configs))
-	for i, c := range configs {
-		documents[i] = c
-	}
-	_, err := r.db.Collection(r.collection).InsertMany(ctx, documents)
-	return err
 }
 
 func (r *AppAudioConfigRepo) GetAll(ctx context.Context) ([]*domain_app.AppAudioConfig, error) {

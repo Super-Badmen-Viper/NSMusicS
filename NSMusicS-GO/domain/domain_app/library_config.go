@@ -12,7 +12,6 @@ type AppLibraryConfig struct {
 }
 
 type AppLibraryConfigUsecase interface {
-	Create(ctx context.Context, configs []*AppLibraryConfig) error
 	ReplaceAll(ctx context.Context, configs []*AppLibraryConfig) error
 	GetAll(ctx context.Context) ([]*AppLibraryConfig, error)
 }

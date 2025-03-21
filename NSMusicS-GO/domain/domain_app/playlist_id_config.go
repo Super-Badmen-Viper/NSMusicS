@@ -12,7 +12,6 @@ type AppPlaylistIDConfig struct {
 }
 
 type AppPlaylistIDConfigUsecase interface {
-	Create(ctx context.Context, configs []*AppPlaylistIDConfig) error
 	ReplaceAll(ctx context.Context, configs []*AppPlaylistIDConfig) error
 	GetAll(ctx context.Context) ([]*AppPlaylistIDConfig, error)
 }

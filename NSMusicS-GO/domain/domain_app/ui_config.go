@@ -12,7 +12,6 @@ type AppUIConfig struct {
 }
 
 type AppUIConfigUsecase interface {
-	Create(ctx context.Context, configs []*AppUIConfig) error
 	ReplaceAll(ctx context.Context, configs []*AppUIConfig) error
 	GetAll(ctx context.Context) ([]*AppUIConfig, error)
 }

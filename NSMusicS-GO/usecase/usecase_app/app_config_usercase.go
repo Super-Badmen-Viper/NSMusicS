@@ -16,12 +16,6 @@ func NewAppConfigUsecase(repo repository_app.AppConfigRepository, timeout time.D
 	return &AppConfigUsecase{repo: repo, timeout: timeout}
 }
 
-func (uc *AppConfigUsecase) Create(ctx context.Context, configs []*domain_app.AppConfig) error {
-	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
-	defer cancel()
-	return uc.repo.Create(ctx, configs)
-}
-
 func (uc *AppConfigUsecase) ReplaceAll(ctx context.Context, configs []*domain_app.AppConfig) error {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()

@@ -16,12 +16,6 @@ func NewAppPlaylistIDConfigUsecase(repo repository_app.AppPlaylistIDConfigReposi
 	return &AppPlaylistIDConfigUsecase{repo: repo, timeout: timeout}
 }
 
-func (uc *AppPlaylistIDConfigUsecase) Create(ctx context.Context, configs []*domain_app.AppPlaylistIDConfig) error {
-	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
-	defer cancel()
-	return uc.repo.Create(ctx, configs)
-}
-
 func (uc *AppPlaylistIDConfigUsecase) ReplaceAll(ctx context.Context, configs []*domain_app.AppPlaylistIDConfig) error {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()

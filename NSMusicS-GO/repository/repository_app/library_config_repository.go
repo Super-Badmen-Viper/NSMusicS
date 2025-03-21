@@ -10,7 +10,6 @@ import (
 )
 
 type AppLibraryConfigRepository interface {
-	Create(ctx context.Context, configs []*domain_app.AppLibraryConfig) error
 	ReplaceAll(ctx context.Context, configs []*domain_app.AppLibraryConfig) error
 	GetAll(ctx context.Context) ([]*domain_app.AppLibraryConfig, error)
 }
@@ -46,15 +45,6 @@ func convertToInterfaceSliceAppLibraryConfig(configs []*domain_app.AppLibraryCon
 		docs[i] = c
 	}
 	return docs
-}
-
-func (r *libraryConfigRepo) Create(ctx context.Context, configs []*domain_app.AppLibraryConfig) error {
-	documents := make([]interface{}, len(configs))
-	for i, c := range configs {
-		documents[i] = c
-	}
-	_, err := r.db.Collection(r.collection).InsertMany(ctx, documents)
-	return err
 }
 
 func (r *libraryConfigRepo) GetAll(ctx context.Context) ([]*domain_app.AppLibraryConfig, error) {

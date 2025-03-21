@@ -16,12 +16,6 @@ func NewAppLibraryConfigUsecase(repo repository_app.AppLibraryConfigRepository, 
 	return &AppLibraryConfigUsecase{repo: repo, timeout: timeout}
 }
 
-func (uc *AppLibraryConfigUsecase) Create(ctx context.Context, configs []*domain_app.AppLibraryConfig) error {
-	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
-	defer cancel()
-	return uc.repo.Create(ctx, configs)
-}
-
 func (uc *AppLibraryConfigUsecase) ReplaceAll(ctx context.Context, configs []*domain_app.AppLibraryConfig) error {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()

@@ -12,7 +12,6 @@ type AppConfig struct {
 }
 
 type AppConfigUsecase interface {
-	Create(ctx context.Context, configs []*AppConfig) error
 	ReplaceAll(ctx context.Context, configs []*AppConfig) error
 	GetAll(ctx context.Context) ([]*AppConfig, error)
 }
