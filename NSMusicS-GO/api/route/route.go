@@ -1,7 +1,8 @@
 package route
 
 import (
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/api/route/route_app"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/api/route/route_app/route_app_config"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/api/route/route_app/route_app_library"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/api/route/route_auth"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/api/route/route_system"
 	"time"
@@ -39,10 +40,12 @@ func RouterPrivate(env *bootstrap.Env, timeout time.Duration, db mongo.Database,
 	route_system.NewSystemInfoRouter(timeout, db, protectedRouter)
 	route_system.NewSystemConfigurationRouter(timeout, db, protectedRouter)
 	//
-	route_app.NewAppConfigRouter(timeout, db, protectedRouter)
-	route_app.NewAppLibraryConfigRouter(timeout, db, protectedRouter)
-	route_app.NewAppAudioConfigRouter(timeout, db, protectedRouter)
-	route_app.NewAppUIConfigRouter(timeout, db, protectedRouter)
-	route_app.NewAppPlaylistIDConfigRouter(timeout, db, protectedRouter)
-	route_app.NewAppServerConfigRouter(timeout, db, protectedRouter)
+	route_app_config.NewAppConfigRouter(timeout, db, protectedRouter)
+	route_app_config.NewAppLibraryConfigRouter(timeout, db, protectedRouter)
+	route_app_config.NewAppAudioConfigRouter(timeout, db, protectedRouter)
+	route_app_config.NewAppUIConfigRouter(timeout, db, protectedRouter)
+	route_app_config.NewAppPlaylistIDConfigRouter(timeout, db, protectedRouter)
+	route_app_config.NewAppServerConfigRouter(timeout, db, protectedRouter)
+	//
+	route_app_library.NewAppMediaFileLibraryRouter(timeout, db, protectedRouter)
 }

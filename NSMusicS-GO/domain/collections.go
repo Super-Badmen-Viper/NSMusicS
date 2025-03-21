@@ -1,22 +1,26 @@
 package domain
 
 const (
-	CollectionAppConfigs = "app_base_configs"
+	CollectionAppConfigs = "app_configs_base"
 )
 const (
-	CollectionAppLibraryConfigs = "app_library_configs"
+	CollectionAppLibraryConfigs = "app_configs_library"
 )
 const (
-	CollectionAppAudioConfigs = "app_audio_configs"
+	CollectionAppAudioConfigs = "app_configs_audio"
 )
 const (
-	CollectionAppUIConfigs = "app_ui_configs"
+	CollectionAppUIConfigs = "app_configs_ui"
 )
 const (
-	CollectionAppPlaylistIDConfigs = "app_playlist_id_configs"
+	CollectionAppPlaylistIDConfigs = "app_configs_playlist_id"
 )
 const (
-	CollectionAppServerConfigs = "app_server_configs"
+	CollectionAppServerConfigs = "app_configs_server"
+)
+
+const (
+	CollectionAppMediaFileLibrarys = "app_library_media_file"
 )
 
 const (
