@@ -26,8 +26,8 @@ import {
 
 export const store_view_album_page_fetchData = reactive({
     async fetchData_Album(){
-        if(isElectron) {
-            if (store_server_user_model.model_server_type_of_local) {
+        if (store_server_user_model.model_server_type_of_local) {
+            if(isElectron) {
                 let db: any = null;
                 let moment = require('moment');
                 // clear RouterView of vue-virtual-scroller data
@@ -54,10 +54,10 @@ export const store_view_album_page_fetchData = reactive({
                             store_view_album_page_logic.page_albumlists_options_Sort_key[0].order.replace('end', '') : '';
                         let keywordFilter = store_view_album_page_logic.page_albumlists_keyword.length > 0 ?
                             `WHERE id LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%' 
-                            OR name LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%' 
-                            OR artist LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%' 
-                            OR artist_id LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%' 
-                            OR created_at LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%'` :
+                        OR name LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%' 
+                        OR artist LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%' 
+                        OR artist_id LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%' 
+                        OR created_at LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%'` :
                             '';
                         if (store_router_data_info.find_album_model) {
                             if (store_view_album_page_logic.page_albumlists_get_keyword_model_num != 1)
@@ -87,7 +87,7 @@ export const store_view_album_page_fetchData = reactive({
                                              ORDER BY ${sortKey} ${sortOrder}`;
                         stmt_album = db.prepare(stmt_album_string);
                         //////
-                        if(!store_view_album_page_logic.page_albumlists_filter_model) {
+                        if (!store_view_album_page_logic.page_albumlists_filter_model) {
                             if (store_router_history_data_of_album.router_select_history_date_of_Album && store_view_album_page_logic.page_albumlists_keyword_reset) {
                                 store_router_history_data_of_album.remove_router_history_of_Album(store_router_history_data_of_album.router_select_history_date_of_Album.id);// 若存在新操作，则覆盖后续的路由
                                 store_view_album_page_logic.page_albumlists_keyword_reset = false;
@@ -132,11 +132,11 @@ export const store_view_album_page_fetchData = reactive({
                     let rows = stmt_album.all();
                     rows.forEach((row: Album) => {
                         if (row.medium_image_url == null || row.medium_image_url == undefined || row.medium_image_url.length == 0) {
-                            if(row.embed_art_path) {
+                            if (row.embed_art_path) {
                                 const fileName = row.embed_art_path.split(/[\\/]/).pop(); // 兼容 Windows 和 Unix 路径分隔符
                                 const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg');
                                 row.medium_image_url = `${store_app_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`;
-                            }else{
+                            } else {
                                 row.medium_image_url = error_album
                             }
                         }
@@ -232,12 +232,10 @@ export const store_view_album_page_fetchData = reactive({
                     db = null;
                 }
             }
-            else if (store_server_user_model.model_server_type_of_web) {
-                store_view_album_page_info.album_Files_temporary = [];
-                await this.fetchData_Album_of_server_web_start();
-            }
-        } else {
-            // other
+        }
+        else if (store_server_user_model.model_server_type_of_web) {
+            store_view_album_page_info.album_Files_temporary = [];
+            await this.fetchData_Album_of_server_web_start();
         }
     },
     async fetchData_This_Album_MediaList(album_id:any){

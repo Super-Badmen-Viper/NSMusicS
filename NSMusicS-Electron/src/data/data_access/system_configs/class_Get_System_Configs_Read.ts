@@ -279,11 +279,11 @@ export class Class_Get_System_Configs_Read {
                 }
             });
             response_library.data.forEach((row: any) => {
-                const propertyName = row.ConfigKey;
-                const propertyValue = row.ConfigValue;
-                if (this.library_Configs.value.hasOwnProperty(propertyName)) {
-                    this.library_Configs.value[propertyName] = propertyValue;
-                }
+                this.library_Configs.value.push({
+                    id: row.ID,
+                    config_key: row.ConfigKey,
+                    config_value: row.ConfigValue
+                })
             });
             //
             const response_server_Configs = await axios.get("/api/app/server", {
@@ -292,11 +292,15 @@ export class Class_Get_System_Configs_Read {
                 }
             });
             response_server_Configs.data.forEach((row: any) => {
-                const propertyName = row.ConfigKey;
-                const propertyValue = row.ConfigValue;
-                if (this.server_Configs.value.hasOwnProperty(propertyName)) {
-                    this.server_Configs.value[propertyName] = propertyValue;
-                }
+                this.server_Configs.value.push({
+                    id: row.ID,
+                    server_name: row.ServerName,
+                    url: row.URL,
+                    user_name: row.UserName,
+                    password: row.Password,
+                    last_login_at: row.LastLoginAt,
+                    type: row.Type
+                })
             });
             response_server_Configs.data.forEach((row) => {
                 if (row.ID === '' + this.app_Configs.value['server_select']) {

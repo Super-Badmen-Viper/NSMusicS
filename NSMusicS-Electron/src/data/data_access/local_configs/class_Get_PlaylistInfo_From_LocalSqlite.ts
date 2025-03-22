@@ -136,7 +136,7 @@ export class Get_PlaylistInfo_From_LocalSqlite {
         } else {
             // other
         }
-        return undefined
+        return []
     }
 
     formatTime(currentTime: number): string {

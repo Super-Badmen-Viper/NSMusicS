@@ -81,7 +81,7 @@ export const store_app_configs_logic_load = reactive({
                 }
             }else{
                 await store_server_user_model.switchToMode_Server()
-                store_server_user_model.model_select = true
+                store_server_user_model.model_select = 'server'
                 store_server_user_model.model_server_type_of_web = true
             }
             //

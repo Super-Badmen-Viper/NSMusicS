@@ -140,7 +140,8 @@ export const store_server_user_model = reactive({
     },
     
     async refresh_model_server_type_of_web(){
-        let user_Authorization_ApiWebService_of_ND = new User_Authorization_ApiWebService_of_ND()
+        let user_Authorization_ApiWebService_of_ND =
+            new User_Authorization_ApiWebService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url)
         await user_Authorization_ApiWebService_of_ND.get_token()
         store_app_configs_logic_save.save_system_config_of_App_Configs()
     },

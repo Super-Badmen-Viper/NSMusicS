@@ -345,7 +345,7 @@ func (si *Initializer) initAppConfigs(ctx context.Context) error {
 		{ConfigKey: "app_view_left_menu_select_activeKey", ConfigValue: "home"},
 		{ConfigKey: "app_view_left_menu_collapsed", ConfigValue: "true"},
 		{ConfigKey: "model_select", ConfigValue: "server"},
-		{ConfigKey: "server_select", ConfigValue: "2b876e61-a2a7-4ebc-97d1-b9bbd7a9592c"},
+		{ConfigKey: "server_select", ConfigValue: "67de9bb764e338bd6fa4b811"},
 		{ConfigKey: "server_select_kind", ConfigValue: "navidrome"},
 		{ConfigKey: "username", ConfigValue: "mozhi"},
 		{ConfigKey: "password", ConfigValue: "qwer1234"},
@@ -519,8 +519,10 @@ func (si *Initializer) initAppPlaylistIDConfigs(ctx context.Context) error {
 func (si *Initializer) initAppServerConfigs(ctx context.Context) error {
 	coll := si.db.Collection(domain.CollectionAppServerConfigs)
 
+	id, _ := primitive.ObjectIDFromHex("67de9bb764e338bd6fa4b811")
 	initConfigs := []*domain_app_config.AppServerConfig{
 		{
+			ID:          id,
 			ServerName:  "mozhi",
 			URL:         "http://localhost:4533",
 			UserName:    "mozhi",
@@ -529,6 +531,7 @@ func (si *Initializer) initAppServerConfigs(ctx context.Context) error {
 			Type:        "navidrome",
 		},
 		{
+			ID:          primitive.NewObjectID(),
 			ServerName:  "xiang",
 			URL:         "http://localhost:8096",
 			UserName:    "xiang",
@@ -537,6 +540,7 @@ func (si *Initializer) initAppServerConfigs(ctx context.Context) error {
 			Type:        "jellyfin",
 		},
 		{
+			ID:          primitive.NewObjectID(),
 			ServerName:  "17741",
 			URL:         "http://localhost:8099",
 			UserName:    "17741",

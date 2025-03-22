@@ -727,78 +727,16 @@
   })
   import {store_server_login_logic} from "@/views/view_server/page_metadata/page_login/store/store_server_login_logic";
   onMounted(async () => {
-    //// init db data
-    try {
-      if (isElectron) {
-        // 等待数据库初始化进程结束
-        if (await ipcRenderer.invoke('window-init-db')) {
-          store_app_configs_info.desktop_system_kind = process.platform;
-          //
-          store_app_configs_info.navidrome_db = await ipcRenderer.invoke('window-get-navidrome-db');
-          store_app_configs_info.nsmusics_db = await ipcRenderer.invoke('window-get-nsmusics-db');
-          console.log(store_app_configs_info.navidrome_db)
-          console.log(store_app_configs_info.nsmusics_db)
-          // noLogin
-          store_router_data_info.router_select_model_server_login = false;
-          // init read
-          await store_app_configs_logic_load.load_app_config()
-          // init lang
-          locale.value = store_app_configs_info.lang
-        }
-      } else {
-        // isLogin
-        store_server_login_logic.checkLoginStatus();
-        //
-        store_app_configs_info.desktop_system_kind = 'docker'
-        // init read
-        await store_app_configs_logic_load.load_app_config()
-        // init lang
-        locale.value = store_app_configs_info.lang
-      }
-    }catch{
-
+    if (!isElectron) {
+      // isLogin
+      await store_server_login_logic.checkLoginStatus();
+      store_app_configs_info.desktop_system_kind = 'docker'
     }
+    await store_app_configs_info.load_app()
     create_menuOptions_appBar()
-
-    if(isElectron) {
-      /// init tray
-      try {
-        await ipcRenderer.invoke('i18n-tray-label-menu',
-            [
-              t('player.play'),
-              t('player.pause'),
-              t('player.previous'),
-              t('player.next'),
-              t('nsmusics.view_page.desktop_lyrics'),
-              t('common.quit'),
-              t('nsmusics.siderbar_player.playback_1'),
-              t('nsmusics.siderbar_player.playback_2'),
-              t('nsmusics.siderbar_player.playback_3'),
-              t('nsmusics.siderbar_player.playback_4')
-            ]
-        );
-        await ipcRenderer.invoke('i18n-tray-music-order',
-            store_player_audio_logic.play_order
-        );
-      } catch (e) {
-        console.log(e);
-      }
-      /// update_info
-      try {
-        store_app_configs_info.version = '1.4.8';
-        console.log('Current Version:', store_app_configs_info.version);
-        const xmlUrl = 'https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-Update/NSMusicS.xml';
-        await store_app_configs_logic_update.fetchAndParseXML(xmlUrl);
-        console.log('Last Version:', store_app_configs_logic_update.getVersion());
-        store_app_configs_info.version_update_explain = store_app_configs_logic_update.changelog_explain.replace(/;/g, '<br>')
-        store_app_configs_info.version_update_address = store_app_configs_logic_update.url
-        if (store_app_configs_info.version < store_app_configs_logic_update.getVersion()) {
-          store_app_configs_info.version_updated = 1;
-        }
-      } catch {
-        store_app_configs_info.version_updated = 0;
-      }
-    }
+  });
+  watch(() => store_app_configs_info.lang, async (newValue) => {
+    locale.value = newValue
   });
   if(isElectron) {
     ipcRenderer.on('tray-app-quit', () => {

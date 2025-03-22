@@ -27,14 +27,34 @@ export const store_server_navidrome_userdata_logic = reactive({
             const {salt, token} = this.navidrome_get_EncryptedPassword(server_set_of_addUser_of_password);
             const userData = await userService.getUser(server_set_of_addUser_of_username, token, salt);
             if (userData["subsonic-response"]["status"] === 'ok'){
-                let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
-                const data:Server_Configs_Props = set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_CreateUser(
-                    server_set_of_addUser_of_servername,
-                    server_set_of_addUser_of_url,
-                    server_set_of_addUser_of_username,
-                    server_set_of_addUser_of_password,
-                    type
-                );
+                let data: Server_Configs_Props = null
+                if(isElectron) {
+                    let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
+                    data = set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_CreateUser(
+                        server_set_of_addUser_of_servername,
+                        server_set_of_addUser_of_url,
+                        server_set_of_addUser_of_username,
+                        server_set_of_addUser_of_password,
+                        type
+                    );
+                }else{
+                    // Golang
+                    data = {
+                        show: false,
+                        type: type,
+                        id: Array.from({ length: 24 }, () => Math.floor(Math.random() * 10)).join(''),
+                        server_name: server_set_of_addUser_of_servername,
+                        url: server_set_of_addUser_of_url,
+                        user_name: server_set_of_addUser_of_username,
+                        password: server_set_of_addUser_of_password,
+                        last_login_at: new Date().toLocaleString(
+                            'zh-CN', {
+                                year: 'numeric', month: '2-digit', day: '2-digit',
+                                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+                            }
+                        ).replace(/\//g, '-'),
+                    };
+                }
                 const new_data: Server_Configs_Props[] = store_server_users.server_config_of_all_user_of_sqlite;
                 new_data.push(data)
                 store_server_users.get_server_config_of_all_user_of_sqlite(new_data)
@@ -54,13 +74,33 @@ export const store_server_navidrome_userdata_logic = reactive({
         const {salt, token} = this.navidrome_get_EncryptedPassword(password);
         const userData = await userService.getUser(user_name, token, salt);
         if (userData["subsonic-response"]["status"] === 'ok'){
-            let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
-            const data:Server_Configs_Props = set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_SetUser(
-                id,
-                server_name, url,
-                user_name, password,
-                type
-            );
+            let data: Server_Configs_Props = null
+            if(isElectron) {
+                let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
+                data = set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_SetUser(
+                    id,
+                    server_name, url,
+                    user_name, password,
+                    type
+                );
+            }else{
+                // Golang
+                data = {
+                    show: false,
+                    type: type,
+                    id: id,
+                    server_name: server_name,
+                    url: url,
+                    user_name: user_name,
+                    password: password,
+                    last_login_at: new Date().toLocaleString(
+                        'zh-CN', {
+                            year: 'numeric', month: '2-digit', day: '2-digit',
+                            hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+                        }
+                    ).replace(/\//g, '-'),
+                };
+            }
             const new_data: Server_Configs_Props[] = store_server_users.server_config_of_all_user_of_sqlite;
             const index = new_data.findIndex(item => item.id === data.id);
             if (index !== -1) {

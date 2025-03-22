@@ -737,26 +737,26 @@ import {store_player_audio_info} from "@/views/view_app/page_metadata/page_folde
                                 <n-button
                                     strong secondary type="info"
                                     @click="()=>{
-                                                  if(item.type === 'navidrome'){
-                                                    server_set_of_addUser_of_type = 'navidrome'
-                                                  }else if (item.type === 'jellyfin'){
-                                                    server_set_of_addUser_of_type = 'jellyfin'
-                                                    if(store_server_user_model.server_login_model_of_apikey) {
-                                                      item.password = store_server_user_model.userid_of_Je
-                                                    }
-                                                  }else if (item.type === 'emby'){
-                                                    server_set_of_addUser_of_type = 'emby'
-                                                    if(store_server_user_model.server_login_model_of_apikey) {
-                                                      item.password = store_server_user_model.userid_of_Je
-                                                    }
-                                                  }
-                                                  update_server_setUser(
-                                                      item.id,
-                                                      item.server_name,item.url,
-                                                      item.user_name,item.password,
-                                                      item.type
-                                                  )
-                                                }">
+                                      if(item.type === 'navidrome'){
+                                        server_set_of_addUser_of_type = 'navidrome'
+                                      }else if (item.type === 'jellyfin'){
+                                        server_set_of_addUser_of_type = 'jellyfin'
+                                        if(store_server_user_model.server_login_model_of_apikey) {
+                                          item.password = store_server_user_model.userid_of_Je
+                                        }
+                                      }else if (item.type === 'emby'){
+                                        server_set_of_addUser_of_type = 'emby'
+                                        if(store_server_user_model.server_login_model_of_apikey) {
+                                          item.password = store_server_user_model.userid_of_Je
+                                        }
+                                      }
+                                      update_server_setUser(
+                                          item.id,
+                                          item.server_name,item.url,
+                                          item.user_name,item.password,
+                                          item.type
+                                      )
+                                    }">
                                   {{ $t('common.save') }}
                                 </n-button>
                               </n-space>
@@ -782,16 +782,16 @@ import {store_player_audio_info} from "@/views/view_app/page_metadata/page_folde
                     </div>
                   </n-space>
                   <n-switch
-                      v-model:value="store_server_user_model.model_server_type_of_web"
-                      @update:value="() => {
-                                  store_server_user_model.model_server_type_of_local_server_download = false
-                                  store_router_data_logic.clear_UserExperience_Model = true;
-                                  store_router_data_logic.get_clear_UserExperience_Model(true);
-                                  update_server_config_of_current_user_of_sqlite(
-                                    store_server_users.server_config_of_current_user_of_select.value,
-                                    false
-                                  );
-                                }"
+                    v-model:value="store_server_user_model.model_server_type_of_web"
+                    @update:value="() => {
+                      store_server_user_model.model_server_type_of_local_server_download = false
+                      store_router_data_logic.clear_UserExperience_Model = true;
+                      store_router_data_logic.get_clear_UserExperience_Model(true);
+                      update_server_config_of_current_user_of_sqlite(
+                        store_server_users.server_config_of_current_user_of_select.value,
+                        false
+                      );
+                    }"
                   >
                   </n-switch>
                 </n-space>
@@ -803,11 +803,11 @@ import {store_player_audio_info} from "@/views/view_app/page_metadata/page_folde
                     </div>
                   </n-space>
                   <n-switch
-                      disabled
-                      v-model:value="store_server_user_model.model_server_type_of_local"
-                      @update:value="() => {
-                                    store_server_user_model.model_server_type_of_local_server_download = true
-                                  }"
+                    disabled
+                    v-model:value="store_server_user_model.model_server_type_of_local"
+                    @update:value="() => {
+                      store_server_user_model.model_server_type_of_local_server_download = true
+                    }"
                   >
                   </n-switch>
                 </n-space>
@@ -815,13 +815,13 @@ import {store_player_audio_info} from "@/views/view_app/page_metadata/page_folde
                          v-if="store_server_user_model.model_server_type_of_local"
                 >
                   <n-space vertical style="width: 320px;">
-                                <span style="font-size:16px;font-weight: 600;">
-                                  {{ $t('nsmusics.view_page.modelServer_type_2') + " | " + $t('nsmusics.view_page.selectServer')}}
-                                </span>
+                    <span style="font-size:16px;font-weight: 600;">
+                      {{ $t('nsmusics.view_page.modelServer_type_2') + " | " + $t('nsmusics.view_page.selectServer')}}
+                    </span>
                     <div style="margin-top: -10px;">
-                                  <span style="font-size:12px;">
-                                    {{ $t('nsmusics.view_page.selectServer_explain') }}
-                                  </span>
+                      <span style="font-size:12px;">
+                        {{ $t('nsmusics.view_page.selectServer_explain') }}
+                      </span>
                     </div>
                   </n-space>
                   <n-space align="end">
