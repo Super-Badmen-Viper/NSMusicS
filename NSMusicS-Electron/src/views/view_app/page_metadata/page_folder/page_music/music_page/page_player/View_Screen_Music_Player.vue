@@ -1527,7 +1527,7 @@ onBeforeUnmount(() => {
                   }">
                 <n-carousel-item
                     v-for="(item, index) in store_playlist_list_info.playlist_MediaFiles_temporary_carousel"
-                    :key="index"
+                    :key="item.id"
                     style="
                       width: 50vh;
                       height: 50vh;

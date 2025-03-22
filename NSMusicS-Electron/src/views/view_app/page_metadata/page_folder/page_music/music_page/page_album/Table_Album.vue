@@ -437,6 +437,7 @@ const Play_this_album_MediaList_click = async (album_id: string) => {
   }
   console.log('play_this_album_click：' + album_id);
   await store_view_album_page_fetchData.fetchData_This_Album_MediaList(album_id)
+  store_playlist_list_info.reset_carousel()
 }
 
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {

@@ -412,6 +412,7 @@ const Play_this_artist_all_media_list_click = async (artist_id: string) => {
   }
   console.log('play_this_artist_song_list：' + artist_id);
   await store_view_artist_page_fetchData.fetchData_This_Artist_MediaList(artist_id)
+  store_playlist_list_info.reset_carousel()
 }
 
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {

@@ -376,6 +376,8 @@ const handleItemDbClick = async (media_file:any,index:number) => {
       store_player_audio_info.this_audio_restart_play = true
 
       store_playlist_list_fetchData.fetchData_PlayList()
+
+      store_playlist_list_info.reset_carousel()
     }
   }
 }

@@ -77,21 +77,28 @@ export const store_playlist_list_info = reactive({
         if (hasSameAbsoluteIndex) {
             return;
         }
-        const startIndex = Math.max(
-            store_player_audio_info.this_audio_Index_of_play_list - 14,
-            0
-        );
-        const endIndex = Math.min(
-            startIndex + 30,
-            store_playlist_list_info.playlist_MediaFiles_temporary.length
-        );
-        store_playlist_list_info.playlist_MediaFiles_temporary_carousel =
-            store_playlist_list_info.playlist_MediaFiles_temporary.slice(startIndex, endIndex);
-        //
-        store_player_audio_info.set_carousel_index()
+        if(store_playlist_list_info.playlist_MediaFiles_temporary.length > 1) {
+            const startIndex = Math.max(
+                store_player_audio_info.this_audio_Index_of_play_list - 14,
+                0
+            );
+            const endIndex = Math.min(
+                startIndex + 30,
+                store_playlist_list_info.playlist_MediaFiles_temporary.length
+            );
+            store_playlist_list_info.playlist_MediaFiles_temporary_carousel =
+                store_playlist_list_info.playlist_MediaFiles_temporary.slice(startIndex, endIndex);
+            //
+            store_player_audio_info.set_carousel_index()
+        }else if(store_playlist_list_info.playlist_MediaFiles_temporary.length === 1){
+            store_playlist_list_info.playlist_MediaFiles_temporary_carousel = [
+                store_playlist_list_info.playlist_MediaFiles_temporary[0],
+                store_playlist_list_info.playlist_MediaFiles_temporary[0]
+            ];
+        }
     }
 });
-watch(() => store_playlist_list_info.playlist_MediaFiles_temporary.length, async (newValue) => {
+watch(() => store_playlist_list_info.playlist_MediaFiles_temporary, async (newValue) => {
     store_playlist_list_info.reset_carousel()
     ///
     store_app_configs_logic_save.save_system_playlist_item_id_config();
