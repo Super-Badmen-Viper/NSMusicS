@@ -711,8 +711,8 @@ import {store_local_data_set_mediaInfo} from "@/data/data_stores/local/local_dat
 import {store_playlist_list_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_logic";
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 import {store_playlist_list_fetchData} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_fetchData";
-import {Audio_howler} from "@/data/data_models/song_Audio_Out/Audio_howler";
-import {Audio_node_mpv} from "@/data/data_models/song_Audio_Out/Audio_node_mpv";
+import {Audio_howler} from "@/data/data_models/app_models/song_Audio_Out/Audio_howler";
+import {Audio_node_mpv} from "@/data/data_models/app_models/song_Audio_Out/Audio_node_mpv";
 import {store_player_tag_modify} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_tag_modify";
 import {Get_AnnotationInfo_To_LocalSqlite} from "@/data/data_access/local_configs/class_Get_AnnotationInfo_To_LocalSqlite";
 import {store_local_data_set_artistInfo} from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_artistInfo";

@@ -95,6 +95,8 @@ export const store_playlist_list_info = reactive({
                 store_playlist_list_info.playlist_MediaFiles_temporary[0],
                 store_playlist_list_info.playlist_MediaFiles_temporary[0]
             ];
+            //
+            store_player_audio_info.set_carousel_index()
         }
     }
 });

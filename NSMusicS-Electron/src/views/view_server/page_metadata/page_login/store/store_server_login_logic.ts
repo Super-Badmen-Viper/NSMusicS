@@ -3,15 +3,18 @@ import { store_router_data_info } from "@/router/router_store/store_router_data_
 import axios from "axios";
 import {store_server_login_info} from "./store_server_login_info";
 import {store_app_configs_info} from "../../../../../data/data_stores/app/store_app_configs_info";
+import {
+    store_view_home_page_fetchData
+} from "../../../../view_app/page_metadata/page_folder/page_music/music_page/page_home/store/store_view_home_page_fetchData";
 
 export const store_server_login_logic = reactive({
-    jwt_expire_time: 1,//60 * 60 * 1000,// 1小时
+    jwt_expire_time: 24 * 60 * 60 * 1000,// 24小时
     async checkLoginStatus() {
         store_router_data_info.store_router_history_data_of_local = false;
         store_router_data_info.store_router_history_data_of_web = true;
 
         const currentTime = new Date().getTime();
-        store_server_login_info.server_accessToken = sessionStorage.getItem("jwt_token");
+        store_server_login_info.server_accessToken = String(sessionStorage.getItem("jwt_token"));
         const expireTime = sessionStorage.getItem("jwt_expire_time");
 
         if (store_server_login_info.server_accessToken && expireTime) {
@@ -21,12 +24,11 @@ export const store_server_login_logic = reactive({
 
                 store_router_data_info.router_select_model_server_login = false;
                 await store_app_configs_info.load_app();
-                store_router_data_info.router.push("/home");
+                store_view_home_page_fetchData.fetchData_Home();
                 console.log("已登录: " + store_server_login_info.server_accessToken);
                 return true
             } else {
                 this.server_logout();
-                console.log("Token 已过期，需要重新登录");
                 //
                 store_server_login_info.server_accessToken = '';
                 return false
@@ -46,8 +48,8 @@ export const store_server_login_logic = reactive({
                 password: password,
                 name: name
             });
-            store_server_login_info.server_accessToken = response.data.accessToken;
-            store_server_login_info.server_refreshToken = response.data.refreshToken;
+            store_server_login_info.server_accessToken = String(response.data.accessToken);
+            store_server_login_info.server_refreshToken = String(response.data.refreshToken);
             console.log("登录成功:", response.data.accessToken);
 
             const currentTime = new Date().getTime();

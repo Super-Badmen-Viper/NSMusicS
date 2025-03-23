@@ -12,6 +12,11 @@ import { User_ApiService_of_ND } from "../../../../data_access/servers_configs/n
 import { Set_ServerInfo_To_LocalSqlite } from "../../../../data_access/local_configs/class_Set_ServerInfo_To_LocalSqlite";
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 import { hash } from 'spark-md5';
+import {store_router_data_info} from "@/router/router_store/store_router_data_info";
+import {
+    store_server_login_info
+} from "../../../../../views/view_server/page_metadata/page_login/store/store_server_login_info";
+import axios from "axios";
 
 export const store_server_navidrome_userdata_logic = reactive({
     /// server add
@@ -42,18 +47,36 @@ export const store_server_navidrome_userdata_logic = reactive({
                     data = {
                         show: false,
                         type: type,
-                        id: Array.from({ length: 24 }, () => Math.floor(Math.random() * 10)).join(''),
+                        id: store_app_configs_logic_save.generateMockObjectId(),
                         server_name: server_set_of_addUser_of_servername,
                         url: server_set_of_addUser_of_url,
                         user_name: server_set_of_addUser_of_username,
                         password: server_set_of_addUser_of_password,
-                        last_login_at: new Date().toLocaleString(
-                            'zh-CN', {
-                                year: 'numeric', month: '2-digit', day: '2-digit',
-                                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
-                            }
-                        ).replace(/\//g, '-'),
+                        last_login_at: new Date().toISOString().split('.')[0] + 'Z'
                     };
+                    if(!store_router_data_info.router_select_model_server_login && store_server_login_info.server_accessToken.length > 0) {
+                        try {
+                            await axios.put("/api/app/server",
+                                JSON.stringify({
+                                    ID: data.id,
+                                    ServerName: data.server_name,
+                                    URL: data.url,
+                                    UserName: data.user_name,
+                                    Password: data.password,
+                                    LastLoginAt: data.last_login_at,
+                                    Type: data.type
+                                }),
+                                {
+                                    headers: {
+                                        "Content-Type": 'application/json',
+                                        Authorization: `Bearer ${store_server_login_info.server_accessToken}`
+                                    }
+                                }
+                            );
+                        } catch (error) {
+                            console.error("请求失败:", error.response ? error.response.data : error.message);
+                        }
+                    }
                 }
                 const new_data: Server_Configs_Props[] = store_server_users.server_config_of_all_user_of_sqlite;
                 new_data.push(data)
@@ -93,13 +116,31 @@ export const store_server_navidrome_userdata_logic = reactive({
                     url: url,
                     user_name: user_name,
                     password: password,
-                    last_login_at: new Date().toLocaleString(
-                        'zh-CN', {
-                            year: 'numeric', month: '2-digit', day: '2-digit',
-                            hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
-                        }
-                    ).replace(/\//g, '-'),
+                    last_login_at: new Date().toISOString().split('.')[0] + 'Z'
                 };
+                if(!store_router_data_info.router_select_model_server_login && store_server_login_info.server_accessToken.length > 0) {
+                    try {
+                        await axios.put("/api/app/server",
+                            JSON.stringify({
+                                ID: data.id,
+                                ServerName: data.server_name,
+                                URL: data.url,
+                                UserName: data.user_name,
+                                Password: data.password,
+                                LastLoginAt: data.last_login_at,
+                                Type: data.type
+                            }),
+                            {
+                                headers: {
+                                    "Content-Type": 'application/json',
+                                    Authorization: `Bearer ${store_server_login_info.server_accessToken}`
+                                }
+                            }
+                        );
+                    } catch (error) {
+                        console.error("请求失败:", error.response ? error.response.data : error.message);
+                    }
+                }
             }
             const new_data: Server_Configs_Props[] = store_server_users.server_config_of_all_user_of_sqlite;
             const index = new_data.findIndex(item => item.id === data.id);

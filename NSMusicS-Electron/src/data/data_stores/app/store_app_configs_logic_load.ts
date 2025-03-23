@@ -222,31 +222,34 @@ export const store_app_configs_logic_load = reactive({
                 '' + system_Configs_Read.player_Configs_of_UI.value['player_use_playbar_auto_hide'] === 'true' ? true :
                     '' + system_Configs_Read.player_Configs_of_UI.value['player_use_playbar_auto_hide'] !== 'false';
             /// player_Configs_of_Audio_Info
-            store_player_audio_info.this_audio_file_path = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_path']
-            store_player_audio_info.this_audio_file_medium_image_url = '';
-            // store_player_audio_info.this_audio_file_medium_image_url = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_medium_image_url']
-            await store_player_audio_info.set_lyric(
-                '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_lyric']
-            )
-            store_player_audio_info.this_audio_artist_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_artist_id']
-            store_player_audio_info.this_audio_artist_name = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_artist_name']
-            store_player_audio_info.this_audio_song_name = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_song_name']
-            store_player_audio_info.this_audio_song_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_song_id']
-            store_player_audio_info.this_audio_song_favorite = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_song_favorite'] === 'true'
-            store_player_audio_info.this_audio_song_rating = Number('' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_song_rating'])
-            store_player_audio_info.this_audio_album_name = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_name']
-            store_player_audio_info.this_audio_album_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_id']
-            store_player_audio_info.this_audio_album_favorite = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_favorite']
-            //
-            store_player_audio_info.page_top_album_image_url = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_image_url']
-            store_player_audio_info.page_top_album_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_id']
-            store_player_audio_info.page_top_album_name = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_name']
-            //
-            store_playlist_list_fetchData._artist_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['playlist_artist_id']
-            store_playlist_list_fetchData._album_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['playlist_album_id']
-            store_playlist_list_fetchData._album_artist_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['playlist_album_artist_id']
-            //
-            store_player_audio_logic.slider_init_singleValue = Number('' + system_Configs_Read.player_Configs_of_Audio_Info.value['slider_singleValue'])
+            // Golang // NSMusicS-GO流媒体模块未完成开发前，不开放回放功能(恢复上次播放数据)
+            if(isElectron) {
+                store_player_audio_info.this_audio_file_path = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_path']
+                store_player_audio_info.this_audio_file_medium_image_url = '';
+                // store_player_audio_info.this_audio_file_medium_image_url = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_medium_image_url']
+                await store_player_audio_info.set_lyric(
+                    '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_lyric']
+                )
+                store_player_audio_info.this_audio_artist_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_artist_id']
+                store_player_audio_info.this_audio_artist_name = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_artist_name']
+                store_player_audio_info.this_audio_song_name = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_song_name']
+                store_player_audio_info.this_audio_song_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_song_id']
+                store_player_audio_info.this_audio_song_favorite = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_song_favorite'] === 'true'
+                store_player_audio_info.this_audio_song_rating = Number('' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_song_rating'])
+                store_player_audio_info.this_audio_album_name = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_name']
+                store_player_audio_info.this_audio_album_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_id']
+                store_player_audio_info.this_audio_album_favorite = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_favorite']
+                //
+                store_player_audio_info.page_top_album_image_url = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_image_url']
+                store_player_audio_info.page_top_album_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_id']
+                store_player_audio_info.page_top_album_name = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_name']
+                //
+                store_playlist_list_fetchData._artist_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['playlist_artist_id']
+                store_playlist_list_fetchData._album_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['playlist_album_id']
+                store_playlist_list_fetchData._album_artist_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['playlist_album_artist_id']
+                //
+                store_player_audio_logic.slider_init_singleValue = Number('' + system_Configs_Read.player_Configs_of_Audio_Info.value['slider_singleValue'])
+            }
             //
             store_player_appearance.player_mode_of_lock_playlist = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['player_mode_of_lock_playlist'] === 'true'
             store_player_appearance.player_mode_of_medialist_from_external_import = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['player_mode_of_medialist_from_external_import'] === 'true'
@@ -407,23 +410,26 @@ export const store_app_configs_logic_load = reactive({
 
         /// playlist media_file_id_of_list
         try {
-            store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = system_Configs_Read.playlist_File_Configs.value
-            let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
-            if(store_server_user_model.model_server_type_of_local) {
-                store_playlist_list_info.playlist_MediaFiles_temporary = get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Media_File_Id_of_list(
-                    store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds
-                )
-            }else if(store_server_user_model.model_server_type_of_web) {
-                store_playlist_list_info.playlist_MediaFiles_temporary =
-                    get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Media_File_of_list()
-            }
-            // Get Play_Id
-            const media_file = store_playlist_list_info.playlist_MediaFiles_temporary.find(
-                (row) => row.id === store_player_audio_info.this_audio_song_id
-            );
-            if (media_file) {
-                store_player_audio_info.this_audio_play_id = media_file.play_id;
-                store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url
+            // Golang // NSMusicS-GO流媒体模块未完成开发前，不开放回放功能(恢复上次播放数据)
+            if(isElectron) {
+                store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = system_Configs_Read.playlist_File_Configs.value
+                let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
+                if (store_server_user_model.model_server_type_of_local) {
+                    store_playlist_list_info.playlist_MediaFiles_temporary = get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Media_File_Id_of_list(
+                        store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds
+                    )
+                } else if (store_server_user_model.model_server_type_of_web) {
+                    store_playlist_list_info.playlist_MediaFiles_temporary =
+                        get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Media_File_of_list()
+                }
+                // Get Play_Id
+                const media_file = store_playlist_list_info.playlist_MediaFiles_temporary.find(
+                    (row) => row.id === store_player_audio_info.this_audio_song_id
+                );
+                if (media_file) {
+                    store_player_audio_info.this_audio_play_id = media_file.play_id;
+                    store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url
+                }
             }
             // replace apikey
             if(

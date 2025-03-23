@@ -726,13 +726,22 @@
     useScope: 'global'
   })
   import {store_server_login_logic} from "@/views/view_server/page_metadata/page_login/store/store_server_login_logic";
+  import {store_server_login_info} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
   onMounted(async () => {
-    if (!isElectron) {
-      // isLogin
-      await store_server_login_logic.checkLoginStatus();
-      store_app_configs_info.desktop_system_kind = 'docker'
+    try {
+      if (!isElectron) {
+        // isLogin
+        await store_server_login_logic.checkLoginStatus();
+        store_app_configs_info.desktop_system_kind = 'docker'
+        if (!store_router_data_info.router_select_model_server_login && store_server_login_info.server_accessToken.length > 0) {
+          await store_app_configs_info.load_app();
+        }
+      } else {
+        await store_app_configs_info.load_app()
+      }
+    }catch (e) {
+      console.error(e);
     }
-    await store_app_configs_info.load_app()
     create_menuOptions_appBar()
   });
   watch(() => store_app_configs_info.lang, async (newValue) => {

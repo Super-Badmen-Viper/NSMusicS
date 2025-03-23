@@ -134,7 +134,7 @@ export class Get_PlaylistInfo_From_LocalSqlite {
             db.close();
             return result;
         } else {
-            // other
+            // Golang
         }
         return []
     }

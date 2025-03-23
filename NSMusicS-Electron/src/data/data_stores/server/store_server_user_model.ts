@@ -14,8 +14,8 @@ import {
     User_Authorization_ApiWebService_of_ND
 } from "../../data_access/servers_configs/navidrome_api/services_web/user_authorization/index_service";
 import {store_player_audio_logic} from "../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
-import {Audio_node_mpv} from "../../data_models/song_Audio_Out/Audio_node_mpv";
-import {Audio_howler} from "../../data_models/song_Audio_Out/Audio_howler";
+import {Audio_node_mpv} from "../../data_models/app_models/song_Audio_Out/Audio_node_mpv";
+import {Audio_howler} from "../../data_models/app_models/song_Audio_Out/Audio_howler";
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 import {
     Get_Jellyfin_Temp_Data_To_LocalSqlite
