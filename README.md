@@ -49,8 +49,11 @@
 - [ ] various music usage scenarios(For NSMusicS-GO: Server)
 
 ## Screenshots:
-  - [x] NSMusicS(Electron)：Under development    
+  - [x] NSMusicS(Electron, Docker-Web)：Under development    
+  - [x] Normal Play Model 
   <img src="doc/Web (0).png" width="49.5%"><img src="doc/Web (1).png" width="49.5%"><img src="doc/Web (2).png" width="49.5%"><img src="doc/Web (3).png" width="49.5%">
+  - [x] Mini Play Model: Desktop floating mini window
+  <img src="doc/Web (4).png" width="49.5%"><img src="doc/Web (5).png" width="49.5%">
 
 ## Downloads
   - [NSMusicS Electron Test (Now)](https://github.com/Super-Badmen-Viper/NSMusicS/releases)
