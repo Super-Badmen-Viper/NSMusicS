@@ -7,6 +7,7 @@ import (
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_app/domain_app_config"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_app/domain_app_library"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity"
 	"golang.org/x/crypto/bcrypt"
 	"time"
 
@@ -77,6 +78,10 @@ func (si *Initializer) executeInitialization(ctx context.Context) error {
 	}
 
 	if err := si.initSystemConfiguration(ctx, userID); err != nil {
+		return err
+	}
+
+	if err := si.initFileEntity(ctx); err != nil {
 		return err
 	}
 
@@ -709,6 +714,65 @@ func (si *Initializer) initAppMediaFileLibrarys(ctx context.Context) error {
 			RgTrackGain:          0.0,
 			RgTrackPeak:          0.0,
 			MediumImageURL:       "http://localhost:4533/rest/getCoverArt?u=mozhi&t=be470bc4c1556004e26c4780c0121030&s=9V8he3&v=1.12.0&c=nsmusics&f=json&id=134d47460ed29e6df249df31ff55240c",
+		},
+	}
+
+	for _, cfg := range initConfigs {
+		_, err := coll.InsertOne(ctx, cfg)
+		if err != nil {
+			return fmt.Errorf("应用配置初始化失败: %w", err)
+		}
+	}
+	return nil
+}
+
+func (si *Initializer) initFileEntity(ctx context.Context) error {
+	coll := si.db.Collection(domain.CollectionFileEntityFolderInfo)
+
+	initConfigs := []*domain_file_entity.FileMetadata{
+		// 音频文件（MP3）
+		{
+			ID:         primitive.NewObjectID(),
+			FolderPath: "/var/lib/media/audio/blue_sky.mp3",
+			FileType:   domain_file_entity.Audio,
+			Size:       3_145_728, // 3MB
+			ModTime:    time.Date(2024, 3, 15, 16, 30, 0, 0, time.UTC),
+			Checksum:   "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824",
+			CreatedAt:  time.Date(2023, 11, 1, 9, 0, 0, 0, time.UTC),
+			UpdatedAt:  time.Date(2024, 3, 15, 16, 30, 0, 0, time.UTC),
+		},
+		// 视频文件（MP4）
+		{
+			ID:         primitive.NewObjectID(),
+			FolderPath: "/var/lib/media/video/sunset_beach.mp4",
+			FileType:   domain_file_entity.Video,
+			Size:       157_286_400, // 150MB
+			ModTime:    time.Now().Add(-72 * time.Hour).UTC(),
+			Checksum:   "486ea46224d1bb4fb680b34f750200167d2772fed2e20abbea8a54a93a69e349",
+			CreatedAt:  time.Now().Add(-2160 * time.Hour).UTC(), // 90天前
+			UpdatedAt:  time.Now().Add(-72 * time.Hour).UTC(),
+		},
+		// 图片文件（JPEG）
+		{
+			ID:         primitive.NewObjectID(),
+			FolderPath: "/var/lib/media/image/mountain_view.jpg",
+			FileType:   domain_file_entity.Image,
+			Size:       2_097_152, // 2MB
+			ModTime:    time.Date(2024, 2, 28, 10, 15, 0, 0, time.UTC),
+			Checksum:   "4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a",
+			CreatedAt:  time.Date(2024, 1, 1, 8, 0, 0, 0, time.UTC),
+			UpdatedAt:  time.Date(2024, 2, 28, 10, 15, 0, 0, time.UTC),
+		},
+		// 文本文件（PDF）
+		{
+			ID:         primitive.NewObjectID(),
+			FolderPath: "/var/lib/media/document/technical_spec.pdf",
+			FileType:   domain_file_entity.Text,
+			Size:       524_288, // 512KB
+			ModTime:    time.Now().Add(-24 * time.Hour).UTC(),
+			Checksum:   "c0535e4be2b79ffd93291305436bf889314e4a3faec05ecffcbb7df31ad9e51a",
+			CreatedAt:  time.Now().Add(-168 * time.Hour).UTC(), // 7天前
+			UpdatedAt:  time.Now().Add(-24 * time.Hour).UTC(),
 		},
 	}
 

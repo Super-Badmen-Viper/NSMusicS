@@ -36,3 +36,10 @@ const (
 const (
 	CollectionSystemConfiguration = "system_configuration"
 )
+
+const (
+	CollectionFileEntityFileInfo = "file_entity_file_info"
+)
+const (
+	CollectionFileEntityFolderInfo = "file_entity_folder_info"
+)

@@ -30,6 +30,7 @@ type Collection interface {
 	Aggregate(context.Context, interface{}) (Cursor, error)
 	UpdateOne(context.Context, interface{}, interface{}, ...*options.UpdateOptions) (*mongo.UpdateResult, error)
 	UpdateMany(context.Context, interface{}, interface{}, ...*options.UpdateOptions) (*mongo.UpdateResult, error)
+	UpdateByID(ctx context.Context, id interface{}, update interface{}) (*mongo.UpdateResult, error)
 }
 
 type SingleResult interface {
@@ -181,6 +182,10 @@ func (mc *mongoCollection) Aggregate(ctx context.Context, pipeline interface{}) 
 
 func (mc *mongoCollection) UpdateMany(ctx context.Context, filter interface{}, update interface{}, opts ...*options.UpdateOptions) (*mongo.UpdateResult, error) {
 	return mc.coll.UpdateMany(ctx, filter, update, opts[:]...)
+}
+
+func (mc *mongoCollection) UpdateByID(ctx context.Context, id interface{}, update interface{}) (*mongo.UpdateResult, error) {
+	return mc.coll.UpdateByID(ctx, id, update)
 }
 
 func (mc *mongoCollection) CountDocuments(ctx context.Context, filter interface{}, opts ...*options.CountOptions) (int64, error) {
