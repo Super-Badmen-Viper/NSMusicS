@@ -415,9 +415,9 @@ export const store_app_configs_logic_load = reactive({
                 store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = system_Configs_Read.playlist_File_Configs.value
                 let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
                 if (store_server_user_model.model_server_type_of_local) {
-                    store_playlist_list_info.playlist_MediaFiles_temporary = get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Media_File_Id_of_list(
-                        store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds
-                    )
+                    store_playlist_list_info.playlist_MediaFiles_temporary =
+                        get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Media_File_Id_of_list(
+                            store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds)
                 } else if (store_server_user_model.model_server_type_of_web) {
                     store_playlist_list_info.playlist_MediaFiles_temporary =
                         get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Media_File_of_list()

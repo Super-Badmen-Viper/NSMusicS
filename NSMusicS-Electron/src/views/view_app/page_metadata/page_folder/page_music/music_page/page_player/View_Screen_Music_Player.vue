@@ -436,6 +436,8 @@ import player_theme_1_png from '@/assets/img/player_theme_1.png'
 import player_theme_2_png from '@/assets/img/player_theme_2.png'
 import player_theme_3_png from '@/assets/img/player_theme_3.png'
 import player_theme_4_png from '@/assets/img/player_theme_4.png'
+import player_theme_5_png from '@/assets/img/player_theme_5.png'
+import player_theme_6_png from '@/assets/img/player_theme_6.png'
 import Animation_1715591164841 from '@/assets/lottie_json/Animation - 1715591164841.json'
 import Animation_1715392202806 from '@/assets/lottie_json/Animation - 1715392202806.json'
 import Animation_1715417974362 from '@/assets/lottie_json/Animation - 1715417974362.json'
@@ -500,7 +502,7 @@ const player_theme_5 = ref<PlayerTheme_LyricItem>(
       id: 4,
       name: computed_i18n_Label_ViewSetConfig_Cover_5.value,
       normalStyle: {
-        image_url: player_theme_3_png,
+        image_url: player_theme_5_png,
 
         textAlign: false,
 
@@ -514,7 +516,7 @@ const player_theme_6 = ref<PlayerTheme_LyricItem>(
       id: 5,
       name: computed_i18n_Label_ViewSetConfig_Cover_6.value,
       normalStyle: {
-        image_url: player_theme_3_png,
+        image_url: player_theme_6_png,
 
         textAlign: false,
 
@@ -770,11 +772,11 @@ onBeforeUnmount(() => {
                       style="height: 100%;z-index: 9;">
                     <n-space vertical justify="center" style="position: relative;left: -27px;z-index: -1;">
                       <img
-                          :src="item.normalStyle.image_url"
-                          style="
-                        width: auto;height: 100px;object-fit: cover;
-                        border-radius: 8px;border: 1.5px solid #FFFFFF20;
-                      " alt="">
+                        :src="item.normalStyle.image_url"
+                        style="
+                          width: auto;height: 100px;object-fit: cover;
+                          border-radius: 8px;border: 1.5px solid #FFFFFF20;
+                        " alt="">
                       <span style="font-size: 16px;position: relative;top: -10px;left: 6px;">
                       {{ item.name }}
                     </span>

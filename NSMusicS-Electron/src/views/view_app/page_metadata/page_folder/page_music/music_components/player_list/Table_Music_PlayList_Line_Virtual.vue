@@ -12,11 +12,13 @@ import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_con
 ////// scrollbar of playlist_view
 const scrollbar = ref(null as any);
 onMounted(() => {
-  if (scrollbar !== null) {
-    setTimeout(() => {
-      scrollbar.value.scrollToItem(store_player_audio_info.this_audio_Index_of_play_list);
-    }, 100);
-  }
+  try {
+    if (scrollbar !== null) {
+      setTimeout(() => {
+        scrollbar.value.scrollToItem(store_player_audio_info.this_audio_Index_of_play_list);
+      }, 100);
+    }
+  }catch {  }
 });
 
 /////// emits audio_info of artistlist_view_list

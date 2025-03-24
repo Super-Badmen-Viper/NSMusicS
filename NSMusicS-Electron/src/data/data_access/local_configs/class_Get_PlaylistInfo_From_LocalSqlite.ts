@@ -2,6 +2,9 @@ import { store_server_user_model } from '@/data/data_stores/server/store_server_
 import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
 import error_album from '@/assets/img/error_album.jpg'
 import { isElectron } from '@/utils/electron/isElectron';
+import {
+    store_view_media_page_info
+} from "../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
 
 export class Get_PlaylistInfo_From_LocalSqlite {
     public Get_Playlist_Count(): number {
@@ -99,6 +102,39 @@ export class Get_PlaylistInfo_From_LocalSqlite {
                 row.play_id = row.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000;
                 result.push(row);
             });
+            //
+            const stmt_media_Annotation_Starred_Items = db.prepare(`
+                SELECT item_id
+                FROM ${store_server_user_model.annotation}
+                WHERE starred = 1
+                  AND item_type = 'media_file'
+            `);
+            const annotations = stmt_media_Annotation_Starred_Items.all();
+            for (let i = 0; i < result.length; i++) {
+                result[i].favorite = !!annotations.some((annotation: {
+                    item_id: string
+                }) => annotation.item_id === result[i].id);
+            }
+            const stmt_media_Annotation_Rating_Items = db.prepare(`
+                            SELECT item_id, rating
+                            FROM ${store_server_user_model.annotation}
+                            WHERE rating > 0
+                              AND item_type = 'media_file'
+                        `);
+            const annotations_rating = stmt_media_Annotation_Rating_Items.all();
+            for (let i = 0; i < result.length; i++) {
+                const mediaFile = result[i];
+                const matchingAnnotation = annotations_rating.find((annotation: {
+                    item_id: string,
+                    rating: number
+                }) => annotation.item_id === mediaFile.id);
+                if (matchingAnnotation)
+                    mediaFile.rating = matchingAnnotation.rating;
+                else
+                    mediaFile.rating = 0;
+            }
+            //
+            //
             db.close();
             return result;
         } else {
@@ -131,6 +167,39 @@ export class Get_PlaylistInfo_From_LocalSqlite {
                 row.play_id = row.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000;
                 result.push(row);
             });
+            //
+            const stmt_media_Annotation_Starred_Items = db.prepare(`
+                SELECT item_id
+                FROM ${store_server_user_model.annotation}
+                WHERE starred = 1
+                  AND item_type = 'media_file'
+            `);
+            const annotations = stmt_media_Annotation_Starred_Items.all();
+            for (let i = 0; i < result.length; i++) {
+                result[i].favorite = !!annotations.some((annotation: {
+                    item_id: string
+                }) => annotation.item_id === result[i].id);
+            }
+            //
+            const stmt_media_Annotation_Rating_Items = db.prepare(`
+                            SELECT item_id, rating
+                            FROM ${store_server_user_model.annotation}
+                            WHERE rating > 0
+                              AND item_type = 'media_file'
+                        `);
+            const annotations_rating = stmt_media_Annotation_Rating_Items.all();
+            for (let i = 0; i < result.length; i++) {
+                const mediaFile = result[i];
+                const matchingAnnotation = annotations_rating.find((annotation: {
+                    item_id: string,
+                    rating: number
+                }) => annotation.item_id === mediaFile.id);
+                if (matchingAnnotation)
+                    mediaFile.rating = matchingAnnotation.rating;
+                else
+                    mediaFile.rating = 0;
+            }
+            //
             db.close();
             return result;
         } else {
