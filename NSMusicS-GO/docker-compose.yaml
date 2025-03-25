@@ -115,3 +115,57 @@ services:
 volumes:
   library:
   dbdata:
+
+#version: "3.8"
+ #
+ #services:
+ #  frontend:
+ #    image: nsmusics
+ #    container_name: ${APP_CONTAINER_NAME}
+ #    restart: unless-stopped
+ #    env_file: .env
+ #    environment:
+ #      - NGINX_PORT=${APP_PORT}
+ #      - BACKEND_SERVICE=${WEB_CONTAINER_NAME}:${SERVER_PORT}
+ #    ports:
+ #      - "${APP_PORT}:${APP_PORT}"
+ #    volumes:
+ #      - ./.env:/app/.env
+ #    depends_on:
+ #      - backend
+ #      - mongodb
+ #
+ #  backend:
+ #    image: nsmusics-go
+ #    container_name: ${WEB_CONTAINER_NAME}
+ #    restart: unless-stopped
+ #    env_file: .env
+ #    ports:
+ #      - "${SERVER_PORT}:${SERVER_PORT}"
+ #    volumes:
+ #      - ./.env:/app/.env
+ #      - "library:/data/library"
+ #    depends_on:
+ #      - mongodb
+ #
+ #  mongodb:
+ #    image: mongo:6.0
+ #    container_name: ${MONGO_CONTAINER_NAME}
+ #    restart: unless-stopped
+ #    env_file: .env
+ #    environment:
+ #      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
+ #      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASS}
+ #    ports:
+ #      - "${DB_PORT}:27017"
+ #    volumes:
+ #      - dbdata:/data/db
+ #    healthcheck:
+ #      test: echo 'db.runCommand("ping").ok' | mongosh --quiet -u $${MONGO_INITDB_ROOT_USERNAME} -p $${MONGO_INITDB_ROOT_PASSWORD} --authenticationDatabase admin | grep 1
+ #      interval: 10s
+ #      timeout: 5s
+ #      retries: 5
+ #
+ #volumes:
+ #  library:
+ #  dbdata:
