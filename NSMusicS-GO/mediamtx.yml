@@ -1,0 +1,11 @@
+# authInternalUsers:
+#   - user: stream_publisher
+#     password: ${STREAM_PUBLISH_PASSWORD}  # 推流用户（需在.env定义）
+#     ips: ["192.168.0.0/16"]  # 允许推流的IP段
+#     permissions:
+#     - action: publish
+#   - user: stream_viewer
+#     password: ${STREAM_VIEW_PASSWORD}     # 播放用户（需在.env定义）
+#     ips: ["0.0.0.0/0"]  # 允许所有IP播放
+#     permissions:
+#     - action: read

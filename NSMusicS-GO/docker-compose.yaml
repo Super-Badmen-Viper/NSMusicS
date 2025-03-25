@@ -1,59 +1,30 @@
-#version: "3.8"
-#
-#services:
-#  frontend:
-#    image: nsmusics
-#    container_name: ${APP_CONTAINER_NAME}
-#    restart: unless-stopped
-#    env_file: .env
-#    environment:
-#      - NGINX_PORT=${APP_PORT}
-#      - BACKEND_SERVICE=${WEB_CONTAINER_NAME}:${SERVER_PORT}
-#    ports:
-#      - "${APP_PORT}:${APP_PORT}"
-#    volumes:
-#      - ./.env:/app/.env
-#    depends_on:
-#      - backend
-#      - mongodb
-#
-#  backend:
-#    image: nsmusics-go
-#    container_name: ${WEB_CONTAINER_NAME}
-#    restart: unless-stopped
-#    env_file: .env
-#    ports:
-#      - "${SERVER_PORT}:${SERVER_PORT}"
-#    volumes:
-#      - ./.env:/app/.env
-#      - "library:/data/library"
-#    depends_on:
-#      - mongodb
-#
-#  mongodb:
-#    image: mongo:6.0
-#    container_name: ${MONGO_CONTAINER_NAME}
-#    restart: unless-stopped
-#    env_file: .env
-#    environment:
-#      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
-#      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASS}
-#    ports:
-#      - "${DB_PORT}:27017"
-#    volumes:
-#      - dbdata:/data/db
-#    healthcheck:
-#      test: echo 'db.runCommand("ping").ok' | mongosh --quiet -u $${MONGO_INITDB_ROOT_USERNAME} -p $${MONGO_INITDB_ROOT_PASSWORD} --authenticationDatabase admin | grep 1
-#      interval: 10s
-#      timeout: 5s
-#      retries: 5
-#
-#volumes:
-#  library:
-#  dbdata:
-
+# docker-compose.yml
 version: "3.8"
 
+# 容器网络架构
+networks:
+  public_net:     # 外网入口层
+    driver: bridge
+    internal: false
+    ipam:
+      config:
+        - subnet: 172.20.1.0/24
+
+  app_net:        # 应用通信层
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.20.2.0/24
+
+  data_net:       # 数据服务层
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.20.3.0/24
+
+# 服务定义
 services:
   frontend:
     image: nsmusics
@@ -65,31 +36,40 @@ services:
       - BACKEND_SERVICE=${WEB_CONTAINER_NAME}:${SERVER_PORT}
     ports:
       - "${APP_PORT}:${APP_PORT}"
-    volumes:
-      - ./.env:/app/.env
     networks:
-      - frontend-network
+      public_net:
+        ipv4_address: 172.20.1.10
+      app_net:
+        ipv4_address: 172.20.2.10
+    volumes:
+      - ./.env:/app/.env:ro
     depends_on:
       - backend
-      - mongodb
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
 
   backend:
     image: nsmusics-go
     container_name: ${WEB_CONTAINER_NAME}
     restart: unless-stopped
     env_file: .env
-    ports:
-      - "${SERVER_PORT}:${SERVER_PORT}"
-    volumes:
-      - ./.env:/app/.env
-      - "library:/data/library"
-      - media_volume:/app/media  # 新增媒体共享卷
     networks:
-      - backend-network
-      - frontend-network
+      app_net:
+        ipv4_address: 172.20.2.20
+      data_net:
+        ipv4_address: 172.20.3.20
+    volumes:
+      - ./.env:/app/.env:ro
+      - library:/data/library
     depends_on:
       - mongodb
-      - ffmpeg  # 新增FFmpeg依赖
+      - mediamtx
+    security_opt:
+      - no-new-privileges:true
+    user: "1000:1000"
 
   mongodb:
     image: mongo:6.0
@@ -99,55 +79,39 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
       - MONGO_INITDB_ROOT_PASSWORD=${DB_PASS}
-    ports:
-      - "${DB_PORT}:27017"
+    networks:
+      data_net:
+        ipv4_address: 172.20.3.30
     volumes:
       - dbdata:/data/db
-    networks:
-      - backend-network
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh --quiet -u $${MONGO_INITDB_ROOT_USERNAME} -p $${MONGO_INITDB_ROOT_PASSWORD} --authenticationDatabase admin | grep 1
       interval: 10s
       timeout: 5s
       retries: 5
 
-  ffmpeg:
-    image: jrottenberg/ffmpeg:latest
-    container_name: nsmusics-ffmpeg
+  mediamtx:
+    image: bluenviron/mediamtx:latest-ffmpeg
+    container_name: ${MEDIAMTX_CONTAINER_NAME:-nsmusics-mediamtx}
     restart: unless-stopped
-    entrypoint: [ "bash" ]  # 覆盖镜像默认入口点
-    command: [ "-c", "tail -f /dev/null" ]  # 保持容器运行
     env_file: .env
-    networks:
-      - backend-network
-    ports:
-      - "${FFMPEG_HOST_PORT}:${FFMPEG_CONTAINER_PORT}"  # 动态映射端口[5,9](@ref)
-    volumes:
-      - media_volume:/media  # 共享媒体目录
-      - ./config/ffmpeg:/config
     environment:
-      - FFMPEG_ENDPOINT=${FFMPEG_ENDPOINT}  # 注入服务地址[2,7](@ref)
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:${FFMPEG_CONTAINER_PORT}/health" ]  # 容器内检测[6](@ref)
-    deploy:  # 资源限制（仅限Swarm模式）
-      resources:
-        limits:
-          cpus: '2'
-          memory: 2G
+      - MTX_RTSPTRANSPORTS=tcp
+    networks:
+      data_net:
+        ipv4_address: 172.20.3.40
+    volumes:
+      - library:/library
+      - ./mediamtx.yml:/mediamtx.yml:ro
+    ports:
+      - "${RTSP_PORT}:8554"
+      - "${RTMP_PORT}:1935"
+      - "${HTTP_PORT}:8888"
+      - "${HTTPS_PORT}:8889"
+      - "${SRT_PORT}:8890/udp"
+      - "${WEBRTC_PORT}:8189/udp"
 
-networks:
-  frontend-network:
-    driver: bridge
-  backend-network:
-    driver: bridge
-    internal: true  # 后端专用隔离网络
-
+# 数据卷定义
 volumes:
   library:
   dbdata:
-  media_volume: # 使用Docker管理卷
-    driver: local
-    driver_opts:
-      o: bind
-      type: none
-      device: ./media  # 项目相对路径（Docker会自动创建）
