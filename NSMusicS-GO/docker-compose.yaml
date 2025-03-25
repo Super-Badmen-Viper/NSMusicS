@@ -92,17 +92,17 @@ services:
 
   mediamtx:
     image: bluenviron/mediamtx:latest-ffmpeg
-    container_name: ${MEDIAMTX_CONTAINER_NAME:-nsmusics-mediamtx}
+    container_name: ${MEDIAMTX_CONTAINER_NAME}
     restart: unless-stopped
     env_file: .env
     environment:
       - MTX_RTSPTRANSPORTS=tcp
-    networks:
-      data_net:
-        ipv4_address: 172.20.3.40
+    # 测试中，不设置网络隔离
+    # networks:
+    #   data_net:
+    #     ipv4_address: 172.20.3.40
     volumes:
       - library:/library
-      - ./mediamtx.yml:/mediamtx.yml:ro
     ports:
       - "${RTSP_PORT}:8554"
       - "${RTMP_PORT}:1935"
@@ -114,58 +114,11 @@ services:
 # 数据卷定义
 volumes:
   library:
+    driver: local
+    driver_opts:
+      type: none
+      device: /e/Video/待分类/ex10
+      o: bind
   dbdata:
 
-#version: "3.8"
- #
- #services:
- #  frontend:
- #    image: nsmusics
- #    container_name: ${APP_CONTAINER_NAME}
- #    restart: unless-stopped
- #    env_file: .env
- #    environment:
- #      - NGINX_PORT=${APP_PORT}
- #      - BACKEND_SERVICE=${WEB_CONTAINER_NAME}:${SERVER_PORT}
- #    ports:
- #      - "${APP_PORT}:${APP_PORT}"
- #    volumes:
- #      - ./.env:/app/.env
- #    depends_on:
- #      - backend
- #      - mongodb
- #
- #  backend:
- #    image: nsmusics-go
- #    container_name: ${WEB_CONTAINER_NAME}
- #    restart: unless-stopped
- #    env_file: .env
- #    ports:
- #      - "${SERVER_PORT}:${SERVER_PORT}"
- #    volumes:
- #      - ./.env:/app/.env
- #      - "library:/data/library"
- #    depends_on:
- #      - mongodb
- #
- #  mongodb:
- #    image: mongo:6.0
- #    container_name: ${MONGO_CONTAINER_NAME}
- #    restart: unless-stopped
- #    env_file: .env
- #    environment:
- #      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
- #      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASS}
- #    ports:
- #      - "${DB_PORT}:27017"
- #    volumes:
- #      - dbdata:/data/db
- #    healthcheck:
- #      test: echo 'db.runCommand("ping").ok' | mongosh --quiet -u $${MONGO_INITDB_ROOT_USERNAME} -p $${MONGO_INITDB_ROOT_PASSWORD} --authenticationDatabase admin | grep 1
- #      interval: 10s
- #      timeout: 5s
- #      retries: 5
- #
- #volumes:
- #  library:
- #  dbdata:
+  # ffmpeg -re -stream_loop -1 -i /library/ex10.mp4 -c copy -f rtsp rtsp://localhost:8554/mystream
