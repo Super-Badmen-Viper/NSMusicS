@@ -9,6 +9,7 @@ import (
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_app/domain_app_library"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity"
 	"golang.org/x/crypto/bcrypt"
+	"log"
 	"time"
 
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_auth"
@@ -81,7 +82,11 @@ func (si *Initializer) executeInitialization(ctx context.Context) error {
 		return err
 	}
 
-	if err := si.initFileEntity(ctx); err != nil {
+	if err := si.initFileEntityFolder(ctx); err != nil {
+		return err
+	}
+
+	if err := si.initFileEntityFile(ctx); err != nil {
 		return err
 	}
 
@@ -726,61 +731,88 @@ func (si *Initializer) initAppMediaFileLibrarys(ctx context.Context) error {
 	return nil
 }
 
-func (si *Initializer) initFileEntity(ctx context.Context) error {
+func (si *Initializer) initFileEntityFolder(ctx context.Context) error {
 	coll := si.db.Collection(domain.CollectionFileEntityFolderInfo)
 
+	initConfigs := []*domain_file_entity.FolderMetadata{
+		// 音频文件夹示例（包含多文件元数据）
+		{
+			ID:         primitive.NewObjectID(),
+			FolderPath: "c:/users/17741/music",
+			FolderMeta: domain_file_entity.FolderMeta{
+				FileCount:   42,
+				LastScanned: time.Now(),
+			},
+		},
+		// 视频监控目录（含子文件夹）
+		{
+			ID:         primitive.NewObjectID(),
+			FolderPath: "c:/users/17741/Videos",
+			FolderMeta: domain_file_entity.FolderMeta{
+				FileCount:   42,
+				LastScanned: time.Now(),
+			},
+		},
+		// 图片资源库（按年份组织）
+		{
+			ID:         primitive.NewObjectID(),
+			FolderPath: "c:/users/17741/Pictures",
+			FolderMeta: domain_file_entity.FolderMeta{
+				FileCount:   42,
+				LastScanned: time.Now(),
+			},
+		},
+		//// 文档共享目录（企业级）
+		//{
+		//
+		//},
+		//// 系统日志目录（带访问控制）
+		//{
+		//
+		//},
+		//// 数据库备份目录（新增类型）
+		//{
+		//
+		//},
+	}
+
+	// 批量插入优化
+	models := make([]interface{}, len(initConfigs))
+	for i, cfg := range initConfigs {
+		models[i] = cfg
+	}
+
+	if _, err := coll.InsertMany(ctx, models); err != nil {
+		log.Println(err)
+	}
+	return nil
+}
+func (si *Initializer) initFileEntityFile(ctx context.Context) error {
+	coll := si.db.Collection(domain.CollectionFileEntityFileInfo)
+
+	id, _ := primitive.ObjectIDFromHex("000000000000000000000000")
 	initConfigs := []*domain_file_entity.FileMetadata{
-		// 音频文件（MP3）
 		{
-			ID:         primitive.NewObjectID(),
-			FolderPath: "/var/lib/media/audio/blue_sky.mp3",
-			FileType:   domain_file_entity.Audio,
-			Size:       3_145_728, // 3MB
-			ModTime:    time.Date(2024, 3, 15, 16, 30, 0, 0, time.UTC),
-			Checksum:   "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824",
-			CreatedAt:  time.Date(2023, 11, 1, 9, 0, 0, 0, time.UTC),
-			UpdatedAt:  time.Date(2024, 3, 15, 16, 30, 0, 0, time.UTC),
-		},
-		// 视频文件（MP4）
-		{
-			ID:         primitive.NewObjectID(),
-			FolderPath: "/var/lib/media/video/sunset_beach.mp4",
-			FileType:   domain_file_entity.Video,
-			Size:       157_286_400, // 150MB
-			ModTime:    time.Now().Add(-72 * time.Hour).UTC(),
-			Checksum:   "486ea46224d1bb4fb680b34f750200167d2772fed2e20abbea8a54a93a69e349",
-			CreatedAt:  time.Now().Add(-2160 * time.Hour).UTC(), // 90天前
-			UpdatedAt:  time.Now().Add(-72 * time.Hour).UTC(),
-		},
-		// 图片文件（JPEG）
-		{
-			ID:         primitive.NewObjectID(),
-			FolderPath: "/var/lib/media/image/mountain_view.jpg",
-			FileType:   domain_file_entity.Image,
-			Size:       2_097_152, // 2MB
-			ModTime:    time.Date(2024, 2, 28, 10, 15, 0, 0, time.UTC),
-			Checksum:   "4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a",
-			CreatedAt:  time.Date(2024, 1, 1, 8, 0, 0, 0, time.UTC),
-			UpdatedAt:  time.Date(2024, 2, 28, 10, 15, 0, 0, time.UTC),
-		},
-		// 文本文件（PDF）
-		{
-			ID:         primitive.NewObjectID(),
-			FolderPath: "/var/lib/media/document/technical_spec.pdf",
-			FileType:   domain_file_entity.Text,
-			Size:       524_288, // 512KB
-			ModTime:    time.Now().Add(-24 * time.Hour).UTC(),
-			Checksum:   "c0535e4be2b79ffd93291305436bf889314e4a3faec05ecffcbb7df31ad9e51a",
-			CreatedAt:  time.Now().Add(-168 * time.Hour).UTC(), // 7天前
-			UpdatedAt:  time.Now().Add(-24 * time.Hour).UTC(),
+			ID:        id,
+			FolderID:  id,
+			FilePath:  "",
+			FileType:  1,
+			Size:      200,
+			ModTime:   time.Time{},
+			Checksum:  "323232323",
+			CreatedAt: time.Time{},
+			UpdatedAt: time.Time{},
 		},
 	}
 
-	for _, cfg := range initConfigs {
-		_, err := coll.InsertOne(ctx, cfg)
-		if err != nil {
-			return fmt.Errorf("应用配置初始化失败: %w", err)
-		}
+	// 批量插入优化
+	models := make([]interface{}, len(initConfigs))
+	for i, cfg := range initConfigs {
+		models[i] = cfg
+	}
+
+	if _, err := coll.InsertMany(ctx, models); err != nil {
+		log.Println(err)
 	}
 	return nil
 }

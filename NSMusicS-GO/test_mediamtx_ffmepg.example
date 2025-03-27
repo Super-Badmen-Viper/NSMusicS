@@ -1,0 +1,50 @@
+MEDIAMTX_CONTAINER_NAME=nsmusics-mediamtx-ffmpeg # MediaMTX容器名称（可修改）
+                                        # MediaMTX container name (modifiable)
+# ===== MediaMTX 端口配置 =====
+RTSP_PORT=8554          # RTSP 协议端口（TCP）
+RTMP_PORT=1935          # RTMP 协议端口（TCP）
+HTTP_PORT=8888          # HTTP 服务器端口（TCP）
+HTTPS_PORT=8889         # HTTPS 服务器端口（TCP）
+SRT_PORT=8890           # SRT 协议端口（UDP）
+WEBRTC_PORT=8189        # WebRTC 协议端口（UDP）
+
+
+
+发布到服务器: FFmpeg
+
+ffmpeg -re -i "G.E.M.邓紫棋 - 多远都要在一起.mp3" -c copy -f rtsp rtsp://localhost:8554/mystream
+
+ffmpeg -re -i "王力宏 - 依然爱你.flac" -map 0:a -c:a aac -ac 2 -f rtsp rtsp://localhost:8554/mystream
+
+start_time
+ffmpeg -re -i "王力宏 - 依然爱你.flac" `
+       -metadata:s:a start_time=0s `
+       -map 0:a -c:a aac -ac 2 -f rtsp rtsp://localhost:8554/mystream
+
+duration
+ffmpeg -re -i "王力宏 - 依然爱你.flac" `
+       -metadata duration="00:00:30" `
+       -map 0:a -c:a aac -ac 2 `
+       -f rtsp rtsp://localhost:8554/mystream
+
+
+
+
+从服务器读取: FFmpeg
+ffmpeg -i rtsp://localhost:8554/mystream -c copy output.mp4
+
+从服务器读取: GStreamer
+gst-launch-1.0 whepsrc whep-endpoint="http://127.0.0.1:8889/stream/whep" use-link-headers=true \
+audio-caps="application/x-rtp,media=audio,encoding-name=OPUS,payload=111,clock-rate=48000,encoding-params=(string)2" \
+! rtpopusdepay ! decodebin ! autoaudiosink
+
+ffmpeg -re  -i "G.E.M.邓紫棋 - 多远都要在一起.mp3" -c:a aac -f rtsp rtsp://localhost:8554/mystream
+ffmpeg -i rtsp://localhost:8554/mystream -c:a libmp3lame output.mp3
+
+
+​1. 推流端调整
+       ​改用AAC编码：MP3在RTSP协议中兼容性较差（参考网页4的音频编码支持列表），建议转码为AAC：
+              ffmpeg -re  -i "G.E.M.邓紫棋 - 多远都要在一起.mp3" -c:a aac -f rtsp rtsp://localhost:8554/mystream
+2.拉流端调整
+       ​转码为MP3：若需输出MP3文件，需显式转码（避免直接复制）：
+              ffmpeg -i rtsp://localhost:8554/mystream -c:a libmp3lame output.mp3

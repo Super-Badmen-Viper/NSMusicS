@@ -1,28 +1,4 @@
-# docker-compose.yml
 version: "3.8"
-
-# 容器网络架构
-networks:
-  public_net:     # 外网入口层
-    driver: bridge
-    internal: false
-    ipam:
-      config:
-        - subnet: 172.20.1.0/24
-
-  app_net:        # 应用通信层
-    driver: bridge
-    internal: true
-    ipam:
-      config:
-        - subnet: 172.20.2.0/24
-
-  data_net:       # 数据服务层
-    driver: bridge
-    internal: true
-    ipam:
-      config:
-        - subnet: 172.20.3.0/24
 
 # 服务定义
 services:
@@ -66,10 +42,8 @@ services:
       - library:/data/library
     depends_on:
       - mongodb
-      - mediamtx
     security_opt:
       - no-new-privileges:true
-    user: "1000:1000"
 
   mongodb:
     image: mongo:6.0
@@ -90,27 +64,6 @@ services:
       timeout: 5s
       retries: 5
 
-  mediamtx:
-    image: bluenviron/mediamtx:latest-ffmpeg
-    container_name: ${MEDIAMTX_CONTAINER_NAME}
-    restart: unless-stopped
-    env_file: .env
-    environment:
-      - MTX_RTSPTRANSPORTS=tcp
-    # 测试中，不设置网络隔离
-    # networks:
-    #   data_net:
-    #     ipv4_address: 172.20.3.40
-    volumes:
-      - library:/library
-    ports:
-      - "${RTSP_PORT}:8554"
-      - "${RTMP_PORT}:1935"
-      - "${HTTP_PORT}:8888"
-      - "${HTTPS_PORT}:8889"
-      - "${SRT_PORT}:8890/udp"
-      - "${WEBRTC_PORT}:8189/udp"
-
 # 数据卷定义
 volumes:
   library:
@@ -121,4 +74,25 @@ volumes:
       o: bind
   dbdata:
 
-  # ffmpeg -re -stream_loop -1 -i /library/ex10.mp4 -c copy -f rtsp rtsp://localhost:8554/mystream
+# 容器网络架构
+networks:
+  public_net:     # 外网入口层
+    driver: bridge
+    internal: false
+    ipam:
+      config:
+        - subnet: 172.20.1.0/24
+
+  app_net:        # 应用通信层
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.20.2.0/24
+
+  data_net:       # 数据服务层
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.20.3.0/24

@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  mediamtx:
+    image: ossrs/srs:5
+    container_name: mediamtx-test
+    restart: unless-stopped
+    ports:
+      - "1935:1935"
+      - "1985:1985"
+      - "8080:8888"
+      - "8000:8000/udp"
+      - "10080:10080/udp"

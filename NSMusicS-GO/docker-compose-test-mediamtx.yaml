@@ -3,15 +3,15 @@ version: "3.8"
 services:
   mediamtx:
     image: bluenviron/mediamtx:latest-ffmpeg
-    container_name: ${MEDIAMTX_CONTAINER_NAME:-nsmusics-mediamtx}
+    container_name: mediamtx-test
     restart: unless-stopped
     env_file: .env
     environment:
       - MTX_RTSPTRANSPORTS=tcp
     ports:
-      - "${RTSP_PORT}:8554"
-      - "${RTMP_PORT}:1935"
-      - "${HTTP_PORT}:8888"
-      - "${HTTPS_PORT}:8889"
-      - "${SRT_PORT}:8890/udp"
-      - "${WEBRTC_PORT}:8189/udp"
+      - "8554:8554"
+      - "1935:1935"
+      - "8888:8888"
+      - "8889:8889"
+      - "8890:8890/udp"
+      - "8189:8189/udp"

@@ -2,35 +2,36 @@ package route_file_entity
 
 import (
 	"fmt"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/api/controller/controller_app/controller_file_entity"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/api/controller/controller_file_entity"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/mongo"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/repository/repository_file_entity"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/usecase/usecase_file_entity"
 	"github.com/gin-gonic/gin"
-	"golang.org/x/time/rate"
-	"net/http"
 	"time"
 )
 
 func NewFileEntityRouter(timeout time.Duration, db mongo.Database, group *gin.RouterGroup) {
+	// 初始化仓库
 	fileRepo := repository_file_entity.NewFileRepo(db, domain.CollectionFileEntityFileInfo)
-	ffmpegRepo := repository_file_entity.NewFFmpegRepo(db)
-	detector := &domain_file_entity.FFmpegDetector{}
+	folderRepo := repository_file_entity.NewFolderRepo(db, domain.CollectionFileEntityFolderInfo)
+	detector := &domain_file_entity.FileDetectorImpl{}
 
-	uc := usecase_file_entity.NewFileUsecase(fileRepo, detector, ffmpegRepo)
+	// 构建用例（新增超时参数）
+	uc := usecase_file_entity.NewFileUsecase(
+		fileRepo,
+		folderRepo,
+		detector,
+		30, // 30分钟超时
+	)
+
+	// 注册控制器
 	ctrl := controller_file_entity.NewFileController(uc)
 
-	// 配置速率限制（每分钟10个请求）
-	limiter := rate.NewLimiter(rate.Every(time.Minute), 10)
-
+	// 路由配置
 	group.Use(requestLogger())
-
 	group.POST("/scan", ctrl.ScanDirectory)
-	group.GET("/ffmpeg/status", ctrl.GetFFmpegStatus)
-	group.POST("/transcode", rateLimitWrapper(limiter), ctrl.Transcode)
-	group.GET("/tasks/:task_id", ctrl.GetTaskStatus)
 }
 
 func requestLogger() gin.HandlerFunc {
@@ -42,15 +43,4 @@ func requestLogger() gin.HandlerFunc {
 			param.StatusCode,
 		)
 	})
-}
-
-func rateLimitWrapper(limiter *rate.Limiter) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		if !limiter.Allow() {
-			c.AbortWithStatusJSON(http.StatusTooManyRequests,
-				gin.H{"error": "请求过于频繁"})
-			return
-		}
-		c.Next()
-	}
 }
