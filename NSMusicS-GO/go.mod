@@ -11,10 +11,7 @@ require (
 	golang.org/x/crypto v0.35.0
 )
 
-require (
-	github.com/fsnotify/fsnotify v1.7.0
-	golang.org/x/time v0.5.0
-)
+require github.com/dhowden/tag v0.0.0-20240417053706-3d75831295e8
 
 require (
 	github.com/bytedance/sonic v1.11.6 // indirect
@@ -22,6 +19,7 @@ require (
 	github.com/cloudwego/base64x v0.1.4 // indirect
 	github.com/cloudwego/iasm v0.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect

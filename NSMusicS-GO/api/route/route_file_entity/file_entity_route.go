@@ -23,7 +23,7 @@ func NewFileEntityRouter(timeout time.Duration, db mongo.Database, group *gin.Ro
 		fileRepo,
 		folderRepo,
 		detector,
-		30, // 30分钟超时
+		0,
 	)
 
 	// 注册控制器

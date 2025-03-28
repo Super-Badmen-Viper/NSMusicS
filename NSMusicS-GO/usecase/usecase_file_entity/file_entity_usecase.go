@@ -21,14 +21,14 @@ type FileUsecase struct {
 	targetTypes map[domain_file_entity.FileType]struct{}
 	targetMutex sync.RWMutex
 	workerPool  chan struct{}
-	scanTimeout time.Duration // 新增配置参数
+	scanTimeout time.Duration
 }
 
 func NewFileUsecase(
 	fileRepo domain_file_entity.FileRepository,
 	folderRepo domain_file_entity.FolderRepository,
 	detector domain_file_entity.FileDetector,
-	timeoutMinutes int, // 新增参数
+	timeoutMinutes int,
 ) *FileUsecase {
 	workerCount := runtime.NumCPU() * 2
 	if workerCount < 4 {
@@ -44,12 +44,7 @@ func NewFileUsecase(
 	}
 }
 
-func (uc *FileUsecase) ProcessDirectory(parentCtx context.Context, dirPath string, targetTypes []domain_file_entity.FileType) error {
-	// 创建带超时的独立上下文
-	ctx, cancel := context.WithTimeout(context.Background(), uc.scanTimeout)
-	defer cancel()
-
-	// 处理文件夹元数据
+func (uc *FileUsecase) ProcessDirectory(ctx context.Context, dirPath string, targetTypes []domain_file_entity.FileType) error {
 	folder, err := uc.folderRepo.FindByPath(ctx, dirPath)
 	if err != nil {
 		return fmt.Errorf("folder query failed: %w", err)
@@ -60,7 +55,7 @@ func (uc *FileUsecase) ProcessDirectory(parentCtx context.Context, dirPath strin
 			ID:         primitive.NewObjectID(),
 			FolderPath: dirPath,
 			FolderMeta: domain_file_entity.FolderMeta{
-				FileCount:   42,
+				FileCount:   0,
 				LastScanned: time.Now(),
 			},
 		}

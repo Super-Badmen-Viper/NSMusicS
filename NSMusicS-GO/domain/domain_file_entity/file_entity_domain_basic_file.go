@@ -22,17 +22,6 @@ const (
 	Unknown
 )
 
-type FolderMeta struct {
-	FileCount   int       `bson:"file_count"`
-	LastScanned time.Time `bson:"last_scanned"`
-}
-
-type FolderMetadata struct {
-	ID         primitive.ObjectID `bson:"_id,omitempty"`
-	FolderPath string             `bson:"folder_path" validate:"dirpath"`
-	FolderMeta FolderMeta         `bson:"folder_meta"`
-}
-
 type FileMetadata struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty"`
 	FolderID  primitive.ObjectID `bson:"folder_id"`
@@ -43,12 +32,6 @@ type FileMetadata struct {
 	Checksum  string             `bson:"checksum" validate:"sha256"`
 	CreatedAt time.Time          `bson:"created_at" validate:"required"`
 	UpdatedAt time.Time          `bson:"updated_at" validate:"required,gtfield=CreatedAt"`
-}
-
-type FolderRepository interface {
-	Insert(ctx context.Context, folder *FolderMetadata) error
-	FindByPath(ctx context.Context, path string) (*FolderMetadata, error)
-	UpdateStats(ctx context.Context, folderID primitive.ObjectID, fileCount int) error
 }
 
 type FileRepository interface {
@@ -92,10 +75,9 @@ func (fd *FileDetectorImpl) DetectMediaType(filePath string) (FileType, error) {
 
 	// 新增可执行文件类型（根据安全建议单独分类）
 	case ".exe", ".msi", ".bat", ".sh", ".apk", ".dmg":
-		return Executable, nil // 需在FileType中新增此类型
+		return Executable, nil
 
 	default:
-		// 包含超过50种小众扩展名的二级检测逻辑
 		if isDatabaseFile(ext) { // 数据库文件检测
 			return Database, nil
 		}

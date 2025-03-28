@@ -740,7 +740,7 @@ func (si *Initializer) initFileEntityFolder(ctx context.Context) error {
 			ID:         primitive.NewObjectID(),
 			FolderPath: "c:/users/17741/music",
 			FolderMeta: domain_file_entity.FolderMeta{
-				FileCount:   42,
+				FileCount:   0,
 				LastScanned: time.Now(),
 			},
 		},
@@ -749,7 +749,7 @@ func (si *Initializer) initFileEntityFolder(ctx context.Context) error {
 			ID:         primitive.NewObjectID(),
 			FolderPath: "c:/users/17741/Videos",
 			FolderMeta: domain_file_entity.FolderMeta{
-				FileCount:   42,
+				FileCount:   0,
 				LastScanned: time.Now(),
 			},
 		},
@@ -758,7 +758,7 @@ func (si *Initializer) initFileEntityFolder(ctx context.Context) error {
 			ID:         primitive.NewObjectID(),
 			FolderPath: "c:/users/17741/Pictures",
 			FolderMeta: domain_file_entity.FolderMeta{
-				FileCount:   42,
+				FileCount:   0,
 				LastScanned: time.Now(),
 			},
 		},

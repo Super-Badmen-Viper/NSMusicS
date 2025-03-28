@@ -28,34 +28,23 @@ func NewFolderRepo(db mongo.Database, collection string) domain_file_entity.Fold
 func (r *folderRepo) FindByPath(ctx context.Context, path string) (*domain_file_entity.FolderMetadata, error) {
 	collection := r.db.Collection(r.collection)
 
-	// 增强路径标准化处理
-	normalizedPath := normalizePath(path)
+	normalizedPath :=
+		strings.TrimSuffix(
+			filepath.ToSlash(
+				filepath.Clean(path)), "/") // 移除尾部斜杠
 	fmt.Printf("DEBUG - 查询路径: 原始='%s' 标准化='%s'\n", path, normalizedPath)
 
 	var folder domain_file_entity.FolderMetadata
 	err := collection.FindOne(ctx, bson.M{"folder_path": normalizedPath}).Decode(&folder)
 
 	if err != nil {
-		// 精确错误类型判断
 		if isNotFound(err) {
-			fmt.Printf("DEBUG - 未找到路径: %s\n", normalizedPath)
 			return nil, nil
 		}
 		fmt.Printf("ERROR - 数据库查询失败: %v\n", err)
 		return nil, fmt.Errorf("数据库操作失败: %w", err)
 	}
-
-	// 验证查询结果
-	fmt.Printf("DEBUG - 找到文件夹: ID=%s 路径=%s\n", folder.ID.Hex(), folder.FolderPath)
 	return &folder, nil
-}
-func normalizePath(rawPath string) string {
-	// 清理路径并转换分隔符
-	cleaned := filepath.Clean(rawPath)
-	withSlashes := filepath.ToSlash(cleaned)
-
-	// 移除尾部斜杠
-	return strings.TrimSuffix(withSlashes, "/")
 }
 func isNotFound(err error) bool {
 	return strings.Contains(err.Error(), "no documents in result") ||
@@ -64,8 +53,10 @@ func isNotFound(err error) bool {
 
 func (r *folderRepo) Insert(ctx context.Context, folder *domain_file_entity.FolderMetadata) error {
 	collection := r.db.Collection(r.collection)
-	// 强制路径标准化
-	folder.FolderPath = filepath.ToSlash(filepath.Clean(folder.FolderPath))
+
+	folder.FolderPath =
+		filepath.ToSlash(
+			filepath.Clean(folder.FolderPath))
 	document := bson.M{
 		"_id":         folder.ID,
 		"folder_path": folder.FolderPath,
@@ -74,6 +65,7 @@ func (r *folderRepo) Insert(ctx context.Context, folder *domain_file_entity.Fold
 			"last_scanned": folder.FolderMeta.LastScanned,
 		},
 	}
+
 	_, err := collection.InsertOne(ctx, document)
 	return err
 }

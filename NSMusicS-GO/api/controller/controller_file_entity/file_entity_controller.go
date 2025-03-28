@@ -31,39 +31,17 @@ func (ctrl *FileController) ScanDirectory(c *gin.Context) {
 		return
 	}
 
+	// 创建独立上下文，不使用清洁架构自带的上下文(使用将无法完成后台任务而直接返回error)
 	bgCtx := context.Background()
 	go func() {
-		// 基础扫描流程
 		if err := ctrl.usecase.ProcessDirectory(bgCtx, req.FolderPath, req.FileTypes); err != nil {
 			log.Printf("Scan failed: %v", err)
 			return
 		}
-		log.Println("基础元数据扫描完毕")
-		for _, fileType := range req.FileTypes { // 修复变量名错误
-			switch fileType {
-			case domain_file_entity.Audio:
-				go ctrl.processAudioMetadata(bgCtx) // 占位参数
-			case domain_file_entity.Video:
-				go ctrl.processVideoMetadata(bgCtx) // 占位参数
-			default:
-				log.Printf("Unhandled file type: %d", fileType)
-			}
-		}
-		log.Println("场景元数据扫描完毕")
 	}()
 
 	c.JSON(http.StatusAccepted, gin.H{
 		"status":  "scan_started",
 		"message": "background processing initiated",
 	})
-}
-
-// 音频元数据存储示例
-func (ctrl *FileController) processAudioMetadata(ctx context.Context) {
-	// 音频专用处理逻辑...
-}
-
-// 视频元数据存储示例
-func (ctrl *FileController) processVideoMetadata(ctx context.Context) {
-	// 视频专用处理逻辑...
 }
