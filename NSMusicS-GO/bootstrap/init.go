@@ -8,6 +8,7 @@ import (
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_app/domain_app_config"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_app/domain_app_library"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/type_audio/domain_file_entity_audio_models"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"time"
@@ -87,6 +88,18 @@ func (si *Initializer) executeInitialization(ctx context.Context) error {
 	}
 
 	if err := si.initFileEntityFile(ctx); err != nil {
+		return err
+	}
+
+	if err := si.initFileEntityAudioMediaFile(ctx); err != nil {
+		return err
+	}
+
+	if err := si.initFileEntityAudioAlbum(ctx); err != nil {
+		return err
+	}
+
+	if err := si.initFileEntityAudioArtist(ctx); err != nil {
 		return err
 	}
 
@@ -738,7 +751,7 @@ func (si *Initializer) initFileEntityFolder(ctx context.Context) error {
 		// 音频文件夹示例（包含多文件元数据）
 		{
 			ID:         primitive.NewObjectID(),
-			FolderPath: "c:/users/17741/music",
+			FolderPath: "c:/users/17741/Music",
 			FolderMeta: domain_file_entity.FolderMeta{
 				FileCount:   0,
 				LastScanned: time.Now(),
@@ -790,29 +803,75 @@ func (si *Initializer) initFileEntityFolder(ctx context.Context) error {
 func (si *Initializer) initFileEntityFile(ctx context.Context) error {
 	coll := si.db.Collection(domain.CollectionFileEntityFileInfo)
 
-	id, _ := primitive.ObjectIDFromHex("000000000000000000000000")
-	initConfigs := []*domain_file_entity.FileMetadata{
-		{
-			ID:        id,
-			FolderID:  id,
-			FilePath:  "",
-			FileType:  1,
-			Size:      200,
-			ModTime:   time.Time{},
-			Checksum:  "323232323",
-			CreatedAt: time.Time{},
-			UpdatedAt: time.Time{},
-		},
+	dummyID := primitive.NewObjectID()
+	emptyDoc := &domain_file_entity.FileMetadata{
+		ID: dummyID,
 	}
 
-	// 批量插入优化
-	models := make([]interface{}, len(initConfigs))
-	for i, cfg := range initConfigs {
-		models[i] = cfg
+	if _, err := coll.InsertOne(ctx, emptyDoc); err != nil {
+		return err
 	}
 
-	if _, err := coll.InsertMany(ctx, models); err != nil {
-		log.Println(err)
+	if _, err := coll.DeleteOne(ctx, bson.M{"_id": dummyID}); err != nil {
+		return err
 	}
+
+	return nil
+}
+
+func (si *Initializer) initFileEntityAudioMediaFile(ctx context.Context) error {
+	coll := si.db.Collection(domain.CollectionFileEntityAudioMediaFile)
+
+	dummyID := primitive.NewObjectID()
+	emptyDoc := &domain_file_entity_audio_models.MediaFileMetadata{
+		ID: dummyID,
+	}
+
+	if _, err := coll.InsertOne(ctx, emptyDoc); err != nil {
+		return err
+	}
+
+	if _, err := coll.DeleteOne(ctx, bson.M{"_id": dummyID}); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (si *Initializer) initFileEntityAudioAlbum(ctx context.Context) error {
+	coll := si.db.Collection(domain.CollectionFileEntityAudioAlbum)
+
+	dummyID := primitive.NewObjectID()
+	emptyDoc := &domain_file_entity_audio_models.AlbumMetadata{
+		ID: dummyID,
+	}
+
+	if _, err := coll.InsertOne(ctx, emptyDoc); err != nil {
+		return err
+	}
+
+	if _, err := coll.DeleteOne(ctx, bson.M{"_id": dummyID}); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (si *Initializer) initFileEntityAudioArtist(ctx context.Context) error {
+	coll := si.db.Collection(domain.CollectionFileEntityAudioArtist)
+
+	dummyID := primitive.NewObjectID()
+	emptyDoc := &domain_file_entity_audio_models.ArtistMetadata{
+		ID: dummyID,
+	}
+
+	if _, err := coll.InsertOne(ctx, emptyDoc); err != nil {
+		return err
+	}
+
+	if _, err := coll.DeleteOne(ctx, bson.M{"_id": dummyID}); err != nil {
+		return err
+	}
+
 	return nil
 }

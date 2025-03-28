@@ -43,3 +43,13 @@ const (
 const (
 	CollectionFileEntityFolderInfo = "file_entity_folder_info"
 )
+
+const (
+	CollectionFileEntityAudioMediaFile = "file_entity_audio_media_file"
+)
+const (
+	CollectionFileEntityAudioAlbum = "file_entity_audio_album"
+)
+const (
+	CollectionFileEntityAudioArtist = "file_entity_audio_artist"
+)

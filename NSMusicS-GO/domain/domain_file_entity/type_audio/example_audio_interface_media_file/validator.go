@@ -1,4 +1,4 @@
-package domain_file_entity_audio_interface
+package example_audio_interface_media_file
 
 import (
 	"context"
@@ -37,7 +37,7 @@ type ConflictResolution struct {
 //type AlbumConsistencyReport struct {
 //	MissingTracks   []int
 //	DuplicateTracks []struct {
-//		TrackNumber int
+//		Track int
 //		Paths       []string
 //	}
 //	YearMismatch   bool

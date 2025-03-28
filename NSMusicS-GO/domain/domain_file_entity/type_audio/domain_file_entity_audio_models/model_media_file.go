@@ -16,8 +16,10 @@ type MediaFileMetadata struct {
 	AlbumArtist          string             `bson:"album_artist"`
 	AlbumID              string             `bson:"album_id"`
 	HasCoverArt          bool               `bson:"has_cover_art"`
-	TrackNumber          int                `bson:"track_number"`
-	DiscNumber           int                `bson:"disc_number"`
+	TrackNumber          int                `bson:"track_number"` // 当前轨道号
+	TotalTracks          int                `bson:"total_tracks"` // 总轨道数
+	DiscNumber           int                `bson:"disc_number"`  // 当前光盘号
+	TotalDiscs           int                `bson:"total_discs"`  // 总光盘数
 	Year                 int                `bson:"year"`
 	Size                 int                `bson:"size"`
 	Suffix               string             `bson:"suffix"`

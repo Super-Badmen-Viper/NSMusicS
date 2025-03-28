@@ -1,4 +1,4 @@
-package domain_file_entity_audio_interface
+package example_audio_interface_media_file
 
 import (
 	"context"

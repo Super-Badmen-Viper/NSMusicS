@@ -1,7 +1,8 @@
-package domain_file_entity_audio_interface
+package example_audio_interface_media_file
 
 import (
 	"context"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/type_audio/domain_file_entity_audio_models"
 )
 
@@ -17,7 +18,7 @@ type MediaFileQuery interface {
 	// 动态过滤
 	FindByCriteria(ctx context.Context,
 		criteria map[string]interface{},
-		options ...QueryOption,
+		options ...domain.QueryOption,
 	) ([]*domain_file_entity_audio_models.MediaFileMetadata, error)
 
 	// 聚合统计

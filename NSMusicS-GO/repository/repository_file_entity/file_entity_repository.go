@@ -3,6 +3,7 @@ package repository_file_entity
 import (
 	"context"
 	"fmt"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/mongo"
 	"go.mongodb.org/mongo-driver/bson"
@@ -38,17 +39,13 @@ func (r *folderRepo) FindByPath(ctx context.Context, path string) (*domain_file_
 	err := collection.FindOne(ctx, bson.M{"folder_path": normalizedPath}).Decode(&folder)
 
 	if err != nil {
-		if isNotFound(err) {
+		if domain.IsNotFound(err) {
 			return nil, nil
 		}
 		fmt.Printf("ERROR - 数据库查询失败: %v\n", err)
 		return nil, fmt.Errorf("数据库操作失败: %w", err)
 	}
 	return &folder, nil
-}
-func isNotFound(err error) bool {
-	return strings.Contains(err.Error(), "no documents in result") ||
-		strings.Contains(err.Error(), "not found")
 }
 
 func (r *folderRepo) Insert(ctx context.Context, folder *domain_file_entity.FolderMetadata) error {

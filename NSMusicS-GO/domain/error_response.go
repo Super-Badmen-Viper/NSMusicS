@@ -1,6 +1,9 @@
 package domain
 
-import "errors"
+import (
+	"errors"
+	"strings"
+)
 
 type ErrorResponse struct {
 	Message string `json:"message"`
@@ -9,3 +12,8 @@ type ErrorResponse struct {
 var (
 	ErrEmptyCollection = errors.New("config collection is empty")
 )
+
+func IsNotFound(err error) bool {
+	return strings.Contains(err.Error(), "no documents in result") ||
+		strings.Contains(err.Error(), "not found")
+}
