@@ -239,7 +239,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                                 store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
                                 (album.PrimaryImageItemId ? album.PrimaryImageItemId : album.ParentBackdropItemId) +
                                 (album.PrimaryImageItemId ? '/Images/Primary?fillWidth=122&fillHeight=122&tag=' : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
-                                (album.PrimaryImageItemId ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
+                                (album.PrimaryImageTag ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
                                 '&api_key=' + store_server_user_model.authorization_of_Je
                         ) : undefined
                     store_view_home_page_info.home_Files_temporary_recently_added.push({
@@ -946,7 +946,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                             store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
                             (album.PrimaryImageItemId ? album.PrimaryImageItemId : album.ParentBackdropItemId) +
                             (album.PrimaryImageItemId ? '/Images/Primary?fillWidth=122&fillHeight=122&tag=' : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
-                            (album.PrimaryImageItemId ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
+                            (album.PrimaryImageTag ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
                             '&api_key=' + store_server_user_model.authorization_of_Je
                         ) : undefined
                     store_view_album_page_info.album_File_metadata.push(album)
@@ -1036,7 +1036,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                                 store_server_users.server_config_of_current_user_of_sqlite?.url + '/emby/Items/' +
                                 (album.PrimaryImageItemId ? album.PrimaryImageItemId : album.ParentBackdropItemId) +
                                 (album.PrimaryImageItemId ? '/Images/Primary?fillWidth=122&fillHeight=122&tag=' : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
-                                (album.PrimaryImageItemId ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
+                                (album.PrimaryImageTag ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
                                 '&api_key=' + store_server_user_model.authorization_of_Je
                         ) : undefined
                     store_view_album_page_info.album_File_metadata.push(album)
