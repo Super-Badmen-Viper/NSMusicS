@@ -612,10 +612,10 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
         if (Array.isArray(songlist) && songlist.length > 0) {
             let last_index = 0;
             songlist.map(async (song: any, index: number) => {
-                const getLyrics_all = await media_Retrieval_ApiService_of_ND.getLyrics_all(username, token, salt, song.id);
+                const getLyrics_id = await media_Retrieval_ApiService_of_ND.getLyrics_id(username, token, salt, song.id);
                 let lyrics = undefined;
                 try {
-                    lyrics = this.convertToLRC_Array(getLyrics_all["subsonic-response"]["lyricsList"]["structuredLyrics"][0]["line"]);
+                    lyrics = this.convertToLRC_Array(getLyrics_id["subsonic-response"]["lyricsList"]["structuredLyrics"][0]["line"]);
                 } catch {
                 }
                 const new_song = {

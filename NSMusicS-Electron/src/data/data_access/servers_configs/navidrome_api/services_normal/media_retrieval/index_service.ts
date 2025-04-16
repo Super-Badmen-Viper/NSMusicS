@@ -37,7 +37,7 @@ export class Media_Retrieval_ApiService_of_ND extends Navidrome_Api_Services_Nor
                 artist,title,
             });
     }
-    public async getLyrics_all(
+    public async getLyrics_id(
         username: string,token: string,salt: string,
         id: string
     ){

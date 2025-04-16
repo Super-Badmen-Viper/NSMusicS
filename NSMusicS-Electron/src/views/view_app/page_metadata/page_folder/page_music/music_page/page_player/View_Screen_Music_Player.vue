@@ -532,7 +532,7 @@ const player_theme_Styles = ref<PlayerTheme_LyricItem[]>(
       player_theme_3.value,// play model 3 ：炫胶唱片
       player_theme_4.value,// play model 4 ：专辑底图
       player_theme_5.value, // play model 5 ：皮肤底图  :disabled
-      player_theme_6.value, // play model 5 ：皮肤底图  :disabled
+      // player_theme_6.value, // play model 5 ：皮肤底图  :disabled
     ]
 );
 

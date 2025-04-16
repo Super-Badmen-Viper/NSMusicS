@@ -5,9 +5,9 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/type_audio/domain_file_entity_audio_interface"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/type_audio/domain_file_entity_audio_models"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/usecase/usecase_file_entity/usecase_file_entity_audio_interface"
+	domain_file_entity_audio_interface2 "github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_db/scene_audio_db_interface"
+	domain_file_entity_audio_models2 "github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_db/scene_audio_db_models"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/usecase/usecase_file_entity/scene_audio/scene_audio_db_usecase"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"io"
@@ -28,10 +28,10 @@ type FileUsecase struct {
 	workerPool  chan struct{}
 	scanTimeout time.Duration
 
-	audioExtractor usecase_file_entity_audio_interface.AudioMetadataExtractor
-	artistRepo     domain_file_entity_audio_interface.ArtistRepository
-	albumRepo      domain_file_entity_audio_interface.AlbumRepository
-	mediaRepo      domain_file_entity_audio_interface.MediaFileRepository
+	audioExtractor scene_audio_db_usecase.AudioMetadataExtractor
+	artistRepo     domain_file_entity_audio_interface2.ArtistRepository
+	albumRepo      domain_file_entity_audio_interface2.AlbumRepository
+	mediaRepo      domain_file_entity_audio_interface2.MediaFileRepository
 }
 
 func NewFileUsecase(
@@ -41,9 +41,9 @@ func NewFileUsecase(
 	timeoutMinutes int,
 
 	// 音频处理依赖项
-	artistRepo domain_file_entity_audio_interface.ArtistRepository,
-	albumRepo domain_file_entity_audio_interface.AlbumRepository,
-	mediaRepo domain_file_entity_audio_interface.MediaFileRepository,
+	artistRepo domain_file_entity_audio_interface2.ArtistRepository,
+	albumRepo domain_file_entity_audio_interface2.AlbumRepository,
+	mediaRepo domain_file_entity_audio_interface2.MediaFileRepository,
 ) *FileUsecase {
 	workerCount := runtime.NumCPU() * 2
 	if workerCount < 4 {
@@ -234,9 +234,9 @@ func (uc *FileUsecase) processFile(
 
 func (uc *FileUsecase) processAudioHierarchy(
 	ctx context.Context,
-	artist *domain_file_entity_audio_models.ArtistMetadata,
-	album *domain_file_entity_audio_models.AlbumMetadata,
-	mediaFile *domain_file_entity_audio_models.MediaFileMetadata,
+	artist *domain_file_entity_audio_models2.ArtistMetadata,
+	album *domain_file_entity_audio_models2.AlbumMetadata,
+	mediaFile *domain_file_entity_audio_models2.MediaFileMetadata,
 ) error {
 	// 关键依赖检查
 	if uc.mediaRepo == nil || uc.artistRepo == nil || uc.albumRepo == nil {
@@ -297,7 +297,7 @@ func (uc *FileUsecase) processAudioHierarchy(
 	return nil
 }
 
-func (uc *FileUsecase) safeUpdateStatistics(artist *domain_file_entity_audio_models.ArtistMetadata, album *domain_file_entity_audio_models.AlbumMetadata) {
+func (uc *FileUsecase) safeUpdateStatistics(artist *domain_file_entity_audio_models2.ArtistMetadata, album *domain_file_entity_audio_models2.AlbumMetadata) {
 	defer func() {
 		if r := recover(); r != nil {
 			log.Printf("统计更新发生panic: %v", r)
@@ -329,7 +329,7 @@ func (uc *FileUsecase) safeUpdateStatistics(artist *domain_file_entity_audio_mod
 
 func (uc *FileUsecase) upsertArtist(
 	ctx context.Context,
-	artist *domain_file_entity_audio_models.ArtistMetadata,
+	artist *domain_file_entity_audio_models2.ArtistMetadata,
 ) error {
 	if uc.artistRepo == nil {
 		log.Print("艺术家仓库未初始化")
@@ -365,7 +365,7 @@ func (uc *FileUsecase) upsertArtist(
 
 func (uc *FileUsecase) upsertAlbum(
 	ctx context.Context,
-	album *domain_file_entity_audio_models.AlbumMetadata,
+	album *domain_file_entity_audio_models2.AlbumMetadata,
 ) error {
 	if uc.albumRepo == nil {
 		log.Print("专辑仓库未初始化")

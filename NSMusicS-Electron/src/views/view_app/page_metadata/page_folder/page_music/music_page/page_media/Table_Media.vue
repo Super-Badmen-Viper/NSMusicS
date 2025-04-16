@@ -988,7 +988,7 @@ onBeforeUnmount(() => {
     <div class="dynamic-scroller-demo">
       <n-space vertical @wheel.prevent style="overflow: hidden;">
         <n-space align="center">
-          <n-space v-if="store_router_data_info.store_router_history_data_of_local">
+          <n-space v-if="false">
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
                 <n-button quaternary circle style="margin-left:2px" @click="get_router_history_model_pervious">
@@ -1013,7 +1013,7 @@ onBeforeUnmount(() => {
               {{ $t('common.forward') }}
             </n-tooltip>
           </n-space>
-          <n-space v-if="store_router_data_info.store_router_history_data_of_web">
+          <n-space>
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
                 <n-button quaternary circle style="margin-left:4px"
@@ -1226,7 +1226,7 @@ onBeforeUnmount(() => {
             </n-tooltip>
           </n-dropdown>
           <n-tooltip
-            v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
+            v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') && store_server_user_model.model_server_type_of_web
             "
             trigger="hover" placement="top">
             <template #trigger>

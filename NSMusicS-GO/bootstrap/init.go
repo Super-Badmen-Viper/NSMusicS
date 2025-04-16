@@ -8,7 +8,7 @@ import (
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_app/domain_app_config"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_app/domain_app_library"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/type_audio/domain_file_entity_audio_models"
+	domain_file_entity_audio_models2 "github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_db/scene_audio_db_models"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"time"
@@ -823,7 +823,7 @@ func (si *Initializer) initFileEntityAudioMediaFile(ctx context.Context) error {
 	coll := si.db.Collection(domain.CollectionFileEntityAudioMediaFile)
 
 	dummyID := primitive.NewObjectID()
-	emptyDoc := &domain_file_entity_audio_models.MediaFileMetadata{
+	emptyDoc := &domain_file_entity_audio_models2.MediaFileMetadata{
 		ID: dummyID,
 	}
 
@@ -842,7 +842,7 @@ func (si *Initializer) initFileEntityAudioAlbum(ctx context.Context) error {
 	coll := si.db.Collection(domain.CollectionFileEntityAudioAlbum)
 
 	dummyID := primitive.NewObjectID()
-	emptyDoc := &domain_file_entity_audio_models.AlbumMetadata{
+	emptyDoc := &domain_file_entity_audio_models2.AlbumMetadata{
 		ID: dummyID,
 	}
 
@@ -861,7 +861,7 @@ func (si *Initializer) initFileEntityAudioArtist(ctx context.Context) error {
 	coll := si.db.Collection(domain.CollectionFileEntityAudioArtist)
 
 	dummyID := primitive.NewObjectID()
-	emptyDoc := &domain_file_entity_audio_models.ArtistMetadata{
+	emptyDoc := &domain_file_entity_audio_models2.ArtistMetadata{
 		ID: dummyID,
 	}
 

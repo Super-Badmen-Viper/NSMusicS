@@ -205,6 +205,9 @@ export const store_app_configs_logic_load = reactive({
             store_player_appearance.player_lyric_fontWeight = '' + system_Configs_Read.player_Configs_of_UI.value['player_lyric_fontWeight']
             store_player_appearance.player_lyric_color = '' + system_Configs_Read.player_Configs_of_UI.value['player_lyric_color']
             store_player_appearance.player_theme_Styles_Selected = Number('' + system_Configs_Read.player_Configs_of_UI.value['player_theme_Styles_Selected'])
+            if(store_player_appearance.player_theme_Styles_Selected === 5) {
+                store_player_appearance.player_theme_Styles_Selected = 0
+            }
             store_player_appearance.player_background_model_num = Number('' + system_Configs_Read.player_Configs_of_UI.value['player_background_model_num'])
             store_player_appearance.player_use_lottie_animation = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_lottie_animation'] === 'true'
             if (

@@ -196,10 +196,10 @@ export class Set_Navidrome_ALL_Data_To_LocalSqlite{
                         const songs = getAlbum_id["subsonic-response"]["album"]["song"];
                         const num = 80 / songs.length / 1000
                         for (const song of songs) {
-                            const getLyrics_all = await media_Retrieval_ApiService_of_ND.getLyrics_all(username, token, salt, song.id);
+                            const getLyrics_id = await media_Retrieval_ApiService_of_ND.getLyrics_id(username, token, salt, song.id);
                             let lyrics = undefined;
                             try {
-                                lyrics = this.convertToLRC(getLyrics_all["subsonic-response"]["lyricsList"]["structuredLyrics"][0]["line"]);
+                                lyrics = this.convertToLRC(getLyrics_id["subsonic-response"]["lyricsList"]["structuredLyrics"][0]["line"]);
                             } catch {
                             }
 

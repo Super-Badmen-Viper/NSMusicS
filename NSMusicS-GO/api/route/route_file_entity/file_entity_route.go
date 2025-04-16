@@ -7,7 +7,7 @@ import (
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/mongo"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/repository/repository_file_entity"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/repository/repository_file_entity/repository_file_entity_audio_interface"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/repository/repository_file_entity/scene_audio/scene_audio_db_repository"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/usecase/usecase_file_entity"
 	"github.com/gin-gonic/gin"
 	"time"
@@ -19,9 +19,9 @@ func NewFileEntityRouter(timeout time.Duration, db mongo.Database, group *gin.Ro
 	folderRepo := repository_file_entity.NewFolderRepo(db, domain.CollectionFileEntityFolderInfo)
 	detector := &domain_file_entity.FileDetectorImpl{}
 
-	artistRepo := repository_file_entity_audio_interface.NewArtistRepository(db, domain.CollectionFileEntityAudioArtist)
-	albumRepo := repository_file_entity_audio_interface.NewAlbumRepository(db, domain.CollectionFileEntityAudioAlbum)
-	mediaRepo := repository_file_entity_audio_interface.NewMediaFileRepository(db, domain.CollectionFileEntityAudioMediaFile)
+	artistRepo := scene_audio_db_repository.NewArtistRepository(db, domain.CollectionFileEntityAudioArtist)
+	albumRepo := scene_audio_db_repository.NewAlbumRepository(db, domain.CollectionFileEntityAudioAlbum)
+	mediaRepo := scene_audio_db_repository.NewMediaFileRepository(db, domain.CollectionFileEntityAudioMediaFile)
 
 	// 构建用例（新增超时参数）
 	uc := usecase_file_entity.NewFileUsecase(
