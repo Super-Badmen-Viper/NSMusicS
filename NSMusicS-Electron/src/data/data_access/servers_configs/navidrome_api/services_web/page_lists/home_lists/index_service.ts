@@ -33,7 +33,7 @@ export class Home_Lists_ApiWebService_of_ND extends Navidrome_Api_Services_Web {
             _order: 'desc',
             _sort: 'play_date',
             _start: '0',
-            recently_played: true
+            recently_played: 'true'
         });
     }
 }

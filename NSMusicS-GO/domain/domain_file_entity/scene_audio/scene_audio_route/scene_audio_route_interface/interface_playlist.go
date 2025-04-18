@@ -2,21 +2,58 @@ package scene_audio_route_interface
 
 import (
 	"context"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_db/scene_audio_db_models"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_route/scene_audio_route_models"
 )
 
-// PlaylistRepository 基础CRUD接口
 type PlaylistRepository interface {
-	// 创建/更新
-	Upsert(ctx context.Context, file *scene_audio_db_models.PlaylistMetadata) error
-	BulkUpsert(ctx context.Context, files []*scene_audio_db_models.PlaylistMetadata) (int, error)
+	GetPlaylistItems(
+		ctx context.Context,
+		end string,
+		order string,
+		sort string,
+		start string,
+		search string,
+		starred string,
+		albumId string,
+		artistId string,
+		year string,
+	) (*scene_audio_route_models.PlaylistMetadata, error)
 
-	// 删除
-	DeleteByID(ctx context.Context, id primitive.ObjectID) error
-	DeleteByPath(ctx context.Context, path string) error
+	getPlaylists_all(
+		ctx context.Context,
+	) (*scene_audio_route_models.PlaylistMetadata, error)
 
-	// 查询
-	GetByID(ctx context.Context, id primitive.ObjectID) (*scene_audio_db_models.PlaylistMetadata, error)
-	GetByPath(ctx context.Context, path string) (*scene_audio_db_models.PlaylistMetadata, error)
+	getPlaylist_id(
+		ctx context.Context,
+		playlist_id string,
+	) (*scene_audio_route_models.PlaylistMetadata, error)
+
+	createPlaylist(
+		ctx context.Context,
+		playlist scene_audio_route_models.PlaylistMetadata,
+	) (*scene_audio_route_models.PlaylistMetadata, error)
+
+	deletePlaylist(
+		ctx context.Context,
+		playlist_id string,
+	) (*scene_audio_route_models.PlaylistMetadata, error)
+
+	updatePlaylist(
+		ctx context.Context,
+		playlist_id string,
+		playlist scene_audio_route_models.PlaylistMetadata,
+	) (*scene_audio_route_models.PlaylistMetadata, error)
+
+	updatePlaylist_songIdToAdd(
+		ctx context.Context,
+		playlist_id string,
+		songIds string,
+	) (*scene_audio_route_models.PlaylistMetadata, error)
+
+	updatePlaylist_songIndexToRemove(
+		ctx context.Context,
+		playlist_id string,
+		songIds string,
+	) (*scene_audio_route_models.PlaylistMetadata, error)
 }
