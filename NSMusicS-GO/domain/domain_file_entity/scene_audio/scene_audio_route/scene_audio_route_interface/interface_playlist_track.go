@@ -18,6 +18,6 @@ type PlaylistTrackRepository interface {
 		albumId string,
 		artistId string,
 		year string,
-		playlist_id string,
-	) (*scene_audio_route_models.PlaylistTrackMetadata, error)
+		playlistId string,
+	) ([]scene_audio_route_models.PlaylistTrackMetadata, error)
 }

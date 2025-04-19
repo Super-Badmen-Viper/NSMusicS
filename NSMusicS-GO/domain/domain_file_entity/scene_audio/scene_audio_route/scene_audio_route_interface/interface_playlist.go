@@ -7,53 +7,40 @@ import (
 )
 
 type PlaylistRepository interface {
-	GetPlaylistItems(
+	GetPlaylistsAll(
 		ctx context.Context,
-		end string,
-		order string,
-		sort string,
-		start string,
-		search string,
-		starred string,
-		albumId string,
-		artistId string,
-		year string,
+	) ([]scene_audio_route_models.PlaylistMetadata, error)
+
+	GetPlaylist(
+		ctx context.Context,
+		playlistId string,
 	) (*scene_audio_route_models.PlaylistMetadata, error)
 
-	getPlaylists_all(
-		ctx context.Context,
-	) (*scene_audio_route_models.PlaylistMetadata, error)
-
-	getPlaylist_id(
-		ctx context.Context,
-		playlist_id string,
-	) (*scene_audio_route_models.PlaylistMetadata, error)
-
-	createPlaylist(
+	CreatePlaylist(
 		ctx context.Context,
 		playlist scene_audio_route_models.PlaylistMetadata,
 	) (*scene_audio_route_models.PlaylistMetadata, error)
 
-	deletePlaylist(
+	DeletePlaylist(
 		ctx context.Context,
-		playlist_id string,
-	) (*scene_audio_route_models.PlaylistMetadata, error)
+		playlistId string,
+	) (bool, error)
 
-	updatePlaylist(
+	UpdatePlaylistInfo(
 		ctx context.Context,
-		playlist_id string,
+		playlistId string,
 		playlist scene_audio_route_models.PlaylistMetadata,
-	) (*scene_audio_route_models.PlaylistMetadata, error)
+	) (bool, error)
 
-	updatePlaylist_songIdToAdd(
+	UpdatePlaylistMediaFileIdToAdd(
 		ctx context.Context,
-		playlist_id string,
-		songIds string,
-	) (*scene_audio_route_models.PlaylistMetadata, error)
+		playlistId string,
+		mediaFileIds string,
+	) (bool, error)
 
-	updatePlaylist_songIndexToRemove(
+	UpdatePlaylistMediaFileIndexToRemove(
 		ctx context.Context,
-		playlist_id string,
-		songIds string,
-	) (*scene_audio_route_models.PlaylistMetadata, error)
+		playlistId string,
+		mediaFileIds string,
+	) (bool, error)
 }

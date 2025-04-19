@@ -18,5 +18,5 @@ type MediaFileRepository interface {
 		albumId string,
 		artistId string,
 		year string,
-	) (*scene_audio_route_models.MediaFileMetadata, error)
+	) ([]scene_audio_route_models.MediaFileMetadata, error)
 }

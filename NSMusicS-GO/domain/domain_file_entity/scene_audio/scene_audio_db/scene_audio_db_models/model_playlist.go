@@ -11,7 +11,6 @@ type PlaylistMetadata struct {
 	Comment     string             `bson:"comment"`
 	Duration    float64            `bson:"duration"`
 	SongCount   float64            `bson:"song_count"`
-	Public      bool               `bson:"public"`
 	CreatedAt   time.Time          `bson:"created_at"`
 	UpdatedAt   time.Time          `bson:"updated_at"`
 	Path        string             `bson:"path"`
@@ -20,4 +19,5 @@ type PlaylistMetadata struct {
 	Rules       string             `bson:"rules"`
 	EvaluatedAt time.Time          `bson:"evaluated_at"`
 	OwnerID     string             `bson:"owner_id"`
+	Public      bool               `bson:"public"`
 }

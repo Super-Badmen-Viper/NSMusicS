@@ -16,5 +16,5 @@ type AlbumRepository interface {
 		search string,
 		starred string,
 		artistId string,
-	) (*scene_audio_route_models.AlbumMetadata, error)
+	) ([]scene_audio_route_models.AlbumMetadata, error)
 }

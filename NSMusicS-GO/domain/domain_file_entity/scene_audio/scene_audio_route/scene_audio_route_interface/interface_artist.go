@@ -15,5 +15,5 @@ type ArtistRepository interface {
 		start string,
 		search string,
 		starred string,
-	) (*scene_audio_route_models.ArtistMetadata, error)
+	) ([]scene_audio_route_models.ArtistMetadata, error)
 }

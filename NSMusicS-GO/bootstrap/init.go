@@ -103,6 +103,10 @@ func (si *Initializer) executeInitialization(ctx context.Context) error {
 		return err
 	}
 
+	if err := si.initFileEntityAudioAnnotation(ctx); err != nil {
+		return err
+	}
+
 	return si.markInitialized(ctx)
 }
 
@@ -863,6 +867,25 @@ func (si *Initializer) initFileEntityAudioArtist(ctx context.Context) error {
 	dummyID := primitive.NewObjectID()
 	emptyDoc := &scene_audio_db_models.ArtistMetadata{
 		ID: dummyID,
+	}
+
+	if _, err := coll.InsertOne(ctx, emptyDoc); err != nil {
+		return err
+	}
+
+	if _, err := coll.DeleteOne(ctx, bson.M{"_id": dummyID}); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (si *Initializer) initFileEntityAudioAnnotation(ctx context.Context) error {
+	coll := si.db.Collection(domain.CollectionFileEntityAnnotation)
+
+	dummyID := primitive.NewObjectID()
+	emptyDoc := &scene_audio_db_models.AnnotationMetadata{
+		AnnID: dummyID,
 	}
 
 	if _, err := coll.InsertOne(ctx, emptyDoc); err != nil {
