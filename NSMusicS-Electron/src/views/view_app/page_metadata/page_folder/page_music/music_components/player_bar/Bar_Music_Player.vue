@@ -168,7 +168,7 @@ const Play_This_Audio_Path = () => {
       )
       await store_player_audio_logic.player.play();
       if(store_player_audio_logic.player_select === 'mpv') {
-        if (store_player_audio_logic.slider_init_singleValue != 0) {
+        if (store_player_audio_logic.slider_init_singleValue != 0 && !init_play) {
           store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_init_singleValue, true);
           store_player_audio_logic.slider_init_singleValue = 0;
         }
@@ -224,7 +224,7 @@ const init_player_howler = async () => {
         }
       }
 
-      if (store_player_audio_logic.slider_init_singleValue != 0) {
+      if (store_player_audio_logic.slider_init_singleValue != 0 && !init_play) {
         store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_init_singleValue, true);
         store_player_audio_logic.slider_init_singleValue = 0;
         store_player_audio_logic.player.pause()
