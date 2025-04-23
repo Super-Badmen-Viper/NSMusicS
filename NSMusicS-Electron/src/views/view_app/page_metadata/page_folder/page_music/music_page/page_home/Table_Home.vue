@@ -446,18 +446,18 @@ onBeforeUnmount(() => {
     <n-space vertical
              style="margin-top: 20px;margin-left: 8px;">
       <div
-           v-contextmenu:contextmenu
-           @contextmenu.prevent="() => {
-             store_playlist_list_info.playlist_Menu_Item = store_view_home_page_info.home_selected_top_album;
-             store_playlist_list_info.playlist_Menu_Item_Id =store_view_home_page_info.home_selected_top_album?.id
-           }">
+         v-contextmenu:contextmenu
+         @contextmenu.prevent="() => {
+           store_playlist_list_info.playlist_Menu_Item = store_view_home_page_info.home_selected_top_album;
+           store_playlist_list_info.playlist_Menu_Item_Id =store_view_home_page_info.home_selected_top_album?.id
+         }">
         <div
           :style="{
             width: 'calc(100vw - ' + (collapsed_width - 20) + 'px)',
           }"
           style="
             height: calc(41vh);
-            border-radius: 5px;
+            border-radius: 7px;
             overflow: hidden;
             background-size: cover;
             background-position: center;
@@ -488,7 +488,7 @@ onBeforeUnmount(() => {
         transformOrigin: 'left bottom',
         marginTop: `calc(-20vh - 50px)`,
         }"
-        style="margin-left: 20px;margin-top: -202px;">
+        style="margin-left: calc(3.5vh);margin-top: -202px;">
         <img
           :src="getAssetImage(store_view_home_page_info.home_selected_top_album_medium_image_url)"
           @error="handleImageError(store_view_home_page_info.home_selected_top_album)"

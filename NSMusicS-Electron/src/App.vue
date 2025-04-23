@@ -110,7 +110,7 @@
           icon: renderIcon(Home28Regular),
         },
         {
-          label: computed(() => renderRouterLink('categories', t('Categories'))),
+          label: computed(() => renderRouterLink('categories', t('entity.smartPlaylist') + t('Categories'))),
           key: 'categories',
           icon: renderIcon(Apps20Regular),
         },
