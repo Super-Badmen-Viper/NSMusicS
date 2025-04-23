@@ -163,55 +163,55 @@
     //     },
     // )
     ///
-    if (store_app_configs_info.menuOptions_selectd_model_2)
-      store_app_configs_info.app_view_menuOptions.push(
-          {
-            label: computed(() => renderRouterLink('update', t('nsmusics.siderbar_menu.karaoke'))),
-            key: 'update',
-            icon: renderIcon(SlideMicrophone32Regular)
-          },
-      )
-    if (store_app_configs_info.menuOptions_selectd_model_1)
-      store_app_configs_info.app_view_menuOptions.push(
-          {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
-          {
-            label: computed(() => renderRouterLink('setting', t('page.appMenu.manageServers'))),
-            key: 'setting',
-            icon: renderIcon(BareMetalServer)
-          },
-          {
-            label: computed(() => renderRouterLink('update', t('HeaderLibraries'))),
-            key: 'library',
-            icon: renderIcon(MediaLibrary)
-          },
-      )
-    if (store_app_configs_info.menuOptions_selectd_model_3)
-      store_app_configs_info.app_view_menuOptions.push(
-          {
-            label: computed(() =>
-                renderRouterLink('update', t('HeaderVideos'))),
-            key: 'update',
-            icon: renderIcon(VideoLibraryOutlined)
-          },
-          {
-            label: computed(() =>
-                renderRouterLink('update', t('Photo'))),
-            key: 'update',
-            icon: renderIcon(PhotoLibraryOutlined)
-          },
-          {
-            label: computed(() =>
-                renderRouterLink('update', t('Books'))),
-            key: 'update',
-            icon: renderIcon(LibraryBooksOutlined)
-          },
-          {
-            label: computed(() =>
-                renderRouterLink('update', t('Folders'))),
-            key: 'update',
-            icon: renderIcon(LocalLibraryOutlined)
-          },
-      )
+    // if (store_app_configs_info.menuOptions_selectd_model_2)
+    //   store_app_configs_info.app_view_menuOptions.push(
+    //       {
+    //         label: computed(() => renderRouterLink('update', t('nsmusics.siderbar_menu.karaoke'))),
+    //         key: 'update',
+    //         icon: renderIcon(SlideMicrophone32Regular)
+    //       },
+    //   )
+    // if (store_app_configs_info.menuOptions_selectd_model_1)
+    //   store_app_configs_info.app_view_menuOptions.push(
+    //       {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
+    //       {
+    //         label: computed(() => renderRouterLink('setting', t('page.appMenu.manageServers'))),
+    //         key: 'setting',
+    //         icon: renderIcon(BareMetalServer)
+    //       },
+    //       {
+    //         label: computed(() => renderRouterLink('update', t('HeaderLibraries'))),
+    //         key: 'library',
+    //         icon: renderIcon(MediaLibrary)
+    //       },
+    //   )
+    // if (store_app_configs_info.menuOptions_selectd_model_3)
+    //   store_app_configs_info.app_view_menuOptions.push(
+    //       {
+    //         label: computed(() =>
+    //             renderRouterLink('update', t('HeaderVideos'))),
+    //         key: 'update',
+    //         icon: renderIcon(VideoLibraryOutlined)
+    //       },
+    //       {
+    //         label: computed(() =>
+    //             renderRouterLink('update', t('Photo'))),
+    //         key: 'update',
+    //         icon: renderIcon(PhotoLibraryOutlined)
+    //       },
+    //       {
+    //         label: computed(() =>
+    //             renderRouterLink('update', t('Books'))),
+    //         key: 'update',
+    //         icon: renderIcon(LibraryBooksOutlined)
+    //       },
+    //       {
+    //         label: computed(() =>
+    //             renderRouterLink('update', t('Folders'))),
+    //         key: 'update',
+    //         icon: renderIcon(LocalLibraryOutlined)
+    //       },
+    //   )
   }
 
   ////// player view
@@ -747,6 +747,7 @@
   import {store_server_login_logic} from "@/views/view_server/page_metadata/page_login/store/store_server_login_logic";
   import {store_server_login_info} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
   onMounted(async () => {
+    create_menuOptions_appBar()
     try {
       if (!isElectron) {
         // isLogin
@@ -761,7 +762,6 @@
     }catch (e) {
       console.error(e);
     }
-    create_menuOptions_appBar()
   });
   watch(() => store_app_configs_info.lang, async (newValue) => {
     locale.value = newValue
