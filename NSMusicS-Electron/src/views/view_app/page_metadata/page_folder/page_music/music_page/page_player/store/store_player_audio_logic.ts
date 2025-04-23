@@ -19,6 +19,8 @@ export const store_player_audio_logic = reactive({
     player_state_skip_back_click: false,
     player_state_skip_forward_click: false,
 
+    player_init_play: false,
+
     player_kind: [
         { label: 'mpv', value: 'mpv' },
         { label: 'web', value: 'web' },

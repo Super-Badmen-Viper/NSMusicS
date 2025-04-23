@@ -109,11 +109,11 @@
           key: 'home',
           icon: renderIcon(Home28Regular),
         },
-        {
-          label: computed(() => renderRouterLink('categories', t('entity.smartPlaylist') + t('Categories'))),
-          key: 'categories',
-          icon: renderIcon(Apps20Regular),
-        },
+        // {
+        //   label: computed(() => renderRouterLink('categories', t('entity.smartPlaylist') + t('Categories'))),
+        //   key: 'categories',
+        //   icon: renderIcon(Apps20Regular),
+        // },
         {
           label: computed(() => renderRouterLink('album', t('entity.album_other'))),
           key: 'album',

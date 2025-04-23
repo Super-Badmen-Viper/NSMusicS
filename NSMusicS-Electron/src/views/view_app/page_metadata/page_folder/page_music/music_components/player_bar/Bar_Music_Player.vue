@@ -168,7 +168,7 @@ const Play_This_Audio_Path = () => {
       )
       await store_player_audio_logic.player.play();
       if(store_player_audio_logic.player_select === 'mpv') {
-        if (store_player_audio_logic.slider_init_singleValue != 0 && !init_play) {
+        if (store_player_audio_logic.slider_init_singleValue != 0 && store_player_audio_logic.player_init_play) {
           store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_init_singleValue, true);
           store_player_audio_logic.slider_init_singleValue = 0;
         }
@@ -224,7 +224,7 @@ const init_player_howler = async () => {
         }
       }
 
-      if (store_player_audio_logic.slider_init_singleValue != 0 && !init_play) {
+      if (store_player_audio_logic.slider_init_singleValue != 0 && store_player_audio_logic.player_init_play) {
         store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_init_singleValue, true);
         store_player_audio_logic.slider_init_singleValue = 0;
         store_player_audio_logic.player.pause()
@@ -325,12 +325,11 @@ onMounted(async () => {
   await store_player_audio_logic.player.IsPlaying()
   await store_player_audio_logic.player.setVolume(Number(store_player_audio_logic.play_volume))
 })
-let init_play = true;
 const Init_Audio_Player = async () => {
   if(store_player_audio_info.this_audio_file_path.length > 0){
-    if(init_play){
+    if(store_player_audio_logic.player_init_play){
       Play_This_Audio_Path()
-      init_play = false
+      store_player_audio_logic.player_init_play = false
     }
     if(!store_player_audio_logic.player.isPlaying){
       if(this_audio_buffer_file.value === null){
