@@ -6,9 +6,41 @@ import {NSlider} from "naive-ui";
 import {
   store_playlist_list_info
 } from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info";
+import {store_view_media_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
 function getAssetImage(firstImage: string) {
   return new URL(firstImage, import.meta.url).href;
 }
+import error_album from '@/assets/img/error_album.jpg'
+import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
+const handleImageError = async (event) => {
+  const originalSrc = event.target.src;
+  let result_src = error_album
+  if(isElectron) {
+    try {
+      const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
+      if (newImagePath.length > 0) {
+        event.target.src = newImagePath;
+      } else {
+        event.target.src = result_src;
+      }
+    } catch (error) {
+      console.error('Error handling image error:', error);
+      event.target.src = result_src;
+    }
+    ///
+    const scroll_item: Media_File | undefined =
+        store_playlist_list_info.playlist_MediaFiles_temporary.find(
+            (mediaFile: Media_File) =>
+                mediaFile.id === store_player_audio_info.this_audio_song_id);
+    if (scroll_item != undefined && scroll_item != 'undefined') {
+      scroll_item.medium_image_url = result_src;
+    }
+    ///
+    store_player_audio_info.page_top_album_image_url = result_src;
+  } else {
+    store_player_audio_info.page_top_album_image_url = error_album;
+  }
+};
 
 import { ref, computed } from "vue";
 import { NCarousel, NCarouselItem } from "naive-ui";
@@ -75,9 +107,10 @@ const nextSlideStyle = computed(() => {
       >
         <div class="image-wrapper">
           <img
-              class="carousel-img"
-              :src="getAssetImage(item.medium_image_url)"
-              :alt="`Carousel Image ${index + 1}`"
+            class="carousel-img"
+            :src="getAssetImage(item.medium_image_url)"
+            :alt="`Carousel Image ${index + 1}`"
+            @error="handleImageError"
           />
         </div>
       </n-carousel-item>
