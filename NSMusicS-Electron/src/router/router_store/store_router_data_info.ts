@@ -23,7 +23,8 @@ export const store_router_data_info = reactive({
 
     router_select_model_menu: false,
     router_select_model_home: false,
-    router_select_model_updateing: false,
+    router_select_model_categories: false,
+    router_select_model_update: false,
     router_select_model_media: false,
     router_select_model_album: false,
     router_select_model_artist: false,
@@ -36,6 +37,9 @@ watch(() => store_router_data_info.router_select, async (newValue) => {
     if(!store_playlist_appearance.playlist_show) {
         if (newValue === 'home') {
             store_router_data_info.router_select_model_home = true
+            store_view_home_page_fetchData.fetchData_Home()
+        } else if (newValue === 'categories') {
+            store_router_data_info.router_select_model_categories = true
             store_view_home_page_fetchData.fetchData_Home()
         } else if (newValue === 'song') {
             store_router_data_info.router_select_model_media = true

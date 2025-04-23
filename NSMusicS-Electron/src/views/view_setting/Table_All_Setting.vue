@@ -10,7 +10,7 @@ import {
   ContentDeliveryNetwork, Catalog, Timer, Close
 } from '@vicons/carbon'
 import {
-  PlayCircle16Regular, LauncherSettings24Regular, Key24Regular, PlugConnected20Regular, Settings48Regular
+  PlayCircle16Regular, LauncherSettings24Regular, Key24Regular, PlugConnected20Regular, Settings20Regular
 } from '@vicons/fluent'
 import {
   LiveTvRound
@@ -62,7 +62,7 @@ const { t } = useI18n({
   inheritLocale: true
 })
 const menuOptions: any[] = reactive([
-  {label: computed(() => t('ClientSettings')), key: 'type-group-0', icon: renderIcon(Settings48Regular),
+  {label: computed(() => t('ClientSettings')), key: 'type-group-0', icon: renderIcon(Settings20Regular),
     children: [
       {label: computed(() => t('page.setting.generalTab')), key: 'type-group-0-1', icon: renderIcon(Settings)},
       {label: computed(() => t('HeaderLibraries')), key: 'type-group-0-2', icon: renderIcon(MediaLibrary)},

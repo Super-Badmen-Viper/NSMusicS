@@ -2,7 +2,7 @@
 ////// this_view resource of vicons_svg
 import {
   TagMultiple24Regular,
-  Delete20Regular, Settings48Regular
+  Delete20Regular, Settings20Regular
 } from '@vicons/fluent'
 import {
   BareMetalServer, Add, Close, UserAvatarFilledAlt, MediaCast
@@ -54,7 +54,7 @@ function renderRouterLink (nameValue: any, defaultValue: any){
 function create_menuOptions_appBar(){
   store_app_configs_info.app_view_menuOptions = []
   store_app_configs_info.app_view_menuOptions.push(
-      {label: computed(() => renderRouterLink('apps',t('common.setting'))), key: 'apps', icon: renderIcon(Settings48Regular),},
+      {label: computed(() => renderRouterLink('apps',t('common.setting'))), key: 'apps', icon: renderIcon(Settings20Regular),},
       {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
   )
   store_app_configs_info.app_view_menuOptions.push(

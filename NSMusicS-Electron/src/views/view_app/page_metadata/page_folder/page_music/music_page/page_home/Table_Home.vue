@@ -4,6 +4,7 @@ import {
   PlayCircle24Regular,
   Heart24Regular,Heart28Filled,
   ChevronLeft16Filled,ChevronRight16Filled,Open28Filled,
+  ArrowReset24Filled
 } from '@vicons/fluent'
 import {
   Play,
@@ -444,7 +445,7 @@ onBeforeUnmount(() => {
   <div class="home-wall-container">
     <n-space vertical
              style="margin-top: 20px;margin-left: 8px;">
-      <div class="notice"
+      <div
            v-contextmenu:contextmenu
            @contextmenu.prevent="() => {
              store_playlist_list_info.playlist_Menu_Item = store_view_home_page_info.home_selected_top_album;
@@ -455,8 +456,8 @@ onBeforeUnmount(() => {
             width: 'calc(100vw - ' + (collapsed_width - 20) + 'px)',
           }"
           style="
-            height: calc(40vh);
-            border-radius: 10px;
+            height: calc(41vh);
+            border-radius: 5px;
             overflow: hidden;
             background-size: cover;
             background-position: center;
@@ -468,7 +469,7 @@ onBeforeUnmount(() => {
               :style="{
                 width: 'calc(100vw - ' + (collapsed_width - 20) + 'px)',
                 height: 'calc(100vw - ' + (collapsed_width - 20) + 'px)',
-                WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 1) 100%)',
+                WebkitMaskImage: 'linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)',
               }"
               style="
                 position: absolute;transform: translateY(-25%);
@@ -487,12 +488,13 @@ onBeforeUnmount(() => {
         transformOrigin: 'left bottom',
         marginTop: `calc(-20vh - 50px)`,
         }"
-        style="margin-left: 0px;margin-top: -202px;">
+        style="margin-left: 20px;margin-top: -202px;">
         <img
           :src="getAssetImage(store_view_home_page_info.home_selected_top_album_medium_image_url)"
           @error="handleImageError(store_view_home_page_info.home_selected_top_album)"
           style="
             object-fit: cover; object-position: center;
+            box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
             width: 170px;height: 170px;
             border-radius: 6px;border: 1.5px solid #FFFFFF20;"/>
         <n-space vertical
@@ -565,58 +567,65 @@ onBeforeUnmount(() => {
     </n-space>
 
     <n-space vertical
-             style="margin-top: 10px;margin-left: 8px;">
-      <n-space align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}">
-        <span style="font-size: 16px;font-weight: 600;">
-          {{
-            $t('page.home.mostPlayed') + ' : ' +
-            (store_server_users.server_select_kind != 'navidrome'
-                ? $t('entity.track_other')
-                : $t('entity.album_other'))
-          }}
-        </span>
-        <n-tooltip trigger="hover" placement="top">
-          <template #trigger>
-            <n-button quaternary circle @click="store_view_home_page_fetchData.fetchData_Home_of_maximum_playback()">
-              <template #icon>
-                <n-icon :size="20"><RefreshSharp/></n-icon>
-              </template>
-            </n-button>
-          </template>
-          {{ $t('common.refresh') }}
-        </n-tooltip>
-        <n-tooltip trigger="hover" placement="top">
-          <template #trigger>
-            <n-button quaternary circle
-                      @click="scrollTo_maximum_playback(-1)"
-                      style="margin-left: -5px;">
-              <n-icon size="20" :depth="2">
-                <ChevronLeft16Filled />
-              </n-icon>
-            </n-button>
-          </template>
-          {{ $t('common.backward') }}
-        </n-tooltip>
-        <n-tooltip trigger="hover" placement="top">
-          <template #trigger>
-            <n-button quaternary circle
-                      @click="scrollTo_maximum_playback(1)"
-                      style="margin-left: -5px;">
-              <n-icon size="20" :depth="2">
-                <ChevronRight16Filled />
-              </n-icon>
-            </n-button>
-          </template>
-          {{ $t('common.forward') }}
-        </n-tooltip>
-        <n-space v-if="store_view_home_page_info.home_Files_temporary_maximum_playback.length === 0">
-          {{ $t('None') + $t('Play') + $t('Data') }}
+             style="margin-left: 8px;">
+      <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}">
+        <n-space align="center">
+          <span style="font-size: 16px;font-weight: 600;">
+            {{
+              $t('page.home.mostPlayed') + ' : ' +
+              (store_server_users.server_select_kind != 'navidrome'
+                  ? $t('entity.track_other')
+                  : $t('entity.album_other'))
+            }}
+          </span>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary @click="()=>{
+                store_view_home_page_fetchData.fetchData_Home_of_maximum_playback();
+                dynamicScroller_maximum_playback.$el.scrollLeft = 0;
+              }">
+                <template #icon>
+                  <n-icon :size="20"><ArrowReset24Filled/></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('common.refresh') }}
+          </n-tooltip>
+          <n-space v-if="store_view_home_page_info.home_Files_temporary_maximum_playback.length === 0" style="margin-top: 2px;">
+            {{ $t('None') + $t('Play') + $t('Data') }}
+          </n-space>
+        </n-space>
+        <n-space>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary
+                        @click="scrollTo_maximum_playback(-1)"
+                        >
+                <n-icon size="20" :depth="2">
+                  <ChevronLeft16Filled />
+                </n-icon>
+              </n-button>
+            </template>
+            {{ $t('common.backward') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary
+                        @click="scrollTo_maximum_playback(1)"
+                        >
+                <n-icon size="20" :depth="2">
+                  <ChevronRight16Filled />
+                </n-icon>
+              </n-button>
+            </template>
+            {{ $t('common.forward') }}
+          </n-tooltip>
         </n-space>
       </n-space>
       <DynamicScroller
           class="home-wall" ref="dynamicScroller_maximum_playback"
           v-if="store_view_home_page_info.home_Files_temporary_maximum_playback.length != 0"
-          :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + (store_server_user_model.model_select === 'local' ? 70 : 60) + 'px'}"
+          :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + 60 + 'px'}"
           :items="store_view_home_page_info.home_Files_temporary_maximum_playback"
           :itemSize="itemSize"
           :minItemSize="itemSize"
@@ -713,18 +722,13 @@ onBeforeUnmount(() => {
               <div :style="{ width: item_album_image + 'px' }">
                 <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
                   <div>
-                    <span id="album_name" :style="{ maxWidth: item_album_txt + 'px' }" style="font-size: 14px;font-weight: 600;">
+                    <span id="home_item_img_album_name" :style="{ maxWidth: item_album_txt + 'px' }" style="font-weight: 600;">
                       {{ item.name }}
                     </span>
                   </div>
                   <div>
-                    <span id="album_artist_name" :style="{ maxWidth: item_album_txt + 'px' }">
+                    <span id="home_item_img_artist_name" :style="{ maxWidth: item_album_txt + 'px' }">
                       {{ item.artist }}
-                    </span>
-                  </div>
-                  <div>
-                    <span id="album_time" :style="{ maxWidth: item_album_txt + 'px' }">
-                      {{ item.created_time }}
                     </span>
                   </div>
                 </div>
@@ -736,43 +740,52 @@ onBeforeUnmount(() => {
     </n-space>
 
     <n-space vertical
-             style="margin-top: 36px;margin-left: 8px;">
-      <n-space align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}">
-        <span style="font-size: 16px;font-weight: 600;">
-          {{
-            $t('page.home.explore') + ' : ' +
-            (store_server_users.server_select_kind != 'navidrome'
-                ? $t('entity.track_other')
-                : $t('entity.album_other'))
-          }}
-        </span>
-        <n-tooltip trigger="hover" placement="top">
+             style="margin-left: 8px;">
+      <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}">
+        <n-space align="center">
+          <span style="font-size: 16px;font-weight: 600;">
+            {{
+              $t('page.home.explore') + ' : ' +
+              (store_server_users.server_select_kind != 'navidrome'
+                  ? $t('entity.track_other')
+                  : $t('entity.album_other'))
+            }}
+          </span>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary @click="()=>{
+                store_view_home_page_fetchData.fetchData_Home_of_random_search();
+                dynamicScroller_random_search.$el.scrollLeft = 0;
+              }">
+                <template #icon>
+                  <n-icon :size="20"><ArrowReset24Filled/></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('common.refresh') }}
+          </n-tooltip>
+          <n-space v-if="store_view_home_page_info.home_Files_temporary_random_search.length === 0" style="margin-top: 2px;">
+            {{ $t('None') + $t('Play') + $t('Data') }}
+          </n-space>
+        </n-space>
+        <n-space>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary
+                        @click="scrollTo_random_search(-1)"
+                        >
+                <n-icon size="20" :depth="2">
+                  <ChevronLeft16Filled />
+                </n-icon>
+              </n-button>
+            </template>
+            {{ $t('common.backward') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top">
           <template #trigger>
-            <n-button quaternary circle @click="store_view_home_page_fetchData.fetchData_Home_of_random_search()">
-              <template #icon>
-                <n-icon :size="20"><RefreshSharp/></n-icon>
-              </template>
-            </n-button>
-          </template>
-          {{ $t('common.refresh') }}
-        </n-tooltip>
-        <n-tooltip trigger="hover" placement="top">
-          <template #trigger>
-            <n-button quaternary circle
-                      @click="scrollTo_random_search(-1)"
-                      style="margin-left: -5px;">
-              <n-icon size="20" :depth="2">
-                <ChevronLeft16Filled />
-              </n-icon>
-            </n-button>
-          </template>
-          {{ $t('common.backward') }}
-        </n-tooltip>
-        <n-tooltip trigger="hover" placement="top">
-          <template #trigger>
-            <n-button quaternary circle
+            <n-button quaternary
                       @click="scrollTo_random_search(1)"
-                      style="margin-left: -5px;">
+                      >
               <n-icon size="20" :depth="2">
                 <ChevronRight16Filled />
               </n-icon>
@@ -780,14 +793,12 @@ onBeforeUnmount(() => {
           </template>
           {{ $t('common.forward') }}
         </n-tooltip>
-        <n-space v-if="store_view_home_page_info.home_Files_temporary_random_search.length === 0">
-          {{ $t('None') + $t('Play') + $t('Data') }}
         </n-space>
       </n-space>
       <DynamicScroller
         class="home-wall" ref="dynamicScroller_random_search"
         v-if="store_view_home_page_info.home_Files_temporary_random_search.length != 0"
-        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + (store_server_user_model.model_select === 'local' ? 70 : 60) + 'px'}"
+        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + 60 + 'px'}"
         :items="store_view_home_page_info.home_Files_temporary_random_search"
         :itemSize="itemSize"
         :minItemSize="itemSize"
@@ -883,18 +894,13 @@ onBeforeUnmount(() => {
               <div :style="{ width: item_album_image + 'px' }">
                 <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
                   <div>
-                  <span id="album_name" :style="{ maxWidth: item_album_txt + 'px' }" style="font-size: 14px;font-weight: 600;">
+                  <span id="home_item_img_album_name" :style="{ maxWidth: item_album_txt + 'px' }" style="font-weight: 600;">
                     {{ item.name }}
                   </span>
                   </div>
                   <div>
-                  <span id="album_artist_name" :style="{ maxWidth: item_album_txt + 'px' }">
+                  <span id="home_item_img_artist_name" :style="{ maxWidth: item_album_txt + 'px' }">
                     {{ item.artist }}
-                  </span>
-                  </div>
-                  <div>
-                  <span id="album_time" :style="{ maxWidth: item_album_txt + 'px' }">
-                    {{ item.created_time }}
                   </span>
                   </div>
                 </div>
@@ -906,43 +912,52 @@ onBeforeUnmount(() => {
     </n-space>
 
     <n-space vertical
-             style="margin-top: 36px;margin-left: 8px;">
-      <n-space align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}">
-        <span style="font-size: 16px;font-weight: 600;">
-          {{
-            $t('page.home.newlyAdded') + ' : ' +
-            (store_server_users.server_select_kind === 'jellyfin'
-                ? $t('entity.track_other')
-                : $t('entity.album_other'))
-          }}
-        </span>
-        <n-tooltip trigger="hover" placement="top">
+             style="margin-left: 8px;">
+      <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}">
+        <n-space align="center">
+          <span style="font-size: 16px;font-weight: 600;">
+            {{
+              $t('page.home.newlyAdded') + ' : ' +
+              (store_server_users.server_select_kind === 'jellyfin'
+                  ? $t('entity.track_other')
+                  : $t('entity.album_other'))
+            }}
+          </span>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary @click="()=>{
+                store_view_home_page_fetchData.fetchData_Home_of_recently_added();
+                dynamicScroller_recently_added.$el.scrollLeft = 0;
+              }">
+                <template #icon>
+                  <n-icon :size="20"><ArrowReset24Filled/></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('common.refresh') }}
+          </n-tooltip>
+          <n-space v-if="store_view_home_page_info.home_Files_temporary_recently_added.length === 0" style="margin-top: 2px;">
+            {{ $t('None') + $t('Play') + $t('Data') }}
+          </n-space>
+        </n-space>
+        <n-space>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary
+                        @click="scrollTo_recently_added(-1)"
+                        >
+                <n-icon size="20" :depth="2">
+                  <ChevronLeft16Filled />
+                </n-icon>
+              </n-button>
+            </template>
+            {{ $t('common.backward') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top">
           <template #trigger>
-            <n-button quaternary circle @click="store_view_home_page_fetchData.fetchData_Home_of_recently_added()">
-              <template #icon>
-                <n-icon :size="20"><RefreshSharp/></n-icon>
-              </template>
-            </n-button>
-          </template>
-          {{ $t('common.refresh') }}
-        </n-tooltip>
-        <n-tooltip trigger="hover" placement="top">
-          <template #trigger>
-            <n-button quaternary circle
-                      @click="scrollTo_recently_added(-1)"
-                      style="margin-left: -5px;">
-              <n-icon size="20" :depth="2">
-                <ChevronLeft16Filled />
-              </n-icon>
-            </n-button>
-          </template>
-          {{ $t('common.backward') }}
-        </n-tooltip>
-        <n-tooltip trigger="hover" placement="top">
-          <template #trigger>
-            <n-button quaternary circle
+            <n-button quaternary
                       @click="scrollTo_recently_added(1)"
-                      style="margin-left: -5px;">
+                      >
               <n-icon size="20" :depth="2">
                 <ChevronRight16Filled />
               </n-icon>
@@ -950,14 +965,12 @@ onBeforeUnmount(() => {
           </template>
           {{ $t('common.forward') }}
         </n-tooltip>
-        <n-space v-if="store_view_home_page_info.home_Files_temporary_recently_added.length === 0">
-          {{ $t('None') + $t('Play') + $t('Data') }}
         </n-space>
       </n-space>
       <DynamicScroller
         class="home-wall" ref="dynamicScroller_recently_added"
         v-if="store_view_home_page_info.home_Files_temporary_recently_added.length != 0"
-        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + (store_server_user_model.model_select === 'local' ? 70 : 60) + 'px'}"
+        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + 60 + 'px'}"
         :items="store_view_home_page_info.home_Files_temporary_recently_added"
         :itemSize="itemSize"
         :minItemSize="itemSize"
@@ -1053,18 +1066,13 @@ onBeforeUnmount(() => {
               <div :style="{ width: item_album_image + 'px' }">
                 <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
                   <div>
-                  <span id="album_name" :style="{ maxWidth: item_album_txt + 'px' }" style="font-size: 14px;font-weight: 600;">
+                  <span id="home_item_img_album_name" :style="{ maxWidth: item_album_txt + 'px' }" style="font-weight: 600;">
                     {{ item.name }}
                   </span>
                   </div>
                   <div>
-                  <span id="album_artist_name" :style="{ maxWidth: item_album_txt + 'px' }">
+                  <span id="home_item_img_artist_name" :style="{ maxWidth: item_album_txt + 'px' }">
                     {{ item.artist }}
-                  </span>
-                  </div>
-                  <div>
-                  <span id="album_time" :style="{ maxWidth: item_album_txt + 'px' }">
-                    {{ item.created_time }}
                   </span>
                   </div>
                 </div>
@@ -1076,43 +1084,52 @@ onBeforeUnmount(() => {
     </n-space>
 
     <n-space vertical
-             style="margin-top: 36px;margin-left: 8px;">
-      <n-space align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}">
-        <span style="font-size: 16px;font-weight: 600;">
-          {{
-            $t('page.home.recentlyPlayed') + ' : ' +
-            (store_server_users.server_select_kind != 'navidrome'
-                ? $t('entity.track_other')
-                : $t('entity.album_other'))
-          }}
-        </span>
-        <n-tooltip trigger="hover" placement="top">
+             style="margin-left: 8px;">
+      <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}">
+        <n-space align="center">
+          <span style="font-size: 16px;font-weight: 600;">
+            {{
+              $t('page.home.recentlyPlayed') + ' : ' +
+              (store_server_users.server_select_kind != 'navidrome'
+                  ? $t('entity.track_other')
+                  : $t('entity.album_other'))
+            }}
+          </span>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary @click="()=>{
+                store_view_home_page_fetchData.fetchData_Home_of_recently_played();
+                dynamicScroller_recently_played.$el.scrollLeft = 0;
+              }">
+                <template #icon>
+                  <n-icon :size="20"><ArrowReset24Filled/></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('common.refresh') }}
+          </n-tooltip>
+          <n-space v-if="store_view_home_page_info.home_Files_temporary_recently_played.length === 0" style="margin-top: 2px;">
+            {{ $t('None') + $t('Play') + $t('Data') }}
+          </n-space>
+        </n-space>
+        <n-space>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary
+                        @click="scrollTo_recently_played(-1)"
+                        >
+                <n-icon size="20" :depth="2">
+                  <ChevronLeft16Filled />
+                </n-icon>
+              </n-button>
+            </template>
+            {{ $t('common.backward') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top">
           <template #trigger>
-            <n-button quaternary circle @click="store_view_home_page_fetchData.fetchData_Home_of_recently_played()">
-              <template #icon>
-                <n-icon :size="20"><RefreshSharp/></n-icon>
-              </template>
-            </n-button>
-          </template>
-          {{ $t('common.refresh') }}
-        </n-tooltip>
-        <n-tooltip trigger="hover" placement="top">
-          <template #trigger>
-            <n-button quaternary circle
-                      @click="scrollTo_recently_played(-1)"
-                      style="margin-left: -5px;">
-              <n-icon size="20" :depth="2">
-                <ChevronLeft16Filled />
-              </n-icon>
-            </n-button>
-          </template>
-          {{ $t('common.backward') }}
-        </n-tooltip>
-        <n-tooltip trigger="hover" placement="top">
-          <template #trigger>
-            <n-button quaternary circle
+            <n-button quaternary
                       @click="scrollTo_recently_played(1)"
-                      style="margin-left: -5px;">
+                      >
               <n-icon size="20" :depth="2">
                 <ChevronRight16Filled />
               </n-icon>
@@ -1120,14 +1137,12 @@ onBeforeUnmount(() => {
           </template>
           {{ $t('common.forward') }}
         </n-tooltip>
-        <n-space v-if="store_view_home_page_info.home_Files_temporary_recently_played.length === 0">
-          {{ $t('None') + $t('Play') + $t('Data') }}
         </n-space>
       </n-space>
       <DynamicScroller
         class="home-wall" ref="dynamicScroller_recently_played"
         v-if="store_view_home_page_info.home_Files_temporary_recently_played.length != 0"
-        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + (store_server_user_model.model_select === 'local' ? 70 : 60) + 'px'}"
+        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + 60 + 'px'}"
         :items="store_view_home_page_info.home_Files_temporary_recently_played"
         :itemSize="itemSize"
         :minItemSize="itemSize"
@@ -1223,18 +1238,13 @@ onBeforeUnmount(() => {
               <div :style="{ width: item_album_image + 'px' }">
                 <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
                   <div>
-                  <span id="album_name" :style="{ maxWidth: item_album_txt + 'px' }" style="font-size: 14px;font-weight: 600;">
+                  <span id="home_item_img_album_name" :style="{ maxWidth: item_album_txt + 'px' }" style="font-weight: 600;">
                     {{ item.name }}
                   </span>
                   </div>
                   <div>
-                  <span id="album_artist_name" :style="{ maxWidth: item_album_txt + 'px' }">
+                  <span id="home_item_img_artist_name" :style="{ maxWidth: item_album_txt + 'px' }">
                     {{ item.artist }}
-                  </span>
-                  </div>
-                  <div>
-                  <span id="album_time" :style="{ maxWidth: item_album_txt + 'px' }">
-                    {{ item.created_time }}
                   </span>
                   </div>
                 </div>
@@ -1280,6 +1290,7 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   scroll-behavior: smooth;
+  scrollbar-width: none;
   overflow-x: hidden;
 }
 .album {
@@ -1322,28 +1333,17 @@ onBeforeUnmount(() => {
   float: left;
   text-align: left;
 }
-#album_name{
+#home_item_img_album_name{
   margin-top: 2px;
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 13px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-#album_artist_name{
-  font-size: 12px;
-  font-weight: 500;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-#album_time{
-  font-size: 12px;
-  font-weight: 500;
+#home_item_img_artist_name{
+  font-size: 13px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;

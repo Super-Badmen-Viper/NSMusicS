@@ -894,7 +894,12 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
         <div class="bar_left_text_song_info">
           <n-space>
             <n-ellipsis>
-              <span id="bar_song_name" @click="handleItemClick_title(store_player_audio_info.this_audio_song_name)">{{ store_player_audio_info.this_audio_song_name + '&nbsp-&nbsp' }}</span>
+              <span id="bar_song_name" @click="handleItemClick_title(store_player_audio_info.this_audio_song_name)">
+                {{ store_player_audio_info.this_audio_song_name }}
+              </span>
+              <span style="font-size: 16px;">
+                -
+              </span>
               <template v-for="artist in store_player_audio_info.this_audio_artist_name.split(/[\/|｜]/)">
                 <span id="bar_artist_name_part" @click="handleItemClick_artist(artist)">{{ artist + '&nbsp' }}</span>
               </template>
@@ -1424,11 +1429,11 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
 .gird_Left .bar_left_text_song_info{
   width: 15vw;
   height: 50px;
-  margin-top: 12px;margin-left: 14px;
+  margin-top: 15px;margin-left: 14px;
   float: left;text-align: left;
 }
 .gird_Left .bar_left_text_song_info #bar_song_name{
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   max-width: 15vw;
 }
@@ -1437,7 +1442,7 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
   color: #3DC3FF;
 }
 .gird_Left .bar_left_text_song_info #bar_artist_name_part {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
 }
 .gird_Left .bar_left_text_song_info #bar_artist_name_part:hover {
@@ -1445,8 +1450,7 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
   color: #3DC3FF;
 }
 .gird_Left .bar_left_text_song_info #bar_album_name{
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 15px;
   max-width: 15vw;
 }
 .gird_Left .bar_left_text_song_info #bar_album_name:hover {

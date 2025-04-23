@@ -9,8 +9,9 @@
     PeopleCommunity16Regular,
     SlideMicrophone32Regular,
     TextIndentIncreaseLtr20Filled,
-    Settings48Regular,
+    Settings20Regular,
     WindowNew16Regular,
+    Apps20Regular
   } from '@vicons/fluent'
   import {
     AlbumFilled,
@@ -30,11 +31,12 @@
     MediaCast,
     BareMetalServer,
     MediaLibrary,
+    Categories
   } from '@vicons/carbon'
   import {
     ArrowsMaximize,
     ArrowsMinimize,
-    Server,
+    SortAscending2,
   } from '@vicons/tabler'
 
   ////// views_components
@@ -97,7 +99,7 @@
         {
           label: computed(() => renderRouterLink('setting', t('HeaderAdmin') + t('Console'))),
           key: 'setting',
-          icon: renderIcon(Settings48Regular)
+          icon: renderIcon(Settings20Regular)
         },
         {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
     )
@@ -106,6 +108,11 @@
           label: computed(() => renderRouterLink('home', t('common.home'))),
           key: 'home',
           icon: renderIcon(Home28Regular),
+        },
+        {
+          label: computed(() => renderRouterLink('categories', t('Categories'))),
+          key: 'categories',
+          icon: renderIcon(Apps20Regular),
         },
         {
           label: computed(() => renderRouterLink('album', t('entity.album_other'))),
@@ -250,9 +257,14 @@
         store_router_data_info.router_select_model_home = true;
         fetchDataIfNeeded('home');
       },
+      'categories': () => {
+        clearFilesIfNeeded('categories');
+        store_router_data_info.router_select_model_categories = true;
+        fetchDataIfNeeded('categories');
+      },
       'update': () => {
         clearFilesIfNeeded();
-        store_router_data_info.router_select_model_updateing = true;
+        store_router_data_info.router_select_model_update = true;
       },
       'album': () => {
         clearFilesIfNeeded('album');
@@ -287,10 +299,12 @@
       await selectedAction();
     }
   }
-  function clearFilesIfNeeded(except?: 'home' | 'album' | 'media' | 'artist') {
+  function clearFilesIfNeeded(except?: 'home' | 'categories' | 'album' | 'media' | 'artist') {
     if (!store_router_data_logic.clear_Memory_Model) {
       if (except === 'home') {
         store_router_data_logic.clear_Files_temporary_except_home();
+      } else if (except === 'categories') {
+        store_router_data_logic.clear_Files_temporary_except_categories();
       } else if (except === 'album') {
         store_router_data_logic.clear_Files_temporary_except_album();
       } else if (except === 'media') {
@@ -302,9 +316,11 @@
       }
     }
   }
-  function fetchDataIfNeeded(type: 'home' | 'album' | 'media' | 'artist') {
+  function fetchDataIfNeeded(type: 'home' | 'categories' | 'album' | 'media' | 'artist') {
     if (store_router_data_logic.clear_Memory_Model) {
       if (type === 'home') {
+        store_view_home_page_fetchData.fetchData_Home();
+      } else if (type === 'categories') {
         store_view_home_page_fetchData.fetchData_Home();
       } else if (type === 'album') {
         store_view_album_page_fetchData.fetchData_Album();
@@ -340,8 +356,11 @@
       if(to.name === 'home'){
         store_router_data_info.router_select_model_home = true
         store_router_data_info.router_name = to.name
+      }else if (to.name === 'categories') {
+        store_router_data_info.router_select_model_categories = true
+        store_router_data_info.router_name = to.name
       }else if(to.name === 'update'){
-        store_router_data_info.router_select_model_updateing = true
+        store_router_data_info.router_select_model_update = true
         store_router_data_info.router_name = to.name
       }else if(to.name === 'song'){
         store_router_data_info.router_select_model_media = true
@@ -848,9 +867,12 @@
             <!--Home View -->
             <RouterView class="view_show_data"
                         v-else-if="store_router_data_info.router_select_model_home"></RouterView>
+            <!--Categories View -->
+            <RouterView class="view_show_data"
+                        v-else-if="store_router_data_info.router_select_model_categories"></RouterView>
             <!--Updateing View-->
             <RouterView class="view_show_data"
-                        v-else-if="store_router_data_info.router_select_model_updateing"></RouterView>
+                        v-else-if="store_router_data_info.router_select_model_update"></RouterView>
             <!--Media View-->
             <RouterView class="view_show_table"
                         v-else-if="store_router_data_info.router_select_model_media"></RouterView>

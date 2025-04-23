@@ -27,6 +27,14 @@ const router = createRouter({
       }
     },
     {
+      path: '/categories',
+      name: 'categories',
+      component: () => import('@/router/router_views/router_music/Router_Home.vue'),
+      meta: {
+        cleanup: true
+      }
+    },
+    {
       path: '/song',
       name: 'song',
       component: () => import('@/router/router_views/router_music/Router_Media.vue'),

@@ -2,7 +2,7 @@
 ////// this_view resource of vicons_svg
 import {
   TagMultiple24Regular,
-  Delete20Regular, Settings48Regular
+  Delete20Regular, Settings20Regular
 } from '@vicons/fluent'
 import {
   BareMetalServer, Add, Close, UserAvatarFilledAlt, MediaCast
