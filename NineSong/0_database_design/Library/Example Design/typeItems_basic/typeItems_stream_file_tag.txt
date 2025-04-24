@@ -1,0 +1,12 @@
+//// 基础流式文件->标签信息
+Images: 图像信息，通常用于表示内容的图像资源。
+Width: 宽度，通常用于表示图像或视频的宽度。
+Height: 高度，通常用于表示图像或视频的高度。
+
+Tags: 标签，通常用于标记或分类内容。
+
+CustomRating: 自定义评分，通常是用户或系统对内容的个性化评分。
+InheritedParentalRatingValue: 继承的家长评级值，通常用于表示从父级继承的评级。
+
+PreferredMetadataLanguage: 首选元数据语言，通常用于表示内容的语言偏好。
+PreferredMetadataCountryCode: 首选元数据国家代码，通常用于表示内容的国家偏好。

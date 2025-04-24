@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: ${MONGO_CONTAINER_NAME}
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASS}
+    ports:
+      - "${DB_PORT}:27017"
+    volumes:
+      - C:/Users/Public/Documents/NineSong/MongoDB:/data/db
+    deploy:
+      resources:
+        limits:
+          memory: 128M

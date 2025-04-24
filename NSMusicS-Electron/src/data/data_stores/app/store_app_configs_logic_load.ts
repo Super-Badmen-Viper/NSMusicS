@@ -225,7 +225,7 @@ export const store_app_configs_logic_load = reactive({
                 '' + system_Configs_Read.player_Configs_of_UI.value['player_use_playbar_auto_hide'] === 'true' ? true :
                     '' + system_Configs_Read.player_Configs_of_UI.value['player_use_playbar_auto_hide'] !== 'false';
             /// player_Configs_of_Audio_Info
-            // Golang // NSMusicS-GO流媒体模块未完成开发前，不开放回放功能(恢复上次播放数据)
+            // Golang // NineSong流媒体模块未完成开发前，不开放回放功能(恢复上次播放数据)
             if(isElectron) {
                 store_player_audio_info.this_audio_file_path = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_path']
                 store_player_audio_info.this_audio_file_medium_image_url = '';
@@ -413,7 +413,7 @@ export const store_app_configs_logic_load = reactive({
 
         /// playlist media_file_id_of_list
         try {
-            // Golang // NSMusicS-GO流媒体模块未完成开发前，不开放回放功能(恢复上次播放数据)
+            // Golang // NineSong流媒体模块未完成开发前，不开放回放功能(恢复上次播放数据)
             if(isElectron) {
                 store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = system_Configs_Read.playlist_File_Configs.value
                 let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()

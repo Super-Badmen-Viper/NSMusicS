@@ -1,0 +1,52 @@
+docker run --rm -it -p 1935:1935 -p 1985:1985 -p 8080:8080 -p 8000:8000/udp -p 10080:10080/udp ossrs/srs:5
+
+ffmpeg -re -i ex10.mp4 -c copy -f flv rtmp://localhost/live/livestream
+
+ffmpeg -re -i "[DM]퀸다미 - Party Train - 🔞교차편집 - 4K_60FPS Enhanced - AfreecaTV VOD_cut.mp4" -c copy -f flv -y rtmp://localhost/live/livestream
+
+
+
+ffmpeg -re -i "G.E.M.邓紫棋 - 多远都要在一起.mp3" -c:a aac -f flv rtmp://localhost/live/livestream_mp3
+    ​警告信息：deprecated pixel format used 是由于视频流从mjpeg转码为flv1时像素格式不兼容。
+    ​关键错误：Failed to update header 和 Qavg: 638.685 表明FLV封装过程中数据包写入异常，可能是视频流无效导致。
+
+ffmpeg -re -i "G.E.M.邓紫棋 - 多远都要在一起.mp3" -map 0:a -c:a aac -f flv rtmp://localhost/live/livestream_mp3
+
+
+docker run -d `
+  -p 1935:1935 -p 8080:8080 `
+  -v E:\0_XiangCheng_WorkSpace\NSMusicS-WorkSpqce\NineSong\srs_audio.conf:/usr/local/srs/conf/srs.conf `
+  --name srs_audio `
+  ossrs/srs:6 `
+  ./objs/srs -c conf/srs.conf
+
+# 推流原始MP3文件（保留原始音质）
+ffmpeg -re -i "G.E.M.邓紫棋 - 多远都要在一起.mp3" -vn -c:a copy -f flv rtmp://localhost/live/livestream_mp3
+# 动态转码推流（适合不同码率需求）
+ffmpeg -re -i "G.E.M.邓紫棋 - 多远都要在一起.mp3" -vn -c:a libmp3lame -b:a 192k -f flv rtmp://localhost/live/livestream_mp3
+
+
+
+
+Howler.js 基于 Web Audio API 和 HTML5 <audio> 标签，仅支持标准音频格式（如 MP3、AAC、OGG 等）。
+
+1. 生成虚拟视频流
+    由于RTMP协议通常需要音视频双轨道，需通过FFmpeg为纯音频文件生成静态黑帧视频流：
+        ffmpeg -re -i "G.E.M.邓紫棋 - 多远都要在一起.mp3" -f lavfi -i "color=size=640x480:rate=1" -c:a aac -c:v libx264 -shortest -f flv rtmp://localhost/live/livestream
+2. 仅播放音频
+    H5(HLS): http://localhost:8080/live/livestream.m3u8
+
+
+1. 使用支持精准跳转的音频格式
+    将MP3转码为AAC格式（支持基于样本的精确跳转），并调整推流命令：
+    # 推流端命令（转码为AAC，启用时间戳同步）
+        ffmpeg -re -i "G.E.M.邓紫棋 - 多远都要在一起.mp3" -vn -c:a aac -copyts -f flv rtmp://localhost/live/livestream_aac
+    ​关键参数：
+        -copyts：保留输入文件的原始时间戳，避免跳转时重置。
+        -c:a aac：AAC格式支持高精度跳转（基于样本而非帧）。
+3. 服务端动态生成虚拟时间戳
+    若需强制跳转到指定位置，可通过FFmpeg在推流时注入虚拟时间戳： -ss 60
+        ffmpeg -re -i "G.E.M.邓紫棋 - 多远都要在一起.mp3" -vn -c:a aac -af "asetpts=PTS+60/TB" -f flv rtmp://localhost/live/livestream_aac
+    ​参数说明：
+        -ss 60：从输入文件的第60秒开始推流。
+        -af "asetpts=PTS+60/TB"：强制时间戳从60秒开始递增，模拟连续流。

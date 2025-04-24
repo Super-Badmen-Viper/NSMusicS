@@ -29,8 +29,8 @@ export class Users_ApiService_of_Je extends Jellyfin_Api_Services_Web {
             const AccessToken = '';
             const Version = '1.5.2';
             const Client = isElectron ? 'Electron Desktop' : 'Web';
-            const Device = isElectron ? 'NSMusicS' : 'NSMusicS-GO';
-            const DeviceId = isElectron ? 'NSMusicS '+Version : 'NSMusicS-GO '+Version;
+            const Device = isElectron ? 'NSMusicS' : 'NineSong';
+            const DeviceId = isElectron ? 'NSMusicS '+Version : 'NineSong '+Version;
             const headers = {
                 'Authorization': `MediaBrowser Token="${AccessToken}", Client="${Client}", Device="${Device}", DeviceId="${DeviceId}-GO", Version="1.5.2"`
             };

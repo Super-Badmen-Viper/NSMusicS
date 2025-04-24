@@ -526,7 +526,7 @@ async function Play_Media_Order(model_num: string, increased: number) {
       } else if (model_num === 'playback-4') {
         if(!store_server_user_model.random_play_model) {
           // 不设置last_index，是因为web触底刷新目前只能依次顺序加载，而不能虚拟化跳过加载
-          // 虚拟化待支持，在NSMusicS-GO中实现
+          // 虚拟化待支持，在NineSong中实现
           index = Math.floor(
               Math.random() * store_playlist_list_info.playlist_MediaFiles_temporary.length
           );

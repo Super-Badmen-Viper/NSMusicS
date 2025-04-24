@@ -1,0 +1,11 @@
+//// 基础流式文件
+guid: 全局唯一标识符（GUID），通常用于唯一标识某个实体或记录。
+Path: 文件或实体的路径，通常用于定位存储位置。
+type: 表示实体的类型，例如folder、audio、video、movie、series、photo、text。
+fileFormat: 表示实体的文件格式。
+UnratedType: 未评级分类类型，通常用于表示未评级的内容类型，例如：Music、Vider、Photo、Other(Novel小说、Audio Novel有声小说(书籍)、Diary日记、comment音乐社区评论)。
+Genres: 内容的类型或类别，例如：电影电视剧流派、照片拍摄流派，音乐流派、视频分类流派。
+Size: 大小，通常用于表示文件或内容的大小。
+TotalBitrate: 总比特率，通常用于表示内容的总比特率。
+IsLocked: 布尔值，表示该实体是否被锁定，通常用于防止修改。
+LockedFields: 锁定字段，通常用于表示哪些字段被锁定，防止修改。

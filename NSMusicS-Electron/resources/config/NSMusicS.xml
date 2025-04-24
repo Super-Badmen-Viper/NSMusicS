@@ -26,7 +26,7 @@
     增加歌曲/专辑/艺术家的的tag信息浏览编辑功能[√];
     将自定义左边菜单栏，更改为菜单栏模式阶梯选择[√];
     菜单栏模式：设置[必选]，专辑-乐曲-艺术家[必选]，主页[可选]，多媒体(Emby-Jellyfin: 音视频+图片)[可选]，AI扩展[可选][√];
-    初步构建NSMusicS-GO的管理系统界面(仅UI界面，未开放)至当前Electron版本中[√];
+    初步构建NineSong的管理系统界面(仅UI界面，未开放)至当前Electron版本中[√];
     优化了Electron文件系统访问源代码对跨平台的兼容性[√];
     增加对MacOS系统客户端的部分兼容支持，并发布MacOS版本(1.仅兼容服务器模式；2.仅兼容web音频输出；)[√];
     ;;
@@ -48,10 +48,10 @@
     ;
     增加webdav服务器配置(数据下载/即时访问);
     增加云存储网盘服务器配置(onedrive以及各类云盘);
-    增加服务器配置种类，使用NSMusicS-GO API;
+    增加服务器配置种类，使用NineSong API;
     增加api配置，使用外置歌词获取api，tag获取补全api;
     ;
-    增加界面的流媒体管理系统功能，与NSMusicS-GO服务器端进行融合;
+    增加界面的流媒体管理系统功能，与NineSong服务器端进行融合;
 </changelog_explain>
 <mandatory>false</mandatory>
 </item>

@@ -349,7 +349,7 @@ export const store_app_configs_logic_save = reactive({
             db = null;
         } else {
             // 不提供服务端配置整体写入
-            // NSMusicS-GO app server config 仅支持get查询所有、put单项创建：新ID值、put单项更新：已有ID值
+            // NineSong app server config 仅支持get查询所有、put单项创建：新ID值、put单项更新：已有ID值
         }
     },
     save_system_config_of_View_Router_History(){

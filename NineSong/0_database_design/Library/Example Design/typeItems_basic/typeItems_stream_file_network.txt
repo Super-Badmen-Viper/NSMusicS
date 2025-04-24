@@ -1,0 +1,9 @@
+//// 基础流式文件->相关网络信息
+CommunityRating: 社区评分，通常是用户对内容的评分。
+CriticRating: 评论家评分，通常是专业评论家对内容的评分。
+OfficialRating: 官方评级，通常是权威机构对内容的评级。
+ExtraIds: 额外ID，通常用于表示与内容相关的额外标识符。
+ExtraType: 额外类型，通常用于表示额外的内容类型。
+ExternalId: 外部ID，通常用于表示与外部服务的关联。
+ExternalSeriesId: 外部系列ID，通常用于表示与外部服务的系列关联。
+ExternalServiceId: 外部服务系列ID，通常用于表示与外部网络服务的系列关联。
