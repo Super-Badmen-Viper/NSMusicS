@@ -527,6 +527,7 @@ async function Play_Media_Order(model_num: string, increased: number) {
         if(!store_server_user_model.random_play_model) {
           // 不设置last_index，是因为web触底刷新目前只能依次顺序加载，而不能虚拟化跳过加载
           // 虚拟化待支持，在NineSong中实现
+          // 长度为数据库列表总长度(并客户端播放列表长度)，以总长度为随机范围，超出客户端拉取范围则向服务端定向拉取单项数据并填充客户端播放列表其后
           index = Math.floor(
               Math.random() * store_playlist_list_info.playlist_MediaFiles_temporary.length
           );
@@ -535,14 +536,28 @@ async function Play_Media_Order(model_num: string, increased: number) {
           index += increased;
           if (index >= last_index) {
             store_server_user_model.random_play_model_add = true
-            let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
-            await get_Navidrome_Temp_Data_To_LocalSqlite.get_random_song_list(
-                store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                store_server_user_model.token,
-                store_server_user_model.salt,
-                10, '', ''
-            )
+            if(store_server_users.server_select_kind === 'navidrome') {
+              let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
+              await get_Navidrome_Temp_Data_To_LocalSqlite.get_random_song_list(
+                  store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+                  store_server_users.server_config_of_current_user_of_sqlite?.user_name,
+                  store_server_user_model.token,
+                  store_server_user_model.salt,
+                  10, '', ''
+              )
+            }else{
+              store_view_media_page_fetchData._load_model = 'play'
+              await store_view_media_page_fetchData.fetchData_Media_of_server_web_start()
+              store_view_media_page_fetchData._load_model = 'search'
+              ///
+              const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[index]
+              await store_player_audio_logic.update_current_media_info(media_file, index)
+              console.log(media_file);
+
+              store_playlist_list_logic.media_page_handleItemDbClick = false
+              // store_player_appearance.player_mode_of_lock_playlist = false
+              store_player_audio_info.this_audio_restart_play = true
+            }
           }else if(index < 0){
             index = last_index - 1;
           }
@@ -841,9 +856,9 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
 })
 watch(() => store_server_user_model.random_play_model, (newValue) => {
   if(newValue) {
-    message.success(t('ButtonStart') + ' navidrome ' + t('Shuffle'))
+    message.success(t('ButtonStart') + t('Shuffle'))
   }else{
-    message.success(t('Off') + ' navidrome ' + t('Shuffle'))
+    message.success(t('Off') + t('Shuffle'))
   }
 });
 </script>

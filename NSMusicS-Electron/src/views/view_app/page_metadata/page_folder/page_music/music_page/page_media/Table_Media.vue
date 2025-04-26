@@ -328,7 +328,7 @@ onMounted(() => {
 
 ////// select Dtatsource of artistlists
 const breadcrumbItems = ref('所有歌曲');
-const page_songlists_handleselected_updatevalue = (value: any) => {
+const page_songlists_handleselected_updatevalue = async (value: any) => {
   /// jellyfin/emby not search_model
   if(
       store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
@@ -341,7 +341,7 @@ const page_songlists_handleselected_updatevalue = (value: any) => {
   /// navidrome/local
   store_view_media_page_logic.set_media_Files_selected_all(false)
   store_view_media_page_logic.list_selected_Hand_click = true
-  store_view_media_page_logic.get_page_songlists_selected(value)
+  await store_view_media_page_logic.get_page_songlists_selected(value)
   console.log('selected_value_for_songlistall：'+value);
   breadcrumbItems.value = store_view_media_page_logic.page_songlists_options.find(option => option.value === value)?.label || '';
   bool_start_play.value = true
@@ -367,7 +367,9 @@ const handleItemDbClick = async (media_file:any,index:number) => {
       if(store_server_user_model.model_server_type_of_web){
         /// Data synchronization
         store_view_media_page_fetchData.fetchData_Media_of_data_synchronization_to_playlist()
-        store_server_user_model.random_play_model = false
+        if(store_server_users.server_select_kind === 'navidrome'){
+          store_server_user_model.random_play_model = false
+        }
       }
       //
       await store_player_audio_logic.update_current_media_info(media_file, index)
@@ -562,6 +564,9 @@ import {
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {store_view_album_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_logic";
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
+import {
+  Get_Jellyfin_Temp_Data_To_LocalSqlite
+} from "@/data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
 
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
@@ -835,18 +840,58 @@ const begin_select_MediaList_ALL_Line_of_playback = (key: string | number) => {
   }
 };
 async function begin_random_play_model() {
-  click_count = 2;
-  store_playlist_list_info.playlist_MediaFiles_temporary = [];
-  store_player_audio_logic.play_order = 'playback-4';
-  let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
-  await get_Navidrome_Temp_Data_To_LocalSqlite.get_random_song_list(
-      store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-      store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-      store_server_user_model.token,
-      store_server_user_model.salt,
-      10, '', ''
-  )
-  store_server_user_model.random_play_model = true;
+  if(!store_server_user_model.random_play_model) {
+    click_count = 2;
+    store_playlist_list_info.playlist_MediaFiles_temporary = [];
+    store_player_audio_logic.play_order = 'playback-4';
+    if (store_server_users.server_select_kind === 'navidrome') {
+      let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
+      await get_Navidrome_Temp_Data_To_LocalSqlite.get_random_song_list(
+          store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+          store_server_users.server_config_of_current_user_of_sqlite?.user_name,
+          store_server_user_model.token,
+          store_server_user_model.salt,
+          10, '', ''
+      )
+    } else {
+      store_view_media_page_logic.list_options_Hand_Sort = false
+      if (store_server_users.server_select_kind === 'jellyfin') {
+        store_view_media_page_logic.page_songlists_options_Sort_key = [{
+          columnKey: String('Random,SortName'),
+          order: state_Sort.Ascend
+        }];
+      } else if (store_server_users.server_select_kind === 'emby') {
+        store_view_media_page_logic.page_songlists_options_Sort_key = [{
+          columnKey: String('Random'),
+          order: state_Sort.Ascend
+        }];
+      }
+      await page_songlists_handleselected_updatevalue('song_list_all')
+      // await store_view_media_page_fetchData.fetchData_Media()
+      scrollTo(0)
+      if (store_view_media_page_info.media_Files_temporary.length > 0) {
+        click_count = 2
+        bool_start_play.value = true
+        await handleItemDbClick(store_view_media_page_info.media_Files_temporary[0], 0)
+      }
+    }
+    store_server_user_model.random_play_model = true;
+  }else{
+    store_server_user_model.random_play_model = false;
+    store_view_media_page_logic.list_options_Hand_Sort = true
+    if (store_server_users.server_select_kind === 'navidrome') {
+      store_view_media_page_logic.page_songlists_options_Sort_key = [{
+        columnKey: String('id'),
+        order: state_Sort.Ascend
+      }];
+    }else {
+      if (store_server_users.server_select_kind === 'jellyfin') {
+        handleSelect_Sort('Random,SortName')
+      } else if (store_server_users.server_select_kind === 'emby') {
+        handleSelect_Sort('Random')
+      }
+    }
+  }
 }
 
 ////// right menu
@@ -1226,8 +1271,7 @@ onBeforeUnmount(() => {
             </n-tooltip>
           </n-dropdown>
           <n-tooltip
-            v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') && store_server_user_model.model_server_type_of_web
-            "
+            v-if="store_server_user_model.model_server_type_of_web"
             trigger="hover" placement="top">
             <template #trigger>
               <div>
@@ -1258,11 +1302,7 @@ onBeforeUnmount(() => {
             </template>
             {{ $t('Shuffle') + ' ' + $t('HeaderLibraries') + ' ' + $t('nsmusics.view_page.allMedia') }}
           </n-tooltip>
-          <n-divider
-              v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
-                    "
-              vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
-
+          <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle style="margin-left:4px"

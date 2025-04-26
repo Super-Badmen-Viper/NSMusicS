@@ -95,6 +95,7 @@ export const store_server_user_model = reactive({
     },
     async switchToMode(){
         if(!store_app_configs_logic_load.app_configs_loading) {
+            store_server_user_model.random_play_model = false;
             // Refresh Current AudioInfo
             await store_player_audio_info.reset_data();
             store_view_media_page_logic.page_songlists_selected = 'song_list_all'

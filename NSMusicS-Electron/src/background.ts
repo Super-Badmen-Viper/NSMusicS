@@ -41,7 +41,7 @@ if (!app.requestSingleInstanceLock()) {
 }
 else {
     app.on('ready', async () => {
-        globalShortcut.register('CommandOrControl+Shift+I', () => {
+        globalShortcut.register('CommandOrControl+Shift+I+O', () => {
             if (context_MainWin.mainWindow.webContents.isDevToolsOpened()) {
                 context_MainWin.mainWindow.webContents.closeDevTools();
             } else {

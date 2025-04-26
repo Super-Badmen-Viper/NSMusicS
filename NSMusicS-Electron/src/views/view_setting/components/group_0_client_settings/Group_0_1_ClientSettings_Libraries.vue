@@ -382,14 +382,34 @@ async function update_server_config_of_current_user_of_sqlite(value: any, select
     }
   }
   store_server_users.percentage_of_nd = 0
+  // Close navidrome random model
+  store_server_user_model.random_play_model = false
   // Refresh Playlist(Local / Server)
   store_playlist_list_info.playlist_MediaFiles_temporary = [];
   await store_player_audio_logic.player.pause();
   store_player_audio_info.reset_data()
-  // Close navidrome random model
-  store_server_user_model.random_play_model = false
   // Refresh play_order(Local / Server)
   store_player_audio_logic.play_order = 'playback-2'
+  // Refresh page_songlists_options_Sort_key
+  if(store_server_user_model.model_server_type_of_web){
+    store_view_media_page_logic.list_options_Hand_Sort = true
+    if (store_server_users.server_select_kind === 'navidrome') {
+      store_view_media_page_logic.page_songlists_options_Sort_key = [{
+        columnKey: String('id'),
+        order: state_Sort.Ascend
+      }];
+    }else {
+      store_view_media_page_logic.page_songlists_options_Sort_key = [{
+        columnKey: String('SortName'),
+        order: state_Sort.Ascend
+      }];
+    }
+  }
+}
+enum state_Sort {
+  Ascend = 'ascend',
+  Descend = 'descend',
+  Default = 'default'
 }
 
 ////// local
@@ -558,6 +578,9 @@ import {
   store_playlist_list_info
 } from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info";
 import {store_player_audio_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_info";
+import {
+  store_view_media_page_logic
+} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
 </script>
 
 <template>

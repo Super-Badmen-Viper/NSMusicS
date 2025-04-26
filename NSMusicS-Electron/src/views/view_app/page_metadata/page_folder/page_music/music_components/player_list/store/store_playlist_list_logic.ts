@@ -9,6 +9,9 @@ import {
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import axios from "axios";
+import {store_view_media_page_info} from "../../../music_page/page_media/store/store_view_media_page_info";
+import {store_player_audio_logic} from "../../../music_page/page_player/store/store_player_audio_logic";
+import {store_player_audio_info} from "../../../music_page/page_player/store/store_player_audio_info";
 
 export const store_playlist_list_logic = reactive({
     async reset_data() {
@@ -38,6 +41,25 @@ export const store_playlist_list_logic = reactive({
 
     playlist_names_StartUpdate: false,
     media_page_handleItemDbClick: false,
+
+    async handleItemDbClick(media_file:any,index:number){
+        if(store_server_user_model.model_server_type_of_web){
+            /// Data synchronization
+            store_playlist_list_info.playlist_MediaFiles_temporary.forEach((row) => {
+                const existingIndex = store_view_media_page_info.media_Files_temporary.findIndex(
+                    (item) => item.id === row.id
+                );
+                if (existingIndex === -1) {
+                    const newRow = { ...row };
+                    delete newRow.play_id;
+                    store_view_media_page_info.media_Files_temporary.push(newRow);
+                }
+            });
+        }
+        await store_player_audio_logic.update_current_media_info(media_file, index)
+        store_playlist_list_logic.media_page_handleItemDbClick = false
+        store_player_audio_info.this_audio_restart_play = true
+    },
 
     get_playlist_tracks_temporary_add(value: any){
         const playlist = store_local_data_set_playlistInfo.Set_PlaylistInfo_To_Update_CreatePlaylist(

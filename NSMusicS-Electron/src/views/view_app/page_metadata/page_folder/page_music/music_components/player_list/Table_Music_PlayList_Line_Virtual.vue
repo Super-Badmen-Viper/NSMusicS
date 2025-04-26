@@ -21,32 +21,6 @@ onMounted(() => {
   }catch {  }
 });
 
-/////// emits audio_info of artistlist_view_list
-const handleItemDbClick = async (media_file:any,index:number) => {
-  if(store_server_user_model.model_server_type_of_web){
-    /// Data synchronization
-    store_playlist_list_info.playlist_MediaFiles_temporary.forEach((row) => {
-      const existingIndex = store_view_media_page_info.media_Files_temporary.findIndex(
-          (item) => item.id === row.id
-      );
-      if (existingIndex === -1) {
-        const newRow = { ...row };
-        delete newRow.play_id;
-        store_view_media_page_info.media_Files_temporary.push(newRow);
-      }
-    });
-  }
-  await store_player_audio_logic.update_current_media_info(media_file, index)
-  store_playlist_list_logic.media_page_handleItemDbClick = false
-  store_player_audio_info.this_audio_restart_play = true
-}
-const handleItemClick_title = (title:string) => {
-
-}
-const handleItemClick_artist = (artist:string) => {
-
-}
-
 ////// changed_data write to sqlite
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   console.log('handleItemClick_Favorite_id：'+id+'  _favorite:'+!favorite)
@@ -265,7 +239,7 @@ onMounted(()=>{
             :data-active="active"
             class="message"
             v-contextmenu:contextmenu @contextmenu.prevent="store_playlist_list_info.playlist_Menu_Item_Id = item.id"
-            @Dblclick="handleItemDbClick(item,index)">
+            @Dblclick="store_playlist_list_logic.handleItemDbClick(item,index)">
             <div
               :style="{
                 width: store_app_configs_info.window_state_miniplayer_playlist ? '280px' : '488px',

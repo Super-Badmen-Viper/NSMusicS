@@ -442,7 +442,11 @@ export const store_view_media_page_fetchData = reactive({
         }
     },
     async fetchData_Media_of_server_web_start(){
-        store_view_media_page_info.media_Files_temporary = [];
+        if(store_server_user_model.random_play_model && store_server_users.server_select_kind != 'navidrome') {
+
+        }else{
+            store_view_media_page_info.media_Files_temporary = [];
+        }
         this._start = 0;
         this._end = 30;
         store_playlist_list_fetchData._start = 0;
@@ -465,12 +469,17 @@ export const store_view_media_page_fetchData = reactive({
             } else if (
                 store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
             ) {
-                if (this._load_model === 'search') {
-                    this._end += 30;
-                    this._start = this._end - 30;
-                } else {
-                    store_playlist_list_fetchData._end += 30;
-                    store_playlist_list_fetchData._start = store_playlist_list_fetchData._end - 30;
+                if(store_server_user_model.random_play_model) {
+                    // jellyfin/emby 随机拉取 不支持流式虚拟列表持续拉取，这种古老的业务逻辑已经无法适应新时代用户需求，就应该被我的NineSong所取代
+                    await this.fetchData_Media_of_server_web_start();
+                }else {
+                    if (this._load_model === 'search') {
+                        this._end += 30;
+                        this._start = this._end - 30;
+                    } else {
+                        store_playlist_list_fetchData._end += 30;
+                        store_playlist_list_fetchData._start = store_playlist_list_fetchData._end - 30;
+                    }
                 }
             }
             await this.fetchData_Media_of_server_web(false)
