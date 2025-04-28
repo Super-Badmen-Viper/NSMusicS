@@ -16,30 +16,30 @@ func NewPlaylistTrackController(uc scene_audio_route_interface.PlaylistTrackRepo
 }
 
 func (c *PlaylistTrackController) GetPlaylistTracks(ctx *gin.Context) {
-	params := struct {
-		Start      string `form:"start"`
-		End        string `form:"end"`
-		Sort       string `form:"sort"`
-		Order      string `form:"order"`
+	var params struct {
+		Start      string `form:"start" binding:"required"`
+		End        string `form:"end" binding:"required"`
+		Sort       string `form:"sort" binding:"required"`
+		Order      string `form:"order" binding:"required"`
 		Search     string `form:"search"`
 		Starred    string `form:"starred"`
 		AlbumId    string `form:"albumId"`
 		ArtistId   string `form:"artistId"`
 		Year       string `form:"year"`
-		PlaylistId string `form:"playlistId"`
-	}{
-		Start:      ctx.DefaultQuery("start", "0"),
-		End:        ctx.DefaultQuery("end", "50"),
-		Sort:       ctx.DefaultQuery("sort", "created_at"),
-		Order:      ctx.DefaultQuery("order", "asc"),
-		Search:     ctx.Query("search"),
-		Starred:    ctx.Query("starred"),
-		AlbumId:    ctx.Query("albumId"),
-		ArtistId:   ctx.Query("artistId"),
-		Year:       ctx.Query("year"),
-		PlaylistId: ctx.Param("playlistId"),
+		PlaylistId string `form:"playlistId" binding:"required"` // 改为表单参数
 	}
 
+	// 参数绑定与验证（参考网页6、网页7）
+	if err := ctx.ShouldBind(&params); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code":    "INVALID_PARAMETERS",
+			"message": "缺少必要参数",
+			"details": err.Error(),
+		})
+		return
+	}
+
+	// 业务逻辑保持不变
 	tracks, err := c.PlaylistTrackUsecase.GetPlaylistTrackItems(
 		ctx.Request.Context(),
 		params.End,
@@ -55,7 +55,10 @@ func (c *PlaylistTrackController) GetPlaylistTracks(ctx *gin.Context) {
 	)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"code":    "DATA_RETRIEVAL_ERROR",
+			"message": "获取播放列表曲目失败",
+		})
 		return
 	}
 

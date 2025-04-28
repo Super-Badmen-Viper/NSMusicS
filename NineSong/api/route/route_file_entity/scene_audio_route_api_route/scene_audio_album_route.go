@@ -26,7 +26,5 @@ func NewAlbumRouter(
 	albumGroup := group.Group("/albums")
 	{
 		albumGroup.GET("", ctrl.GetAlbumItems)
-		// 可扩展其他路由
-		// albumGroup.GET("/:id", ctrl.GetAlbumDetail)
 	}
 }

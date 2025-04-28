@@ -17,10 +17,9 @@ func NewPlaylistTrackRouter(
 	group *gin.RouterGroup,
 ) {
 	repo := scene_audio_route_repository.NewPlaylistTrackRepository(db, domain.CollectionFileEntityAudioPlaylistTrack)
-
 	ctrl := scene_audio_route_api_controller.NewPlaylistTrackController(repo)
 
-	playlistTrackGroup := group.Group("/playlists/:playlistId/tracks")
+	playlistTrackGroup := group.Group("/playlists/tracks")
 	{
 		playlistTrackGroup.GET("", ctrl.GetPlaylistTracks)
 	}

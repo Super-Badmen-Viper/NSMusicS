@@ -23,10 +23,10 @@ func NewPlaylistRouter(
 	{
 		playlistGroup.GET("", ctrl.GetPlaylists)
 		playlistGroup.POST("", ctrl.CreatePlaylist)
-		playlistGroup.GET("/:playlistId", ctrl.GetPlaylist)
-		playlistGroup.PUT("/:playlistId", ctrl.UpdatePlaylist)
-		playlistGroup.DELETE("/:playlistId", ctrl.DeletePlaylist)
-		playlistGroup.POST("/:playlistId/media", ctrl.AddMediaFiles)
-		playlistGroup.DELETE("/:playlistId/media", ctrl.RemoveMediaFiles)
+		playlistGroup.GET("/detail", ctrl.GetPlaylist)
+		playlistGroup.PUT("", ctrl.UpdatePlaylist)
+		playlistGroup.DELETE("", ctrl.DeletePlaylist)
+		playlistGroup.POST("/media", ctrl.AddMediaFiles)
+		playlistGroup.DELETE("/media", ctrl.RemoveMediaFiles)
 	}
 }

@@ -28,10 +28,18 @@ func (c *PlaylistController) GetPlaylists(ctx *gin.Context) {
 	})
 }
 
-// 获取单个播放列表
+// 获取单个播放列表（新版）
 func (c *PlaylistController) GetPlaylist(ctx *gin.Context) {
-	playlistId := ctx.Param("playlistId")
-	playlist, err := c.PlaylistUsecase.GetPlaylist(ctx.Request.Context(), playlistId)
+	var req struct {
+		ID string `form:"id" binding:"required"`
+	}
+
+	if err := ctx.ShouldBind(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Missing ID parameter"})
+		return
+	}
+
+	playlist, err := c.PlaylistUsecase.GetPlaylist(ctx.Request.Context(), req.ID)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": "playlist not found"})
 		return
@@ -66,16 +74,17 @@ func (c *PlaylistController) CreatePlaylist(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, created)
 }
 
-// 更新播放列表
+// 更新播放列表（新版）
 func (c *PlaylistController) UpdatePlaylist(ctx *gin.Context) {
-	playlistId := ctx.Param("playlistId")
 	var req struct {
-		Name    string `json:"name" binding:"required"`
-		Comment string `json:"comment"`
-		Public  bool   `json:"public"`
+		ID      string `form:"id" binding:"required"`
+		Name    string `form:"name" binding:"required"`
+		Comment string `form:"comment"`
+		Public  bool   `form:"public"`
 	}
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body"})
+
+	if err := ctx.ShouldBind(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid parameters"})
 		return
 	}
 
@@ -85,39 +94,48 @@ func (c *PlaylistController) UpdatePlaylist(ctx *gin.Context) {
 		Public:  req.Public,
 	}
 
-	success, err := c.PlaylistUsecase.UpdatePlaylistInfo(ctx.Request.Context(), playlistId, updateData)
+	success, err := c.PlaylistUsecase.UpdatePlaylistInfo(ctx.Request.Context(), req.ID, updateData)
 	if err != nil || !success {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "update failed"})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Update failed"})
 		return
 	}
 	ctx.Status(http.StatusNoContent)
 }
 
-// 删除播放列表
+// 删除播放列表（新版）
 func (c *PlaylistController) DeletePlaylist(ctx *gin.Context) {
-	playlistId := ctx.Param("playlistId")
-	success, err := c.PlaylistUsecase.DeletePlaylist(ctx.Request.Context(), playlistId)
+	var req struct {
+		ID string `form:"id" binding:"required"`
+	}
+
+	if err := ctx.ShouldBind(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Missing ID parameter"})
+		return
+	}
+
+	success, err := c.PlaylistUsecase.DeletePlaylist(ctx.Request.Context(), req.ID)
 	if err != nil || !success {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "delete failed"})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Delete failed"})
 		return
 	}
 	ctx.Status(http.StatusNoContent)
 }
 
-// 添加媒体文件
+// 媒体文件操作（新版）
 func (c *PlaylistController) AddMediaFiles(ctx *gin.Context) {
-	playlistId := ctx.Param("playlistId")
 	var req struct {
-		MediaFileIDs string `json:"media_file_ids" binding:"required"`
+		PlaylistID   string `form:"playlist_id" binding:"required"`
+		MediaFileIDs string `form:"media_file_ids" binding:"required"`
 	}
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body"})
+
+	if err := ctx.ShouldBind(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid parameters"})
 		return
 	}
 
 	success, err := c.PlaylistUsecase.UpdatePlaylistMediaFileIdToAdd(
 		ctx.Request.Context(),
-		playlistId,
+		req.PlaylistID,
 		req.MediaFileIDs,
 	)
 	if err != nil || !success {

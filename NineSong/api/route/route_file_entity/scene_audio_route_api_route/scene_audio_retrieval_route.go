@@ -5,23 +5,25 @@ import (
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/bootstrap"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/mongo"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/repository/repository_file_entity/scene_audio/scene_audio_route_repository"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/usecase/usecase_file_entity/scene_audio/scene_audio_route_usecase"
 	"github.com/gin-gonic/gin"
 	"time"
 )
 
-func NewAnnotationRouter(
+func NewRetrievalRouter(
 	env *bootstrap.Env,
 	timeout time.Duration,
 	db mongo.Database,
 	group *gin.RouterGroup,
 ) {
-	repo := scene_audio_route_repository.NewAnnotationRepository(db)
-	ctrl := scene_audio_route_api_controller.NewAnnotationController(repo)
+	repo := scene_audio_route_repository.NewRetrievalRepository(db)
+	uc := scene_audio_route_usecase.NewRetrievalUsecase(repo, timeout)
+	ctrl := scene_audio_route_api_controller.NewRetrievalController(uc)
 
-	annotationGroup := group.Group("/annotations")
+	retrievalGroup := group.Group("/media")
 	{
-		annotationGroup.GET("/artists", ctrl.GetArtistList)
-		annotationGroup.GET("/albums", ctrl.GetAlbumList)
-		annotationGroup.GET("/mediafiles", ctrl.GetMediaFileList)
+		retrievalGroup.GET("/stream", ctrl.StreamHandler)
+		retrievalGroup.GET("/cover", ctrl.CoverArtHandler)
+		retrievalGroup.GET("/lyrics", ctrl.LyricsHandler)
 	}
 }
