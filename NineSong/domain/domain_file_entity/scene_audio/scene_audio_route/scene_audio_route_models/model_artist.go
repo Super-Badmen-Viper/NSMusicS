@@ -21,3 +21,8 @@ type ArtistMetadata struct {
 
 	ImageFiles string `bson:"image_files"` // 为空则不存在cover封面，从媒体文件中提取
 }
+
+type ArtistListResponse struct {
+	Artists []ArtistMetadata `json:"artists"`
+	Count   int              `json:"count"`
+}

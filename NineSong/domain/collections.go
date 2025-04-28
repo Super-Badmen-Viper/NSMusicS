@@ -56,3 +56,9 @@ const (
 const (
 	CollectionFileEntityAnnotation = "file_entity_audio_annotation"
 )
+const (
+	CollectionFileEntityPlaylist = "file_entity_audio_playlist"
+)
+const (
+	CollectionFileEntityPlaylistTrack = "file_entity_audio_playlist_track"
+)

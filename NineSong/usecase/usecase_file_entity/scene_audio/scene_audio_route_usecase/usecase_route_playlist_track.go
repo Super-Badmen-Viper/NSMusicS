@@ -17,7 +17,7 @@ type playlistTrackUsecase struct {
 	timeout time.Duration
 }
 
-func NewPlaylistTrackUsecase(repo scene_audio_route_interface.PlaylistTrackRepository, timeout time.Duration) scene_audio_route_interface.PlaylistTrackRepository {
+func NewPlaylistTrackUsecase(repo scene_audio_route_interface.PlaylistTrackRepository, timeout time.Duration) *playlistTrackUsecase {
 	return &playlistTrackUsecase{
 		repo:    repo,
 		timeout: timeout,
@@ -31,29 +31,19 @@ func (uc *playlistTrackUsecase) GetPlaylistTrackItems(
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
 
-	// 参数验证链
-	validations := []func() error{
-		func() error {
-			if _, err := primitive.ObjectIDFromHex(playlistId); err != nil {
-				return errors.New("invalid playlist id format")
-			}
-			return nil
-		},
-		func() error {
-			if _, err := strconv.Atoi(start); err != nil && start != "" {
-				return errors.New("invalid start parameter")
-			}
-			if _, err := strconv.Atoi(end); err != nil && end != "" {
-				return errors.New("invalid end parameter")
-			}
-			return nil
-		},
+	if _, err := primitive.ObjectIDFromHex(playlistId); err != nil {
+		return nil, errors.New("invalid playlist id format")
+	}
+	if _, err := strconv.Atoi(start); start != "" && err != nil {
+		return nil, errors.New("invalid start parameter")
+	}
+	if _, err := strconv.Atoi(end); end != "" && err != nil {
+		return nil, errors.New("invalid end parameter")
 	}
 
-	for _, validate := range validations {
-		if err := validate(); err != nil {
-			return nil, err
-		}
+	validSortFields := map[string]bool{"created_at": true, "play_order": true}
+	if !validSortFields[sort] {
+		sort = "created_at"
 	}
 
 	return uc.repo.GetPlaylistTrackItems(ctx, end, order, sort, start, search, starred, albumId, artistId, year, playlistId)

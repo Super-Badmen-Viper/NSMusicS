@@ -10,32 +10,38 @@ import (
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_route/scene_audio_route_models"
 )
 
-type artistUsecase struct {
-	artistRepo scene_audio_route_interface.ArtistRepository
-	timeout    time.Duration
+type ArtistUsecase struct {
+	repo    scene_audio_route_interface.ArtistRepository
+	timeout time.Duration
 }
 
-func NewArtistUsecase(repo scene_audio_route_interface.ArtistRepository, timeout time.Duration) scene_audio_route_interface.ArtistRepository {
-	return &artistUsecase{
-		artistRepo: repo,
-		timeout:    timeout,
+func NewArtistUsecase(repo scene_audio_route_interface.ArtistRepository, timeout time.Duration) *ArtistUsecase {
+	return &ArtistUsecase{
+		repo:    repo,
+		timeout: timeout,
 	}
 }
 
-func (uc *artistUsecase) GetArtistItems(
+func (uc *ArtistUsecase) GetArtistItems(
 	ctx context.Context,
 	end, order, sort, start, search, starred string,
 ) ([]scene_audio_route_models.ArtistMetadata, error) {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
 
-	// 参数验证
-	if _, err := strconv.Atoi(start); err != nil && start != "" {
+	if _, err := strconv.Atoi(start); start != "" && err != nil {
 		return nil, errors.New("invalid start parameter")
 	}
-	if _, err := strconv.Atoi(end); err != nil && end != "" {
+
+	if _, err := strconv.Atoi(end); end != "" && err != nil {
 		return nil, errors.New("invalid end parameter")
 	}
 
-	return uc.artistRepo.GetArtistItems(ctx, end, order, sort, start, search, starred)
+	// 参数白名单校验
+	validSortFields := map[string]bool{"name": true, "album_count": true, "song_count": true}
+	if !validSortFields[sort] {
+		sort = "name"
+	}
+
+	return uc.repo.GetArtistItems(ctx, end, order, sort, start, search, starred)
 }

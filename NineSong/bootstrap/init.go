@@ -107,6 +107,14 @@ func (si *Initializer) executeInitialization(ctx context.Context) error {
 		return err
 	}
 
+	if err := si.initFileEntityAudioPlaylist(ctx); err != nil {
+		return err
+	}
+
+	if err := si.initFileEntityAudioPlaylistTrack(ctx); err != nil {
+		return err
+	}
+
 	return si.markInitialized(ctx)
 }
 
@@ -893,6 +901,43 @@ func (si *Initializer) initFileEntityAudioAnnotation(ctx context.Context) error 
 	}
 
 	if _, err := coll.DeleteOne(ctx, bson.M{"_id": dummyID}); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (si *Initializer) initFileEntityAudioPlaylist(ctx context.Context) error {
+	coll := si.db.Collection(domain.CollectionFileEntityPlaylist)
+
+	dummyID := primitive.NewObjectID()
+	emptyDoc := &scene_audio_db_models.PlaylistMetadata{
+		ID: dummyID,
+	}
+
+	if _, err := coll.InsertOne(ctx, emptyDoc); err != nil {
+		return err
+	}
+
+	if _, err := coll.DeleteOne(ctx, bson.M{"_id": dummyID}); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (si *Initializer) initFileEntityAudioPlaylistTrack(ctx context.Context) error {
+	coll := si.db.Collection(domain.CollectionFileEntityPlaylistTrack)
+
+	emptyDoc := &scene_audio_db_models.PlaylistTrackMetadata{
+		ID: 0,
+	}
+
+	if _, err := coll.InsertOne(ctx, emptyDoc); err != nil {
+		return err
+	}
+
+	if _, err := coll.DeleteOne(ctx, bson.M{"_id": 0}); err != nil {
 		return err
 	}
 

@@ -30,3 +30,8 @@ type AlbumMetadata struct {
 	AllArtistIDs  string             `bson:"all_artist_ids"`
 	ImageFiles    string             `bson:"image_files"` // 为空则不存在cover封面，从媒体文件中提取
 }
+
+type AlbumListResponse struct {
+	Albums []AlbumMetadata `json:"albums"`
+	Count  int             `json:"count"`
+}

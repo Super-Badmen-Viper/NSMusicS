@@ -10,3 +10,8 @@ type PlaylistTrackMetadata struct {
 	AlbumID     primitive.ObjectID `bson:"album_id"`
 	ArtistID    primitive.ObjectID `bson:"artist_id"`
 }
+
+type PlaylistTrackListResponse struct {
+	PlaylistTracks []PlaylistTrackMetadata `json:"playlist_tracks"`
+	Count          int                     `json:"count"`
+}

@@ -3,18 +3,13 @@ package scene_audio_route_repository
 
 import (
 	"context"
-	"errors"
 	"fmt"
-	"strconv"
-	"time"
-
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_db/scene_audio_db_models"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_route/scene_audio_route_interface"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_route/scene_audio_route_models"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/mongo"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"strconv"
 )
 
 type mediaFileRepository struct {
@@ -29,131 +24,101 @@ func NewMediaFileRepository(db mongo.Database, collection string) scene_audio_ro
 	}
 }
 
-func (m mediaFileRepository) GetMediaFileItems(
+func (r *mediaFileRepository) GetMediaFileItems(
 	ctx context.Context,
 	end, order, sort, start, search, starred, albumId, artistId, year string,
 ) ([]scene_audio_route_models.MediaFileMetadata, error) {
-	collection := m.db.Collection(m.collection)
+	collection := r.db.Collection(r.collection)
 
 	// 构建复合查询条件
 	filter := bson.M{}
-
-	// 处理艺术家ID过滤
 	if artistId != "" {
 		filter["artist_id"] = artistId
 	}
-
-	// 处理专辑ID过滤
 	if albumId != "" {
 		filter["album_id"] = albumId
 	}
-
-	// 处理年份过滤
 	if year != "" {
-		yearInt, err := strconv.Atoi(year)
-		if err != nil {
-			return nil, errors.New("invalid year format")
+		if yearInt, err := strconv.Atoi(year); err == nil {
+			filter["year"] = yearInt
 		}
-		filter["year"] = yearInt
 	}
-
-	// 处理多字段搜索（标题、艺术家、专辑）
 	if search != "" {
 		filter["$or"] = []bson.M{
-			{"title": bson.M{"$regex": primitive.Regex{Pattern: search, Options: "i"}}},
-			{"artist": bson.M{"$regex": primitive.Regex{Pattern: search, Options: "i"}}},
-			{"album": bson.M{"$regex": primitive.Regex{Pattern: search, Options: "i"}}},
+			{"title": bson.M{"$regex": search, "$options": "i"}},
+			{"artist": bson.M{"$regex": search, "$options": "i"}},
+			{"album": bson.M{"$regex": search, "$options": "i"}},
 		}
 	}
-
-	// 处理收藏状态
 	if starred != "" {
 		isStarred, err := strconv.ParseBool(starred)
 		if err != nil {
-			return nil, errors.New("invalid starred parameter")
+			return nil, fmt.Errorf("invalid starred parameter: %w", err)
 		}
 		filter["starred"] = isStarred
 	}
 
-	// 分页处理
-	skip, limit := getPagination(start, end)
-
-	// 排序处理（支持nocase排序规则）
-	sortOption := getSortOption_MediaFile(sort, order)
-
-	// 执行查询
-	findOptions := options.Find().
-		SetSort(sortOption).
-		SetSkip(int64(skip)).
-		SetLimit(int64(limit))
-
-	cursor, err := collection.Find(ctx, filter, findOptions)
-	if err != nil {
-		return nil, fmt.Errorf("database query failed: %v", err)
-	}
-	defer cursor.Close(ctx)
-
-	// 使用组合结构体解码数据库模型
-	var results []struct {
-		scene_audio_db_models.MediaFileMetadata `bson:",inline"`
-		MergedImageURL                          string `bson:"-"`
+	// 处理分页
+	skip, _ := strconv.Atoi(start)
+	limit, _ := strconv.Atoi(end)
+	if limit == 0 || limit > 100 {
+		limit = 50
 	}
 
-	if err := cursor.All(ctx, &results); err != nil {
-		return nil, fmt.Errorf("failed to decode results: %v", err)
+	// 安全排序字段白名单
+	validSortFields := map[string]bool{
+		"title": true, "artist": true,
+		"year": true, "duration": true,
+	}
+	if !validSortFields[sort] {
+		sort = "title"
 	}
 
-	// 转换为路由模型
-	routeResults := make([]scene_audio_route_models.MediaFileMetadata, len(results))
-	for i, item := range results {
-		routeResults[i] = scene_audio_route_models.MediaFileMetadata{
-			ID:            item.ID,
-			Path:          item.Path,
-			Title:         item.Title,
-			Album:         item.Album,
-			Artist:        item.Artist,
-			ArtistID:      item.ArtistID,
-			AlbumArtist:   item.AlbumArtist,
-			AlbumID:       item.AlbumID,
-			HasCoverArt:   item.HasCoverArt,
-			Year:          item.Year,
-			Size:          item.Size,
-			Suffix:        item.Suffix,
-			Duration:      item.Duration,
-			BitRate:       item.BitRate,
-			Genre:         item.Genre,
-			CreatedAt:     item.CreatedAt,
-			UpdatedAt:     item.UpdatedAt,
-			AlbumArtistID: item.AlbumArtistID,
-			Channels:      item.Channels,
-			PlayCount:     0,           // 待填充Annotation交互逻辑
-			Rating:        0,           // 待填充Annotation交互逻辑
-			Starred:       false,       // 待填充Annotation交互逻辑
-			StarredAt:     time.Time{}, // 待填充Annotation交互逻辑
-		}
-	}
-
-	if routeResults == nil {
-		return []scene_audio_route_models.MediaFileMetadata{}, nil
-	}
-
-	return routeResults, nil
-}
-
-// 常规排序处理（仅字段顺序）
-func getSortOption_MediaFile(sortField, order string) bson.D {
+	// 构建排序
 	sortOrder := 1
 	if order == "desc" {
 		sortOrder = -1
 	}
+	opts := options.Find().
+		SetSort(bson.D{{Key: sort, Value: sortOrder}}).
+		SetSkip(int64(skip)).
+		SetLimit(int64(limit))
 
-	// 设置默认排序字段
-	if sortField == "" {
-		sortField = "title" // 保持原默认字段
+	cursor, err := collection.Find(ctx, filter, opts)
+	if err != nil {
+		return nil, fmt.Errorf("database query failed: %w", err)
+	}
+	defer cursor.Close(ctx)
+
+	var results []scene_audio_route_models.MediaFileMetadata
+	if err := cursor.All(ctx, &results); err != nil {
+		return nil, fmt.Errorf("decode error: %w", err)
 	}
 
-	// 简化后的排序条件
-	return bson.D{
-		{Key: sortField, Value: sortOrder},
+	// 后处理逻辑
+	for i := range results {
+		if !results[i].HasCoverArt {
+			results[i].HasCoverArt = checkFallbackCover(results[i].AlbumID)
+		}
 	}
+
+	return results, nil
+}
+
+func checkFallbackCover(albumID string) bool {
+	// 实现1: 简单校验专辑ID格式
+	if _, err := strconv.Atoi(albumID); err == nil {
+		return true // 假设有效ID即有封面
+	}
+	return false
+
+	// 实现2: 实际数据库查询（需注入collection）
+	/*
+	   ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	   defer cancel()
+
+	   var result struct{ HasCover bool }
+	   err := collection.FindOne(ctx, bson.M{"album_id": albumID}).Decode(&result)
+	   return err == nil && result.HasCover
+	*/
 }

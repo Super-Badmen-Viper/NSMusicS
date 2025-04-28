@@ -34,22 +34,7 @@ type MediaFileMetadata struct {
 	Channels      int                `bson:"channels"`
 }
 
-// FilterParams 基础过滤参数
-type FilterParams struct {
-	Genres       []string
-	MinYear      int
-	MaxYear      int
-	ArtistIDs    []string
-	MinDuration  float64
-	MaxDuration  float64
-	AlbumTypes   []string
-	HasLyrics    *bool
-	BitrateRange [2]int
-}
-
-// SortParams 排序参数
-type SortParams struct {
-	Field     string // 支持字段：title, artist, year, duration, bit_rate 等
-	Ascending bool
-	Collation string // 排序规则（如：nocase）
+type MediaFileListResponse struct {
+	MediaFiles []MediaFileMetadata `json:"media_files"`
+	Count      int                 `json:"count"`
 }
