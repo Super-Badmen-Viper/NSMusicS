@@ -889,7 +889,7 @@ func (si *Initializer) initFileEntityAudioArtist(ctx context.Context) error {
 }
 
 func (si *Initializer) initFileEntityAudioAnnotation(ctx context.Context) error {
-	coll := si.db.Collection(domain.CollectionFileEntityAnnotation)
+	coll := si.db.Collection(domain.CollectionFileEntityAudioAnnotation)
 
 	dummyID := primitive.NewObjectID()
 	emptyDoc := &scene_audio_db_models.AnnotationMetadata{
@@ -908,7 +908,7 @@ func (si *Initializer) initFileEntityAudioAnnotation(ctx context.Context) error 
 }
 
 func (si *Initializer) initFileEntityAudioPlaylist(ctx context.Context) error {
-	coll := si.db.Collection(domain.CollectionFileEntityPlaylist)
+	coll := si.db.Collection(domain.CollectionFileEntityAudioPlaylist)
 
 	dummyID := primitive.NewObjectID()
 	emptyDoc := &scene_audio_db_models.PlaylistMetadata{
@@ -927,7 +927,7 @@ func (si *Initializer) initFileEntityAudioPlaylist(ctx context.Context) error {
 }
 
 func (si *Initializer) initFileEntityAudioPlaylistTrack(ctx context.Context) error {
-	coll := si.db.Collection(domain.CollectionFileEntityPlaylistTrack)
+	coll := si.db.Collection(domain.CollectionFileEntityAudioPlaylistTrack)
 
 	emptyDoc := &scene_audio_db_models.PlaylistTrackMetadata{
 		ID: 0,

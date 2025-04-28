@@ -19,3 +19,8 @@ type PlaylistMetadata struct {
 	OwnerID   string             `bson:"owner_id"`
 	Public    bool               `bson:"public"`
 }
+
+type PlaylistListResponse struct {
+	Playlists []PlaylistMetadata `json:"playlists"`
+	Count     int                `json:"count"`
+}

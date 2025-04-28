@@ -78,7 +78,7 @@ func (r *annotationRepository) GetArtistList(
 	ctx context.Context,
 	end, order, sort, start string,
 ) ([]scene_audio_route_models.ArtistMetadata, error) {
-	collection := r.db.Collection("CollectionFileEntityAnnotation")
+	collection := r.db.Collection("CollectionFileEntityAudioAnnotation")
 	pipeline := r.buildPipeline("artist", "CollectionFileEntityAudioArtist", start, end, sort, order)
 
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
@@ -103,7 +103,7 @@ func (r *annotationRepository) GetAlbumList(
 	ctx context.Context,
 	end, order, sort, start string,
 ) ([]scene_audio_route_models.AlbumMetadata, error) {
-	collection := r.db.Collection("CollectionFileEntityAnnotation")
+	collection := r.db.Collection("CollectionFileEntityAudioAnnotation")
 	pipeline := r.buildPipeline("album", "CollectionFileEntityAudioAlbum", start, end, sort, order)
 
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
@@ -128,7 +128,7 @@ func (r *annotationRepository) GetMediaFileList(
 	ctx context.Context,
 	end, order, sort, start string,
 ) ([]scene_audio_route_models.MediaFileMetadata, error) {
-	collection := r.db.Collection("CollectionFileEntityAnnotation")
+	collection := r.db.Collection("CollectionFileEntityAudioAnnotation")
 	pipeline := r.buildPipeline("media", "CollectionFileEntityAudioMediaFile", start, end, sort, order)
 
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)

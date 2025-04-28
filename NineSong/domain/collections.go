@@ -54,11 +54,11 @@ const (
 	CollectionFileEntityAudioArtist = "file_entity_audio_artist"
 )
 const (
-	CollectionFileEntityAnnotation = "file_entity_audio_annotation"
+	CollectionFileEntityAudioAnnotation = "file_entity_audio_annotation"
 )
 const (
-	CollectionFileEntityPlaylist = "file_entity_audio_playlist"
+	CollectionFileEntityAudioPlaylist = "file_entity_audio_playlist"
 )
 const (
-	CollectionFileEntityPlaylistTrack = "file_entity_audio_playlist_track"
+	CollectionFileEntityAudioPlaylistTrack = "file_entity_audio_playlist_track"
 )

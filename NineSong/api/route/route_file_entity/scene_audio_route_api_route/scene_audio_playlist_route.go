@@ -10,18 +10,23 @@ import (
 	"time"
 )
 
-func NewPlaylistTrackRouter(
+func NewPlaylistRouter(
 	env *bootstrap.Env,
 	timeout time.Duration,
 	db mongo.Database,
 	group *gin.RouterGroup,
 ) {
-	repo := scene_audio_route_repository.NewPlaylistTrackRepository(db, domain.CollectionFileEntityAudioPlaylistTrack)
+	repo := scene_audio_route_repository.NewPlaylistRepository(db, domain.CollectionFileEntityAudioPlaylist)
+	ctrl := scene_audio_route_api_controller.NewPlaylistController(repo)
 
-	ctrl := scene_audio_route_api_controller.NewPlaylistTrackController(repo)
-
-	playlistTrackGroup := group.Group("/playlists/:playlistId/tracks")
+	playlistGroup := group.Group("/playlists")
 	{
-		playlistTrackGroup.GET("", ctrl.GetPlaylistTracks)
+		playlistGroup.GET("", ctrl.GetPlaylists)
+		playlistGroup.POST("", ctrl.CreatePlaylist)
+		playlistGroup.GET("/:playlistId", ctrl.GetPlaylist)
+		playlistGroup.PUT("/:playlistId", ctrl.UpdatePlaylist)
+		playlistGroup.DELETE("/:playlistId", ctrl.DeletePlaylist)
+		playlistGroup.POST("/:playlistId/media", ctrl.AddMediaFiles)
+		playlistGroup.DELETE("/:playlistId/media", ctrl.RemoveMediaFiles)
 	}
 }
