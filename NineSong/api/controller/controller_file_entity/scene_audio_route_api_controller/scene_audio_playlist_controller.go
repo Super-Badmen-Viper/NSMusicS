@@ -145,7 +145,7 @@ func (c *PlaylistController) AddMediaFiles(ctx *gin.Context) {
 	ctx.Status(http.StatusNoContent)
 }
 
-// 移除媒体文件
+// RemoveMediaFiles 删除媒体文件（新版）
 func (c *PlaylistController) RemoveMediaFiles(ctx *gin.Context) {
 	playlistId := ctx.Param("playlistId")
 	var req struct {
