@@ -84,9 +84,6 @@ func (uc *playlistUsecase) CreatePlaylist(
 	if strings.TrimSpace(playlist.Name) == "" {
 		return nil, errors.New("playlist name cannot be empty")
 	}
-	if playlist.OwnerID == "" {
-		return nil, errors.New("owner id is required")
-	}
 
 	// 业务规则：名称长度限制（参考网页9的验证实践）
 	if len(playlist.Name) > 100 {
@@ -129,92 +126,29 @@ func (uc *playlistUsecase) UpdatePlaylistInfo(
 	ctx context.Context,
 	playlistId string,
 	playlist scene_audio_route_models.PlaylistMetadata,
-) (bool, error) {
+) (*scene_audio_route_models.PlaylistMetadata, error) {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
 
 	// 参数校验
 	if _, err := primitive.ObjectIDFromHex(playlistId); err != nil {
-		return false, errors.New("invalid playlist id format")
+		return nil, errors.New("invalid playlist id format")
 	}
 	if strings.TrimSpace(playlist.Name) == "" {
-		return false, errors.New("playlist name cannot be empty")
+		return nil, errors.New("playlist name cannot be empty")
 	}
 
 	// 保留原始所有权（符合网页4的数据一致性原则）
-	existing, err := uc.repo.GetPlaylist(ctx, playlistId)
-	if err != nil {
-		return false, domain.WrapDomainError(err, "playlist not found")
-	}
-	playlist.OwnerID = existing.OwnerID
-
-	// 执行更新操作
-	success, err := uc.repo.UpdatePlaylistInfo(ctx, playlistId, playlist)
-	if err != nil || !success {
-		return false, domain.WrapDomainError(err, "update failed")
-	}
-	return true, nil
-}
-
-// 添加媒体文件（带容量控制）
-func (uc *playlistUsecase) UpdatePlaylistMediaFileIdToAdd(
-	ctx context.Context,
-	playlistId string,
-	mediaFileIds string,
-) (bool, error) {
-	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
-	defer cancel()
-
-	// 参数校验
-	if _, err := primitive.ObjectIDFromHex(playlistId); err != nil {
-		return false, errors.New("invalid playlist id format")
-	}
-	if strings.TrimSpace(mediaFileIds) == "" {
-		return false, errors.New("empty media file list")
-	}
-
-	// 获取当前播放列表状态，，检测是否可添加
 	_, err := uc.repo.GetPlaylist(ctx, playlistId)
 	if err != nil {
-		return false, domain.WrapDomainError(err, "playlist not found")
+		return nil, domain.WrapDomainError(err, "playlist not found")
 	}
 
-	// 业务规则：容量限制（参考网页6的业务容量控制）
-	// 单独优化，不需要容量限制，哪怕是涉及百万千万级的数据处理，都应该不限制操作，而应该优化数据处理算法
-	//ids := strings.Split(mediaFileIds, ",")
-	//if existing.SongCount+len(ids) > uc.maxMediaSize {
-	//	return false, errors.New("exceeds maximum media capacity")
-	//}
-
-	// 执行添加操作
-	success, err := uc.repo.UpdatePlaylistMediaFileIdToAdd(ctx, playlistId, mediaFileIds)
-	if err != nil || !success {
-		return false, domain.WrapDomainError(err, "failed to add media files")
-	}
-	return true, nil
-}
-
-// 移除媒体文件（带存在性校验）
-func (uc *playlistUsecase) UpdatePlaylistMediaFileIndexToRemove(
-	ctx context.Context,
-	playlistId string,
-	mediaFileIds string,
-) (bool, error) {
-	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
-	defer cancel()
-
-	// 参数校验
-	if _, err := primitive.ObjectIDFromHex(playlistId); err != nil {
-		return false, errors.New("invalid playlist id format")
-	}
-	if strings.TrimSpace(mediaFileIds) == "" {
-		return false, errors.New("empty media file list")
+	// 执行更新并获取最新数据
+	updated, err := uc.repo.UpdatePlaylistInfo(ctx, playlistId, playlist)
+	if err != nil {
+		return nil, domain.WrapDomainError(err, "update failed")
 	}
 
-	// 执行移除操作
-	success, err := uc.repo.UpdatePlaylistMediaFileIndexToRemove(ctx, playlistId, mediaFileIds)
-	if err != nil || !success {
-		return false, domain.WrapDomainError(err, "failed to remove media files")
-	}
-	return true, nil
+	return updated, nil
 }

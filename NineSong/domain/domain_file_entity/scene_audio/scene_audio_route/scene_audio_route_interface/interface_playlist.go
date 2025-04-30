@@ -30,17 +30,5 @@ type PlaylistRepository interface {
 		ctx context.Context,
 		playlistId string,
 		playlist scene_audio_route_models.PlaylistMetadata,
-	) (bool, error)
-
-	UpdatePlaylistMediaFileIdToAdd(
-		ctx context.Context,
-		playlistId string,
-		mediaFileIds string,
-	) (bool, error)
-
-	UpdatePlaylistMediaFileIndexToRemove(
-		ctx context.Context,
-		playlistId string,
-		mediaFileIds string,
-	) (bool, error)
+	) (*scene_audio_route_models.PlaylistMetadata, error)
 }

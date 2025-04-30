@@ -19,5 +19,23 @@ type PlaylistTrackRepository interface {
 		artistId string,
 		year string,
 		playlistId string,
-	) ([]scene_audio_route_models.PlaylistTrackMetadata, error)
+	) ([]scene_audio_route_models.MediaFileMetadata, error)
+
+	AddPlaylistTrackItems(
+		ctx context.Context,
+		playlistId string,
+		mediaFileIds string,
+	) (bool, error)
+
+	RemovePlaylistTrackItems(
+		ctx context.Context,
+		playlistId string,
+		mediaFileIds string,
+	) (bool, error)
+
+	SortPlaylistTrackItems(
+		ctx context.Context,
+		playlistId string,
+		mediaFileIds string,
+	) (bool, error)
 }

@@ -26,7 +26,5 @@ func NewPlaylistRouter(
 		playlistGroup.GET("/detail", ctrl.GetPlaylist)
 		playlistGroup.PUT("", ctrl.UpdatePlaylist)
 		playlistGroup.DELETE("", ctrl.DeletePlaylist)
-		playlistGroup.POST("/media", ctrl.AddMediaFiles)
-		playlistGroup.DELETE("/media", ctrl.RemoveMediaFiles)
 	}
 }

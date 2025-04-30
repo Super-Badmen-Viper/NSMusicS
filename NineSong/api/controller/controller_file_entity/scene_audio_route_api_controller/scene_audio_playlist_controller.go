@@ -4,7 +4,10 @@ import (
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_route/scene_audio_route_interface"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_route/scene_audio_route_models"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"net/http"
+	"strings"
 )
 
 type PlaylistController struct {
@@ -34,7 +37,7 @@ func (c *PlaylistController) GetPlaylist(ctx *gin.Context) {
 		ID string `form:"id" binding:"required"`
 	}
 
-	if err := ctx.ShouldBind(&req); err != nil {
+	if err := ctx.ShouldBindWith(&req, binding.Form); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Missing ID parameter"})
 		return
 	}
@@ -50,12 +53,16 @@ func (c *PlaylistController) GetPlaylist(ctx *gin.Context) {
 // 创建播放列表
 func (c *PlaylistController) CreatePlaylist(ctx *gin.Context) {
 	var req struct {
-		Name    string `json:"name" binding:"required"`
-		Comment string `json:"comment"`
-		Public  bool   `json:"public"`
+		Name    string `form:"name" binding:"required"`
+		Comment string `form:"comment"`
+		Public  bool   `form:"public"`
 	}
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body"})
+
+	if err := ctx.ShouldBind(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+			"type":  "FORM_BIND_ERROR",
+		})
 		return
 	}
 
@@ -63,7 +70,6 @@ func (c *PlaylistController) CreatePlaylist(ctx *gin.Context) {
 		Name:    req.Name,
 		Comment: req.Comment,
 		Public:  req.Public,
-		OwnerID: getCurrentUserID(ctx), // 需要实现用户身份获取逻辑
 	}
 
 	created, err := c.PlaylistUsecase.CreatePlaylist(ctx.Request.Context(), newPlaylist)
@@ -83,23 +89,47 @@ func (c *PlaylistController) UpdatePlaylist(ctx *gin.Context) {
 		Public  bool   `form:"public"`
 	}
 
-	if err := ctx.ShouldBind(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid parameters"})
+	if err := ctx.ShouldBindWith(&req, binding.Form); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code":    "INVALID_PARAMS",
+			"details": err.Error(),
+		})
 		return
 	}
 
+	userid, _ := primitive.ObjectIDFromHex(req.ID)
 	updateData := scene_audio_route_models.PlaylistMetadata{
+		ID:      userid,
 		Name:    req.Name,
 		Comment: req.Comment,
 		Public:  req.Public,
 	}
 
-	success, err := c.PlaylistUsecase.UpdatePlaylistInfo(ctx.Request.Context(), req.ID, updateData)
-	if err != nil || !success {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Update failed"})
+	updatedPlaylist, err := c.PlaylistUsecase.UpdatePlaylistInfo(ctx.Request.Context(), req.ID, updateData)
+	if err != nil {
+		if strings.Contains(err.Error(), "already exists") {
+			ctx.JSON(http.StatusConflict, gin.H{
+				"code":    "NAME_CONFLICT",
+				"message": "播放列表名称已存在",
+			})
+		} else if strings.Contains(err.Error(), "not found") {
+			ctx.JSON(http.StatusNotFound, gin.H{
+				"code": "NOT_FOUND",
+				"msg":  "指定播放列表不存在",
+			})
+		} else {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"code":    "SERVER_ERROR",
+				"message": err.Error(),
+			})
+		}
 		return
 	}
-	ctx.Status(http.StatusNoContent)
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"code": "SUCCESS",
+		"data": updatedPlaylist,
+	})
 }
 
 // 删除播放列表（新版）
@@ -119,57 +149,4 @@ func (c *PlaylistController) DeletePlaylist(ctx *gin.Context) {
 		return
 	}
 	ctx.Status(http.StatusNoContent)
-}
-
-// 媒体文件操作（新版）
-func (c *PlaylistController) AddMediaFiles(ctx *gin.Context) {
-	var req struct {
-		PlaylistID   string `form:"playlist_id" binding:"required"`
-		MediaFileIDs string `form:"media_file_ids" binding:"required"`
-	}
-
-	if err := ctx.ShouldBind(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid parameters"})
-		return
-	}
-
-	success, err := c.PlaylistUsecase.UpdatePlaylistMediaFileIdToAdd(
-		ctx.Request.Context(),
-		req.PlaylistID,
-		req.MediaFileIDs,
-	)
-	if err != nil || !success {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "add media failed"})
-		return
-	}
-	ctx.Status(http.StatusNoContent)
-}
-
-// RemoveMediaFiles 删除媒体文件（新版）
-func (c *PlaylistController) RemoveMediaFiles(ctx *gin.Context) {
-	playlistId := ctx.Param("playlistId")
-	var req struct {
-		MediaFileIDs string `json:"media_file_ids" binding:"required"`
-	}
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body"})
-		return
-	}
-
-	success, err := c.PlaylistUsecase.UpdatePlaylistMediaFileIndexToRemove(
-		ctx.Request.Context(),
-		playlistId,
-		req.MediaFileIDs,
-	)
-	if err != nil || !success {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "remove media failed"})
-		return
-	}
-	ctx.Status(http.StatusNoContent)
-}
-
-// 获取当前用户ID（需根据项目鉴权方案实现）
-func getCurrentUserID(ctx *gin.Context) string {
-	// 示例实现，需替换为实际鉴权逻辑
-	return "user123"
 }
