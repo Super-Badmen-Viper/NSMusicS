@@ -4,7 +4,9 @@ package scene_audio_route_usecase
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_route/scene_audio_route_interface"
@@ -27,7 +29,7 @@ func NewPlaylistTrackUsecase(repo scene_audio_route_interface.PlaylistTrackRepos
 func (uc *playlistTrackUsecase) GetPlaylistTrackItems(
 	ctx context.Context,
 	end, order, sort, start, search, starred, albumId, artistId, year, playlistId string,
-) ([]scene_audio_route_models.PlaylistTrackMetadata, error) {
+) ([]scene_audio_route_models.MediaFileMetadata, error) {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
 
@@ -47,4 +49,56 @@ func (uc *playlistTrackUsecase) GetPlaylistTrackItems(
 	}
 
 	return uc.repo.GetPlaylistTrackItems(ctx, end, order, sort, start, search, starred, albumId, artistId, year, playlistId)
+}
+
+func (uc *playlistTrackUsecase) AddPlaylistTrackItems(
+	ctx context.Context,
+	playlistId string,
+	mediaFileIds string,
+) (bool, error) {
+	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
+	defer cancel()
+
+	success, err := uc.repo.AddPlaylistTrackItems(ctx, playlistId, mediaFileIds)
+	if err != nil && !success { // 完全失败时返回错误
+		return false, fmt.Errorf("operation failed: %w", err)
+	}
+
+	return success, nil // 部分成功视为成功
+}
+
+func (uc *playlistTrackUsecase) RemovePlaylistTrackItems(
+	ctx context.Context,
+	playlistId string,
+	mediaFileIds string,
+) (bool, error) {
+	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
+	defer cancel()
+
+	if _, err := primitive.ObjectIDFromHex(playlistId); err != nil {
+		return false, errors.New("invalid playlist id format")
+	}
+	if strings.TrimSpace(mediaFileIds) == "" {
+		return false, errors.New("empty media file list")
+	}
+
+	return uc.repo.RemovePlaylistTrackItems(ctx, playlistId, mediaFileIds)
+}
+
+func (uc *playlistTrackUsecase) SortPlaylistTrackItems(
+	ctx context.Context,
+	playlistId string,
+	mediaFileIds string,
+) (bool, error) {
+	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
+	defer cancel()
+
+	if _, err := primitive.ObjectIDFromHex(playlistId); err != nil {
+		return false, errors.New("invalid playlist id format")
+	}
+	if strings.TrimSpace(mediaFileIds) == "" {
+		return false, errors.New("empty media file list")
+	}
+
+	return uc.repo.SortPlaylistTrackItems(ctx, playlistId, mediaFileIds)
 }

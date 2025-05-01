@@ -20,8 +20,8 @@ func NewFileController(uc *usecase_file_entity.FileUsecase) *FileController {
 
 func (ctrl *FileController) ScanDirectory(c *gin.Context) {
 	var req struct {
-		FolderPath string                        `json:"folder_path" binding:"required"`
-		FileTypes  []domain_file_entity.FileType `json:"file_types" binding:"required"`
+		FolderPath string                          `json:"folder_path" binding:"required"`
+		FileTypes  []domain_file_entity.FileTypeNo `json:"file_types" binding:"required"`
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {

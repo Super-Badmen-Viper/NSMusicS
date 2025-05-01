@@ -23,7 +23,7 @@ type FileUsecase struct {
 	fileRepo    domain_file_entity.FileRepository
 	folderRepo  domain_file_entity.FolderRepository
 	detector    domain_file_entity.FileDetector
-	targetTypes map[domain_file_entity.FileType]struct{}
+	targetTypes map[domain_file_entity.FileTypeNo]struct{}
 	targetMutex sync.RWMutex
 	workerPool  chan struct{}
 	scanTimeout time.Duration
@@ -62,7 +62,7 @@ func NewFileUsecase(
 	}
 }
 
-func (uc *FileUsecase) ProcessDirectory(ctx context.Context, dirPath string, targetTypes []domain_file_entity.FileType) error {
+func (uc *FileUsecase) ProcessDirectory(ctx context.Context, dirPath string, targetTypes []domain_file_entity.FileTypeNo) error {
 	// 防御性检查
 	if uc.folderRepo == nil {
 		log.Printf("folderRepo未初始化")
@@ -93,7 +93,7 @@ func (uc *FileUsecase) ProcessDirectory(ctx context.Context, dirPath string, tar
 
 	// 设置目标文件类型
 	uc.targetMutex.Lock()
-	uc.targetTypes = make(map[domain_file_entity.FileType]struct{})
+	uc.targetTypes = make(map[domain_file_entity.FileTypeNo]struct{})
 	for _, ft := range targetTypes {
 		uc.targetTypes[ft] = struct{}{}
 	}

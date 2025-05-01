@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_db/scene_audio_db_models"
@@ -64,6 +63,20 @@ func (p *playlistRepository) GetPlaylist(ctx context.Context, playlistId string)
 
 // 创建播放列表
 func (p *playlistRepository) CreatePlaylist(ctx context.Context, playlist scene_audio_route_models.PlaylistMetadata) (*scene_audio_route_models.PlaylistMetadata, error) {
+	// 构造新的唯一性校验条件
+	filter := bson.D{
+		{"name", playlist.Name}, // 仅保留name字段校验[3,4](@ref)
+	}
+
+	// 查询重复项
+	count, err := p.db.Collection(p.collection).CountDocuments(ctx, filter)
+	if err != nil {
+		return nil, fmt.Errorf("query failed: %w", err)
+	}
+	if count > 0 {
+		return nil, errors.New("playlist name already exists")
+	}
+
 	if playlist.ID.IsZero() {
 		playlist.ID = primitive.NewObjectID()
 	}
@@ -75,8 +88,16 @@ func (p *playlistRepository) CreatePlaylist(ctx context.Context, playlist scene_
 	dbModel := convertToDBModel(playlist)
 
 	coll := p.db.Collection(p.collection)
-	if _, err := coll.InsertOne(ctx, dbModel); err != nil {
+	insertResult, err := coll.InsertOne(ctx, dbModel)
+	if err != nil {
 		return nil, fmt.Errorf("insert failed: %w", err)
+	}
+
+	// 获取生成的ObjectID
+	if oid, ok := insertResult.(primitive.ObjectID); ok {
+		playlist.ID = oid
+	} else {
+		return nil, errors.New("invalid objectid generated")
 	}
 
 	return &playlist, nil
@@ -99,10 +120,23 @@ func (p *playlistRepository) DeletePlaylist(ctx context.Context, playlistId stri
 }
 
 // 更新播放列表基本信息
-func (p *playlistRepository) UpdatePlaylistInfo(ctx context.Context, playlistId string, playlist scene_audio_route_models.PlaylistMetadata) (bool, error) {
+func (p *playlistRepository) UpdatePlaylistInfo(ctx context.Context, playlistId string, playlist scene_audio_route_models.PlaylistMetadata) (*scene_audio_route_models.PlaylistMetadata, error) {
 	objID, err := primitive.ObjectIDFromHex(playlistId)
 	if err != nil {
-		return false, errors.New("invalid playlist id format")
+		return nil, errors.New("invalid playlist id format")
+	}
+
+	// 添加名称唯一性检查
+	filter := bson.M{
+		"name": playlist.Name,
+		"_id":  bson.M{"$ne": objID},
+	}
+	count, err := p.db.Collection(p.collection).CountDocuments(ctx, filter)
+	if err != nil {
+		return nil, fmt.Errorf("name check failed: %w", err)
+	}
+	if count > 0 {
+		return nil, errors.New("playlist name already exists")
 	}
 
 	update := bson.M{
@@ -115,89 +149,23 @@ func (p *playlistRepository) UpdatePlaylistInfo(ctx context.Context, playlistId 
 	}
 
 	coll := p.db.Collection(p.collection)
+	// 执行更新操作
 	result, err := coll.UpdateByID(ctx, objID, update)
 	if err != nil {
-		return false, fmt.Errorf("update failed: %w", err)
+		return nil, fmt.Errorf("update failed: %w", err)
 	}
-
 	if result.MatchedCount == 0 {
-		return false, errors.New("document not found")
+		return nil, errors.New("document not found")
 	}
 
-	return true, nil
-}
-
-// 添加媒体文件到播放列表
-func (p *playlistRepository) UpdatePlaylistMediaFileIdToAdd(ctx context.Context, playlistId string, mediaFileIds string) (bool, error) {
-	objID, err := primitive.ObjectIDFromHex(playlistId)
+	// 新增：查询更新后的文档
+	var updatedDoc scene_audio_db_models.PlaylistMetadata
+	err = coll.FindOne(ctx, bson.M{"_id": objID}).Decode(&updatedDoc)
 	if err != nil {
-		return false, errors.New("invalid playlist id format")
+		return nil, fmt.Errorf("fetch updated document failed: %w", err)
 	}
 
-	ids, err := splitMediaFileIds(mediaFileIds)
-	if err != nil {
-		return false, fmt.Errorf("invalid media file ids: %w", err)
-	}
-
-	update := bson.M{
-		"$addToSet": bson.M{"media_file_ids": bson.M{"$each": ids}},
-		"$set":      bson.M{"updated_at": time.Now().UTC()},
-	}
-
-	coll := p.db.Collection(p.collection)
-	result, err := coll.UpdateByID(ctx, objID, update)
-	if err != nil {
-		return false, fmt.Errorf("update failed: %w", err)
-	}
-
-	if result.MatchedCount == 0 {
-		return false, errors.New("document not found")
-	}
-
-	return true, nil
-}
-
-// 从播放列表移除媒体文件
-func (p *playlistRepository) UpdatePlaylistMediaFileIndexToRemove(ctx context.Context, playlistId string, mediaFileIds string) (bool, error) {
-	objID, err := primitive.ObjectIDFromHex(playlistId)
-	if err != nil {
-		return false, errors.New("invalid playlist id format")
-	}
-
-	ids, err := splitMediaFileIds(mediaFileIds)
-	if err != nil {
-		return false, fmt.Errorf("invalid media file ids: %w", err)
-	}
-
-	update := bson.M{
-		"$pull": bson.M{"media_file_ids": bson.M{"$in": ids}},
-		"$set":  bson.M{"updated_at": time.Now().UTC()},
-	}
-
-	coll := p.db.Collection(p.collection)
-	result, err := coll.UpdateByID(ctx, objID, update)
-	if err != nil {
-		return false, fmt.Errorf("update failed: %w", err)
-	}
-
-	if result.MatchedCount == 0 {
-		return false, errors.New("document not found")
-	}
-
-	return true, nil
-}
-
-// 辅助函数：分割媒体文件ID
-func splitMediaFileIds(ids string) ([]primitive.ObjectID, error) {
-	var objectIDs []primitive.ObjectID
-	for _, idStr := range strings.Split(ids, ",") {
-		objID, err := primitive.ObjectIDFromHex(strings.TrimSpace(idStr))
-		if err != nil {
-			return nil, err
-		}
-		objectIDs = append(objectIDs, objID)
-	}
-	return objectIDs, nil
+	return convertToRouteModel(updatedDoc), nil
 }
 
 // 数据库模型转换
@@ -206,14 +174,9 @@ func convertToDBModel(routeModel scene_audio_route_models.PlaylistMetadata) scen
 		ID:        routeModel.ID,
 		Name:      routeModel.Name,
 		Comment:   routeModel.Comment,
-		Duration:  routeModel.Duration,
-		SongCount: routeModel.SongCount,
+		Public:    routeModel.Public,
 		CreatedAt: routeModel.CreatedAt,
 		UpdatedAt: routeModel.UpdatedAt,
-		Path:      routeModel.Path,
-		Size:      routeModel.Size,
-		OwnerID:   routeModel.OwnerID,
-		Public:    routeModel.Public,
 	}
 }
 
@@ -229,7 +192,6 @@ func convertToRouteModel(dbModel scene_audio_db_models.PlaylistMetadata) *scene_
 		UpdatedAt: dbModel.UpdatedAt,
 		Path:      dbModel.Path,
 		Size:      dbModel.Size,
-		OwnerID:   dbModel.OwnerID,
 		Public:    dbModel.Public,
 	}
 }

@@ -8,10 +8,10 @@ import (
 	"time"
 )
 
-type FileType int
+type FileTypeNo int
 
 const (
-	Audio FileType = iota + 1
+	Audio FileTypeNo = iota + 1
 	Video
 	Image
 	Text
@@ -22,11 +22,114 @@ const (
 	Unknown
 )
 
+const (
+	AcoustIDFingerprint       = "ACOUSTID_FINGERPRINT"
+	AcoustIDID                = "ACOUSTID_ID"
+	Album                     = "ALBUM"
+	AlbumArtist               = "ALBUMARTIST"
+	AlbumArtistSort           = "ALBUMARTISTSORT"
+	AlbumSort                 = "ALBUMSORT"
+	Arranger                  = "ARRANGER"
+	Artist                    = "ARTIST"
+	Artists                   = "ARTISTS"
+	ArtistSort                = "ARTISTSORT"
+	ArtistWebpage             = "ARTISTWEBPAGE"
+	ASIN                      = "ASIN"
+	AudioSourceWebpage        = "AUDIOSOURCEWEBPAGE"
+	Barcode                   = "BARCODE"
+	BPM                       = "BPM"
+	CatalogNumber             = "CATALOGNUMBER"
+	Comment                   = "COMMENT"
+	Compilation               = "COMPILATION"
+	Composer                  = "COMPOSER"
+	ComposerSort              = "COMPOSERSORT"
+	Conductor                 = "CONDUCTOR"
+	Copyright                 = "COPYRIGHT"
+	CopyrightURL              = "COPYRIGHTURL"
+	Date                      = "DATE"
+	DiscNumber                = "DISCNUMBER"
+	DiscSubtitle              = "DISCSUBTITLE"
+	DJMixer                   = "DJMIXER"
+	EncodedBy                 = "ENCODEDBY"
+	Encoding                  = "ENCODING"
+	EncodingTime              = "ENCODINGTIME"
+	Engineer                  = "ENGINEER"
+	FileType                  = "FILETYPE"
+	FileWebpage               = "FILEWEBPAGE"
+	GaplessPlayback           = "GAPLESSPLAYBACK"
+	Genre                     = "GENRE"
+	Grouping                  = "GROUPING"
+	InitialKey                = "INITIALKEY"
+	InvolvedPeople            = "INVOLVEDPEOPLE"
+	ISRC                      = "ISRC"
+	Label                     = "LABEL"
+	Language                  = "LANGUAGE"
+	Length                    = "LENGTH"
+	License                   = "LICENSE"
+	Lyricist                  = "LYRICIST"
+	Lyrics                    = "LYRICS"
+	Media                     = "MEDIA"
+	Mixer                     = "MIXER"
+	Mood                      = "MOOD"
+	MovementCount             = "MOVEMENTCOUNT"
+	MovementName              = "MOVEMENTNAME"
+	MovementNumber            = "MOVEMENTNUMBER"
+	MusicBrainzAlbumID        = "MUSICBRAINZ_ALBUMID"
+	MusicBrainzAlbumArtistID  = "MUSICBRAINZ_ALBUMARTISTID"
+	MusicBrainzArtistID       = "MUSICBRAINZ_ARTISTID"
+	MusicBrainzReleaseGroupID = "MUSICBRAINZ_RELEASEGROUPID"
+	MusicBrainzReleaseTrackID = "MUSICBRAINZ_RELEASETRACKID"
+	MusicBrainzTrackID        = "MUSICBRAINZ_TRACKID"
+	MusicBrainzWorkID         = "MUSICBRAINZ_WORKID"
+	MusicianCredits           = "MUSICIANCREDITS"
+	MusicIPPUID               = "MUSICIP_PUID"
+	OriginalAlbum             = "ORIGINALALBUM"
+	OriginalArtist            = "ORIGINALARTIST"
+	OriginalDate              = "ORIGINALDATE"
+	OriginalFilename          = "ORIGINALFILENAME"
+	OriginalLyricist          = "ORIGINALLYRICIST"
+	Owner                     = "OWNER"
+	PaymentWebpage            = "PAYMENTWEBPAGE"
+	Performer                 = "PERFORMER"
+	PlaylistDelay             = "PLAYLISTDELAY"
+	Podcast                   = "PODCAST"
+	PodcastCategory           = "PODCASTCATEGORY"
+	PodcastDesc               = "PODCASTDESC"
+	PodcastID                 = "PODCASTID"
+	PodcastURL                = "PODCASTURL"
+	ProducedNotice            = "PRODUCEDNOTICE"
+	Producer                  = "PRODUCER"
+	PublisherWebpage          = "PUBLISHERWEBPAGE"
+	RadioStation              = "RADIOSTATION"
+	RadioStationOwner         = "RADIOSTATIONOWNER"
+	RadioStationWebpage       = "RADIOSTATIONWEBPAGE"
+	ReleaseCountry            = "RELEASECOUNTRY"
+	ReleaseDate               = "RELEASEDATE"
+	ReleaseStatus             = "RELEASESTATUS"
+	ReleaseType               = "RELEASETYPE"
+	Remixer                   = "REMIXER"
+	Script                    = "SCRIPT"
+	ShowSort                  = "SHOWSORT"
+	ShowWorkMovement          = "SHOWWORKMOVEMENT"
+	Subtitle                  = "SUBTITLE"
+	TaggingDate               = "TAGGINGDATE"
+	Title                     = "TITLE"
+	TitleSort                 = "TITLESORT"
+	TrackNumber               = "TRACKNUMBER"
+	TVEpisode                 = "TVEPISODE"
+	TVEpisodeID               = "TVEPISODEID"
+	TVNetwork                 = "TVNETWORK"
+	TVSeason                  = "TVSEASON"
+	TVShow                    = "TVSHOW"
+	URL                       = "URL"
+	Work                      = "WORK"
+)
+
 type FileMetadata struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty"`
 	FolderID  primitive.ObjectID `bson:"folder_id"`
 	FilePath  string             `bson:"file_path" validate:"filepath"`
-	FileType  FileType           `bson:"file_type" validate:"min=1,max=8"`
+	FileType  FileTypeNo         `bson:"file_type" validate:"min=1,max=8"`
 	Size      int64              `bson:"size" validate:"min=0"`
 	ModTime   time.Time          `bson:"mod_time" validate:"required"`
 	Checksum  string             `bson:"checksum" validate:"sha256"`
@@ -41,12 +144,12 @@ type FileRepository interface {
 }
 
 type FileDetector interface {
-	DetectMediaType(filePath string) (FileType, error)
+	DetectMediaType(filePath string) (FileTypeNo, error)
 }
 
 type FileDetectorImpl struct{}
 
-func (fd *FileDetectorImpl) DetectMediaType(filePath string) (FileType, error) {
+func (fd *FileDetectorImpl) DetectMediaType(filePath string) (FileTypeNo, error) {
 	ext := strings.ToLower(filepath.Ext(filePath))
 	switch ext {
 	// 音频类型（补充无损格式和现代编码）
