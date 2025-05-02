@@ -28,4 +28,42 @@ type AnnotationRepository interface {
 		sort string,
 		start string,
 	) ([]scene_audio_route_models.MediaFileMetadata, error)
+
+	GetRandomArtistList(
+		ctx context.Context,
+		end string,
+		start string,
+	) ([]scene_audio_route_models.ArtistMetadata, error)
+	GetRandomAlbumList(
+		ctx context.Context,
+		end string,
+		start string,
+	) ([]scene_audio_route_models.AlbumMetadata, error)
+	GetRandomMediaFileList(
+		ctx context.Context,
+		end string,
+		start string,
+	) ([]scene_audio_route_models.MediaFileMetadata, error)
+
+	UpdateStarred(
+		ctx context.Context,
+		itemId string,
+		itemType string,
+	) (bool, error)
+	UpdateUnStarred(
+		ctx context.Context,
+		itemId string,
+		itemType string,
+	) (bool, error)
+	UpdateRating(
+		ctx context.Context,
+		itemId string,
+		itemType string,
+		rating int,
+	) (bool, error)
+	UpdateScrobble(
+		ctx context.Context,
+		itemId string,
+		itemType string,
+	) (bool, error)
 }

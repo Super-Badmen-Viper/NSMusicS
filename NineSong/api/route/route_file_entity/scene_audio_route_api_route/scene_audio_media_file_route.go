@@ -23,7 +23,7 @@ func NewMediaFileRouter(
 	usecase := scene_audio_route_usecase.NewMediaFileUsecase(repo, timeout)
 	ctrl := scene_audio_route_api_controller.NewMediaFileController(usecase)
 
-	mediaGroup := group.Group("/songs")
+	mediaGroup := group.Group("/medias")
 	{
 		mediaGroup.GET("", ctrl.GetMediaFiles)
 	}

@@ -8,101 +8,201 @@ import (
 )
 
 type AnnotationController struct {
-	AnnotationUsecase scene_audio_route_interface.AnnotationRepository
+	usecase scene_audio_route_interface.AnnotationRepository
 }
 
 func NewAnnotationController(uc scene_audio_route_interface.AnnotationRepository) *AnnotationController {
-	return &AnnotationController{AnnotationUsecase: uc}
+	return &AnnotationController{usecase: uc}
 }
 
-// 通用参数处理结构体
-type annotationQueryParams struct {
-	Start string `form:"start"`
-	End   string `form:"end"`
-	Sort  string `form:"sort"`
-	Order string `form:"order"`
+// region Common Tools
+func (c *AnnotationController) parsePagination(ctx *gin.Context) (start, end string) {
+	start = ctx.DefaultQuery("start", "0")
+	end = ctx.DefaultQuery("end", "50")
+	return
 }
 
-// 获取艺术家列表
+func (c *AnnotationController) parseID(ctx *gin.Context) string {
+	return ctx.Param("id")
+}
+
+// endregion
+
+// region Artist Endpoints
 func (c *AnnotationController) GetArtistList(ctx *gin.Context) {
-	params := annotationQueryParams{
-		Start: ctx.DefaultQuery("start", "0"),
-		End:   ctx.DefaultQuery("end", "50"),
-		Sort:  ctx.DefaultQuery("sort", "created_at"),
-		Order: ctx.DefaultQuery("order", "asc"),
-	}
+	start, end := c.parsePagination(ctx)
+	sort := ctx.DefaultQuery("sort", "name")
+	order := ctx.DefaultQuery("order", "asc")
 
-	results, err := c.AnnotationUsecase.GetArtistList(
-		ctx.Request.Context(),
-		params.End,
-		params.Order,
-		params.Sort,
-		params.Start,
-	)
-
+	artists, err := c.usecase.GetArtistList(ctx, end, order, sort, start)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	ctx.JSON(http.StatusOK, scene_audio_route_models.ArtistListResponse{
-		Artists: results,
-		Count:   len(results),
+		Artists: artists,
+		Count:   len(artists),
 	})
 }
 
-// 获取专辑列表
-func (c *AnnotationController) GetAlbumList(ctx *gin.Context) {
-	params := annotationQueryParams{
-		Start: ctx.DefaultQuery("start", "0"),
-		End:   ctx.DefaultQuery("end", "50"),
-		Sort:  ctx.DefaultQuery("sort", "release_date"),
-		Order: ctx.DefaultQuery("order", "desc"),
+func (c *AnnotationController) GetRandomArtistList(ctx *gin.Context) {
+	start, end := c.parsePagination(ctx)
+
+	artists, err := c.usecase.GetRandomArtistList(ctx, end, start)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
-	results, err := c.AnnotationUsecase.GetAlbumList(
-		ctx.Request.Context(),
-		params.End,
-		params.Order,
-		params.Sort,
-		params.Start,
-	)
+	ctx.JSON(http.StatusOK, scene_audio_route_models.ArtistListResponse{
+		Artists: artists,
+		Count:   len(artists),
+	})
+}
 
+// endregion
+
+// region Album Endpoints
+func (c *AnnotationController) GetAlbumList(ctx *gin.Context) {
+	start, end := c.parsePagination(ctx)
+	sort := ctx.DefaultQuery("sort", "title")
+	order := ctx.DefaultQuery("order", "asc")
+
+	albums, err := c.usecase.GetAlbumList(ctx, end, order, sort, start)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	ctx.JSON(http.StatusOK, scene_audio_route_models.AlbumListResponse{
-		Albums: results,
-		Count:  len(results),
+		Albums: albums,
+		Count:  len(albums),
 	})
 }
 
-// 获取媒体文件列表
-func (c *AnnotationController) GetMediaFileList(ctx *gin.Context) {
-	params := annotationQueryParams{
-		Start: ctx.DefaultQuery("start", "0"),
-		End:   ctx.DefaultQuery("end", "50"),
-		Sort:  ctx.DefaultQuery("sort", "play_count"),
-		Order: ctx.DefaultQuery("order", "desc"),
+func (c *AnnotationController) GetRandomAlbumList(ctx *gin.Context) {
+	start, end := c.parsePagination(ctx)
+
+	albums, err := c.usecase.GetRandomAlbumList(ctx, end, start)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
-	results, err := c.AnnotationUsecase.GetMediaFileList(
-		ctx.Request.Context(),
-		params.End,
-		params.Order,
-		params.Sort,
-		params.Start,
-	)
+	ctx.JSON(http.StatusOK, scene_audio_route_models.AlbumListResponse{
+		Albums: albums,
+		Count:  len(albums),
+	})
+}
 
+// endregion
+
+// region MediaFile Endpoints
+func (c *AnnotationController) GetMediaFileList(ctx *gin.Context) {
+	start, end := c.parsePagination(ctx)
+	sort := ctx.DefaultQuery("sort", "title")
+	order := ctx.DefaultQuery("order", "asc")
+
+	mediaFiles, err := c.usecase.GetMediaFileList(ctx, end, order, sort, start)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	ctx.JSON(http.StatusOK, scene_audio_route_models.MediaFileListResponse{
-		MediaFiles: results,
-		Count:      len(results),
+		MediaFiles: mediaFiles,
+		Count:      len(mediaFiles),
 	})
+}
+
+func (c *AnnotationController) GetRandomMediaFileList(ctx *gin.Context) {
+	start, end := c.parsePagination(ctx)
+
+	mediaFiles, err := c.usecase.GetRandomMediaFileList(ctx, end, start)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, scene_audio_route_models.MediaFileListResponse{
+		MediaFiles: mediaFiles,
+		Count:      len(mediaFiles),
+	})
+}
+
+// endregion
+
+type BaseAnnotationRequest struct {
+	ItemID   string `form:"item_id" binding:"required"`
+	ItemType string `form:"item_type" binding:"required,oneof=artist album media"`
+}
+
+type UpdateRatingRequest struct {
+	BaseAnnotationRequest
+	Rating int `form:"rating" binding:"required,min=0,max=5"`
+}
+
+func (c *AnnotationController) UpdateStarred(ctx *gin.Context) {
+	var req BaseAnnotationRequest
+	if err := ctx.ShouldBind(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	result, err := c.usecase.UpdateStarred(ctx, req.ItemID, req.ItemType)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, result)
+}
+
+func (c *AnnotationController) UpdateUnStarred(ctx *gin.Context) {
+	var req BaseAnnotationRequest
+	if err := ctx.ShouldBind(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	result, err := c.usecase.UpdateUnStarred(ctx, req.ItemID, req.ItemType)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, result)
+}
+
+func (c *AnnotationController) UpdateRating(ctx *gin.Context) {
+	var req UpdateRatingRequest
+	if err := ctx.ShouldBind(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	result, err := c.usecase.UpdateRating(ctx, req.ItemID, req.ItemType, req.Rating)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, result)
+}
+
+func (c *AnnotationController) UpdateScrobble(ctx *gin.Context) {
+	var req BaseAnnotationRequest
+	if err := ctx.ShouldBind(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	result, err := c.usecase.UpdateScrobble(ctx, req.ItemID, req.ItemType)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, result)
 }
