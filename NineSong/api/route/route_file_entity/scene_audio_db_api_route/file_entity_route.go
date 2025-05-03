@@ -22,7 +22,7 @@ func NewFileEntityRouter(timeout time.Duration, db mongo.Database, group *gin.Ro
 	artistRepo := scene_audio_db_repository.NewArtistRepository(db, domain.CollectionFileEntityAudioArtist)
 	albumRepo := scene_audio_db_repository.NewAlbumRepository(db, domain.CollectionFileEntityAudioAlbum)
 	mediaRepo := scene_audio_db_repository.NewMediaFileRepository(db, domain.CollectionFileEntityAudioMediaFile)
-
+	tempRepo := scene_audio_db_repository.NewTempRepository(db, domain.CollectionFileEntityAudioTempMetadata)
 	// 构建用例（新增超时参数）
 	uc := usecase_file_entity.NewFileUsecase(
 		fileRepo,
@@ -32,6 +32,7 @@ func NewFileEntityRouter(timeout time.Duration, db mongo.Database, group *gin.Ro
 		artistRepo,
 		albumRepo,
 		mediaRepo,
+		tempRepo,
 	)
 
 	// 注册控制器

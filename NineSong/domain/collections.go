@@ -62,3 +62,6 @@ const (
 const (
 	CollectionFileEntityAudioPlaylistTrack = "file_entity_audio_playlist_track"
 )
+const (
+	CollectionFileEntityAudioTempMetadata = "file_entity_audio_temp_metadata"
+)

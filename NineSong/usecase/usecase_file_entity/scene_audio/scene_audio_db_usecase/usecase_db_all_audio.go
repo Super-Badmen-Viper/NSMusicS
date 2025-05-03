@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_db/scene_audio_db_models"
 	"io"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -17,7 +18,11 @@ import (
 
 type AudioMetadataExtractor struct{}
 
-func (e *AudioMetadataExtractor) Extract(path string, fileMetadata *domain_file_entity.FileMetadata) (
+func (e *AudioMetadataExtractor) Extract(
+	path string, fileMetadata *domain_file_entity.FileMetadata,
+	coverTempPath string,
+	lyricsPath string,
+) (
 	*scene_audio_db_models.MediaFileMetadata,
 	*scene_audio_db_models.AlbumMetadata,
 	*scene_audio_db_models.ArtistMetadata,
@@ -51,13 +56,13 @@ func (e *AudioMetadataExtractor) Extract(path string, fileMetadata *domain_file_
 	albumArtistID := e.generateAlbumArtistID(metadata, rawTags)
 
 	// 构建媒体文件元数据
-	mediaFile := e.buildMediaFile(path, metadata, rawTags, fileMetadata, now, artistID, albumID, albumArtistID)
+	mediaFile := e.buildMediaFile(path, metadata, rawTags, fileMetadata, now, artistID, albumID, albumArtistID, coverTempPath, lyricsPath)
 
 	// 构建专辑元数据
-	album := e.buildAlbum(path, metadata, rawTags, now, artistID, albumID, albumArtistID)
+	album := e.buildAlbum(path, metadata, rawTags, now, artistID, albumID, albumArtistID, coverTempPath)
 
 	// 构建艺术家元数据
-	artist := e.buildArtist(path, metadata, rawTags, now, artistID)
+	artist := e.buildArtist(path, metadata, rawTags, now, artistID, coverTempPath)
 
 	return mediaFile, album, artist, nil
 }
@@ -104,10 +109,13 @@ func (e *AudioMetadataExtractor) buildMediaFile(
 	fm *domain_file_entity.FileMetadata,
 	now time.Time,
 	artistID, albumID, albumArtistID primitive.ObjectID,
+	coverTempPath string,
+	lyricsPath string,
 ) *scene_audio_db_models.MediaFileMetadata {
 	currentTrack, totalTracks := m.Track()
 	currentDisc, totalDiscs := m.Disc()
-	coverPath := e.extractMediaCover(m, fm.ID)
+	coverPath := e.extractMediaCover(m, fm.ID, coverTempPath)
+	e.saveLyricsToFile(e.getTagString(rawTags, "lyrics"), fm.ID, lyricsPath)
 
 	return &scene_audio_db_models.MediaFileMetadata{
 		// 基础文件元数据
@@ -171,27 +179,57 @@ func (e *AudioMetadataExtractor) buildMediaFile(
 		MediumImageURL:       coverPath,
 	}
 }
-func (e *AudioMetadataExtractor) extractMediaCover(m tag.Metadata, ID primitive.ObjectID) string {
+func (e *AudioMetadataExtractor) extractMediaCover(m tag.Metadata, ID primitive.ObjectID, coverTempPath string) string {
 	if pic := m.Picture(); pic != nil && len(pic.Data) > 0 {
-		// 构建标准化路径（网页2路径规范实践）
-		fileName := ID.String() + ".jpg"
-		targetDir := `C:\Users\Public\Documents\NineSong\MetaData` // 硬编码指定路径
-		targetPath := filepath.Join(targetDir, fileName)
+		// 构建标准化文件路径
+		fileName := ID.Hex() + ".jpg"
+		targetPath := filepath.Join(coverTempPath, fileName)
 
-		// 创建目录并写入文件（网页3文件系统操作实践）
-		if err := os.MkdirAll(targetDir, 0755); err == nil {
-			if err := os.WriteFile(targetPath, pic.Data, 0644); err == nil {
-				return targetPath
-			}
+		// 原子化目录创建
+		if err := os.MkdirAll(coverTempPath, 0755); err != nil {
+			log.Printf("[ERROR] 目录创建失败: %v | 路径: %s", err, coverTempPath)
+			return ""
 		}
+
+		// 安全写入文件
+		if err := os.WriteFile(targetPath, pic.Data, 0644); err != nil {
+			log.Printf("[ERROR] 文件写入失败: %v | 路径: %s", err, targetPath)
+			return ""
+		}
+
+		return targetPath
 	}
 	return ""
+}
+func (e *AudioMetadataExtractor) saveLyricsToFile(content string, id primitive.ObjectID, basePath string) string {
+	if content == "" {
+		return ""
+	}
+
+	// 构建标准化路径
+	fileName := id.Hex() + ".lrc"
+	targetPath := filepath.Join(basePath, fileName)
+
+	// 原子化目录创建
+	if err := os.MkdirAll(basePath, 0755); err != nil {
+		log.Printf("[ERROR] 歌词目录创建失败: %v | 路径: %s", err, basePath)
+		return ""
+	}
+
+	// 安全写入文件
+	if err := os.WriteFile(targetPath, []byte(content), 0644); err != nil {
+		log.Printf("[ERROR] 歌词写入失败: %v | 路径: %s", err, targetPath)
+		return ""
+	}
+
+	return targetPath
 }
 
 func (e *AudioMetadataExtractor) buildAlbum(
 	path string,
 	m tag.Metadata, rawTags map[string]interface{}, now time.Time,
 	artistID, albumID, albumArtistID primitive.ObjectID,
+	coverTempPath string,
 ) *scene_audio_db_models.AlbumMetadata {
 	coverPath := e.extractAlbumCover(path)
 
@@ -275,6 +313,7 @@ func (e *AudioMetadataExtractor) buildArtist(
 	path string,
 	m tag.Metadata, rawTags map[string]interface{}, now time.Time,
 	artistID primitive.ObjectID,
+	coverTempPath string,
 ) *scene_audio_db_models.ArtistMetadata {
 	return &scene_audio_db_models.ArtistMetadata{
 		ID:          artistID,

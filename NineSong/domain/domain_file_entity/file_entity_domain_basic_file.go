@@ -139,6 +139,7 @@ type FileMetadata struct {
 
 type FileRepository interface {
 	Upsert(ctx context.Context, file *FileMetadata) error
+	FindByPath(ctx context.Context, path string) (*FileMetadata, error)
 	DeleteByFolder(ctx context.Context, folderID primitive.ObjectID) error
 	CountByFolderID(ctx context.Context, folderID primitive.ObjectID) (int64, error)
 }

@@ -18,7 +18,8 @@ type RetrievalStreamMetadata struct {
 }
 type RetrievalCoverArtMetadata struct {
 	ID        primitive.ObjectID `bson:"_id"`
-	Name      string             `bson:"name"`
+	FileName  string             `bson:"file_name"`
+	Format    string             `bson:"format"`
 	CreatedAt time.Time          `bson:"created_at"`
 	UpdatedAt time.Time          `bson:"updated_at"`
 	Path      string             `bson:"path"`
@@ -26,12 +27,13 @@ type RetrievalCoverArtMetadata struct {
 	Size      int                `bson:"size"`
 	Width     int                `bson:"width"`
 	Height    int                `bson:"height"`
-	Format    string             `bson:"format"`
 }
 type RetrievalLyricsMetadata struct {
-	ID        primitive.ObjectID `bson:"_id"`
-	Name      string             `bson:"name"`
-	CreatedAt time.Time          `bson:"created_at"`
-	UpdatedAt time.Time          `bson:"updated_at"`
-	Path      string             `bson:"path"`
+	ID          primitive.ObjectID `bson:"_id"`
+	MediaFileID primitive.ObjectID `bson:"media_file_id"`
+	Lyrics      string             `bson:"lyrics"` // 直接获取媒体文件元数据内的歌词
+	Name        string             `bson:"name"`
+	CreatedAt   time.Time          `bson:"created_at"`
+	UpdatedAt   time.Time          `bson:"updated_at"`
+	Path        string             `bson:"path"` // 多歌词文件管理
 }

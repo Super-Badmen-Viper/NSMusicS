@@ -3,6 +3,7 @@ package usecase_file_entity
 import (
 	"context"
 	"crypto/sha256"
+	"errors"
 	"fmt"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_db/scene_audio_db_interface"
@@ -10,6 +11,7 @@ import (
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/usecase/usecase_file_entity/scene_audio/scene_audio_db_usecase"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 	"io"
 	"log"
 	"os"
@@ -32,6 +34,7 @@ type FileUsecase struct {
 	artistRepo     scene_audio_db_interface.ArtistRepository
 	albumRepo      scene_audio_db_interface.AlbumRepository
 	mediaRepo      scene_audio_db_interface.MediaFileRepository
+	tempRepo       scene_audio_db_interface.TempRepository
 }
 
 func NewFileUsecase(
@@ -44,6 +47,7 @@ func NewFileUsecase(
 	artistRepo scene_audio_db_interface.ArtistRepository,
 	albumRepo scene_audio_db_interface.AlbumRepository,
 	mediaRepo scene_audio_db_interface.MediaFileRepository,
+	tempRepo scene_audio_db_interface.TempRepository,
 ) *FileUsecase {
 	workerCount := runtime.NumCPU() * 2
 	if workerCount < 4 {
@@ -59,6 +63,7 @@ func NewFileUsecase(
 		artistRepo:  artistRepo,
 		albumRepo:   albumRepo,
 		mediaRepo:   mediaRepo,
+		tempRepo:    tempRepo,
 	}
 }
 
@@ -68,6 +73,10 @@ func (uc *FileUsecase) ProcessDirectory(ctx context.Context, dirPath string, tar
 		log.Printf("folderRepo未初始化")
 		return fmt.Errorf("系统未正确初始化")
 	}
+
+	coverTempPath, _ := uc.tempRepo.GetTempPath(ctx, "cover")
+	lyricsPath, _ := uc.tempRepo.GetTempPath(ctx, "lyrics")
+	//steamPath, _ := uc.tempRepo.GetTempPath(ctx, "stream")
 
 	folder, err := uc.folderRepo.FindByPath(ctx, dirPath)
 	if err != nil {
@@ -99,11 +108,11 @@ func (uc *FileUsecase) ProcessDirectory(ctx context.Context, dirPath string, tar
 	}
 	uc.targetMutex.Unlock()
 
-	// 清理旧文件记录
-	if err := uc.fileRepo.DeleteByFolder(ctx, folder.ID); err != nil {
-		log.Printf("清理失败: %v", err)
-		return fmt.Errorf("cleanup failed: %w", err)
-	}
+	// 清理 domain.CollectionFileEntityFileInfo
+	//if err := uc.fileRepo.DeleteByFolder(ctx, folder.ID); err != nil {
+	//	log.Printf("清理失败: %v", err)
+	//	return fmt.Errorf("cleanup failed: %w", err)
+	//}
 
 	// 并发处理管道
 	var wg sync.WaitGroup
@@ -127,7 +136,7 @@ func (uc *FileUsecase) ProcessDirectory(ctx context.Context, dirPath string, tar
 
 			wg.Add(1)
 			fileCount++
-			go uc.processFile(ctx, path, folder.ID, &wg, errChan)
+			go uc.processFile(ctx, path, coverTempPath, lyricsPath, folder.ID, &wg, errChan)
 			return nil
 		}
 	})
@@ -174,6 +183,8 @@ func (uc *FileUsecase) shouldProcess(path string) bool {
 func (uc *FileUsecase) processFile(
 	ctx context.Context,
 	path string,
+	coverTempPath string,
+	lyricsPath string,
 	folderID primitive.ObjectID,
 	wg *sync.WaitGroup,
 	errChan chan<- error,
@@ -218,7 +229,7 @@ func (uc *FileUsecase) processFile(
 
 	// 处理音频文件
 	if fileType == domain_file_entity.Audio {
-		mediaFile, album, artist, err := uc.audioExtractor.Extract(path, metadata)
+		mediaFile, album, artist, err := uc.audioExtractor.Extract(path, metadata, coverTempPath, lyricsPath)
 		if err != nil {
 			log.Printf("音频解析失败: %s | %v", path, err)
 			errChan <- fmt.Errorf("元数据解析失败 %s: %w", path, err)
@@ -409,6 +420,19 @@ func (uc *FileUsecase) createMetadataBasicInfo(
 	path string,
 	folderID primitive.ObjectID,
 ) (*domain_file_entity.FileMetadata, error) {
+	// 1. 先查询是否已存在该路径文件
+	existingFile, err := uc.fileRepo.FindByPath(context.Background(), path)
+	if err != nil && !errors.Is(err, mongo.ErrNoDocuments) {
+		log.Printf("路径查询失败: %s | %v", path, err)
+		return nil, fmt.Errorf("路径查询失败: %w", err)
+	}
+
+	// 2. 已存在则直接返回
+	if existingFile != nil {
+		return existingFile, nil
+	}
+
+	// 3. 不存在时执行原流程
 	file, err := os.Open(path)
 	if err != nil {
 		log.Printf("文件打开失败: %s | %v", path, err)
@@ -434,10 +458,12 @@ func (uc *FileUsecase) createMetadataBasicInfo(
 		return nil, err
 	}
 
+	normalizedPath := filepath.ToSlash(filepath.Clean(path))
+
 	return &domain_file_entity.FileMetadata{
 		ID:        primitive.NewObjectID(),
 		FolderID:  folderID,
-		FilePath:  path,
+		FilePath:  normalizedPath,
 		FileType:  fileType,
 		Size:      stat.Size(),
 		ModTime:   stat.ModTime(),

@@ -27,53 +27,44 @@ func NewMediaFileRepository(db mongo.Database, collection string) scene_audio_db
 
 func (r *mediaFileRepository) Upsert(ctx context.Context, file *scene_audio_db_models.MediaFileMetadata) error {
 	coll := r.db.Collection(r.collection)
-
-	// 获取当前时间
 	now := time.Now()
 
-	// 序列化结构体为BSON
-	var doc bson.M
-	data, err := bson.Marshal(file)
-	if err != nil {
-		return fmt.Errorf("marshal error: %w", err)
-	}
-	if err := bson.Unmarshal(data, &doc); err != nil {
-		return fmt.Errorf("unmarshal error: %w", err)
-	}
+	// 构建以路径为唯一标识的查询条件（核心修改）
+	filter := bson.M{"path": file.Path}
 
-	// 构造更新文档
+	// 构造更新文档（保留created_at）
 	update := bson.M{
-		"$set":         make(bson.M),
-		"$setOnInsert": bson.M{"created_at": now},
+		"$set": file.ToUpdateDoc(),
+		"$setOnInsert": bson.M{
+			"_id":        primitive.NewObjectID(),
+			"created_at": now,
+		},
 	}
 
-	// 动态构建$set内容，排除特定字段
-	for k, v := range doc {
-		if k == "_id" || k == "created_at" {
-			continue // 跳过ID和创建时间
-		}
-		update["$set"].(bson.M)[k] = v
-	}
-
-	// 强制设置更新时间
-	update["$set"].(bson.M)["updated_at"] = now
-
-	// 执行更新操作
-	filter := bson.M{"_id": file.ID}
+	// 执行原子化更新插入
 	opts := options.Update().SetUpsert(true)
 	result, err := coll.UpdateOne(ctx, filter, update, opts)
 	if err != nil {
 		return fmt.Errorf("media file upsert failed: %w", err)
 	}
 
-	// 处理插入后的ID同步
+	// 处理ID回填（关键逻辑）
 	if result.UpsertedID != nil {
-		if oid, ok := result.UpsertedID.(primitive.ObjectID); ok {
-			file.ID = oid
-			file.CreatedAt = now // 回填创建时间
+		file.ID = result.UpsertedID.(primitive.ObjectID)
+	} else {
+		// 查询已有记录的ID（防止竞态条件）
+		var existing struct {
+			ID primitive.ObjectID `bson:"_id"`
 		}
+		_ = coll.FindOne(ctx, filter).Decode(&existing)
+		file.ID = existing.ID
 	}
-	file.UpdatedAt = now // 保证时间一致性
+
+	// 时间字段处理
+	if result.UpsertedID != nil {
+		file.CreatedAt = now
+	}
+	file.UpdatedAt = now
 
 	return nil
 }

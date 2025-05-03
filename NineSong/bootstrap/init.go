@@ -115,6 +115,10 @@ func (si *Initializer) executeInitialization(ctx context.Context) error {
 		return err
 	}
 
+	if err := si.initFileEntityAudioTempMetadata(ctx); err != nil {
+		return err
+	}
+
 	return si.markInitialized(ctx)
 }
 
@@ -941,5 +945,38 @@ func (si *Initializer) initFileEntityAudioPlaylistTrack(ctx context.Context) err
 		return err
 	}
 
+	return nil
+}
+
+func (si *Initializer) initFileEntityAudioTempMetadata(ctx context.Context) error {
+	coll := si.db.Collection(domain.CollectionFileEntityAudioTempMetadata)
+
+	initConfigs := []*scene_audio_db_models.TempMetadata{
+		{
+			ID:           primitive.NewObjectID(),
+			MetadataType: "cover",
+			FolderPath:   "c:/Users/Public/Documents/NineSong/MetaData/Cover",
+		},
+		{
+			ID:           primitive.NewObjectID(),
+			MetadataType: "lyrics",
+			FolderPath:   "c:/Users/Public/Documents/NineSong/MetaData/Lyrics",
+		},
+		{
+			ID:           primitive.NewObjectID(),
+			MetadataType: "steam",
+			FolderPath:   "c:/Users/Public/Documents/NineSong/MetaData/Steam",
+		},
+	}
+
+	// 批量插入优化
+	models := make([]interface{}, len(initConfigs))
+	for i, cfg := range initConfigs {
+		models[i] = cfg
+	}
+
+	if _, err := coll.InsertMany(ctx, models); err != nil {
+		log.Println(err)
+	}
 	return nil
 }
