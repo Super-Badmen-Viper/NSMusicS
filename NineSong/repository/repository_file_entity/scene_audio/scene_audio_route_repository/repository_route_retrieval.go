@@ -13,7 +13,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"os"
 	"path/filepath"
-	"strings"
 )
 
 type retrievalRepository struct {
@@ -30,8 +29,8 @@ func (r *retrievalRepository) GetStream(ctx context.Context, mediaFileId string)
 		return "", errors.New("invalid media file id format")
 	}
 
-	collection := r.db.Collection("CollectionFileEntityAudioStream")
-	var result scene_audio_route_models.RetrievalStreamMetadata
+	collection := r.db.Collection(domain.CollectionFileEntityAudioMediaFile)
+	var result scene_audio_route_models.MediaFileMetadata
 	err = collection.FindOne(ctx, bson.M{"_id": objID}).Decode(&result)
 	if err != nil {
 		return "", fmt.Errorf("stream metadata not found: %w", err)
@@ -45,8 +44,8 @@ func (r *retrievalRepository) GetDownload(ctx context.Context, mediaFileId strin
 		return "", errors.New("invalid media file id format")
 	}
 
-	collection := r.db.Collection("CollectionFileEntityAudioDownload")
-	var result scene_audio_route_models.RetrievalStreamMetadata
+	collection := r.db.Collection(domain.CollectionFileEntityAudioMediaFile)
+	var result scene_audio_route_models.MediaFileMetadata
 	err = collection.FindOne(ctx, bson.M{"_id": objID}).Decode(&result)
 	if err != nil {
 		return "", fmt.Errorf("download metadata not found: %w", err)
@@ -67,7 +66,6 @@ func (r *retrievalRepository) GetCoverArt(ctx context.Context, coverArtId string
 		ctx,
 		bson.M{
 			"metadata_type": "cover",
-			"status":        "active", // 增加状态过滤
 		},
 	).Decode(&tempMeta)
 	if err != nil {
@@ -78,12 +76,7 @@ func (r *retrievalRepository) GetCoverArt(ctx context.Context, coverArtId string
 	fileName := fmt.Sprintf("%s.jpg", coverArtId)
 	fullPath := filepath.Join(tempMeta.FolderPath, fileName)
 
-	// 安全校验路径
-	if !strings.HasPrefix(fullPath, "/media_storage/cover_art") {
-		return "", errors.New("invalid file access path")
-	}
-
-	// Step 3: 验证文件存在性
+	// Step 2: 验证文件存在性
 	if _, err := os.Stat(fullPath); os.IsNotExist(err) {
 		return "", fmt.Errorf("cover file not found: %s", fileName)
 	}

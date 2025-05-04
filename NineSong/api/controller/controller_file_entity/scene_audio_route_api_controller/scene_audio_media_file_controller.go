@@ -1,11 +1,10 @@
 package scene_audio_route_api_controller
 
 import (
-	"net/http"
-
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_route/scene_audio_route_interface"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_route/scene_audio_route_models"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type MediaFileController struct {
@@ -18,8 +17,8 @@ func NewMediaFileController(uc scene_audio_route_interface.MediaFileRepository) 
 
 func (c *MediaFileController) GetMediaFiles(ctx *gin.Context) {
 	params := struct {
-		Start    string `form:"start"`
-		End      string `form:"end"`
+		Start    string `form:"start" binding:"required"`
+		End      string `form:"end" binding:"required"`
 		Sort     string `form:"sort"`
 		Order    string `form:"order"`
 		Search   string `form:"search"`
@@ -38,6 +37,13 @@ func (c *MediaFileController) GetMediaFiles(ctx *gin.Context) {
 		ArtistID: ctx.Query("artist_id"),
 		Year:     ctx.Query("year"),
 	}
+	if params.Start == "" || params.End == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code":    "MISSING_PARAMS",
+			"message": "必须提供start和end参数",
+		})
+		return
+	}
 
 	mediaFiles, err := c.MediaFileUsecase.GetMediaFileItems(
 		ctx.Request.Context(),
@@ -53,7 +59,10 @@ func (c *MediaFileController) GetMediaFiles(ctx *gin.Context) {
 	)
 
 	if err != nil {
-		handleMediaFileError(ctx, err)
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"code":    "SERVER_ERROR",
+			"message": err.Error(),
+		})
 		return
 	}
 
@@ -61,18 +70,4 @@ func (c *MediaFileController) GetMediaFiles(ctx *gin.Context) {
 		MediaFiles: mediaFiles,
 		Count:      len(mediaFiles),
 	})
-}
-
-func handleMediaFileError(ctx *gin.Context, err error) {
-	switch err.Error() {
-	case "invalid start parameter",
-		"invalid end parameter",
-		"invalid starred parameter",
-		"invalid album id format",
-		"invalid artist id format",
-		"year must be integer":
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	default:
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "服务器内部错误"})
-	}
 }

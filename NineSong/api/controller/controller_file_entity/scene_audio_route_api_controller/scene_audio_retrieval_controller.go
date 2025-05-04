@@ -7,7 +7,6 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
-	"strings"
 )
 
 type RetrievalController struct {
@@ -142,15 +141,6 @@ const (
 )
 
 func serveMediaFile(ctx *gin.Context, path string, contentType string) {
-	// 验证路径安全性
-	if !strings.HasPrefix(path, mediaBasePath) {
-		ctx.JSON(http.StatusForbidden, gin.H{
-			"code":    "INVALID_FILE_PATH",
-			"message": "访问受限资源",
-		})
-		return
-	}
-
 	// 增加范围请求支持
 	file, err := os.Open(path)
 	if err != nil {
