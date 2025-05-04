@@ -31,10 +31,8 @@ func (c *AnnotationController) parseID(ctx *gin.Context) string {
 // region Artist Endpoints
 func (c *AnnotationController) GetArtistList(ctx *gin.Context) {
 	start, end := c.parsePagination(ctx)
-	sort := ctx.DefaultQuery("sort", "name")
-	order := ctx.DefaultQuery("order", "asc")
 
-	artists, err := c.usecase.GetArtistList(ctx, end, order, sort, start)
+	artists, err := c.usecase.GetArtistList(ctx, end, start)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -66,10 +64,8 @@ func (c *AnnotationController) GetRandomArtistList(ctx *gin.Context) {
 // region Album Endpoints
 func (c *AnnotationController) GetAlbumList(ctx *gin.Context) {
 	start, end := c.parsePagination(ctx)
-	sort := ctx.DefaultQuery("sort", "title")
-	order := ctx.DefaultQuery("order", "asc")
 
-	albums, err := c.usecase.GetAlbumList(ctx, end, order, sort, start)
+	albums, err := c.usecase.GetAlbumList(ctx, end, start)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -101,10 +97,8 @@ func (c *AnnotationController) GetRandomAlbumList(ctx *gin.Context) {
 // region MediaFile Endpoints
 func (c *AnnotationController) GetMediaFileList(ctx *gin.Context) {
 	start, end := c.parsePagination(ctx)
-	sort := ctx.DefaultQuery("sort", "title")
-	order := ctx.DefaultQuery("order", "asc")
 
-	mediaFiles, err := c.usecase.GetMediaFileList(ctx, end, order, sort, start)
+	mediaFiles, err := c.usecase.GetMediaFileList(ctx, end, start)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

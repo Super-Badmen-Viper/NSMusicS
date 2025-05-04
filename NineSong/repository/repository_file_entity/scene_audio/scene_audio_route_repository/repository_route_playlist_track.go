@@ -32,138 +32,126 @@ func (r *playlistTrackRepository) GetPlaylistTrackItems(
 	ctx context.Context,
 	end, order, sort, start, search, starred, albumId, artistId, year, playlistId string,
 ) ([]scene_audio_route_models.MediaFileMetadata, error) {
-
-	// 1. 获取播放列表轨迹元数据
-	tracks, err := r.getRawPlaylistTracks(ctx, end, order, sort, start, search, starred, albumId, artistId, year, playlistId)
+	// 1. 获取播放列表关联的媒体文件ID
+	mediaFileIDs, err := r.getPlaylistMediaFileIDs(ctx, playlistId)
 	if err != nil {
 		return nil, err
 	}
 
-	// 2. 获取关联的媒体文件
-	return r.getMediaFilesByTrackIDs(ctx, tracks)
+	// 2. 直接查询媒体文件表
+	return r.queryMediaFilesWithFilters(
+		ctx,
+		mediaFileIDs,
+		end, order, sort, start,
+		search, starred, albumId, artistId, year,
+	)
 }
-func (r *playlistTrackRepository) getRawPlaylistTracks(
+func (r *playlistTrackRepository) getPlaylistMediaFileIDs(
 	ctx context.Context,
-	end, order, sort, start, search, starred, albumId, artistId, year, playlistId string,
-) ([]scene_audio_route_models.PlaylistTrackMetadata, error) {
-	collection := r.db.Collection(r.collection)
-
+	playlistId string,
+) ([]primitive.ObjectID, error) {
 	// 转换PlaylistID
 	objID, err := primitive.ObjectIDFromHex(playlistId)
 	if err != nil {
 		return nil, fmt.Errorf("invalid playlist id: %w", err)
 	}
 
-	// 构建基础过滤条件
+	// 简单查询获取所有关联的媒体文件ID
 	filter := bson.M{"playlist_id": objID}
+	opts := options.Find().SetProjection(bson.M{"media_file_id": 1})
 
-	// 添加可选过滤条件
+	cursor, err := r.db.Collection(r.collection).Find(ctx, filter, opts)
+	if err != nil {
+		return nil, fmt.Errorf("database query failed: %w", err)
+	}
+	defer cursor.Close(ctx)
+
+	var results []struct {
+		MediaFileID primitive.ObjectID `bson:"media_file_id"`
+	}
+	if err := cursor.All(ctx, &results); err != nil {
+		return nil, fmt.Errorf("decode error: %w", err)
+	}
+
+	// 提取ID列表
+	ids := make([]primitive.ObjectID, 0, len(results))
+	for _, item := range results {
+		ids = append(ids, item.MediaFileID)
+	}
+
+	return ids, nil
+}
+func (r *playlistTrackRepository) queryMediaFilesWithFilters(
+	ctx context.Context,
+	mediaFileIDs []primitive.ObjectID,
+	end, order, sort, start, search, starred, albumId, artistId, year string,
+) ([]scene_audio_route_models.MediaFileMetadata, error) {
+	collection := r.db.Collection(domain.CollectionFileEntityAudioMediaFile)
+
+	filter := bson.M{
+		"_id": bson.M{"$in": mediaFileIDs},
+	}
 	if albumId != "" {
-		if albumObjID, err := primitive.ObjectIDFromHex(albumId); err == nil {
-			filter["album_id"] = albumObjID
-		}
+		filter["album_id"] = albumId
 	}
 	if artistId != "" {
-		if artistObjID, err := primitive.ObjectIDFromHex(artistId); err == nil {
-			filter["artist_id"] = artistObjID
-		}
+		filter["artist_id"] = artistId
 	}
 	if search != "" {
 		filter["$or"] = []bson.M{
 			{"title": bson.M{"$regex": search, "$options": "i"}},
 			{"artist": bson.M{"$regex": search, "$options": "i"}},
+			{"album": bson.M{"$regex": search, "$options": "i"}},
+		}
+	}
+	if starred != "" {
+		if isStarred, err := strconv.ParseBool(starred); err == nil {
+			filter["starred"] = isStarred
+		}
+	}
+	if year != "" {
+		if yearInt, err := strconv.Atoi(year); err == nil {
+			filter["year"] = yearInt
 		}
 	}
 
-	// 处理分页参数
-	skip := 0
-	if start != "" {
-		s, err := strconv.Atoi(start)
-		if err == nil && s >= 0 {
-			skip = s
-		}
-	}
+	// 处理分页
+	skip, _ := strconv.Atoi(start)
+	limit, _ := strconv.Atoi(end)
 
-	limit := 50
-	if end != "" {
-		l, err := strconv.Atoi(end)
-		if err == nil && l > 0 && l <= 1000 {
-			limit = l
-		}
-	}
-
-	// 构建排序选项
-	sortField := "_id"
 	validSortFields := map[string]bool{
-		"_id":        true,
-		"created_at": true,
-		"updated_at": true,
-		"duration":   true,
-		"size":       true,
-		"path":       true,
-		"title":      true,
-		"album":      true,
-		"artist":     true,
-		"play_count": true,
-		"play_date":  true,
+		// 播放相关
+		"play_count": true, "play_date": true,
+		// 用户互动
+		"rating": true, "starred": true, "starred_at": true,
+		// 核心元数据
+		"title": true, "artist": true, "album": true, "year": true, "genre": true,
+		// 技术属性
+		"duration": true, "bit_rate": true, "size": true, "channels": true, "suffix": true,
+		// 时间戳
+		"created_at": true, "updated_at": true,
+		// 关联ID
+		"artist_id": true, "album_id": true, "album_artist_id": true,
+		// 扩展属性
+		"has_cover_art": true, "path": true,
 	}
-	if sort == "id" {
-		sort = "_id"
-	}
-	if validSortFields[sort] {
-		sortField = sort
+	if !validSortFields[sort] {
+		sort = "title"
 	}
 
+	// 构建排序
 	sortOrder := 1
 	if order == "desc" {
 		sortOrder = -1
 	}
 
 	opts := options.Find().
-		SetSort(bson.D{{Key: sortField, Value: sortOrder}}).
+		SetSort(bson.D{{Key: sort, Value: sortOrder}}).
 		SetSkip(int64(skip)).
 		SetLimit(int64(limit))
 
-	// 处理时间类型字段的特殊排序需求
-	if sortField == "play_date" || sortField == "created_at" || sortField == "updated_at" {
-		opts.SetSort(bson.D{
-			{Key: sortField, Value: sortOrder},
-			{Key: "_id", Value: 1}, // 添加二级排序确保稳定性
-		})
-	} else {
-		opts.SetSort(bson.D{{Key: sortField, Value: sortOrder}})
-	}
-
 	// 执行查询
 	cursor, err := collection.Find(ctx, filter, opts)
-	if err != nil {
-		return nil, fmt.Errorf("database query failed: %w", err)
-	}
-	defer cursor.Close(ctx)
-
-	var results []scene_audio_route_models.PlaylistTrackMetadata
-	if err := cursor.All(ctx, &results); err != nil {
-		return nil, fmt.Errorf("decode error: %w", err)
-	}
-
-	return results, nil
-}
-func (r *playlistTrackRepository) getMediaFilesByTrackIDs(
-	ctx context.Context,
-	tracks []scene_audio_route_models.PlaylistTrackMetadata,
-) ([]scene_audio_route_models.MediaFileMetadata, error) {
-
-	// 1. 提取所有媒体文件ID
-	mediaFileIDs := make([]primitive.ObjectID, 0, len(tracks))
-	for _, track := range tracks {
-		mediaFileIDs = append(mediaFileIDs, track.MediaFileID)
-	}
-
-	// 2. 查询媒体文件集合
-	mediaFileColl := r.db.Collection(domain.CollectionFileEntityAudioMediaFile)
-	filter := bson.M{"_id": bson.M{"$in": mediaFileIDs}}
-
-	cursor, err := mediaFileColl.Find(ctx, filter)
 	if err != nil {
 		return nil, fmt.Errorf("media files query failed: %w", err)
 	}

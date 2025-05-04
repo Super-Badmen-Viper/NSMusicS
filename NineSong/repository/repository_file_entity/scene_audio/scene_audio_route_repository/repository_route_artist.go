@@ -29,6 +29,19 @@ func (r *artistRepository) GetArtistItems(
 ) ([]scene_audio_route_models.ArtistMetadata, error) {
 	collection := r.db.Collection(r.collection)
 
+	validSortFields := map[string]bool{
+		"name":        true,
+		"play_count":  true, // 新增播放次数排序
+		"starred_at":  true, // 新增收藏时间排序
+		"album_count": true, // 新增专辑数量排序
+		"song_count":  true, // 新增歌曲数量排序
+		"size":        true, // 新增文件大小排序
+		"rating":      true, // 新增评分排序
+	}
+	if !validSortFields[sort] {
+		sort = "name"
+	}
+
 	// 构建查询条件
 	filter := bson.M{}
 	if search != "" {

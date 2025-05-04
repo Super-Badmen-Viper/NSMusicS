@@ -27,8 +27,8 @@ func (c *MediaFileController) GetMediaFiles(ctx *gin.Context) {
 		ArtistID string `form:"artist_id"`
 		Year     string `form:"year"`
 	}{
-		Start:    ctx.DefaultQuery("start", "0"),
-		End:      ctx.DefaultQuery("end", "100"),
+		Start:    ctx.Query("start"),
+		End:      ctx.Query("end"),
 		Sort:     ctx.DefaultQuery("sort", "title"),
 		Order:    ctx.DefaultQuery("order", "asc"),
 		Search:   ctx.Query("search"),

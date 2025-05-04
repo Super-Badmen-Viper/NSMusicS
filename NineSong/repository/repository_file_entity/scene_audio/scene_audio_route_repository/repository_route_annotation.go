@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain"
@@ -21,115 +20,128 @@ type annotationRepository struct {
 	db mongo.Database
 }
 
-const (
-	maxPageSize     = 1000
-	defaultPageSize = 50
-)
-
 func NewAnnotationRepository(db mongo.Database) scene_audio_route_interface.AnnotationRepository {
 	return &annotationRepository{db: db}
 }
 
-// region 通用工具方法
-func (r *annotationRepository) parsePagination(startStr, endStr string) (int64, int64, error) {
-	start, err := strconv.ParseInt(startStr, 10, 64)
-	if err != nil || start < 0 {
-		return 0, 0, errors.New("invalid start parameter")
+func (r *annotationRepository) getItemIDs(ctx context.Context, itemType string, start, end string) ([]primitive.ObjectID, error) {
+	// 获取分页参数
+	skip, _ := strconv.Atoi(start)
+	limit, _ := strconv.Atoi(end)
+	if limit <= 0 || limit > 1000 {
+		limit = 50
 	}
 
-	limit, err := strconv.ParseInt(endStr, 10, 64)
-	if err != nil || limit <= 0 {
-		limit = defaultPageSize
-	}
-	if limit > maxPageSize {
-		limit = maxPageSize
+	// 从推荐表获取指定类型的ID列表
+	annotationColl := r.db.Collection(domain.CollectionFileEntityAudioAnnotation)
+	pipeline := []bson.M{
+		{"$match": bson.M{"item_type": itemType}},
+		{"$skip": skip},
+		{"$limit": limit},
+		{"$project": bson.M{"item_id": 1}},
 	}
 
-	return start, limit, nil
+	cursor, err := annotationColl.Aggregate(ctx, pipeline)
+	if err != nil {
+		return nil, fmt.Errorf("获取推荐ID失败: %w", err)
+	}
+	defer cursor.Close(ctx)
+
+	var results []struct {
+		ItemID primitive.ObjectID `bson:"item_id"`
+	}
+	if err := cursor.All(ctx, &results); err != nil {
+		return nil, fmt.Errorf("解析推荐ID失败: %w", err)
+	}
+
+	// 提取ID列表
+	ids := make([]primitive.ObjectID, 0, len(results))
+	for _, item := range results {
+		ids = append(ids, item.ItemID)
+	}
+
+	return ids, nil
 }
 
-func escapeSortField(field string) string {
-	return strings.ReplaceAll(field, ".", "·")
-}
-
-// endregion
-
-// region 查询基础实现
-func (r *annotationRepository) baseListQuery(
+func (r *annotationRepository) GetArtistList(
 	ctx context.Context,
-	itemType string,
-	targetCollection string,
-	start, end, sort, order string,
-) ([]bson.M, error) {
-	skip, limit, err := r.parsePagination(start, end)
+	end, start string,
+) ([]scene_audio_route_models.ArtistMetadata, error) {
+	// 1. 获取推荐艺术家ID
+	artistIDs, err := r.getItemIDs(ctx, "artist", start, end)
 	if err != nil {
 		return nil, err
 	}
 
-	pipeline := []bson.M{
-		{"$match": bson.M{"item_type": itemType}},
-		{"$lookup": bson.M{
-			"from":         targetCollection,
-			"localField":   "item_id",
-			"foreignField": "_id",
-			"as":           "related_data",
-		}},
-		{"$unwind": "$related_data"},
-		{"$replaceRoot": bson.M{"newRoot": "$related_data"}},
-	}
+	// 2. 查询艺术家详情
+	artistColl := r.db.Collection(domain.CollectionFileEntityAudioArtist)
+	filter := bson.M{"_id": bson.M{"$in": artistIDs}}
 
-	if sort != "" {
-		sortOrder := 1
-		if strings.ToLower(order) == "desc" {
-			sortOrder = -1
-		}
-		pipeline = append(pipeline, bson.M{"$sort": bson.M{escapeSortField(sort): sortOrder}})
-	}
-
-	pipeline = append(pipeline,
-		bson.M{"$skip": skip},
-		bson.M{"$limit": limit},
-	)
-
-	coll := r.db.Collection(domain.CollectionFileEntityAudioAnnotation)
-	cursor, err := coll.Aggregate(ctx, pipeline)
+	cursor, err := artistColl.Find(ctx, filter)
 	if err != nil {
-		return nil, fmt.Errorf("query failed: %w", err)
+		return nil, fmt.Errorf("查询艺术家失败: %w", err)
 	}
 	defer cursor.Close(ctx)
 
-	var results []bson.M
+	var results []scene_audio_route_models.ArtistMetadata
 	if err := cursor.All(ctx, &results); err != nil {
-		return nil, fmt.Errorf("decode failed: %w", err)
+		return nil, fmt.Errorf("解析艺术家数据失败: %w", err)
 	}
 
 	return results, nil
 }
 
-// endregion
-
-func (r *annotationRepository) GetArtistList(
+func (r *annotationRepository) GetAlbumList(
 	ctx context.Context,
-	end, order, sort, start string,
-) ([]scene_audio_route_models.ArtistMetadata, error) {
-	rawResults, err := r.baseListQuery(
-		ctx,
-		"artist",
-		domain.CollectionFileEntityAudioArtist,
-		start, end, sort, order,
-	)
+	end, start string,
+) ([]scene_audio_route_models.AlbumMetadata, error) {
+	// 1. 获取推荐专辑ID
+	albumIDs, err := r.getItemIDs(ctx, "album", start, end)
 	if err != nil {
 		return nil, err
 	}
 
-	results := make([]scene_audio_route_models.ArtistMetadata, 0, len(rawResults))
-	for _, raw := range rawResults {
-		var artist scene_audio_route_models.ArtistMetadata
-		bsonBytes, _ := bson.Marshal(raw)
-		if err := bson.Unmarshal(bsonBytes, &artist); err != nil {
-			return nil, fmt.Errorf("artist data unmarshal failed: %w", err)
-		}
-		results = append(results, artist)
+	// 2. 查询专辑详情
+	albumColl := r.db.Collection(domain.CollectionFileEntityAudioAlbum)
+	filter := bson.M{"_id": bson.M{"$in": albumIDs}}
+
+	cursor, err := albumColl.Find(ctx, filter)
+	if err != nil {
+		return nil, fmt.Errorf("查询专辑失败: %w", err)
+	}
+	defer cursor.Close(ctx)
+
+	var results []scene_audio_route_models.AlbumMetadata
+	if err := cursor.All(ctx, &results); err != nil {
+		return nil, fmt.Errorf("解析专辑数据失败: %w", err)
+	}
+
+	return results, nil
+}
+
+func (r *annotationRepository) GetMediaFileList(
+	ctx context.Context,
+	end, start string,
+) ([]scene_audio_route_models.MediaFileMetadata, error) {
+	// 1. 获取推荐媒体文件ID
+	mediaIDs, err := r.getItemIDs(ctx, "media", start, end)
+	if err != nil {
+		return nil, err
+	}
+
+	// 2. 查询媒体文件详情
+	mediaColl := r.db.Collection(domain.CollectionFileEntityAudioMediaFile)
+	filter := bson.M{"_id": bson.M{"$in": mediaIDs}}
+
+	cursor, err := mediaColl.Find(ctx, filter)
+	if err != nil {
+		return nil, fmt.Errorf("查询媒体文件失败: %w", err)
+	}
+	defer cursor.Close(ctx)
+
+	var results []scene_audio_route_models.MediaFileMetadata
+	if err := cursor.All(ctx, &results); err != nil {
+		return nil, fmt.Errorf("解析媒体文件失败: %w", err)
 	}
 
 	return results, nil
@@ -139,64 +151,31 @@ func (r *annotationRepository) GetRandomArtistList(
 	ctx context.Context,
 	end, start string,
 ) ([]scene_audio_route_models.ArtistMetadata, error) {
-	skip, limit, err := r.parsePagination(start, end)
-	if err != nil {
-		return nil, err
+	collection := r.db.Collection(domain.CollectionFileEntityAudioArtist)
+
+	// 转换分页参数
+	skip, _ := strconv.Atoi(start)
+	limit, _ := strconv.Atoi(end)
+	if limit <= 0 || limit > 1000 {
+		limit = 50
 	}
 
+	// 构建随机查询
 	pipeline := []bson.M{
-		{"$match": bson.M{"item_type": "artist"}},
 		{"$sample": bson.M{"size": limit + skip}},
 		{"$skip": skip},
 		{"$limit": limit},
-		{"$lookup": bson.M{
-			"from":         domain.CollectionFileEntityAudioArtist,
-			"localField":   "item_id",
-			"foreignField": "_id",
-			"as":           "related_data",
-		}},
-		{"$unwind": "$related_data"},
-		{"$replaceRoot": bson.M{"newRoot": "$related_data"}},
 	}
 
-	coll := r.db.Collection(domain.CollectionFileEntityAudioAnnotation)
-	cursor, err := coll.Aggregate(ctx, pipeline)
+	cursor, err := collection.Aggregate(ctx, pipeline)
 	if err != nil {
-		return nil, fmt.Errorf("random artist query failed: %w", err)
+		return nil, fmt.Errorf("random query failed: %w", err)
 	}
+	defer cursor.Close(ctx)
 
 	var results []scene_audio_route_models.ArtistMetadata
 	if err := cursor.All(ctx, &results); err != nil {
-		return nil, fmt.Errorf("decode random artists failed: %w", err)
-	}
-
-	return results, nil
-}
-
-// endregion
-
-func (r *annotationRepository) GetAlbumList(
-	ctx context.Context,
-	end, order, sort, start string,
-) ([]scene_audio_route_models.AlbumMetadata, error) {
-	rawResults, err := r.baseListQuery(
-		ctx,
-		"album",
-		domain.CollectionFileEntityAudioAlbum,
-		start, end, sort, order,
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	results := make([]scene_audio_route_models.AlbumMetadata, 0, len(rawResults))
-	for _, raw := range rawResults {
-		var album scene_audio_route_models.AlbumMetadata
-		bsonBytes, _ := bson.Marshal(raw)
-		if err := bson.Unmarshal(bsonBytes, &album); err != nil {
-			return nil, fmt.Errorf("album data unmarshal failed: %w", err)
-		}
-		results = append(results, album)
+		return nil, fmt.Errorf("decode error: %w", err)
 	}
 
 	return results, nil
@@ -206,64 +185,29 @@ func (r *annotationRepository) GetRandomAlbumList(
 	ctx context.Context,
 	end, start string,
 ) ([]scene_audio_route_models.AlbumMetadata, error) {
-	skip, limit, err := r.parsePagination(start, end)
-	if err != nil {
-		return nil, err
+	collection := r.db.Collection(domain.CollectionFileEntityAudioAlbum)
+
+	skip, _ := strconv.Atoi(start)
+	limit, _ := strconv.Atoi(end)
+	if limit <= 0 || limit > 1000 {
+		limit = 50
 	}
 
 	pipeline := []bson.M{
-		{"$match": bson.M{"item_type": "album"}},
 		{"$sample": bson.M{"size": limit + skip}},
 		{"$skip": skip},
 		{"$limit": limit},
-		{"$lookup": bson.M{
-			"from":         domain.CollectionFileEntityAudioAlbum,
-			"localField":   "item_id",
-			"foreignField": "_id",
-			"as":           "related_data",
-		}},
-		{"$unwind": "$related_data"},
-		{"$replaceRoot": bson.M{"newRoot": "$related_data"}},
 	}
 
-	coll := r.db.Collection(domain.CollectionFileEntityAudioAnnotation)
-	cursor, err := coll.Aggregate(ctx, pipeline)
+	cursor, err := collection.Aggregate(ctx, pipeline)
 	if err != nil {
-		return nil, fmt.Errorf("random album query failed: %w", err)
+		return nil, fmt.Errorf("random query failed: %w", err)
 	}
+	defer cursor.Close(ctx)
 
 	var results []scene_audio_route_models.AlbumMetadata
 	if err := cursor.All(ctx, &results); err != nil {
-		return nil, fmt.Errorf("decode random albums failed: %w", err)
-	}
-
-	return results, nil
-}
-
-// endregion
-
-func (r *annotationRepository) GetMediaFileList(
-	ctx context.Context,
-	end, order, sort, start string,
-) ([]scene_audio_route_models.MediaFileMetadata, error) {
-	rawResults, err := r.baseListQuery(
-		ctx,
-		"media",
-		domain.CollectionFileEntityAudioMediaFile,
-		start, end, sort, order,
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	results := make([]scene_audio_route_models.MediaFileMetadata, 0, len(rawResults))
-	for _, raw := range rawResults {
-		var media scene_audio_route_models.MediaFileMetadata
-		bsonBytes, _ := bson.Marshal(raw)
-		if err := bson.Unmarshal(bsonBytes, &media); err != nil {
-			return nil, fmt.Errorf("media file unmarshal failed: %w", err)
-		}
-		results = append(results, media)
+		return nil, fmt.Errorf("decode error: %w", err)
 	}
 
 	return results, nil
@@ -273,41 +217,33 @@ func (r *annotationRepository) GetRandomMediaFileList(
 	ctx context.Context,
 	end, start string,
 ) ([]scene_audio_route_models.MediaFileMetadata, error) {
-	skip, limit, err := r.parsePagination(start, end)
-	if err != nil {
-		return nil, err
+	collection := r.db.Collection(domain.CollectionFileEntityAudioMediaFile)
+
+	skip, _ := strconv.Atoi(start)
+	limit, _ := strconv.Atoi(end)
+	if limit <= 0 || limit > 1000 {
+		limit = 50
 	}
 
 	pipeline := []bson.M{
-		{"$match": bson.M{"item_type": "media"}},
 		{"$sample": bson.M{"size": limit + skip}},
 		{"$skip": skip},
 		{"$limit": limit},
-		{"$lookup": bson.M{
-			"from":         domain.CollectionFileEntityAudioMediaFile,
-			"localField":   "item_id",
-			"foreignField": "_id",
-			"as":           "related_data",
-		}},
-		{"$unwind": "$related_data"},
-		{"$replaceRoot": bson.M{"newRoot": "$related_data"}},
 	}
 
-	coll := r.db.Collection(domain.CollectionFileEntityAudioAnnotation)
-	cursor, err := coll.Aggregate(ctx, pipeline)
+	cursor, err := collection.Aggregate(ctx, pipeline)
 	if err != nil {
-		return nil, fmt.Errorf("random media query failed: %w", err)
+		return nil, fmt.Errorf("random query failed: %w", err)
 	}
+	defer cursor.Close(ctx)
 
 	var results []scene_audio_route_models.MediaFileMetadata
 	if err := cursor.All(ctx, &results); err != nil {
-		return nil, fmt.Errorf("decode random media failed: %w", err)
+		return nil, fmt.Errorf("decode error: %w", err)
 	}
 
 	return results, nil
 }
-
-// endregion
 
 // region 通用工具
 func (r *annotationRepository) createFilter(itemId, itemType string) (bson.M, error) {

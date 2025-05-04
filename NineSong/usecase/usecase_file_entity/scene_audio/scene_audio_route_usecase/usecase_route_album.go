@@ -26,6 +26,7 @@ func NewAlbumUsecase(repo scene_audio_route_interface.AlbumRepository, timeout t
 func (uc *AlbumUsecase) GetAlbumItems(
 	ctx context.Context,
 	end, order, sort, start, search, starred, artistId string,
+	minYear, maxYear string,
 ) ([]scene_audio_route_models.AlbumMetadata, error) {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
@@ -49,5 +50,5 @@ func (uc *AlbumUsecase) GetAlbumItems(
 		sort = "name"
 	}
 
-	return uc.repo.GetAlbumItems(ctx, end, order, sort, start, search, starred, artistId)
+	return uc.repo.GetAlbumItems(ctx, end, order, sort, start, search, starred, artistId, minYear, maxYear)
 }

@@ -56,7 +56,7 @@ func validateRating(rating int) error {
 
 func (uc *annotationUsecase) GetArtistList(
 	ctx context.Context,
-	end, order, sort, start string,
+	end, start string,
 ) ([]scene_audio_route_models.ArtistMetadata, error) {
 	if err := uc.validatePagination(start, end); err != nil {
 		return nil, err
@@ -65,7 +65,7 @@ func (uc *annotationUsecase) GetArtistList(
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
 
-	return uc.repo.GetArtistList(ctx, end, order, sort, start)
+	return uc.repo.GetArtistList(ctx, end, start)
 }
 
 func (uc *annotationUsecase) GetRandomArtistList(
@@ -86,7 +86,7 @@ func (uc *annotationUsecase) GetRandomArtistList(
 
 func (uc *annotationUsecase) GetAlbumList(
 	ctx context.Context,
-	end, order, sort, start string,
+	end, start string,
 ) ([]scene_audio_route_models.AlbumMetadata, error) {
 	if err := uc.validatePagination(start, end); err != nil {
 		return nil, err
@@ -95,7 +95,7 @@ func (uc *annotationUsecase) GetAlbumList(
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
 
-	return uc.repo.GetAlbumList(ctx, end, order, sort, start)
+	return uc.repo.GetAlbumList(ctx, end, start)
 }
 
 func (uc *annotationUsecase) GetRandomAlbumList(
@@ -116,7 +116,7 @@ func (uc *annotationUsecase) GetRandomAlbumList(
 
 func (uc *annotationUsecase) GetMediaFileList(
 	ctx context.Context,
-	end, order, sort, start string,
+	end, start string,
 ) ([]scene_audio_route_models.MediaFileMetadata, error) {
 	if err := uc.validatePagination(start, end); err != nil {
 		return nil, err
@@ -125,7 +125,7 @@ func (uc *annotationUsecase) GetMediaFileList(
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
 
-	return uc.repo.GetMediaFileList(ctx, end, order, sort, start)
+	return uc.repo.GetMediaFileList(ctx, end, start)
 }
 
 func (uc *annotationUsecase) GetRandomMediaFileList(

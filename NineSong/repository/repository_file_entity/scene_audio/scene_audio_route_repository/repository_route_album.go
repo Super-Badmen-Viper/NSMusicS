@@ -7,7 +7,6 @@ import (
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_route/scene_audio_route_models"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/mongo"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"strconv"
 )
@@ -27,36 +26,47 @@ func NewAlbumRepository(db mongo.Database, collection string) scene_audio_route_
 func (r *albumRepository) GetAlbumItems(
 	ctx context.Context,
 	end, order, sort, start, search, starred, artistId string,
+	minYear, maxYear string,
 ) ([]scene_audio_route_models.AlbumMetadata, error) {
 	collection := r.db.Collection(r.collection)
 
 	filter := bson.M{}
+	if minYear != "" {
+		if year, err := strconv.Atoi(minYear); err == nil {
+			filter["min_year"] = bson.M{"$gte": year}
+		}
+	}
+	if maxYear != "" {
+		if year, err := strconv.Atoi(maxYear); err == nil {
+			filter["max_year"] = bson.M{"$lte": year}
+		}
+	}
 	if artistId != "" {
 		filter["artist_id"] = artistId
 	}
-
 	if search != "" {
 		filter["$or"] = []bson.M{
-			{"name": primitive.Regex{Pattern: search, Options: "i"}},
-			{"artist": primitive.Regex{Pattern: search, Options: "i"}},
+			{"name": bson.M{"$regex": search, "$options": "i"}},
+			{"artist": bson.M{"$regex": search, "$options": "i"}},
+			{"album_artist": bson.M{"$regex": search, "$options": "i"}},
 		}
 	}
-
 	if starred != "" {
-		isStarred, err := strconv.ParseBool(starred)
-		if err != nil {
-			return nil, fmt.Errorf("invalid starred parameter: %w", err)
+		if isStarred, err := strconv.ParseBool(starred); err == nil {
+			filter["starred"] = isStarred
 		}
-		filter["starred"] = isStarred
 	}
 
 	skip, _ := strconv.Atoi(start)
 	limit, _ := strconv.Atoi(end)
-	if limit == 0 || limit > 100 {
-		limit = 50
+
+	validSortFields := map[string]bool{
+		"name": true, "song_count": true, "created_at": true,
+		"play_count": true, "rating": true, "starred_at": true,
+		"min_year": true, "max_year": true, "duration": true,
+		"updated_at": true, "genre": true,
 	}
 
-	validSortFields := map[string]bool{"name": true, "song_count": true, "created_at": true}
 	if !validSortFields[sort] {
 		sort = "name"
 	}
@@ -75,10 +85,9 @@ func (r *albumRepository) GetAlbumItems(
 	if err != nil {
 		return nil, fmt.Errorf("database query failed: %w", err)
 	}
-	defer cursor.Close(ctx)
 
 	var results []scene_audio_route_models.AlbumMetadata
-	if err := cursor.All(ctx, &results); err != nil {
+	if err = cursor.All(ctx, &results); err != nil {
 		return nil, fmt.Errorf("decode error: %w", err)
 	}
 

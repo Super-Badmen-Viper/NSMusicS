@@ -34,8 +34,8 @@ func NewAnnotationRouter(
 		router.GET("/albums/random", ctrl.GetRandomAlbumList)
 
 		// 媒体文件相关
-		router.GET("/media", ctrl.GetMediaFileList)
-		router.GET("/media/random", ctrl.GetRandomMediaFileList)
+		router.GET("/medias", ctrl.GetMediaFileList)
+		router.GET("/medias/random", ctrl.GetRandomMediaFileList)
 
 		// 标注操作
 		router.POST("/star", ctrl.UpdateStarred)

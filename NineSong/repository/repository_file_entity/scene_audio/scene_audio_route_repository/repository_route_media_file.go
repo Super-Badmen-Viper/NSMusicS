@@ -62,34 +62,19 @@ func (r *mediaFileRepository) GetMediaFileItems(
 
 	validSortFields := map[string]bool{
 		// 播放相关
-		"play_count": true,
-		"play_date":  true,
+		"play_count": true, "play_date": true,
 		// 用户互动
-		"rating":     true,
-		"starred":    true,
-		"starred_at": true,
+		"rating": true, "starred": true, "starred_at": true,
 		// 核心元数据
-		"title":  true,
-		"artist": true,
-		"album":  true,
-		"year":   true,
-		"genre":  true,
+		"title": true, "artist": true, "album": true, "year": true, "genre": true,
 		// 技术属性
-		"duration": true,
-		"bit_rate": true,
-		"size":     true,
-		"channels": true,
-		"suffix":   true,
+		"duration": true, "bit_rate": true, "size": true, "channels": true, "suffix": true,
 		// 时间戳
-		"created_at": true,
-		"updated_at": true,
+		"created_at": true, "updated_at": true,
 		// 关联ID
-		"artist_id":       true,
-		"album_id":        true,
-		"album_artist_id": true,
+		"artist_id": true, "album_id": true, "album_artist_id": true,
 		// 扩展属性
-		"has_cover_art": true,
-		"path":          true,
+		"has_cover_art": true, "path": true,
 	}
 	if !validSortFields[sort] {
 		sort = "title"

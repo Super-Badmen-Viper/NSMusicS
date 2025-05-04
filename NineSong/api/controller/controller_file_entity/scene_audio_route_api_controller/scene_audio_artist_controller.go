@@ -18,15 +18,15 @@ func NewArtistController(uc scene_audio_route_interface.ArtistRepository) *Artis
 
 func (c *ArtistController) GetArtists(ctx *gin.Context) {
 	params := struct {
-		Start   string `form:"start"`
-		End     string `form:"end"`
+		Start   string `form:"start" binding:"required"`
+		End     string `form:"end" binding:"required"`
 		Sort    string `form:"sort"`
 		Order   string `form:"order"`
 		Search  string `form:"search"`
 		Starred string `form:"starred"`
 	}{
-		Start:   ctx.DefaultQuery("start", "0"),
-		End:     ctx.DefaultQuery("end", "50"),
+		Start:   ctx.Query("start"),
+		End:     ctx.Query("end"),
 		Sort:    ctx.DefaultQuery("sort", "name"),
 		Order:   ctx.DefaultQuery("order", "asc"),
 		Search:  ctx.Query("search"),

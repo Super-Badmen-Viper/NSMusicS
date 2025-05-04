@@ -16,27 +16,39 @@ func NewAlbumController(uc scene_audio_route_interface.AlbumRepository) *AlbumCo
 	return &AlbumController{AlbumUsecase: uc}
 }
 
-func (ac *AlbumController) GetAlbumItems(c *gin.Context) {
+func (c *AlbumController) GetAlbumItems(ctx *gin.Context) {
 	params := struct {
-		Start    string `form:"start"`
-		End      string `form:"end"`
+		Start    string `form:"start" binding:"required"`
+		End      string `form:"end" binding:"required"`
 		Sort     string `form:"sort"`
 		Order    string `form:"order"`
 		Search   string `form:"search"`
 		Starred  string `form:"starred"`
 		ArtistID string `form:"artist_id"`
+		MinYear  string `form:"min_year"`
+		MaxYear  string `form:"max_year"`
 	}{
-		Start:    c.DefaultQuery("start", "0"),
-		End:      c.DefaultQuery("end", "50"),
-		Sort:     c.DefaultQuery("sort", "name"),
-		Order:    c.DefaultQuery("order", "asc"),
-		Search:   c.Query("search"),
-		Starred:  c.Query("starred"),
-		ArtistID: c.Query("artist_id"),
+		Start:    ctx.Query("start"),
+		End:      ctx.Query("end"),
+		Sort:     ctx.DefaultQuery("sort", "name"),
+		Order:    ctx.DefaultQuery("order", "asc"),
+		Search:   ctx.Query("search"),
+		Starred:  ctx.Query("starred"),
+		ArtistID: ctx.Query("artist_id"),
+		MinYear:  ctx.Query("min_year"),
+		MaxYear:  ctx.Query("max_year"),
 	}
 
-	albums, err := ac.AlbumUsecase.GetAlbumItems(
-		c.Request.Context(),
+	if params.Start == "" || params.End == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code":    "MISSING_PARAMS",
+			"message": "必须提供start和end参数",
+		})
+		return
+	}
+
+	albums, err := c.AlbumUsecase.GetAlbumItems(
+		ctx.Request.Context(),
 		params.End,
 		params.Order,
 		params.Sort,
@@ -44,27 +56,20 @@ func (ac *AlbumController) GetAlbumItems(c *gin.Context) {
 		params.Search,
 		params.Starred,
 		params.ArtistID,
+		params.MinYear,
+		params.MaxYear,
 	)
 
 	if err != nil {
-		handleAlbumError(c, err)
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"code":    "SERVER_ERROR",
+			"message": err.Error(),
+		})
 		return
 	}
 
-	c.JSON(http.StatusOK, scene_audio_route_models.AlbumListResponse{
+	ctx.JSON(http.StatusOK, scene_audio_route_models.AlbumListResponse{
 		Albums: albums,
 		Count:  len(albums),
 	})
-}
-
-func handleAlbumError(c *gin.Context, err error) {
-	switch err.Error() {
-	case "invalid start parameter",
-		"invalid end parameter",
-		"invalid starred parameter",
-		"invalid artist id format":
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	default:
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "服务器内部错误"})
-	}
 }
