@@ -16,6 +16,6 @@ func NewTaskRouter(timeout time.Duration, db mongo.Database, group *gin.RouterGr
 	tc := &controller_auth.TaskController{
 		TaskUsecase: usecase_auth.NewTaskUsecase(tr, timeout),
 	}
-	group.GET("/task", tc.Fetch)
-	group.POST("/task", tc.Create)
+	group.GET("/user/task", tc.Fetch)
+	group.POST("/user/task", tc.Create)
 }

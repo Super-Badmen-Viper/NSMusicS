@@ -16,5 +16,5 @@ func NewProfileRouter(timeout time.Duration, db mongo.Database, group *gin.Route
 	pc := &controller_auth.ProfileController{
 		ProfileUsecase: usecase_auth.NewProfileUsecase(ur, timeout),
 	}
-	group.GET("/profile", pc.Fetch)
+	group.GET("/user/profile", pc.Fetch)
 }

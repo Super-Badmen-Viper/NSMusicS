@@ -134,9 +134,10 @@ func (si *Initializer) markInitialized(ctx context.Context) error {
 func (si *Initializer) createAdminUser(ctx context.Context) (primitive.ObjectID, error) {
 	user := domain_auth.User{
 		ID:       primitive.NewObjectID(),
-		Name:     "Test Name",
+		Name:     "TestName",
 		Email:    "test@gmail.com",
-		Password: "test",
+		Password: "test123",
+		Admin:    true,
 	}
 	encryptedPassword, err := bcrypt.GenerateFromPassword(
 		[]byte(user.Password),

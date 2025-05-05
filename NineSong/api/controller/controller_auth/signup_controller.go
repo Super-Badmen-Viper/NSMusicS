@@ -47,6 +47,7 @@ func (sc *SignupController) Signup(c *gin.Context) {
 		Name:     request.Name,
 		Email:    request.Email,
 		Password: request.Password,
+		Admin:    false,
 	}
 
 	err = sc.SignupUsecase.Create(c, &user)
