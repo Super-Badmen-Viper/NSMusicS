@@ -7,7 +7,7 @@ import (
 )
 
 type AppServerConfig struct {
-	ID          primitive.ObjectID `bson:"id" bson:"_id,omitempty"`
+	ID          primitive.ObjectID `bson:"_id"`
 	ServerName  string             `bson:"serverName" bson:"server_name"`
 	URL         string             `bson:"url" bson:"url"`
 	UserName    string             `bson:"userName" bson:"user_name"`
@@ -19,4 +19,5 @@ type AppServerConfig struct {
 type AppServerConfigUsecase interface {
 	Update(ctx context.Context, config *AppServerConfig) error
 	GetAll(ctx context.Context) ([]*AppServerConfig, error)
+	Delete(ctx context.Context, id primitive.ObjectID) error
 }

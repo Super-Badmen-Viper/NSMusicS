@@ -58,6 +58,7 @@ import { useI18n } from 'vue-i18n'
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {store_local_db_info} from "@/data/data_stores/local/store_local_db_info";
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
+import {isElectron} from "@/utils/electron/isElectron";
 const { t } = useI18n({
   inheritLocale: true
 })
@@ -133,11 +134,13 @@ const defaultExpandedKeys = ['type-group-0', 'type-group-1', 'type-group-2', 'ty
 ///
 const init_config_model = ref(false)
 onMounted(()=>{
-  if(
-      store_server_users.server_config_of_all_user_of_sqlite.length === 0 &&
-      store_local_db_info.local_config_of_all_user_of_sqlite.length === 0
-  ){
-    init_config_model.value = true;
+  if(isElectron) {
+    if (
+        store_server_users.server_config_of_all_user_of_sqlite.length === 0 &&
+        store_local_db_info.local_config_of_all_user_of_sqlite.length === 0
+    ) {
+      init_config_model.value = true;
+    }
   }
 })
 </script>

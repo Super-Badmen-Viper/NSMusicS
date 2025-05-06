@@ -324,11 +324,15 @@ watch(() => store_player_audio_logic.player_mpvExtraParameters,  (newValue) => {
     store_app_configs_logic_save.save_system_config_of_App_Configs()
 });
 watch(() => store_player_audio_logic.play_order, (newValue) => {
-    store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()
+    if(newValue && newValue.length > 0) {
+        store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()
+    }
 });
 watch(() => store_player_audio_logic.play_volume, async (newValue) => {
-    await store_player_audio_logic.player.setVolume(Number(store_player_audio_logic.play_volume))
-    store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()
+    if(newValue && newValue >= 0) {
+        await store_player_audio_logic.player.setVolume(Number(store_player_audio_logic.play_volume))
+        store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()
+    }
 });
 watch(() => store_player_audio_logic.player_save_new_data, (newValue) => {
     store_app_configs_logic_save.save_system_config_of_Player_Configs_of_Audio_Info()

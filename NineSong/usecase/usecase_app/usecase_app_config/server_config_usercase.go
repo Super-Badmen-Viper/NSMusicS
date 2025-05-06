@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_app/domain_app_config"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/repository/repository_app/repository_app_config"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
 )
 
@@ -27,4 +28,10 @@ func (uc *AppServerConfigUsecase) GetAll(ctx context.Context) ([]*domain_app_con
 	defer cancel()
 
 	return uc.repo.GetAll(ctx)
+}
+
+func (uc *AppServerConfigUsecase) Delete(ctx context.Context, id primitive.ObjectID) error {
+	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
+	defer cancel()
+	return uc.repo.DeleteByID(ctx, id)
 }

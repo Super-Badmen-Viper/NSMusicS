@@ -28,7 +28,7 @@ services:
           memory: 1G
 
   backend:
-    image: nsmusics-go
+    image: ninesong
     container_name: ${WEB_CONTAINER_NAME}
     restart: unless-stopped
     env_file: .env

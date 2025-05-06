@@ -24,6 +24,7 @@ import axios from "axios";
 import {
     store_server_login_info
 } from "../../../views/view_server/page_metadata/page_login/store/store_server_login_info";
+import {store_app_configs_logic_load} from "./store_app_configs_logic_load";
 
 export const store_app_configs_logic_save = reactive({
     generateMockObjectId(){
@@ -35,82 +36,84 @@ export const store_app_configs_logic_save = reactive({
         return id;
     },
     async save_system_config_of_App_Configs() {
-        const app_Configs = ref(
-            new App_Configs({
-                theme: store_app_configs_info.theme_name,
-                lang: store_app_configs_info.lang,
-                router_name: String(store_router_data_info.router_name),
-                menuOptions_selectd_model_1: String(store_app_configs_info.menuOptions_selectd_model_1),
-                menuOptions_selectd_model_2: String(store_app_configs_info.menuOptions_selectd_model_2),
-                menuOptions_selectd_model_3: String(store_app_configs_info.menuOptions_selectd_model_3),
-                menuOptions_selectd_model_4: String(store_app_configs_info.menuOptions_selectd_model_4),
-                app_view_left_menu_select_activeKey: String(store_app_configs_info.app_view_left_menu_select_activeKey),
-                app_view_left_menu_collapsed: String(store_app_configs_info.app_view_left_menu_collapsed),
-                model_select: String(store_server_user_model.model_select),
-                server_select: String(store_server_user_model.server_select),
-                server_select_kind: String(store_server_users.server_select_kind),
-                username: String(store_server_user_model.username),
-                password: String(store_server_user_model.password),
-                play_order: String(store_player_audio_logic.play_order),
-                play_volume: String(store_player_audio_logic.play_volume),
-                model_server_type_of_web: String(store_server_user_model.model_server_type_of_web),
-                model_server_type_of_local: String(store_server_user_model.model_server_type_of_local),
-                model_server_type_of_local_server_download: String(store_server_user_model.model_server_type_of_local_server_download),
-                authorization_of_nd: String(store_server_user_model.authorization_of_nd),
-                client_unique_id: String(store_server_user_model.client_unique_id),
-                media_page_sizes: String(store_view_media_page_info.media_page_sizes),
-                album_page_sizes: String(store_view_album_page_info.album_page_sizes),
-                artist_page_sizes: String(store_view_artist_page_info.artist_page_sizes),
-                clear_Memory_Model: String(store_router_data_logic.clear_Memory_Model),
-                clear_Equilibrium_Model: String(store_router_data_logic.clear_Equilibrium_Model),
-                clear_UserExperience_Model: String(store_router_data_logic.clear_UserExperience_Model),
-                theme_auto_system: String(store_app_configs_info.theme_auto_system),
-                page_songlists_filter_year: String(store_view_media_page_logic.page_songlists_filter_year),
-                player_select: String(store_player_audio_logic.player_select),
-                player_fade_value: String(store_player_audio_logic.player_fade_value),
-                player_dolby: String(store_player_audio_logic.player_dolby),
-                player_samp_value: String(store_player_audio_logic.player_samp_value),
-                player_gaplessAudio: String(store_player_audio_logic.player_gaplessAudio),
-                player_audioExclusiveMode: String(store_player_audio_logic.player_audioExclusiveMode),
-                player_replayGainMode: String(store_player_audio_logic.player_replayGainMode),
-                player_replayGainPreamp: String(store_player_audio_logic.player_replayGainPreamp),
-                player_replayGainClip: String(store_player_audio_logic.player_replayGainClip),
-                player_replayGainFallback: String(store_player_audio_logic.player_replayGainFallback),
-                player_mpvExtraParameters: String(store_player_audio_logic.player_mpvExtraParameters),
-                player_audio_channel: String(store_player_audio_logic.player_audio_channel),
-                player_device_select: String(store_player_audio_logic.player_device_select)
-            }));
-        if (isElectron) {
-            let db: any = null;
-            db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
-            db.pragma('journal_mode = WAL');
-            db.exec('PRAGMA foreign_keys = OFF');
-            let system_Configs_Write = new Class_Set_System_Configs_Write()
-            system_Configs_Write.system_app_config(
-                db,
-                app_Configs.value)
-            console.log('save config succuessful')
-            db.close();
-            db = null;
-        } else {
-            if(!store_router_data_info.router_select_model_server_login && store_server_login_info.server_accessToken.length > 0) {
-                const data = Object.entries(app_Configs.value).map(([key, value]) => ({
-                    ID: this.generateMockObjectId(),
-                    ConfigKey: String(key),
-                    ConfigValue: String(value)
+        if(store_app_configs_logic_load.app_configs_loading) {
+            const app_Configs = ref(
+                new App_Configs({
+                    theme: store_app_configs_info.theme_name,
+                    lang: store_app_configs_info.lang,
+                    router_name: String(store_router_data_info.router_name),
+                    menuOptions_selectd_model_1: String(store_app_configs_info.menuOptions_selectd_model_1),
+                    menuOptions_selectd_model_2: String(store_app_configs_info.menuOptions_selectd_model_2),
+                    menuOptions_selectd_model_3: String(store_app_configs_info.menuOptions_selectd_model_3),
+                    menuOptions_selectd_model_4: String(store_app_configs_info.menuOptions_selectd_model_4),
+                    app_view_left_menu_select_activeKey: String(store_app_configs_info.app_view_left_menu_select_activeKey),
+                    app_view_left_menu_collapsed: String(store_app_configs_info.app_view_left_menu_collapsed),
+                    model_select: String(store_server_user_model.model_select),
+                    server_select: String(store_server_user_model.server_select),
+                    server_select_kind: String(store_server_users.server_select_kind),
+                    username: String(store_server_user_model.username),
+                    password: String(store_server_user_model.password),
+                    play_order: String(store_player_audio_logic.play_order),
+                    play_volume: String(store_player_audio_logic.play_volume),
+                    model_server_type_of_web: String(store_server_user_model.model_server_type_of_web),
+                    model_server_type_of_local: String(store_server_user_model.model_server_type_of_local),
+                    model_server_type_of_local_server_download: String(store_server_user_model.model_server_type_of_local_server_download),
+                    authorization_of_nd: String(store_server_user_model.authorization_of_nd),
+                    client_unique_id: String(store_server_user_model.client_unique_id),
+                    media_page_sizes: String(store_view_media_page_info.media_page_sizes),
+                    album_page_sizes: String(store_view_album_page_info.album_page_sizes),
+                    artist_page_sizes: String(store_view_artist_page_info.artist_page_sizes),
+                    clear_Memory_Model: String(store_router_data_logic.clear_Memory_Model),
+                    clear_Equilibrium_Model: String(store_router_data_logic.clear_Equilibrium_Model),
+                    clear_UserExperience_Model: String(store_router_data_logic.clear_UserExperience_Model),
+                    theme_auto_system: String(store_app_configs_info.theme_auto_system),
+                    page_songlists_filter_year: String(store_view_media_page_logic.page_songlists_filter_year),
+                    player_select: String(store_player_audio_logic.player_select),
+                    player_fade_value: String(store_player_audio_logic.player_fade_value),
+                    player_dolby: String(store_player_audio_logic.player_dolby),
+                    player_samp_value: String(store_player_audio_logic.player_samp_value),
+                    player_gaplessAudio: String(store_player_audio_logic.player_gaplessAudio),
+                    player_audioExclusiveMode: String(store_player_audio_logic.player_audioExclusiveMode),
+                    player_replayGainMode: String(store_player_audio_logic.player_replayGainMode),
+                    player_replayGainPreamp: String(store_player_audio_logic.player_replayGainPreamp),
+                    player_replayGainClip: String(store_player_audio_logic.player_replayGainClip),
+                    player_replayGainFallback: String(store_player_audio_logic.player_replayGainFallback),
+                    player_mpvExtraParameters: String(store_player_audio_logic.player_mpvExtraParameters),
+                    player_audio_channel: String(store_player_audio_logic.player_audio_channel),
+                    player_device_select: String(store_player_audio_logic.player_device_select)
                 }));
-                try {
-                    await axios.put("/api/app/config",
-                        JSON.stringify(data),
-                        {
-                            headers: {
-                                "Content-Type": 'application/json',
-                                Authorization: `Bearer ${store_server_login_info.server_accessToken}`
+            if (isElectron) {
+                let db: any = null;
+                db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
+                db.pragma('journal_mode = WAL');
+                db.exec('PRAGMA foreign_keys = OFF');
+                let system_Configs_Write = new Class_Set_System_Configs_Write()
+                system_Configs_Write.system_app_config(
+                    db,
+                    app_Configs.value)
+                console.log('save config succuessful')
+                db.close();
+                db = null;
+            } else {
+                if (!store_router_data_info.router_select_model_server_login && store_server_login_info.server_accessToken.length > 0) {
+                    const data = Object.entries(app_Configs.value).map(([key, value]) => ({
+                        ID: this.generateMockObjectId(),
+                        ConfigKey: String(key),
+                        ConfigValue: String(value)
+                    }));
+                    try {
+                        await axios.put("/api/app/config",
+                            JSON.stringify(data),
+                            {
+                                headers: {
+                                    "Content-Type": 'application/json',
+                                    Authorization: `Bearer ${store_server_login_info.server_accessToken}`
+                                }
                             }
-                        }
-                    );
-                } catch (error) {
-                    console.error("请求失败:", error.response ? error.response.data : error.message);
+                        );
+                    } catch (error) {
+                        console.error("请求失败:", error.response ? error.response.data : error.message);
+                    }
                 }
             }
         }
@@ -295,7 +298,7 @@ export const store_app_configs_logic_save = reactive({
                     store_playlist_list_info.playlist_MediaFiles_temporary
                 )
             }
-            this.save_system_config_of_App_Configs()
+            await this.save_system_config_of_App_Configs()
             db.close();
             db = null;
         } else {
@@ -344,7 +347,7 @@ export const store_app_configs_logic_save = reactive({
             system_Configs_Write.system_servers_config(
                 db,
                 store_server_users.server_config_of_all_user_of_sqlite)
-            this.save_system_config_of_App_Configs()
+            await this.save_system_config_of_App_Configs()
             db.close();
             db = null;
         } else {

@@ -17,33 +17,44 @@ export const store_server_login_logic = reactive({
         store_server_login_info.server_accessToken = String(sessionStorage.getItem("jwt_token"));
         const expireTime = sessionStorage.getItem("jwt_expire_time");
 
-        if (store_server_login_info.server_accessToken && expireTime) {
-            const remainingTime = parseInt(expireTime) - currentTime;
-            if (remainingTime > 0) {
-                sessionStorage.setItem("jwt_expire_time", currentTime + this.jwt_expire_time); // 1 小时
+        try {
+            if (store_server_login_info.server_accessToken) {
+                const response = await axios.get("/api/user/profile", {
+                    headers: {
+                        'Authorization': `Bearer ${store_server_login_info.server_accessToken}`
+                    }
+                });
+                if (response.data && response.data.name) {
+                    if (store_server_login_info.server_accessToken && expireTime) {
+                        const remainingTime = parseInt(expireTime) - currentTime;
+                        if (remainingTime > 0) {
+                            sessionStorage.setItem("jwt_expire_time", String(currentTime + this.jwt_expire_time)); // 1 小时
 
-                store_router_data_info.router_select_model_server_login = false;
-                await store_app_configs_info.load_app();
-                store_view_home_page_fetchData.fetchData_Home();
-                console.log("已登录: " + store_server_login_info.server_accessToken);
-                return true
+                            store_router_data_info.router_select_model_server_login = false;
+                            await store_app_configs_info.load_app();
+                            store_view_home_page_fetchData.fetchData_Home();
+                            console.log("已登录: " + store_server_login_info.server_accessToken);
+                            return true;
+                        } else {
+                            return this.server_logout();
+                        }
+                    } else {
+                        return this.server_logout();
+                    }
+                } else {
+                    return this.server_logout();
+                }
             } else {
-                this.server_logout();
-                //
-                store_server_login_info.server_accessToken = '';
-                return false
+                return this.server_logout();
             }
-        } else {
-            store_server_login_info.server_accessToken = '';
-            //
-            store_router_data_info.router_select_model_server_login = true;
-            store_router_data_info.router.push("/login");
-            return false
+        } catch (error) {
+            console.error("验证登录状态失败:", error);
+            return this.server_logout();
         }
     },
     async server_login(email: string, name: string, password: string) {
         try {
-            const response = await axios.post("/api/login", {
+            const response = await axios.post("/api/user/login", {
                 email: email,
                 password: password,
                 name: name
@@ -70,7 +81,10 @@ export const store_server_login_logic = reactive({
         sessionStorage.removeItem("jwt_token");
         sessionStorage.removeItem("jwt_expire_time");
 
+        store_server_login_info.server_accessToken = '';
+        store_router_data_info.router_select_model_server_login = true;
         store_router_data_info.router.push("/login");
-        console.log("已退出登录");
+
+        return false
     }
 });

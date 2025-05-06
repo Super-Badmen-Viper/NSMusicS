@@ -12,78 +12,55 @@ import { User_ApiService_of_ND } from "../../../../data_access/servers_configs/n
 import { Set_ServerInfo_To_LocalSqlite } from "../../../../data_access/local_configs/class_Set_ServerInfo_To_LocalSqlite";
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 import { hash } from 'spark-md5';
-import {store_router_data_info} from "@/router/router_store/store_router_data_info";
-import {
-    store_server_login_info
-} from "../../../../../views/view_server/page_metadata/page_login/store/store_server_login_info";
-import axios from "axios";
+import {store_server_ninesong_userdata_logic} from "../server_ninesong_user_data/store_server_ninesong_userdata_logic";
 
 export const store_server_navidrome_userdata_logic = reactive({
     /// server add
     async navidrome_update_server_addUser(
-        server_set_of_addUser_of_servername: string,
-        server_set_of_addUser_of_url: string,
-        server_set_of_addUser_of_username: string,
-        server_set_of_addUser_of_password: string,
+        server_name: string,
+        url: string,
+        user_name: string,
+        password: string,
         type: string
     ) {
-        try{
-            const userService = new User_ApiService_of_ND(server_set_of_addUser_of_url +'/rest');
-            const {salt, token} = this.navidrome_get_EncryptedPassword(server_set_of_addUser_of_password);
-            const userData = await userService.getUser(server_set_of_addUser_of_username, token, salt);
-            if (userData["subsonic-response"]["status"] === 'ok'){
-                let data: Server_Configs_Props = null
-                if(isElectron) {
+        try {
+            const userService = new User_ApiService_of_ND(url + '/rest');
+            const { salt, token } = this.navidrome_get_EncryptedPassword(password);
+            const userData = await userService.getUser(user_name, token, salt);
+
+            if (userData && userData["subsonic-response"] && userData["subsonic-response"]["status"] === 'ok') {
+                let data: Server_Configs_Props = null;
+
+                if (isElectron) {
                     let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
                     data = set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_CreateUser(
-                        server_set_of_addUser_of_servername,
-                        server_set_of_addUser_of_url,
-                        server_set_of_addUser_of_username,
-                        server_set_of_addUser_of_password,
+                        server_name,
+                        url,
+                        user_name,
+                        password,
                         type
                     );
-                }else{
+                } else {
                     // Golang
-                    data = {
-                        show: false,
-                        type: type,
-                        id: store_app_configs_logic_save.generateMockObjectId(),
-                        server_name: server_set_of_addUser_of_servername,
-                        url: server_set_of_addUser_of_url,
-                        user_name: server_set_of_addUser_of_username,
-                        password: server_set_of_addUser_of_password,
-                        last_login_at: new Date().toISOString().split('.')[0] + 'Z'
-                    };
-                    if(!store_router_data_info.router_select_model_server_login && store_server_login_info.server_accessToken.length > 0) {
-                        try {
-                            await axios.put("/api/app/server",
-                                JSON.stringify({
-                                    ID: data.id,
-                                    ServerName: data.server_name,
-                                    URL: data.url,
-                                    UserName: data.user_name,
-                                    Password: data.password,
-                                    LastLoginAt: data.last_login_at,
-                                    Type: data.type
-                                }),
-                                {
-                                    headers: {
-                                        "Content-Type": 'application/json',
-                                        Authorization: `Bearer ${store_server_login_info.server_accessToken}`
-                                    }
-                                }
-                            );
-                        } catch (error) {
-                            console.error("请求失败:", error.response ? error.response.data : error.message);
-                        }
-                    }
+                    data = await store_server_ninesong_userdata_logic.update_app_configs_server(
+                        store_app_configs_logic_save.generateMockObjectId(),
+                        server_name,
+                        url,
+                        user_name,
+                        password,
+                        type
+                    );
                 }
-                const new_data: Server_Configs_Props[] = store_server_users.server_config_of_all_user_of_sqlite;
-                new_data.push(data)
-                store_server_users.get_server_config_of_all_user_of_sqlite(new_data)
-                return true;
+
+                if (data != null) {
+                    const new_data: Server_Configs_Props[] = [...store_server_users.server_config_of_all_user_of_sqlite, data];
+                    store_server_users.get_server_config_of_all_user_of_sqlite(new_data);
+                    return true;
+                }
             }
-        }catch {  }
+        } catch (error) {
+            console.error("Error during navidrome_update_server_addUser:", error);
+        }
         return false;
     },
 
@@ -108,49 +85,24 @@ export const store_server_navidrome_userdata_logic = reactive({
                 );
             }else{
                 // Golang
-                data = {
-                    show: false,
-                    type: type,
-                    id: id,
-                    server_name: server_name,
-                    url: url,
-                    user_name: user_name,
-                    password: password,
-                    last_login_at: new Date().toISOString().split('.')[0] + 'Z'
-                };
-                if(!store_router_data_info.router_select_model_server_login && store_server_login_info.server_accessToken.length > 0) {
-                    try {
-                        await axios.put("/api/app/server",
-                            JSON.stringify({
-                                ID: data.id,
-                                ServerName: data.server_name,
-                                URL: data.url,
-                                UserName: data.user_name,
-                                Password: data.password,
-                                LastLoginAt: data.last_login_at,
-                                Type: data.type
-                            }),
-                            {
-                                headers: {
-                                    "Content-Type": 'application/json',
-                                    Authorization: `Bearer ${store_server_login_info.server_accessToken}`
-                                }
-                            }
-                        );
-                    } catch (error) {
-                        console.error("请求失败:", error.response ? error.response.data : error.message);
-                    }
+                data = await store_server_ninesong_userdata_logic.update_app_configs_server(
+                    id,
+                    server_name,
+                    url,
+                    user_name,
+                    password,
+                    type
+                )
+            }
+            if(data != null) {
+                const new_data: Server_Configs_Props[] = store_server_users.server_config_of_all_user_of_sqlite;
+                const index = new_data.findIndex(item => item.id === data.id);
+                if (index !== -1) {
+                    new_data[index] = data;
                 }
+                store_server_users.get_server_config_of_all_user_of_sqlite(new_data)
+                return true
             }
-            const new_data: Server_Configs_Props[] = store_server_users.server_config_of_all_user_of_sqlite;
-            const index = new_data.findIndex(item => item.id === data.id);
-            if (index !== -1) {
-                new_data[index] = data;
-            } else {
-                new_data.push(data);
-            }
-            store_server_users.get_server_config_of_all_user_of_sqlite(new_data)
-            return true
         }
         return false
     },

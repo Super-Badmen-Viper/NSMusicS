@@ -11,6 +11,7 @@ type ErrorResponse struct {
 
 var (
 	ErrEmptyCollection = errors.New("config collection is empty")
+	ErrNotFound        = errors.New("not found")
 )
 
 func IsNotFound(err error) bool {

@@ -286,6 +286,7 @@ export class Class_Get_System_Configs_Read {
                 })
             });
             //
+            this.server_Configs.value = []
             const response_server_Configs = await axios.get("/api/app/server", {
                 headers: {
                     Authorization: `Bearer ${store_server_login_info.server_accessToken}`
