@@ -52,12 +52,11 @@ export const store_server_login_logic = reactive({
             return this.server_logout();
         }
     },
-    async server_login(email: string, name: string, password: string) {
+    async server_login(email: string, password: string) {
         try {
             const response = await axios.post("/api/user/login", {
                 email: email,
-                password: password,
-                name: name
+                password: password
             });
             store_server_login_info.server_accessToken = String(response.data.accessToken);
             store_server_login_info.server_refreshToken = String(response.data.refreshToken);

@@ -69,24 +69,24 @@ const menuOptions: any[] = reactive([
       {label: computed(() => t('HeaderLibraries')), key: 'type-group-0-2', icon: renderIcon(MediaLibrary)},
       {label: computed(() => t('page.setting.playbackTab')), key: 'type-group-0-3', icon: renderIcon(PlayCircle16Regular)},
       {label: computed(() => t('page.setting.hotkeysTab')), key: 'type-group-0-4', icon: renderIcon(Keyboard)},
-      {label: computed(() => t('page.setting.windowTab')), key: 'type-group-0-5', icon: renderIcon(AppWindow)},
+      {label: computed(() => t('page.setting.windowTab')), key: 'type-group-0-5', icon: renderIcon(AppWindow), disabled: true},
     ]
   },
   {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '16px'}}},
   {label: computed(() => t('TabServer') + t('Settings')), key: 'type-group-1', icon: renderIcon(BareMetalServer),
     children: [
-      {label: computed(() => t('TabDashboard')), key: 'type-group-1-1', icon: renderIcon(BlockStorageAlt)},
-      {label: computed(() => t('General')), key: 'type-group-1-2', icon: renderIcon(Settings)},
+      {label: computed(() => t('TabDashboard')), key: 'type-group-1-1', icon: renderIcon(BlockStorageAlt), disabled: true},
+      {label: computed(() => t('General')), key: 'type-group-1-2', icon: renderIcon(Settings), disabled: true},
       {label: computed(() => t('HeaderUser')), key: 'type-group-1-3', icon: renderIcon(UserMultiple)},
       {label: computed(() => t('HeaderLibraries')), key: 'type-group-1-4', icon: renderIcon(MediaLibrary),
         children: [
           {label: computed(() => t('HeaderLibraries')), key: 'type-group-1-4-1'},
-          {label: computed(() => t('Display')), key: 'type-group-1-4-2'},
-          {label: computed(() => t('LabelMetadata')), key: 'type-group-1-4-3'},
+          {label: computed(() => t('Display')), key: 'type-group-1-4-2', disabled: true},
+          {label: computed(() => t('LabelMetadata')), key: 'type-group-1-4-3', disabled: true},
           {label: computed(() => t('TabNfoSettings')), key: 'type-group-1-4-4'},
         ]
       },
-      {label: computed(() => t('Play')), key: 'type-group-1-5', icon: renderIcon(PlayCircle16Regular),
+      {label: computed(() => t('Play')), key: 'type-group-1-5', icon: renderIcon(PlayCircle16Regular), disabled: true,
         children: [
           {label: computed(() => t('LabelTranscodes')), key: 'type-group-1-5-1'},
           {label: computed(() => t('ButtonResume')), key: 'type-group-1-5-2'},
@@ -99,33 +99,33 @@ const menuOptions: any[] = reactive([
   {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '16px'}}},
   {label: computed(() => t('HeaderDevices')), key: 'type-group-2', icon: renderIcon(Devices),
     children: [
-      {label: computed(() => t('HeaderDevices')), key: 'type-group-2-1', icon: renderIcon(Devices)},
-      {label: computed(() => t('HeaderActivity')), key: 'type-group-2-2', icon: renderIcon(Activity)},
-      {label: 'DLNA', key: 'type-group-2-3', icon: renderIcon(SendBackward)},
+      {label: computed(() => t('HeaderDevices')), key: 'type-group-2-1', icon: renderIcon(Devices), disabled: true},
+      {label: computed(() => t('HeaderActivity')), key: 'type-group-2-2', icon: renderIcon(Activity), disabled: true},
+      {label: 'DLNA', key: 'type-group-2-3', icon: renderIcon(SendBackward), disabled: true},
     ]
   },
   {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '16px'}}},
   {label: computed(() => t('LiveTV')), key: 'type-group-3', icon: renderIcon(LiveTvRound),
     children: [
-      {label: computed(() => t('LiveTV')), key: 'type-group-3-1', icon: renderIcon(LiveTvRound)},
-      {label: computed(() => t('HeaderDVR')), key: 'type-group-3-2', icon: renderIcon(Video)},
+      {label: computed(() => t('LiveTV')), key: 'type-group-3-1', icon: renderIcon(LiveTvRound), disabled: true},
+      {label: computed(() => t('HeaderDVR')), key: 'type-group-3-2', icon: renderIcon(Video), disabled: true},
     ]
   },
   {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '16px'}}},
   {label: computed(() => t('TabAdvanced')), key: 'type-group-4', icon: renderIcon(LauncherSettings24Regular),
     children: [
-      {label: computed(() => t('TabNetworking')), key: 'type-group-4-1', icon: renderIcon(ContentDeliveryNetwork)},
-      {label: computed(() => t('HeaderApiKey')), key: 'type-group-4-2', icon: renderIcon(Key24Regular)},
+      {label: computed(() => t('TabNetworking')), key: 'type-group-4-1', icon: renderIcon(ContentDeliveryNetwork), disabled: true},
+      {label: computed(() => t('HeaderApiKey')), key: 'type-group-4-2', icon: renderIcon(Key24Regular), disabled: true},
       {label: computed(() => t('TabLogs')), key: 'type-group-4-3', icon: renderIcon(Catalog)},
-      {label: computed(() => t('HeaderAlert')), key: 'type-group-4-4', icon: renderIcon(NotificationsOutline)},
-      {label: computed(() => t('TabPlugins')), key: 'type-group-4-5', icon: renderIcon(PlugConnected20Regular),
+      {label: computed(() => t('HeaderAlert')), key: 'type-group-4-4', icon: renderIcon(NotificationsOutline), disabled: true},
+      {label: computed(() => t('TabPlugins')), key: 'type-group-4-5', icon: renderIcon(PlugConnected20Regular), disabled: true,
         children: [
           {label: computed(() => t('TabMyPlugins')), key: 'type-group-4-5-1'},
           {label: computed(() => t('TabCatalog')), key: 'type-group-4-5-2'},
           {label: computed(() => t('TabRepositories')), key: 'type-group-4-5-3'},
         ]
       },
-      {label: computed(() => t('TabScheduledTasks')), key: 'type-group-4-6', icon: renderIcon(Timer)},
+      {label: computed(() => t('TabScheduledTasks')), key: 'type-group-4-6', icon: renderIcon(Timer), disabled: true},
     ]
   }
 ]);

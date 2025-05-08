@@ -17,7 +17,6 @@ const message = useMessage()
 async function login(){
   const result = await store_server_login_logic.server_login(
     store_server_login_info.server_input_email,
-    store_server_login_info.server_input_username,
     store_server_login_info.server_input_password
   )
   if(!result) {
@@ -53,12 +52,6 @@ async function login(){
               <span style="font-size: 15px;font-weight: 600;">{{ $t('nsmusics.server_page.server_email') }}</span>
               <n-input clearable placeholder="any"
                        v-model:value="store_server_login_info.server_input_email"
-                       style="border: 1.5px solid #FFFFFF20;"/>
-            </n-space>
-            <n-space vertical style="margin-bottom: 10px;">
-              <span style="font-size: 15px;font-weight: 600;">{{ $t('LabelUsername') }}</span>
-              <n-input clearable placeholder="any"
-                       v-model:value="store_server_login_info.server_input_username"
                        style="border: 1.5px solid #FFFFFF20;"/>
             </n-space>
             <n-space vertical style="margin-bottom: 10px;">

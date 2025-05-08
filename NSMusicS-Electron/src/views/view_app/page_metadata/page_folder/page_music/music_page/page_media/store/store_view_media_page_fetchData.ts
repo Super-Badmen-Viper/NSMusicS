@@ -470,7 +470,6 @@ export const store_view_media_page_fetchData = reactive({
                 store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
             ) {
                 if(store_server_user_model.random_play_model) {
-                    // jellyfin/emby 随机拉取 不支持流式虚拟列表持续拉取，这种古老的业务逻辑已经无法适应新时代用户需求，就应该被我的NineSong所取代
                     await this.fetchData_Media_of_server_web_start();
                 }else {
                     if (this._load_model === 'search') {

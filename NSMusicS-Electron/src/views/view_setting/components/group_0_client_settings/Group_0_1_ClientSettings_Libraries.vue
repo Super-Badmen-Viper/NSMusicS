@@ -91,8 +91,8 @@ const message = useMessage()
 ////// server
 const Type_Server_Kinds = [
   {
-    value: "nsmusics",
-    label: "NSMusicS"
+    value: "ninesong",
+    label: "NineSong"
   },
   {
     value: "subsonic",
@@ -568,13 +568,13 @@ import {
                   :options="Type_Server_Model_Open_Option"
                   :disabled="store_app_configs_info.desktop_system_kind != 'win32'"
                   @update:value="
-                              async () => {
-                                Type_Server_Model_Open_Value === 'server' ?
-                                await store_server_user_model.switchToMode_Server()
-                                :
-                                await store_server_user_model.switchToMode_Local()
-                              }
-                            "
+                    async () => {
+                      Type_Server_Model_Open_Value === 'server' ?
+                      await store_server_user_model.switchToMode_Server()
+                      :
+                      await store_server_user_model.switchToMode_Local()
+                    }
+                  "
                   placeholder=""
                   :reset-menu-on-options-change="false"
                   style="width: 207px;margin-top: 6px;"
@@ -618,22 +618,24 @@ import {
                       <div
                           class="server_item_info"
                           @click="() => {
-                                        item.show = !item.show;
-                                        // if(item.type === 'jellyfin' || item.type === 'emby'){
-                                        //   store_server_user_model.server_login_model_of_apikey = true
-                                        //   server_set_of_addUser_of_apikey = item.user_name
-                                        //   update_server_apikey_user_option({
-                                        //     servername: item.server_name,
-                                        //     url: item.url,
-                                        //     apikey: item.user_name,
-                                        //     userid: item.password,
-                                        //     init: false
-                                        //   });
-                                        // }else{
-                                        //   store_server_user_model.server_login_model_of_apikey = false
-                                        // }
-                                        store_server_user_model.server_login_model_of_apikey = false
-                                      }"
+                            if(item.type != 'ninesong'){
+                              item.show = !item.show;
+                              // if(item.type === 'jellyfin' || item.type === 'emby'){
+                              //   store_server_user_model.server_login_model_of_apikey = true
+                              //   server_set_of_addUser_of_apikey = item.user_name
+                              //   update_server_apikey_user_option({
+                              //     servername: item.server_name,
+                              //     url: item.url,
+                              //     apikey: item.user_name,
+                              //     userid: item.password,
+                              //     init: false
+                              //   });
+                              // }else{
+                              //   store_server_user_model.server_login_model_of_apikey = false
+                              // }
+                              store_server_user_model.server_login_model_of_apikey = false
+                            }
+                          }"
                           style="
                             width: 230px;
                             height: 54px;
@@ -1087,6 +1089,7 @@ import {
             <n-radio-button
                 style="text-align: center;width: 133px;"
                 :key="Type_Server_Kinds[0].value"
+                disabled
                 :value="Type_Server_Kinds[0].value"
                 :label="Type_Server_Kinds[0].label"
             />

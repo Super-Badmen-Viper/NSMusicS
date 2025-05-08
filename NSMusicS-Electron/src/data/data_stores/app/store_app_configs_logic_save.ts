@@ -36,7 +36,7 @@ export const store_app_configs_logic_save = reactive({
         return id;
     },
     async save_system_config_of_App_Configs() {
-        if(store_app_configs_logic_load.app_configs_loading) {
+        if(!store_app_configs_logic_load.app_configs_loading) {
             const app_Configs = ref(
                 new App_Configs({
                     theme: store_app_configs_info.theme_name,

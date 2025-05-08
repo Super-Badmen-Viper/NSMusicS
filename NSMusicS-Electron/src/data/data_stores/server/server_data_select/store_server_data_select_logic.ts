@@ -5,6 +5,8 @@ import {
 import {Set_ServerInfo_To_LocalSqlite} from "../../../data_access/local_configs/class_Set_ServerInfo_To_LocalSqlite";
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {store_server_jellyfin_userdata_logic} from "./server_jellyfin_user_data/store_server_jellyfin_userdata_logic";
+import {isElectron} from "../../../../utils/electron/isElectron";
+import {store_server_ninesong_userdata_logic} from "./server_ninesong_user_data/store_server_ninesong_userdata_logic";
 
 export const store_server_data_select_logic = reactive({
     /// server add
@@ -81,8 +83,15 @@ export const store_server_data_select_logic = reactive({
         id: string
     ) {
         try {
-            let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
-            set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_DeleteUser(id);
+            if(isElectron) {
+                let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
+                set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_DeleteUser(id);
+            }else{
+                let result = await store_server_ninesong_userdata_logic.delete_app_configs_server(id)
+                if(!result){
+                    return false
+                }
+            }
             const new_data: Server_Configs_Props[] = store_server_users.server_config_of_all_user_of_sqlite;
             const index = new_data.findIndex(item => item.id === id);
             new_data.splice(index, 1);

@@ -839,7 +839,7 @@ onBeforeUnmount(() => {
                   width: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
                   height: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
                   minHeight: '280px',
-                  WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 100%)'
+                  WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, 1) 100%)'
                 }"
                 style="
                   margin-left: 200px;transform: translateY(-25%);
@@ -858,12 +858,12 @@ onBeforeUnmount(() => {
                 margin-left: 10px;
                 margin-bottom: 20px;">
               <template #title>
-                <n-space vertical align="start" style="height: 280px;margin-left: 20px;">
-                  <n-space style="margin-top: 10px;margin-left: 11px;">
-                    <div style="font-size: 36px;font-weight: 600;">
+                <n-space vertical align="start" style="height: 280px;margin-left: 12px;">
+                  <n-space style="margin-top: 26px;margin-left: 11px;">
+                    <div style="font-size: 32px;font-weight: 600;">
                       {{ $t('entity.album_other')}}
                     </div>
-                    <div style="font-size: 36px;font-weight: 600;margin-top: -2px">
+                    <div style="font-size: 32px;font-weight: 600;margin-top: -2px">
                       {{" | "}}
                     </div>
                     <div
@@ -871,24 +871,27 @@ onBeforeUnmount(() => {
                         maxWidth: 'calc(100vw - ' + (collapsed_width + 540) + 'px)'
                       }"
                       style="
-                        text-align: left;cursor: pointer;
-                        font-size: 36px;font-weight: 600;
-                        display: -webkit-box;
-                        -webkit-box-orient: vertical;
-                        -webkit-line-clamp: 1;
-                        overflow: hidden;
-                        text-overflow: ellipsis;"
+                      text-align: left;cursor: pointer;
+                      font-size: 32px;font-weight: 600;
+                      display: -webkit-box;
+                      -webkit-box-orient: vertical;
+                      -webkit-line-clamp: 1;
+                      overflow: hidden;
+                      text-overflow: ellipsis;"
                       @click="() => {
-                      if(store_server_user_model.model_server_type_of_local) {
-                        handleItemClick_album(store_player_audio_info.page_top_album_id)
-                      }else if(store_server_user_model.model_server_type_of_web) {
-                        handleItemClick_album(store_player_audio_info.page_top_album_name)
-                      }
-                    }">
+                        if(store_server_user_model.model_server_type_of_local) {
+                          handleItemClick_album(store_player_audio_info.page_top_album_id)
+                        }else if(store_server_user_model.model_server_type_of_web) {
+                          handleItemClick_album(store_player_audio_info.page_top_album_name)
+                        }
+                      }">
                       {{ store_player_audio_info.page_top_album_name }}
                     </div>
                   </n-space>
-                  <n-space style="margin-top: 4px;">
+                  <n-space align="center" style="margin-top: 2px;margin-left: 11px;">
+                    <div style="color: #767C82;font-size: 15px;font-weight: 600;">
+                      {{ $t('GuideProviderSelectListings') + ' >'}}
+                    </div>
                     <n-tooltip trigger="hover" placement="top">
                       <template #trigger>
                         <n-select
@@ -899,10 +902,10 @@ onBeforeUnmount(() => {
                       {{ $t('Select') + $t('LabelPlaylist') }}
                     </n-tooltip>
                   </n-space>
-                  <n-space vertical style="margin-top: 12px;margin-left: 7px;">
+                  <n-space vertical style="margin-top: 10px;margin-left: 7px;">
                     <n-grid
                         :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
-                        style="margin-left: 4px;width: 336px;">
+                        style="margin-left: 4px;width: 386px;">
                       <n-gi v-for="albumlist in page_albumlists_statistic" :key="albumlist.id">
                         <n-statistic :label="albumlist.label" :value="albumlist.album_count" />
                       </n-gi>
