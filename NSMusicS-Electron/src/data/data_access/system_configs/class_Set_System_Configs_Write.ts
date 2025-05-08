@@ -1,6 +1,6 @@
-import { App_Configs } from '../../data_models/app_models/app_Configs/class_App_Configs';
-import { Player_Configs_of_Audio_Info } from '../../data_models/app_models/app_Configs/class_Player_Configs_of_Audio_Info';
-import { Player_Configs_of_UI } from '../../data_models/app_models/app_Configs/class_Player_Configs_of_UI';
+import { App_Configs } from '@/data/data_models/app_models/app_Configs/class_App_Configs';
+import { Player_Configs_of_Audio_Info } from '@/data/data_models/app_models/app_Configs/class_Player_Configs_of_Audio_Info';
+import { Player_Configs_of_UI } from '@/data/data_models/app_models/app_Configs/class_Player_Configs_of_UI';
 
 export class Class_Set_System_Configs_Write {
     system_app_config(

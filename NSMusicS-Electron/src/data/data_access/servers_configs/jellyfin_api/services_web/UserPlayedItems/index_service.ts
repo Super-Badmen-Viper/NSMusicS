@@ -1,6 +1,6 @@
 import {Jellyfin_Api_Services_Web} from "../Jellyfin_Api_Services_Web";
-import {store_server_users} from "../../../../../data_stores/server/store_server_users";
-import {store_server_user_model} from "../../../../../data_stores/server/store_server_user_model";
+import {store_server_users} from "@/data/data_stores/server/store_server_users";
+import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 import {Items_ApiService_of_Je} from "../Items/index_service";
 
 export class UserPlayedItems_ApiService_of_Je extends Jellyfin_Api_Services_Web {

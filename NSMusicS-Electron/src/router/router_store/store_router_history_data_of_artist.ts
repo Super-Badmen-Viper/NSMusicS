@@ -1,7 +1,7 @@
 import {reactive, watch} from 'vue'
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
 import {store_router_data_info} from "@/router/router_store/store_router_data_info";
-import {store_view_artist_page_fetchData} from "../../views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_fetchData";
+import {store_general_fetch_artist_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_artist/store_general_fetch_artist_list";
 import {store_router_history_data_of_album} from "./store_router_history_data_of_album";
 
 export const store_router_history_data_of_artist = reactive({
@@ -28,7 +28,7 @@ export const store_router_history_data_of_artist = reactive({
                     const selectedRouterName = this.router_select_history_date_of_Artist.router_name;
                     if (selectedRouterName === 'artist') {
                         store_router_data_info.router_select_model_artist = true;
-                        store_view_artist_page_fetchData.fetchData_Artist();
+                        store_general_fetch_artist_list.fetchData_Artist();
                         this.router_history_model_of_Artist_scroll = true;
                     }
                 }

@@ -1,13 +1,13 @@
 import {reactive} from 'vue'
 import {store_router_data_info} from "@/router/router_store/store_router_data_info";
-import {store_view_home_page_info} from "../../views/view_app/page_metadata/page_folder/page_music/music_page/page_home/store/store_view_home_page_info";
-import {store_view_media_page_info} from "../../views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
-import {store_view_album_page_info} from "../../views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_info";
-import {store_view_artist_page_info} from "../../views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_info"
-import {store_view_media_page_logic} from "../../views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
+import {store_view_home_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_home/store/store_view_home_page_info";
+import {store_view_media_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
+import {store_view_album_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_info";
+import {store_view_artist_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_info"
+import {store_view_media_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
 import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
-import {store_view_album_page_logic} from "../../views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_logic"
-import {store_view_artist_page_logic} from "../../views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_logic"
+import {store_view_album_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_logic"
+import {store_view_artist_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_logic"
 import {store_router_history_data_of_media} from "@/router/router_store/store_router_history_data_of_media";
 import {store_router_history_data_of_album} from "@/router/router_store/store_router_history_data_of_album";
 import {store_router_history_data_of_artist} from "@/router/router_store/store_router_history_data_of_artist";
@@ -15,12 +15,12 @@ import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_con
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 import {
     Get_Navidrome_Temp_Data_To_LocalSqlite
-} from "../../data/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
+} from "@/data/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import { isElectron } from '@/utils/electron/isElectron';
 import {
     Get_Jellyfin_Temp_Data_To_LocalSqlite
-} from "../../data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
+} from "@/data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
 
 export const store_router_data_logic = reactive({
     reset_data(){

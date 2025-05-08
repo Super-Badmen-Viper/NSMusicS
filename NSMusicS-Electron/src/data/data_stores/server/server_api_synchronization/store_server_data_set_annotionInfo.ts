@@ -1,7 +1,7 @@
 import {reactive} from 'vue'
 import {
     Media_Annotation_ApiService_of_ND
-} from "../../../data_access/servers_configs/navidrome_api/services_normal/media_annotation/index_service";
+} from "@/data/data_access/servers_configs/navidrome_api/services_normal/media_annotation/index_service";
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 

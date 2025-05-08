@@ -296,7 +296,7 @@ const handleMpvStopped = debounce(async (event, args) => {
   if (store_server_user_model.model_server_type_of_local) {
     last_play = index >= store_playlist_list_info.playlist_MediaFiles_temporary.length - 1;
   } else if (store_server_user_model.model_server_type_of_web) {
-    last_play = index >= store_playlist_list_fetchData._totalCount - 1;
+    last_play = index >= store_general_fetch_player_list._totalCount - 1;
   }
   if (last_play && store_player_audio_logic.play_order === 'playback-1') {
     await store_player_audio_logic.player.pause();
@@ -475,17 +475,17 @@ async function Play_Media_Order(model_num: string, increased: number) {
     if(!store_server_user_model.random_play_model) {
       if(store_playlist_list_info.playlist_MediaFiles_temporary.length >= 30) {
         // web获取的该列表项总数，触底加载不刷新
-        if (store_playlist_list_fetchData._totalCount != undefined) {
-          if (store_playlist_list_fetchData._totalCount < store_playlist_list_info.playlist_MediaFiles_temporary.length) {
-            store_playlist_list_fetchData._totalCount = store_playlist_list_info.playlist_MediaFiles_temporary.length
+        if (store_general_fetch_player_list._totalCount != undefined) {
+          if (store_general_fetch_player_list._totalCount < store_playlist_list_info.playlist_MediaFiles_temporary.length) {
+            store_general_fetch_player_list._totalCount = store_playlist_list_info.playlist_MediaFiles_temporary.length
           }
         } else {
-          store_playlist_list_fetchData._totalCount = store_playlist_list_info.playlist_MediaFiles_temporary.length
+          store_general_fetch_player_list._totalCount = store_playlist_list_info.playlist_MediaFiles_temporary.length
         }
       }else{
-        store_playlist_list_fetchData._totalCount = store_playlist_list_info.playlist_MediaFiles_temporary.length
+        store_general_fetch_player_list._totalCount = store_playlist_list_info.playlist_MediaFiles_temporary.length
       }
-      last_index = store_playlist_list_fetchData._totalCount;
+      last_index = store_general_fetch_player_list._totalCount;
     }else{
       // web随机获取，设置为固定10项，触底加载刷新+10
       last_index = store_playlist_list_info.playlist_MediaFiles_temporary.length
@@ -550,9 +550,9 @@ async function Play_Media_Order(model_num: string, increased: number) {
                   30, '', ''
               )
             }else{
-              store_view_media_page_fetchData._load_model = 'play'
-              await store_view_media_page_fetchData.fetchData_Media_of_server_web_start()
-              store_view_media_page_fetchData._load_model = 'search'
+              store_general_fetch_media_list._load_model = 'play'
+              await store_general_fetch_media_list.fetchData_Media_of_server_web_start()
+              store_general_fetch_media_list._load_model = 'search'
               ///
               const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[index]
               await store_player_audio_logic.update_current_media_info(media_file, index)
@@ -574,9 +574,9 @@ async function Play_Media_Order(model_num: string, increased: number) {
         if (!stop_play) {
           if (store_server_user_model.model_server_type_of_web) {
             if (index >= store_playlist_list_info.playlist_MediaFiles_temporary.length) {
-              store_view_media_page_fetchData._load_model = 'play'
-              await store_view_media_page_fetchData.fetchData_Media_of_server_web_end();
-              store_view_media_page_fetchData._load_model = 'search'
+              store_general_fetch_media_list._load_model = 'play'
+              await store_general_fetch_media_list.fetchData_Media_of_server_web_end();
+              store_general_fetch_media_list._load_model = 'search'
             }
           }
           const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[index]
@@ -728,7 +728,7 @@ import {store_view_media_page_logic} from "@/views/view_app/page_metadata/page_f
 import {store_local_data_set_mediaInfo} from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_mediaInfo";
 import {store_playlist_list_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_logic";
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
-import {store_playlist_list_fetchData} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_fetchData";
+import {store_general_fetch_player_list} from "@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list";
 import {Audio_howler} from "@/data/data_models/app_models/song_Audio_Out/Audio_howler";
 import {Audio_node_mpv} from "@/data/data_models/app_models/song_Audio_Out/Audio_node_mpv";
 import {store_player_tag_modify} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_tag_modify";
@@ -739,8 +739,8 @@ import {
 } from "@/data/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {
-  store_view_media_page_fetchData
-} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_fetchData";
+  store_general_fetch_media_list
+} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list";
 
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   if(id != null && id.length > 0 && id != 'undefined') {

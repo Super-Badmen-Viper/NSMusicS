@@ -29,8 +29,8 @@ import {store_view_album_page_logic} from "@/views/view_app/page_metadata/page_f
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
 import {store_router_history_data_of_artist} from "@/router/router_store/store_router_history_data_of_artist";
 import {
-  store_view_artist_page_fetchData
-} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_fetchData";
+  store_general_fetch_artist_list
+} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_artist/store_general_fetch_artist_list";
 
 ////// i18n auto lang
 import {useI18n} from 'vue-i18n'
@@ -46,8 +46,8 @@ import {store_view_media_page_info} from "@/views/view_app/page_metadata/page_fo
 ////// right menu
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 import {
-  store_view_media_page_fetchData
-} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_fetchData";
+  store_general_fetch_media_list
+} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list";
 import {
   store_local_data_set_mediaInfo
 } from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_mediaInfo";
@@ -56,11 +56,11 @@ import {
 } from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_logic";
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 import {
-  store_view_album_page_fetchData
-} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_fetchData";
+  store_general_fetch_album_list
+} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list";
 import {
-  store_playlist_list_fetchData
-} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_fetchData";
+  store_general_fetch_player_list
+} from "@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list";
 import {store_player_tag_modify} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_tag_modify";
 import {store_player_audio_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
@@ -385,9 +385,9 @@ const get_router_history_model_next = () =>  {
 ////// go to media_view
 const Open_this_artist_all_artist_list_click = (artist_id:string) => {
   if(store_server_user_model.model_server_type_of_web){
-    store_view_media_page_fetchData.set_artist_id(artist_id)
+    store_general_fetch_media_list.set_artist_id(artist_id)
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
-    store_view_album_page_fetchData.set_artist_id(artist_id)
+    store_general_fetch_album_list.set_artist_id(artist_id)
     store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
   }
   if(
@@ -404,14 +404,14 @@ const Open_this_artist_all_artist_list_click = (artist_id:string) => {
 }
 const Play_this_artist_all_media_list_click = async (artist_id: string) => {
   if(store_server_user_model.model_server_type_of_web){
-    store_view_media_page_fetchData.set_artist_id(artist_id)
+    store_general_fetch_media_list.set_artist_id(artist_id)
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
-    store_view_album_page_fetchData.set_artist_id(artist_id)
+    store_general_fetch_album_list.set_artist_id(artist_id)
     store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
     store_server_user_model.random_play_model = false;
   }
   console.log('play_this_artist_song_list：' + artist_id);
-  await store_view_artist_page_fetchData.fetchData_This_Artist_MediaList(artist_id)
+  await store_general_fetch_artist_list.fetchData_This_Artist_MediaList(artist_id)
   store_playlist_list_info.reset_carousel()
 }
 
@@ -440,7 +440,7 @@ const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
 const message = useMessage()
 async function update_playlist_addArtist(id: any, playlist_id: any){
   try{
-    await store_view_media_page_fetchData.fetchData_Media_Find_This_Artist(id)
+    await store_general_fetch_media_list.fetchData_Media_Find_This_Artist(id)
     const matchingIds: string[] = [];
     store_view_media_page_info.media_Files_temporary.forEach((item: Media_File) => {
       if (item.artist_id === id) {
@@ -460,7 +460,7 @@ async function update_playlist_addArtist(id: any, playlist_id: any){
   }
 }
 async function menu_item_add_to_playlist_end() {
-  await store_view_media_page_fetchData.fetchData_Media_Find_This_Artist(store_playlist_list_info.playlist_Menu_Item_Id);
+  await store_general_fetch_media_list.fetchData_Media_Find_This_Artist(store_playlist_list_info.playlist_Menu_Item_Id);
   const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
       (item: Media_File) => item.artist_id === store_playlist_list_info.playlist_Menu_Item_Id
   );
@@ -481,7 +481,7 @@ async function menu_item_add_to_playlist_end() {
   contextmenu.value.hide()
 }
 async function menu_item_add_to_playlist_next() {
-  await store_view_media_page_fetchData.fetchData_Media_Find_This_Artist(store_playlist_list_info.playlist_Menu_Item_Id);
+  await store_general_fetch_media_list.fetchData_Media_Find_This_Artist(store_playlist_list_info.playlist_Menu_Item_Id);
   const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
       (item: Media_File) => item.artist_id === store_playlist_list_info.playlist_Menu_Item_Id
   );
@@ -529,7 +529,7 @@ const onScrollEnd = async () => {
   if (isScrolling.value) return;
   isScrolling.value = true;
   if (store_server_user_model.model_server_type_of_web) {
-    await store_view_artist_page_fetchData.fetchData_Artist_of_server_web_end()
+    await store_general_fetch_artist_list.fetchData_Artist_of_server_web_end()
   }
   isScrolling.value = false;
 };
@@ -540,12 +540,12 @@ const onScroll = async () => {
 //////
 const onRefreshSharp = async () => {
   if(store_server_user_model.model_server_type_of_web){
-    store_view_artist_page_fetchData.fetchData_Artist_of_server_web_start()
+    store_general_fetch_artist_list.fetchData_Artist_of_server_web_start()
   }else if(store_server_user_model.model_server_type_of_local){
     input_search_InstRef.value?.clear()
     bool_show_search_area.value = false
     store_view_artist_page_logic.page_artistlists_keyword = ""
-    store_view_artist_page_fetchData.fetchData_Artist()
+    store_general_fetch_artist_list.fetchData_Artist()
   }
 }
 
@@ -767,8 +767,8 @@ onBeforeUnmount(() => {
                     <div style="font-size: 32px;font-weight: 600;">
                       {{ $t('entity.artist_other')}}
                     </div>
-                    <div style="font-size: 32px;font-weight: 600;margin-top: -2px">
-                      {{" | "}}
+                    <div v-if="store_player_audio_info.this_audio_artist_name.length > 0" style="font-size: 32px;font-weight: 600;margin-top: -2px">
+                      {{" : "}}
                     </div>
                     <div
                       :style="{

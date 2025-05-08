@@ -1,7 +1,7 @@
 import { reactive, watch } from 'vue';
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic';
 import { store_router_data_info } from '@/router/router_store/store_router_data_info';
-import { store_view_media_page_fetchData } from "../../views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_fetchData";
+import { store_general_fetch_media_list } from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list";
 
 export const store_router_history_data_of_media = reactive({
     router_history_model_of_Media_scroll: false,
@@ -32,7 +32,7 @@ export const store_router_history_data_of_media = reactive({
         const selectedRouterName = this.router_select_history_date_of_Media.router_name;
         if (selectedRouterName === 'song') {
             store_router_data_info.router_select_model_media = true;
-            await store_view_media_page_fetchData.fetchData_Media();
+            await store_general_fetch_media_list.fetchData_Media();
             this.router_history_model_of_Media_scroll = true;
         }
     },

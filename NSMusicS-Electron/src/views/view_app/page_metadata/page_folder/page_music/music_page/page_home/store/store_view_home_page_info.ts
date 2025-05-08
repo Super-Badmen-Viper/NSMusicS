@@ -1,8 +1,5 @@
 import {reactive, watch} from 'vue'
 import error_album from "@/assets/img/error_album.jpg";
-import {store_view_home_page_fetchData} from "./store_view_home_page_fetchData";
-import {store_view_media_page_logic} from "../../page_media/store/store_view_media_page_logic";
-import {store_view_home_page_logic} from "./store_view_home_page_logic";
 
 export const store_view_home_page_info = reactive({
     home_Files_temporary_maximum_playback: [],

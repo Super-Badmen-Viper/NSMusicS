@@ -1,11 +1,11 @@
 import {reactive, watch} from 'vue'
-import {store_view_home_page_fetchData} from "../../views/view_app/page_metadata/page_folder/page_music/music_page/page_home/store/store_view_home_page_fetchData";
-import {store_view_media_page_fetchData} from "../../views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_fetchData";
-import {store_view_album_page_fetchData} from "../../views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_fetchData";
-import {store_view_artist_page_fetchData} from "../../views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_fetchData";
+import {store_general_fetch_home_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_home/store_general_fetch_home_list";
+import {store_general_fetch_media_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list";
+import {store_general_fetch_album_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list";
+import {store_general_fetch_artist_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_artist/store_general_fetch_artist_list";
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
-import {store_playlist_appearance} from "../../views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_appearance";
+import {store_playlist_appearance} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_appearance";
 
 export const store_router_data_info = reactive({
     router: null,
@@ -37,13 +37,13 @@ watch(() => store_router_data_info.router_select, async (newValue) => {
     if(!store_playlist_appearance.playlist_show) {
         if (newValue === 'home') {
             store_router_data_info.router_select_model_home = true
-            store_view_home_page_fetchData.fetchData_Home()
+            store_general_fetch_home_list.fetchData_Home()
         } else if (newValue === 'categories') {
             store_router_data_info.router_select_model_categories = true
-            store_view_home_page_fetchData.fetchData_Home()
+            store_general_fetch_home_list.fetchData_Home()
         } else if (newValue === 'song') {
             store_router_data_info.router_select_model_media = true
-            await store_view_media_page_fetchData.fetchData_Media()
+            await store_general_fetch_media_list.fetchData_Media()
             /// Synchronize API data
             if (store_server_user_model.model_select === 'server') {
                 // get server all playlist
@@ -51,10 +51,10 @@ watch(() => store_router_data_info.router_select, async (newValue) => {
             }
         } else if (newValue === 'album') {
             store_router_data_info.router_select_model_album = true
-            store_view_album_page_fetchData.fetchData_Album()
+            store_general_fetch_album_list.fetchData_Album()
         } else if (newValue === 'artist') {
             store_router_data_info.router_select_model_artist = true
-            store_view_artist_page_fetchData.fetchData_Artist()
+            store_general_fetch_artist_list.fetchData_Artist()
         }
     }
 });

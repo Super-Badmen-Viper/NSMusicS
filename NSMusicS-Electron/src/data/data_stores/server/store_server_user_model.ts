@@ -3,36 +3,36 @@ import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_con
 import {store_router_data_info} from "@/router/router_store/store_router_data_info";
 import {
     Set_Navidrome_ALL_Data_To_LocalSqlite
-} from "../../data_access/servers_configs/navidrome_api/services_normal_middleware/class_Set_Navidrome_ALL_Data_To_LocalSqlite";
+} from "@/data/data_access/servers_configs/navidrome_api/services_normal_middleware/class_Set_Navidrome_ALL_Data_To_LocalSqlite";
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
-import {store_playlist_list_info} from "../../../views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info"
-import {store_player_audio_info} from "../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_info";
+import {store_playlist_list_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info"
+import {store_player_audio_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_info";
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
-import {store_playlist_list_logic} from "../../../views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_logic"
+import {store_playlist_list_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_logic"
 import {store_app_configs_logic_load} from "@/data/data_stores/app/store_app_configs_logic_load";
 import {
     User_Authorization_ApiWebService_of_ND
-} from "../../data_access/servers_configs/navidrome_api/services_web/user_authorization/index_service";
-import {store_player_audio_logic} from "../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
-import {Audio_node_mpv} from "../../data_models/app_models/song_Audio_Out/Audio_node_mpv";
-import {Audio_howler} from "../../data_models/app_models/song_Audio_Out/Audio_howler";
+} from "@/data/data_access/servers_configs/navidrome_api/services_web/user_authorization/index_service";
+import {store_player_audio_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
+import {Audio_node_mpv} from "@/data/data_models/app_models/song_Audio_Out/Audio_node_mpv";
+import {Audio_howler} from "@/data/data_models/app_models/song_Audio_Out/Audio_howler";
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 import {
     Get_Jellyfin_Temp_Data_To_LocalSqlite
-} from "../../data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
+} from "@/data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
 import {
     store_view_media_page_logic
-} from "../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
+} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
 import {
     store_view_album_page_logic
-} from "../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_logic";
+} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_logic";
 import {
     store_view_artist_page_logic
-} from "../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_logic";
-import {Users_ApiService_of_Je} from "../../data_access/servers_configs/jellyfin_api/services_web/Users/index_service";
+} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_logic";
+import {Users_ApiService_of_Je} from "@/data/data_access/servers_configs/jellyfin_api/services_web/Users/index_service";
 import {
     Library_ApiService_of_Je
-} from "../../data_access/servers_configs/jellyfin_api/services_web/Library/index_service";
+} from "@/data/data_access/servers_configs/jellyfin_api/services_web/Library/index_service";
 
 export const store_server_user_model = reactive({
     model_select: 'server',

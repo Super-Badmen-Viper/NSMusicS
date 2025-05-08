@@ -1,6 +1,6 @@
 import {reactive, watch} from 'vue'
 import {store_router_history_data_of_artist} from "@/router/router_store/store_router_history_data_of_artist";
-import {store_view_artist_page_fetchData} from "./store_view_artist_page_fetchData";
+import {store_general_fetch_artist_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_artist/store_general_fetch_artist_list";
 
 export const store_view_artist_page_logic = reactive({
     list_data_StartUpdate: false,
@@ -18,7 +18,7 @@ watch(() => store_view_artist_page_logic.page_artistlists_options_Sort_key, (new
     if (newValue != null) {
         store_view_artist_page_logic.page_artistlists_keyword = '';
         store_router_history_data_of_artist.fix_router_history_of_Artist_scroller_value(store_router_history_data_of_artist.router_history_model_of_Artist_scroller_value) // 保留此滚轮值(上次浏览位置)
-        store_view_artist_page_fetchData.fetchData_Artist()
+        store_general_fetch_artist_list.fetchData_Artist()
     }
 });
 watch(() => store_view_artist_page_logic.page_artistlists_keyword, (newValue) => {
@@ -40,16 +40,16 @@ watch(() => store_view_artist_page_logic.page_artistlists_keyword, (newValue) =>
     store_view_artist_page_logic.page_artistlists_keyword_reset = true;
     console.log('page_artistlists_keyword:' + newValue)
 
-    store_view_artist_page_fetchData.fetchData_Artist()
+    store_general_fetch_artist_list.fetchData_Artist()
 });
 watch(() => store_view_artist_page_logic.page_artistlists_selected, (newValue) => {
     console.log('page_artistlists_selected：'+newValue)
-    store_view_artist_page_fetchData.fetchData_Artist()
+    store_general_fetch_artist_list.fetchData_Artist()
 });
 watch(() => store_view_artist_page_logic.list_data_StartUpdate, (newValue) => {
     if(newValue) {
         store_view_artist_page_logic.page_artistlists_keyword = '';
-        store_view_artist_page_fetchData.fetchData_Artist()
+        store_general_fetch_artist_list.fetchData_Artist()
 
         store_router_history_data_of_artist.router_history_datas_of_Artist = [];
         if (store_router_history_data_of_artist.router_select_history_date_of_Artist) {

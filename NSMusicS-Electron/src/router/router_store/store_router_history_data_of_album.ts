@@ -1,7 +1,7 @@
 import {reactive, watch} from 'vue'
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
 import {store_router_data_info} from "@/router/router_store/store_router_data_info";
-import {store_view_album_page_fetchData} from "../../views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_fetchData";
+import {store_general_fetch_album_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list";
 
 export const store_router_history_data_of_album = reactive({
     router_history_model_of_Album_scroll: false,
@@ -27,7 +27,7 @@ export const store_router_history_data_of_album = reactive({
                     const selectedRouterName = this.router_select_history_date_of_Album.router_name;
                     if (selectedRouterName === 'album') {
                         store_router_data_info.router_select_model_album = true;
-                        store_view_album_page_fetchData.fetchData_Album();
+                        store_general_fetch_album_list.fetchData_Album();
                         this.router_history_model_of_Album_scroll = true;
                     }
                 }

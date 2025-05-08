@@ -1,10 +1,10 @@
 import {reactive, watch} from 'vue'
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
-import {store_view_media_page_info} from "../../page_media/store/store_view_media_page_info";
-import {store_view_album_page_info} from "../../page_album/store/store_view_album_page_info";
+import {store_view_media_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
+import {store_view_album_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_info";
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
-import {Browsing_ApiService_of_ND} from "../../../../../../../../data/data_access/servers_configs/navidrome_api/services_normal/browsing/index_service";
-import {store_view_artist_page_info} from "../../page_artist/store/store_view_artist_page_info"
+import {Browsing_ApiService_of_ND} from "@/data/data_access/servers_configs/navidrome_api/services_normal/browsing/index_service";
+import {store_view_artist_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_info"
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 
 export const store_player_tag_modify = reactive({

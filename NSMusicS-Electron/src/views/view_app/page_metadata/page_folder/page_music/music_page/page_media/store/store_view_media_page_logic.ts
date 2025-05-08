@@ -1,18 +1,18 @@
 import {reactive, watch} from 'vue'
-import {store_playlist_list_logic} from "../../../music_components/player_list/store/store_playlist_list_logic"
-import {Set_LibraryInfo_To_LocalSqlite} from "../../../../../../../../data/data_access/local_configs/class_Set_LibraryInfo_To_LocalSqlite";
+import {store_playlist_list_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_logic"
+import {Set_LibraryInfo_To_LocalSqlite} from "@/data/data_access/local_configs/class_Set_LibraryInfo_To_LocalSqlite";
 import {store_view_media_page_info} from "./store_view_media_page_info";
 import {store_router_history_data_of_media} from "@/router/router_store/store_router_history_data_of_media";
-import {store_view_media_page_fetchData} from "./store_view_media_page_fetchData";
+import {store_general_fetch_media_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list";
 import {store_router_data_info} from "@/router/router_store/store_router_data_info";
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 import {store_local_data_set_annotionInfo} from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_annotionInfo";
 import {store_local_data_set_playlistInfo} from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_playlistInfo";
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
-import {store_server_data_set_playlistInfo} from "@/data/data_stores/server/server_data_synchronization/store_server_data_set_playlistInfo";
-import {store_server_data_set_mediaInfo} from "@/data/data_stores/server/server_data_synchronization/store_server_data_set_mediaInfo";
-import {store_player_appearance} from "../../page_player/store/store_player_appearance";
-import {store_server_users} from "../../../../../../../../data/data_stores/server/store_server_users";
+import {store_server_data_set_playlistInfo} from "@/data/data_stores/server/server_api_synchronization/store_server_data_set_playlistInfo";
+import {store_server_data_set_mediaInfo} from "@/data/data_stores/server/server_api_synchronization/store_server_data_set_mediaInfo";
+import {store_player_appearance} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_appearance";
+import {store_server_users} from "@/data/data_stores/server/store_server_users";
 
 export const store_view_media_page_logic = reactive({
     list_data_StartUpdate: false,
@@ -188,7 +188,7 @@ export const store_view_media_page_logic = reactive({
         console.log('page_songlists_keyword:' + newValue)
 
         store_router_data_info.router.push('song')
-        store_view_media_page_fetchData.fetchData_Media()
+        store_general_fetch_media_list.fetchData_Media()
     },
     async get_page_songlists_selected(newValue: any){
         this.page_songlists_selected = newValue
@@ -200,7 +200,7 @@ export const store_view_media_page_logic = reactive({
             }
             store_view_media_page_logic.list_selected_Hand_click = false
             console.log('page_songlists_selected：' + newValue)
-            await store_view_media_page_fetchData.fetchData_Media()
+            await store_general_fetch_media_list.fetchData_Media()
             await store_app_configs_logic_save.save_system_config_of_Player_Configs_of_Audio_Info()
             store_app_configs_logic_save.save_system_config_of_View_Router_History()
             store_view_media_page_logic.page_songlists_keyword = '';
@@ -216,7 +216,7 @@ watch(() => store_view_media_page_logic.page_songlists_options_Sort_key, async (
     if (newValue != null && store_view_media_page_logic.list_options_Hand_Sort) {
         store_view_media_page_logic.list_options_Hand_Sort = false
         store_router_history_data_of_media.fix_router_history_of_Media_scroller_value(store_router_history_data_of_media.router_history_model_of_Media_scroller_value) // 保留此滚轮值(上次浏览位置)
-        store_view_media_page_fetchData.fetchData_Media()
+        store_general_fetch_media_list.fetchData_Media()
     }
 });
 watch(() => store_view_media_page_logic.list_data_StartUpdate, async (newValue) => {
@@ -226,7 +226,7 @@ watch(() => store_view_media_page_logic.list_data_StartUpdate, async (newValue) 
             store_view_media_page_logic.page_songlists_keywordFilter = ""
         }
         store_router_data_info.find_music_model = false;
-        store_view_media_page_fetchData.fetchData_Media()
+        store_general_fetch_media_list.fetchData_Media()
 
         store_router_history_data_of_media.router_history_datas_of_Media = [];
         if(store_router_history_data_of_media.router_select_history_date_of_Media){
@@ -243,12 +243,12 @@ watch(() => store_view_media_page_logic.page_songlists_filter_year, async (newVa
     store_app_configs_logic_save.save_system_config_of_App_Configs()
     store_view_media_page_logic.page_songlists_keywordFilter = ""
     store_view_media_page_logic.list_selected_Hand_click = false
-    await store_view_media_page_fetchData.fetchData_Media()
+    await store_general_fetch_media_list.fetchData_Media()
 });
 watch(() => store_view_media_page_logic.page_songlists_filter_path_folder, async (newValue) => {
     store_view_media_page_logic.page_songlists_filter_model = newValue !== ''
     store_app_configs_logic_save.save_system_config_of_App_Configs()
     store_view_media_page_logic.page_songlists_keywordFilter = ""
     store_view_media_page_logic.list_selected_Hand_click = false
-    await store_view_media_page_fetchData.fetchData_Media()
+    await store_general_fetch_media_list.fetchData_Media()
 });

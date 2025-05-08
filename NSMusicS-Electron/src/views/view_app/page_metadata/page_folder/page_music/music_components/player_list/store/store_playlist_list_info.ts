@@ -1,7 +1,6 @@
 import {reactive, watch} from 'vue'
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
-import {store_playlist_list_fetchData} from "@/views/view_app/music_components/player_list/store/store_playlist_list_fetchData";
-import {store_player_audio_info} from "../../../music_page/page_player/store/store_player_audio_info";
+import {store_player_audio_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_info";
 
 export const store_playlist_list_info = reactive({
     playlist_names_ALLLists: [],

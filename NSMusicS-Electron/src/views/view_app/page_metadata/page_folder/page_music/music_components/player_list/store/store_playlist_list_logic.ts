@@ -2,16 +2,16 @@ import { reactive, ref } from 'vue'
 import {store_playlist_list_info} from "./store_playlist_list_info"
 import {
     Get_PlaylistInfo_From_LocalSqlite
-} from "../../../../../../../../data/data_access/local_configs/class_Get_PlaylistInfo_From_LocalSqlite";
+} from "@/data/data_access/local_configs/class_Get_PlaylistInfo_From_LocalSqlite";
 import {
     store_local_data_set_playlistInfo
 } from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_playlistInfo";
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import axios from "axios";
-import {store_view_media_page_info} from "../../../music_page/page_media/store/store_view_media_page_info";
-import {store_player_audio_logic} from "../../../music_page/page_player/store/store_player_audio_logic";
-import {store_player_audio_info} from "../../../music_page/page_player/store/store_player_audio_info";
+import {store_view_media_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
+import {store_player_audio_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
+import {store_player_audio_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_info";
 
 export const store_playlist_list_logic = reactive({
     async reset_data() {

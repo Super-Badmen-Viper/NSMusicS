@@ -2,10 +2,10 @@ import { reactive } from "vue";
 import { store_router_data_info } from "@/router/router_store/store_router_data_info";
 import axios from "axios";
 import {store_server_login_info} from "./store_server_login_info";
-import {store_app_configs_info} from "../../../../../data/data_stores/app/store_app_configs_info";
+import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
 import {
-    store_view_home_page_fetchData
-} from "../../../../view_app/page_metadata/page_folder/page_music/music_page/page_home/store/store_view_home_page_fetchData";
+    store_general_fetch_home_list
+} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_home/store_general_fetch_home_list";
 
 export const store_server_login_logic = reactive({
     jwt_expire_time: 24 * 60 * 60 * 1000,// 24小时
@@ -32,7 +32,7 @@ export const store_server_login_logic = reactive({
 
                             store_router_data_info.router_select_model_server_login = false;
                             await store_app_configs_info.load_app();
-                            store_view_home_page_fetchData.fetchData_Home();
+                            store_general_fetch_home_list.fetchData_Home();
                             console.log("已登录: " + store_server_login_info.server_accessToken);
                             return true;
                         } else {

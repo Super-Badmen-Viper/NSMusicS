@@ -1,10 +1,10 @@
 import {reactive, watch} from 'vue'
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 import { isElectron } from '@/utils/electron/isElectron';
-import {Users_ApiService_of_Je} from "../../data_access/servers_configs/jellyfin_api/services_web/Users/index_service";
+import {Users_ApiService_of_Je} from "@/data/data_access/servers_configs/jellyfin_api/services_web/Users/index_service";
 import {
     Library_ApiService_of_Je
-} from "../../data_access/servers_configs/jellyfin_api/services_web/Library/index_service";
+} from "@/data/data_access/servers_configs/jellyfin_api/services_web/Library/index_service";
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
 import {
     store_server_navidrome_userdata_logic

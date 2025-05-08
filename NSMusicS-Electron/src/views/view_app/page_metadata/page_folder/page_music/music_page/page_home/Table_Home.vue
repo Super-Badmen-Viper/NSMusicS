@@ -18,7 +18,7 @@ import {Icon} from "@vicons/utils";
 import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
 import {store_view_home_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_home/store/store_view_home_page_logic";
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
-import {store_view_album_page_fetchData} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_fetchData";
+import {store_general_fetch_album_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list";
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
@@ -116,10 +116,7 @@ onMounted(() => {
 });
 
 ////// dynamicScroller of albumlist_view
-import {store_view_home_page_fetchData} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_home/store/store_view_home_page_fetchData";
-import {
-  store_view_media_page_fetchData
-} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_fetchData";
+import {store_general_fetch_home_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_home/store_general_fetch_home_list";
 const dynamicScroller_maximum_playback = ref(null as any);
 let offset_maximum_playback = 0;
 const scrollTo_maximum_playback = (value :number) => {
@@ -206,12 +203,12 @@ const Open_this_album_MediaList_click = (item: any, list_name: string) => {
 const Play_this_album_MediaList_click = async (item: any, list_name: string) => {
   const temp_id = Get_this_album_info(item, list_name);
   if (store_server_user_model.model_server_type_of_web) {
-    store_view_media_page_fetchData.set_album_id(item.id)
+    store_general_fetch_media_list.set_album_id(item.id)
     store_view_media_page_logic.page_songlists_selected = 'song_list_all';
     store_server_user_model.random_play_model = false;
   }
   console.log('play_this_album_click：' + temp_id);
-  await store_view_album_page_fetchData.fetchData_This_Album_MediaList(temp_id);
+  await store_general_fetch_album_list.fetchData_This_Album_MediaList(temp_id);
   store_playlist_list_info.reset_carousel()
 };
 const Get_this_album_info = (item: any, list_name: string): string => {
@@ -219,22 +216,22 @@ const Get_this_album_info = (item: any, list_name: string): string => {
   if (store_server_user_model.model_server_type_of_web) {
     if (store_server_users.server_select_kind === 'jellyfin') {
       // Jellyfin 使用 media_id
-      store_view_media_page_fetchData._media_id = item.id;
+      store_general_fetch_media_list._media_id = item.id;
     } else if (store_server_users.server_select_kind === 'emby') {
       // Emby 根据列表类型设置 album_artist_id
-      store_view_media_page_fetchData.set_album_artist_id(
+      store_general_fetch_media_list.set_album_artist_id(
           list_name === 'recently_added' ? item.id : item.album_artist_id
       );
       if(list_name === 'recently_added'){
-        store_playlist_list_fetchData._album_artist_id = item.album_artist_id;
+        store_general_fetch_player_list._album_artist_id = item.album_artist_id;
         temp_id = item.album_artist_id;
       }else{
-        store_view_media_page_fetchData._media_id = item.id;
+        store_general_fetch_media_list._media_id = item.id;
         temp_id = item.id;
       }
     } else {
       // 其他服务器使用 album_id
-      store_view_media_page_fetchData._album_id = item.id;
+      store_general_fetch_media_list._album_id = item.id;
     }
   }
   return temp_id;
@@ -282,14 +279,14 @@ const handleItemClick_Rating = (id_rating: any) => {
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 import {useMessage} from 'naive-ui'
 import {store_playlist_list_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info";
-import {store_view_media_page_fetchData} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_fetchData";
+import {store_general_fetch_media_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list";
 import {store_view_media_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
 import {store_local_data_set_mediaInfo} from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_mediaInfo";
 import {store_playlist_list_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_logic";
 import {store_player_audio_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_info";
 import {store_player_appearance} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_appearance";
 import {store_view_media_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
-import {store_playlist_list_fetchData} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_fetchData";
+import {store_general_fetch_player_list} from "@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list";
 const contextmenu = ref(null as any)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
 const message = useMessage()
@@ -309,7 +306,7 @@ async function update_playlist_addAlbum(id: any, playlist_id: any){
     }
     recently_added_contextmenu_of_emby.value = false
     if(result_album) {
-      await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(id)
+      await store_general_fetch_media_list.fetchData_Media_Find_This_Album(id)
       const matchingIds: string[] = [];
       store_view_media_page_info.media_Files_temporary.forEach((item: Media_File) => {
         if (item.album_id === id) {
@@ -352,15 +349,15 @@ async function menu_item_add_to_playlist_end() {
   recently_added_contextmenu_of_emby.value = false
   let matchingItems = []
   if(result_album) {
-    await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(
+    await store_general_fetch_media_list.fetchData_Media_Find_This_Album(
         store_playlist_list_info.playlist_Menu_Item_Id
     );
     matchingItems = store_view_media_page_info.media_Files_temporary.filter(
         (item: Media_File) => item.album_id === store_playlist_list_info.playlist_Menu_Item_Id
     );
   }else{
-    store_view_media_page_fetchData._media_id = store_playlist_list_info.playlist_Menu_Item_Id
-    await store_view_media_page_fetchData.fetchData_Media();
+    store_general_fetch_media_list._media_id = store_playlist_list_info.playlist_Menu_Item_Id
+    await store_general_fetch_media_list.fetchData_Media();
     matchingItems = store_view_media_page_info.media_Files_temporary.filter(
         (item: Media_File) => item.id === store_playlist_list_info.playlist_Menu_Item_Id
     );
@@ -395,13 +392,13 @@ async function menu_item_add_to_playlist_next() {
   recently_added_contextmenu_of_emby.value = false
   let matchingItems = []
   if(result_album) {
-    await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(store_playlist_list_info.playlist_Menu_Item_Id);
+    await store_general_fetch_media_list.fetchData_Media_Find_This_Album(store_playlist_list_info.playlist_Menu_Item_Id);
     matchingItems = store_view_media_page_info.media_Files_temporary.filter(
         (item: Media_File) => item.album_id === store_playlist_list_info.playlist_Menu_Item_Id
     );
   }else{
-    store_view_media_page_fetchData._media_id = store_playlist_list_info.playlist_Menu_Item_Id
-    await store_view_media_page_fetchData.fetchData_Media();
+    store_general_fetch_media_list._media_id = store_playlist_list_info.playlist_Menu_Item_Id
+    await store_general_fetch_media_list.fetchData_Media();
     matchingItems = store_view_media_page_info.media_Files_temporary.filter(
         (item: Media_File) => item.id === store_playlist_list_info.playlist_Menu_Item_Id
     );
@@ -581,7 +578,7 @@ onBeforeUnmount(() => {
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary @click="()=>{
-                store_view_home_page_fetchData.fetchData_Home_of_maximum_playback();
+                store_general_fetch_home_list.fetchData_Home_of_maximum_playback();
                 dynamicScroller_maximum_playback.$el.scrollLeft = 0;
               }">
                 <template #icon>
@@ -754,7 +751,7 @@ onBeforeUnmount(() => {
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary @click="()=>{
-                store_view_home_page_fetchData.fetchData_Home_of_random_search();
+                store_general_fetch_home_list.fetchData_Home_of_random_search();
                 dynamicScroller_random_search.$el.scrollLeft = 0;
               }">
                 <template #icon>
@@ -926,7 +923,7 @@ onBeforeUnmount(() => {
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary @click="()=>{
-                store_view_home_page_fetchData.fetchData_Home_of_recently_added();
+                store_general_fetch_home_list.fetchData_Home_of_recently_added();
                 dynamicScroller_recently_added.$el.scrollLeft = 0;
               }">
                 <template #icon>
@@ -1098,7 +1095,7 @@ onBeforeUnmount(() => {
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary @click="()=>{
-                store_view_home_page_fetchData.fetchData_Home_of_recently_played();
+                store_general_fetch_home_list.fetchData_Home_of_recently_played();
                 dynamicScroller_recently_played.$el.scrollLeft = 0;
               }">
                 <template #icon>

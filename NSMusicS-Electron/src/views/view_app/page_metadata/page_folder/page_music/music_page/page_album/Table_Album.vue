@@ -27,7 +27,7 @@ import {store_view_album_page_info} from "@/views/view_app/page_metadata/page_fo
 import {store_view_album_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_logic";
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
 import {store_router_history_data_of_album} from "@/router/router_store/store_router_history_data_of_album";
-import {store_view_album_page_fetchData} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_fetchData";
+import {store_general_fetch_album_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list";
 
 ////// i18n auto lang
 import {useI18n} from 'vue-i18n'
@@ -39,8 +39,8 @@ import {store_view_media_page_info} from "@/views/view_app/page_metadata/page_fo
 import {store_playlist_list_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info";
 import {store_view_media_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
 import {store_playlist_list_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_logic";
-import {store_view_media_page_fetchData} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_fetchData";
-import {store_playlist_list_fetchData} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_fetchData";
+import {store_general_fetch_media_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list";
+import {store_general_fetch_player_list} from "@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list";
 import {store_player_appearance} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_appearance";
 ////// right menu
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
@@ -266,7 +266,7 @@ const show_search_area = () => {
       scrollTo(0)
     }
     if(store_server_user_model.model_server_type_of_web) {
-      store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_search_parms()
+      store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
     }
     input_search_InstRef.value?.clear()
     store_view_album_page_logic.page_albumlists_keyword = ""
@@ -361,7 +361,7 @@ onMounted(() => {
     ) {
       /// 兼容行为：打开指定艺术家，直接跳转乐曲页面，路由刷新到专辑页面需要清空数据
       store_player_appearance.player_mode_of_medialist_from_external_import = true
-      store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_search_parms()
+      store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
     }
   }
 });
@@ -373,7 +373,7 @@ const page_albumlists_handleSelected_updateValue = (value: any) => {
   if(
       store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
   ) {
-    store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_search_parms()
+    store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
     input_search_InstRef.value?.clear()
     store_view_album_page_logic.page_albumlists_keyword = ""
   }
@@ -400,7 +400,7 @@ const handleItemClick_album = (album:string) => {
   if(store_server_user_model.model_server_type_of_local) {
     bool_show_search_area.value = true
   }else if(store_server_user_model.model_server_type_of_web){
-    store_view_album_page_fetchData._artist_id = ''
+    store_general_fetch_album_list._artist_id = ''
     bool_show_search_area.value = true
   }
   store_view_album_page_logic.page_albumlists_keyword = album
@@ -412,7 +412,7 @@ const handleItemClick_artist = (artist_id:string) => {
     bool_show_search_area.value = true;
   }else if(store_server_user_model.model_server_type_of_web){
     if(store_server_users.server_select_kind != 'navidrome') {
-      store_view_album_page_fetchData.set_artist_id(artist_id)
+      store_general_fetch_album_list.set_artist_id(artist_id)
     }
     bool_show_search_area.value = true
   }
@@ -423,7 +423,7 @@ const handleItemClick_artist = (artist_id:string) => {
 const Open_this_album_MediaList_click = (album_id:string) => {
   if(store_server_user_model.model_server_type_of_web){
     store_player_appearance.player_mode_of_medialist_from_external_import = false
-    store_view_media_page_fetchData.set_album_id(album_id)
+    store_general_fetch_media_list.set_album_id(album_id)
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
   }
   console.log('media_list_of_album_id：'+album_id);
@@ -431,12 +431,12 @@ const Open_this_album_MediaList_click = (album_id:string) => {
 }
 const Play_this_album_MediaList_click = async (album_id: string) => {
   if(store_server_user_model.model_server_type_of_web){
-    store_view_media_page_fetchData.set_album_id(album_id)
+    store_general_fetch_media_list.set_album_id(album_id)
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
     store_server_user_model.random_play_model = false;
   }
   console.log('play_this_album_click：' + album_id);
-  await store_view_album_page_fetchData.fetchData_This_Album_MediaList(album_id)
+  await store_general_fetch_album_list.fetchData_This_Album_MediaList(album_id)
   store_playlist_list_info.reset_carousel()
 }
 
@@ -465,7 +465,7 @@ const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
 const message = useMessage()
 async function update_playlist_addAlbum(id: any, playlist_id: any){
   try{
-    await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(id)
+    await store_general_fetch_media_list.fetchData_Media_Find_This_Album(id)
     const matchingIds: string[] = [];
     store_view_media_page_info.media_Files_temporary.forEach((item: Media_File) => {
       if (item.album_id === id) {
@@ -485,7 +485,7 @@ async function update_playlist_addAlbum(id: any, playlist_id: any){
   }
 }
 async function menu_item_add_to_playlist_end() {
-  await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(store_playlist_list_info.playlist_Menu_Item_Id);
+  await store_general_fetch_media_list.fetchData_Media_Find_This_Album(store_playlist_list_info.playlist_Menu_Item_Id);
   const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
       (item: Media_File) => item.album_id === store_playlist_list_info.playlist_Menu_Item_Id
   );
@@ -506,7 +506,7 @@ async function menu_item_add_to_playlist_end() {
   contextmenu.value.hide()
 }
 async function menu_item_add_to_playlist_next() {
-  await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(store_playlist_list_info.playlist_Menu_Item_Id);
+  await store_general_fetch_media_list.fetchData_Media_Find_This_Album(store_playlist_list_info.playlist_Menu_Item_Id);
   const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
       (item: Media_File) => item.album_id === store_playlist_list_info.playlist_Menu_Item_Id
   );
@@ -554,7 +554,7 @@ const onScrollEnd = async () => {
   if (isScrolling.value) return;
   isScrolling.value = true;
   if (store_server_user_model.model_server_type_of_web) {
-    await store_view_album_page_fetchData.fetchData_Album_of_server_web_end()
+    await store_general_fetch_album_list.fetchData_Album_of_server_web_end()
   }
   isScrolling.value = false;
 };
@@ -565,16 +565,16 @@ const onScroll = async () => {
 //////
 const onRefreshSharp = async () => {
   if(store_server_user_model.model_server_type_of_web){
-    store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_search_parms()
+    store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
     input_search_InstRef.value?.clear()
     bool_show_search_area.value = false
     store_view_album_page_logic.page_albumlists_keyword = ""
-    store_view_album_page_fetchData.fetchData_Album_of_server_web_start()
+    store_general_fetch_album_list.fetchData_Album_of_server_web_start()
   }else if(store_server_user_model.model_server_type_of_local){
     input_search_InstRef.value?.clear()
     bool_show_search_area.value = false
     store_view_album_page_logic.page_albumlists_keyword = ""
-    store_view_album_page_fetchData.fetchData_Album()
+    store_general_fetch_album_list.fetchData_Album()
   }
 }
 
@@ -863,8 +863,8 @@ onBeforeUnmount(() => {
                     <div style="font-size: 32px;font-weight: 600;">
                       {{ $t('entity.album_other')}}
                     </div>
-                    <div style="font-size: 32px;font-weight: 600;margin-top: -2px">
-                      {{" | "}}
+                    <div v-if="store_player_audio_info.page_top_album_name.length > 0" style="font-size: 32px;font-weight: 600;margin-top: -2px">
+                      {{" : "}}
                     </div>
                     <div
                       :style="{

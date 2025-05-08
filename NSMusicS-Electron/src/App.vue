@@ -61,12 +61,11 @@ import {store_view_artist_page_logic} from "@/views/view_app/page_metadata/page_
 import {store_router_data_info} from "@/router/router_store/store_router_data_info";
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
-import {store_app_configs_logic_load} from "@/data/data_stores/app/store_app_configs_logic_load";
 import {store_app_configs_logic_theme} from "@/data/data_stores/app/store_app_configs_logic_theme";
-import {store_view_media_page_fetchData} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_fetchData";
-import {store_view_home_page_fetchData} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_home/store/store_view_home_page_fetchData";
-import {store_view_album_page_fetchData} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_fetchData";
-import {store_view_artist_page_fetchData} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_fetchData";
+import {store_general_fetch_media_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list";
+import {store_general_fetch_home_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_home/store_general_fetch_home_list";
+import {store_general_fetch_album_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list";
+import {store_general_fetch_artist_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_artist/store_general_fetch_artist_list";
 
 ////// BrowserWindow
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
@@ -318,15 +317,15 @@ function clearFilesIfNeeded(except?: 'home' | 'categories' | 'album' | 'media' |
 function fetchDataIfNeeded(type: 'home' | 'categories' | 'album' | 'media' | 'artist') {
   if (store_router_data_logic.clear_Memory_Model) {
     if (type === 'home') {
-      store_view_home_page_fetchData.fetchData_Home();
+      store_general_fetch_home_list.fetchData_Home();
     } else if (type === 'categories') {
-      store_view_home_page_fetchData.fetchData_Home();
+      store_general_fetch_home_list.fetchData_Home();
     } else if (type === 'album') {
-      store_view_album_page_fetchData.fetchData_Album();
+      store_general_fetch_album_list.fetchData_Album();
     } else if (type === 'media') {
-      store_view_media_page_fetchData.fetchData_Media();
+      store_general_fetch_media_list.fetchData_Media();
     } else if (type === 'artist') {
-      store_view_artist_page_fetchData.fetchData_Artist();
+      store_general_fetch_artist_list.fetchData_Artist();
     }
   }
 }
@@ -813,7 +812,7 @@ if(isElectron) {
                   :collapsed-icon-size="22"
                   :icon-size="20"
                   :options="store_app_configs_info.app_view_menuOptions"
-                  @click="store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_all_parms()"
+                  @click="store_general_fetch_media_list.fetchData_Media_of_server_web_clear_all_parms()"
                 />
                 <div></div>
               </n-flex>
@@ -846,7 +845,7 @@ if(isElectron) {
                   :collapsed-icon-size="22"
                   :icon-size="20"
                   :options="store_app_configs_info.app_view_menuOptions"
-                  @click="store_view_media_page_fetchData.fetchData_Media_of_server_web_clear_all_parms()"
+                  @click="store_general_fetch_media_list.fetchData_Media_of_server_web_clear_all_parms()"
                 />
                 <div></div>
               </n-flex>

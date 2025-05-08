@@ -1,8 +1,8 @@
 import {reactive} from 'vue'
-import {Set_AnnotationInfo_To_LocalSqlite} from "../../../data_access/local_configs/class_Set_AnnotationInfo_To_LocalSqlite";
+import {Set_AnnotationInfo_To_LocalSqlite} from "@/data/data_access/local_configs/class_Set_AnnotationInfo_To_LocalSqlite";
 import {
     store_server_data_set_annotionInfo
-} from "@/data/data_stores/server/server_data_synchronization/store_server_data_set_annotionInfo";
+} from "@/data/data_stores/server/server_api_synchronization/store_server_data_set_annotionInfo";
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 const set_AnnotationInfo_To_LocalSqlite = new Set_AnnotationInfo_To_LocalSqlite()
 export const store_local_data_set_annotionInfo = reactive({

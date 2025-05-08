@@ -1,13 +1,13 @@
 import { ref } from 'vue'
-import { App_Configs } from '../../data_models/app_models/app_Configs/class_App_Configs';
-import { Player_Configs_of_Audio_Info } from '../../data_models/app_models/app_Configs/class_Player_Configs_of_Audio_Info';
-import { Player_Configs_of_UI } from '../../data_models/app_models/app_Configs/class_Player_Configs_of_UI';
+import { App_Configs } from '@/data/data_models/app_models/app_Configs/class_App_Configs';
+import { Player_Configs_of_Audio_Info } from '@/data/data_models/app_models/app_Configs/class_Player_Configs_of_Audio_Info';
+import { Player_Configs_of_UI } from '@/data/data_models/app_models/app_Configs/class_Player_Configs_of_UI';
 import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
 import { isElectron } from '@/utils/electron/isElectron';
 import axios from "axios";
 import {
     store_server_login_info
-} from "../../../views/view_server/page_metadata/page_login/store/store_server_login_info";
+} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
 
 export class Class_Get_System_Configs_Read {
     public app_Configs = ref(

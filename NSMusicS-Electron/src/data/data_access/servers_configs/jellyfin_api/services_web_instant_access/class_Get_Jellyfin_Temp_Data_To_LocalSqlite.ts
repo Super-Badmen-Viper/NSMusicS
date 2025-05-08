@@ -1,44 +1,36 @@
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {
     store_view_home_page_info
-} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_home/store/store_view_home_page_info";
+} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_home/store/store_view_home_page_info";
 import {
     store_view_artist_page_info
-} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_info"
+} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_info"
 import {
     store_view_album_page_info
-} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_info";
+} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_info";
 import {
     store_view_media_page_info
-} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
-import {Browsing_ApiService_of_ND} from "../../navidrome_api/services_normal/browsing/index_service";
+} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
 import {
     store_playlist_list_info
-} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info"
+} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info"
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
-import {Media_Retrieval_ApiService_of_ND} from "../../navidrome_api/services_normal/media_retrieval/index_service";
 import {
     store_player_audio_logic
-} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
-import {store_server_user_model} from "../../../../data_stores/server/store_server_user_model";
-import {
-    store_playlist_list_logic
-} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_logic";
-import {
-    store_player_audio_info
-} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_info";
+} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
+import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 import {Items_ApiService_of_Je} from "../services_web/Items/index_service";
 import {Artists_ApiService_of_Je} from "../services_web/Artists/index_service";
 import axios from "axios";
 import {
     store_view_media_page_logic
-} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
+} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
 import {
-    store_playlist_list_fetchData
-} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_fetchData";
+    store_general_fetch_player_list
+} from "@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list";
 import {
-    store_view_media_page_fetchData
-} from "../../../../../views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_fetchData";
+    store_general_fetch_media_list
+} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list";
 
 export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
     private items_ApiService_of_Je = new Items_ApiService_of_Je(
@@ -383,7 +375,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                 songlist = response_media_list.data.Items;
                 ///
                 if (Array.isArray(songlist) && songlist.length > 0) {
-                    if (store_view_media_page_fetchData._load_model === 'search') {
+                    if (store_general_fetch_media_list._load_model === 'search') {
                         const existingSong = store_view_media_page_info.media_Files_temporary.find(item => item.id === songlist[0].id);
                         if (existingSong) {
                             return;
@@ -398,10 +390,10 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     return;
                 }
                 ///
-                store_playlist_list_fetchData._totalCount = response_media_list.data.TotalRecordCount
+                store_general_fetch_player_list._totalCount = response_media_list.data.TotalRecordCount
             }
             if (Array.isArray(songlist) && songlist.length > 0) {
-                let last_index = store_view_media_page_fetchData._load_model === 'search' ?
+                let last_index = store_general_fetch_media_list._load_model === 'search' ?
                     store_view_media_page_info.media_Files_temporary.length :
                     store_playlist_list_info.playlist_MediaFiles_temporary.length
                 store_view_media_page_info.media_File_metadata = [];
@@ -478,7 +470,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         rg_track_peak: 0,
                         medium_image_url: medium_image_url
                     };
-                    if (store_view_media_page_fetchData._load_model === 'search') {
+                    if (store_general_fetch_media_list._load_model === 'search') {
                         store_view_media_page_info.media_File_metadata.push(song);
                         store_view_media_page_info.media_Files_temporary.push(newsong);
                     } else {
@@ -488,7 +480,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         });
                     }
                 }));
-                if (store_view_media_page_fetchData._load_model === 'play') {
+                if (store_general_fetch_media_list._load_model === 'play') {
                     store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
                         store_view_media_page_info.media_Files_temporary.map(item => item.id);
                     store_app_configs_logic_save.save_system_playlist_item_id_config();
@@ -513,9 +505,9 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             );
             let songlist = [];
             songlist.push(data.data);
-            store_playlist_list_fetchData._totalCount = songlist.length // 1个
+            store_general_fetch_player_list._totalCount = songlist.length // 1个
             if (Array.isArray(songlist) && songlist.length > 0) {
-                let last_index = store_view_media_page_fetchData._load_model === 'search' ?
+                let last_index = store_general_fetch_media_list._load_model === 'search' ?
                     store_view_media_page_info.media_Files_temporary.length :
                     store_playlist_list_info.playlist_MediaFiles_temporary.length
                 store_view_media_page_info.media_File_metadata = [];
@@ -592,7 +584,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         rg_track_peak: 0,
                         medium_image_url: medium_image_url
                     };
-                    if (store_view_media_page_fetchData._load_model === 'search') {
+                    if (store_general_fetch_media_list._load_model === 'search') {
                         store_view_media_page_info.media_File_metadata.push(song);
                         store_view_media_page_info.media_Files_temporary.push(newsong);
                     } else {
@@ -602,7 +594,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         });
                     }
                 }));
-                if (store_view_media_page_fetchData._load_model === 'play') {
+                if (store_general_fetch_media_list._load_model === 'play') {
                     store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
                         store_view_media_page_info.media_Files_temporary.map(item => item.id);
                     store_app_configs_logic_save.save_system_playlist_item_id_config();
@@ -631,7 +623,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                 songlist = list.Items;
                 ///
                 if (Array.isArray(songlist) && songlist.length > 0) {
-                    if (store_view_media_page_fetchData._load_model === 'search') {
+                    if (store_general_fetch_media_list._load_model === 'search') {
                         const existingSong = store_view_media_page_info.media_Files_temporary.find(item => item.id === songlist[0].id);
                         if (existingSong) {
                             return;
@@ -646,11 +638,11 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     return;
                 }
                 ///
-                store_playlist_list_fetchData._totalCount =
+                store_general_fetch_player_list._totalCount =
                     (typeof list.TotalRecordCount !== 'undefined' && list.TotalRecordCount != 0) ? list.TotalRecordCount : list.Items.length;
             }
             if (Array.isArray(songlist) && songlist.length > 0) {
-                let last_index = store_view_media_page_fetchData._load_model === 'search' ?
+                let last_index = store_general_fetch_media_list._load_model === 'search' ?
                     store_view_media_page_info.media_Files_temporary.length :
                     store_playlist_list_info.playlist_MediaFiles_temporary.length
                 store_view_media_page_info.media_File_metadata = [];
@@ -727,7 +719,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         rg_track_peak: 0,
                         medium_image_url: medium_image_url
                     };
-                    if (store_view_media_page_fetchData._load_model === 'search') {
+                    if (store_general_fetch_media_list._load_model === 'search') {
                         store_view_media_page_info.media_File_metadata.push(song);
                         store_view_media_page_info.media_Files_temporary.push(newsong);
                     } else {
@@ -737,7 +729,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         });
                     }
                 }));
-                if (store_view_media_page_fetchData._load_model === 'play') {
+                if (store_general_fetch_media_list._load_model === 'play') {
                     store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
                         store_view_media_page_info.media_Files_temporary.map(item => item.id);
                     store_app_configs_logic_save.save_system_playlist_item_id_config();
@@ -769,7 +761,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                 )
                 if (list != undefined) {
                     songlist = list.Items;
-                    store_playlist_list_fetchData._totalCount = list.TotalRecordCount
+                    store_general_fetch_player_list._totalCount = list.TotalRecordCount
                 }
             } else {
                 const response_playlMedias = await axios(
@@ -789,7 +781,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     }
                     ///
                     if (Array.isArray(songlist) && songlist.length > 0) {
-                        if (store_view_media_page_fetchData._load_model === 'search') {
+                        if (store_general_fetch_media_list._load_model === 'search') {
                             const existingSong = store_view_media_page_info.media_Files_temporary.find(item => item.id === songlist[0].id);
                             if (existingSong) {
                                 return;
@@ -804,14 +796,14 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         return;
                     }
                     ///
-                    store_playlist_list_fetchData._totalCount = response_playlMedias.data.TotalRecordCount
+                    store_general_fetch_player_list._totalCount = response_playlMedias.data.TotalRecordCount
                 }
             }
             if (Array.isArray(songlist) && songlist.length > 0) {
                 if (sortBy === 'DatePlayed') {
                     songlist = songlist.filter(song => song.UserData.PlayCount > 0)
                 }
-                let last_index = store_view_media_page_fetchData._load_model === 'search' ?
+                let last_index = store_general_fetch_media_list._load_model === 'search' ?
                     store_view_media_page_info.media_Files_temporary.length :
                     store_playlist_list_info.playlist_MediaFiles_temporary.length
                 store_view_media_page_info.media_File_metadata = [];
@@ -888,7 +880,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         rg_track_peak: 0,
                         medium_image_url: medium_image_url
                     };
-                    if (store_view_media_page_fetchData._load_model === 'search') {
+                    if (store_general_fetch_media_list._load_model === 'search') {
                         store_view_media_page_info.media_File_metadata.push(song);
                         store_view_media_page_info.media_Files_temporary.push(newsong);
                     } else {
@@ -898,7 +890,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                         });
                     }
                 }));
-                if (store_view_media_page_fetchData._load_model === 'play') {
+                if (store_general_fetch_media_list._load_model === 'play') {
                     store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
                         store_view_media_page_info.media_Files_temporary.map(item => item.id);
                     store_app_configs_logic_save.save_system_playlist_item_id_config();

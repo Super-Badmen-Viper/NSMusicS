@@ -1,6 +1,6 @@
 import {reactive, watch} from 'vue'
-import {store_view_home_page_fetchData} from "./store_view_home_page_fetchData";
-import {store_view_media_page_logic} from "../../page_media/store/store_view_media_page_logic";
+import {store_general_fetch_home_list} from "../../../../../../../../data/data_stores/server/server_api_abstract/music_scene/page/page_home/store_general_fetch_home_list";
+import {store_view_media_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
 
 export const store_view_home_page_logic = reactive({
     list_data_StartUpdate: false,
@@ -9,7 +9,7 @@ export const store_view_home_page_logic = reactive({
 
 watch(() => store_view_home_page_logic.list_data_StartUpdate, (newValue) => {
     if(newValue) {
-        store_view_home_page_fetchData.fetchData_Home()
+        store_general_fetch_home_list.fetchData_Home()
         store_view_media_page_logic.list_selected_Hand_click = true
         console.log("store_view_home_page_logic.list_data_StartUpdate")
 

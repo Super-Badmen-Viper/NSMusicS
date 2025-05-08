@@ -1,24 +1,24 @@
 import {reactive, watch} from 'vue'
-import {store_player_appearance} from "../../page_player/store/store_player_appearance";
+import {store_player_appearance} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_appearance";
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
 import {store_router_data_info} from "@/router/router_store/store_router_data_info";
 import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
-import {store_playlist_list_logic} from "../../../music_components/player_list/store/store_playlist_list_logic"
+import {store_playlist_list_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_logic"
 import {store_router_history_data_of_media} from "@/router/router_store/store_router_history_data_of_media";
-import {store_view_media_page_logic} from "./store_view_media_page_logic";
+import {store_view_media_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
-import {store_view_media_page_info} from "./store_view_media_page_info";
-import {store_playlist_list_info} from "../../../music_components/player_list/store/store_playlist_list_info"
-import {Get_Navidrome_Temp_Data_To_LocalSqlite} from "../../../../../../../../data/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
+import {store_view_media_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
+import {store_playlist_list_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info"
+import {Get_Navidrome_Temp_Data_To_LocalSqlite} from "@/data/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
-import {store_view_album_page_fetchData} from "../../page_album/store/store_view_album_page_fetchData";
-import {store_playlist_list_fetchData} from "../../../music_components/player_list/store/store_playlist_list_fetchData";
+import {store_general_fetch_album_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list";
+import {store_general_fetch_player_list} from "@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list";
 import error_album from '@/assets/img/error_album.jpg'
 import { isElectron } from '@/utils/electron/isElectron';
 import {
     Get_Jellyfin_Temp_Data_To_LocalSqlite
-} from "../../../../../../../../data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
-import {store_playlist_appearance} from "../../../music_components/player_list/store/store_playlist_appearance";
+} from "@/data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
+import {store_playlist_appearance} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_appearance";
 /**
  * -> 歌单加载: LoadList、歌曲列表: PlayList -> 合并联合查询
  * local歌单加载：一次性全局加载
@@ -27,7 +27,7 @@ import {store_playlist_appearance} from "../../../music_components/player_list/s
  * -> PlayList独立于LoadList -> 数标状态位随LoadList数标状态位刷新
  * -> 数标状态位：【_start、_end】【_album_id、_artist_id、_album_artist_id】
  */
-export const store_view_media_page_fetchData = reactive({
+export const store_general_fetch_media_list = reactive({
     async fetchData_Media(){
         try {
             if (store_server_user_model.model_server_type_of_local) {
@@ -397,48 +397,48 @@ export const store_view_media_page_fetchData = reactive({
     _end: 30,
     _album_id: '',
     set_album_id(id: string){
-        store_view_media_page_fetchData._album_id = id
-        store_playlist_list_fetchData._album_id = id
+        store_general_fetch_media_list._album_id = id
+        store_general_fetch_player_list._album_id = id
     },
     _artist_id: '',
     set_artist_id(id: string){
-        store_view_media_page_fetchData._artist_id = id
-        store_playlist_list_fetchData._artist_id = id
+        store_general_fetch_media_list._artist_id = id
+        store_general_fetch_player_list._artist_id = id
     },
     _album_artist_id: '', // Emby Home$Album
     set_album_artist_id(id: string){
         this.fetchData_Media_of_server_web_clear_all_parms()
-        store_view_media_page_fetchData._album_artist_id = id
-        store_playlist_list_fetchData._album_artist_id = id
+        store_general_fetch_media_list._album_artist_id = id
+        store_general_fetch_player_list._album_artist_id = id
     },
     fetchData_Media_of_server_web_clear_all_parms(){
-        store_view_media_page_fetchData._album_id = ''
-        store_view_media_page_fetchData._artist_id = ''
-        store_view_album_page_fetchData._artist_id = ''
-        store_view_media_page_fetchData._album_artist_id = ''
-        store_view_media_page_fetchData._media_id = ''
+        store_general_fetch_media_list._album_id = ''
+        store_general_fetch_media_list._artist_id = ''
+        store_general_fetch_album_list._artist_id = ''
+        store_general_fetch_media_list._album_artist_id = ''
+        store_general_fetch_media_list._media_id = ''
 
-        store_playlist_list_fetchData._album_id = ''
-        store_playlist_list_fetchData._artist_id = ''
-        store_playlist_list_fetchData._album_artist_id = ''
+        store_general_fetch_player_list._album_id = ''
+        store_general_fetch_player_list._artist_id = ''
+        store_general_fetch_player_list._album_artist_id = ''
     },
     _media_id: '', // Jellyfin Home$Media
     _load_model: 'search', // 'search' and 'play'
     fetchData_Media_of_server_web_clear_search_parms(){
-        store_view_media_page_fetchData._album_id = ''
-        store_view_media_page_fetchData._artist_id = ''
-        store_view_album_page_fetchData._artist_id = ''
+        store_general_fetch_media_list._album_id = ''
+        store_general_fetch_media_list._artist_id = ''
+        store_general_fetch_album_list._artist_id = ''
 
-        store_view_media_page_fetchData._album_artist_id = ''
-        store_view_media_page_fetchData._media_id = ''
+        store_general_fetch_media_list._album_artist_id = ''
+        store_general_fetch_media_list._media_id = ''
     },
     fetchData_Media_of_server_web_clear_index(){
         if(this._load_model === 'search') {
             this._start = 0;
             this._end = 30;
         }else{
-            store_playlist_list_fetchData._start = 0;
-            store_playlist_list_fetchData._end = 30;
+            store_general_fetch_player_list._start = 0;
+            store_general_fetch_player_list._end = 30;
         }
     },
     async fetchData_Media_of_server_web_start(){
@@ -449,8 +449,8 @@ export const store_view_media_page_fetchData = reactive({
         }
         this._start = 0;
         this._end = 30;
-        store_playlist_list_fetchData._start = 0;
-        store_playlist_list_fetchData._end = 30;
+        store_general_fetch_player_list._start = 0;
+        store_general_fetch_player_list._end = 30;
         await this.fetchData_Media_of_server_web(false)
         if(store_player_appearance.player_mode_of_medialist_from_external_import) {
             this.fetchData_Media_of_server_web_clear_search_parms()
@@ -463,8 +463,8 @@ export const store_view_media_page_fetchData = reactive({
                     this._start += 30;
                     this._end += 30;
                 } else {
-                    store_playlist_list_fetchData._start += 30;
-                    store_playlist_list_fetchData._end += 30;
+                    store_general_fetch_player_list._start += 30;
+                    store_general_fetch_player_list._end += 30;
                 }
             } else if (
                 store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
@@ -476,8 +476,8 @@ export const store_view_media_page_fetchData = reactive({
                         this._end += 30;
                         this._start = this._end - 30;
                     } else {
-                        store_playlist_list_fetchData._end += 30;
-                        store_playlist_list_fetchData._start = store_playlist_list_fetchData._end - 30;
+                        store_general_fetch_player_list._end += 30;
+                        store_general_fetch_player_list._start = store_general_fetch_player_list._end - 30;
                     }
                 }
             }
@@ -515,18 +515,18 @@ export const store_view_media_page_fetchData = reactive({
             }
         }
         const _artist_id = this._load_model === 'search' ?
-            this._artist_id : store_playlist_list_fetchData._artist_id
+            this._artist_id : store_general_fetch_player_list._artist_id
         const _album_id = this._load_model === 'search' ?
-            this._album_id : store_playlist_list_fetchData._album_id
+            this._album_id : store_general_fetch_player_list._album_id
         const _album_artist_id = this._load_model === 'search' ?
-            this._album_artist_id : store_playlist_list_fetchData._album_artist_id
+            this._album_artist_id : store_general_fetch_player_list._album_artist_id
         if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
             const limit = this._load_model === 'search' ?
                 String(this._end) :
-                String(store_playlist_list_fetchData._end)
+                String(store_general_fetch_player_list._end)
             const startIndex = this._load_model === 'search' ?
                 String(this._start) :
-                String(store_playlist_list_fetchData._start)
+                String(store_general_fetch_player_list._start)
             let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
             await get_Navidrome_Temp_Data_To_LocalSqlite.get_media_list(
                 store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
@@ -548,10 +548,10 @@ export const store_view_media_page_fetchData = reactive({
             const filter = _starred === 'true' ? 'IsFavorite' : ''
             const limit = this._load_model === 'search' ?
                 String(this._end - this._start) :
-                String(store_playlist_list_fetchData._end - store_playlist_list_fetchData._start)
+                String(store_general_fetch_player_list._end - store_general_fetch_player_list._start)
             const startIndex = this._load_model === 'search' ?
                 String(this._start) :
-                String(store_playlist_list_fetchData._start)
+                String(store_general_fetch_player_list._start)
             // jellyfin not support search artist and album list of musicdata
             let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
             if(this._media_id.length === 0) {
@@ -611,13 +611,13 @@ export const store_view_media_page_fetchData = reactive({
 });
 watch(() => store_playlist_appearance.playlist_show, async (newValue) => {
     if(newValue){
-        store_view_media_page_fetchData._load_model = 'play'
+        store_general_fetch_media_list._load_model = 'play'
         const index = store_playlist_list_info.playlist_MediaFiles_temporary.length / 30
         if(index > 0){
-            store_playlist_list_fetchData._start = 30 * index - 30;
-            store_playlist_list_fetchData._end = 30 * index;
+            store_general_fetch_player_list._start = 30 * index - 30;
+            store_general_fetch_player_list._end = 30 * index;
         }
     }else{
-        store_view_media_page_fetchData._load_model = 'search'
+        store_general_fetch_media_list._load_model = 'search'
     }
 });
