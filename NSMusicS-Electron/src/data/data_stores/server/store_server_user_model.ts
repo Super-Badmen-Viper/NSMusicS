@@ -1,9 +1,6 @@
 import {reactive, watch} from 'vue'
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 import {store_router_data_info} from "@/router/router_store/store_router_data_info";
-import {
-    Set_Navidrome_ALL_Data_To_LocalSqlite
-} from "@/data/data_access/servers_configs/navidrome_api/services_normal_middleware/class_Set_Navidrome_ALL_Data_To_LocalSqlite";
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {store_playlist_list_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info"
 import {store_player_audio_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_info";
@@ -14,12 +11,7 @@ import {
     User_Authorization_ApiWebService_of_ND
 } from "@/data/data_access/servers_configs/navidrome_api/services_web/user_authorization/index_service";
 import {store_player_audio_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
-import {Audio_node_mpv} from "@/data/data_models/app_models/song_Audio_Out/Audio_node_mpv";
-import {Audio_howler} from "@/data/data_models/app_models/song_Audio_Out/Audio_howler";
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
-import {
-    Get_Jellyfin_Temp_Data_To_LocalSqlite
-} from "@/data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
 import {
     store_view_media_page_logic
 } from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
@@ -29,10 +21,6 @@ import {
 import {
     store_view_artist_page_logic
 } from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_logic";
-import {Users_ApiService_of_Je} from "@/data/data_access/servers_configs/jellyfin_api/services_web/Users/index_service";
-import {
-    Library_ApiService_of_Je
-} from "@/data/data_access/servers_configs/jellyfin_api/services_web/Library/index_service";
 
 export const store_server_user_model = reactive({
     model_select: 'server',
@@ -145,21 +133,6 @@ export const store_server_user_model = reactive({
             new User_Authorization_ApiWebService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url)
         await user_Authorization_ApiWebService_of_ND.get_token()
         store_app_configs_logic_save.save_system_config_of_App_Configs()
-    },
-
-    async Get_UserData_Synchronize_PlayList() {
-        const index = store_server_users.server_config_of_all_user_of_sqlite.findIndex(item => item.id === store_server_users.server_config_of_current_user_of_sqlite?.id);
-        const user_config = store_server_users.server_config_of_all_user_of_sqlite[index]
-        if(user_config?.type === 'navidrome'){
-            let set_Navidrome_Data_To_LocalSqlite = new Set_Navidrome_ALL_Data_To_LocalSqlite();
-            await set_Navidrome_Data_To_LocalSqlite.Set_Read_Navidrome_Api_PlayListInfo_Add_LocalSqlite(
-                store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
-            );
-        }else if(user_config?.type === 'jellyfin' || user_config?.type === 'emby'){
-            let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
-            await get_Jellyfin_Temp_Data_To_LocalSqlite.get_playlist_je()
-        }
     },
 })
 watch(() => store_server_user_model.model_server_type_of_web, (newValue) => {

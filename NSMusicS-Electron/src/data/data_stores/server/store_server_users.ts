@@ -1,14 +1,4 @@
-import {reactive, watch} from 'vue'
-import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
-import { isElectron } from '@/utils/electron/isElectron';
-import {Users_ApiService_of_Je} from "@/data/data_access/servers_configs/jellyfin_api/services_web/Users/index_service";
-import {
-    Library_ApiService_of_Je
-} from "@/data/data_access/servers_configs/jellyfin_api/services_web/Library/index_service";
-import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
-import {
-    store_server_navidrome_userdata_logic
-} from "./server_data_select/server_navidrome_user_data/store_server_navidrome_userdata_logic";
+import {reactive} from 'vue'
 
 export const store_server_users = reactive({
     percentage_of_local: 0,
@@ -46,95 +36,6 @@ export const store_server_users = reactive({
             };
             store_server_users.server_config_of_current_user_of_select_servername =
                 store_server_users.server_config_of_all_user_of_sqlite[index].type + ' - ' + store_server_users.server_config_of_all_user_of_sqlite[index].server_name
-        }
-    },
-
-    async get_init_login_server(){
-        if(store_server_users.server_select_kind === 'navidrome') {
-            const {salt, token} = store_server_navidrome_userdata_logic.navidrome_get_EncryptedPassword(
-                store_server_user_model.password
-            );
-            store_server_user_model.salt = salt
-            store_server_user_model.token = token
-        }else if(
-            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-        ) {
-            if(store_server_user_model.server_login_model_of_apikey) {
-                store_server_user_model.authorization_of_Je =
-                    store_server_users.server_config_of_current_user_of_sqlite?.user_name
-                // load User
-                const userService = new Users_ApiService_of_Je(
-                    store_server_users.server_config_of_current_user_of_sqlite?.url
-                )
-                const result = await userService.getUsers_ALL()
-                let server_set_of_addUser_of_apikey_user_option = []
-                store_server_user_model.userid_of_Je = ''
-                if (result) {
-                    if (Array.isArray(result) && result.length > 0) {
-                        result.forEach((row: any, index: number) => {
-                            server_set_of_addUser_of_apikey_user_option.push({
-                                label: row.Name,
-                                value: row.Id
-                            });
-                        });
-                        store_server_user_model.userid_of_Je = server_set_of_addUser_of_apikey_user_option[0].value
-                        // load Library parentid_of_Je
-                        const library_ApiService_of_Je = new Library_ApiService_of_Je(
-                            store_server_users.server_config_of_current_user_of_sqlite?.url
-                        )
-                        const result_parentIds = await library_ApiService_of_Je.getLibrary_MediaFolders_ALL()
-                        store_server_user_model.parentid_of_Je = []
-                        if (result_parentIds.Items) {
-                            if (Array.isArray(result_parentIds.Items) && result_parentIds.Items.length > 0) {
-                                result_parentIds.Items.forEach((row: any, index: number) => {
-                                    store_server_user_model.parentid_of_Je.push({
-                                        label: row.Name,
-                                        value: row.Id
-                                    });
-                                    if (row.CollectionType === 'music') {
-                                        store_server_user_model.parentid_of_Je_Music = row.Id
-                                    }
-                                });
-                            }
-                        }
-                    }
-                }
-            }
-            else {
-                store_server_user_model.username =
-                    store_server_users.server_config_of_current_user_of_sqlite?.user_name
-                store_server_user_model.password =
-                    store_server_users.server_config_of_current_user_of_sqlite?.password
-                const data = await new Users_ApiService_of_Je(
-                    store_server_users.server_config_of_current_user_of_sqlite?.url
-                ).authenticateUserByName(
-                    store_server_users.server_config_of_current_user_of_sqlite?.url,
-                    store_server_user_model.username,
-                    store_server_user_model.password
-                )
-                store_server_user_model.authorization_of_Je = data.AccessToken
-                store_server_user_model.userid_of_Je = data.User.Id
-                await store_router_data_logic.get_page_top_info()
-                // load Library parentid_of_Je
-                const library_ApiService_of_Je = new Library_ApiService_of_Je(
-                    store_server_users.server_config_of_current_user_of_sqlite?.url
-                )
-                const result_parentIds = await library_ApiService_of_Je.getLibrary_MediaFolders_ALL()
-                store_server_user_model.parentid_of_Je = []
-                if(result_parentIds.Items){
-                    if(Array.isArray(result_parentIds.Items) && result_parentIds.Items.length > 0) {
-                        result_parentIds.Items.forEach((row: any, index: number) => {
-                            store_server_user_model.parentid_of_Je.push({
-                                label: row.Name,
-                                value: row.Id
-                            });
-                            if(row.CollectionType === 'music'){
-                                store_server_user_model.parentid_of_Je_Music = row.Id
-                            }
-                        });
-                    }
-                }
-            }
         }
     },
 });

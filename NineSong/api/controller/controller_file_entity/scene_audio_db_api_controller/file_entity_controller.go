@@ -2,7 +2,7 @@ package scene_audio_db_api_controller
 
 import (
 	"context"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/api/controller"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/usecase/usecase_file_entity"
 	"github.com/gin-gonic/gin"
@@ -25,23 +25,24 @@ func (ctrl *FileController) ScanDirectory(c *gin.Context) {
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, domain.ErrorResponse{
-			Message: "invalid request format",
-		})
+		controller.ErrorResponse(c, http.StatusBadRequest, "INVALID_REQUEST", "无效的请求格式")
 		return
 	}
 
-	// 创建独立上下文，不使用清洁架构自带的上下文(使用将无法完成后台任务而直接返回error)
 	bgCtx := context.Background()
 	go func() {
 		if err := ctrl.usecase.ProcessDirectory(bgCtx, req.FolderPath, req.FileTypes); err != nil {
 			log.Printf("Scan failed: %v", err)
-			return
 		}
 	}()
 
 	c.JSON(http.StatusAccepted, gin.H{
-		"status":  "scan_started",
-		"message": "background processing initiated",
+		"ninesong-response": gin.H{
+			"status":        "ok",
+			"version":       controller.APIVersion,
+			"type":          controller.ServiceType,
+			"serverVersion": controller.ServerVersion,
+			"message":       "后台处理已启动",
+		},
 	})
 }

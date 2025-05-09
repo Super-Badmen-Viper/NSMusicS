@@ -17,7 +17,6 @@ func NewRetrievalController(uc scene_audio_route_interface.RetrievalRepository) 
 	return &RetrievalController{RetrievalUsecase: uc}
 }
 
-// 音频流处理
 func (c *RetrievalController) StreamHandler(ctx *gin.Context) {
 	var req struct {
 		MediaFileID string `form:"media_file_id" binding:"required"`
@@ -66,30 +65,38 @@ func (c *RetrievalController) DownloadHandler(ctx *gin.Context) {
 	serveMediaFile(ctx, filePath, "audio/mpeg")
 }
 
-// 封面图处理
 func (c *RetrievalController) CoverArtHandler(ctx *gin.Context) {
-	// 直接获取参数
-	coverArtID := ctx.Query("cover_art_id")
-	if coverArtID == "" {
-		ctx.Data(http.StatusOK, "text/plain", []byte("missing_param"))
+	var req struct {
+		Type     string `form:"type" binding:"required,oneof=media album"`
+		TargetID string `form:"target_id" binding:"required,hexadecimal,len=24"`
+	}
+
+	if err := ctx.ShouldBind(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code":    "INVALID_PARAMETERS",
+			"message": "参数格式错误: type必须为media或album，target_id必须为24位十六进制",
+		})
 		return
 	}
 
-	// 获取物理路径
-	filePath, _ := c.RetrievalUsecase.GetCoverArt(ctx, coverArtID)
+	filePath, err := c.RetrievalUsecase.GetCoverArt(ctx.Request.Context(), req.Type, req.TargetID)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"code":    "COVER_NOT_FOUND",
+			"message": "封面文件不存在",
+		})
+		return
+	}
 
-	// 直接透传二进制流
-	ctx.Header("Content-Type", "image/jpeg") // 显式声明类型
-	ctx.File(filePath)                       // 使用零拷贝系统调用
+	ctx.Header("Content-Type", "image/jpeg")
+	ctx.File(filePath)
 }
 
-// 歌词处理
 func (c *RetrievalController) LyricsHandlerMetadata(ctx *gin.Context) {
 	var req struct {
 		MediaFileID string `form:"media_file_id" binding:"required,hexadecimal,len=24"`
 	}
 
-	// 参数绑定与验证
 	if err := ctx.ShouldBind(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"code":    "INVALID_PARAMETERS",
@@ -98,7 +105,6 @@ func (c *RetrievalController) LyricsHandlerMetadata(ctx *gin.Context) {
 		return
 	}
 
-	// 获取歌词内容
 	lyricsContent, err := c.RetrievalUsecase.GetLyricsLrcMetaData(ctx.Request.Context(), req.MediaFileID)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{
@@ -108,7 +114,6 @@ func (c *RetrievalController) LyricsHandlerMetadata(ctx *gin.Context) {
 		return
 	}
 
-	// 直接返回歌词文本
 	ctx.Data(http.StatusOK, "text/plain; charset=utf-8", []byte(lyricsContent))
 }
 func (c *RetrievalController) LyricsHandlerFile(ctx *gin.Context) {
@@ -134,11 +139,6 @@ func (c *RetrievalController) LyricsHandlerFile(ctx *gin.Context) {
 	}
 	serveTextFile(ctx, filePath)
 }
-
-// 通用媒体文件服务
-const (
-	mediaBasePath = "/var/media" // 设置媒体文件根目录
-)
 
 func serveMediaFile(ctx *gin.Context, path string, contentType string) {
 	// 增加范围请求支持

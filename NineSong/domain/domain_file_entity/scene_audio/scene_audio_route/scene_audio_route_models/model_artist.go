@@ -13,11 +13,12 @@ type ArtistMetadata struct {
 	Starred   bool      `bson:"starred"`
 	StarredAt time.Time `bson:"starred_at"`
 
-	ID         primitive.ObjectID `bson:"_id"`
-	Name       string             `bson:"name"`
-	AlbumCount int                `bson:"album_count"`
-	SongCount  int                `bson:"song_count"`
-	Size       int                `bson:"size"`
+	ID          primitive.ObjectID `bson:"_id"`
+	Name        string             `bson:"name"`
+	AlbumCount  int                `bson:"album_count"`
+	SongCount   int                `bson:"song_count"`
+	Size        int                `bson:"size"`
+	HasCoverArt bool               `bson:"has_cover_art"`
 
 	ImageFiles string `bson:"image_files"` // 为空则不存在cover封面，从媒体文件中提取
 }

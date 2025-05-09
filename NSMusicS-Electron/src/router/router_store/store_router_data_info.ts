@@ -6,6 +6,9 @@ import {store_general_fetch_artist_list} from "@/data/data_stores/server/server_
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
 import {store_playlist_appearance} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_appearance";
+import {
+    store_general_model_player_list
+} from "../../data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list";
 
 export const store_router_data_info = reactive({
     router: null,
@@ -47,7 +50,7 @@ watch(() => store_router_data_info.router_select, async (newValue) => {
             /// Synchronize API data
             if (store_server_user_model.model_select === 'server') {
                 // get server all playlist
-                await store_server_user_model.Get_UserData_Synchronize_PlayList()
+                await store_general_model_player_list.get_playlists_info()
             }
         } else if (newValue === 'album') {
             store_router_data_info.router_select_model_album = true

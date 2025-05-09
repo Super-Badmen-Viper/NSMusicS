@@ -186,3 +186,25 @@ func (r *albumRepository) GetByFilter(
 
 	return &album, nil
 }
+
+func (r *albumRepository) UpdateByID(ctx context.Context, id primitive.ObjectID, update bson.M) (bool, error) {
+	coll := r.db.Collection(r.collection)
+
+	// 构建原子更新操作
+	result, err := coll.UpdateOne(
+		ctx,
+		bson.M{"_id": id},
+		update,
+		options.Update().SetUpsert(false),
+	)
+
+	if err != nil {
+		return false, fmt.Errorf("专辑更新失败: %w", err)
+	}
+
+	if result.MatchedCount == 0 {
+		return false, nil
+	}
+
+	return true, nil
+}

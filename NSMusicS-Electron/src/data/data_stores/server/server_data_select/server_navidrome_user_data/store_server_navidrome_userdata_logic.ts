@@ -119,7 +119,7 @@ export const store_server_navidrome_userdata_logic = reactive({
                 store_server_users.server_config_of_all_user_of_sqlite[index].password,
                 store_server_users.server_config_of_all_user_of_sqlite[index].type
             )
-            await this.navidrome_get_server_config_of_current_user_of_sqlite(
+            await this.navidrome_get_server_config(
                 store_server_users.server_config_of_all_user_of_sqlite[index]
             )
             if(store_server_user_model.model_server_type_of_web){
@@ -136,7 +136,7 @@ export const store_server_navidrome_userdata_logic = reactive({
         return false;
     },
     /// server start login
-    async navidrome_get_server_config_of_current_user_of_sqlite(value: Server_Configs_Props) {
+    async navidrome_get_server_config(value: Server_Configs_Props) {
         store_server_users.server_config_of_current_user_of_sqlite = value
         store_server_users.server_config_of_current_user_of_select =
             {

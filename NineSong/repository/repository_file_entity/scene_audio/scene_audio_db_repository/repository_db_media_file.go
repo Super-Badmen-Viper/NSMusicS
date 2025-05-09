@@ -27,42 +27,29 @@ func NewMediaFileRepository(db mongo.Database, collection string) scene_audio_db
 
 func (r *mediaFileRepository) Upsert(ctx context.Context, file *scene_audio_db_models.MediaFileMetadata) error {
 	coll := r.db.Collection(r.collection)
-	now := time.Now()
+	now := time.Now().UTC()
 
-	// 构建以路径为唯一标识的查询条件（核心修改）
 	filter := bson.M{"path": file.Path}
-
-	// 构造更新文档（保留created_at）
-	update := bson.M{
-		"$set": file.ToUpdateDoc(),
-		"$setOnInsert": bson.M{
-			"_id":        primitive.NewObjectID(),
-			"created_at": now,
-		},
+	update := file.ToUpdateDoc()
+	update["$setOnInsert"] = bson.M{
+		"_id":        primitive.NewObjectID(),
+		"created_at": now,
 	}
 
-	// 执行原子化更新插入
 	opts := options.Update().SetUpsert(true)
 	result, err := coll.UpdateOne(ctx, filter, update, opts)
 	if err != nil {
-		return fmt.Errorf("media file upsert failed: %w", err)
+		return fmt.Errorf("upsert操作失败: %w", err)
 	}
 
-	// 处理ID回填（关键逻辑）
 	if result.UpsertedID != nil {
 		file.ID = result.UpsertedID.(primitive.ObjectID)
-	} else {
-		// 查询已有记录的ID（防止竞态条件）
-		var existing struct {
-			ID primitive.ObjectID `bson:"_id"`
-		}
-		_ = coll.FindOne(ctx, filter).Decode(&existing)
-		file.ID = existing.ID
-	}
-
-	// 时间字段处理
-	if result.UpsertedID != nil {
 		file.CreatedAt = now
+	} else {
+		var existing struct{ ID primitive.ObjectID }
+		if err := coll.FindOne(ctx, filter).Decode(&existing); err == nil {
+			file.ID = existing.ID
+		}
 	}
 	file.UpdatedAt = now
 
@@ -136,4 +123,26 @@ func (r *mediaFileRepository) GetByPath(ctx context.Context, path string) (*scen
 		return nil, fmt.Errorf("get by path failed: %w", err)
 	}
 	return &file, nil
+}
+
+func (r *mediaFileRepository) UpdateByID(ctx context.Context, id primitive.ObjectID, update bson.M) (bool, error) {
+	coll := r.db.Collection(r.collection)
+
+	// 构建原子更新操作
+	result, err := coll.UpdateOne(
+		ctx,
+		bson.M{"_id": id},
+		update,
+		options.Update().SetUpsert(false),
+	)
+
+	if err != nil {
+		return false, fmt.Errorf("媒体文件更新失败: %w", err)
+	}
+
+	if result.MatchedCount == 0 {
+		return false, nil
+	}
+
+	return true, nil
 }

@@ -60,5 +60,6 @@ func RouterPrivate(env *bootstrap.Env, timeout time.Duration, db mongo.Database,
 	scene_audio_route_api_route.NewPlaylistRouter(env, timeout, db, protectedRouter)
 	scene_audio_route_api_route.NewPlaylistTrackRouter(env, timeout, db, protectedRouter)
 	scene_audio_route_api_route.NewAnnotationRouter(env, timeout, db, protectedRouter)
+	scene_audio_route_api_route.NewHomeRouter(env, timeout, db, protectedRouter)
 	scene_audio_route_api_route.NewRetrievalRouter(env, timeout, db, protectedRouter)
 }

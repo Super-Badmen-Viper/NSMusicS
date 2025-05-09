@@ -143,7 +143,6 @@ func (p *playlistRepository) UpdatePlaylistInfo(ctx context.Context, playlistId 
 		"$set": bson.M{
 			"name":       playlist.Name,
 			"comment":    playlist.Comment,
-			"public":     playlist.Public,
 			"updated_at": time.Now().UTC(),
 		},
 	}
@@ -174,7 +173,6 @@ func convertToDBModel(routeModel scene_audio_route_models.PlaylistMetadata) scen
 		ID:        routeModel.ID,
 		Name:      routeModel.Name,
 		Comment:   routeModel.Comment,
-		Public:    routeModel.Public,
 		CreatedAt: routeModel.CreatedAt,
 		UpdatedAt: routeModel.UpdatedAt,
 	}
@@ -192,7 +190,6 @@ func convertToRouteModel(dbModel scene_audio_db_models.PlaylistMetadata) *scene_
 		UpdatedAt: dbModel.UpdatedAt,
 		Path:      dbModel.Path,
 		Size:      dbModel.Size,
-		Public:    dbModel.Public,
 	}
 }
 

@@ -13,6 +13,9 @@ import {store_server_data_set_playlistInfo} from "@/data/data_stores/server/serv
 import {store_server_data_set_mediaInfo} from "@/data/data_stores/server/server_api_synchronization/store_server_data_set_mediaInfo";
 import {store_player_appearance} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_appearance";
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
+import {
+    store_general_model_player_list
+} from "../../../../../../../../data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list";
 
 export const store_view_media_page_logic = reactive({
     list_data_StartUpdate: false,
@@ -92,7 +95,7 @@ export const store_view_media_page_logic = reactive({
             store_view_media_page_info.media_Files_selected.map((file: any) => file.id),
             value
         )
-        store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
+        store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
 
         if (store_server_user_model.model_select === 'server') {
             await store_server_data_set_playlistInfo.Set_Selected_MediaInfo_Add_Selected_Playlist(
@@ -107,7 +110,7 @@ export const store_view_media_page_logic = reactive({
             store_view_media_page_info.media_Files_selected.map((file: any) => file.id),
             value
         )
-        store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
+        store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
 
         if (store_server_user_model.model_select === 'server') {
             await store_server_data_set_playlistInfo.Set_Selected_MediaInfo_Delete_Selected_Playlist(
@@ -125,7 +128,7 @@ export const store_view_media_page_logic = reactive({
             store_view_media_page_info.media_Files_selected.map((file: any) => file.id),
             true
         )
-        store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
+        store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
 
         if (store_server_user_model.model_select === 'server') {
             store_view_media_page_info.media_Files_selected.forEach((media: any) => {
@@ -139,7 +142,7 @@ export const store_view_media_page_logic = reactive({
             store_view_media_page_info.media_Files_selected.map((file: any) => file.id),
             value
         )
-        store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
+        store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
 
         if (store_server_user_model.model_select === 'server') {
             store_view_media_page_info.media_Files_selected.forEach((media: any) => {
@@ -154,7 +157,7 @@ export const store_view_media_page_logic = reactive({
         set_LibraryInfo_To_LocalSqlite.Set_LibraryInfo_Delete_Selected_Playlist(
             store_view_media_page_info.media_Files_selected.map((file: any) => file.id)
         )
-        store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
+        store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
     },
     get_selected_recentlist_deletet_MediaFile(value: any){
         console.log('selected_recentlist_deletetMediaFile',value)
@@ -162,7 +165,7 @@ export const store_view_media_page_logic = reactive({
             store_view_media_page_info.media_Files_selected.map((file: any) => file.id),
             value
         )
-        store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
+        store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
     },
 
     async get_page_songlists_keyword(newValue: any){

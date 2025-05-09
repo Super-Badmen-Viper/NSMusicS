@@ -17,7 +17,6 @@ type PlaylistMetadata struct {
 	Path      string             `bson:"path"`
 	Size      int                `bson:"size"`
 	//OwnerID   string             `bson:"owner_id"`
-	Public bool `bson:"public"`
 }
 
 type PlaylistListResponse struct {

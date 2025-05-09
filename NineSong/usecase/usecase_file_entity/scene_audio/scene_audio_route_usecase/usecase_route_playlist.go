@@ -40,14 +40,7 @@ func (uc *playlistUsecase) GetPlaylistsAll(ctx context.Context) ([]scene_audio_r
 		return nil, domain.WrapDomainError(err, "failed to fetch playlists")
 	}
 
-	// 业务规则：过滤私有播放列表
-	publicPlaylists := make([]scene_audio_route_models.PlaylistMetadata, 0)
-	for _, p := range playlists {
-		if p.Public {
-			publicPlaylists = append(publicPlaylists, p)
-		}
-	}
-	return publicPlaylists, nil
+	return playlists, nil
 }
 
 // 获取单个播放列表（带访问控制）
@@ -65,10 +58,6 @@ func (uc *playlistUsecase) GetPlaylist(ctx context.Context, playlistId string) (
 		return nil, domain.WrapDomainError(err, "playlist not found")
 	}
 
-	// 业务规则：非公开播放列表需要权限校验
-	if !playlist.Public {
-		// TODO: 添加用户权限校验逻辑（参考网页7的事务处理）
-	}
 	return playlist, nil
 }
 

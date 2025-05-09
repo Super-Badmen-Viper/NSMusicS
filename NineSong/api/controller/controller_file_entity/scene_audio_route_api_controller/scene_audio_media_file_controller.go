@@ -1,8 +1,8 @@
 package scene_audio_route_api_controller
 
 import (
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/api/controller"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_route/scene_audio_route_interface"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_route/scene_audio_route_models"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -37,11 +37,9 @@ func (c *MediaFileController) GetMediaFiles(ctx *gin.Context) {
 		ArtistID: ctx.Query("artist_id"),
 		Year:     ctx.Query("year"),
 	}
+
 	if params.Start == "" || params.End == "" {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"code":    "MISSING_PARAMS",
-			"message": "必须提供start和end参数",
-		})
+		controller.ErrorResponse(ctx, http.StatusBadRequest, "MISSING_PARAMS", "必须提供start和end参数")
 		return
 	}
 
@@ -59,15 +57,9 @@ func (c *MediaFileController) GetMediaFiles(ctx *gin.Context) {
 	)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"code":    "SERVER_ERROR",
-			"message": err.Error(),
-		})
+		controller.ErrorResponse(ctx, http.StatusInternalServerError, "SERVER_ERROR", err.Error())
 		return
 	}
 
-	ctx.JSON(http.StatusOK, scene_audio_route_models.MediaFileListResponse{
-		MediaFiles: mediaFiles,
-		Count:      len(mediaFiles),
-	})
+	controller.SuccessResponse(ctx, "mediaFiles", mediaFiles, len(mediaFiles))
 }

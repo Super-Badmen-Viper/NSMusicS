@@ -12,6 +12,7 @@ type AlbumMetadata struct {
 	EmbedArtPath          string             `bson:"embed_art_path"`
 	Artist                string             `bson:"artist"`
 	AlbumArtist           string             `bson:"album_artist"`
+	HasCoverArt           bool               `bson:"has_cover_art"`
 	MinYear               int                `bson:"min_year"`
 	MaxYear               int                `bson:"max_year"`
 	Compilation           bool               `bson:"compilation"`

@@ -40,16 +40,17 @@ func (uc *retrievalUsecase) GetDownload(ctx context.Context, mediaFileId string)
 	return uc.repo.GetDownload(ctx, mediaFileId)
 }
 
-func (uc *retrievalUsecase) GetCoverArt(ctx context.Context, coverArtId string) (string, error) {
+func (uc *retrievalUsecase) GetCoverArt(ctx context.Context, fileType string, targetID string) (string, error) {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
 
-	// 格式校验
-	if len(coverArtId) != 24 {
-		return "", errors.New("cover art id must be 24 hex characters")
+	// 扩展参数校验
+	allowedTypes := map[string]bool{"media": true, "album": true}
+	if !allowedTypes[fileType] {
+		return "", errors.New("invalid file type parameter")
 	}
 
-	return uc.repo.GetCoverArt(ctx, coverArtId)
+	return uc.repo.GetCoverArt(ctx, fileType, targetID)
 }
 
 func (uc *retrievalUsecase) GetLyricsLrcMetaData(ctx context.Context, mediaFileId string) (string, error) {

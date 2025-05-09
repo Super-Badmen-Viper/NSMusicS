@@ -12,6 +12,7 @@ import {
 } from "@/data/data_access/servers_configs/jellyfin_api/services_web/Library/index_service";
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
 import {store_server_ninesong_userdata_logic} from "../server_ninesong_user_data/store_server_ninesong_userdata_logic";
+import {store_server_model_statistics} from "../../server_api_abstract/music_scene/model/model_statistics";
 
 export const store_server_jellyfin_userdata_logic = reactive({
     // server add
@@ -130,7 +131,7 @@ export const store_server_jellyfin_userdata_logic = reactive({
             const data = await new Users_ApiService_of_Je(value.url).authenticateUserByName(value.url, value.user_name, value.password)
             store_server_user_model.authorization_of_Je = data.AccessToken
             store_server_user_model.userid_of_Je = data.User.Id
-            await store_router_data_logic.get_page_top_info()
+            await store_server_model_statistics.get_page_top_info()
         }
         const library_ApiService = new Library_ApiService_of_Je(value.url)
         let result_parentIds = await library_ApiService.getLibrary_MediaFolders_ALL()

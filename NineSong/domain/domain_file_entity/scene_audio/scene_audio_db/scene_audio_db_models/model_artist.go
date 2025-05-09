@@ -14,6 +14,7 @@ type ArtistMetadata struct {
 	SortArtistName        string             `bson:"sort_artist_name"`
 	SongCount             int                `bson:"song_count"`
 	Size                  int                `bson:"size"`
+	HasCoverArt           bool               `bson:"has_cover_art"`
 	MBZArtistID           string             `bson:"mbz_artist_id"`
 	Biography             string             `bson:"biography"`
 	SmallImageURL         string             `bson:"small_image_url"`

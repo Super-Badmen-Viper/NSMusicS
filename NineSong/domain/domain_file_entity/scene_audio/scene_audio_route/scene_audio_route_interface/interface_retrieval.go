@@ -5,28 +5,13 @@ import (
 )
 
 type RetrievalRepository interface {
-	GetStream(
-		ctx context.Context,
-		mediaFileId string,
-	) (string, error)
+	GetStream(ctx context.Context, mediaFileId string) (string, error)
 
-	GetDownload(
-		ctx context.Context,
-		mediaFileId string,
-	) (string, error)
+	GetDownload(ctx context.Context, mediaFileId string) (string, error)
 
-	GetCoverArt(
-		ctx context.Context,
-		coverArtId string,
-	) (string, error)
+	GetCoverArt(ctx context.Context, fileType string, targetID string) (string, error)
 
-	GetLyricsLrcMetaData(
-		ctx context.Context,
-		mediaFileId string,
-	) (string, error)
+	GetLyricsLrcMetaData(ctx context.Context, mediaFileId string) (string, error)
 
-	GetLyricsLrcFile(
-		ctx context.Context,
-		mediaFileId string,
-	) (string, error)
+	GetLyricsLrcFile(ctx context.Context, mediaFileId string) (string, error)
 }

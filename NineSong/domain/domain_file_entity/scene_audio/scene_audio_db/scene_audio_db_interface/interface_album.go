@@ -3,6 +3,7 @@ package scene_audio_db_interface
 import (
 	"context"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_db/scene_audio_db_models"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -11,6 +12,7 @@ type AlbumRepository interface {
 	// 创建/更新
 	Upsert(ctx context.Context, album *scene_audio_db_models.AlbumMetadata) error
 	BulkUpsert(ctx context.Context, albums []*scene_audio_db_models.AlbumMetadata) (int, error)
+	UpdateByID(ctx context.Context, id primitive.ObjectID, update bson.M) (bool, error)
 
 	// 删除
 	DeleteByID(ctx context.Context, id primitive.ObjectID) error

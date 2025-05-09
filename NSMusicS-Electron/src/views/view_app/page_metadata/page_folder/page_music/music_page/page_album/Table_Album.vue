@@ -62,6 +62,9 @@ import error_album from '@/assets/img/error_album.jpg'
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 import {store_player_audio_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
+import {
+  store_general_model_player_list
+} from "@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list";
 const errorHandled = ref(new Map());
 const handleImageError = async (item: any) => {
   let result_src = error_album
@@ -479,7 +482,7 @@ async function update_playlist_addAlbum(id: any, playlist_id: any){
     }
     ////
     message.success(t('common.add'))
-    store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
+    store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
   }catch (e) {
     console.error(e)
   }

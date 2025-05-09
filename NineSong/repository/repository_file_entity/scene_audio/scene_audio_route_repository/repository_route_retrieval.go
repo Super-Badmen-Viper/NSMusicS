@@ -53,49 +53,44 @@ func (r *retrievalRepository) GetDownload(ctx context.Context, mediaFileId strin
 	return result.Path, nil
 }
 
-func (r *retrievalRepository) GetCoverArt(ctx context.Context, coverArtId string) (string, error) {
-	// 参数格式验证
-	if _, err := primitive.ObjectIDFromHex(coverArtId); err != nil {
-		return "", errors.New("invalid cover art id format")
+func (r *retrievalRepository) GetCoverArt(ctx context.Context, fileType string, targetID string) (string, error) {
+	if _, err := primitive.ObjectIDFromHex(targetID); err != nil {
+		return "", errors.New("invalid target id format")
 	}
 
-	// Step 1: 获取封面存储路径
 	tempCollection := r.db.Collection(domain.CollectionFileEntityAudioTempMetadata)
 	var tempMeta scene_audio_db_models.TempMetadata
 	err := tempCollection.FindOne(
 		ctx,
-		bson.M{
-			"metadata_type": "cover",
-		},
+		bson.M{"metadata_type": "cover"},
 	).Decode(&tempMeta)
 	if err != nil {
 		return "", fmt.Errorf("cover storage config not found: %w", err)
 	}
 
-	// Step 2: 构建完整文件路径
-	fileName := fmt.Sprintf("%s.jpg", coverArtId)
-	fullPath := filepath.Join(tempMeta.FolderPath, fileName)
+	typePath := filepath.Join(tempMeta.FolderPath, fileType, targetID, "cover.jpg")
 
-	// Step 2: 验证文件存在性
-	if _, err := os.Stat(fullPath); os.IsNotExist(err) {
-		return "", fmt.Errorf("cover file not found: %s", fileName)
+	if fileInfo, err := os.Stat(typePath); err != nil {
+		if os.IsNotExist(err) {
+			return "", fmt.Errorf("cover art not found: %s", typePath)
+		}
+		return "", fmt.Errorf("file system error: %w", err)
+	} else if fileInfo.Size() == 0 {
+		return "", errors.New("empty cover art file")
 	}
 
-	return fullPath, nil
+	return typePath, nil
 }
 
 func (r *retrievalRepository) GetLyricsLrcMetaData(ctx context.Context, mediaFileId string) (string, error) {
-	// 参数验证
 	objID, err := primitive.ObjectIDFromHex(mediaFileId)
 	if err != nil {
 		return "", errors.New("invalid media file id format")
 	}
 
-	// 查询媒体文件表
 	collection := r.db.Collection(domain.CollectionFileEntityAudioMediaFile)
 	var result scene_audio_route_models.RetrievalLyricsMetadata
 
-	// 构建查询条件
 	filter := bson.M{"_id": objID}
 
 	// 执行查询

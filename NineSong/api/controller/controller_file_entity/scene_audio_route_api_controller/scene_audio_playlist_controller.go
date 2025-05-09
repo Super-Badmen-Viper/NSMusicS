@@ -55,7 +55,6 @@ func (c *PlaylistController) CreatePlaylist(ctx *gin.Context) {
 	var req struct {
 		Name    string `form:"name" binding:"required"`
 		Comment string `form:"comment"`
-		Public  bool   `form:"public"`
 	}
 
 	if err := ctx.ShouldBind(&req); err != nil {
@@ -69,7 +68,6 @@ func (c *PlaylistController) CreatePlaylist(ctx *gin.Context) {
 	newPlaylist := scene_audio_route_models.PlaylistMetadata{
 		Name:    req.Name,
 		Comment: req.Comment,
-		Public:  req.Public,
 	}
 
 	created, err := c.PlaylistUsecase.CreatePlaylist(ctx.Request.Context(), newPlaylist)
@@ -86,7 +84,6 @@ func (c *PlaylistController) UpdatePlaylist(ctx *gin.Context) {
 		ID      string `form:"id" binding:"required"`
 		Name    string `form:"name" binding:"required"`
 		Comment string `form:"comment"`
-		Public  bool   `form:"public"`
 	}
 
 	if err := ctx.ShouldBindWith(&req, binding.Form); err != nil {
@@ -102,7 +99,6 @@ func (c *PlaylistController) UpdatePlaylist(ctx *gin.Context) {
 		ID:      userid,
 		Name:    req.Name,
 		Comment: req.Comment,
-		Public:  req.Public,
 	}
 
 	updatedPlaylist, err := c.PlaylistUsecase.UpdatePlaylistInfo(ctx.Request.Context(), req.ID, updateData)

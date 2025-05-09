@@ -348,7 +348,7 @@ routers.beforeEach((to, from, next) => {
 routers.afterEach(async (to, from) => {
   if(to.name !== from.name){
     try{
-      store_router_data_logic.get_page_top_info()
+      store_server_model_statistics.get_page_top_info()
     }catch{}
     store_router_data_logic.clear_Files_temporary()
     if(to.name === 'home'){
@@ -744,6 +744,9 @@ const { locale } = useI18n({
 })
 import {store_server_login_logic} from "@/views/view_server/page_metadata/page_login/store/store_server_login_logic";
 import {store_server_login_info} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+import {
+  store_server_model_statistics
+} from "@/data/data_stores/server/server_api_abstract/music_scene/model/model_statistics";
 onMounted(async () => {
   create_menuOptions_appBar()
   try {
@@ -753,6 +756,7 @@ onMounted(async () => {
       store_app_configs_info.desktop_system_kind = 'docker'
       if (!store_router_data_info.router_select_model_server_login && store_server_login_info.server_accessToken.length > 0) {
         await store_app_configs_info.load_app();
+        store_server_user_model.token = store_server_login_info.server_accessToken;
       }
     } else {
       await store_app_configs_info.load_app()

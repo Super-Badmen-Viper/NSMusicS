@@ -81,12 +81,15 @@ import {
 import {store_player_audio_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
 import {store_view_media_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
 import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
+import {
+  store_general_model_player_list
+} from "@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list";
 const contextmenu = ref(null)
 async function update_playlist_addMediaFile(id: any, playlist_id: any){
   try{
     await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(id,playlist_id)
     message.success(t('common.add'))
-    store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
+    store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
   }catch (e) {
     console.error(e)
   }

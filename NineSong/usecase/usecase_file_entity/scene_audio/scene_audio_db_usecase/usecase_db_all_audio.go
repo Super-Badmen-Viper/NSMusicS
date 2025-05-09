@@ -16,55 +16,69 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type AudioMetadataExtractor struct{}
+type AudioMetadataExtractor struct {
+	mediaID primitive.ObjectID
+}
 
 func (e *AudioMetadataExtractor) Extract(
-	path string, fileMetadata *domain_file_entity.FileMetadata,
-	coverTempPath string,
-	lyricsPath string,
+	path string,
+	fileMetadata *domain_file_entity.FileMetadata,
 ) (
 	*scene_audio_db_models.MediaFileMetadata,
 	*scene_audio_db_models.AlbumMetadata,
 	*scene_audio_db_models.ArtistMetadata,
+	tag.Metadata,
 	error,
 ) {
-	// 获取完整文件元数据
+	e.mediaID = primitive.NewObjectID()
 	if err := e.enrichFileMetadata(path, fileMetadata); err != nil {
-		return nil, nil, nil, err
+		return nil, nil, nil, nil, err
 	}
-
-	// 打开音频文件解析标签
 	file, err := os.Open(path)
 	if err != nil {
-		return nil, nil, nil, fmt.Errorf("文件访问失败[%s]: %w", path, err)
+		return nil, nil, nil, nil, fmt.Errorf("文件访问失败[%s]: %w", path, err)
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Printf("文件关闭失败[%s]: %v", path, err)
+		}
+	}(file)
 
 	metadata, err := tag.ReadFrom(file)
 	if err != nil {
-		return nil, nil, nil, fmt.Errorf("标签解析失败[%s]: %w", path, err)
+		return nil, nil, nil, nil, fmt.Errorf("标签解析失败[%s]: %w", path, err)
 	}
-
 	now := time.Now().UTC()
 	rawTags := metadata.Raw()
 
-	// 生成新的 ObjectID 用于关联关系
-
-	// 生成确定性ID
 	artistID := e.generateArtistID(metadata, rawTags)
 	albumID := e.generateAlbumID(metadata, rawTags)
 	albumArtistID := e.generateAlbumArtistID(metadata, rawTags)
 
-	// 构建媒体文件元数据
-	mediaFile := e.buildMediaFile(path, metadata, rawTags, fileMetadata, now, artistID, albumID, albumArtistID, coverTempPath, lyricsPath)
-
-	// 构建专辑元数据
-	album := e.buildAlbum(path, metadata, rawTags, now, artistID, albumID, albumArtistID, coverTempPath)
-
-	// 构建艺术家元数据
-	artist := e.buildArtist(path, metadata, rawTags, now, artistID, coverTempPath)
-
-	return mediaFile, album, artist, nil
+	mediaFile := e.buildMediaFile(
+		path,
+		metadata,
+		rawTags,
+		fileMetadata,
+		artistID,
+		albumID,
+		albumArtistID,
+	)
+	album := e.buildAlbum(
+		metadata,
+		rawTags,
+		now,
+		artistID,
+		albumID,
+		albumArtistID,
+	)
+	artist := e.buildArtist(
+		metadata,
+		rawTags,
+		artistID,
+	)
+	return mediaFile, album, artist, metadata, nil
 }
 
 func (e *AudioMetadataExtractor) enrichFileMetadata(path string, fm *domain_file_entity.FileMetadata) error {
@@ -73,7 +87,12 @@ func (e *AudioMetadataExtractor) enrichFileMetadata(path string, fm *domain_file
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Printf("文件关闭失败[%s]: %v", path, err)
+		}
+	}(file)
 
 	hash := sha256.New()
 	if _, err := io.Copy(hash, file); err != nil {
@@ -107,27 +126,23 @@ func (e *AudioMetadataExtractor) buildMediaFile(
 	m tag.Metadata,
 	rawTags map[string]interface{},
 	fm *domain_file_entity.FileMetadata,
-	now time.Time,
 	artistID, albumID, albumArtistID primitive.ObjectID,
-	coverTempPath string,
-	lyricsPath string,
 ) *scene_audio_db_models.MediaFileMetadata {
 	currentTrack, totalTracks := m.Track()
 	currentDisc, totalDiscs := m.Disc()
-	coverPath := e.extractMediaCover(m, fm.ID, coverTempPath)
-	e.saveLyricsToFile(e.getTagString(rawTags, "lyrics"), fm.ID, lyricsPath)
 
 	return &scene_audio_db_models.MediaFileMetadata{
-		// 基础文件元数据
-		ID:        fm.ID,
+		ID:             e.mediaID,
+		MediumImageURL: "",
+
 		Path:      fm.FilePath,
 		Size:      int(fm.Size),
 		CreatedAt: fm.CreatedAt,
 		UpdatedAt: fm.UpdatedAt,
 
-		ArtistID:      artistID.Hex(),      // 新增关联
-		AlbumID:       albumID.Hex(),       // 新增关联
-		AlbumArtistID: albumArtistID.Hex(), // 假设专辑艺术家=艺术家
+		ArtistID:      artistID.Hex(),
+		AlbumID:       albumID.Hex(),
+		AlbumArtistID: albumArtistID.Hex(),
 
 		// 音频标签元数据
 		Title:       m.Title(),
@@ -155,7 +170,7 @@ func (e *AudioMetadataExtractor) buildMediaFile(
 		Compilation: e.isCompilation(rawTags),
 
 		// 默认空值字段
-		HasCoverArt:          coverPath != "",
+		HasCoverArt:          false,
 		Duration:             0,
 		BitRate:              0,
 		FullText:             "",
@@ -176,63 +191,15 @@ func (e *AudioMetadataExtractor) buildMediaFile(
 		RGTrackGain:          e.getTagFloat(rawTags, "replaygain_track_gain"),
 		RGAlbumPeak:          e.getTagFloat(rawTags, "replaygain_album_peak"),
 		RGTrackPeak:          e.getTagFloat(rawTags, "replaygain_track_peak"),
-		MediumImageURL:       coverPath,
 	}
-}
-func (e *AudioMetadataExtractor) extractMediaCover(m tag.Metadata, ID primitive.ObjectID, coverTempPath string) string {
-	if pic := m.Picture(); pic != nil && len(pic.Data) > 0 {
-		// 构建标准化文件路径
-		fileName := ID.Hex() + ".jpg"
-		targetPath := filepath.Join(coverTempPath, fileName)
-
-		// 原子化目录创建
-		if err := os.MkdirAll(coverTempPath, 0755); err != nil {
-			log.Printf("[ERROR] 目录创建失败: %v | 路径: %s", err, coverTempPath)
-			return ""
-		}
-
-		// 安全写入文件
-		if err := os.WriteFile(targetPath, pic.Data, 0644); err != nil {
-			log.Printf("[ERROR] 文件写入失败: %v | 路径: %s", err, targetPath)
-			return ""
-		}
-
-		return targetPath
-	}
-	return ""
-}
-func (e *AudioMetadataExtractor) saveLyricsToFile(content string, id primitive.ObjectID, basePath string) string {
-	if content == "" {
-		return ""
-	}
-
-	// 构建标准化路径
-	fileName := id.Hex() + ".lrc"
-	targetPath := filepath.Join(basePath, fileName)
-
-	// 原子化目录创建
-	if err := os.MkdirAll(basePath, 0755); err != nil {
-		log.Printf("[ERROR] 歌词目录创建失败: %v | 路径: %s", err, basePath)
-		return ""
-	}
-
-	// 安全写入文件
-	if err := os.WriteFile(targetPath, []byte(content), 0644); err != nil {
-		log.Printf("[ERROR] 歌词写入失败: %v | 路径: %s", err, targetPath)
-		return ""
-	}
-
-	return targetPath
 }
 
 func (e *AudioMetadataExtractor) buildAlbum(
-	path string,
-	m tag.Metadata, rawTags map[string]interface{}, now time.Time,
+	m tag.Metadata,
+	rawTags map[string]interface{},
+	now time.Time,
 	artistID, albumID, albumArtistID primitive.ObjectID,
-	coverTempPath string,
 ) *scene_audio_db_models.AlbumMetadata {
-	coverPath := e.extractAlbumCover(path)
-
 	return &scene_audio_db_models.AlbumMetadata{
 		ID:            albumID,             // 关键修改
 		ArtistID:      artistID.Hex(),      // 新增关联
@@ -250,7 +217,6 @@ func (e *AudioMetadataExtractor) buildAlbum(
 		CreatedAt:        now,
 		UpdatedAt:        now,
 
-		// 默认空值字段
 		EmbedArtPath:          "",
 		Compilation:           false,
 		SongCount:             0,
@@ -265,7 +231,7 @@ func (e *AudioMetadataExtractor) buildAlbum(
 		CatalogNum:            e.getTagString(rawTags, "catalognum"),
 		Comment:               e.getTagString(rawTags, "comment"),
 		AllArtistIDs:          "",
-		ImageFiles:            coverPath,
+		ImageFiles:            "",
 		Paths:                 "",
 		Description:           "",
 		SmallImageURL:         "",
@@ -275,45 +241,11 @@ func (e *AudioMetadataExtractor) buildAlbum(
 		ExternalInfoUpdatedAt: time.Time{},
 	}
 }
-func (e *AudioMetadataExtractor) extractAlbumCover(path string) string {
-	// 1. 获取文件所在目录
-	dir := filepath.Dir(path)
-
-	// 2. 读取目录下所有文件
-	entries, err := os.ReadDir(dir)
-	if err != nil {
-		return ""
-	}
-
-	// 3. 遍历检测封面文件
-	var coverPath string
-	for _, entry := range entries {
-		if entry.IsDir() {
-			continue
-		}
-
-		// 4. 提取文件名和扩展名
-		filename := entry.Name()
-		ext := strings.ToLower(filepath.Ext(filename))
-		baseName := strings.TrimSuffix(filename, ext)
-
-		// 5. 匹配cover文件名规范
-		if baseName == "cover" && (ext == ".jpg" || ext == ".jpeg" || ext == ".png") {
-			// 6. 优先选择jpg格式
-			if coverPath == "" || (ext == ".jpg" && !strings.HasSuffix(coverPath, ".jpg")) {
-				coverPath = filepath.Join(dir, filename)
-			}
-		}
-	}
-
-	return coverPath
-}
 
 func (e *AudioMetadataExtractor) buildArtist(
-	path string,
-	m tag.Metadata, rawTags map[string]interface{}, now time.Time,
+	m tag.Metadata,
+	rawTags map[string]interface{},
 	artistID primitive.ObjectID,
-	coverTempPath string,
 ) *scene_audio_db_models.ArtistMetadata {
 	return &scene_audio_db_models.ArtistMetadata{
 		ID:          artistID,
@@ -337,36 +269,28 @@ func (e *AudioMetadataExtractor) buildArtist(
 }
 
 // 辅助方法
-// 生成艺术家ID（基于MusicBrainz ID或艺术家名称）
 func (e *AudioMetadataExtractor) generateArtistID(m tag.Metadata, rawTags map[string]interface{}) primitive.ObjectID {
 	if mbzID := e.getTagString(rawTags, "musicbrainz_artistid"); mbzID != "" {
 		return generateDeterministicID(mbzID)
 	}
 	return generateDeterministicID(m.Artist())
 }
-
-// 生成专辑ID（基于MusicBrainz ID或专辑名称+艺术家）
 func (e *AudioMetadataExtractor) generateAlbumID(m tag.Metadata, rawTags map[string]interface{}) primitive.ObjectID {
 	if mbzID := e.getTagString(rawTags, "musicbrainz_albumid"); mbzID != "" {
 		return generateDeterministicID(mbzID)
 	}
 	return generateDeterministicID(m.Album() + "|" + m.AlbumArtist())
 }
-
-// 生成专辑艺术家ID
 func (e *AudioMetadataExtractor) generateAlbumArtistID(m tag.Metadata, rawTags map[string]interface{}) primitive.ObjectID {
 	if mbzID := e.getTagString(rawTags, "musicbrainz_albumartistid"); mbzID != "" {
 		return generateDeterministicID(mbzID)
 	}
 	return generateDeterministicID(m.AlbumArtist())
 }
-
-// 确定性ID生成器（SHA256哈希前12字节）
 func generateDeterministicID(seed string) primitive.ObjectID {
 	hash := sha256.Sum256([]byte(seed))
 	return primitive.ObjectID(hash[:12])
 }
-
 func (e *AudioMetadataExtractor) getTagString(tags map[string]interface{}, key string) string {
 	if val, ok := tags[key]; ok {
 		if s, ok := val.(string); ok {
@@ -386,7 +310,6 @@ func (e *AudioMetadataExtractor) getTagInt(tags map[string]interface{}, key stri
 	}
 	return 0
 }
-
 func (e *AudioMetadataExtractor) getTagFloat(tags map[string]interface{}, key string) float64 {
 	if s := e.getTagString(tags, key); s != "" {
 		var result float64
@@ -396,7 +319,6 @@ func (e *AudioMetadataExtractor) getTagFloat(tags map[string]interface{}, key st
 	}
 	return 0.0
 }
-
 func (e *AudioMetadataExtractor) isCompilation(tags map[string]interface{}) bool {
 	switch {
 	case e.getTagString(tags, "compilation") == "1",

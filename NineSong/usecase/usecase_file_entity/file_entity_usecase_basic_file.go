@@ -9,6 +9,7 @@ import (
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_db/scene_audio_db_interface"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_db/scene_audio_db_models"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/usecase/usecase_file_entity/scene_audio/scene_audio_db_usecase"
+	"github.com/dhowden/tag"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -191,6 +192,7 @@ func (uc *FileUsecase) processFile(
 ) {
 	defer wg.Done()
 
+	// 上下文取消检查
 	select {
 	case <-ctx.Done():
 		errChan <- ctx.Err()
@@ -215,6 +217,7 @@ func (uc *FileUsecase) processFile(
 		return
 	}
 
+	// 创建基础元数据
 	metadata, err := uc.createMetadataBasicInfo(path, folderID)
 	if err != nil {
 		log.Printf("元数据创建失败: %s | %v", path, err)
@@ -222,25 +225,173 @@ func (uc *FileUsecase) processFile(
 		return
 	}
 
-	if upsertErr := uc.fileRepo.Upsert(ctx, metadata); upsertErr != nil {
-		log.Printf("文件写入失败: %s | %v", path, upsertErr)
-		errChan <- fmt.Errorf("数据库写入失败 %s: %w", path, upsertErr)
+	// 保存基础文件信息
+	if err := uc.fileRepo.Upsert(ctx, metadata); err != nil {
+		log.Printf("文件写入失败: %s | %v", path, err)
+		errChan <- fmt.Errorf("数据库写入失败 %s: %w", path, err)
+		return
 	}
 
 	// 处理音频文件
 	if fileType == domain_file_entity.Audio {
-		mediaFile, album, artist, err := uc.audioExtractor.Extract(path, metadata, coverTempPath, lyricsPath)
+		mediaFile, album, artist, metadataTag, err := uc.audioExtractor.Extract(path, metadata)
 		if err != nil {
 			log.Printf("音频解析失败: %s | %v", path, err)
 			errChan <- fmt.Errorf("元数据解析失败 %s: %w", path, err)
 			return
 		}
 
-		if processErr := uc.processAudioHierarchy(ctx, artist, album, mediaFile); processErr != nil {
-			log.Printf("层级处理失败: %s | %v", path, processErr)
-			errChan <- fmt.Errorf("层级数据写入失败 %s: %w", path, processErr)
+		// 保存层级关系
+		if err := uc.processAudioHierarchy(ctx, artist, album, mediaFile); err != nil {
+			log.Printf("层级处理失败: %s | %v", path, err)
+			errChan <- fmt.Errorf("层级数据写入失败 %s: %w", path, err)
+			return
+		}
+
+		// 保存封面与歌词
+		if err := uc.processMediaFilesAndAlbumCover(
+			ctx,
+			mediaFile, // 媒体文件对象
+			album,     // 已加载的专辑对象
+			metadataTag,
+			coverTempPath,
+			lyricsPath,
+		); err != nil {
+			errChan <- fmt.Errorf("文件存储失败 %s: %w", path, err)
+			return
 		}
 	}
+}
+
+// 合并后的封面与专辑关联处理方法
+func (uc *FileUsecase) processMediaFilesAndAlbumCover(
+	ctx context.Context,
+	media *scene_audio_db_models.MediaFileMetadata,
+	album *scene_audio_db_models.AlbumMetadata,
+	tag tag.Metadata,
+	coverBasePath string,
+	lyricsBasePath string,
+) error {
+	// 创建媒体文件存储目录
+	mediaCoverDir := filepath.Join(coverBasePath, "media", media.ID.Hex())
+	if err := os.MkdirAll(mediaCoverDir, 0755); err != nil {
+		return fmt.Errorf("媒体目录创建失败: %w", err)
+	}
+
+	// 原子化操作保障
+	var coverPath string
+	defer func() {
+		if coverPath == "" {
+			os.RemoveAll(mediaCoverDir)
+		}
+	}()
+
+	// 保存封面文件
+	if pic := tag.Picture(); pic != nil && len(pic.Data) > 0 {
+		targetPath := filepath.Join(mediaCoverDir, "cover.jpg")
+		if err := os.WriteFile(targetPath, pic.Data, 0644); err != nil {
+			return fmt.Errorf("封面写入失败: %w", err)
+		}
+		coverPath = targetPath
+	}
+
+	// 更新媒体文件记录
+	mediaUpdate := bson.M{
+		"$set": bson.M{
+			"medium_image_url": coverPath,
+			"has_cover_art":    coverPath != "",
+		},
+	}
+	if _, err := uc.mediaRepo.UpdateByID(ctx, media.ID, mediaUpdate); err != nil {
+		return fmt.Errorf("媒体更新失败: %w", err)
+	}
+
+	// 同步处理专辑封面 (核心修改点)
+	if album != nil && coverPath != "" {
+		// 直接使用内存对象判断，避免二次查询
+		if album.MediumImageURL == "" {
+			// 创建专辑专属封面目录
+			albumCoverDir := filepath.Join(coverBasePath, "album", album.ID.Hex())
+			if err := os.MkdirAll(albumCoverDir, 0755); err != nil {
+				log.Printf("[WARN] 专辑封面目录创建失败 | AlbumID:%s | 错误:%v",
+					album.ID.Hex(), err)
+			} else if pic := tag.Picture(); pic != nil && len(pic.Data) > 0 {
+				// 保存到专辑目录
+				albumCoverPath := filepath.Join(albumCoverDir, "cover.jpg")
+				if err := os.WriteFile(albumCoverPath, pic.Data, 0644); err != nil {
+					log.Printf("[WARN] 专辑封面写入失败 | AlbumID:%s | 路径:%s | 错误:%v",
+						album.ID.Hex(), albumCoverPath, err)
+				} else {
+					coverPath = albumCoverPath // 优先使用专辑级封面路径
+				}
+			}
+
+			// 更新专辑元数据
+			albumUpdate := bson.M{
+				"$set": bson.M{
+					"medium_image_url": coverPath,
+					"has_cover_art":    true, // 新增字段
+					"updated_at":       time.Now().UTC(),
+				},
+			}
+			if _, err := uc.albumRepo.UpdateByID(ctx, album.ID, albumUpdate); err != nil {
+				log.Printf("[WARN] 专辑元数据更新失败 | ID:%s | 错误:%v",
+					album.ID.Hex(), err)
+			}
+		}
+	}
+
+	// 保存歌词文件（原有逻辑保持不变）
+	if lyrics, ok := tag.Raw()["lyrics"].(string); ok && lyrics != "" {
+		targetDir := filepath.Join(lyricsBasePath, "lyrics", media.ID.Hex())
+		if err := os.MkdirAll(targetDir, 0755); err != nil {
+			return fmt.Errorf("歌词目录创建失败: %w", err)
+		}
+
+		targetPath := filepath.Join(targetDir, "lyrics.lrc")
+		if err := os.WriteFile(targetPath, []byte(lyrics), 0644); err != nil {
+			return fmt.Errorf("歌词写入失败: %w", err)
+		}
+	}
+
+	return nil
+}
+
+func (uc *FileUsecase) saveMediaCover(
+	pic *tag.Picture,
+	storageDir string,
+) (string, error) {
+	if pic == nil || len(pic.Data) == 0 {
+		return "", nil
+	}
+
+	targetPath := filepath.Join(storageDir, "cover.jpg")
+	if err := os.WriteFile(targetPath, pic.Data, 0644); err != nil {
+		return "", fmt.Errorf("封面写入失败: %w", err)
+	}
+	return targetPath, nil
+}
+
+func (uc *FileUsecase) saveMediaLyrics(
+	mediaID primitive.ObjectID,
+	rawTags map[string]interface{},
+	basePath string,
+) (string, error) {
+	lyrics, ok := rawTags["lyrics"].(string)
+	if !ok || lyrics == "" {
+		return "", nil
+	}
+
+	targetDir := filepath.Join(basePath, "lyrics", mediaID.Hex())
+	if err := os.MkdirAll(targetDir, 0755); err != nil {
+		return "", fmt.Errorf("歌词目录创建失败: %w", err)
+	}
+
+	targetPath := filepath.Join(targetDir, "lyrics.lrc")
+	if err := os.WriteFile(targetPath, []byte(lyrics), 0644); err != nil {
+		return "", fmt.Errorf("歌词写入失败: %w", err)
+	}
+	return targetPath, nil
 }
 
 func (uc *FileUsecase) processAudioHierarchy(

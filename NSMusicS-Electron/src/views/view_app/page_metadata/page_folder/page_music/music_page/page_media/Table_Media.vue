@@ -567,6 +567,9 @@ import {store_router_data_logic} from "@/router/router_store/store_router_data_l
 import {
   Get_Jellyfin_Temp_Data_To_LocalSqlite
 } from "@/data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
+import {
+  store_general_model_player_list
+} from "@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list";
 
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
@@ -595,7 +598,7 @@ async function update_playlist_addPlaylist(){
             getCreatePlaylist_set_id
         )
         // get server all playlist
-        await store_server_user_model.Get_UserData_Synchronize_PlayList()
+        await store_general_model_player_list.get_playlists_info()
         //
         console.log('SetPlaylist_of_Local: ' +
             getCreatePlaylist_set_id + ': ' +
@@ -608,7 +611,7 @@ async function update_playlist_addPlaylist(){
       }
     }
     else {
-      store_playlist_list_logic.get_playlist_tracks_temporary_add(playlist_set_of_addPlaylist_of_playlistname.value)
+      store_general_model_player_list.get_playlist_tracks_temporary_add(playlist_set_of_addPlaylist_of_playlistname.value)
     }
 
     page_songlists_statistic.value.forEach((item: any) => {
@@ -652,7 +655,7 @@ async function update_playlist_updatePlaylist(){
           playlist_set_of_updatePlaylist_of_public.value
       )
     }else{
-      store_playlist_list_logic.get_playlist_tracks_temporary_update(playlist)
+      store_general_model_player_list.get_playlist_tracks_temporary_update(playlist)
     }
   }catch (e) {
     console.error(e)
@@ -663,7 +666,7 @@ async function update_playlist_deletePlaylist(){
     Type_Update_Playlist.value = false;
     playlist_set_of_updatePlaylist_of_playlistcomment.value = '';
     if(playlist_update_emit_id.value.length > 0) {
-      store_playlist_list_logic.get_playlist_tracks_temporary_delete(playlist_update_emit_id.value)
+      store_general_model_player_list.get_playlist_tracks_temporary_delete(playlist_update_emit_id.value)
       if (store_server_user_model.model_select === 'server') {
         const result = await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_DeletePlaylist(
             playlist_update_emit_id.value
@@ -687,7 +690,7 @@ async function update_playlist_addMediaFile(id: any, playlist_id: any){
   try{
     await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(id,playlist_id)
     message.success(t('common.add'))
-    store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
+    store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
   }catch (e) {
     console.error(e)
   }
@@ -715,7 +718,7 @@ async function update_playlist_deleteMediaFile(id: any){
     }
     store_view_media_page_info.media_Files_temporary = store_view_media_page_info.media_Files_temporary.filter((media: any) => media.id !== id);
     message.success(t('common.delete'))
-    store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
+    store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
   }catch (e) {
     console.error(e)
   }

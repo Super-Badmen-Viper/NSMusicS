@@ -61,57 +61,20 @@ type MediaFileMetadata struct {
 }
 
 func (m *MediaFileMetadata) ToUpdateDoc() bson.M {
-	now := time.Now()
-	return bson.M{
-		"path":                    m.Path,
-		"title":                   m.Title,
-		"album":                   m.Album,
-		"artist":                  m.Artist,
-		"artist_id":               m.ArtistID,
-		"album_artist":            m.AlbumArtist,
-		"album_id":                m.AlbumID,
-		"has_cover_art":           m.HasCoverArt,
-		"track_number":            m.TrackNumber,
-		"total_tracks":            m.TotalTracks,
-		"disc_number":             m.DiscNumber,
-		"total_discs":             m.TotalDiscs,
-		"year":                    m.Year,
-		"size":                    m.Size,
-		"suffix":                  m.Suffix,
-		"duration":                m.Duration,
-		"bit_rate":                m.BitRate,
-		"genre":                   m.Genre,
-		"compilation":             m.Compilation,
-		"full_text":               m.FullText,
-		"album_artist_id":         m.AlbumArtistID,
-		"order_album_name":        m.OrderAlbumName,
-		"order_album_artist_name": m.OrderAlbumArtistName,
-		"order_artist_name":       m.OrderArtistName,
-		"sort_album_name":         m.SortAlbumName,
-		"sort_artist_name":        m.SortArtistName,
-		"sort_album_artist_name":  m.SortAlbumArtistName,
-		"sort_title":              m.SortTitle,
-		"disc_subtitle":           m.DiscSubtitle,
-		"mbz_track_id":            m.MBZTrackID,
-		"mbz_album_id":            m.MBZAlbumID,
-		"mbz_artist_id":           m.MBZArtistID,
-		"mbz_album_artist_id":     m.MBZAlbumArtistID,
-		"mbz_album_type":          m.MBZAlbumType,
-		"mbz_album_comment":       m.MBZAlbumComment,
-		"catalog_num":             m.CatalogNum,
-		"comment":                 m.Comment,
-		"lyrics":                  m.Lyrics,
-		"bpm":                     m.BPM,
-		"channels":                m.Channels,
-		"order_title":             m.OrderTitle,
-		"mbz_release_track_id":    m.MBZReleaseTrackID,
-		"rg_album_gain":           m.RGAlbumGain,
-		"rg_album_peak":           m.RGAlbumPeak,
-		"rg_track_gain":           m.RGTrackGain,
-		"rg_track_peak":           m.RGTrackPeak,
-		"medium_image_url":        m.MediumImageURL,
-		"updated_at":              now, // 强制更新修改时间
-	}
+	// 使用反射自动生成完整字段列表
+	data, _ := bson.Marshal(m)
+	var raw bson.M
+	_ = bson.Unmarshal(data, &raw)
+
+	// 移除不可更新字段
+	delete(raw, "_id")
+	delete(raw, "created_at")
+
+	// 确保关键字段存在
+	raw["medium_image_url"] = m.MediumImageURL
+	raw["updated_at"] = time.Now().UTC()
+
+	return bson.M{"$set": raw}
 }
 
 // FilterParams 基础过滤参数
