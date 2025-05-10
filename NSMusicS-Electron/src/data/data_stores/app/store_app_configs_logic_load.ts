@@ -223,7 +223,7 @@ export const store_app_configs_logic_load = reactive({
                 ) {
                     store_player_appearance.player_use_lyric_skip_forward = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_lyric_skip_forward'] === 'true'
                 } else {
-                    store_player_appearance.player_use_lyric_skip_forward = true
+                    store_player_appearance.player_use_lyric_skip_forward = false
                 }
                 store_player_appearance.player_use_background_filter_blur = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_background_filter_blur'] === 'true'
                 store_player_appearance.player_use_background_automatic_rotation = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_background_automatic_rotation'] === 'true'

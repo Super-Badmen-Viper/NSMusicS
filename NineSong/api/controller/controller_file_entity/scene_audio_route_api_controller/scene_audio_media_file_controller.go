@@ -1,7 +1,6 @@
 package scene_audio_route_api_controller
 
 import (
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/api/controller"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_route/scene_audio_route_interface"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -39,7 +38,7 @@ func (c *MediaFileController) GetMediaFiles(ctx *gin.Context) {
 	}
 
 	if params.Start == "" || params.End == "" {
-		controller.ErrorResponse(ctx, http.StatusBadRequest, "MISSING_PARAMS", "必须提供start和end参数")
+		ErrorResponse(ctx, http.StatusBadRequest, "MISSING_PARAMS", "必须提供start和end参数")
 		return
 	}
 
@@ -57,9 +56,9 @@ func (c *MediaFileController) GetMediaFiles(ctx *gin.Context) {
 	)
 
 	if err != nil {
-		controller.ErrorResponse(ctx, http.StatusInternalServerError, "SERVER_ERROR", err.Error())
+		ErrorResponse(ctx, http.StatusInternalServerError, "SERVER_ERROR", err.Error())
 		return
 	}
 
-	controller.SuccessResponse(ctx, "mediaFiles", mediaFiles, len(mediaFiles))
+	SuccessResponse(ctx, "mediaFiles", mediaFiles, len(mediaFiles))
 }

@@ -60,6 +60,28 @@ func (r *albumRepository) BulkUpsert(ctx context.Context, albums []*scene_audio_
 	return successCount, nil
 }
 
+func (r *albumRepository) UpdateByID(ctx context.Context, id primitive.ObjectID, update bson.M) (bool, error) {
+	coll := r.db.Collection(r.collection)
+
+	// 构建原子更新操作
+	result, err := coll.UpdateOne(
+		ctx,
+		bson.M{"_id": id},
+		update,
+		options.Update().SetUpsert(false),
+	)
+
+	if err != nil {
+		return false, fmt.Errorf("专辑更新失败: %w", err)
+	}
+
+	if result.MatchedCount == 0 {
+		return false, nil
+	}
+
+	return true, nil
+}
+
 func (r *albumRepository) DeleteByID(ctx context.Context, id primitive.ObjectID) error {
 	coll := r.db.Collection(r.collection)
 	_, err := coll.DeleteOne(ctx, bson.M{"_id": id})
@@ -119,7 +141,12 @@ func (r *albumRepository) GetByArtist(ctx context.Context, artistID string) ([]*
 	if err != nil {
 		return nil, fmt.Errorf("get albums by artist failed: %w", err)
 	}
-	defer cursor.Close(ctx)
+	defer func(cursor mongo.Cursor, ctx context.Context) {
+		err := cursor.Close(ctx)
+		if err != nil {
+			fmt.Printf("close cursor failed: %v\n", err)
+		}
+	}(cursor, ctx)
 
 	var albums []*scene_audio_db_models.AlbumMetadata
 	if err := cursor.All(ctx, &albums); err != nil {
@@ -185,26 +212,4 @@ func (r *albumRepository) GetByFilter(
 	}
 
 	return &album, nil
-}
-
-func (r *albumRepository) UpdateByID(ctx context.Context, id primitive.ObjectID, update bson.M) (bool, error) {
-	coll := r.db.Collection(r.collection)
-
-	// 构建原子更新操作
-	result, err := coll.UpdateOne(
-		ctx,
-		bson.M{"_id": id},
-		update,
-		options.Update().SetUpsert(false),
-	)
-
-	if err != nil {
-		return false, fmt.Errorf("专辑更新失败: %w", err)
-	}
-
-	if result.MatchedCount == 0 {
-		return false, nil
-	}
-
-	return true, nil
 }

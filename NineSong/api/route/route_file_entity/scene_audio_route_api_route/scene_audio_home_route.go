@@ -23,13 +23,8 @@ func NewHomeRouter(
 
 	router := group.Group("/homes")
 	{
-		router.GET("/artists", ctrl.GetArtistList)
 		router.GET("/artists/random", ctrl.GetRandomArtistList)
-
-		router.GET("/albums", ctrl.GetAlbumList)
 		router.GET("/albums/random", ctrl.GetRandomAlbumList)
-
-		router.GET("/medias", ctrl.GetMediaFileList)
 		router.GET("/medias/random", ctrl.GetRandomMediaFileList)
 	}
 }

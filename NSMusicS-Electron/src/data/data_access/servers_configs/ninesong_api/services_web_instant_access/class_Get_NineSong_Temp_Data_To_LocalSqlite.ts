@@ -62,15 +62,6 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
     private home_Lists_ApiWebService_of_ND = new Home_Lists_ApiWebService_of_ND(
         store_server_users.server_config_of_current_user_of_sqlite?.url + '/api',
     )
-    private song_Lists_ApiWebService_of_ND = new Media_Lists_ApiWebService_of_ND(
-        store_server_users.server_config_of_current_user_of_sqlite?.url + '/api',
-    )
-    private album_Lists_ApiWebService_of_ND = new Album_Lists_ApiWebService_of_ND(
-        store_server_users.server_config_of_current_user_of_sqlite?.url + '/api',
-    )
-    private artist_Lists_ApiWebService_of_ND = new Artist_Lists_ApiWebService_of_ND(
-        store_server_users.server_config_of_current_user_of_sqlite?.url + '/api',
-    )
 
     public async get_home_list(
         url: string,
@@ -427,12 +418,15 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
     }
     public async get_album_list(
         url: string,
-        username: string,token: string,salt: string,
-        _end:string, _order:string, _sort:string, _start: string, _search:string, _starred:string,
-        _artist_id:string
+        _start: string, _end:string,
+        _sort:string, _order:string, _starred:string, _search:string,
+        min_year:string,max_year:string,
+        _artist_id:string,
     ){
-        let albumlist = await this.album_Lists_ApiWebService_of_ND.getAlbumList_ALL(
-            _end, _order, _sort, _start, _search, _starred,
+        let albumlist = await this.albums_ApiService_of_NineSong.getAlbums(
+            _start, _end, _sort, _order,
+            _starred, _search,
+            min_year,max_year,
             _artist_id
         )
         if (Array.isArray(albumlist) && albumlist.length > 0) {
@@ -494,11 +488,12 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
     }
     public async get_artist_list(
         url: string,
-        username: string,token: string,salt: string,
-        _end:string, _order:string, _sort:string, _start: string, _search:string, _starred:string,
+        _start: string, _end:string,
+        _sort:string, _order:string, _starred:string, _search:string,
     ){
-        let artistlist = await this.artist_Lists_ApiWebService_of_ND.getArtistList_ALL(
-            _end, _order, _sort, _start, _search, _starred
+        let artistlist = await this.artists_ApiService_of_NineSong.getArtists(
+            _start, _end, _sort, _order,
+            _starred, _search
         )
         if (Array.isArray(artistlist) && artistlist.length > 0) {
             if(_sort === 'playDate'){
@@ -538,23 +533,28 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
     }
     public async get_play_list(
         url: string,
-        username: string,token: string,salt: string,
-        _end:string, _order:string, _sort:string, _start: string, _search:string, _starred:string,
+        _start: string, _end:string,
+        _sort:string, _order:string, _starred:string, _search:string,
+        year:string,
         playlist_id: string,
-        _album_id:string, _artist_id:string
+        _album_id:string, _artist_id:string,
     ){
         let songlist = []
         if(playlist_id === '') {
-            const {data,totalCount} = await this.song_Lists_ApiWebService_of_ND.getMediaList_ALL(
-                _end, _order, _sort, _start, _search, _starred, _album_id, _artist_id, ''
+            songlist = await this.medias_ApiService_of_NineSong.getMedias(
+                _start, _end, _sort, _order,
+                _starred, _search,
+                year,
+                _album_id, _artist_id
             );
-            songlist = data
         }else{
-            const {data,totalCount} = await this.song_Lists_ApiWebService_of_ND.getMediaList_of_Playlist(
+            songlist = await this.medias_ApiService_of_NineSong.getMedias_Playlist(
                 playlist_id,
-                _end, _order, _sort, _start, ''
+                _start, _end, _sort, _order,
+                _starred, _search,
+                year,
+                _album_id, _artist_id
             )
-            songlist = data
         }
         if (Array.isArray(songlist) && songlist.length > 0) {
             if(_sort === 'playDate'){
@@ -631,18 +631,9 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
     }
     public async get_random_song_list(
         url: string,
-        username: string,token: string,salt: string,
-        size: string,
-        fromYear: string, toYear: string
+        _start: string, _end:string,
     ){
-        let browsing_ApiService_of_ND = new Browsing_ApiService_of_ND(url);
-        const getRandomSongs = await browsing_ApiService_of_ND.getRandomSongs(
-            username, token, salt,
-            size,
-            fromYear, toYear
-        );
-        let media_Retrieval_ApiService_of_ND = new Media_Retrieval_ApiService_of_ND(url);
-        let songlist = getRandomSongs["subsonic-response"]["randomSongs"]["song"];
+        const songlist = []
         if (Array.isArray(songlist) && songlist.length > 0) {
             let last_index = 0;
             songlist.map(async (song: any, index: number) => {

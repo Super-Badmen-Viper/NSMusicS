@@ -1,11 +1,11 @@
-package controller
+package scene_audio_route_api_controller
 
 import "github.com/gin-gonic/gin"
 
 const (
 	APIVersion    = "1.16.1"
 	ServerVersion = "0.52.5 (c5560888)"
-	ServiceType   = "ninesong"
+	ServiceType   = "NSMusicS"
 )
 
 func SuccessResponse(c *gin.Context, dataKey string, data interface{}, count int) {

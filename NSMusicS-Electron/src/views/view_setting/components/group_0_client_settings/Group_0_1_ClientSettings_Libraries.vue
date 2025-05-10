@@ -618,7 +618,13 @@ import {
                       <div
                           class="server_item_info"
                           @click="() => {
+                            let show = false
                             if(item.type != 'ninesong'){
+                              show = true
+                            }else if(store_app_configs_info.desktop_system_kind != 'docker'){
+                              show = true
+                            }
+                            if(show){
                               item.show = !item.show;
                               // if(item.type === 'jellyfin' || item.type === 'emby'){
                               //   store_server_user_model.server_login_model_of_apikey = true
@@ -708,7 +714,8 @@ import {
                               </n-form>
                               <n-form v-else style="margin-top: -12px;">
                                 <n-space vertical size="small" style="margin-bottom: 10px;">
-                                  <span>{{ $t('form.addServer.input_username') }}</span>
+                                  <span v-if="item.type != 'ninesong'">{{ $t('form.addServer.input_username') }}</span>
+                                  <span v-else>{{ $t('nsmusics.server_page.server_email') }}</span>
                                   <n-input clearable size="small" v-model:value="item.user_name" placeholder=""/>
                                 </n-space>
                                 <n-space vertical size="small" style="margin-bottom: 10px;">
@@ -1089,7 +1096,6 @@ import {
             <n-radio-button
                 style="text-align: center;width: 133px;"
                 :key="Type_Server_Kinds[0].value"
-                disabled
                 :value="Type_Server_Kinds[0].value"
                 :label="Type_Server_Kinds[0].label"
             />
@@ -1175,7 +1181,8 @@ import {
           </n-form>
           <n-form v-else style="margin-top: -12px;">
             <n-space vertical style="margin-bottom: 10px;">
-              <span>{{ $t('form.addServer.input_username') }}</span>
+              <span v-if="item.type != 'ninesong'">{{ $t('form.addServer.input_username') }}</span>
+              <span v-else>{{ $t('nsmusics.server_page.server_email') }}</span>
               <n-input clearable placeholder="" v-model:value="server_set_of_addUser_of_username"/>
             </n-space>
             <n-space vertical style="margin-bottom: 10px;">

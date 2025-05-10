@@ -2,7 +2,7 @@ package scene_audio_db_api_controller
 
 import (
 	"context"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/api/controller"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/api/controller/controller_file_entity/scene_audio_route_api_controller"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/usecase/usecase_file_entity"
 	"github.com/gin-gonic/gin"
@@ -25,7 +25,7 @@ func (ctrl *FileController) ScanDirectory(c *gin.Context) {
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		controller.ErrorResponse(c, http.StatusBadRequest, "INVALID_REQUEST", "无效的请求格式")
+		scene_audio_route_api_controller.ErrorResponse(c, http.StatusBadRequest, "INVALID_REQUEST", "无效的请求格式")
 		return
 	}
 
@@ -39,9 +39,9 @@ func (ctrl *FileController) ScanDirectory(c *gin.Context) {
 	c.JSON(http.StatusAccepted, gin.H{
 		"ninesong-response": gin.H{
 			"status":        "ok",
-			"version":       controller.APIVersion,
-			"type":          controller.ServiceType,
-			"serverVersion": controller.ServerVersion,
+			"version":       scene_audio_route_api_controller.APIVersion,
+			"type":          scene_audio_route_api_controller.ServiceType,
+			"serverVersion": scene_audio_route_api_controller.ServerVersion,
 			"message":       "后台处理已启动",
 		},
 	})

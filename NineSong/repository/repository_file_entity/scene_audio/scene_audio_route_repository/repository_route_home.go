@@ -8,7 +8,6 @@ import (
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_route/scene_audio_route_models"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/mongo"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"strconv"
 )
 
@@ -18,129 +17,6 @@ type homeRepository struct {
 
 func NewHomeRepository(db mongo.Database) scene_audio_route_interface.HomeRepository {
 	return &homeRepository{db: db}
-}
-
-func (r *homeRepository) getItemIDs(ctx context.Context, itemType string, start, end string) ([]primitive.ObjectID, error) {
-	// 获取分页参数
-	skip, _ := strconv.Atoi(start)
-	limit, _ := strconv.Atoi(end)
-	if limit <= 0 || limit > 1000 {
-		limit = 50
-	}
-
-	// 从推荐表获取指定类型的ID列表
-	homeColl := r.db.Collection(domain.CollectionFileEntityAudioAnnotation)
-	pipeline := []bson.M{
-		{"$match": bson.M{"item_type": itemType}},
-		{"$skip": skip},
-		{"$limit": limit},
-		{"$project": bson.M{"item_id": 1}},
-	}
-
-	cursor, err := homeColl.Aggregate(ctx, pipeline)
-	if err != nil {
-		return nil, fmt.Errorf("获取推荐ID失败: %w", err)
-	}
-	defer cursor.Close(ctx)
-
-	var results []struct {
-		ItemID primitive.ObjectID `bson:"item_id"`
-	}
-	if err := cursor.All(ctx, &results); err != nil {
-		return nil, fmt.Errorf("解析推荐ID失败: %w", err)
-	}
-
-	// 提取ID列表
-	ids := make([]primitive.ObjectID, 0, len(results))
-	for _, item := range results {
-		ids = append(ids, item.ItemID)
-	}
-
-	return ids, nil
-}
-
-func (r *homeRepository) GetArtistList(
-	ctx context.Context,
-	end, start string,
-) ([]scene_audio_route_models.ArtistMetadata, error) {
-	// 1. 获取推荐艺术家ID
-	artistIDs, err := r.getItemIDs(ctx, "artist", start, end)
-	if err != nil {
-		return nil, err
-	}
-
-	// 2. 查询艺术家详情
-	artistColl := r.db.Collection(domain.CollectionFileEntityAudioArtist)
-	filter := bson.M{"_id": bson.M{"$in": artistIDs}}
-
-	cursor, err := artistColl.Find(ctx, filter)
-	if err != nil {
-		return nil, fmt.Errorf("查询艺术家失败: %w", err)
-	}
-	defer cursor.Close(ctx)
-
-	var results []scene_audio_route_models.ArtistMetadata
-	if err := cursor.All(ctx, &results); err != nil {
-		return nil, fmt.Errorf("解析艺术家数据失败: %w", err)
-	}
-
-	return results, nil
-}
-
-func (r *homeRepository) GetAlbumList(
-	ctx context.Context,
-	end, start string,
-) ([]scene_audio_route_models.AlbumMetadata, error) {
-	// 1. 获取推荐专辑ID
-	albumIDs, err := r.getItemIDs(ctx, "album", start, end)
-	if err != nil {
-		return nil, err
-	}
-
-	// 2. 查询专辑详情
-	albumColl := r.db.Collection(domain.CollectionFileEntityAudioAlbum)
-	filter := bson.M{"_id": bson.M{"$in": albumIDs}}
-
-	cursor, err := albumColl.Find(ctx, filter)
-	if err != nil {
-		return nil, fmt.Errorf("查询专辑失败: %w", err)
-	}
-	defer cursor.Close(ctx)
-
-	var results []scene_audio_route_models.AlbumMetadata
-	if err := cursor.All(ctx, &results); err != nil {
-		return nil, fmt.Errorf("解析专辑数据失败: %w", err)
-	}
-
-	return results, nil
-}
-
-func (r *homeRepository) GetMediaFileList(
-	ctx context.Context,
-	end, start string,
-) ([]scene_audio_route_models.MediaFileMetadata, error) {
-	// 1. 获取推荐媒体文件ID
-	mediaIDs, err := r.getItemIDs(ctx, "media", start, end)
-	if err != nil {
-		return nil, err
-	}
-
-	// 2. 查询媒体文件详情
-	mediaColl := r.db.Collection(domain.CollectionFileEntityAudioMediaFile)
-	filter := bson.M{"_id": bson.M{"$in": mediaIDs}}
-
-	cursor, err := mediaColl.Find(ctx, filter)
-	if err != nil {
-		return nil, fmt.Errorf("查询媒体文件失败: %w", err)
-	}
-	defer cursor.Close(ctx)
-
-	var results []scene_audio_route_models.MediaFileMetadata
-	if err := cursor.All(ctx, &results); err != nil {
-		return nil, fmt.Errorf("解析媒体文件失败: %w", err)
-	}
-
-	return results, nil
 }
 
 func (r *homeRepository) GetRandomArtistList(

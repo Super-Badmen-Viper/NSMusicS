@@ -1,7 +1,6 @@
 package scene_audio_route_api_controller
 
 import (
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/api/controller"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_route/scene_audio_route_interface"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -31,7 +30,7 @@ func (c *PlaylistTrackController) GetPlaylistTracks(ctx *gin.Context) {
 	}
 
 	if err := ctx.ShouldBind(&params); err != nil {
-		controller.ErrorResponse(ctx, http.StatusBadRequest, "INVALID_PARAMS", "参数校验失败: "+err.Error())
+		ErrorResponse(ctx, http.StatusBadRequest, "INVALID_PARAMS", "参数校验失败: "+err.Error())
 		return
 	}
 
@@ -50,11 +49,11 @@ func (c *PlaylistTrackController) GetPlaylistTracks(ctx *gin.Context) {
 	)
 
 	if err != nil {
-		controller.ErrorResponse(ctx, http.StatusInternalServerError, "DATA_RETRIEVAL_FAILED", "获取播放列表曲目失败: "+err.Error())
+		ErrorResponse(ctx, http.StatusInternalServerError, "DATA_RETRIEVAL_FAILED", "获取播放列表曲目失败: "+err.Error())
 		return
 	}
 
-	controller.SuccessResponse(ctx, "mediaFiles", mediaFiles, len(mediaFiles))
+	SuccessResponse(ctx, "mediaFiles", mediaFiles, len(mediaFiles))
 }
 
 func (c *PlaylistTrackController) AddPlaylistTracks(ctx *gin.Context) {
@@ -64,7 +63,7 @@ func (c *PlaylistTrackController) AddPlaylistTracks(ctx *gin.Context) {
 	}
 
 	if err := ctx.ShouldBind(&req); err != nil {
-		controller.ErrorResponse(ctx, http.StatusBadRequest, "INVALID_PARAMS", "参数格式错误: "+parseBindingError(err))
+		ErrorResponse(ctx, http.StatusBadRequest, "INVALID_PARAMS", "参数格式错误: "+parseBindingError(err))
 		return
 	}
 
@@ -81,11 +80,11 @@ func (c *PlaylistTrackController) AddPlaylistTracks(ctx *gin.Context) {
 			statusCode = http.StatusBadRequest
 			errorCode = "INVALID_REQUEST"
 		}
-		controller.ErrorResponse(ctx, statusCode, errorCode, err.Error())
+		ErrorResponse(ctx, statusCode, errorCode, err.Error())
 		return
 	}
 
-	controller.SuccessResponse(ctx, "added", gin.H{"success": success}, 1)
+	SuccessResponse(ctx, "added", gin.H{"success": success}, 1)
 }
 
 func (c *PlaylistTrackController) RemovePlaylistTracks(ctx *gin.Context) {
@@ -95,7 +94,7 @@ func (c *PlaylistTrackController) RemovePlaylistTracks(ctx *gin.Context) {
 	}
 
 	if err := ctx.ShouldBind(&req); err != nil {
-		controller.ErrorResponse(ctx, http.StatusBadRequest, "INVALID_PARAMS", "参数格式错误: "+parseBindingError(err))
+		ErrorResponse(ctx, http.StatusBadRequest, "INVALID_PARAMS", "参数格式错误: "+parseBindingError(err))
 		return
 	}
 
@@ -112,11 +111,11 @@ func (c *PlaylistTrackController) RemovePlaylistTracks(ctx *gin.Context) {
 			statusCode = http.StatusBadRequest
 			errorCode = "INVALID_REQUEST"
 		}
-		controller.ErrorResponse(ctx, statusCode, errorCode, err.Error())
+		ErrorResponse(ctx, statusCode, errorCode, err.Error())
 		return
 	}
 
-	controller.SuccessResponse(ctx, "removed", gin.H{"success": success}, 1)
+	SuccessResponse(ctx, "removed", gin.H{"success": success}, 1)
 }
 
 func (c *PlaylistTrackController) SortPlaylistTracks(ctx *gin.Context) {
@@ -126,7 +125,7 @@ func (c *PlaylistTrackController) SortPlaylistTracks(ctx *gin.Context) {
 	}
 
 	if err := ctx.ShouldBind(&req); err != nil {
-		controller.ErrorResponse(ctx, http.StatusBadRequest, "INVALID_PARAMS", "参数格式错误: "+parseBindingError(err))
+		ErrorResponse(ctx, http.StatusBadRequest, "INVALID_PARAMS", "参数格式错误: "+parseBindingError(err))
 		return
 	}
 
@@ -143,11 +142,11 @@ func (c *PlaylistTrackController) SortPlaylistTracks(ctx *gin.Context) {
 			statusCode = http.StatusBadRequest
 			errorCode = "INVALID_REQUEST"
 		}
-		controller.ErrorResponse(ctx, statusCode, errorCode, err.Error())
+		ErrorResponse(ctx, statusCode, errorCode, err.Error())
 		return
 	}
 
-	controller.SuccessResponse(ctx, "sorted", gin.H{"success": success}, 1)
+	SuccessResponse(ctx, "sorted", gin.H{"success": success}, 1)
 }
 
 func parseBindingError(err error) string {

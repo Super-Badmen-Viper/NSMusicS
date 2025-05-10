@@ -4,6 +4,17 @@ import {
     store_server_login_info
 } from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
 import axios from "axios";
+import {
+    Auth_Token_ApiService_of_NineSong
+} from "../../../../data_access/servers_configs/ninesong_api/services_web/Auth/Auth_Token/index_service";
+import {store_server_users} from "@/data/data_stores/server/store_server_users";
+import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
+import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
+import {
+    User_Authorization_ApiWebService_of_ND
+} from "@/data/data_access/servers_configs/navidrome_api/services_web/user_authorization/index_service";
+import { Set_ServerInfo_To_LocalSqlite } from "@/data/data_access/local_configs/class_Set_ServerInfo_To_LocalSqlite";
+import {isElectron} from '@/utils/electron/isElectron';
 
 export const store_server_ninesong_userdata_logic = reactive({
     /// docker server manage
@@ -84,13 +95,16 @@ export const store_server_ninesong_userdata_logic = reactive({
         type: string
     ) {
         try {
-            const userService = new User_ApiService_of_ND(url + '/rest');
-            const { salt, token } = this.ninesong_get_EncryptedPassword(password);
-            const userData = await userService.getUser(user_name, token, salt);
+            let auth = new Auth_Token_ApiService_of_NineSong(url)
+            const userData = await auth.getAuth_Token(
+                user_name,
+                password,
+            )
+            if (userData && userData.accessToken && userData.refreshToken) {
+                store_server_login_info.server_accessToken = String(userData.accessToken);
+                store_server_login_info.server_refreshToken = String(userData.refreshToken);
 
-            if (userData && userData["subsonic-response"] && userData["subsonic-response"]["status"] === 'ok') {
                 let data: Server_Configs_Props = null;
-
                 if (isElectron) {
                     let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
                     data = set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_CreateUser(
@@ -130,10 +144,15 @@ export const store_server_ninesong_userdata_logic = reactive({
         user_name:string, password:string,
         type: string
     ) {
-        const userService = new User_ApiService_of_ND(url+'/rest');
-        const {salt, token} = this.ninesong_get_EncryptedPassword(password);
-        const userData = await userService.getUser(user_name, token, salt);
-        if (userData["subsonic-response"]["status"] === 'ok'){
+        let auth = new Auth_Token_ApiService_of_NineSong(url)
+        const userData = await auth.getAuth_Token(
+            user_name,
+            password,
+        )
+        if (userData && userData.accessToken && userData.refreshToken) {
+            store_server_login_info.server_accessToken = String(userData.accessToken);
+            store_server_login_info.server_refreshToken = String(userData.refreshToken);
+
             let data: Server_Configs_Props = null
             if(isElectron) {
                 let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
@@ -208,36 +227,5 @@ export const store_server_ninesong_userdata_logic = reactive({
         store_server_user_model.username = value.user_name
         store_server_user_model.password = value.password
         store_app_configs_logic_save.save_system_config_of_Servers_Config()
-
-        const {salt, token} = this.ninesong_get_EncryptedPassword(store_server_users.server_config_of_current_user_of_sqlite?.password);
-        store_server_user_model.salt = salt
-        store_server_user_model.token = token
-
-        if(store_server_user_model.model_server_type_of_local) {
-            let set_Navidrome_Data_To_LocalSqlite = new Set_Navidrome_ALL_Data_To_LocalSqlite()
-            await set_Navidrome_Data_To_LocalSqlite.Set_Read_Navidrome_Api_BasicInfo_Add_LocalSqlite(
-                store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                store_server_user_model.token,
-                store_server_user_model.salt,
-            )
-            /// reset app data
-            if(isElectron) {
-                ipcRenderer.send('window-reset-data');
-            }
-        }
-    },
-    /// server get token
-    ninesong_get_EncryptedPassword(password: string): { salt: string, token: string } {
-        const saltLength = 6;
-        const characters = 'dfeVYUY9iu239iBUYHuji46h39BHUJ8u42nmrfhDD3r4ouj123890fvn48u95h';
-        let randomString = '';
-        for (let i = 0; i < saltLength; i++) {
-            const randomIndex = Math.floor(Math.random() * characters.length);
-            randomString += characters[randomIndex];
-        }
-        const salt = randomString;
-        const token = hash(password + salt);
-        return { salt, token };
     },
 });

@@ -25,14 +25,18 @@ export class NineSong_Api_Services_Web {
         data?: any,
     ): Promise<any> {
         try {
-            if(store_server_login_info.server_accessToken != undefined &&
-                store_server_login_info.server_accessToken.length > 0) {
+            if(
+                endpoint === 'user/login' ||
+                (store_server_login_info.server_accessToken != undefined && store_server_login_info.server_accessToken.length > 0)
+            ) {
                 const headers = {
                     Authorization: `Bearer ${store_server_login_info.server_accessToken}`
                 };
 
                 const queryString = params ? new URLSearchParams(params).toString() : '';
-                const url = `${this.baseUrl}/${endpoint}${queryString ? `?${queryString}` : ''}`;
+                const url = this.baseUrl.includes('api')
+                    ? `${this.baseUrl}/${endpoint}${queryString ? `?${queryString}` : ''}`
+                    : `${this.baseUrl}/api/${endpoint}${queryString ? `?${queryString}` : ''}`;
 
                 const response = await axios({
                     method,
