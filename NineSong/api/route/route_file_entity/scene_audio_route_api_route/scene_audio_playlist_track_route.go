@@ -16,18 +16,15 @@ func NewPlaylistTrackRouter(
 	group *gin.RouterGroup,
 ) {
 	repo := scene_audio_route_repository.NewPlaylistTrackRepository(db, domain.CollectionFileEntityAudioPlaylistTrack)
-	uc := scene_audio_route_usecase.NewPlaylistTrackUsecase(repo, timeout)
-	ctrl := scene_audio_route_api_controller.NewPlaylistTrackController(uc)
+	usecase := scene_audio_route_usecase.NewPlaylistTrackUsecase(repo, timeout)
+	ctrl := scene_audio_route_api_controller.NewPlaylistTrackController(usecase)
 
 	playlistTrackGroup := group.Group("/playlists/tracks")
 	{
-		// 获取曲目列表
 		playlistTrackGroup.GET("", ctrl.GetPlaylistTracks)
-		// 添加曲目
+		playlistTrackGroup.GET("/filter_counts", ctrl.GetPlaylistFilterCounts)
 		playlistTrackGroup.POST("/add", ctrl.AddPlaylistTracks)
-		// 移除曲目
 		playlistTrackGroup.POST("/remove", ctrl.RemovePlaylistTracks)
-		// 排序曲目
 		playlistTrackGroup.PUT("/sort", ctrl.SortPlaylistTracks)
 	}
 }

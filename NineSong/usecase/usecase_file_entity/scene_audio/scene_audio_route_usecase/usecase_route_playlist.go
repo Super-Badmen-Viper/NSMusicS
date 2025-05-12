@@ -17,10 +17,7 @@ type playlistUsecase struct {
 	timeout time.Duration
 }
 
-func NewPlaylistUsecase(
-	repo scene_audio_route_interface.PlaylistRepository,
-	timeout time.Duration,
-) scene_audio_route_interface.PlaylistRepository {
+func NewPlaylistUsecase(repo scene_audio_route_interface.PlaylistRepository, timeout time.Duration) scene_audio_route_interface.PlaylistRepository {
 	return &playlistUsecase{
 		repo:    repo,
 		timeout: timeout,

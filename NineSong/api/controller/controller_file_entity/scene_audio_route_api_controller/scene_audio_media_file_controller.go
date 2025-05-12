@@ -85,8 +85,5 @@ func (c *MediaFileController) GetMediaFilterCounts(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"code":   "SUCCESS",
-		"counts": counts,
-	})
+	SuccessResponse(ctx, "mediaFiles", counts, 1)
 }

@@ -92,8 +92,5 @@ func (c *AlbumController) GetAlbumFilterCounts(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"code":   "SUCCESS",
-		"counts": counts,
-	})
+	SuccessResponse(ctx, "albums", counts, 1)
 }

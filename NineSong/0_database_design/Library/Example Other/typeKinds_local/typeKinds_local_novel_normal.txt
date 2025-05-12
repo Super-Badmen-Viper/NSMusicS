@@ -1,7 +1,0 @@
-id:全局唯一标识符（GUID），通常用于唯一标识某个实体或记录。
-
-"pageCount" int, -- 页数（适用于小说、有声小说）
-"readPosition" int, -- 阅读位置（适用于小说、有声小说）
-"lastReadDate" datetime, -- 上次阅读日期（适用于小说、有声小说、日记）
-
-"bookFormat" Text, -- 书籍格式（适用于小说、有声小说）

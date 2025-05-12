@@ -69,8 +69,5 @@ func (c *ArtistController) GetArtistFilterCounts(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"code":   "SUCCESS",
-		"counts": counts,
-	})
+	SuccessResponse(ctx, "artists", counts, 1)
 }

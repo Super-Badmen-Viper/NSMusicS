@@ -1,7 +1,0 @@
-//// 基础流式文件->所有者信息
-OwnerId: 所有者ID，通常用于标识内容的拥有者。
-UserDataKey: 用户数据键，通常用于标识用户数据的唯一键。
-PresentationUniqueKey: 展示唯一键，通常用于唯一标识内容的展示形式。
-ProviderIds: 提供者ID，通常用于表示与内容相关的多个提供者的唯一标识符。
-ProductionLocations: 制作地点，通常用于表示内容的制作地点。
-Studios: 制作工作室或公司，通常用于表示内容的制作方。
