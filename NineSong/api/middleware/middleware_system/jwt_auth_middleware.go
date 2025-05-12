@@ -11,27 +11,46 @@ import (
 
 func JwtAuthMiddleware(secret string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		authHeader := c.Request.Header.Get("Authorization")
-		t := strings.Split(authHeader, " ")
-		if len(t) == 2 {
-			authToken := t[1]
-			authorized, err := token_util.IsAuthorized(authToken, secret)
-			if authorized {
-				userID, err := token_util.ExtractIDFromToken(authToken, secret)
-				if err != nil {
-					c.JSON(http.StatusUnauthorized, domain.ErrorResponse{Message: err.Error()})
-					c.Abort()
-					return
-				}
-				c.Set("x-user-id", userID)
-				c.Next()
+		// 优先从URL参数获取access_token
+		authToken := c.Query("access_token")
+
+		// 如果URL参数没有，尝试从Header获取
+		if authToken == "" {
+			authHeader := c.GetHeader("Authorization")
+			if authHeader == "" {
+				c.JSON(http.StatusUnauthorized, domain.ErrorResponse{Message: "Not authorized"})
+				c.Abort()
 				return
 			}
+
+			// 解析Bearer Token
+			tokenParts := strings.Split(authHeader, " ")
+			if len(tokenParts) != 2 || strings.ToLower(tokenParts[0]) != "bearer" {
+				c.JSON(http.StatusUnauthorized, domain.ErrorResponse{Message: "Invalid authorization format"})
+				c.Abort()
+				return
+			}
+			authToken = tokenParts[1]
+		}
+
+		// 验证令牌
+		authorized, err := token_util.IsAuthorized(authToken, secret)
+		if !authorized || err != nil {
+			c.JSON(http.StatusUnauthorized, domain.ErrorResponse{Message: "Invalid token"})
+			c.Abort()
+			return
+		}
+
+		// 提取用户信息
+		userID, err := token_util.ExtractIDFromToken(authToken, secret)
+		if err != nil {
 			c.JSON(http.StatusUnauthorized, domain.ErrorResponse{Message: err.Error()})
 			c.Abort()
 			return
 		}
-		c.JSON(http.StatusUnauthorized, domain.ErrorResponse{Message: "Not authorized"})
-		c.Abort()
+
+		// 设置上下文信息
+		c.Set("x-user-id", userID)
+		c.Next()
 	}
 }

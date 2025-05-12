@@ -9,11 +9,12 @@ import (
 type ArtistRepository interface {
 	GetArtistItems(
 		ctx context.Context,
-		end string,
-		order string,
-		sort string,
-		start string,
-		search string,
-		starred string,
+		end, order, sort, start,
+		search, starred string,
 	) ([]scene_audio_route_models.ArtistMetadata, error)
+
+	GetArtistFilterItemsCount(
+		ctx context.Context,
+		search, starred string,
+	) (*scene_audio_route_models.ArtistFilterCounts, error)
 }

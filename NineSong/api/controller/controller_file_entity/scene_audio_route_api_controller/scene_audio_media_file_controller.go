@@ -1,9 +1,10 @@
 package scene_audio_route_api_controller
 
 import (
+	"net/http"
+
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_route/scene_audio_route_interface"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 type MediaFileController struct {
@@ -37,11 +38,6 @@ func (c *MediaFileController) GetMediaFiles(ctx *gin.Context) {
 		Year:     ctx.Query("year"),
 	}
 
-	if params.Start == "" || params.End == "" {
-		ErrorResponse(ctx, http.StatusBadRequest, "MISSING_PARAMS", "必须提供start和end参数")
-		return
-	}
-
 	mediaFiles, err := c.MediaFileUsecase.GetMediaFileItems(
 		ctx.Request.Context(),
 		params.End,
@@ -61,4 +57,36 @@ func (c *MediaFileController) GetMediaFiles(ctx *gin.Context) {
 	}
 
 	SuccessResponse(ctx, "mediaFiles", mediaFiles, len(mediaFiles))
+}
+
+func (c *MediaFileController) GetMediaFilterCounts(ctx *gin.Context) {
+	params := struct {
+		Search   string `form:"search"`
+		AlbumID  string `form:"album_id"`
+		ArtistID string `form:"artist_id"`
+		Year     string `form:"year"`
+	}{
+		Search:   ctx.Query("search"),
+		AlbumID:  ctx.Query("album_id"),
+		ArtistID: ctx.Query("artist_id"),
+		Year:     ctx.Query("year"),
+	}
+
+	counts, err := c.MediaFileUsecase.GetMediaFileFilterItemsCount(
+		ctx.Request.Context(),
+		params.Search,
+		params.AlbumID,
+		params.ArtistID,
+		params.Year,
+	)
+
+	if err != nil {
+		ErrorResponse(ctx, http.StatusInternalServerError, "SERVER_ERROR", err.Error())
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"code":   "SUCCESS",
+		"counts": counts,
+	})
 }

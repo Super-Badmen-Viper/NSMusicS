@@ -21,6 +21,11 @@ type PlaylistTrackRepository interface {
 		playlistId string,
 	) ([]scene_audio_route_models.MediaFileMetadata, error)
 
+	//GetPlaylistTrackFilterItemsCount(
+	//	ctx context.Context,
+	//	search, albumId, artistId, year string,
+	//) (*scene_audio_route_models.MediaFileFilterCounts, error)
+
 	AddPlaylistTrackItems(
 		ctx context.Context,
 		playlistId string,

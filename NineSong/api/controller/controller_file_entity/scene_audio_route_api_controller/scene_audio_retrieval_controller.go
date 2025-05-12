@@ -67,7 +67,7 @@ func (c *RetrievalController) DownloadHandler(ctx *gin.Context) {
 
 func (c *RetrievalController) CoverArtHandler(ctx *gin.Context) {
 	var req struct {
-		Type     string `form:"type" binding:"required,oneof=media album"`
+		Type     string `form:"type" binding:"required,oneof=media album artist"`
 		TargetID string `form:"target_id" binding:"required,hexadecimal,len=24"`
 	}
 
@@ -147,7 +147,16 @@ func serveMediaFile(ctx *gin.Context, path string, contentType string) {
 		handleFileError(ctx, err)
 		return
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"code":    "FILE_CLOSE_ERROR",
+				"message": "关闭文件时发生错误",
+			})
+			return
+		}
+	}(file)
 
 	fileInfo, _ := file.Stat()
 

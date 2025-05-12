@@ -3,8 +3,6 @@ import {NineSong_Api_Services_Web} from "../NineSong_Api_Services_Web";
 export class Home_ApiService_of_NineSong extends NineSong_Api_Services_Web {
     public async getRandomArtists(
         start: string, end: string,
-        sort: string, order: string,
-        starred: string, search: string
     ): Promise<any> {
         return this.sendRequest(
             'GET',
@@ -12,17 +10,11 @@ export class Home_ApiService_of_NineSong extends NineSong_Api_Services_Web {
             {
                 start,
                 end,
-                sort,
-                order,
-                starred,
-                search,
             }
         );
     }
     public async getRandomAlbums(
         start: string, end: string,
-        sort: string, order: string,
-        starred: string, search: string
     ): Promise<any> {
         return this.sendRequest(
             'GET',
@@ -30,17 +22,11 @@ export class Home_ApiService_of_NineSong extends NineSong_Api_Services_Web {
             {
                 start,
                 end,
-                sort,
-                order,
-                starred,
-                search,
             }
         );
     }
     public async getRandomMedias(
         start: string, end: string,
-        sort: string, order: string,
-        starred: string, search: string
     ): Promise<any> {
         return this.sendRequest(
             'GET',
@@ -48,10 +34,43 @@ export class Home_ApiService_of_NineSong extends NineSong_Api_Services_Web {
             {
                 start,
                 end,
-                sort,
-                order,
-                starred,
-                search,
+            }
+        );
+    }
+
+    public async getAlbumList_Play_Count(): Promise<any> {
+        return this.sendRequest(
+            'GET',
+            'albums',
+            {
+                start: '0',
+                end: '15',
+                sort: 'play_count',
+                order: 'desc',
+            }
+        );
+    }
+    public async getAlbumList_Recently_Added(): Promise<any> {
+        return this.sendRequest(
+            'GET',
+            'albums',
+            {
+                start: '0',
+                end: '15',
+                sort: 'recently_added',
+                order: 'desc',
+            }
+        );
+    }
+    public async getAlbumList_Play_Date(): Promise<any> {
+        return this.sendRequest(
+            'GET',
+            'albums',
+            {
+                start: '0',
+                end: '15',
+                sort: 'play_date',
+                order: 'desc',
             }
         );
     }

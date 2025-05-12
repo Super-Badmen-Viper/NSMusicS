@@ -18,7 +18,6 @@ func NewPlaylistController(uc scene_audio_route_interface.PlaylistRepository) *P
 	return &PlaylistController{PlaylistUsecase: uc}
 }
 
-// 获取所有播放列表
 func (c *PlaylistController) GetPlaylists(ctx *gin.Context) {
 	playlists, err := c.PlaylistUsecase.GetPlaylistsAll(ctx.Request.Context())
 	if err != nil {
@@ -31,7 +30,6 @@ func (c *PlaylistController) GetPlaylists(ctx *gin.Context) {
 	})
 }
 
-// 获取单个播放列表（新版）
 func (c *PlaylistController) GetPlaylist(ctx *gin.Context) {
 	var req struct {
 		ID string `form:"id" binding:"required"`
@@ -50,7 +48,6 @@ func (c *PlaylistController) GetPlaylist(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, playlist)
 }
 
-// 创建播放列表
 func (c *PlaylistController) CreatePlaylist(ctx *gin.Context) {
 	var req struct {
 		Name    string `form:"name" binding:"required"`
@@ -78,7 +75,6 @@ func (c *PlaylistController) CreatePlaylist(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, created)
 }
 
-// 更新播放列表（新版）
 func (c *PlaylistController) UpdatePlaylist(ctx *gin.Context) {
 	var req struct {
 		ID      string `form:"id" binding:"required"`
@@ -128,7 +124,6 @@ func (c *PlaylistController) UpdatePlaylist(ctx *gin.Context) {
 	})
 }
 
-// 删除播放列表（新版）
 func (c *PlaylistController) DeletePlaylist(ctx *gin.Context) {
 	var req struct {
 		ID string `form:"id" binding:"required"`

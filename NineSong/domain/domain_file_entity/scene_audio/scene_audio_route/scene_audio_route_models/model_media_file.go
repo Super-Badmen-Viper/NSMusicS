@@ -7,12 +7,6 @@ import (
 )
 
 type MediaFileMetadata struct {
-	PlayCount int       `bson:"play_count"`
-	PlayDate  time.Time `bson:"play_date"`
-	Rating    int       `bson:"rating"`
-	Starred   bool      `bson:"starred"`
-	StarredAt time.Time `bson:"starred_at"`
-
 	ID            primitive.ObjectID `bson:"_id"`
 	Path          string             `bson:"path"`
 	Title         string             `bson:"title"`
@@ -32,6 +26,18 @@ type MediaFileMetadata struct {
 	UpdatedAt     time.Time          `bson:"updated_at"`
 	AlbumArtistID string             `bson:"album_artist_id"`
 	Channels      int                `bson:"channels"`
+
+	PlayCount int       `bson:"play_count"`
+	PlayDate  time.Time `bson:"play_date"`
+	Rating    int       `bson:"rating"`
+	Starred   bool      `bson:"starred"`
+	StarredAt time.Time `bson:"starred_at"`
+}
+
+type MediaFileFilterCounts struct {
+	Total      int `json:"total"`
+	Starred    int `json:"starred"`
+	RecentPlay int `json:"recent_play"`
 }
 
 type MediaFileListResponse struct {

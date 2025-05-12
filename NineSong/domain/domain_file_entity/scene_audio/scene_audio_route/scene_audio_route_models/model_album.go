@@ -7,12 +7,6 @@ import (
 )
 
 type AlbumMetadata struct {
-	PlayCount int       `bson:"play_count"`
-	PlayDate  time.Time `bson:"play_date"`
-	Rating    int       `bson:"rating"`
-	Starred   bool      `bson:"starred"`
-	StarredAt time.Time `bson:"starred_at"`
-
 	ID          primitive.ObjectID `bson:"_id"`
 	Name        string             `bson:"name"`
 	ArtistID    string             `bson:"artist_id"`
@@ -31,6 +25,18 @@ type AlbumMetadata struct {
 	Comment       string    `bson:"comment"`
 	AllArtistIDs  string    `bson:"all_artist_ids"`
 	ImageFiles    string    `bson:"image_files"` // 为空则不存在cover封面，从媒体文件中提取
+
+	PlayCount int       `bson:"play_count"`
+	PlayDate  time.Time `bson:"play_date"`
+	Rating    int       `bson:"rating"`
+	Starred   bool      `bson:"starred"`
+	StarredAt time.Time `bson:"starred_at"`
+}
+
+type AlbumFilterCounts struct {
+	Total      int `json:"total"`
+	Starred    int `json:"starred"`
+	RecentPlay int `json:"recent_play"`
 }
 
 type AlbumListResponse struct {

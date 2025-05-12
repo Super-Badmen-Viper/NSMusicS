@@ -37,6 +37,7 @@ func RouterPrivate(env *bootstrap.Env, timeout time.Duration, db mongo.Database,
 	route_auth.NewSignupRouter(env, timeout, db, protectedRouter)
 	route_auth.NewUpdateUserRouter(env, timeout, db, protectedRouter)
 	route_auth.NewRefreshTokenRouter(env, timeout, db, protectedRouter)
+	// auth_other
 	route_auth.NewProfileRouter(timeout, db, protectedRouter)
 	route_auth.NewTaskRouter(timeout, db, protectedRouter)
 	// system
@@ -54,12 +55,12 @@ func RouterPrivate(env *bootstrap.Env, timeout time.Duration, db mongo.Database,
 	// file entity
 	scene_audio_db_api_route.NewFileEntityRouter(timeout, db, protectedRouter)
 	// scene audio
-	scene_audio_route_api_route.NewArtistRouter(env, timeout, db, protectedRouter)
-	scene_audio_route_api_route.NewAlbumRouter(env, timeout, db, protectedRouter)
-	scene_audio_route_api_route.NewMediaFileRouter(env, timeout, db, protectedRouter)
-	scene_audio_route_api_route.NewPlaylistRouter(env, timeout, db, protectedRouter)
-	scene_audio_route_api_route.NewPlaylistTrackRouter(env, timeout, db, protectedRouter)
-	scene_audio_route_api_route.NewAnnotationRouter(env, timeout, db, protectedRouter)
-	scene_audio_route_api_route.NewHomeRouter(env, timeout, db, protectedRouter)
-	scene_audio_route_api_route.NewRetrievalRouter(env, timeout, db, protectedRouter)
+	scene_audio_route_api_route.NewArtistRouter(timeout, db, protectedRouter)
+	scene_audio_route_api_route.NewAlbumRouter(timeout, db, protectedRouter)
+	scene_audio_route_api_route.NewMediaFileRouter(timeout, db, protectedRouter)
+	scene_audio_route_api_route.NewPlaylistRouter(timeout, db, protectedRouter)
+	scene_audio_route_api_route.NewPlaylistTrackRouter(timeout, db, protectedRouter)
+	scene_audio_route_api_route.NewAnnotationRouter(timeout, db, protectedRouter)
+	scene_audio_route_api_route.NewHomeRouter(timeout, db, protectedRouter)
+	scene_audio_route_api_route.NewRetrievalRouter(timeout, db, protectedRouter)
 }

@@ -6,13 +6,11 @@ import (
 	"time"
 
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/api/controller/controller_file_entity/scene_audio_route_api_controller"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/bootstrap"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/mongo"
 	"github.com/gin-gonic/gin"
 )
 
 func NewAnnotationRouter(
-	env *bootstrap.Env,
 	timeout time.Duration,
 	db mongo.Database,
 	group *gin.RouterGroup,

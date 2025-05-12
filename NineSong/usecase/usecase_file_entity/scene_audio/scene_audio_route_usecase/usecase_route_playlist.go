@@ -13,24 +13,20 @@ import (
 )
 
 type playlistUsecase struct {
-	repo         scene_audio_route_interface.PlaylistRepository
-	timeout      time.Duration
-	maxMediaSize int
+	repo    scene_audio_route_interface.PlaylistRepository
+	timeout time.Duration
 }
 
 func NewPlaylistUsecase(
 	repo scene_audio_route_interface.PlaylistRepository,
 	timeout time.Duration,
-	maxMediaSize int,
 ) scene_audio_route_interface.PlaylistRepository {
 	return &playlistUsecase{
-		repo:         repo,
-		timeout:      timeout,
-		maxMediaSize: maxMediaSize,
+		repo:    repo,
+		timeout: timeout,
 	}
 }
 
-// 获取所有播放列表（带缓存逻辑）
 func (uc *playlistUsecase) GetPlaylistsAll(ctx context.Context) ([]scene_audio_route_models.PlaylistMetadata, error) {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
@@ -43,7 +39,6 @@ func (uc *playlistUsecase) GetPlaylistsAll(ctx context.Context) ([]scene_audio_r
 	return playlists, nil
 }
 
-// 获取单个播放列表（带访问控制）
 func (uc *playlistUsecase) GetPlaylist(ctx context.Context, playlistId string) (*scene_audio_route_models.PlaylistMetadata, error) {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
@@ -61,7 +56,6 @@ func (uc *playlistUsecase) GetPlaylist(ctx context.Context, playlistId string) (
 	return playlist, nil
 }
 
-// 创建播放列表（带业务规则校验）
 func (uc *playlistUsecase) CreatePlaylist(
 	ctx context.Context,
 	playlist scene_audio_route_models.PlaylistMetadata,
@@ -86,7 +80,6 @@ func (uc *playlistUsecase) CreatePlaylist(
 	return created, nil
 }
 
-// 删除播放列表（带所有权校验）
 func (uc *playlistUsecase) DeletePlaylist(ctx context.Context, playlistId string) (bool, error) {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
@@ -110,7 +103,6 @@ func (uc *playlistUsecase) DeletePlaylist(ctx context.Context, playlistId string
 	return true, nil
 }
 
-// 更新播放列表元信息（带版本控制）
 func (uc *playlistUsecase) UpdatePlaylistInfo(
 	ctx context.Context,
 	playlistId string,

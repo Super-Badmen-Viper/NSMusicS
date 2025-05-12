@@ -30,23 +30,29 @@ func (uc *mediaFileUsecase) GetMediaFileItems(
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
 
-	// 参数验证链式处理
+	// 参数验证
 	validations := []func() error{
-		func() error { // 分页参数校验
-			if _, err := strconv.Atoi(start); err != nil && start != "" {
+		func() error {
+			if _, err := strconv.Atoi(start); start != "" && err != nil {
 				return errors.New("invalid start parameter")
 			}
-			if _, err := strconv.Atoi(end); err != nil && end != "" {
+			return nil
+		},
+		func() error {
+			if _, err := strconv.Atoi(end); end != "" && err != nil {
 				return errors.New("invalid end parameter")
 			}
 			return nil
 		},
-		func() error { // ID格式校验
+		func() error {
 			if albumId != "" {
 				if _, err := primitive.ObjectIDFromHex(albumId); err != nil {
 					return errors.New("invalid album id format")
 				}
 			}
+			return nil
+		},
+		func() error {
 			if artistId != "" {
 				if _, err := primitive.ObjectIDFromHex(artistId); err != nil {
 					return errors.New("invalid artist id format")
@@ -54,7 +60,7 @@ func (uc *mediaFileUsecase) GetMediaFileItems(
 			}
 			return nil
 		},
-		func() error { // 年份格式校验
+		func() error {
 			if year != "" {
 				if _, err := strconv.Atoi(year); err != nil {
 					return errors.New("year must be integer")
@@ -71,4 +77,14 @@ func (uc *mediaFileUsecase) GetMediaFileItems(
 	}
 
 	return uc.mediaFileRepo.GetMediaFileItems(ctx, end, order, sort, start, search, starred, albumId, artistId, year)
+}
+
+func (uc *mediaFileUsecase) GetMediaFileFilterItemsCount(
+	ctx context.Context,
+	search, albumId, artistId, year string,
+) (*scene_audio_route_models.MediaFileFilterCounts, error) {
+	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
+	defer cancel()
+
+	return uc.mediaFileRepo.GetMediaFileFilterItemsCount(ctx, search, albumId, artistId, year)
 }

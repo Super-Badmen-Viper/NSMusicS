@@ -9,14 +9,15 @@ import (
 type AlbumRepository interface {
 	GetAlbumItems(
 		ctx context.Context,
-		end string,
-		order string,
-		sort string,
-		start string,
-		search string,
-		starred string,
-		artistId string,
-		minYear string,
-		maxYear string,
+		end, order, sort, start,
+		search, starred,
+		artistId,
+		minYear, maxYear string,
 	) ([]scene_audio_route_models.AlbumMetadata, error)
+
+	GetAlbumFilterItemsCount(
+		ctx context.Context,
+		search, starred, artistId,
+		minYear, maxYear string,
+	) (*scene_audio_route_models.AlbumFilterCounts, error)
 }

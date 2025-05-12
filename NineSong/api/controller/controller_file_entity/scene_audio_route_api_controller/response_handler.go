@@ -3,8 +3,8 @@ package scene_audio_route_api_controller
 import "github.com/gin-gonic/gin"
 
 const (
-	APIVersion    = "1.16.1"
-	ServerVersion = "0.52.5 (c5560888)"
+	APIVersion    = "1.0.0"
+	ServerVersion = "1.0.0"
 	ServiceType   = "NSMusicS"
 )
 

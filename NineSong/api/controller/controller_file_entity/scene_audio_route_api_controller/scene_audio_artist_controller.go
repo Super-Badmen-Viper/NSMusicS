@@ -48,3 +48,29 @@ func (c *ArtistController) GetArtists(ctx *gin.Context) {
 
 	SuccessResponse(ctx, "artists", artists, len(artists))
 }
+
+func (c *ArtistController) GetArtistFilterCounts(ctx *gin.Context) {
+	params := struct {
+		Search  string `form:"search"`
+		Starred string `form:"starred"`
+	}{
+		Search:  ctx.Query("search"),
+		Starred: ctx.Query("starred"),
+	}
+
+	counts, err := c.ArtistUsecase.GetArtistFilterItemsCount(
+		ctx.Request.Context(),
+		params.Search,
+		params.Starred,
+	)
+
+	if err != nil {
+		ErrorResponse(ctx, http.StatusInternalServerError, "SERVER_ERROR", err.Error())
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"code":   "SUCCESS",
+		"counts": counts,
+	})
+}

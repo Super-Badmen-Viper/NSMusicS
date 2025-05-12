@@ -7,13 +7,11 @@ import (
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/usecase/usecase_file_entity/scene_audio/scene_audio_route_usecase"
 	"time"
 
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/bootstrap"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/mongo"
 	"github.com/gin-gonic/gin"
 )
 
 func NewAlbumRouter(
-	env *bootstrap.Env,
 	timeout time.Duration,
 	db mongo.Database,
 	group *gin.RouterGroup,
@@ -26,5 +24,6 @@ func NewAlbumRouter(
 	albumGroup := group.Group("/albums")
 	{
 		albumGroup.GET("", ctrl.GetAlbumItems)
+		albumGroup.GET("/filter_counts", ctrl.GetAlbumFilterCounts)
 	}
 }

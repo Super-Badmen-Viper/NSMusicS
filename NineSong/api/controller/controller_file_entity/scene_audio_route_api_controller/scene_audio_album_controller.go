@@ -62,3 +62,38 @@ func (c *AlbumController) GetAlbumItems(ctx *gin.Context) {
 
 	SuccessResponse(ctx, "albums", albums, len(albums))
 }
+
+func (c *AlbumController) GetAlbumFilterCounts(ctx *gin.Context) {
+	params := struct {
+		Search   string `form:"search"`
+		Starred  string `form:"starred"`
+		ArtistID string `form:"artist_id"`
+		MinYear  string `form:"min_year"`
+		MaxYear  string `form:"max_year"`
+	}{
+		Search:   ctx.Query("search"),
+		Starred:  ctx.Query("starred"),
+		ArtistID: ctx.Query("artist_id"),
+		MinYear:  ctx.Query("min_year"),
+		MaxYear:  ctx.Query("max_year"),
+	}
+
+	counts, err := c.AlbumUsecase.GetAlbumFilterItemsCount(
+		ctx.Request.Context(),
+		params.Search,
+		params.Starred,
+		params.ArtistID,
+		params.MinYear,
+		params.MaxYear,
+	)
+
+	if err != nil {
+		ErrorResponse(ctx, http.StatusInternalServerError, "SERVER_ERROR", err.Error())
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"code":   "SUCCESS",
+		"counts": counts,
+	})
+}

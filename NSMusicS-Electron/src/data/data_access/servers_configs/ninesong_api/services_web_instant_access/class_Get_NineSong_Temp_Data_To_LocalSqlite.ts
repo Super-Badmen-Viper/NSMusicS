@@ -5,18 +5,12 @@ import {store_view_artist_page_info} from "@/views/view_app/page_metadata/page_f
 import {store_view_album_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_info";
 import {Media_library_scanning_ApiService_of_ND} from "../services_normal/media_library_scanning/index_service";
 import {store_view_media_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
-import {Artist_Lists_ApiWebService_of_ND} from "../services_web/page_lists/artist_lists/index_service";
-import {Album_Lists_ApiWebService_of_ND} from "../services_web/page_lists/album_lists/index_service";
-import {Media_Lists_ApiWebService_of_ND} from "../services_web/page_lists/song_lists/index_service";
 import {Playlists_ApiService_of_ND} from "../services_normal/playlists/index_service";
 import {Album$Medias_Lists_ApiService_of_ND} from "../services_normal/album$songs_lists/index_service";
 import {Browsing_ApiService_of_ND} from "../services_normal/browsing/index_service";
 import {store_playlist_list_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info"
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 import {store_general_fetch_player_list} from "@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list";
-import {
-    Media_Retrieval_ApiService_of_ND
-} from "../services_normal/media_retrieval/index_service";
 import {store_player_audio_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 import {
@@ -37,6 +31,7 @@ import {Retrieval_ApiService_of_NineSong} from "../services_web/Scene/Music/Retr
 import {
     store_server_login_info
 } from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+import {Home_ApiService_of_NineSong} from "../services_web/Scene/Music/Home/index_service";
 
 export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
     private artists_ApiService_of_NineSong = new Artists_ApiService_of_NineSong(
@@ -49,6 +44,9 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
         store_server_login_info.server_url
     )
     private annotation_ApiService_of_NineSong = new Annotation_ApiService_of_NineSong(
+        store_server_login_info.server_url
+    )
+    private home_ApiService_of_NineSong = new Home_ApiService_of_NineSong(
         store_server_login_info.server_url
     )
     private playlist_ApiService_of_NineSong = new Playlist_ApiService_of_NineSong(
@@ -64,19 +62,17 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
     )
 
     public async get_home_list(
-        url: string,
-        username: string,token: string,salt: string
+        url: string
     ){
-        await this.get_home_list_of_maximum_playback(url, username, token, salt)
-        await this.get_home_list_of_random_search(url, username, token, salt)
-        await this.get_home_list_of_recently_added(url, username, token, salt)
-        await this.get_home_list_of_recently_played(url, username, token, salt)
+        await this.get_home_list_of_maximum_playback(url)
+        await this.get_home_list_of_random_search(url)
+        await this.get_home_list_of_recently_added(url)
+        await this.get_home_list_of_recently_played(url)
     }
     public async get_home_list_of_maximum_playback(
-        url: string,
-        username: string,token: string,salt: string
+        url: string
     ){
-        const maximum_playback = await this.home_Lists_ApiWebService_of_ND.getAlbumList_Play_Count()
+        const maximum_playback = await this.home_ApiService_of_NineSong.getAlbumList_Play_Count()
         if(maximum_playback != undefined && Array.isArray(maximum_playback)) {
             maximum_playback.map(async (album: any) => {
                 store_view_home_page_info.home_Files_temporary_maximum_playback.push(
@@ -116,7 +112,7 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
                         paths: '',
                         description: '',
                         small_image_url: '',
-                        medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + album.id,
+                        medium_image_url: url + '/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=album&target_id=' + album.id,
                         large_image_url: '',
                         external_url: '',
                         external_info_updated_at: ''
@@ -126,8 +122,7 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
         }
     }
     public async get_home_list_of_random_search(
-        url: string,
-        username: string,token: string,salt: string
+        url: string
     ){
         const random_search = await this.home_Lists_ApiWebService_of_ND.getAlbumList_Random()
         if(random_search != undefined && Array.isArray(random_search)) {
@@ -169,7 +164,7 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
                         paths: '',
                         description: '',
                         small_image_url: '',
-                        medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + album.id,
+                        medium_image_url: url + '/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=album&target_id=' + album.id,
                         large_image_url: '',
                         external_url: '',
                         external_info_updated_at: ''
@@ -179,10 +174,9 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
         }
     }
     public async get_home_list_of_recently_added(
-        url: string,
-        username: string,token: string,salt: string
+        url: string
     ){
-        const recently_added = await this.home_Lists_ApiWebService_of_ND.getAlbumList_Recently_Added()
+        const recently_added = await this.home_ApiService_of_NineSong.getAlbumList_Recently_Added()
         if(recently_added != undefined && Array.isArray(recently_added)) {
             recently_added.map(async (album: any) => {
                 store_view_home_page_info.home_Files_temporary_recently_added.push(
@@ -222,7 +216,7 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
                         paths: '',
                         description: '',
                         small_image_url: '',
-                        medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + album.id,
+                        medium_image_url: url + '/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=album&target_id=' + album.id,
                         large_image_url: '',
                         external_url: '',
                         external_info_updated_at: ''
@@ -232,10 +226,9 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
         }
     }
     public async get_home_list_of_recently_played(
-        url: string,
-        username: string,token: string,salt: string
+        url: string
     ){
-        const recently_played = await this.home_Lists_ApiWebService_of_ND.getAlbumList_Play_Date()
+        const recently_played = await this.home_ApiService_of_NineSong.getRandomAlbums('0', '15')
         if(recently_played != undefined && Array.isArray(recently_played)) {
             recently_played.map(async (album: any) => {
                 store_view_home_page_info.home_Files_temporary_recently_played.push(
@@ -275,7 +268,7 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
                         paths: '',
                         description: '',
                         small_image_url: '',
-                        medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + album.id,
+                        medium_image_url: url + '/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=album&target_id=' + album.id,
                         large_image_url: '',
                         external_url: '',
                         external_info_updated_at: ''
@@ -341,7 +334,6 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
                 store_playlist_list_info.playlist_MediaFiles_temporary.length
             store_view_media_page_info.media_File_metadata = [];
             songlist.map(async (song: any, index: number) => {
-                let lyrics = this.convertToLRC(song.lyrics)
                 if(playlist_id !== '') {
                     song.id = song.mediaFileId
                 }
@@ -352,7 +344,7 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
                     duration_txt: this.formatTime(song.duration),
                     id: song.id,
                     title: song.title,
-                    path: url + '/stream?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + song.id,
+                    path: url + '/media/stream?access_token=' + store_server_login_info.server_accessToken + '&media_file_id=' + song.id,
                     artist: song.artist,
                     album: song.album,
                     artist_id: song.artistId,
@@ -388,7 +380,7 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
                     mbz_album_comment: '',
                     catalog_num: '',
                     comment: '',
-                    lyrics: lyrics,
+                    lyrics: '',
                     bpm: 0,
                     channels: 0,
                     order_title: '',
@@ -397,7 +389,7 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
                     rg_album_peak: 0,
                     rg_track_gain: 0,
                     rg_track_peak: 0,
-                    medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + song.id
+                    medium_image_url: url + '/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=media&target_id=' + song.id
                 }
                 if(store_general_fetch_media_list._load_model === 'search') {
                     store_view_media_page_info.media_File_metadata.push(song)
@@ -477,7 +469,7 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
                         paths: '',
                         description: '',
                         small_image_url: '',
-                        medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + album.id,
+                        medium_image_url: url + '/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=album&target_id=' + album.id,
                         large_image_url: '',
                         external_url: '',
                         external_info_updated_at: ''
@@ -521,7 +513,7 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
                         mbz_artist_id: '',
                         biography: '',
                         small_image_url: '',
-                        medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + artist.id,
+                        medium_image_url: url + '/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=artist&target_id=' + artist.id,
                         large_image_url: '',
                         similar_artists: '',
                         external_url: '',
@@ -562,7 +554,6 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
             }
             let last_index = store_view_media_page_info.media_Files_temporary.length
             songlist.map(async (song: any, index: number) => {
-                let lyrics = this.convertToLRC(song.lyrics)
                 if(playlist_id !== '') {
                     song.id = song.mediaFileId
                 }
@@ -573,7 +564,7 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
                     duration_txt: this.formatTime(song.duration),
                     id: song.id,
                     title: song.title,
-                    path: url + '/stream?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + song.id,
+                    path: url + '/media/stream?access_token=' + store_server_login_info.server_accessToken + '&media_file_id=' + song.id,
                     artist: song.artist,
                     album: song.album,
                     artist_id: song.artistId,
@@ -609,7 +600,7 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
                     mbz_album_comment: '',
                     catalog_num: '',
                     comment: '',
-                    lyrics: lyrics,
+                    lyrics: '',
                     bpm: 0,
                     channels: 0,
                     order_title: '',
@@ -618,7 +609,7 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
                     rg_album_peak: 0,
                     rg_track_gain: 0,
                     rg_track_peak: 0,
-                    medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + song.id
+                    medium_image_url: url + '/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=media&target_id=' + song.id
                 }
                 store_playlist_list_info.playlist_MediaFiles_temporary.push({
                     ...new_song,
@@ -633,16 +624,12 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
         url: string,
         _start: string, _end:string,
     ){
-        const songlist = []
+        const songlist = await this.home_ApiService_of_NineSong.getRandomMedias(
+            _start, _end
+        )
         if (Array.isArray(songlist) && songlist.length > 0) {
             let last_index = 0;
             songlist.map(async (song: any, index: number) => {
-                const getLyrics_id = await media_Retrieval_ApiService_of_ND.getLyrics_id(username, token, salt, song.id);
-                let lyrics = undefined;
-                try {
-                    lyrics = this.convertToLRC_Array(getLyrics_id["subsonic-response"]["lyricsList"]["structuredLyrics"][0]["line"]);
-                } catch {
-                }
                 const new_song = {
                     absoluteIndex: index + 1 + last_index,
                     favorite: song.starred,
@@ -650,7 +637,7 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
                     duration_txt: this.formatTime(song.duration),
                     id: song.id,
                     title: song.title,
-                    path: url + '/stream?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + song.id,
+                    path: url + '/media/stream?access_token=' + store_server_login_info.server_accessToken + '&media_file_id=' + song.id,
                     artist: song.artist,
                     album: song.album,
                     artist_id: song.artistId,
@@ -686,7 +673,7 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
                     mbz_album_comment: '',
                     catalog_num: '',
                     comment: '',
-                    lyrics: lyrics,
+                    lyrics: '',
                     bpm: 0,
                     channels: 0,
                     order_title: '',
@@ -695,7 +682,7 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
                     rg_album_peak: 0,
                     rg_track_gain: 0,
                     rg_track_peak: 0,
-                    medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + song.id
+                    medium_image_url: url + '/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=album&target_id=' + song.id
                 }
                 store_playlist_list_info.playlist_MediaFiles_temporary.push({
                     ...new_song,
@@ -733,57 +720,6 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
 
         return `${formattedMinutes}:${formattedSeconds}`;
     }
-    private convertToLRC(lyrics: string): string {
-        let lrcLines: string[] = [];
-
-        let lyricsArray;
-        try {
-            lyricsArray = JSON.parse(lyrics);
-        } catch {
-            try {
-                return lyrics;
-            } catch (e) {
-                console.error("Failed to parse lyrics JSON:", e);
-            }
-            return '';
-        }
-
-        if (!Array.isArray(lyricsArray)) {
-            return '';
-        }
-
-        for (const langBlock of lyricsArray) {
-            if (langBlock.synced && Array.isArray(langBlock.line)) {
-                for (const line of langBlock.line) {
-                    const minutes = Math.floor(line.start / 60000);
-                    const seconds = Math.floor((line.start % 60000) / 1000);
-                    const milliseconds = (line.start % 1000).toString().padStart(3, '0').slice(0, 2);
-
-                    const timeTag = `[${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds}]`;
-                    lrcLines.push(`${timeTag}${line.value}`);
-                }
-            }
-        }
-
-        return lrcLines.join('\n');
-    }
-    private convertToLRC_Array(lyrics: {
-        start: number;
-        value: string;
-    }[]): string {
-        return lyrics
-            .map((item) => {
-                // 将毫秒转换为 [mm:ss.xx] 格式
-                const minutes = Math.floor(item.start / 60000);
-                const seconds = Math.floor((item.start % 60000) / 1000);
-                const milliseconds = Math.floor((item.start % 1000) / 10);
-                const time = `[${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(milliseconds).padStart(2, '0')}]`;
-
-                // 返回 LRC 格式的行
-                return `${time}${item.value}`;
-            })
-            .join('\n'); // 每行用换行符分隔
-    }
 
     /// file count
     public async get_count_of_media_file(
@@ -792,7 +728,7 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
     ){
         try{
             let media_library_scanning_ApiService_of_ND = new Media_library_scanning_ApiService_of_ND(url);
-            const getScanStatus = await media_library_scanning_ApiService_of_ND.getScanStatus(username, token, salt);
+            const getScanStatus = await media_library_scanning_ApiService_of_ND.getScanStatus();
             store_view_media_page_info.media_item_count = Number(getScanStatus["subsonic-response"]["scanStatus"]["count"]);
         }catch{}
     }
@@ -802,7 +738,7 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
     ){
         try{
             let browsing_ApiService_of_ND = new Browsing_ApiService_of_ND(url);
-            const getArtists_ALL = await browsing_ApiService_of_ND.getArtists_ALL(username, token, salt);
+            const getArtists_ALL = await browsing_ApiService_of_ND.getArtists_ALL();
             const list = getArtists_ALL["subsonic-response"]["artists"]["index"];
             if(list != undefined && Array.isArray(list)) {
                 store_view_artist_page_info.artist_item_count = list.reduce((total, item) => total + item.artist.length, 0);
@@ -821,7 +757,7 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
     ){
         try{
             let album$Medias_Lists_ApiService_of_ND = new Album$Medias_Lists_ApiService_of_ND(url);
-            const getStarred2_all = await album$Medias_Lists_ApiService_of_ND.getStarred2_all(username, token, salt);
+            const getStarred2_all = await album$Medias_Lists_ApiService_of_ND.getStarred2_all();
             const starred2_artist = getStarred2_all["subsonic-response"]["starred2"]["artist"];
             const starred2_album = getStarred2_all["subsonic-response"]["starred2"]["album"];
             const starred2_song = getStarred2_all["subsonic-response"]["starred2"]["song"];
@@ -840,7 +776,7 @@ export class class_Get_NineSong_Temp_Data_To_LocalSqlite{
     ){
         try{
             let playlists_ApiService_of_ND = new Playlists_ApiService_of_ND(url);
-            const getPlaylists_all = await playlists_ApiService_of_ND.getPlaylists_all(username, token, salt);
+            const getPlaylists_all = await playlists_ApiService_of_ND.getPlaylists_all();
             const playlists = getPlaylists_all["subsonic-response"]["playlists"]["playlist"];
             if(playlists != undefined)
                 store_view_media_page_info.media_playlist_count = playlists.length || 0;

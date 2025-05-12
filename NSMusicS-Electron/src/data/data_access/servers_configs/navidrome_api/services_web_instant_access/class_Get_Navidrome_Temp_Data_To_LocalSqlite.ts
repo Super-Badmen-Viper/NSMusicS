@@ -821,23 +821,4 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
                 store_view_media_page_info.media_playlist_count = playlists.length || 0;
         }catch{}
     }
-    /// recently count
-    public async get_count_of_recently_media(
-        url: string,
-        username: string,token: string,salt: string
-    ){
-        store_view_media_page_info.media_recently_count = 0
-    }
-    public async get_count_of_recently_album(
-        url: string,
-        username: string,token: string,salt: string
-    ){
-        store_view_album_page_info.album_recently_count = 0
-    }
-    public async get_count_of_recently_artist(
-        url: string,
-        username: string,token: string,salt: string
-    ){
-        store_view_artist_page_info.artist_recently_count = 0
-    }
 }
