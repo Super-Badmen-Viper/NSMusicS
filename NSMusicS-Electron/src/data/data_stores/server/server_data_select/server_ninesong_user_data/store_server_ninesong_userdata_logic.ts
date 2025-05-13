@@ -10,11 +10,11 @@ import {
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
-import {
-    User_Authorization_ApiWebService_of_ND
-} from "@/data/data_access/servers_configs/navidrome_api/services_web/user_authorization/index_service";
 import { Set_ServerInfo_To_LocalSqlite } from "@/data/data_access/local_configs/class_Set_ServerInfo_To_LocalSqlite";
 import {isElectron} from '@/utils/electron/isElectron';
+import {
+    store_server_login_logic
+} from "../../../../../views/view_server/page_metadata/page_login/store/store_server_login_logic";
 
 export const store_server_ninesong_userdata_logic = reactive({
     /// docker server manage
@@ -152,6 +152,7 @@ export const store_server_ninesong_userdata_logic = reactive({
         if (userData && userData.accessToken && userData.refreshToken) {
             store_server_login_info.server_accessToken = String(userData.accessToken);
             store_server_login_info.server_refreshToken = String(userData.refreshToken);
+            store_server_login_info.server_url = url;
 
             let data: Server_Configs_Props = null
             if(isElectron) {
@@ -201,15 +202,8 @@ export const store_server_ninesong_userdata_logic = reactive({
             await this.ninesong_get_server_config(
                 store_server_users.server_config_of_all_user_of_sqlite[index]
             )
-            if(store_server_user_model.model_server_type_of_web){
-                console.log('store_server_user_model.model_server_type_of_web')
-                let user_Authorization_ApiWebService_of_ND = new User_Authorization_ApiWebService_of_ND(
-                    store_server_users.server_config_of_current_user_of_sqlite?.url
-                )
-                await user_Authorization_ApiWebService_of_ND.get_token()
-                store_app_configs_logic_save.save_system_config_of_App_Configs()
-                store_app_configs_logic_save.save_system_config_of_Servers_Config()
-            }
+            store_app_configs_logic_save.save_system_config_of_App_Configs()
+            store_app_configs_logic_save.save_system_config_of_Servers_Config()
             return true;
         }catch { }
         return false;

@@ -81,10 +81,10 @@ func (uc *mediaFileUsecase) GetMediaFileItems(
 
 func (uc *mediaFileUsecase) GetMediaFileFilterItemsCount(
 	ctx context.Context,
-	search, albumId, artistId, year string,
+	search, starred, albumId, artistId, year string,
 ) (*scene_audio_route_models.MediaFileFilterCounts, error) {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
 
-	return uc.mediaFileRepo.GetMediaFileFilterItemsCount(ctx, search, albumId, artistId, year)
+	return uc.mediaFileRepo.GetMediaFileFilterItemsCount(ctx, search, starred, albumId, artistId, year)
 }

@@ -110,7 +110,7 @@ func (r *mediaFileRepository) GetMediaFileItems(
 
 func (r *mediaFileRepository) GetMediaFileFilterItemsCount(
 	ctx context.Context,
-	search, albumId, artistId, year string,
+	search, starred, albumId, artistId, year string,
 ) (*scene_audio_route_models.MediaFileFilterCounts, error) {
 	coll := r.db.Collection(r.collection)
 

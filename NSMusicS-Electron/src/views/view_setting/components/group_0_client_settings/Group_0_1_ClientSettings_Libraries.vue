@@ -333,6 +333,8 @@ async function update_server_config_of_current_user_of_sqlite(value: any, select
           store_server_users.server_select_kind = 'jellyfin'
         }else if(user_config?.type === 'emby'){
           store_server_users.server_select_kind = 'emby'
+        }else if(user_config?.type === 'ninesong'){
+          store_server_users.server_select_kind = 'ninesong'
         }
         store_app_configs_logic_save.save_system_config_of_App_Configs()
       } else {
@@ -745,6 +747,8 @@ import {
                                         if(store_server_user_model.server_login_model_of_apikey) {
                                           item.password = store_server_user_model.userid_of_Je
                                         }
+                                      }else if (item.type === 'ninesong'){
+                                        server_set_of_addUser_of_type = 'ninesong'
                                       }
                                       update_server_setUser(
                                           item.id,
@@ -1181,7 +1185,7 @@ import {
           </n-form>
           <n-form v-else style="margin-top: -12px;">
             <n-space vertical style="margin-bottom: 10px;">
-              <span v-if="item.type != 'ninesong'">{{ $t('form.addServer.input_username') }}</span>
+              <span v-if="server_set_of_addUser_of_type != 'ninesong'">{{ $t('form.addServer.input_username') }}</span>
               <span v-else>{{ $t('nsmusics.server_page.server_email') }}</span>
               <n-input clearable placeholder="" v-model:value="server_set_of_addUser_of_username"/>
             </n-space>

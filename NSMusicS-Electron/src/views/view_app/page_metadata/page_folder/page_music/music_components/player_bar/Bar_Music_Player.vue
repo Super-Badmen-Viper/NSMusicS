@@ -27,7 +27,7 @@ const get_playerbar_to_switch_playerview = inject('get_playerbar_to_switch_playe
 
 import { useI18n } from 'vue-i18n'
 import {store_view_media_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
-import {store_playlist_list_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info";
+import {store_server_login_info} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
 const { t } = useI18n({
   inheritLocale: true
 })
@@ -539,8 +539,14 @@ async function Play_Media_Order(model_num: string, increased: number) {
           // navidrome random_play_model
           index += increased;
           if (index >= last_index) {
-            store_server_user_model.random_play_model_add = true
-            if(store_server_users.server_select_kind === 'navidrome') {
+            store_server_user_model.random_play_model_add = true;
+            if(store_server_users.server_select_kind === 'ninesong') {
+              let get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
+              await get_NineSong_Temp_Data_To_LocalSqlite.get_random_song_list(
+                  store_server_login_info.server_url,
+                  '0','30'
+              )
+            }else if(store_server_users.server_select_kind === 'navidrome') {
               let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
               await get_Navidrome_Temp_Data_To_LocalSqlite.get_random_song_list(
                   store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
@@ -741,6 +747,9 @@ import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {
   store_general_fetch_media_list
 } from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list";
+import {
+  Get_NineSong_Temp_Data_To_LocalSqlite
+} from "@/data/data_access/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite";
 
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   if(id != null && id.length > 0 && id != 'undefined') {

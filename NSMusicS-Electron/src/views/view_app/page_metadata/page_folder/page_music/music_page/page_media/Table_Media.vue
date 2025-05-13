@@ -570,6 +570,10 @@ import {
 import {
   store_general_model_player_list
 } from "@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list";
+import {
+  Get_NineSong_Temp_Data_To_LocalSqlite
+} from "@/data/data_access/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite";
+import {store_server_login_info} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
 
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
@@ -847,7 +851,13 @@ async function begin_random_play_model() {
     click_count = 2;
     store_playlist_list_info.playlist_MediaFiles_temporary = [];
     store_player_audio_logic.play_order = 'playback-4';
-    if (store_server_users.server_select_kind === 'navidrome') {
+    if (store_server_users.server_select_kind === 'ninesong') {
+      let get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
+      await get_NineSong_Temp_Data_To_LocalSqlite.get_random_song_list(
+          store_server_login_info.server_url,
+          '0','30'
+      )
+    }else if (store_server_users.server_select_kind === 'navidrome') {
       let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
       await get_Navidrome_Temp_Data_To_LocalSqlite.get_random_song_list(
           store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',

@@ -25,6 +25,12 @@ import {
 import {
     Get_Jellyfin_Temp_Data_To_LocalSqlite
 } from "@/data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
+import {
+    Get_NineSong_Temp_Data_To_LocalSqlite
+} from "../../../../../../data_access/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite";
+import {
+    store_server_login_info
+} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
 
 export const store_general_fetch_artist_list = reactive({
     async fetchData_Artist(){
@@ -265,55 +271,81 @@ export const store_general_fetch_artist_list = reactive({
         this._end += 30;
         await this.fetchData_Artist_of_server_web()
     },
-    async fetchData_Artist_of_server_web(){
-        const _search = store_view_artist_page_logic.page_artistlists_keyword;
-        const selected = store_view_artist_page_logic.page_artistlists_selected;
-        ///
-        let _sort = store_view_artist_page_logic.page_artistlists_options_Sort_key.length > 0 && store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order !== 'default' ?
-            store_view_artist_page_logic.page_artistlists_options_Sort_key[0].columnKey : 'id';
-        let _order = store_view_artist_page_logic.page_artistlists_options_Sort_key.length > 0 && store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order !== 'default' ?
-            store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order.replace('end', '') : 'ASC';
-        ///
-        let _starred = '';
-        let playlist_id = '';
-        if (selected === 'artist_list_love') {
-            _starred = 'true'
-        } else if (selected === 'artist_list_recently') {
-            _order = 'desc'
-            _sort = 'playDate'
-            if(
-                store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-            ) {
-                _sort = 'DatePlayed'
+    async fetchData_Artist_of_server_web() {
+        try {
+            const _search = store_view_artist_page_logic.page_artistlists_keyword;
+            const selected = store_view_artist_page_logic.page_artistlists_selected;
+
+            let _sort = store_view_artist_page_logic.page_artistlists_options_Sort_key.length > 0 && store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order !== 'default'
+                ? store_view_artist_page_logic.page_artistlists_options_Sort_key[0].columnKey
+                : 'id';
+            let _order = store_view_artist_page_logic.page_artistlists_options_Sort_key.length > 0 && store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order !== 'default'
+                ? store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order.replace('end', '')
+                : 'ASC';
+
+            let _starred = '';
+            let playlist_id = '';
+            if (selected === 'artist_list_love') {
+                _starred = 'true';
+            } else if (selected === 'artist_list_recently') {
+                _order = 'desc';
+                _sort = 'playDate';
+                if (store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')) {
+                    _sort = 'DatePlayed';
+                }
+            } else if (selected !== 'artist_list_all') {
+                playlist_id = selected;
             }
-        } else if (selected != 'artist_list_all') {
-            playlist_id = selected
-        }
-        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
-            let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
-            await get_Navidrome_Temp_Data_To_LocalSqlite.get_artist_list(
-                store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                store_server_user_model.token,
-                store_server_user_model.salt,
-                String(this._end), _order, _sort, String(this._start),
-                _search, _starred
-            )
-        }else if(
-            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-        ) {
-            const filter = _starred === 'true' ? 'IsFavorite' : ''
-            let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
-            await get_Jellyfin_Temp_Data_To_LocalSqlite.get_artist_list(
-                store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music,
-                _search,
-                '', '',
-                String(this._end - this._start), String(this._start),
-                'Artist',
-                'ParentId', 'Primary,Backdrop,Thumb', 'true', '1',
-                '',
-                filter
-            )
+
+            if (store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
+                const get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite();
+                await get_Navidrome_Temp_Data_To_LocalSqlite.get_artist_list(
+                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+                    store_server_users.server_config_of_current_user_of_sqlite?.user_name,
+                    store_server_user_model.token,
+                    store_server_user_model.salt,
+                    String(this._end),
+                    _order,
+                    _sort,
+                    String(this._start),
+                    _search,
+                    _starred
+                );
+            } else if (store_server_user_model.model_server_type_of_web) {
+                if(store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
+                    const filter = _starred === 'true' ? 'IsFavorite' : '';
+                    const get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite();
+                    await get_Jellyfin_Temp_Data_To_LocalSqlite.get_artist_list(
+                        store_server_user_model.userid_of_Je,
+                        store_server_user_model.parentid_of_Je_Music,
+                        _search,
+                        '',
+                        '',
+                        String(this._end - this._start),
+                        String(this._start),
+                        'Artist',
+                        'ParentId',
+                        'Primary,Backdrop,Thumb',
+                        'true',
+                        '1',
+                        '',
+                        filter
+                    );
+                }else if(store_server_users.server_select_kind === 'ninesong'){
+                    const get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite();
+                    await get_NineSong_Temp_Data_To_LocalSqlite.get_artist_list(
+                        store_server_login_info.server_url,
+                        String(this._start),
+                        String(this._end),
+                        _sort,
+                        _order,
+                        _starred,
+                        _search,
+                    );
+                }
+            }
+        } catch (error) {
+            console.error('Failed to fetch artist data:', error);
         }
     }
 });

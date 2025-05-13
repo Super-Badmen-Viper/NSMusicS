@@ -19,6 +19,11 @@ import {
     Get_Jellyfin_Temp_Data_To_LocalSqlite
 } from "@/data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
 import {store_playlist_appearance} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_appearance";
+import {
+    Get_NineSong_Temp_Data_To_LocalSqlite
+} from "../../../../../../data_access/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite";
+import {store_server_login_info} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+
 /**
  * -> 歌单加载: LoadList、歌曲列表: PlayList -> 合并联合查询
  * local歌单加载：一次性全局加载
@@ -441,22 +446,30 @@ export const store_general_fetch_media_list = reactive({
             store_general_fetch_player_list._end = 30;
         }
     },
-    async fetchData_Media_of_server_web_start(){
-        if(store_server_user_model.random_play_model && store_server_users.server_select_kind != 'navidrome') {
+    async fetchData_Media_of_server_web_start() {
+        try {
+            if (store_server_user_model.random_play_model && store_server_users.server_select_kind !== 'navidrome') {
+                // 随机播放逻辑
+            } else {
+                store_view_media_page_info.media_Files_temporary = [];
+            }
 
-        }else{
-            store_view_media_page_info.media_Files_temporary = [];
-        }
-        this._start = 0;
-        this._end = 30;
-        store_general_fetch_player_list._start = 0;
-        store_general_fetch_player_list._end = 30;
-        await this.fetchData_Media_of_server_web(false)
-        if(store_player_appearance.player_mode_of_medialist_from_external_import) {
-            this.fetchData_Media_of_server_web_clear_search_parms()
+            this._start = 0;
+            this._end = 30;
+            store_general_fetch_player_list._start = 0;
+            store_general_fetch_player_list._end = 30;
+
+            await this.fetchData_Media_of_server_web(false);
+
+            if (store_player_appearance.player_mode_of_medialist_from_external_import) {
+                this.fetchData_Media_of_server_web_clear_search_parms();
+            }
+        } catch (error) {
+            console.error('Failed to fetch media data start:', error);
         }
     },
-    async fetchData_Media_of_server_web_end(){
+
+    async fetchData_Media_of_server_web_end() {
         try {
             if (store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
                 if (this._load_model === 'search') {
@@ -466,12 +479,10 @@ export const store_general_fetch_media_list = reactive({
                     store_general_fetch_player_list._start += 30;
                     store_general_fetch_player_list._end += 30;
                 }
-            } else if (
-                store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-            ) {
-                if(store_server_user_model.random_play_model) {
+            } else if (store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')) {
+                if (store_server_user_model.random_play_model) {
                     await this.fetchData_Media_of_server_web_start();
-                }else {
+                } else {
                     if (this._load_model === 'search') {
                         this._end += 30;
                         this._start = this._end - 30;
@@ -481,117 +492,143 @@ export const store_general_fetch_media_list = reactive({
                     }
                 }
             }
-            await this.fetchData_Media_of_server_web(false)
-        }catch (e) {
-            console.error('fetchData_Media: ' + e)
+
+            await this.fetchData_Media_of_server_web(false);
+        } catch (error) {
+            console.error('Failed to fetch media data end:', error);
         }
     },
-    async fetchData_Media_of_server_web(
-        find_model: boolean
-    ){
-        const _search = (store_view_media_page_logic.page_songlists_keywordFilter || '').match(/%([^%]+)%/)?.[1] || '';
-        const selected = store_view_media_page_logic.page_songlists_selected;
-        ///
-        let _sort = store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 && store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default' ?
-            store_view_media_page_logic.page_songlists_options_Sort_key[0].columnKey : 'id';
-        let _order = store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 && store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default' ?
-            store_view_media_page_logic.page_songlists_options_Sort_key[0].order.replace('end', '') : 'ASC';
-        ///
-        let _starred = '';
-        let playlist_id = '';
-        if (selected === 'song_list_love') {
-            _starred = 'true'
-        } else if (selected === 'song_list_recently') {
-            _order = 'desc'
-            _sort = 'playDate'
-            if(store_server_users.server_select_kind === 'jellyfin') {
-                _sort = 'DatePlayed'
-            }else if(store_server_users.server_select_kind === 'emby') {
-                _sort = 'DatePlayed,SortName'
-            }
-        } else if (selected != 'song_list_all') {
-            if(!find_model) {
-                playlist_id = selected
-            }
-        }
-        const _artist_id = this._load_model === 'search' ?
-            this._artist_id : store_general_fetch_player_list._artist_id
-        const _album_id = this._load_model === 'search' ?
-            this._album_id : store_general_fetch_player_list._album_id
-        const _album_artist_id = this._load_model === 'search' ?
-            this._album_artist_id : store_general_fetch_player_list._album_artist_id
-        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
-            const limit = this._load_model === 'search' ?
-                String(this._end) :
-                String(store_general_fetch_player_list._end)
-            const startIndex = this._load_model === 'search' ?
-                String(this._start) :
-                String(store_general_fetch_player_list._start)
-            let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
-            await get_Navidrome_Temp_Data_To_LocalSqlite.get_media_list(
-                store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                store_server_user_model.token,
-                store_server_user_model.salt,
-                limit, _order, _sort, startIndex,
-                _search, _starred, playlist_id,
-                _album_id, _artist_id,
-                store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : ''
-            )
-        }else if(
-            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-        ) {
-            const sortBy = _sort === 'DatePlayed'
-                ? 'DatePlayed,SortName' : (_sort != 'id' ? _sort : 'SortName');
-            const sortOrder = _sort === 'DatePlayed'
-                ? 'Descending' : (_order === 'desc' ? 'Descending' : 'Ascending');
-            const filter = _starred === 'true' ? 'IsFavorite' : ''
-            const limit = this._load_model === 'search' ?
-                String(this._end - this._start) :
-                String(store_general_fetch_player_list._end - store_general_fetch_player_list._start)
-            const startIndex = this._load_model === 'search' ?
-                String(this._start) :
-                String(store_general_fetch_player_list._start)
-            // jellyfin not support search artist and album list of musicdata
-            let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
-            if(this._media_id.length === 0) {
-                // _album_id -> media_id -> Jellyfin+Emby
-                if (_artist_id.length === 0) {
-                    /// jellyfin+emby - all - action
-                    if (_album_artist_id.length === 0) {
-                        /// jellyfin+emby - all - action
-                        const prarentId = _album_id.length === 0
-                            ? store_server_user_model.parentid_of_Je_Music : _album_id
-                        await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list(
-                            playlist_id,
-                            store_server_user_model.userid_of_Je, prarentId,
-                            _search,
-                            sortBy, sortOrder,
-                            limit, startIndex,
-                            'Audio',
-                            'ParentId', 'Primary,Backdrop,Thumb', 'true', '1',
-                            store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : '',
-                            filter
-                        )
-                    } else { /// emby - home - action
-                        await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list_of_home$album_of_Em(
-                            _album_artist_id,
-                            limit, startIndex,
-                        )
-                    }
-                } else {
-                    await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list_of_artist(
-                        _artist_id,
-                        limit, startIndex,
-                    )
+
+    async fetchData_Media_of_server_web(find_model: boolean) {
+        try {
+            const _search = (store_view_media_page_logic.page_songlists_keywordFilter || '').match(/%([^%]+)%/)?.[1] || '';
+            const selected = store_view_media_page_logic.page_songlists_selected;
+
+            let _sort = store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 && store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default'
+                ? store_view_media_page_logic.page_songlists_options_Sort_key[0].columnKey
+                : 'id';
+            let _order = store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 && store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default'
+                ? store_view_media_page_logic.page_songlists_options_Sort_key[0].order.replace('end', '')
+                : 'ASC';
+
+            let _starred = '';
+            let playlist_id = '';
+            if (selected === 'song_list_love') {
+                _starred = 'true';
+            } else if (selected === 'song_list_recently') {
+                _order = 'desc';
+                _sort = 'playDate';
+                if (store_server_users.server_select_kind === 'jellyfin') {
+                    _sort = 'DatePlayed';
+                } else if (store_server_users.server_select_kind === 'emby') {
+                    _sort = 'DatePlayed,SortName';
+                }
+            } else if (selected !== 'song_list_all') {
+                if (!find_model) {
+                    playlist_id = selected;
                 }
             }
-            else{
-                await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list_of_home$media_of_Je(
-                    this._media_id,
-                    limit, startIndex,
-                )
+
+            const _artist_id = this._load_model === 'search' ? this._artist_id : store_general_fetch_player_list._artist_id;
+            const _album_id = this._load_model === 'search' ? this._album_id : store_general_fetch_player_list._album_id;
+            const _album_artist_id = this._load_model === 'search' ? this._album_artist_id : store_general_fetch_player_list._album_artist_id;
+
+            if (store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
+                const limit = this._load_model === 'search' ? String(this._end) : String(store_general_fetch_player_list._end);
+                const startIndex = this._load_model === 'search' ? String(this._start) : String(store_general_fetch_player_list._start);
+
+                const get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite();
+                await get_Navidrome_Temp_Data_To_LocalSqlite.get_media_list(
+                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+                    store_server_users.server_config_of_current_user_of_sqlite?.user_name,
+                    store_server_user_model.token,
+                    store_server_user_model.salt,
+                    limit,
+                    _order,
+                    _sort,
+                    startIndex,
+                    _search,
+                    _starred,
+                    playlist_id,
+                    _album_id,
+                    _artist_id,
+                    store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : ''
+                );
+            } else if (store_server_user_model.model_server_type_of_web) {
+                if(store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
+                    const sortBy = _sort === 'DatePlayed' ? 'DatePlayed,SortName' : (_sort !== 'id' ? _sort : 'SortName');
+                    const sortOrder = _sort === 'DatePlayed' ? 'Descending' : (_order === 'desc' ? 'Descending' : 'Ascending');
+                    const filter = _starred === 'true' ? 'IsFavorite' : '';
+
+                    const limit = this._load_model === 'search' ? String(this._end - this._start) : String(store_general_fetch_player_list._end - store_general_fetch_player_list._start);
+                    const startIndex = this._load_model === 'search' ? String(this._start) : String(store_general_fetch_player_list._start);
+
+                    const get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite();
+                    if (this._media_id.length === 0) {
+                        if (_artist_id.length === 0) {
+                            if (_album_artist_id.length === 0) {
+                                const parentId = _album_id.length === 0 ? store_server_user_model.parentid_of_Je_Music : _album_id;
+                                await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list(
+                                    playlist_id,
+                                    store_server_user_model.userid_of_Je,
+                                    parentId,
+                                    _search,
+                                    sortBy,
+                                    sortOrder,
+                                    limit,
+                                    startIndex,
+                                    'Audio',
+                                    'ParentId',
+                                    'Primary,Backdrop,Thumb',
+                                    'true',
+                                    '1',
+                                    store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : '',
+                                    filter
+                                );
+                            } else {
+                                await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list_of_home$album_of_Em(
+                                    _album_artist_id,
+                                    limit,
+                                    startIndex
+                                );
+                            }
+                        } else {
+                            await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list_of_artist(
+                                _artist_id,
+                                limit,
+                                startIndex
+                            );
+                        }
+                    } else {
+                        await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list_of_home$media_of_Je(
+                            this._media_id,
+                            limit,
+                            startIndex
+                        );
+                    }
+                }
+                else if(store_server_users.server_select_kind === 'ninesong'){
+                    const limit = this._load_model === 'search' ? String(this._end) : String(store_general_fetch_player_list._end);
+                    const startIndex = this._load_model === 'search' ? String(this._start) : String(store_general_fetch_player_list._start);
+
+                    const get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite();
+                    await get_NineSong_Temp_Data_To_LocalSqlite.get_media_list(
+                        store_server_login_info.server_url,
+                        startIndex,
+                        limit,
+                        _sort,
+                        _order,
+                        _starred,
+                        _search,
+                        store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : '',
+                        playlist_id,
+                        _album_id,
+                        _artist_id,
+                    );
+                }
             }
+        } catch (error) {
+            console.error('Failed to fetch media data:', error);
         }
     },
     fetchData_Media_of_data_synchronization_to_playlist(){

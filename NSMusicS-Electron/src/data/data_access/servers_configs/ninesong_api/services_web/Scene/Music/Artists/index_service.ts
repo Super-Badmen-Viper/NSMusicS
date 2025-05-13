@@ -19,4 +19,16 @@ export class Artists_ApiService_of_NineSong extends NineSong_Api_Services_Web {
             }
         );
     }
+    public async getArtistCounts(
+        starred: string, search: string
+    ): Promise<any> {
+        return this.sendRequest(
+            'GET',
+            'artists/filter_counts',
+            {
+                starred,
+                search,
+            }
+        );
+    }
 }

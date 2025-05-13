@@ -23,6 +23,10 @@ import {
 import {
     Get_Jellyfin_Temp_Data_To_LocalSqlite
 } from "@/data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
+import {
+    Get_NineSong_Temp_Data_To_LocalSqlite
+} from "../../../../../../data_access/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite";
+import {store_server_login_info} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
 
 export const store_general_fetch_album_list = reactive({
     async fetchData_Album(){
@@ -308,71 +312,101 @@ export const store_general_fetch_album_list = reactive({
         this._end += 30;
         await this.fetchData_Album_of_server_web()
     },
-    async fetchData_Album_of_server_web(){
-        const _search = store_view_album_page_logic.page_albumlists_keyword;
-        const selected = store_view_album_page_logic.page_albumlists_selected;
-        ///
-        let _sort = store_view_album_page_logic.page_albumlists_options_Sort_key.length > 0 && store_view_album_page_logic.page_albumlists_options_Sort_key[0].order !== 'default' ?
-            store_view_album_page_logic.page_albumlists_options_Sort_key[0].columnKey : 'id';
-        let _order = store_view_album_page_logic.page_albumlists_options_Sort_key.length > 0 && store_view_album_page_logic.page_albumlists_options_Sort_key[0].order !== 'default' ?
-            store_view_album_page_logic.page_albumlists_options_Sort_key[0].order.replace('end', '') : 'ASC';
-        ///
-        let _starred = '';
-        if (selected === 'album_list_love') {
-            _starred = 'true'
-        } else if (selected === 'album_list_recently') {
-            _order = 'desc'
-            _sort = 'playDate'
-            if(
-                store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-            ) {
-                _sort = 'DatePlayed'
+    async fetchData_Album_of_server_web() {
+        try {
+            const _search = store_view_album_page_logic.page_albumlists_keyword;
+            const selected = store_view_album_page_logic.page_albumlists_selected;
+
+            let _sort = store_view_album_page_logic.page_albumlists_options_Sort_key.length > 0 && store_view_album_page_logic.page_albumlists_options_Sort_key[0].order !== 'default'
+                ? store_view_album_page_logic.page_albumlists_options_Sort_key[0].columnKey
+                : 'id';
+            let _order = store_view_album_page_logic.page_albumlists_options_Sort_key.length > 0 && store_view_album_page_logic.page_albumlists_options_Sort_key[0].order !== 'default'
+                ? store_view_album_page_logic.page_albumlists_options_Sort_key[0].order.replace('end', '')
+                : 'ASC';
+
+            let _starred = '';
+            if (selected === 'album_list_love') {
+                _starred = 'true';
+            } else if (selected === 'album_list_recently') {
+                _order = 'desc';
+                _sort = 'playDate';
+                if (store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')) {
+                    _sort = 'DatePlayed';
+                }
             }
-        }
-        if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
-            let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
-            await get_Navidrome_Temp_Data_To_LocalSqlite.get_album_list(
-                store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                store_server_user_model.token,
-                store_server_user_model.salt,
-                String(this._end), _order, _sort, String(this._start),
-                _search, _starred,
-                this._artist_id
-            )
-        }else if(
-            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-        ) {
-            const sortBy = _sort === 'DatePlayed'
-                ? 'DatePlayed,SortName' : (_sort != 'id' ? _sort : 'SortName');
-            const sortOrder = _sort === 'DatePlayed'
-                ? 'Descending' : (_order === 'desc' ? 'Descending' : 'Ascending');
-            const filter = _starred === 'true' ? 'IsFavorite' : ''
-            const find_artist_albums = this._artist_id.length === 0;
-            // const find_artist_albums = this._artist_id.length > 0
-            // getItems_List_Find_Artist_ALL_Album
-            let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
-            if(find_artist_albums) {
-                await get_Jellyfin_Temp_Data_To_LocalSqlite.get_album_list(
-                    store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music,
+
+            if (store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
+                const get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite();
+                await get_Navidrome_Temp_Data_To_LocalSqlite.get_album_list(
+                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+                    store_server_users.server_config_of_current_user_of_sqlite?.user_name,
+                    store_server_user_model.token,
+                    store_server_user_model.salt,
+                    String(this._end),
+                    _order,
+                    _sort,
+                    String(this._start),
                     _search,
-                    sortBy, sortOrder,
-                    String(this._end - this._start), String(this._start),
-                    'MusicAlbum',
-                    'ParentId', 'Primary,Backdrop,Thumb', 'true', '1',
-                    store_view_album_page_logic.page_albumlists_filter_year > 0 ? store_view_album_page_logic.page_albumlists_filter_year : '',
-                    filter
-                )
-            }else{
-                await get_Jellyfin_Temp_Data_To_LocalSqlite.get_album_list_find_artist_id(
-                    store_server_user_model.userid_of_Je, this._artist_id,
-                    sortBy, sortOrder,
-                    String(this._end - this._start), String(this._start),
-                    'MusicAlbum',
-                    'ParentId,PrimaryImageAspectRatio,ParentId,PrimaryImageAspectRatio', 'true',
-                    'false'
-                )
+                    _starred,
+                    this._artist_id
+                );
+            } else if (store_server_user_model.model_server_type_of_web) {
+                if(store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
+                    const sortBy = _sort === 'DatePlayed' ? 'DatePlayed,SortName' : (_sort !== 'id' ? _sort : 'SortName');
+                    const sortOrder = _sort === 'DatePlayed' ? 'Descending' : (_order === 'desc' ? 'Descending' : 'Ascending');
+                    const filter = _starred === 'true' ? 'IsFavorite' : '';
+                    const find_artist_albums = this._artist_id.length === 0;
+
+                    const get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite();
+                    if (find_artist_albums) {
+                        await get_Jellyfin_Temp_Data_To_LocalSqlite.get_album_list(
+                            store_server_user_model.userid_of_Je,
+                            store_server_user_model.parentid_of_Je_Music,
+                            _search,
+                            sortBy,
+                            sortOrder,
+                            String(this._end - this._start),
+                            String(this._start),
+                            'MusicAlbum',
+                            'ParentId',
+                            'Primary,Backdrop,Thumb',
+                            'true',
+                            '1',
+                            store_view_album_page_logic.page_albumlists_filter_year > 0 ? store_view_album_page_logic.page_albumlists_filter_year : '',
+                            filter
+                        );
+                    } else {
+                        await get_Jellyfin_Temp_Data_To_LocalSqlite.get_album_list_find_artist_id(
+                            store_server_user_model.userid_of_Je,
+                            this._artist_id,
+                            sortBy,
+                            sortOrder,
+                            String(this._end - this._start),
+                            String(this._start),
+                            'MusicAlbum',
+                            'ParentId,PrimaryImageAspectRatio,ParentId,PrimaryImageAspectRatio',
+                            'true',
+                            'false'
+                        );
+                    }
+                }else if(store_server_users.server_select_kind === 'ninesong'){
+                    const get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite();
+                    await get_NineSong_Temp_Data_To_LocalSqlite.get_album_list(
+                        store_server_login_info.server_url,
+                        String(this._start),
+                        String(this._end),
+                        _sort,
+                        _order,
+                        _starred,
+                        _search,
+                        store_view_album_page_logic.page_albumlists_filter_year > 0 ? store_view_album_page_logic.page_albumlists_filter_year : '',
+                        store_view_album_page_logic.page_albumlists_filter_year > 0 ? store_view_album_page_logic.page_albumlists_filter_year : '',
+                        this._artist_id
+                    );
+                }
             }
+        } catch (error) {
+            console.error('Failed to fetch album data:', error);
         }
     }
 });

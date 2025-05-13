@@ -24,6 +24,23 @@ export class Medias_ApiService_of_NineSong extends NineSong_Api_Services_Web {
             }
         );
     }
+    public async getMediaCounts(
+        starred: string, search: string,
+        year: string,
+        album_id: string, artist_id: string,
+    ): Promise<any> {
+        return this.sendRequest(
+            'GET',
+            'medias/filter_counts',
+            {
+                starred,
+                search,
+                year,
+                album_id,
+                artist_id,
+            }
+        );
+    }
     public async getMedias_Playlist(
         playlistId: string,
         start: string, end: string,

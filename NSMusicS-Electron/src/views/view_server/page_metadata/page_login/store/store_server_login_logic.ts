@@ -6,6 +6,9 @@ import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_i
 import {
     store_general_fetch_home_list
 } from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_home/store_general_fetch_home_list";
+import {
+    Auth_Token_ApiService_of_NineSong
+} from "../../../../../data/data_access/servers_configs/ninesong_api/services_web/Auth/Auth_Token/index_service";
 
 export const store_server_login_logic = reactive({
     jwt_expire_time: 24 * 60 * 60 * 1000,// 24小时
@@ -54,22 +57,31 @@ export const store_server_login_logic = reactive({
     },
     async server_login(email: string, password: string) {
         try {
-            const response = await axios.post("/api/user/login", {
-                email: email,
-                password: password
-            });
-            store_server_login_info.server_accessToken = String(response.data.accessToken);
-            store_server_login_info.server_refreshToken = String(response.data.refreshToken);
-            console.log("登录成功:", response.data.accessToken);
+            const url =
+                store_app_configs_info.desktop_system_kind === 'docker' ?
+                    '/api' : store_server_login_info.server_url;
+            const response = new Auth_Token_ApiService_of_NineSong(
+                url
+            );
+            const data = await response.getAuth_Token(
+                email,
+                password,
+            )
+            store_server_login_info.server_accessToken = String(data.accessToken);
+            store_server_login_info.server_refreshToken = String(data.refreshToken);
+            console.log("登录成功:", data.accessToken);
 
-            const currentTime = new Date().getTime();
-            const expireTime = currentTime + this.jwt_expire_time
-            sessionStorage.setItem("jwt_token", store_server_login_info.server_accessToken);
-            sessionStorage.setItem("jwt_expire_time", expireTime.toString());
+            // 由于Electron初始化调用此方法，检测是否为docker，防止调用load_app陷入无限循环
+            if(store_app_configs_info.desktop_system_kind === 'docker') {
+                const currentTime = new Date().getTime();
+                const expireTime = currentTime + this.jwt_expire_time
+                sessionStorage.setItem("jwt_token", store_server_login_info.server_accessToken);
+                sessionStorage.setItem("jwt_expire_time", expireTime.toString());
 
-            store_router_data_info.router_select_model_server_login = false;
-            await store_app_configs_info.load_app();
-            store_router_data_info.router.push("/home");
+                store_router_data_info.router_select_model_server_login = false;
+                await store_app_configs_info.load_app();
+                store_router_data_info.router.push("/home");
+            }
             return true;
         } catch (error) {
             console.error("登录失败:", error);

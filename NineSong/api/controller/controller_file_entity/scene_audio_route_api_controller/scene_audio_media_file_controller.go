@@ -62,11 +62,13 @@ func (c *MediaFileController) GetMediaFiles(ctx *gin.Context) {
 func (c *MediaFileController) GetMediaFilterCounts(ctx *gin.Context) {
 	params := struct {
 		Search   string `form:"search"`
+		Starred  string `form:"starred"`
 		AlbumID  string `form:"album_id"`
 		ArtistID string `form:"artist_id"`
 		Year     string `form:"year"`
 	}{
 		Search:   ctx.Query("search"),
+		Starred:  ctx.Query("starred"),
 		AlbumID:  ctx.Query("album_id"),
 		ArtistID: ctx.Query("artist_id"),
 		Year:     ctx.Query("year"),
@@ -75,6 +77,7 @@ func (c *MediaFileController) GetMediaFilterCounts(ctx *gin.Context) {
 	counts, err := c.MediaFileUsecase.GetMediaFileFilterItemsCount(
 		ctx.Request.Context(),
 		params.Search,
+		params.Starred,
 		params.AlbumID,
 		params.ArtistID,
 		params.Year,

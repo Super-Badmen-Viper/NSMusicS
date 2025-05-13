@@ -7,6 +7,9 @@ import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {store_server_jellyfin_userdata_logic} from "./server_jellyfin_user_data/store_server_jellyfin_userdata_logic";
 import {isElectron} from "@/utils/electron/isElectron";
 import {store_server_ninesong_userdata_logic} from "./server_ninesong_user_data/store_server_ninesong_userdata_logic";
+import {
+    store_view_media_page_logic
+} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
 
 export const store_server_data_select_logic = reactive({
     /// server add
@@ -81,6 +84,8 @@ export const store_server_data_select_logic = reactive({
         value: any,
         type: string
     ){
+        store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+        //
         if(type === 'ninesong'){
             return store_server_ninesong_userdata_logic.ninesong_update_server_config_of_current_user_of_sqlite(
                 value
