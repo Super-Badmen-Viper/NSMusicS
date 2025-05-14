@@ -2,7 +2,10 @@
 <img src="https://github.com/user-attachments/assets/7534a7e7-c45a-4813-9210-2fc66c686164" width="49%">
 
 ## NSMusicS | Nine Song Music : 九歌音乐
- It should not only implement its own streaming services, but also be compatible with various mainstream open-source streaming servers, And implement cross platform professional music clients for various operating systems, ensuring data interoperability between the client and server of each operating system  (desktop：Windows，Linux，MacOs. mobile: Android, IOS. Car System: Android)  
+NSMusicS integrates its own NineSong streaming server by default, and is also compatible with various mainstream open-source streaming servers,
+﻿
+And implement cross platform professional music clients for various operating systems, 
+ensuring each operating system (desktop: Windows, Linux, MacOS). Mobile: Android, iOS. Data interoperability between the client and server of the in car system (Android)
  
  The Chinese name of the project is "Nine Songs Music | 九歌", abbreviated as NSMusicS<br> inspired by ["Chu Ci"] | 楚辞, to commemorate ["Qu Yuan"] | 屈原<br>
  
@@ -13,7 +16,19 @@
   [github: ha_xiaomi_home](https://github.com/XiaoMi/ha_xiaomi_home) (米家集成：智能家居系统)
   - [ ] Xiaomi ecosystem of people, cars, and homes
   (小米：人车家全生态)
- 
+
+## New Function
+The NineSong server will be released in June this year, and NSMusicS will be able to deploy Docker and integrate NineSong streaming services by default.  
+Compared to other music servers (Navidrome, Jellyfin, Emby, Plex, Subsonic, Gonic),
+It has better functions, as follows: 
+ - More detailed music library managementand support for remote upload, synchronization, and download of music libraries
+ - More detailed music metadata TAG management, supporting remote TAG upload and synchronous modification
+ - - Add TAG settings (singer avatar (multiple choices), singer photo (multiple choices), album cover (multiple choices), song sound quality version (multiple choices), song lyrics version (multiple choices))
+ - More detailed music recommendations tailored to your playback data
+ - - Add tag word cloud for users to recommend interests
+ - More detailed music playback experience, with a variety of playback modes available
+ - It can be used through a web browser to automatically respond to changes in the layout of computer and mobile applications based on screen ratio
+
 ## NSMusicS-Electron | NineSong Music(Desktop-client) : 九歌音乐
 - [x] supporting the Windows10+、MacOS(arm、x64)、Linux platform (which will soon support Docker)
 - [x] music library management
