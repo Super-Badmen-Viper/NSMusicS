@@ -30,6 +30,9 @@ It has better functions, as follows:
  - More detailed music playback experience, with a variety of playback modes available
  - It can be used through a web browser to automatically respond to changes in the layout of computer and mobile applications based on screen ratio
 
+The cross platform version of NSMusicS Flutter for mobile devices will be released by the end of this year
+marking a milestone in the NineSong Music Scene as the first application scenario of the NineSong software ecosystem
+
 ## NSMusicS-Electron | NineSong Music(Desktop-client) : 九歌音乐
 - [x] supporting the Windows10+、MacOS(arm、x64)、Linux platform (which will soon support Docker)
 - [x] music library management
