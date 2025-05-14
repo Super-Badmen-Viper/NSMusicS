@@ -25,30 +25,51 @@ export class NineSong_Api_Services_Web {
         data?: any,
     ): Promise<any> {
         try {
-            if(
-                endpoint === 'user/login' ||
-                (store_server_login_info.server_accessToken != undefined && store_server_login_info.server_accessToken.length > 0)
-            ) {
-                const headers = {
-                    Authorization: `Bearer ${store_server_login_info.server_accessToken}`
-                };
+            const headers = {
+                Authorization: `Bearer ${store_server_login_info.server_accessToken}`
+            };
+            const queryString = params ? new URLSearchParams(params).toString() : '';
+            const url = this.baseUrl.includes('api')
+                ? `${this.baseUrl}/${endpoint}${queryString ? `?${queryString}` : ''}`
+                : `${this.baseUrl}/api/${endpoint}${queryString ? `?${queryString}` : ''}`;
 
-                const queryString = params ? new URLSearchParams(params).toString() : '';
-                const url = this.baseUrl.includes('api')
-                    ? `${this.baseUrl}/${endpoint}${queryString ? `?${queryString}` : ''}`
-                    : `${this.baseUrl}/api/${endpoint}${queryString ? `?${queryString}` : ''}`;
-
-                const response = await axios({
-                    method,
-                    url,
-                    headers,
-                    data,
-                });
-                return response.data;
+            try {
+                if (
+                    endpoint === 'user/login' ||
+                    (store_server_login_info.server_accessToken != undefined && store_server_login_info.server_accessToken.length > 0)
+                ) {
+                    const response = await axios({
+                        method,
+                        url,
+                        headers,
+                        data,
+                    });
+                    return response.data;
+                }
+                return undefined;
+            } catch (e) {
+                try {
+                    await store_server_login_logic.server_login(
+                        store_server_user_model.username,
+                        store_server_user_model.password
+                    )
+                    // replace apikey
+                    store_server_auth_token.test_init_server_token()
+                    console.error('尝试重新登录:', e);
+                    //
+                    const response = await axios({
+                        method,
+                        url,
+                        headers,
+                        data,
+                    });
+                    return response.data;
+                } catch {}
+                console.error('请求失败:', e);
+                return undefined;
             }
-            return undefined;
-        } catch (e) {
-            console.error('请求失败:', e);
+        }catch (e) {
+            console.error('API构建失败:', e);
             return undefined;
         }
     }

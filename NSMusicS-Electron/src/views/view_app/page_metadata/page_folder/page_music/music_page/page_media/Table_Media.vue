@@ -380,6 +380,7 @@ const handleItemDbClick = async (media_file:any,index:number) => {
       store_general_fetch_player_list.fetchData_PlayList()
 
       store_playlist_list_info.reset_carousel()
+      store_player_audio_info.this_audio_Index_of_play_list_carousel = index;
     }
   }
 }

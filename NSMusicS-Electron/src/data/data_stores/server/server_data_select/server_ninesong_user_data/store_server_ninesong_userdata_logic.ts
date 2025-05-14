@@ -12,9 +12,6 @@ import {store_server_user_model} from "@/data/data_stores/server/store_server_us
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 import { Set_ServerInfo_To_LocalSqlite } from "@/data/data_access/local_configs/class_Set_ServerInfo_To_LocalSqlite";
 import {isElectron} from '@/utils/electron/isElectron';
-import {
-    store_server_login_logic
-} from "@/views/view_server/page_metadata/page_login/store/store_server_login_logic";
 
 export const store_server_ninesong_userdata_logic = reactive({
     /// docker server manage

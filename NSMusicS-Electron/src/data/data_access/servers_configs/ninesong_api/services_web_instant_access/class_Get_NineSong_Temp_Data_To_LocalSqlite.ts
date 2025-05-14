@@ -496,7 +496,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                         rating: artist.Rating,
                         id: artist.ID,
                         name: artist.Name,
-                        album_count: artist.albumCount,
+                        album_count: artist.AlbumCount,
                         full_text: '',
                         order_artist_name: '',
                         sort_artist_name: '',

@@ -10,6 +10,12 @@ import {store_server_ninesong_userdata_logic} from "./server_ninesong_user_data/
 import {
     store_view_media_page_logic
 } from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
+import {
+    store_view_album_page_logic
+} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_logic";
+import {
+    store_view_artist_page_logic
+} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_logic";
 
 export const store_server_data_select_logic = reactive({
     /// server add
@@ -85,6 +91,8 @@ export const store_server_data_select_logic = reactive({
         type: string
     ){
         store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+        store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
+        store_view_artist_page_logic.page_artistlists_selected = 'artist_list_all'
         //
         if(type === 'ninesong'){
             return store_server_ninesong_userdata_logic.ninesong_update_server_config_of_current_user_of_sqlite(
