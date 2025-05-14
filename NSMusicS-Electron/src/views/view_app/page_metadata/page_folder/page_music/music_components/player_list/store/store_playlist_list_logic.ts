@@ -9,7 +9,7 @@ import {
 } from "@/data/data_access/local_configs/class_Get_PlaylistInfo_From_LocalSqlite";
 import {
     store_general_model_player_list
-} from "../../../../../../../../data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list";
+} from "@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list";
 
 export const store_playlist_list_logic = reactive({
     async reset_data() {

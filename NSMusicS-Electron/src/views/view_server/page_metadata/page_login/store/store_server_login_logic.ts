@@ -8,7 +8,7 @@ import {
 } from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_home/store_general_fetch_home_list";
 import {
     Auth_Token_ApiService_of_NineSong
-} from "../../../../../data/data_access/servers_configs/ninesong_api/services_web/Auth/Auth_Token/index_service";
+} from "@/data/data_access/servers_configs/ninesong_api/services_web/Auth/Auth_Token/index_service";
 
 export const store_server_login_logic = reactive({
     jwt_expire_time: 24 * 60 * 60 * 1000,// 24小时

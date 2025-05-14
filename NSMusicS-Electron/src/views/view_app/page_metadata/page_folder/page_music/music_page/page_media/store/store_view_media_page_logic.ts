@@ -15,7 +15,7 @@ import {store_player_appearance} from "@/views/view_app/page_metadata/page_folde
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {
     store_general_model_player_list
-} from "../../../../../../../../data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list";
+} from "@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list";
 
 export const store_view_media_page_logic = reactive({
     list_data_StartUpdate: false,

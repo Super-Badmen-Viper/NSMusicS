@@ -8,7 +8,7 @@ import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_i
 import {store_playlist_appearance} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_appearance";
 import {
     store_general_model_player_list
-} from "../../data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list";
+} from "@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list";
 
 export const store_router_data_info = reactive({
     router: null,

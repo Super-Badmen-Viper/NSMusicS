@@ -10,7 +10,7 @@ import { isElectron } from '@/utils/electron/isElectron';
 import { Get_Jellyfin_Temp_Data_To_LocalSqlite } from '@/data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite';
 import {
     Get_NineSong_Temp_Data_To_LocalSqlite
-} from "../../../../../data_access/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite";
+} from "@/data/data_access/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite";
 
 export const store_server_model_statistics = reactive({
     async get_page_top_info() {

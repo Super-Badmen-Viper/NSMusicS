@@ -14,10 +14,10 @@ import {
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 import {
     Retrieval_ApiService_of_NineSong
-} from "../../../../../../../../data/data_access/servers_configs/ninesong_api/services_web/Scene/Music/Retrieval/index_service";
+} from "@/data/data_access/servers_configs/ninesong_api/services_web/Scene/Music/Retrieval/index_service";
 import {
     store_server_login_info
-} from "../../../../../../../view_server/page_metadata/page_login/store/store_server_login_info";
+} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
 
 export const store_player_audio_logic = reactive({
     player: new Audio_node_mpv(),

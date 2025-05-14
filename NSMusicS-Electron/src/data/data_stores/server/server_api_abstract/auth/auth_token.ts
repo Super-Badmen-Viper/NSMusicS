@@ -23,14 +23,13 @@ import {
 import {
     store_server_navidrome_userdata_logic
 } from "../../server_data_select/server_navidrome_user_data/store_server_navidrome_userdata_logic";
-import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
 import {store_server_model_statistics} from "../music_scene/model/model_statistics";
 import {
     store_server_login_logic
-} from "../../../../../views/view_server/page_metadata/page_login/store/store_server_login_logic";
+} from "@/views/view_server/page_metadata/page_login/store/store_server_login_logic";
 import {
     store_server_login_info
-} from "../../../../../views/view_server/page_metadata/page_login/store/store_server_login_info";
+} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
 
 export const store_server_auth_token = reactive({
     async init_login_server(){

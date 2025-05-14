@@ -8,6 +8,12 @@ import {
 import {
     Items_ApiService_of_Je
 } from "@/data/data_access/servers_configs/jellyfin_api/services_web/Items/index_service";
+import {
+    store_server_login_info
+} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+import {
+    Playlist_ApiService_of_NineSong
+} from "@/data/data_access/servers_configs/ninesong_api/services_web/Scene/Music/Playlist/index_service";
 
 export const store_server_data_set_playlistInfo = reactive({
     async Set_PlaylistInfo_To_Update_CreatePlaylist_Server(name: string, _public_: boolean){
@@ -29,6 +35,18 @@ export const store_server_data_set_playlistInfo = reactive({
                 name, '', 'Audio',
                 store_server_user_model.userid_of_Je
             )
+        }else if(
+            store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong'
+        ) {
+            const getCreatePlaylist_set_id = await new Playlist_ApiService_of_NineSong(store_server_login_info.server_url)
+                .createPlaylist(
+                    name,''
+                );
+            try {
+                return getCreatePlaylist_set_id["ninesong-response"]["playlist"]["ID"]
+            } catch {
+                return ''
+            }
         }
     },
     async Set_PlaylistInfo_To_Update_SetPlaylist(id: string, name: string,comment: string, _public_: boolean,){
@@ -39,12 +57,12 @@ export const store_server_data_set_playlistInfo = reactive({
                     id, name, comment, String(_public_)
                 );
         }else if(
-            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
+            store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong'
         ) {
-            // Jellyfin-api does not support updating playlist information
-            // await new Playlists_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).postPlaylists_Update(
-            //     id, _public_, name
-            // )
+            await new Playlist_ApiService_of_NineSong(store_server_login_info.server_url)
+                .updatePlaylist_Id(
+                    id, name, comment
+                )
         }
     },
     async Set_PlaylistInfo_To_Update_DeletePlaylist(id:string){
@@ -62,6 +80,13 @@ export const store_server_data_set_playlistInfo = reactive({
             ).delItems_List_Quick(
                 id
             )
+        }else if(
+            store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong'
+        ) {
+            return await new Playlist_ApiService_of_NineSong(store_server_login_info.server_url)
+                .deletePlaylist_Id(
+                    id
+                )
         }
     },
 
@@ -81,6 +106,14 @@ export const store_server_data_set_playlistInfo = reactive({
                 ids.join(','),
                 store_server_user_model.userid_of_Je
             )
+        }else if(
+            store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong'
+        ) {
+            await new Playlist_ApiService_of_NineSong(store_server_login_info.server_url)
+                .addMediaFiles_Playlist(
+                    playlist_id,
+                    ids.join(',')
+                )
         }
     },
     async Set_Selected_MediaInfo_Delete_Selected_Playlist(ids: string[], playlist_id: string){
@@ -107,16 +140,15 @@ export const store_server_data_set_playlistInfo = reactive({
                 playlist_id,
                 ids.join(',')
             )
+        }else if(
+            store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong'
+        ) {
+            await new Playlist_ApiService_of_NineSong(store_server_login_info.server_url)
+                .removeMediaFiles_Playlist(
+                    playlist_id,
+                    ids.join(',')
+                )
         }
-        // for (const id of ids) {
-        //     const indexs = await this.Set_PlaylistInfo_To_Update_GetPlaylist_MediaIndex(
-        //         playlist_id, [id]
-        //     )
-        //     await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
-        //         .updatePlaylist_songIndexToRemove(
-        //             store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
-        //             playlist_id, indexs[0]);
-        // }
     },
 
     async Set_PlaylistInfo_To_Update_GetPlaylist_MediaIndex(playlist_id: string, ids: string[]) {
@@ -140,7 +172,7 @@ export const store_server_data_set_playlistInfo = reactive({
                 return [];
             }
         }else if(
-            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
+            store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong'
         ) {
 
         }
