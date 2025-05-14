@@ -491,6 +491,14 @@ export const store_general_fetch_media_list = reactive({
                         store_general_fetch_player_list._start = store_general_fetch_player_list._end - 30;
                     }
                 }
+            } else if (store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong') {
+                if (this._load_model === 'search') {
+                    this._start += 30;
+                    this._end += 30;
+                } else {
+                    store_general_fetch_player_list._start += 30;
+                    store_general_fetch_player_list._end += 30;
+                }
             }
 
             await this.fetchData_Media_of_server_web(false);

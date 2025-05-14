@@ -218,7 +218,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
     public async get_home_list_of_recently_played(
         url: string
     ){
-        const recently_played = await this.home_ApiService_of_NineSong.getRandomAlbums('0', '15')
+        const recently_played = await this.home_ApiService_of_NineSong.getAlbumList_Play_Date()
         if(recently_played != undefined && Array.isArray(recently_played)) {
             recently_played.map(async (album: any) => {
                 store_view_home_page_info.home_Files_temporary_recently_played.push(

@@ -25,11 +25,24 @@ import {
 } from "../../server_data_select/server_navidrome_user_data/store_server_navidrome_userdata_logic";
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
 import {store_server_model_statistics} from "../music_scene/model/model_statistics";
+import {
+    store_server_login_logic
+} from "../../../../../views/view_server/page_metadata/page_login/store/store_server_login_logic";
+import {
+    store_server_login_info
+} from "../../../../../views/view_server/page_metadata/page_login/store/store_server_login_info";
 
 export const store_server_auth_token = reactive({
     async init_login_server(){
         if(store_server_users.server_select_kind === 'ninesong'){
-
+            store_server_user_model.username =
+                store_server_users.server_config_of_current_user_of_sqlite?.user_name
+            store_server_user_model.password =
+                store_server_users.server_config_of_current_user_of_sqlite?.password
+            await store_server_login_logic.server_login(
+                store_server_user_model.username,
+                store_server_user_model.password
+            )
         }else if(store_server_users.server_select_kind === 'navidrome') {
             const {salt, token} = store_server_navidrome_userdata_logic.navidrome_get_EncryptedPassword(
                 store_server_user_model.password
@@ -37,7 +50,7 @@ export const store_server_auth_token = reactive({
             store_server_user_model.salt = salt
             store_server_user_model.token = token
         }else if(
-            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
+            store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby'
         ) {
             if(store_server_user_model.server_login_model_of_apikey) {
                 store_server_user_model.authorization_of_Je =
@@ -118,34 +131,61 @@ export const store_server_auth_token = reactive({
         }
     },
     test_init_server_token(){
-        if (
-            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-        ) {
-            if (store_server_user_model.authorization_of_Je != undefined) {
-                const regex = /api_key=([^&]+)/;
-                store_player_audio_info.this_audio_file_path =
-                    store_player_audio_info.this_audio_file_path.replace(
-                        regex,
-                        'api_key=' + store_server_user_model.authorization_of_Je
-                    );
-                store_player_audio_info.this_audio_file_medium_image_url =
-                    store_player_audio_info.this_audio_file_medium_image_url.replace(
-                        regex,
-                        'api_key=' + store_server_user_model.authorization_of_Je
-                    );
-                store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any) => {
-                    if (item.medium_image_url) {
-                        item.medium_image_url = item.medium_image_url
-                            .replace(regex, 'api_key=' + store_server_user_model.authorization_of_Je);
-                    }
-                    if (item.path) {
-                        item.path = item.path
-                            .replace(regex, 'api_key=' + store_server_user_model.authorization_of_Je);
-                    }
-                    if (item.duration) {
-                        item.duration_txt = store_player_audio_logic.formatTime_RunTimeTicks(item.duration);
-                    }
-                });
+        if (store_server_user_model.model_server_type_of_web) {
+            if (store_server_users.server_select_kind === 'ninesong') {
+                if (store_server_login_info.server_accessToken != undefined && store_server_login_info.server_accessToken.length > 0) {
+                    const regex = /access_token=([^&]+)/;
+                    store_player_audio_info.this_audio_file_path =
+                        store_player_audio_info.this_audio_file_path.replace(
+                            regex,
+                            'access_token=' + store_server_user_model.authorization_of_Je
+                        );
+                    store_player_audio_info.this_audio_file_medium_image_url =
+                        store_player_audio_info.this_audio_file_medium_image_url.replace(
+                            regex,
+                            'access_token=' + store_server_user_model.authorization_of_Je
+                        );
+                    store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any) => {
+                        if (item.medium_image_url) {
+                            item.medium_image_url = item.medium_image_url
+                                .replace(regex, 'access_token=' + store_server_user_model.authorization_of_Je);
+                        }
+                        if (item.path) {
+                            item.path = item.path
+                                .replace(regex, 'access_token=' + store_server_user_model.authorization_of_Je);
+                        }
+                        if (item.duration) {
+                            item.duration_txt = store_player_audio_logic.formatTime_RunTimeTicks(item.duration);
+                        }
+                    });
+                }
+            }else if(store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
+                if (store_server_user_model.authorization_of_Je != undefined) {
+                    const regex = /api_key=([^&]+)/;
+                    store_player_audio_info.this_audio_file_path =
+                        store_player_audio_info.this_audio_file_path.replace(
+                            regex,
+                            'api_key=' + store_server_user_model.authorization_of_Je
+                        );
+                    store_player_audio_info.this_audio_file_medium_image_url =
+                        store_player_audio_info.this_audio_file_medium_image_url.replace(
+                            regex,
+                            'api_key=' + store_server_user_model.authorization_of_Je
+                        );
+                    store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any) => {
+                        if (item.medium_image_url) {
+                            item.medium_image_url = item.medium_image_url
+                                .replace(regex, 'api_key=' + store_server_user_model.authorization_of_Je);
+                        }
+                        if (item.path) {
+                            item.path = item.path
+                                .replace(regex, 'api_key=' + store_server_user_model.authorization_of_Je);
+                        }
+                        if (item.duration) {
+                            item.duration_txt = store_player_audio_logic.formatTime_RunTimeTicks(item.duration);
+                        }
+                    });
+                }
             }
         }
     }

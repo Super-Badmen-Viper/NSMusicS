@@ -12,6 +12,12 @@ import {
     Audio_ApiService_of_Je
 } from "@/data/data_access/servers_configs/jellyfin_api/services_web/Audio/index_service";
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
+import {
+    Retrieval_ApiService_of_NineSong
+} from "../../../../../../../../data/data_access/servers_configs/ninesong_api/services_web/Scene/Music/Retrieval/index_service";
+import {
+    store_server_login_info
+} from "../../../../../../../view_server/page_metadata/page_login/store/store_server_login_info";
 
 export const store_player_audio_logic = reactive({
     player: new Audio_node_mpv(),
@@ -162,9 +168,15 @@ export const store_player_audio_logic = reactive({
     },
     async update_current_media_info(media_file:any,index:number){
         if(store_server_user_model.model_server_type_of_web){
-            if(
-                store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-            ) {
+            if(store_server_users.server_select_kind === 'ninesong'){
+                const retrieval = new Retrieval_ApiService_of_NineSong(
+                    store_server_login_info.server_url
+                )
+                const lyrics = await retrieval.getLyrics_id(media_file.id);
+                await store_player_audio_info.set_lyric(
+                    lyrics
+                )
+            }else if(store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
                 try {
                     const audio_ApiService_of_Je = new Audio_ApiService_of_Je(
                         store_server_users.server_config_of_current_user_of_sqlite?.url
@@ -191,7 +203,7 @@ export const store_player_audio_logic = reactive({
                         media_file.lyrics
                     )
                 }
-            }else{
+            }else if(store_server_users.server_select_kind === 'navidrome'){
                 await store_player_audio_info.set_lyric(
                     media_file.lyrics
                 )
