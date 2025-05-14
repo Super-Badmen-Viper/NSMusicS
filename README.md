@@ -8,14 +8,6 @@ And implement cross platform professional music clients for various operating sy
 ensuring each operating system (desktop: Windows, Linux, MacOS). Mobile: Android, iOS. Data interoperability between the client and server of the in car system (Android)
  
  The Chinese name of the project is "Nine Songs Music | 九歌", abbreviated as NSMusicS<br> inspired by ["Chu Ci"] | 楚辞, to commemorate ["Qu Yuan"] | 屈原<br>
- 
- In addition, NSMusicS also supports local mode to use local music libraries. And plan to support various types of network cloud drives，such as webdev，onedriver....
-
- After the initial development and improvement of NSMusicS, it will be integrated into various software ecosystems, such as:
-  - [ ] Xiaomi Home Integration for Home Assistant: 
-  [github: ha_xiaomi_home](https://github.com/XiaoMi/ha_xiaomi_home) (米家集成：智能家居系统)
-  - [ ] Xiaomi ecosystem of people, cars, and homes
-  (小米：人车家全生态)
 
 ## New Function
 The NineSong server will be released in June this year, and NSMusicS will be able to deploy Docker and integrate NineSong streaming services by default.  
@@ -32,6 +24,14 @@ It has better functions, as follows:
 
 The cross platform version of NSMusicS Flutter for mobile devices will be released by the end of this year
 marking a milestone in the NineSong Music Scene as the first application scenario of the NineSong software ecosystem
+
+ In addition, NSMusicS also supports local mode to use local music libraries. And plan to support various types of network cloud drives，such as webdev，onedriver....
+
+ After the initial development and improvement of NSMusicS, it will be integrated into various software ecosystems, such as:
+  - [ ] Xiaomi Home Integration for Home Assistant: 
+  [github: ha_xiaomi_home](https://github.com/XiaoMi/ha_xiaomi_home) (米家集成：智能家居系统)
+  - [ ] Xiaomi ecosystem of people, cars, and homes
+  (小米：人车家全生态)
 
 ## NSMusicS-Electron | NineSong Music(Desktop-client) : 九歌音乐
 - [x] supporting the Windows10+、MacOS(arm、x64)、Linux platform (which will soon support Docker)
