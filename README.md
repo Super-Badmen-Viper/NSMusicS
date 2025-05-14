@@ -24,6 +24,7 @@ It has better functions, as follows:
  - More detailed music library managementand support for remote upload, synchronization, and download of music libraries
  - More detailed music metadata TAG management, supporting remote TAG upload and synchronous modification
  - - Add TAG settings (singer avatar (multiple choices), singer photo (multiple choices), album cover (multiple choices), song sound quality version (multiple choices), song lyrics version (multiple choices))
+ - - Added adaptation to the free music TAG API, allowing users to obtain the online TAG of their songs and choose whether to synchronize TAG data。https://musicbrainz.org/、https://www.theaudiodb.com/
  - More detailed music recommendations tailored to your playback data
  - - Add tag word cloud for users to recommend interests
  - More detailed music playback experience, with a variety of playback modes available
