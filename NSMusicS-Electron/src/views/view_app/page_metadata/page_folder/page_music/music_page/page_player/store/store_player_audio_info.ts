@@ -195,9 +195,9 @@ export const store_player_audio_info = reactive({
     },
     set_carousel_index(){
         const index = store_playlist_list_info.playlist_MediaFiles_temporary_carousel.findIndex(
-            (item) => item.id === store_player_audio_info.this_audio_song_id
+            (item) => item.path === store_player_audio_info.this_audio_file_path
         );
-        store_player_audio_info.this_audio_Index_of_play_list_carousel = index !== -1 ? index : 0
+        store_player_audio_info.this_audio_Index_of_play_list_carousel = index != -1 ? index : 0
     }
 });
 watch(() => store_player_audio_info.this_audio_file_path, (newValue) => {

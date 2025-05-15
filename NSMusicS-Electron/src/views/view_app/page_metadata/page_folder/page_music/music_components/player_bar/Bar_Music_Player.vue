@@ -91,6 +91,7 @@ const click_back_svg = () => {
     get_playerbar_to_switch_playerview(player_show_hight_animation_value.value);
     store_player_audio_logic.player_back_ChevronDouble = player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow;
   }
+  store_playlist_list_info.reset_carousel()
 };
 watch(() => store_player_appearance.player_show_click, (newValue) => {
   if (newValue) {

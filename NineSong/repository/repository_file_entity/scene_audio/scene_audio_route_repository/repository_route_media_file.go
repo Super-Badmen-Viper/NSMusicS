@@ -203,6 +203,7 @@ func validateSortField(sort string) string {
 		"artist": true, "album": true, "year": true,
 		"duration": true, "bit_rate": true, "size": true,
 		"rating": true, "starred_at": true,
+		"created_at": true, "updated_at": true,
 	}
 	if validSortFields[sort] {
 		return sort

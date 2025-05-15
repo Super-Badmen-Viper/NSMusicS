@@ -77,16 +77,21 @@ export const store_playlist_list_info = reactive({
             return;
         }
         if(store_playlist_list_info.playlist_MediaFiles_temporary.length > 1) {
-            const startIndex = Math.max(
-                store_player_audio_info.this_audio_Index_of_play_list - 14,
-                0
-            );
-            const endIndex = Math.min(
-                startIndex + 30,
-                store_playlist_list_info.playlist_MediaFiles_temporary.length
-            );
-            store_playlist_list_info.playlist_MediaFiles_temporary_carousel =
-                store_playlist_list_info.playlist_MediaFiles_temporary.slice(startIndex, endIndex);
+            if(!isNaN(store_player_audio_info.this_audio_Index_of_play_list)) {
+                const startIndex = Math.max(
+                    store_player_audio_info.this_audio_Index_of_play_list - 14,
+                    0
+                );
+                const endIndex = Math.min(
+                    startIndex + 30,
+                    store_playlist_list_info.playlist_MediaFiles_temporary.length
+                );
+                store_playlist_list_info.playlist_MediaFiles_temporary_carousel =
+                    store_playlist_list_info.playlist_MediaFiles_temporary.slice(startIndex, endIndex);
+            }else{
+                store_playlist_list_info.playlist_MediaFiles_temporary_carousel =
+                    store_playlist_list_info.playlist_MediaFiles_temporary.slice(0, 30);
+            }
             //
             store_player_audio_info.set_carousel_index()
         }else if(store_playlist_list_info.playlist_MediaFiles_temporary.length === 1){

@@ -89,6 +89,22 @@ if(store_server_user_model.model_server_type_of_local || (store_server_users.ser
     {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
   ]
 }else if(
+    store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'ninesong')
+){
+  options_Sort_key.value = [
+    {label:computed(() => t('filter.title')), key: 'title', state_Sort: state_Sort.Default },
+    {label:computed(() => t('entity.artist_other')), key: 'artist', state_Sort: state_Sort.Default },
+    {label:computed(() => t('entity.album_other')), key: 'album', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.releaseYear')), key: 'year', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.duration')), key: 'duration', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.dateAdded')), key: 'created_at', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
+    {label:computed(() => t('common.bitrate')), key: 'bit_rate', state_Sort: state_Sort.Default },
+    {label:computed(() => t('LabelSize')), key: 'size', state_Sort: state_Sort.Default },
+    {label:computed(() => t('LabelLevel')), key: 'rating', state_Sort: state_Sort.Default },
+    {label:computed(() => t('common.favorite')+t('LabelDate')), key: 'starred_at', state_Sort: state_Sort.Default },
+  ]
+}else if(
     store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin')
 ){
   options_Sort_key.value = [
@@ -380,7 +396,6 @@ const handleItemDbClick = async (media_file:any,index:number) => {
       store_general_fetch_player_list.fetchData_PlayList()
 
       store_playlist_list_info.reset_carousel()
-      store_player_audio_info.this_audio_Index_of_play_list_carousel = index;
     }
   }
 }
