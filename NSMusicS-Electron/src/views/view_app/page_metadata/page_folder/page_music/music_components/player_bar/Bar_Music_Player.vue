@@ -168,11 +168,15 @@ const Play_This_Audio_Path = () => {
           Number(store_player_audio_logic.play_volume)
       )
       await store_player_audio_logic.player.play();
-      if(store_player_audio_logic.player_select === 'mpv') {
-        if (store_player_audio_logic.slider_init_singleValue != 0 && store_player_audio_logic.player_init_play) {
+      if (store_player_audio_logic.slider_init_singleValue != 0 && store_player_audio_logic.player_init_play) {
+        if(store_player_audio_logic.player_select === 'mpv') {
           store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_init_singleValue, true);
           store_player_audio_logic.slider_init_singleValue = 0;
         }
+      }else{
+        // init play logic
+        store_player_audio_logic.slider_init_singleValue = 0;
+        store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_init_singleValue, true);
       }
       Set_MediaInfo_To_PlayCount();
     }
