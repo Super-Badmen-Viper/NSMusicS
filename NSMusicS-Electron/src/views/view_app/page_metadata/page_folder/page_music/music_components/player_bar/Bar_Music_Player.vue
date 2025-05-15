@@ -179,22 +179,21 @@ const Play_This_Audio_Path = () => {
   }, 400);
 }
 const init_player_howler = async () => {
-  if(store_player_audio_logic.player.howl != null){
-    await store_player_audio_logic.player.howl.unload()
+  if (store_player_audio_logic.player.howl != null) {
+    await store_player_audio_logic.player.howl.unload();
   }
-  let media_kind = ''
-  if(store_server_user_model.model_server_type_of_local){
-    media_kind = store_player_audio_info.this_audio_file_path.split('.').pop()
-  }else if(store_server_user_model.model_server_type_of_web){
-    media_kind = 'mp3'
+  let media_kind = '';
+  if (store_server_user_model.model_server_type_of_local) {
+    media_kind = store_player_audio_info.this_audio_file_path.split('.').pop();
+  } else if (store_server_user_model.model_server_type_of_web) {
+    media_kind = 'mp3';
   }
-  store_player_audio_logic.player = new Audio_howler()
+  store_player_audio_logic.player = new Audio_howler();
   store_player_audio_logic.player.howl = new Howl({
     src: [store_player_audio_info.this_audio_file_path],
-    format: store_player_audio_logic.player_dolby ?
-        ['dolby', media_kind]
-        :
-        [],
+    format: store_player_audio_logic.player_dolby
+        ? ['dolby', media_kind]
+        : [],
     autoplay: false,
     html5: true,
     loop: false,
@@ -202,11 +201,12 @@ const init_player_howler = async () => {
     onplay: async () => {
       store_player_audio_logic.player.howl.fade(0, 1, store_player_audio_logic.player_fade_value);
       store_player_audio_logic.player.isPlaying = true;
-      if(isElectron) {
+      if (isElectron) {
         await ipcRenderer.invoke('i18n-tray-music-pause', true);
       }
 
-      if( store_player_audio_logic.player_device_select != undefined &&
+      if (
+          store_player_audio_logic.player_device_select != undefined &&
           store_player_audio_logic.player_device_select != 'default' &&
           store_player_audio_logic.player_device_select.length > 0
       ) {
@@ -214,41 +214,43 @@ const init_player_howler = async () => {
         if (typeof audioElement.setSinkId === 'function') {
           audioElement
               .setSinkId(store_player_audio_logic.player_device_select)
-              .then( async () => {
-                await store_player_audio_logic.player.getDevices()
+              .then(async () => {
+                await store_player_audio_logic.player.getDevices();
                 console.log('Audio output successfully redirected.');
               })
               .catch((error) => {
                 console.error('Failed to redirect audio output:', error);
-                store_player_audio_logic.player_device_select = 'default'
+                store_player_audio_logic.player_device_select = 'default';
               });
         }
       }
 
-      if (store_player_audio_logic.slider_init_singleValue != 0 && store_player_audio_logic.player_init_play) {
+      if (
+          store_player_audio_logic.slider_init_singleValue != 0 &&
+          store_player_audio_logic.player_init_play
+      ) {
         store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_init_singleValue, true);
         store_player_audio_logic.slider_init_singleValue = 0;
-        store_player_audio_logic.player.pause()
+        store_player_audio_logic.player.pause();
       }
     },
     onpause: async () => {
       store_player_audio_logic.player.isPlaying = false;
-      if(isElectron) {
-        await ipcRenderer.invoke('i18n-tray-music-pause', false)
+      if (isElectron) {
+        await ipcRenderer.invoke('i18n-tray-music-pause', false);
       }
     },
     onstop: async () => {
       store_player_audio_logic.player.isPlaying = false;
-      if(isElectron) {
-        await ipcRenderer.invoke('i18n-tray-music-pause', false)
+      if (isElectron) {
+        await ipcRenderer.invoke('i18n-tray-music-pause', false);
       }
     },
     onend: () => {
       store_player_audio_logic.player.howl.fade(1, 0, store_player_audio_logic.player_fade_value);
       setTimeout(async () => {
         store_player_audio_logic.player.isPlaying = false;
-        //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
-        if(store_player_audio_logic.player_no_progress_jump){
+        if (store_player_audio_logic.player_no_progress_jump) {
           store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(store_player_audio_logic.player.getDuration());
           store_player_audio_logic.player_slider_currentTime_added_value = 0;
           this_audio_buffer_file.value = null;
@@ -259,15 +261,15 @@ const init_player_howler = async () => {
           store_player_audio_logic.player.isPlaying = false;
           store_player_audio_logic.player_is_play_ended = true;
         }
-        Play_Media_Switching()
+        Play_Media_Switching();
       }, store_player_audio_logic.player_fade_value);
     },
     onloaderror: (id: any, error: any) => {
-      // console.error('Failed to load audio:', error);
       store_player_audio_logic.player.isPlaying = false;
-    }
+    },
   });
-}
+};
+
 const Set_MediaInfo_To_PlayCount = debounce(async (event, args) => {
   store_local_data_set_mediaInfo.Set_MediaInfo_To_PlayCount_of_Media_File(
       store_player_audio_info.this_audio_song_id
@@ -285,13 +287,11 @@ const Set_MediaInfo_To_PlayCount = debounce(async (event, args) => {
   }
 }, 1000);
 
-/// Prevent 'mpv stopped' from being triggered multiple times and implement anti shake throttling measures
 const handleMpvStopped = debounce(async (event, args) => {
   store_player_audio_logic.player_is_play_ended = true;
   let index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
       (item: any) =>
-          item.play_id ===
-          store_player_audio_info.this_audio_play_id
+          item.play_id === store_player_audio_info.this_audio_play_id
   );
   let last_play = false;
   if (store_server_user_model.model_server_type_of_local) {
@@ -303,7 +303,6 @@ const handleMpvStopped = debounce(async (event, args) => {
     await store_player_audio_logic.player.pause();
   } else {
     store_player_audio_logic.player.isPlaying = false;
-    // 无进度跳动: 若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
     if (store_player_audio_logic.player_no_progress_jump) {
       store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(store_player_audio_logic.player.getDuration());
       store_player_audio_logic.player_slider_currentTime_added_value = 0;
@@ -314,9 +313,10 @@ const handleMpvStopped = debounce(async (event, args) => {
 
       store_player_audio_logic.player.isPlaying = false;
     }
-    Play_Media_Switching()
+    Play_Media_Switching();
   }
-}, 300);// 300ms 的防抖时间，限制node-mpv频繁触发end事件
+}, 300);
+
 if(isElectron) {
   ipcRenderer.on('mpv-stopped', handleMpvStopped);
 }
@@ -468,55 +468,54 @@ const backpanel_order_click = () => {
   }
 };
 async function Play_Media_Order(model_num: string, increased: number) {
-  let last_index = 0
-  if(store_server_user_model.model_server_type_of_local){
-    // local获取的该列表项总数，一次性加载不刷新
-    last_index = store_playlist_list_info.playlist_MediaFiles_temporary.length
-  }else if(store_server_user_model.model_server_type_of_web){
-    if(!store_server_user_model.random_play_model) {
-      if(store_playlist_list_info.playlist_MediaFiles_temporary.length >= 30) {
-        // web获取的该列表项总数，触底加载不刷新
+  let last_index = 0;
+  if (store_server_user_model.model_server_type_of_local) {
+    last_index = store_playlist_list_info.playlist_MediaFiles_temporary.length;
+  } else if (store_server_user_model.model_server_type_of_web) {
+    if (!store_server_user_model.random_play_model) {
+      if (store_playlist_list_info.playlist_MediaFiles_temporary.length >= 30) {
         if (store_general_fetch_player_list._totalCount != undefined) {
           if (store_general_fetch_player_list._totalCount < store_playlist_list_info.playlist_MediaFiles_temporary.length) {
-            store_general_fetch_player_list._totalCount = store_playlist_list_info.playlist_MediaFiles_temporary.length
+            store_general_fetch_player_list._totalCount = store_playlist_list_info.playlist_MediaFiles_temporary.length;
           }
         } else {
-          store_general_fetch_player_list._totalCount = store_playlist_list_info.playlist_MediaFiles_temporary.length
+          store_general_fetch_player_list._totalCount = store_playlist_list_info.playlist_MediaFiles_temporary.length;
         }
-      }else{
-        store_general_fetch_player_list._totalCount = store_playlist_list_info.playlist_MediaFiles_temporary.length
+      } else {
+        store_general_fetch_player_list._totalCount = store_playlist_list_info.playlist_MediaFiles_temporary.length;
       }
       last_index = store_general_fetch_player_list._totalCount;
-    }else{
-      // web随机获取，设置为固定10项，触底加载刷新+10
-      last_index = store_playlist_list_info.playlist_MediaFiles_temporary.length
+    } else {
+      last_index = store_playlist_list_info.playlist_MediaFiles_temporary.length;
     }
   }
+
   if (last_index > 0) {
     let index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
         (item: any) =>
-            item.play_id ===
-            store_player_audio_info.this_audio_play_id
+            item.play_id === store_player_audio_info.this_audio_play_id
     );
+
     let stop_play = false;
+
     if (index !== -1) {
       if (model_num === 'playback-1') {
         index += increased;
         if (index >= last_index) {
-          if(store_player_audio_logic.player_is_play_ended){
+          if (store_player_audio_logic.player_is_play_ended) {
             stop_play = true;
             store_player_audio_logic.player_is_play_ended = false;
-          }else{
+          } else {
             index = 0;
           }
-        }else if(index < 0){
+        } else if (index < 0) {
           index = last_index - 1;
         }
       } else if (model_num === 'playback-2') {
         index += increased;
         if (index >= last_index) {
           index = 0;
-        }else if(index < 0){
+        } else if (index < 0) {
           index = last_index - 1;
         }
       } else if (model_num === 'playback-3') {
@@ -529,47 +528,43 @@ async function Play_Media_Order(model_num: string, increased: number) {
           }
         }
       } else if (model_num === 'playback-4') {
-        if(!store_server_user_model.random_play_model) {
-          // 不设置last_index，是因为web触底刷新目前只能依次顺序加载，而不能虚拟化跳过加载
-          // 虚拟化待支持，在NineSong中实现
-          // 长度为数据库列表总长度(并客户端播放列表长度)，以总长度为随机范围，超出客户端拉取范围则向服务端定向拉取单项数据并填充客户端播放列表其后
-          index = Math.floor(
-              Math.random() * store_playlist_list_info.playlist_MediaFiles_temporary.length
-          );
-        }else{
-          // navidrome random_play_model
+        if (!store_server_user_model.random_play_model) {
+          index = Math.floor(Math.random() * last_index);
+        } else {
           index += increased;
           if (index >= last_index) {
             store_server_user_model.random_play_model_add = true;
-            if(store_server_users.server_select_kind === 'ninesong') {
-              let get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
+            if (store_server_users.server_select_kind === 'ninesong') {
+              let get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite();
               await get_NineSong_Temp_Data_To_LocalSqlite.get_random_song_list(
                   store_server_login_info.server_url,
-                  '0','30'
-              )
-            }else if(store_server_users.server_select_kind === 'navidrome') {
-              let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
+                  '0',
+                  '30'
+              );
+            } else if (store_server_users.server_select_kind === 'navidrome') {
+              let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite();
               await get_Navidrome_Temp_Data_To_LocalSqlite.get_random_song_list(
                   store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
                   store_server_users.server_config_of_current_user_of_sqlite?.user_name,
                   store_server_user_model.token,
                   store_server_user_model.salt,
-                  30, '', ''
-              )
-            }else{
-              store_general_fetch_media_list._load_model = 'play'
-              await store_general_fetch_media_list.fetchData_Media_of_server_web_start()
-              store_general_fetch_media_list._load_model = 'search'
-              ///
-              const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[index]
-              await store_player_audio_logic.update_current_media_info(media_file, index)
+                  30,
+                  '',
+                  ''
+              );
+            } else {
+              store_general_fetch_media_list._load_model = 'play';
+              await store_general_fetch_media_list.fetchData_Media_of_server_web_start();
+              store_general_fetch_media_list._load_model = 'search';
+
+              const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[index];
+              await store_player_audio_logic.update_current_media_info(media_file, index);
               console.log(media_file);
 
-              store_playlist_list_logic.media_page_handleItemDbClick = false
-              // store_player_appearance.player_mode_of_lock_playlist = false
-              store_player_audio_info.this_audio_restart_play = true
+              store_playlist_list_logic.media_page_handleItemDbClick = false;
+              store_player_audio_info.this_audio_restart_play = true;
             }
-          }else if(index < 0){
+          } else if (index < 0) {
             index = last_index - 1;
           }
         }
@@ -577,27 +572,27 @@ async function Play_Media_Order(model_num: string, increased: number) {
         stop_play = true;
       }
 
-      if(!store_server_user_model.random_play_model || index < last_index) {
+      if (!store_server_user_model.random_play_model || index < last_index) {
         if (!stop_play) {
           if (store_server_user_model.model_server_type_of_web) {
             if (index >= store_playlist_list_info.playlist_MediaFiles_temporary.length) {
-              store_general_fetch_media_list._load_model = 'play'
+              store_general_fetch_media_list._load_model = 'play';
               await store_general_fetch_media_list.fetchData_Media_of_server_web_end();
-              store_general_fetch_media_list._load_model = 'search'
+              store_general_fetch_media_list._load_model = 'search';
             }
           }
-          const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[index]
-          await store_player_audio_logic.update_current_media_info(media_file, index)
+          const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[index];
+          await store_player_audio_logic.update_current_media_info(media_file, index);
           console.log(media_file);
 
-          store_playlist_list_logic.media_page_handleItemDbClick = false
-          // store_player_appearance.player_mode_of_lock_playlist = false
-          store_player_audio_info.this_audio_restart_play = true
+          store_playlist_list_logic.media_page_handleItemDbClick = false;
+          store_player_audio_info.this_audio_restart_play = true;
         }
       }
     }
   }
 }
+
 ////// player_configs player_button middle area
 const play_skip_back_click = async () => {
   store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(await store_player_audio_logic.player.getDuration());
@@ -637,8 +632,11 @@ if(isElectron) {
       })
   );
 }
+
 const Play_Media_Switching = async () => {
-  store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(await store_player_audio_logic.player.getDuration());
+  store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(
+      await store_player_audio_logic.player.getDuration()
+  );
   store_player_audio_logic.player_slider_currentTime_added_value = 0;
   this_audio_buffer_file.value = null;
   clearInterval(timer);
@@ -648,10 +646,11 @@ const Play_Media_Switching = async () => {
   store_player_audio_logic.player.isPlaying = false;
   store_player_audio_logic.player_is_play_ended = true;
 
-  if (store_player_audio_logic.play_order === 'playback-3')
-    Play_Media_Order(store_player_audio_logic.play_order, 0)
-  else
-    Play_Media_Order(store_player_audio_logic.play_order, 1)
+  if (store_player_audio_logic.play_order === 'playback-3') {
+    Play_Media_Order(store_player_audio_logic.play_order, 0);
+  } else {
+    Play_Media_Order(store_player_audio_logic.play_order, 1);
+  }
 };
 
 ////// player_configs slider formatTime area

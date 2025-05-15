@@ -210,7 +210,6 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
   console.log('play_this_album_click：' + temp_id);
   await store_general_fetch_album_list.fetchData_This_Album_MediaList(temp_id);
   store_playlist_list_info.reset_carousel()
-  store_player_audio_info.this_audio_Index_of_play_list_carousel = 0;
 };
 const Get_this_album_info = (item: any, list_name: string): string => {
   let temp_id = item.id;
