@@ -244,9 +244,8 @@ export const store_general_fetch_artist_list = reactive({
             store_playlist_list_logic.media_page_handleItemDbClick = false
         }
 
+        store_local_data_set_artistInfo.Set_ArtistInfo_To_PlayCount_of_Artist(store_playlist_list_info.playlist_MediaFiles_temporary[0].artist_id)
         if(store_server_user_model.model_server_type_of_local){
-            store_local_data_set_artistInfo.Set_ArtistInfo_To_PlayCount_of_Artist(store_playlist_list_info.playlist_MediaFiles_temporary[0].artist_id)
-            //
             let get_AnnotationInfo_To_LocalSqlite = new Get_AnnotationInfo_To_LocalSqlite();
             store_view_artist_page_info.artist_recently_count =
                 get_AnnotationInfo_To_LocalSqlite.Get_Annotation_ItemInfo_Play_Count('artist')
@@ -290,8 +289,12 @@ export const store_general_fetch_artist_list = reactive({
             } else if (selected === 'artist_list_recently') {
                 _order = 'desc';
                 _sort = 'playDate';
-                if (store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')) {
-                    _sort = 'DatePlayed';
+                if (store_server_user_model.model_server_type_of_web) {
+                    if(store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
+                        _sort = 'DatePlayed';
+                    } else if (store_server_users.server_select_kind === 'ninesong') {
+                        _sort = 'play_date';
+                    }
                 }
             } else if (selected !== 'artist_list_all') {
                 playlist_id = selected;

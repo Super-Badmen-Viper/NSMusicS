@@ -21,6 +21,13 @@ import {
 import {
     store_view_artist_page_logic
 } from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_logic";
+import {store_server_auth_token} from "./server_api_abstract/auth/auth_token";
+import {
+    Auth_Token_ApiService_of_NineSong
+} from "../../data_access/servers_configs/ninesong_api/services_web/Auth/Auth_Token/index_service";
+import {
+    store_server_login_info
+} from "../../../views/view_server/page_metadata/page_login/store/store_server_login_info";
 
 export const store_server_user_model = reactive({
     model_select: 'server',
@@ -129,9 +136,24 @@ export const store_server_user_model = reactive({
     },
     
     async refresh_model_server_type_of_web(){
-        let user_Authorization_ApiWebService_of_ND =
-            new User_Authorization_ApiWebService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url)
-        await user_Authorization_ApiWebService_of_ND.get_token()
+        if(store_server_users.server_select_kind === 'navidrome') {
+            let user_Authorization_ApiWebService_of_ND =
+                new User_Authorization_ApiWebService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url)
+            await user_Authorization_ApiWebService_of_ND.get_token()
+        }else if(store_server_users.server_select_kind === 'ninesong') {
+            let auth_Token_ApiService_of_NineSong = new Auth_Token_ApiService_of_NineSong(
+                store_server_login_info.server_url
+            )
+            const userData = await auth_Token_ApiService_of_NineSong.getAuth_Token(
+                store_server_user_model.username,
+                store_server_user_model.password,
+            )
+            if (userData && userData.accessToken && userData.refreshToken) {
+                store_server_login_info.server_accessToken = String(userData.accessToken);
+                store_server_login_info.server_refreshToken = String(userData.refreshToken);
+            }
+            store_server_auth_token.test_init_server_token()
+        }
         store_app_configs_logic_save.save_system_config_of_App_Configs()
     },
 })

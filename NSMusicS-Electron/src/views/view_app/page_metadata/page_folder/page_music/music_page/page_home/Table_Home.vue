@@ -282,7 +282,6 @@ import {store_playlist_list_info} from "@/views/view_app/page_metadata/page_fold
 import {store_general_fetch_media_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list";
 import {store_view_media_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
 import {store_local_data_set_mediaInfo} from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_mediaInfo";
-import {store_playlist_list_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_logic";
 import {store_player_audio_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_info";
 import {store_player_appearance} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_appearance";
 import {store_view_media_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
@@ -478,7 +477,7 @@ onBeforeUnmount(() => {
               "
               :src="getAssetImage(store_view_home_page_info.home_selected_top_album_medium_image_url)"
               @error="handleImageError(store_view_home_page_info.home_selected_top_album)"
-            />
+              alt=""/>
           </div>
         </div>
       </div>
@@ -496,7 +495,7 @@ onBeforeUnmount(() => {
             object-fit: cover; object-position: center;
             box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
             width: 170px;height: 170px;
-            border-radius: 6px;border: 1.5px solid #FFFFFF20;"/>
+            border-radius: 6px;border: 1.5px solid #FFFFFF20;" alt=""/>
         <n-space vertical
           style="margin-top: -2px;margin-left: 12px;"
           :style="{
@@ -505,7 +504,7 @@ onBeforeUnmount(() => {
           <div style="font-size: 16px;font-weight: 600;">
             {{
               $t('page.home.explore') + ' : ' +
-              (store_server_users.server_select_kind != 'navidrome'
+              (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby'
                   ? $t('entity.track_other')
                   : $t('entity.album_other'))
             }}
@@ -573,7 +572,7 @@ onBeforeUnmount(() => {
           <span style="font-size: 16px;font-weight: 600;">
             {{
               $t('page.home.mostPlayed') + ' : ' +
-              (store_server_users.server_select_kind != 'navidrome'
+              (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby'
                   ? $t('entity.track_other')
                   : $t('entity.album_other'))
             }}
@@ -652,7 +651,7 @@ onBeforeUnmount(() => {
                     :src="item.medium_image_url"
                     @error="handleImageError(item)"
                     style="objectFit: cover; objectPosition: center;border: 1.5px solid #FFFFFF20;"
-                    :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"/>
+                    :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }" alt=""/>
                 <div class="hover-overlay"
                      @dblclick="Open_this_album_MediaList_click(item, 'maximum')">
                   <div class="hover-content">
@@ -662,7 +661,7 @@ onBeforeUnmount(() => {
                           Play_this_album_MediaList_click(item, 'maximum');
                         }"
                         style="
-                        border: 0px;background-color: transparent;
+                        border: 0;background-color: transparent;
                         width: 50px;height: 50px;
                         cursor: pointer;
                       "
@@ -693,7 +692,7 @@ onBeforeUnmount(() => {
                           class="open_this_artist"
                           @click="Open_this_album_MediaList_click(item, 'maximum')"
                           style="
-                          border: 0px;background-color: transparent;
+                          border: 0;background-color: transparent;
                           width: 28px;height: 28px;
                           cursor: pointer;
                         "
@@ -707,7 +706,7 @@ onBeforeUnmount(() => {
                             item.favorite = !item.favorite;
                           }"
                           style="
-                          border: 0px;background-color: transparent;
+                          border: 0;background-color: transparent;
                           width: 28px;height: 28px;
                           cursor: pointer;
                         "
@@ -746,7 +745,7 @@ onBeforeUnmount(() => {
           <span style="font-size: 16px;font-weight: 600;">
             {{
               $t('page.home.explore') + ' : ' +
-              (store_server_users.server_select_kind != 'navidrome'
+              (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby'
                   ? $t('entity.track_other')
                   : $t('entity.album_other'))
             }}
@@ -825,7 +824,7 @@ onBeforeUnmount(() => {
                     :src="item.medium_image_url"
                     @error="handleImageError(item)"
                     style="objectFit: cover; objectPosition: center;border: 1.5px solid #FFFFFF20;"
-                    :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"/>
+                    :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }" alt=""/>
                 <div class="hover-overlay"
                      @dblclick="Open_this_album_MediaList_click(item, 'random')">
                   <div class="hover-content">
@@ -835,7 +834,7 @@ onBeforeUnmount(() => {
                           Play_this_album_MediaList_click(item, 'random');
                         }"
                         style="
-                      border: 0px;background-color: transparent;
+                      border: 0;background-color: transparent;
                       width: 50px;height: 50px;
                       cursor: pointer;
                     "
@@ -866,7 +865,7 @@ onBeforeUnmount(() => {
                           class="open_this_artist"
                           @click="Open_this_album_MediaList_click(item, 'random')"
                           style="
-                        border: 0px;background-color: transparent;
+                        border: 0;background-color: transparent;
                         width: 28px;height: 28px;
                         cursor: pointer;
                       "
@@ -880,7 +879,7 @@ onBeforeUnmount(() => {
                           item.favorite = !item.favorite;
                         }"
                         style="
-                          border: 0px;background-color: transparent;
+                          border: 0;background-color: transparent;
                           width: 28px;height: 28px;
                           cursor: pointer;
                         ">
@@ -997,7 +996,7 @@ onBeforeUnmount(() => {
                     :src="item.medium_image_url"
                     @error="handleImageError(item)"
                     style="objectFit: cover; objectPosition: center;border: 1.5px solid #FFFFFF20;"
-                    :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"/>
+                    :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }" alt=""/>
                 <div class="hover-overlay"
                      @dblclick="Open_this_album_MediaList_click(item, 'recently_added')">
                   <div class="hover-content">
@@ -1007,7 +1006,7 @@ onBeforeUnmount(() => {
                           Play_this_album_MediaList_click(item, 'recently_added');
                         }"
                         style="
-                        border: 0px;background-color: transparent;
+                        border: 0;background-color: transparent;
                         width: 50px;height: 50px;
                         cursor: pointer;
                       "
@@ -1038,7 +1037,7 @@ onBeforeUnmount(() => {
                           class="open_this_artist"
                           @click="Open_this_album_MediaList_click(item, 'recently_added')"
                           style="
-                          border: 0px;background-color: transparent;
+                          border: 0;background-color: transparent;
                           width: 28px;height: 28px;
                           cursor: pointer;
                         "
@@ -1052,7 +1051,7 @@ onBeforeUnmount(() => {
                             item.favorite = !item.favorite;
                           }"
                         style="
-                          border: 0px;background-color: transparent;
+                          border: 0;background-color: transparent;
                           width: 28px;height: 28px;
                           cursor: pointer;
                         ">
@@ -1090,7 +1089,7 @@ onBeforeUnmount(() => {
           <span style="font-size: 16px;font-weight: 600;">
             {{
               $t('page.home.recentlyPlayed') + ' : ' +
-              (store_server_users.server_select_kind != 'navidrome'
+              (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby'
                   ? $t('entity.track_other')
                   : $t('entity.album_other'))
             }}
@@ -1169,7 +1168,7 @@ onBeforeUnmount(() => {
                     :src="item.medium_image_url"
                     @error="handleImageError(item)"
                     style="objectFit: cover; objectPosition: center;border: 1.5px solid #FFFFFF20;"
-                    :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"/>
+                    :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }" alt=""/>
                 <div class="hover-overlay"
                      @dblclick="Open_this_album_MediaList_click(item, 'recently_played')">
                   <div class="hover-content">
@@ -1179,7 +1178,7 @@ onBeforeUnmount(() => {
                           Play_this_album_MediaList_click(item, 'recently_played');
                         }"
                         style="
-                      border: 0px;background-color: transparent;
+                      border: 0;background-color: transparent;
                       width: 50px;height: 50px;
                       cursor: pointer;
                     "
@@ -1210,7 +1209,7 @@ onBeforeUnmount(() => {
                           class="open_this_artist"
                           @click="Open_this_album_MediaList_click(item, 'recently_played')"
                           style="
-                        border: 0px;background-color: transparent;
+                        border: 0;background-color: transparent;
                         width: 28px;height: 28px;
                         cursor: pointer;
                       "
@@ -1224,7 +1223,7 @@ onBeforeUnmount(() => {
                             item.favorite = !item.favorite;
                           }"
                         style="
-                          border: 0px;background-color: transparent;
+                          border: 0;background-color: transparent;
                           width: 28px;height: 28px;
                           cursor: pointer;
                         ">
@@ -1364,7 +1363,7 @@ onBeforeUnmount(() => {
 .RateCustom.viaSlot .icon {
   width: 15px;
   height: 25px;
-  margin: 0px;
+  margin: 0;
 }
 .Rate.viaSlot .Rate__star {
   width: 25px;

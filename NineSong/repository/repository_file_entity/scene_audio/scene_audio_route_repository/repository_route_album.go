@@ -240,7 +240,7 @@ func validateAlbumSortField(sort string) string {
 	validSortFields := map[string]bool{
 		"name": true, "song_count": true, "created_at": true,
 		"play_count": true, "rating": true, "starred_at": true,
-		"min_year": true, "max_year": true, "duration": true,
+		"min_year": true, "max_year": true, "duration": true, "size": true,
 		"play_date": true, "genre": true, "updated_at": true,
 	}
 	if validSortFields[sort] {

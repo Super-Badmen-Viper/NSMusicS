@@ -97,12 +97,13 @@ if(store_server_user_model.model_server_type_of_local || (store_server_users.ser
     {label:computed(() => t('entity.album_other')), key: 'album', state_Sort: state_Sort.Default },
     {label:computed(() => t('filter.releaseYear')), key: 'year', state_Sort: state_Sort.Default },
     {label:computed(() => t('filter.duration')), key: 'duration', state_Sort: state_Sort.Default },
-    {label:computed(() => t('filter.dateAdded')), key: 'created_at', state_Sort: state_Sort.Default },
-    {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
     {label:computed(() => t('common.bitrate')), key: 'bit_rate', state_Sort: state_Sort.Default },
     {label:computed(() => t('LabelSize')), key: 'size', state_Sort: state_Sort.Default },
-    {label:computed(() => t('LabelLevel')), key: 'rating', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.playCount')), key: 'play_count', state_Sort: state_Sort.Default },
+    {label:computed(() => t('common.favorite')+t('LabelLevel')), key: 'rating', state_Sort: state_Sort.Default },
     {label:computed(() => t('common.favorite')+t('LabelDate')), key: 'starred_at', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.dateAdded')), key: 'created_at', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
   ]
 }else if(
     store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin')
@@ -412,11 +413,6 @@ const handleItemClick_title = (title:string) => {
     store_view_media_page_logic.page_songlists_bool_show_search_area = true
     store_view_media_page_logic.page_songlists_input_search_Value = title
     store_view_media_page_logic.get_page_songlists_keyword(title)
-    if(
-        store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-    ) {
-
-    }
   }
 }
 const handleItemClick_artist = (artist:string) => {
@@ -1935,7 +1931,7 @@ onBeforeUnmount(() => {
           <n-button
             key="song_love"
             class="songlist_more"
-            style="width: 100px;height: 24px;border: 0px; background-color: transparent;display: block;"
+            style="width: 100px;height: 24px;border: 0; background-color: transparent;display: block;"
             @click="update_lovelist_addMediaFile_selected"
           >
             {{ $t('nsmusics.view_page.loveMedia') }}
@@ -1944,7 +1940,7 @@ onBeforeUnmount(() => {
             v-for="n in store_playlist_list_info.playlist_names_ALLLists"
             :key="n.value"
             class="songlist_more"
-            style="width: 100px;height: 24px;border: 0px; background-color: transparent;display: block;"
+            style="width: 100px;height: 24px;border: 0; background-color: transparent;display: block;"
             @click="update_playlist_addMediaFile_selected(n.value)"
           >
             {{ n.label }}
@@ -2066,7 +2062,7 @@ onBeforeUnmount(() => {
 .RateCustom.viaSlot .icon {
   width: 25px;
   height: 25px;
-  margin: 0px;
+  margin: 0;
 }
 .Rate.viaSlot .Rate__star {
   width: 25px;

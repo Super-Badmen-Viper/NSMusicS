@@ -330,8 +330,12 @@ export const store_general_fetch_album_list = reactive({
             } else if (selected === 'album_list_recently') {
                 _order = 'desc';
                 _sort = 'playDate';
-                if (store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')) {
-                    _sort = 'DatePlayed';
+                if (store_server_user_model.model_server_type_of_web) {
+                    if(store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
+                        _sort = 'DatePlayed';
+                    } else if (store_server_users.server_select_kind === 'ninesong') {
+                        _sort = 'play_date';
+                    }
                 }
             }
 

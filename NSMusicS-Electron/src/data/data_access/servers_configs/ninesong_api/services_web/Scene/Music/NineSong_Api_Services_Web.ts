@@ -1,7 +1,6 @@
 import axios from 'axios';
-import {
-    store_server_login_info
-} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+import { store_server_login_info } from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 
 export class NineSong_Api_Services_Web {
     protected readonly baseUrl: string;
@@ -24,52 +23,48 @@ export class NineSong_Api_Services_Web {
         params?: Record<string, string>,
         data?: any,
     ): Promise<any> {
-        try {
-            const headers = {
-                Authorization: `Bearer ${store_server_login_info.server_accessToken}`
-            };
-            const queryString = params ? new URLSearchParams(params).toString() : '';
-            const url = this.baseUrl.includes('api')
-                ? `${this.baseUrl}/${endpoint}${queryString ? `?${queryString}` : ''}`
-                : `${this.baseUrl}/api/${endpoint}${queryString ? `?${queryString}` : ''}`;
+        const headers = {
+            Authorization: `Bearer ${store_server_login_info.server_accessToken}`
+        };
+        const queryString = params ? new URLSearchParams(params).toString() : '';
+        const url = this.baseUrl.includes('api')
+            ? `${this.baseUrl}/${endpoint}${queryString ? `?${queryString}` : ''}`
+            : `${this.baseUrl}/api/${endpoint}${queryString ? `?${queryString}` : ''}`;
 
-            try {
-                if (
-                    endpoint === 'user/login' ||
-                    (store_server_login_info.server_accessToken != undefined && store_server_login_info.server_accessToken.length > 0)
-                ) {
-                    const response = await axios({
-                        method,
-                        url,
-                        headers,
-                        data,
-                    });
-                    return response.data;
-                }
-                return undefined;
-            } catch (e) {
-                try {
-                    await store_server_login_logic.server_login(
-                        store_server_user_model.username,
-                        store_server_user_model.password
-                    )
-                    // replace apikey
-                    store_server_auth_token.test_init_server_token()
-                    console.error('尝试重新登录:', e);
-                    //
-                    const response = await axios({
-                        method,
-                        url,
-                        headers,
-                        data,
-                    });
-                    return response.data;
-                } catch {}
-                console.error('请求失败:', e);
-                return undefined;
+        try {
+            if (
+                endpoint === 'user/login' ||
+                (store_server_login_info.server_accessToken != undefined && store_server_login_info.server_accessToken.length > 0)
+            ) {
+                const response = await axios({
+                    method,
+                    url,
+                    headers,
+                    data,
+                });
+                return response.data;
             }
-        }catch (e) {
-            console.error('API构建失败:', e);
+            return undefined;
+        } catch (error: any) {
+            if (error.message.indexOf('401') > 0) {
+                await store_server_user_model.refresh_model_server_type_of_web();
+                try {
+                    if (
+                        endpoint === 'user/login' ||
+                        (store_server_login_info.server_accessToken != undefined && store_server_login_info.server_accessToken.length > 0)
+                    ) {
+                        const response = await axios({
+                            method,
+                            url,
+                            headers,
+                            data,
+                        });
+                        return response.data;
+                    }
+                    return undefined;
+                }catch{  }
+            }
+            console.error('请求失败:', error);
             return undefined;
         }
     }

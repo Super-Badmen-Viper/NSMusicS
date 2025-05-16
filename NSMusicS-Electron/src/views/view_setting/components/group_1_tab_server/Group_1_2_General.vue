@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
+
 </script>
 
 <template>
@@ -14,7 +14,7 @@ import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_i
         <span style="font-size: 16px;font-weight: 600;">{{ $t('LabelServerName') }}</span>
         <n-input style="width: 400px;"/>
       </n-space>
-      <span style="font-size: 13px;margin-left: 0px;">{{ $t('LabelServerNameHelp') }}</span>
+      <span style="font-size: 13px;margin-left: 0;">{{ $t('LabelServerNameHelp') }}</span>
     </n-space>
 
     <n-space vertical style="margin-bottom: 20px;">
@@ -27,13 +27,13 @@ import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_i
           <span style="font-size: 16px;font-weight: 600;">{{ $t('LabelCachePath') }}</span>
           <n-input style="width: 400px;"/>
         </n-space>
-        <span style="font-size: 13px;margin-left: 0px;">{{ $t('LabelCachePathHelp') }}</span>
+        <span style="font-size: 13px;margin-left: 0;">{{ $t('LabelCachePathHelp') }}</span>
         <!---->
         <n-space align="center">
           <span style="font-size: 16px;font-weight: 600;">{{ $t('LabelMetadataPath') }}</span>
           <n-input style="width: 400px;"/>
         </n-space>
-        <span style="font-size: 13px;margin-left: 0px;">{{ $t('LabelMetadataPathHelp') }}</span>
+        <span style="font-size: 13px;margin-left: 0;">{{ $t('LabelMetadataPathHelp') }}</span>
       </n-space>
     </n-space>
   </n-space>

@@ -18,6 +18,7 @@ type AlbumMetadata struct {
 	MaxYear       int       `bson:"max_year"`
 	SongCount     int       `bson:"song_count"`
 	Duration      float64   `bson:"duration"`
+	Size          int       `bson:"size"`
 	Genre         string    `bson:"genre"`
 	CreatedAt     time.Time `bson:"created_at"`
 	UpdatedAt     time.Time `bson:"updated_at"`

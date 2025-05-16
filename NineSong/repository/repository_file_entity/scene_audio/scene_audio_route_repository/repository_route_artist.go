@@ -221,7 +221,8 @@ func validateArtistSortField(sort string) string {
 	validSortFields := map[string]bool{
 		"name": true, "album_count": true, "song_count": true,
 		"play_count": true, "rating": true, "starred_at": true,
-		"size": true,
+		"size": true, "play_date": true,
+		"created_at": true, "updated_at": true,
 	}
 	if validSortFields[sort] {
 		return sort

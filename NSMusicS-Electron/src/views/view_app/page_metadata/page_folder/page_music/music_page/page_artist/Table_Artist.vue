@@ -51,16 +51,10 @@ import {
 import {
   store_local_data_set_mediaInfo
 } from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_mediaInfo";
-import {
-  store_playlist_list_logic
-} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_logic";
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 import {
   store_general_fetch_album_list
 } from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list";
-import {
-  store_general_fetch_player_list
-} from "@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list";
 import {store_player_tag_modify} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_tag_modify";
 import {store_player_audio_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
@@ -186,6 +180,12 @@ if(store_server_user_model.model_server_type_of_local || (store_server_users.ser
     {label:computed(() => t('entity.artist_other')), key: 'name', state_Sort: state_Sort.Default },
     {label:computed(() => t('entity.album_other')), key: 'album_count', state_Sort: state_Sort.Default },
     {label:computed(() => t('filter.songCount')), key: 'song_count', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.playCount')), key: 'play_count', state_Sort: state_Sort.Default },
+    {label:computed(() => t('common.favorite')+t('LabelLevel')), key: 'rating', state_Sort: state_Sort.Default },
+    {label:computed(() => t('LabelSize')), key: 'size', state_Sort: state_Sort.Default },
+    {label:computed(() => t('common.favorite')+t('LabelDate')), key: 'starred_at', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.dateAdded')), key: 'created_at', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
   ]
 }
 const options_Sort = computed(() => {
@@ -832,7 +832,7 @@ onBeforeUnmount(() => {
                     object-fit: cover;
                     margin-left: -3px;"
                   :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
-                />
+                  alt=""/>
               </template>
               <template #extra>
                 
@@ -865,14 +865,14 @@ onBeforeUnmount(() => {
                   :src="item.medium_image_url"
                   @error="handleImageError(item)"
                   style="objectFit: cover; objectPosition: center;border: 1.5px solid #FFFFFF20;"
-                  :style="{ width: item_artist_image + 'px', height: item_artist_image + 'px', borderRadius: '600px' }"/>
+                  :style="{ width: item_artist_image + 'px', height: item_artist_image + 'px', borderRadius: '600px' }" alt=""/>
                 <div class="hover-overlay" @dblclick="Open_this_artist_all_artist_list_click(item.id)">
                   <div class="hover-content">
                     <button
                         class="play_this_artist"
                         @click="Play_this_artist_all_media_list_click(item.id)"
                         style="
-                        border: 0px;background-color: transparent;
+                        border: 0;background-color: transparent;
                         width: 50px;height: 50px;
                         cursor: pointer;
                       "
@@ -902,7 +902,7 @@ onBeforeUnmount(() => {
                           class="open_this_artist"
                           @click="Open_this_artist_all_artist_list_click(item.id)"
                           style="
-                          border: 0px;background-color: transparent;
+                          border: 0;background-color: transparent;
                           width: 28px;height: 28px;
                           cursor: pointer;
                         "
@@ -916,7 +916,7 @@ onBeforeUnmount(() => {
                             item.favorite = !item.favorite;
                           }"
                         style="
-                          border: 0px;background-color: transparent;
+                          border: 0;background-color: transparent;
                           width: 28px;height: 28px;
                           cursor: pointer;
                         ">
@@ -1091,7 +1091,7 @@ onBeforeUnmount(() => {
 .RateCustom.viaSlot .icon {
   width: 15px;
   height: 25px;
-  margin: 0px;
+  margin: 0;
 }
 .Rate.viaSlot .Rate__star {
   width: 25px;

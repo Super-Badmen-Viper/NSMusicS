@@ -567,11 +567,7 @@ const player_theme_set_theme = (index:number) => {
   }catch{}
 };
 function init_player_theme(){
-  if(store_player_appearance.player_background_model_num === 0){
-    store_player_appearance.player_show_of_control_info = false
-  }else{
-    store_player_appearance.player_show_of_control_info = true
-  }
+  store_player_appearance.player_show_of_control_info = store_player_appearance.player_background_model_num !== 0;
   store_player_appearance.player_lyric_fontSize_Num =
       store_player_appearance.player_use_lyric_skip_forward ?
           36 + Math.floor((window.innerHeight - 880) / 200) * 6 :
@@ -613,7 +609,6 @@ import {store_player_audio_logic} from "@/views/view_app/page_metadata/page_fold
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
 import Table_Album_Model_1_AlbumScroll from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/components/Table_Album_Model_1_AlbumScroll.vue";
-import Table_Album_Model_5_AlbumScroll_Vertical from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/components/Table_Album_Model_5_AlbumScroll_Vertical.vue"
 import {ArrowsMaximize, ArrowsMinimize} from "@vicons/tabler";
 import {
   store_playlist_list_info
@@ -968,7 +963,7 @@ onBeforeUnmount(() => {
           :style="{
             opacity: store_player_appearance.player_collapsed_action_bar_of_Immersion_model
             ? 0 : 1,
-            transition: 'opacity 0.4s',
+            transition: 'opacity 0.4s'
           }"
           style="
             width: 100vw;
@@ -1131,7 +1126,7 @@ onBeforeUnmount(() => {
                     :style="{
                       marginTop: store_player_appearance.player_use_lyric_skip_forward
                       ? '0px' : '40px',
-                      transition: 'margin 0.4s',
+                      transition: 'margin 0.4s'
                     }"
                     style="margin-right:8vw;">
                   <!-- 1 方形封面-->
@@ -1283,7 +1278,7 @@ onBeforeUnmount(() => {
                         marginLeft: store_player_audio_logic.player.isPlaying
                         ? 'calc(-56vh)' : 'calc(-70vh)',
                         opacity: store_player_audio_logic.player.isPlaying
-                          ? 1 : 0,
+                        ? 1 : 0
                       }"
                     />
                     <div
@@ -1346,7 +1341,7 @@ onBeforeUnmount(() => {
                           right: store_player_audio_logic.player.isPlaying
                           ? 'calc(-1.5vh)' : 'calc(12vh)',
                           opacity: store_player_audio_logic.player.isPlaying
-                          ? 1 : 0,
+                          ? 1 : 0
                         }"
                       >
 
@@ -1363,7 +1358,7 @@ onBeforeUnmount(() => {
                           right: store_player_audio_logic.player.isPlaying
                           ? 'calc(-1vh)' : 'calc(13vh)',
                           opacity: store_player_audio_logic.player.isPlaying
-                          ? 1 : 0,
+                          ? 1 : 0
                         }"
                       >
 
@@ -1371,7 +1366,7 @@ onBeforeUnmount(() => {
                     </div>
                     <div
                         style="
-                        width: 46vh;margin-top: 0vh;margin-left: calc(-74vh);
+                        width: 46vh;margin-top: 0;margin-left: calc(-74vh);
                         color: #E7E5E5;font-weight: 900;font-size: calc(2.2vh + 4px);
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
@@ -1401,7 +1396,7 @@ onBeforeUnmount(() => {
                         );
                       }"
                       :on-dragend="()=>{
-                        if(store_player_audio_logic.slider_singleValue >= 99.5 || store_player_audio_logic.slider_singleValue == 0){
+                        if(store_player_audio_logic.slider_singleValue >= 99.5 || store_player_audio_logic.slider_singleValue === 0){
                           store_player_audio_logic.player_is_play_ended = true;
                           store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
                         }
@@ -1426,14 +1421,14 @@ onBeforeUnmount(() => {
               <n-layout-content
                 style="background-color: transparent;overflow: hidden;"
                 :style="{
-                  marginLeft: store_player_appearance.player_background_model_num != 3
-                  ? '-1.5vw' : '2vw',
+                  marginLeft: store_player_appearance.player_background_model_num !== 3
+                  ? '-1.5vw' : '2vw'
                 }"
               >
                 <div
                   :style="{
                     height: store_player_appearance.player_use_lyric_skip_forward
-                    ? 'calc(100vh - 100px)' : 'calc(100vh - 50px)',
+                    ? 'calc(100vh - 100px)' : 'calc(100vh - 50px)'
                   }"
                   style="
                     width: 40vw;
@@ -1465,7 +1460,7 @@ onBeforeUnmount(() => {
                       <n-list-item
                           class="lyrics_info"
                           :style="{
-                            textAlign: store_player_appearance.player_collapsed_album ? 'center' : 'left',
+                            textAlign: store_player_appearance.player_collapsed_album ? 'center' : 'left'
                           }"
                           v-for="(item, index) in store_player_audio_info.this_audio_lyrics_info_line_font"
                           @click="handleItemDbClick(index)">
@@ -1525,7 +1520,7 @@ onBeforeUnmount(() => {
                   "
                   :style="{
                     marginTop: 'calc(28vh - 182px)',
-                    transition: 'margin 0.4s, height 0.4s',
+                    transition: 'margin 0.4s, height 0.4s'
                   }">
                 <n-carousel-item
                     v-for="(item, index) in store_playlist_list_info.playlist_MediaFiles_temporary_carousel"
@@ -1626,17 +1621,17 @@ onBeforeUnmount(() => {
                   direction="horizontal"
                   dot-placement="bottom"
                   :prev-slide-style="{
-                    transform: 'translateX(-160%) translateZ(-140px) rotateY(40deg)',
+                    transform: 'translateX(-160%) translateZ(-140px) rotateY(40deg)'
                   }"
                   :next-slide-style="{
-                    transform: 'translateX(60%) translateZ(-140px) rotateY(-40deg)',
+                    transform: 'translateX(60%) translateZ(-140px) rotateY(-40deg)'
                   }"
                   style="
                     transform-style: preserve-3d;
                     width: 100vw;height: 10vh;
                   "
                   :style="{
-                    transition: 'margin 0.4s, height 0.4s',
+                    transition: 'margin 0.4s, height 0.4s'
                   }">
                 <n-carousel-item
                     v-for="(item, index) in store_player_audio_info.this_audio_lyrics_info_line_font"
@@ -1701,7 +1696,7 @@ onBeforeUnmount(() => {
                 '--background-image': `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`,
                 opacity: store_player_audio_logic.player.isPlaying? 0.8 : 0.2,
                 right: '23vw',
-                transition: 'right 0.6s, top 0.6s, zIndex 0.6s, transform 0.6s, opacity 0.4s',
+                transition: 'right 0.6s, top 0.6s, zIndex 0.6s, transform 0.6s, opacity 0.4s'
               }"
             />
             <div
@@ -1727,7 +1722,7 @@ onBeforeUnmount(() => {
                 filter: 'brightness(16%) blur(0px)',
                 marginTop: '-10px',
                 marginRight: '30vw',
-                transition: 'right 0.6s, top 0.6s, zIndex 0.6s, transform 0.6s',
+                transition: 'right 0.6s, top 0.6s, zIndex 0.6s, transform 0.6s'
               }">
             </div>
           </n-space>
@@ -1815,7 +1810,7 @@ onBeforeUnmount(() => {
   max-width: calc(36vw);
   padding-left: 20px;
   padding-top: 0;
-  padding-bottom: 0px;
+  padding-bottom: 0;
   transition: color 0.2s;
 }
 

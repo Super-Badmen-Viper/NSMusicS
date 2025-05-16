@@ -18,6 +18,7 @@ type AlbumMetadata struct {
 	Compilation           bool               `bson:"compilation"`
 	SongCount             int                `bson:"song_count"`
 	Duration              float64            `bson:"duration"`
+	Size                  int                `bson:"size"`
 	Genre                 string             `bson:"genre"`
 	CreatedAt             time.Time          `bson:"created_at"`
 	UpdatedAt             time.Time          `bson:"updated_at"`
@@ -28,7 +29,6 @@ type AlbumMetadata struct {
 	SortAlbumName         string             `bson:"sort_album_name"`
 	SortArtistName        string             `bson:"sort_artist_name"`
 	SortAlbumArtistName   string             `bson:"sort_album_artist_name"`
-	Size                  int                `bson:"size"`
 	MBZAlbumID            string             `bson:"mbz_album_id"`
 	MBZAlbumArtistID      string             `bson:"mbz_album_artist_id"`
 	MBZAlbumType          string             `bson:"mbz_album_type"`

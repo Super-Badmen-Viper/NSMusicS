@@ -38,9 +38,7 @@ import {store_local_data_set_mediaInfo} from "@/data/data_stores/local/local_dat
 import {store_view_media_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
 import {store_playlist_list_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info";
 import {store_view_media_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
-import {store_playlist_list_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_logic";
 import {store_general_fetch_media_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list";
-import {store_general_fetch_player_list} from "@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list";
 import {store_player_appearance} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_appearance";
 ////// right menu
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
@@ -167,6 +165,11 @@ if(store_server_user_model.model_server_type_of_local || (store_server_users.ser
     {label:computed(() => t('entity.artist_other')), key: 'artist', state_Sort: state_Sort.Default },
     {label:computed(() => t('filter.toYear')), key: 'min_year', state_Sort: state_Sort.Default },
     {label:computed(() => t('common.duration')), key: 'duration', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.songCount')), key: 'song_count', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.playCount')), key: 'play_count', state_Sort: state_Sort.Default },
+    {label:computed(() => t('common.favorite')+t('LabelLevel')), key: 'rating', state_Sort: state_Sort.Default },
+    {label:computed(() => t('LabelSize')), key: 'size', state_Sort: state_Sort.Default },
+    {label:computed(() => t('common.favorite')+t('LabelDate')), key: 'starred_at', state_Sort: state_Sort.Default },
     {label:computed(() => t('filter.dateAdded')), key: 'created_at', state_Sort: state_Sort.Default },
     {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
   ]
@@ -425,7 +428,7 @@ const handleItemClick_artist = (artist_id:string) => {
   if(store_server_user_model.model_server_type_of_local) {
     bool_show_search_area.value = true;
   }else if(store_server_user_model.model_server_type_of_web){
-    if(store_server_users.server_select_kind != 'navidrome') {
+    if(store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
       store_general_fetch_album_list.set_artist_id(artist_id)
     }
     bool_show_search_area.value = true
@@ -938,7 +941,7 @@ onBeforeUnmount(() => {
                     object-fit: cover;
                     margin-left: -3px;"
                   :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
-                />
+                  alt=""/>
               </template>
               <template #extra>
 
@@ -974,7 +977,7 @@ onBeforeUnmount(() => {
                   :src="item.medium_image_url"
                   @error="handleImageError(item)"
                   style="objectFit: cover; objectPosition: center;border: 1.5px solid #FFFFFF20;border-radius: 4px;"
-                  :style="{ width: item_album_image + 'px', height: item_album_image + 'px'}"/>
+                  :style="{ width: item_album_image + 'px', height: item_album_image + 'px'}" alt=""/>
                 <div class="hover-overlay" @dblclick="Open_this_album_MediaList_click(item.id)">
                   <div class="hover-content">
                     <button
@@ -984,7 +987,7 @@ onBeforeUnmount(() => {
                         store_player_audio_info.this_audio_artist_id = item.artist_id;
                       }"
                       style="
-                        border: 0px;background-color: transparent;
+                        border: 0;background-color: transparent;
                         width: 50px;height: 50px;
                         cursor: pointer;
                       "
@@ -1014,7 +1017,7 @@ onBeforeUnmount(() => {
                         class="open_this_artist"
                         @click="Open_this_album_MediaList_click(item.id)"
                         style="
-                          border: 0px;background-color: transparent;
+                          border: 0;background-color: transparent;
                           width: 28px;height: 28px;
                           cursor: pointer;
                         "
@@ -1028,7 +1031,7 @@ onBeforeUnmount(() => {
                           item.favorite = !item.favorite;
                         }"
                         style="
-                          border: 0px;background-color: transparent;
+                          border: 0;background-color: transparent;
                           width: 28px;height: 28px;
                           cursor: pointer;
                         ">
@@ -1056,9 +1059,7 @@ onBeforeUnmount(() => {
                         if(store_server_user_model.model_server_type_of_local) {
                           handleItemClick_artist(item.artist_id)
                         }else if(store_server_user_model.model_server_type_of_web) {
-                          if(
-                              store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-                          ) {
+                          if(store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
                             handleItemClick_artist(item.artist_id)
                           }else{
                             handleItemClick_artist(item.artist)
@@ -1101,9 +1102,7 @@ onBeforeUnmount(() => {
             if(store_server_user_model.model_server_type_of_local) {
               handleItemClick_artist(store_playlist_list_info.playlist_Menu_Item.artist_id)
             }else if(store_server_user_model.model_server_type_of_web) {
-              if(
-                  store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-              ) {
+              if(store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
                 handleItemClick_artist(store_playlist_list_info.playlist_Menu_Item.artist_id)
               }else{
                 handleItemClick_artist(store_playlist_list_info.playlist_Menu_Item.artist)
@@ -1252,7 +1251,7 @@ onBeforeUnmount(() => {
 .RateCustom.viaSlot .icon {
   width: 15px;
   height: 25px;
-  margin: 0px;
+  margin: 0;
 }
 .Rate.viaSlot .Rate__star {
   width: 25px;

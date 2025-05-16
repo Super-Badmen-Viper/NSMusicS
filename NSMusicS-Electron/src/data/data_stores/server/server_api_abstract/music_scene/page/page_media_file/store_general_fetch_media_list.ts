@@ -533,6 +533,8 @@ export const store_general_fetch_media_list = reactive({
                     _sort = 'DatePlayed';
                 } else if (store_server_users.server_select_kind === 'emby') {
                     _sort = 'DatePlayed,SortName';
+                } else if (store_server_users.server_select_kind === 'ninesong') {
+                    _sort = 'play_date';
                 }
             } else if (selected !== 'song_list_all') {
                 if (!find_model) {
