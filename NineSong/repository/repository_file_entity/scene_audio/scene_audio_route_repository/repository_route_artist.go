@@ -226,7 +226,7 @@ func validateArtistSortField(sort string) string {
 	if validSortFields[sort] {
 		return sort
 	}
-	return "name"
+	return "_id"
 }
 
 func buildArtistSortStage(sort, order string) bson.D {
@@ -244,8 +244,14 @@ func buildArtistSortStage(sort, order string) bson.D {
 func buildArtistPaginationStage(start, end string) []bson.D {
 	var stages []bson.D
 
-	skip, _ := strconv.Atoi(start)
-	limit, _ := strconv.Atoi(end)
+	startInt, err := strconv.Atoi(start)
+	endInt, err := strconv.Atoi(end)
+	if err != nil {
+		return stages
+	}
+
+	skip := startInt
+	limit := endInt - startInt
 
 	if skip > 0 {
 		stages = append(stages, bson.D{{Key: "$skip", Value: skip}})

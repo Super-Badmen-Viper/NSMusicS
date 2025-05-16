@@ -179,6 +179,14 @@ if(store_server_user_model.model_server_type_of_local || (store_server_users.ser
   options_Sort_key.value = [
 
   ]
+}else if(
+    store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong'
+){
+  options_Sort_key.value = [
+    {label:computed(() => t('entity.artist_other')), key: 'name', state_Sort: state_Sort.Default },
+    {label:computed(() => t('entity.album_other')), key: 'album_count', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.songCount')), key: 'song_count', state_Sort: state_Sort.Default },
+  ]
 }
 const options_Sort = computed(() => {
   if(store_view_artist_page_logic.page_artistlists_options_Sort_key != null && store_view_artist_page_logic.page_artistlists_options_Sort_key.length > 0){

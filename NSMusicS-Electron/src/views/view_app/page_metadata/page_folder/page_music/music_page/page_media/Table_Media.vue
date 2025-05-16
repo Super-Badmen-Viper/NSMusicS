@@ -420,7 +420,13 @@ const handleItemClick_title = (title:string) => {
   }
 }
 const handleItemClick_artist = (artist:string) => {
-  if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
+  if(
+      store_server_user_model.model_server_type_of_local
+      ||
+      (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)
+      ||
+      (store_server_users.server_select_kind === 'ninesong' && store_server_user_model.model_server_type_of_web)
+  ) {
     click_count = 0;
     if (store_server_user_model.model_server_type_of_local) {
       store_view_media_page_logic.page_songlists_input_search_Value = artist//+'accurate_search'+'__artist__'//artist不参与精确搜索
@@ -434,18 +440,19 @@ const handleItemClick_artist = (artist:string) => {
       store_view_media_page_logic.page_songlists_bool_show_search_area = true
       store_view_media_page_logic.page_songlists_input_search_Value = artist
       store_view_media_page_logic.get_page_songlists_keyword(artist)
-      if (
-          store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-      ) {
-
-      }
     }
   }else{
     message.warning('Jellyfin / Emby ' + t('ContainerNotSupported') + ' ' + t('setting.hotkey_localSearch'))
   }
 }
 const handleItemClick_album = (album_id:string) => {
-  if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
+  if(
+      store_server_user_model.model_server_type_of_local
+      ||
+      (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)
+      ||
+      (store_server_users.server_select_kind === 'ninesong' && store_server_user_model.model_server_type_of_web)
+  ) {
     click_count = 0;
     if (store_server_user_model.model_server_type_of_local) {
       store_view_media_page_logic.page_songlists_input_search_Value = album_id + 'accurate_search' + '__album__'
@@ -905,7 +912,12 @@ async function begin_random_play_model() {
   }else{
     store_server_user_model.random_play_model = false;
     store_view_media_page_logic.list_options_Hand_Sort = true
-    if (store_server_users.server_select_kind === 'navidrome') {
+    if (store_server_users.server_select_kind === 'ninesong') {
+      store_view_media_page_logic.page_songlists_options_Sort_key = [{
+        columnKey: String('_id'),
+        order: state_Sort.Ascend
+      }];
+    }else if (store_server_users.server_select_kind === 'navidrome') {
       store_view_media_page_logic.page_songlists_options_Sort_key = [{
         columnKey: String('id'),
         order: state_Sort.Ascend

@@ -810,7 +810,13 @@ const handleItemClick_title = (title:string) => {
   store_player_audio_logic.player_back_ChevronDouble = player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow;
 }
 const handleItemClick_artist = (artist:string) => {
-  if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
+  if(
+      store_server_user_model.model_server_type_of_local
+      ||
+      (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)
+      ||
+      (store_server_users.server_select_kind === 'ninesong' && store_server_user_model.model_server_type_of_web)
+  ) {
     store_view_media_page_logic.page_songlists_bool_show_search_area = true
     store_view_media_page_logic.page_songlists_input_search_Value = artist
     if (store_server_user_model.model_server_type_of_local) {
@@ -826,7 +832,13 @@ const handleItemClick_artist = (artist:string) => {
   }
 }
 const handleItemClick_album = (album:string) => {
-  if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {
+  if(
+      store_server_user_model.model_server_type_of_local
+      ||
+      (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)
+      ||
+      (store_server_users.server_select_kind === 'ninesong' && store_server_user_model.model_server_type_of_web)
+  ) {
     store_view_media_page_logic.page_songlists_bool_show_search_area = true
     store_view_media_page_logic.page_songlists_input_search_Value = album
     if (store_server_user_model.model_server_type_of_local) {

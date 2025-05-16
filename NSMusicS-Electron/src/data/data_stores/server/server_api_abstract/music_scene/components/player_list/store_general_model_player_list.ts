@@ -12,6 +12,9 @@ import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {
     Get_Jellyfin_Temp_Data_To_LocalSqlite
 } from "@/data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
+import {
+    Get_NineSong_Temp_Data_To_LocalSqlite
+} from "../../../../../../data_access/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite";
 
 export const store_general_model_player_list = reactive({
     async get_playlists_info() {
@@ -26,6 +29,9 @@ export const store_general_model_player_list = reactive({
         }else if(user_config?.type === 'jellyfin' || user_config?.type === 'emby'){
             let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
             await get_Jellyfin_Temp_Data_To_LocalSqlite.get_playlist_je()
+        }else if(user_config?.type === 'ninesong'){
+            let get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
+            await get_NineSong_Temp_Data_To_LocalSqlite.get_playlist_ninesong()
         }
     },
     get_playlist_tracks_temporary_add(value: any){
@@ -100,42 +106,79 @@ export const store_general_model_player_list = reactive({
                     playlist_tracks: get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Tracks(item.id)
                 })
             });
-        }else if(
-            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-        ) {
-            const response_playlists = await axios(
-                store_server_users.server_config_of_current_user_of_sqlite?.url + '/Users/' +
-                store_server_user_model.userid_of_Je + '/Items?IncludeItemTypes=Playlist&Recursive=true&api_key=' +
-                store_server_user_model.authorization_of_Je
-            );
-            const playlists = response_playlists.data.Items;
-            if (playlists != null) {
-                for (const playlist of playlists) {
-                    store_playlist_list_info.playlist_names_ALLLists.push({
-                        label: playlist.Name,
-                        value: playlist.Id
-                    })
-                    store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.push({
-                        playlist: {
+        }else if(store_server_user_model.model_server_type_of_web) {
+            if(store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
+                const response_playlists = await axios(
+                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/Users/' +
+                    store_server_user_model.userid_of_Je + '/Items?IncludeItemTypes=Playlist&Recursive=true&api_key=' +
+                    store_server_user_model.authorization_of_Je
+                );
+                const playlists = response_playlists.data.Items;
+                if (playlists != null) {
+                    for (const playlist of playlists) {
+                        store_playlist_list_info.playlist_names_ALLLists.push({
                             label: playlist.Name,
-                            value: playlist.Id,
-                            id: playlist.Id,
-                            name: playlist.Name,
-                            comment: '',
-                            duration: playlist.RunTimeTicks || 0,
-                            song_count: playlist.ChildCount || 0,
-                            public: 0,
-                            created_at: '',
-                            updated_at: '',
-                            path: '',
-                            sync: 0,
-                            size: 0,
-                            rules: null,
-                            evaluated_at: '',
-                            owner_id: store_server_user_model.username,
-                        },
-                        playlist_tracks: []
-                    });
+                            value: playlist.Id
+                        })
+                        store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.push({
+                            playlist: {
+                                label: playlist.Name,
+                                value: playlist.Id,
+                                id: playlist.Id,
+                                name: playlist.Name,
+                                comment: '',
+                                duration: playlist.RunTimeTicks || 0,
+                                song_count: playlist.ChildCount || 0,
+                                public: 0,
+                                created_at: '',
+                                updated_at: '',
+                                path: '',
+                                sync: 0,
+                                size: 0,
+                                rules: null,
+                                evaluated_at: '',
+                                owner_id: store_server_user_model.username,
+                            },
+                            playlist_tracks: []
+                        });
+                    }
+                }
+            }else if(store_server_users.server_select_kind === 'ninesong'){
+                let playlists = [];
+                const getPlaylists_all = await this.playlist_ApiService_of_NineSong.getPlaylists();
+                if(getPlaylists_all != undefined) {
+                    playlists = getPlaylists_all["ninesong-response"]["playlists"];
+                    store_playlist_list_info.playlist_names_ALLLists = [];
+                    store_playlist_list_info.playlist_tracks_temporary_of_ALLLists = [];
+                }
+                if (playlists != null) {
+                    for (const playlist of playlists) {
+                        store_playlist_list_info.playlist_names_ALLLists.push({
+                            label: playlist.Name,
+                            value: playlist.ID
+                        })
+                        store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.push({
+                            playlist: {
+                                label: playlist.Name,
+                                value: playlist.ID,
+                                id: playlist.ID,
+                                name: playlist.Name,
+                                comment: '',
+                                duration: playlist.Duration || 0,
+                                song_count: playlist.SongCount || 0,
+                                public: 0,
+                                created_at: '',
+                                updated_at: '',
+                                path: '',
+                                sync: 0,
+                                size: 0,
+                                rules: null,
+                                evaluated_at: '',
+                                owner_id: store_server_user_model.username,
+                            },
+                            playlist_tracks: []
+                        });
+                    }
                 }
             }
         }

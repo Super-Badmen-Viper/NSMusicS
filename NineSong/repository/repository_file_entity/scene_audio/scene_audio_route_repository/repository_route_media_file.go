@@ -87,7 +87,7 @@ func (r *mediaFileRepository) GetMediaFileItems(
 	pipeline = append(pipeline, buildSortStage(validatedSort, order))
 
 	// 添加分页阶段
-	pipeline = append(pipeline, buildPaginationStage(start, end)...)
+	pipeline = append(pipeline, buildMediaPaginationStage(start, end)...)
 
 	// 执行聚合查询
 	cursor, err := coll.Aggregate(ctx, pipeline)
@@ -208,7 +208,7 @@ func validateSortField(sort string) string {
 	if validSortFields[sort] {
 		return sort
 	}
-	return "title"
+	return "_id"
 }
 
 func buildMatchStage(search, starred, albumId, artistId, year string) bson.D {
@@ -257,11 +257,17 @@ func buildSortStage(sort, order string) bson.D {
 	}
 }
 
-func buildPaginationStage(start, end string) []bson.D {
+func buildMediaPaginationStage(start, end string) []bson.D {
 	var stages []bson.D
 
-	skip, _ := strconv.Atoi(start)
-	limit, _ := strconv.Atoi(end)
+	startInt, err := strconv.Atoi(start)
+	endInt, err := strconv.Atoi(end)
+	if err != nil {
+		return stages
+	}
+
+	skip := startInt
+	limit := endInt - startInt
 
 	if skip > 0 {
 		stages = append(stages, bson.D{{Key: "$skip", Value: skip}})

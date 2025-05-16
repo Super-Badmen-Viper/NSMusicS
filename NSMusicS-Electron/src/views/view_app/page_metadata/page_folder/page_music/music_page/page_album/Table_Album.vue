@@ -160,6 +160,17 @@ if(store_server_user_model.model_server_type_of_local || (store_server_users.ser
     {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
   ]
 }else if(
+    store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'ninesong')
+) {
+  options_Sort_key.value = [
+    {label:computed(() => t('entity.album_other')), key: 'name', state_Sort: state_Sort.Default },
+    {label:computed(() => t('entity.artist_other')), key: 'artist', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.toYear')), key: 'min_year', state_Sort: state_Sort.Default },
+    {label:computed(() => t('common.duration')), key: 'duration', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.dateAdded')), key: 'created_at', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
+  ]
+}else if(
   store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin')
 ){
   options_Sort_key.value = [

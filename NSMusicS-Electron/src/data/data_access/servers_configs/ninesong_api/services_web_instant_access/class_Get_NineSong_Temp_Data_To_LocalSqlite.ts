@@ -15,7 +15,9 @@ import {store_player_audio_info} from "@/views/view_app/page_metadata/page_folde
 import {
     store_general_fetch_media_list
 } from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list";
-
+import {
+    store_view_media_page_logic
+} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
 
 import {Artists_ApiService_of_NineSong} from "../services_web/Scene/Music/Artists/index_service";
 import {Albums_ApiService_of_NineSong} from "../services_web/Scene/Music/Albums/index_service";
@@ -27,6 +29,7 @@ import {
     store_server_login_info
 } from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
 import {Home_ApiService_of_NineSong} from "../services_web/Scene/Music/Home/index_service";
+import axios from "axios";
 
 export class Get_NineSong_Temp_Data_To_LocalSqlite{
     private artists_ApiService_of_NineSong = new Artists_ApiService_of_NineSong(
@@ -673,5 +676,69 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
             if(playlists != undefined)
                 store_view_media_page_info.media_playlist_count = playlists.length || 0;
         }catch{}
+    }
+
+    public async get_playlist_ninesong(){
+        let playlists = [];
+        const getPlaylists_all = await this.playlist_ApiService_of_NineSong.getPlaylists();
+        if(getPlaylists_all != undefined) {
+            playlists = getPlaylists_all["ninesong-response"]["playlists"];
+            store_playlist_list_info.playlist_names_ALLLists = [];
+            store_playlist_list_info.playlist_tracks_temporary_of_ALLLists = [];
+        }
+        if (playlists != null) {
+            for (const playlist of playlists) {
+                store_playlist_list_info.playlist_names_ALLLists.push({
+                    label: playlist.Name,
+                    value: playlist.ID
+                })
+                store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.push({
+                    playlist: {
+                        label: playlist.Name,
+                        value: playlist.ID,
+                        id: playlist.ID,
+                        name: playlist.Name,
+                        comment: '',
+                        duration: playlist.Duration || 0,
+                        song_count: playlist.SongCount || 0,
+                        public: 0,
+                        created_at: '',
+                        updated_at: '',
+                        path: '',
+                        sync: 0,
+                        size: 0,
+                        rules: null,
+                        evaluated_at: '',
+                        owner_id: store_server_user_model.username,
+                    },
+                    playlist_tracks: []
+                });
+                const isDuplicate = store_view_media_page_logic.page_songlists.some(
+                    (item: Play_List) => item.id === playlist.ID
+                );
+                if (!isDuplicate) {
+                    const temp_playlist: Play_List = {
+                        label: playlist.Name,
+                        value: playlist.ID,
+                        id: playlist.ID,
+                        name: playlist.Name,
+                        comment: '',
+                        duration: playlist.Duration,
+                        song_count: playlist.SongCount + ' *',
+                        public: '',
+                        created_at: '',
+                        updated_at: '',
+                        path: '',
+                        sync: '',
+                        size: '',
+                        rules: '',
+                        evaluated_at: '',
+                        owner_id: store_server_user_model.userid_of_Je,
+                    };
+                    store_view_media_page_logic.page_songlists_options.push(temp_playlist);
+                    store_view_media_page_logic.page_songlists.push(temp_playlist);
+                }
+            }
+        }
     }
 }

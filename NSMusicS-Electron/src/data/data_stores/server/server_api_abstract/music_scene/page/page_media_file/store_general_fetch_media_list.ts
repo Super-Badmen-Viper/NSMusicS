@@ -309,13 +309,14 @@ export const store_general_fetch_media_list = reactive({
                 this._album_id = ''
             }
         }
-        else if(
-            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-        ) {
-            this.fetchData_Media_of_server_web_clear_index()
-            this._album_id = id
-            await this.fetchData_Media_of_server_web(true)
-            this._album_id = ''
+        else if(store_server_user_model.model_server_type_of_web) {
+            if(store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby' ||
+                store_server_users.server_select_kind === 'ninesong') {
+                this.fetchData_Media_of_server_web_clear_index()
+                this._album_id = id
+                await this.fetchData_Media_of_server_web(true)
+                this._album_id = ''
+            }
         }
     },
     async fetchData_Media_Find_This_Artist(id: string){
@@ -354,13 +355,15 @@ export const store_general_fetch_media_list = reactive({
                 this._artist_id = ''
             }
         }
-        else if (
-            store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-        ) {
-            this.fetchData_Media_of_server_web_clear_index()
-            this._artist_id = id
-            await this.fetchData_Media_of_server_web(true)
-            this._artist_id = ''
+        else if (store_server_user_model.model_server_type_of_web) {
+            if(store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby' ||
+                store_server_users.server_select_kind === 'ninesong'
+            ) {
+                this.fetchData_Media_of_server_web_clear_index()
+                this._artist_id = id
+                await this.fetchData_Media_of_server_web(true)
+                this._artist_id = ''
+            }
         }
     },
     setMediumImageUrl(row: Media_File) {

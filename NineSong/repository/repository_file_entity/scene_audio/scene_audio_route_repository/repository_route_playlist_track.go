@@ -277,14 +277,16 @@ func buildMediaMatch(search, starred, albumId, artistId, year string) bson.D {
 
 func validateMediaSortField(sort string) string {
 	validSortFields := map[string]bool{
-		"title": true, "artist": true, "album": true, "year": true,
-		"play_count": true, "rating": true, "starred_at": true,
-		"duration": true, "created_at": true,
+		"play_count": true, "play_date": true, "title": true,
+		"artist": true, "album": true, "year": true,
+		"duration": true, "bit_rate": true, "size": true,
+		"rating": true, "starred_at": true,
+		"created_at": true, "updated_at": true,
 	}
 	if validSortFields[sort] {
 		return sort
 	}
-	return "title"
+	return "_id"
 }
 
 func buildMediaSortStage(sort, order string) bson.D {
@@ -297,22 +299,6 @@ func buildMediaSortStage(sort, order string) bson.D {
 			{Key: sort, Value: sortOrder},
 		}},
 	}
-}
-
-func buildMediaPaginationStage(start, end string) []bson.D {
-	var stages []bson.D
-
-	skip, _ := strconv.Atoi(start)
-	limit, _ := strconv.Atoi(end)
-
-	if skip > 0 {
-		stages = append(stages, bson.D{{Key: "$skip", Value: skip}})
-	}
-	if limit > 0 {
-		stages = append(stages, bson.D{{Key: "$limit", Value: limit}})
-	}
-
-	return stages
 }
 
 func (r *playlistTrackRepository) getPlaylistMediaFileIDs(

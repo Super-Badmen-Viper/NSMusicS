@@ -31,8 +31,8 @@ const message = useMessage()
 ////// server
 const Type_Server_Kinds = [
   {
-    value: "nsmusics",
-    label: "NSMusicS"
+    value: "ninesong",
+    label: "NineSong"
   },
   {
     value: "subsonic",
@@ -267,6 +267,8 @@ async function update_server_config_of_current_user_of_sqlite(value: any, select
           store_server_users.server_select_kind = 'jellyfin'
         }else if(user_config?.type === 'emby'){
           store_server_users.server_select_kind = 'emby'
+        }else if(user_config?.type === 'ninesong'){
+          store_server_users.server_select_kind = 'ninesong'
         }
         store_app_configs_logic_save.save_system_config_of_App_Configs()
       } else {
