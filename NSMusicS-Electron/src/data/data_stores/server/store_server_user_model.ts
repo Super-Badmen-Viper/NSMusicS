@@ -28,6 +28,12 @@ import {
 import {
     store_server_login_info
 } from "../../../views/view_server/page_metadata/page_login/store/store_server_login_info";
+import {
+    store_app_configs_info
+} from "@/data/data_stores/app/store_app_configs_info";
+import {
+    store_server_login_logic
+} from "../../../views/view_server/page_metadata/page_login/store/store_server_login_logic";
 
 export const store_server_user_model = reactive({
     model_select: 'server',
@@ -138,24 +144,62 @@ export const store_server_user_model = reactive({
     async refresh_model_server_type_of_web(){
         if(store_server_users.server_select_kind === 'navidrome') {
             let user_Authorization_ApiWebService_of_ND =
-                new User_Authorization_ApiWebService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url)
-            await user_Authorization_ApiWebService_of_ND.get_token()
-        }else if(store_server_users.server_select_kind === 'ninesong') {
+                new User_Authorization_ApiWebService_of_ND(
+                    store_server_users.server_config_of_current_user_of_sqlite?.url
+                );
+            return await user_Authorization_ApiWebService_of_ND.get_token()
+        }
+        else if(store_server_users.server_select_kind === 'ninesong') {
+            if(store_server_users.server_config_of_current_user_of_sqlite?.url === undefined || store_server_users.server_config_of_current_user_of_sqlite?.url.length === 0){
+                store_server_users.server_config_of_current_user_of_sqlite.url =
+                    store_app_configs_info.desktop_system_kind === 'docker' ?
+                        '/api' : store_server_login_info.server_url;
+            }
+            store_server_login_info.server_url = store_server_users.server_config_of_current_user_of_sqlite?.url
             let auth_Token_ApiService_of_NineSong = new Auth_Token_ApiService_of_NineSong(
                 store_server_login_info.server_url
-            )
-            const userData = await auth_Token_ApiService_of_NineSong.getAuth_Token(
-                store_server_user_model.username,
-                store_server_user_model.password,
-            )
-            if (userData && userData.accessToken && userData.refreshToken) {
-                store_server_login_info.server_accessToken = String(userData.accessToken);
-                store_server_login_info.server_refreshToken = String(userData.refreshToken);
+            );
+            if(store_server_user_model.username === undefined || store_server_user_model.username.length === 0){
+                store_server_user_model.username = String(sessionStorage.getItem("email"))
             }
-            store_server_auth_token.test_init_server_token()
+            if(store_server_user_model.password.length > 0){
+                const userData = await auth_Token_ApiService_of_NineSong.getAuth_Token(
+                    store_server_user_model.username,
+                    store_server_user_model.password,
+                )
+                if (userData && userData.accessToken && userData.refreshToken) {
+                    store_server_login_info.server_accessToken = String(userData.accessToken);
+                    store_server_login_info.server_refreshToken = String(userData.refreshToken);
+                    store_server_auth_token.test_init_server_token();
+                }else{
+                    if (store_app_configs_info.desktop_system_kind === 'docker') {
+                        store_server_login_logic.server_logout()
+                    }
+                    return false
+                }
+            }else{
+                if (store_app_configs_info.desktop_system_kind === 'docker') {
+                    store_server_login_logic.server_logout()
+                }
+                return false
+            }
         }
         store_app_configs_logic_save.save_system_config_of_App_Configs()
+
+        return true
     },
+
+    async init_server_info(){
+        // store_server_users.server_config_of_current_user_of_sqlite = {
+        //     id: store_server_user_model.username,
+        //     server_name: 'nsmusics',
+        //     url: '/api',
+        //     user_name: store_server_user_model.username,
+        //     password: store_server_user_model.password,
+        //     last_login_at: new Date().toISOString().split('.')[0] + 'Z',
+        //     type: 'ninesong'
+        // }
+    }
 })
 watch(() => store_server_user_model.model_server_type_of_web, (newValue) => {
     store_server_user_model.model_server_type_of_local = !newValue

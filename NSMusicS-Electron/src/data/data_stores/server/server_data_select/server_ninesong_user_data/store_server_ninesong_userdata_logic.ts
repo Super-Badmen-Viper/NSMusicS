@@ -215,6 +215,7 @@ export const store_server_ninesong_userdata_logic = reactive({
         store_server_user_model.server_select = value.id
         store_server_user_model.username = value.user_name
         store_server_user_model.password = value.password
+        store_server_login_info.server_url = value.url
         store_app_configs_logic_save.save_system_config_of_Servers_Config()
     },
 });

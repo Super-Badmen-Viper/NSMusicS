@@ -21,6 +21,8 @@ export class User_Authorization_ApiWebService_of_ND extends Navidrome_Api_Servic
             store_server_user_model.client_unique_id = response.data.id
         } catch (error: any) {
             console.error('Error inserting data:', error);
+            return false
         }
+        return true
     }
 }

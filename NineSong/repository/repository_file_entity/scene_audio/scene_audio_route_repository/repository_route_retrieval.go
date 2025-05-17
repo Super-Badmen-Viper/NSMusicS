@@ -59,7 +59,7 @@ func (r *retrievalRepository) GetCoverArt(ctx context.Context, fileType string, 
 	}
 
 	tempCollection := r.db.Collection(domain.CollectionFileEntityAudioTempMetadata)
-	var tempMeta scene_audio_db_models.TempMetadata
+	var tempMeta scene_audio_db_models.ExternalResource
 	err := tempCollection.FindOne(
 		ctx,
 		bson.M{"metadata_type": "cover"},

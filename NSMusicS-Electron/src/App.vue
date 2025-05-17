@@ -747,17 +747,14 @@ import {store_server_login_info} from "@/views/view_server/page_metadata/page_lo
 import {
   store_server_model_statistics
 } from "@/data/data_stores/server/server_api_abstract/music_scene/model/model_statistics";
-onMounted(async () => {
+onMounted(()=>{
   create_menuOptions_appBar()
+})
+onMounted(async () => {
   try {
     if (!isElectron) {
       // isLogin
       await store_server_login_logic.checkLoginStatus();
-      store_app_configs_info.desktop_system_kind = 'docker'
-      if (!store_router_data_info.router_select_model_server_login && store_server_login_info.server_accessToken.length > 0) {
-        await store_app_configs_info.load_app();
-        store_server_user_model.token = store_server_login_info.server_accessToken;
-      }
     } else {
       await store_app_configs_info.load_app()
     }

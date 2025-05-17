@@ -47,22 +47,25 @@ export class NineSong_Api_Services_Web {
             return undefined;
         } catch (error: any) {
             if (error.message.indexOf('401') > 0) {
-                await store_server_user_model.refresh_model_server_type_of_web();
-                try {
-                    if (
-                        endpoint === 'user/login' ||
-                        (store_server_login_info.server_accessToken != undefined && store_server_login_info.server_accessToken.length > 0)
-                    ) {
-                        const response = await axios({
-                            method,
-                            url,
-                            headers,
-                            data,
-                        });
-                        return response.data;
+                const result = await store_server_user_model.refresh_model_server_type_of_web();
+                if(result) {
+                    try {
+                        if (
+                            endpoint === 'user/login' ||
+                            (store_server_login_info.server_accessToken != undefined && store_server_login_info.server_accessToken.length > 0)
+                        ) {
+                            const response = await axios({
+                                method,
+                                url,
+                                headers,
+                                data,
+                            });
+                            return response.data;
+                        }
+                        return undefined;
+                    } catch {
                     }
-                    return undefined;
-                }catch{  }
+                }
             }
             console.error('请求失败:', error);
             return undefined;

@@ -1,7 +1,6 @@
 package scene_audio_db_models
 
 import (
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
 )
@@ -58,41 +57,4 @@ type MediaFileMetadata struct {
 	RGTrackGain          float64            `bson:"rg_track_gain"`
 	RGTrackPeak          float64            `bson:"rg_track_peak"`
 	MediumImageURL       string             `bson:"medium_image_url"`
-}
-
-func (m *MediaFileMetadata) ToUpdateDoc() bson.M {
-	// 使用反射自动生成完整字段列表
-	data, _ := bson.Marshal(m)
-	var raw bson.M
-	_ = bson.Unmarshal(data, &raw)
-
-	// 移除不可更新字段
-	delete(raw, "_id")
-	delete(raw, "created_at")
-
-	// 确保关键字段存在
-	raw["medium_image_url"] = m.MediumImageURL
-	raw["updated_at"] = time.Now().UTC()
-
-	return bson.M{"$set": raw}
-}
-
-// FilterParams 基础过滤参数
-type FilterParams struct {
-	Genres       []string
-	MinYear      int
-	MaxYear      int
-	ArtistIDs    []string
-	MinDuration  float64
-	MaxDuration  float64
-	AlbumTypes   []string
-	HasLyrics    *bool
-	BitrateRange [2]int
-}
-
-// SortParams 排序参数
-type SortParams struct {
-	Field     string // 支持字段：title, artist, year, duration, bit_rate 等
-	Ascending bool
-	Collation string // 排序规则（如：nocase）
 }

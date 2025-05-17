@@ -626,9 +626,9 @@ import {
                           class="server_item_info"
                           @click="() => {
                             let show = false
-                            if(item.type != 'ninesong'){
+                            if(item.type !== 'ninesong'){
                               show = true
-                            }else if(store_app_configs_info.desktop_system_kind != 'docker'){
+                            }else if(store_app_configs_info.desktop_system_kind !== 'docker'){
                               show = true
                             }
                             if(show){

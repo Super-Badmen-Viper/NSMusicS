@@ -37,9 +37,7 @@ export const store_general_fetch_home_list = reactive({
                     const get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite();
                     await get_Navidrome_Temp_Data_To_LocalSqlite.get_home_list(
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                        store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                        store_server_user_model.token,
-                        store_server_user_model.salt
+                        store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt
                     );
                 } else if (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
                     await new Get_Jellyfin_Temp_Data_To_LocalSqlite().get_home_list(
@@ -73,9 +71,7 @@ export const store_general_fetch_home_list = reactive({
                     const get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite();
                     await get_Navidrome_Temp_Data_To_LocalSqlite.get_home_list_of_maximum_playback(
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                        store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                        store_server_user_model.token,
-                        store_server_user_model.salt
+                        store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt
                     );
                 } else if (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
                     await new Get_Jellyfin_Temp_Data_To_LocalSqlite().get_home_list_of_maximum_playback(
@@ -105,9 +101,7 @@ export const store_general_fetch_home_list = reactive({
                     const get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite();
                     await get_Navidrome_Temp_Data_To_LocalSqlite.get_home_list_of_random_search(
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                        store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                        store_server_user_model.token,
-                        store_server_user_model.salt
+                        store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt
                     );
                 } else if (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
                     await new Get_Jellyfin_Temp_Data_To_LocalSqlite().get_home_list_of_random_search(
@@ -140,9 +134,7 @@ export const store_general_fetch_home_list = reactive({
                     const get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite();
                     await get_Navidrome_Temp_Data_To_LocalSqlite.get_home_list_of_recently_added(
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                        store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                        store_server_user_model.token,
-                        store_server_user_model.salt
+                        store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt
                     );
                 } else if (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
                     await new Get_Jellyfin_Temp_Data_To_LocalSqlite().get_home_list_of_recently_added(
@@ -171,9 +163,7 @@ export const store_general_fetch_home_list = reactive({
                     const get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite();
                     await get_Navidrome_Temp_Data_To_LocalSqlite.get_home_list_of_recently_played(
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                        store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                        store_server_user_model.token,
-                        store_server_user_model.salt
+                        store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt
                     );
                 } else if (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
                     await new Get_Jellyfin_Temp_Data_To_LocalSqlite().get_home_list_of_recently_played(

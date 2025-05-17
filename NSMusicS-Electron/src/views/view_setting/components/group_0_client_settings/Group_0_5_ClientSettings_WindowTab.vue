@@ -58,6 +58,7 @@ const player_lyric_panel_fontfamily_options = ref([
         <n-select
             v-model:value="player_lyric_panel_fontfamily_options_selected"
             :options="player_lyric_panel_fontfamily_options"
+            :disabled="store_app_configs_info.desktop_system_kind === 'docker'"
             placeholder="not enabled"
             :reset-menu-on-options-change="false"
             style="width: 207px;margin-top: -4px;"

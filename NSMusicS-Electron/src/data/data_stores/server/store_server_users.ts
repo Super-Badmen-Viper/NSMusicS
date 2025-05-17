@@ -1,4 +1,8 @@
 import {reactive} from 'vue'
+import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
+import {
+    store_server_login_info
+} from "../../../views/view_server/page_metadata/page_login/store/store_server_login_info";
 
 export const store_server_users = reactive({
     percentage_of_local: 0,
@@ -36,6 +40,9 @@ export const store_server_users = reactive({
             };
             store_server_users.server_config_of_current_user_of_select_servername =
                 store_server_users.server_config_of_all_user_of_sqlite[index].type + ' - ' + store_server_users.server_config_of_all_user_of_sqlite[index].server_name
+            store_server_user_model.username = store_server_users.server_config_of_current_user_of_sqlite?.user_name
+            store_server_user_model.password = store_server_users.server_config_of_current_user_of_sqlite?.password
+            store_server_login_info.server_url = store_server_users.server_config_of_current_user_of_sqlite?.url
         }
     },
 });

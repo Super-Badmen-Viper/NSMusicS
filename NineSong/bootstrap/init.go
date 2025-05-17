@@ -952,7 +952,7 @@ func (si *Initializer) initFileEntityAudioPlaylistTrack(ctx context.Context) err
 func (si *Initializer) initFileEntityAudioTempMetadata(ctx context.Context) error {
 	coll := si.db.Collection(domain.CollectionFileEntityAudioTempMetadata)
 
-	initConfigs := []*scene_audio_db_models.TempMetadata{
+	initConfigs := []*scene_audio_db_models.ExternalResource{
 		{
 			ID:           primitive.NewObjectID(),
 			MetadataType: "cover",

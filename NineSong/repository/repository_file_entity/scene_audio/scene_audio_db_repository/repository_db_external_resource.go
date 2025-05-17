@@ -33,7 +33,7 @@ func (t *tempRepository) GetTempPath(
 
 	filter := bson.M{"metadata_type": metadataType}
 
-	var result scene_audio_db_models.TempMetadata
+	var result scene_audio_db_models.ExternalResource
 	err := collection.FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return "", fmt.Errorf("路径查询失败: %w | 类型: %s", err, metadataType)

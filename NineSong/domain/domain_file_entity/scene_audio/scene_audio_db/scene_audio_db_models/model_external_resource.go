@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type TempMetadata struct {
+type ExternalResource struct {
 	ID           primitive.ObjectID `bson:"_id"`
 	MetadataType string             `bson:"metadata_type"`
 	FolderPath   string             `bson:"folder_path"`

@@ -310,11 +310,10 @@ watch(() => store_player_audio_info.this_audio_album_id, (newValue) => {
     }
 });
 watch(() => store_player_audio_info.this_audio_artist_id, (newValue) => {
+    store_local_data_set_artistInfo.Set_ArtistInfo_To_PlayCount_of_Artist(
+        store_player_audio_info.this_audio_artist_id
+    )
     if(store_server_user_model.model_server_type_of_local){
-        store_local_data_set_artistInfo.Set_ArtistInfo_To_PlayCount_of_Artist(
-            store_player_audio_info.this_audio_artist_id
-        )
-        //
         let get_AnnotationInfo_To_LocalSqlite = new Get_AnnotationInfo_To_LocalSqlite();
         store_view_artist_page_info.artist_recently_count =
             get_AnnotationInfo_To_LocalSqlite.Get_Annotation_ItemInfo_Play_Count('artist')

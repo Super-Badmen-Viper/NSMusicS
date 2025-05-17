@@ -144,27 +144,19 @@ export const store_server_model_statistics = reactive({
                     const get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite();
                     await get_Navidrome_Temp_Data_To_LocalSqlite.get_count_of_media_file(
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                        store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                        store_server_user_model.token,
-                        store_server_user_model.salt
+                        store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt
                     );
                     await get_Navidrome_Temp_Data_To_LocalSqlite.get_count_of_artist_album(
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                        store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                        store_server_user_model.token,
-                        store_server_user_model.salt
+                        store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt
                     );
                     await get_Navidrome_Temp_Data_To_LocalSqlite.get_count_of_starred(
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                        store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                        store_server_user_model.token,
-                        store_server_user_model.salt
+                        store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt
                     );
                     await get_Navidrome_Temp_Data_To_LocalSqlite.get_count_of_playlist(
                         store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                        store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                        store_server_user_model.token,
-                        store_server_user_model.salt
+                        store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt
                     );
                 } else if (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
                     const get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite();

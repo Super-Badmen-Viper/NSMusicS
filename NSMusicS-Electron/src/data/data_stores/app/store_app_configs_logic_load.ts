@@ -282,11 +282,11 @@ export const store_app_configs_logic_load = reactive({
                     });
                     if (!exists) {
                         const new_item = {
-                            id: store_server_login_info.server_input_email,
+                            id: store_server_user_model.username,
                             server_name: 'nsmusics',
                             url: '/api',
-                            user_name: store_server_login_info.server_input_email,
-                            password: store_server_login_info.server_accessToken,
+                            user_name: store_server_user_model.username,
+                            password: store_server_user_model.password,
                             last_login_at: new Date().toISOString().split('.')[0] + 'Z',
                             type: 'ninesong'
                         };
@@ -318,18 +318,36 @@ export const store_app_configs_logic_load = reactive({
                     };
                     store_server_users.server_config_of_current_user_of_select_servername =
                         store_server_users.server_config_of_all_user_of_sqlite[index].type + ' - ' + store_server_users.server_config_of_all_user_of_sqlite[index].server_name
+                }else{
+                    if(store_app_configs_info.desktop_system_kind === 'docker'){
+                        if(store_server_users.server_config_of_all_user_of_sqlite.length > 0) {
+                            store_server_users.server_config_of_current_user_of_sqlite = store_server_users.server_config_of_all_user_of_sqlite[0]
+                        }
+                    }
                 }
                 ///
                 store_app_configs_logic_save.save_system_config_of_Servers_Config()
                 /// server login
                 if (store_server_user_model.model_server_type_of_web) {
-                    await store_server_auth_token.init_login_server();
+                    store_server_user_model.username = store_server_users.server_config_of_current_user_of_sqlite?.user_name
+                    store_server_user_model.password = store_server_users.server_config_of_current_user_of_sqlite?.password
+                    store_server_users.server_select_kind = store_server_users.server_config_of_current_user_of_sqlite?.type
+                    store_server_login_info.server_url = store_server_users.server_config_of_current_user_of_sqlite?.url
+                    if(store_server_users.server_config_of_current_user_of_sqlite != undefined) {
+                        if (store_app_configs_info.desktop_system_kind === 'docker') {
+                            if (store_server_users.server_select_kind != 'ninesong') {
+                                await store_server_auth_token.init_login_server();
+                            }
+                        } else {
+                            await store_server_auth_token.init_login_server();
+                        }
+                    }
                 }
 
                 /// view_router_history
                 // init media music_page router_music histtory
                 store_view_media_page_logic.page_songlists_keywordFilter = ""
-                await store_general_fetch_media_list.fetchData_Media()
+                // await store_general_fetch_media_list.fetchData_Media()
                 store_view_media_page_logic.page_songlists_selected = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_songlists_selected']
                 //
                 store_router_history_data_of_media.router_select_history_date_of_Media = system_Configs_Read.view_Media_History_select_Configs.value
@@ -478,22 +496,26 @@ export const store_app_configs_logic_load = reactive({
             /// close
             try {
                 await store_server_model_statistics.get_page_top_info()
-            } catch {
-            }
-            store_app_configs_info.app_view_left_menu_select_activeKey = '' + system_Configs_Read.app_Configs.value['app_view_left_menu_select_activeKey']
-            store_router_data_info.router_name = '' + system_Configs_Read.app_Configs.value['router_name']
-            if (
-                store_router_data_info.router_name === '' ||
-                store_router_data_info.router_name === 'app'
-            ) {
-                store_app_configs_info.app_view_left_menu_select_activeKey = 'setting'
-                store_router_data_info.router_name = 'setting'
-            } else {
+            } catch {}
+            if(store_app_configs_info.desktop_system_kind != 'docker') {
+                store_app_configs_info.app_view_left_menu_select_activeKey = '' + system_Configs_Read.app_Configs.value['app_view_left_menu_select_activeKey']
+                store_router_data_info.router_name = '' + system_Configs_Read.app_Configs.value['router_name']
+                if (
+                    store_router_data_info.router_name === '' ||
+                    store_router_data_info.router_name === 'app'
+                ) {
+                    store_app_configs_info.app_view_left_menu_select_activeKey = 'setting'
+                    store_router_data_info.router_name = 'setting'
+                } else {
+                    store_app_configs_info.app_view_left_menu_select_activeKey = 'home'
+                    store_router_data_info.router_name = 'home'
+                }
+                store_router_data_info.router.push(store_router_data_info.router_name)
+            }else{
                 store_app_configs_info.app_view_left_menu_select_activeKey = 'home'
                 store_router_data_info.router_name = 'home'
+                store_router_data_info.router.push(store_router_data_info.router_name)
             }
-            ///
-            store_router_data_info.router.push(store_router_data_info.router_name)
 
             // init image
             store_player_audio_logic.player_back_ChevronDouble = shrink_up_arrow

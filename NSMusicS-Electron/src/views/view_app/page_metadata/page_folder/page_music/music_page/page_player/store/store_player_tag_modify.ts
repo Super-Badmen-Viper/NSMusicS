@@ -241,9 +241,7 @@ watch(() => store_player_tag_modify.player_show_tag_modify, async (newValue) => 
                             store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
                         );
                         const getAlbum_id = await browsing_ApiService_of_ND.getAlbum(
-                            store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                            store_server_user_model.token,
-                            store_server_user_model.salt,
+                            store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
                             store_player_tag_modify.player_current_album_id
                         );
                         const item = getAlbum_id["subsonic-response"]["album"]
@@ -279,9 +277,7 @@ watch(() => store_player_tag_modify.player_show_tag_modify, async (newValue) => 
                             store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
                         );
                         const getArtist_id = await browsing_ApiService_of_ND.getArtist(
-                            store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                            store_server_user_model.token,
-                            store_server_user_model.salt,
+                            store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
                             store_player_tag_modify.player_current_artist_id
                         );
                         const item = getArtist_id["subsonic-response"]["artist"]

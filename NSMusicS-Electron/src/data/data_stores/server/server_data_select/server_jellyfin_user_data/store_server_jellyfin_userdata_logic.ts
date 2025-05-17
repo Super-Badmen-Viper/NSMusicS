@@ -13,6 +13,9 @@ import {
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
 import {store_server_ninesong_userdata_logic} from "../server_ninesong_user_data/store_server_ninesong_userdata_logic";
 import {store_server_model_statistics} from "../../server_api_abstract/music_scene/model/model_statistics";
+import {
+    store_server_login_info
+} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
 
 export const store_server_jellyfin_userdata_logic = reactive({
     // server add
@@ -128,6 +131,7 @@ export const store_server_jellyfin_userdata_logic = reactive({
         } else {
             store_server_user_model.username = value.user_name
             store_server_user_model.password = value.password
+            store_server_login_info.server_url = value.url
             const data = await new Users_ApiService_of_Je(value.url).authenticateUserByName(value.url, value.user_name, value.password)
             store_server_user_model.authorization_of_Je = data.AccessToken
             store_server_user_model.userid_of_Je = data.User.Id

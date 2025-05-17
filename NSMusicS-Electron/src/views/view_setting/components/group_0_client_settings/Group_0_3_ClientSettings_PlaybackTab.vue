@@ -174,7 +174,7 @@ import { openLink } from '@/utils/electron/openLink';
         <n-select
             v-model:value="store_player_audio_logic.player_select"
             :options="store_player_audio_logic.player_kind"
-            :disabled="store_app_configs_info.desktop_system_kind === 'linux'"
+            :disabled="store_app_configs_info.desktop_system_kind === 'linux' || store_app_configs_info.desktop_system_kind === 'docker'"
             @update:value="() => {
                         store_router_data_logic.clear_Memory_Model = false;
                         store_router_data_logic.clear_Equilibrium_Model = false;
@@ -194,6 +194,7 @@ import { openLink } from '@/utils/electron/openLink';
         <n-select
             v-model:value="player_lyric_panel_fontfamily_options_selected"
             :options="player_lyric_panel_fontfamily_options"
+            :disabled="store_app_configs_info.desktop_system_kind === 'docker'"
             placeholder="not enabled"
             :reset-menu-on-options-change="false"
             style="width: 207px;margin-top: -4px;"

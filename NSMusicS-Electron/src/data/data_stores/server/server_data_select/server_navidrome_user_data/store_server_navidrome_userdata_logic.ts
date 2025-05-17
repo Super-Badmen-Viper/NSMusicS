@@ -13,6 +13,9 @@ import { Set_ServerInfo_To_LocalSqlite } from "@/data/data_access/local_configs/
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 import { hash } from 'spark-md5';
 import {store_server_ninesong_userdata_logic} from "../server_ninesong_user_data/store_server_ninesong_userdata_logic";
+import {
+    store_server_login_info
+} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
 
 export const store_server_navidrome_userdata_logic = reactive({
     /// server add
@@ -138,32 +141,36 @@ export const store_server_navidrome_userdata_logic = reactive({
     /// server start login
     async navidrome_get_server_config(value: Server_Configs_Props) {
         store_server_users.server_config_of_current_user_of_sqlite = value
-        store_server_users.server_config_of_current_user_of_select =
-            {
-                label: value.type + ' - ' + value.server_name,
-                value: value.id
-            };
-        store_server_users.server_config_of_current_user_of_select_servername = value.type + ' - ' + value.server_name
-        store_server_user_model.server_select = value.id
-        store_server_user_model.username = value.user_name
-        store_server_user_model.password = value.password
-        store_app_configs_logic_save.save_system_config_of_Servers_Config()
+        if(value != undefined) {
+            store_server_users.server_config_of_current_user_of_select =
+                {
+                    label: value.type + ' - ' + value.server_name,
+                    value: value.id
+                };
+            store_server_users.server_config_of_current_user_of_select_servername = value.type + ' - ' + value.server_name
+            store_server_user_model.server_select = value.id
+            store_server_user_model.username = value.user_name
+            store_server_user_model.password = value.password
+            store_server_login_info.server_url = value.url
+            store_app_configs_logic_save.save_system_config_of_Servers_Config()
 
-        const {salt, token} = this.navidrome_get_EncryptedPassword(store_server_users.server_config_of_current_user_of_sqlite?.password);
-        store_server_user_model.salt = salt
-        store_server_user_model.token = token
+            const {
+                salt,
+                token
+            } = this.navidrome_get_EncryptedPassword(store_server_users.server_config_of_current_user_of_sqlite?.password);
+            store_server_user_model.salt = salt
+            store_server_user_model.token = token
 
-        if(store_server_user_model.model_server_type_of_local) {
-            let set_Navidrome_Data_To_LocalSqlite = new Set_Navidrome_ALL_Data_To_LocalSqlite()
-            await set_Navidrome_Data_To_LocalSqlite.Set_Read_Navidrome_Api_BasicInfo_Add_LocalSqlite(
-                store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                store_server_user_model.token,
-                store_server_user_model.salt,
-            )
-            /// reset app data
-            if(isElectron) {
-                ipcRenderer.send('window-reset-data');
+            if (store_server_user_model.model_server_type_of_local) {
+                let set_Navidrome_Data_To_LocalSqlite = new Set_Navidrome_ALL_Data_To_LocalSqlite()
+                await set_Navidrome_Data_To_LocalSqlite.Set_Read_Navidrome_Api_BasicInfo_Add_LocalSqlite(
+                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+                    store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
+                )
+                /// reset app data
+                if (isElectron) {
+                    ipcRenderer.send('window-reset-data');
+                }
             }
         }
     },

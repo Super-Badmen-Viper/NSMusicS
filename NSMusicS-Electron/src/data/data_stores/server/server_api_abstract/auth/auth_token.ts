@@ -34,10 +34,6 @@ import {
 export const store_server_auth_token = reactive({
     async init_login_server(){
         if(store_server_users.server_select_kind === 'ninesong'){
-            store_server_user_model.username =
-                store_server_users.server_config_of_current_user_of_sqlite?.user_name
-            store_server_user_model.password =
-                store_server_users.server_config_of_current_user_of_sqlite?.password
             await store_server_login_logic.server_login(
                 store_server_user_model.username,
                 store_server_user_model.password
@@ -93,10 +89,6 @@ export const store_server_auth_token = reactive({
                 }
             }
             else {
-                store_server_user_model.username =
-                    store_server_users.server_config_of_current_user_of_sqlite?.user_name
-                store_server_user_model.password =
-                    store_server_users.server_config_of_current_user_of_sqlite?.password
                 const data = await new Users_ApiService_of_Je(
                     store_server_users.server_config_of_current_user_of_sqlite?.url
                 ).authenticateUserByName(
@@ -129,63 +121,58 @@ export const store_server_auth_token = reactive({
             }
         }
     },
-    test_init_server_token(){
+    test_init_server_token() {
         if (store_server_user_model.model_server_type_of_web) {
             if (store_server_users.server_select_kind === 'ninesong') {
-                if (store_server_login_info.server_accessToken != undefined && store_server_login_info.server_accessToken.length > 0) {
-                    const regex = /access_token=([^&]+)/;
-                    store_player_audio_info.this_audio_file_path =
-                        store_player_audio_info.this_audio_file_path.replace(
-                            regex,
-                            'access_token=' + store_server_user_model.authorization_of_Je
-                        );
-                    store_player_audio_info.this_audio_file_medium_image_url =
-                        store_player_audio_info.this_audio_file_medium_image_url.replace(
-                            regex,
-                            'access_token=' + store_server_user_model.authorization_of_Je
-                        );
-                    store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any) => {
-                        if (item.medium_image_url) {
-                            item.medium_image_url = item.medium_image_url
-                                .replace(regex, 'access_token=' + store_server_user_model.authorization_of_Je);
-                        }
-                        if (item.path) {
-                            item.path = item.path
-                                .replace(regex, 'access_token=' + store_server_user_model.authorization_of_Je);
-                        }
-                        if (item.duration) {
-                            item.duration_txt = store_player_audio_logic.formatTime_RunTimeTicks(item.duration);
-                        }
-                    });
-                }
-            }else if(store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
-                if (store_server_user_model.authorization_of_Je != undefined) {
-                    const regex = /api_key=([^&]+)/;
-                    store_player_audio_info.this_audio_file_path =
-                        store_player_audio_info.this_audio_file_path.replace(
-                            regex,
-                            'api_key=' + store_server_user_model.authorization_of_Je
-                        );
-                    store_player_audio_info.this_audio_file_medium_image_url =
-                        store_player_audio_info.this_audio_file_medium_image_url.replace(
-                            regex,
-                            'api_key=' + store_server_user_model.authorization_of_Je
-                        );
-                    store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any) => {
-                        if (item.medium_image_url) {
-                            item.medium_image_url = item.medium_image_url
-                                .replace(regex, 'api_key=' + store_server_user_model.authorization_of_Je);
-                        }
-                        if (item.path) {
-                            item.path = item.path
-                                .replace(regex, 'api_key=' + store_server_user_model.authorization_of_Je);
-                        }
-                        if (item.duration) {
-                            item.duration_txt = store_player_audio_logic.formatTime_RunTimeTicks(item.duration);
-                        }
-                    });
-                }
+                this.replaceTokens(
+                    /access_token=([^&]*)/,
+                    'access_token',
+                    store_server_login_info.server_accessToken
+                );
+            } else if (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
+                this.replaceTokens(
+                    /api_key=([^&]*)/,
+                    'api_key',
+                    store_server_user_model.authorization_of_Je
+                );
             }
         }
-    }
+    },
+    replaceTokens(regex: RegExp, tokenName: string, newToken: string | undefined) {
+        if (!newToken) return;
+
+        const updateUrl = (url: string): string => {
+            const match = url.match(regex);
+            if (match) {
+                // 如果匹配到的token值为空或不存在，直接替换为新token
+                return url.replace(regex, `${tokenName}=${newToken}`);
+            }
+            // 如果不存在匹配项，直接追加新token
+            const separator = url.includes('?') ? '&' : '?';
+            return `${url}${separator}${tokenName}=${newToken}`;
+        };
+
+        // 更新 this_audio_file_path
+        if (store_player_audio_info.this_audio_file_path) {
+            store_player_audio_info.this_audio_file_path = updateUrl(store_player_audio_info.this_audio_file_path);
+        }
+
+        // 更新 this_audio_file_medium_image_url
+        if (store_player_audio_info.this_audio_file_medium_image_url) {
+            store_player_audio_info.this_audio_file_medium_image_url = updateUrl(store_player_audio_info.this_audio_file_medium_image_url);
+        }
+
+        // 更新 playlist_MediaFiles_temporary
+        store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any) => {
+            if (item.medium_image_url) {
+                item.medium_image_url = updateUrl(item.medium_image_url);
+            }
+            if (item.path) {
+                item.path = updateUrl(item.path);
+            }
+            if (item.duration) {
+                item.duration_txt = store_player_audio_logic.formatTime_RunTimeTicks(item.duration);
+            }
+        });
+    },
 });

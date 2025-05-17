@@ -553,9 +553,7 @@ export const store_general_fetch_media_list = reactive({
                 const get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite();
                 await get_Navidrome_Temp_Data_To_LocalSqlite.get_media_list(
                     store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                    store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                    store_server_user_model.token,
-                    store_server_user_model.salt,
+                    store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
                     limit,
                     _order,
                     _sort,
