@@ -29,20 +29,72 @@ func NewInitializer(env *Env, db mongo.Database) *Initializer {
 	return &Initializer{env: env, db: db}
 }
 
-func (si *Initializer) CheckAndInitialize(ctx context.Context) error {
-	if si.isInitialized(ctx) {
-		return nil
-	}
-	return si.executeInitialization(ctx)
-}
-
 func (si *Initializer) isInitialized(ctx context.Context) bool {
 	count, _ := si.db.Collection("system_init").CountDocuments(ctx, bson.M{"key": "initialized"})
 	return count > 0
 }
 
+func (si *Initializer) CheckAndInitialize(ctx context.Context) error {
+	if si.isInitialized(ctx) {
+		return nil
+	}
+
+	required := []string{
+		domain.CollectionUser,
+		domain.CollectionSystemInfo,
+		domain.CollectionSystemConfiguration,
+		domain.CollectionAppConfigs,
+		domain.CollectionAppLibraryConfigs,
+		domain.CollectionAppAudioConfigs,
+		domain.CollectionAppUIConfigs,
+		domain.CollectionAppPlaylistIDConfigs,
+		domain.CollectionAppServerConfigs,
+		domain.CollectionAppMediaFileLibrarys,
+		domain.CollectionFileEntityFolderInfo,
+		domain.CollectionFileEntityFileInfo,
+		domain.CollectionFileEntityAudioMediaFile,
+		domain.CollectionFileEntityAudioMediaMvMetadata,
+		domain.CollectionFileEntityAudioMediaTrackMetadata,
+		domain.CollectionFileEntityAudioMediaKaraokeMetadata,
+		domain.CollectionFileEntityAudioAlbum,
+		domain.CollectionFileEntityAudioArtist,
+		domain.CollectionFileEntityAudioAnnotation,
+		domain.CollectionFileEntityAudioPlaylist,
+		domain.CollectionFileEntityAudioPlaylistTrack,
+		domain.CollectionFileEntityAudioTempMetadata,
+	}
+	for _, coll := range required {
+		if err := si.safeCreateCollection(ctx, coll); err != nil {
+			return fmt.Errorf("创建集合%s失败: %w", coll, err)
+		}
+	}
+
+	if err := si.executeInitialization(ctx); err != nil {
+		return err
+	}
+
+	return si.initializedSystem(ctx)
+}
+
+func (si *Initializer) safeCreateCollection(ctx context.Context, collName string) error {
+	if si.collectionExists(ctx, collName) {
+		return nil
+	}
+
+	_, err := si.db.Collection(collName).InsertOne(ctx, bson.M{"__init": true})
+	if err == nil {
+		_, _ = si.db.Collection(collName).DeleteOne(ctx, bson.M{"__init": true})
+	}
+	return err
+}
+
+func (si *Initializer) collectionExists(ctx context.Context, collName string) bool {
+	_, err := si.db.Collection(collName).CountDocuments(ctx, bson.M{"_id": primitive.NewObjectID()})
+	return err == nil
+}
+
 func (si *Initializer) executeInitialization(ctx context.Context) error {
-	userID, err := si.createAdminUser(ctx)
+	userID, err := si.initAdminUser(ctx)
 	if err != nil {
 		return err
 	}
@@ -119,10 +171,10 @@ func (si *Initializer) executeInitialization(ctx context.Context) error {
 		return err
 	}
 
-	return si.markInitialized(ctx)
+	return si.initializedSystem(ctx)
 }
 
-func (si *Initializer) markInitialized(ctx context.Context) error {
+func (si *Initializer) initializedSystem(ctx context.Context) error {
 	_, err := si.db.Collection("system_init").InsertOne(ctx, bson.M{
 		"key":            "initialized",
 		"value":          true,
@@ -131,7 +183,7 @@ func (si *Initializer) markInitialized(ctx context.Context) error {
 	return err
 }
 
-func (si *Initializer) createAdminUser(ctx context.Context) (primitive.ObjectID, error) {
+func (si *Initializer) initAdminUser(ctx context.Context) (primitive.ObjectID, error) {
 	user := domain_auth.User{
 		ID:       primitive.NewObjectID(),
 		Name:     "TestName",

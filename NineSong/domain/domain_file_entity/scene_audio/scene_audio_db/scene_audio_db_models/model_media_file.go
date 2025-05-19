@@ -15,6 +15,8 @@ type MediaFileMetadata struct {
 	ArtistID             string             `bson:"artist_id"`
 	AlbumArtist          string             `bson:"album_artist"`
 	AlbumID              string             `bson:"album_id"`
+	MvID                 string             `bson:"mv_id"`
+	KaraokeID            string             `bson:"karaoke_id"`
 	HasCoverArt          bool               `bson:"has_cover_art"`
 	TrackNumber          int                `bson:"track_number"` // 当前轨道号
 	TotalTracks          int                `bson:"total_tracks"` // 总轨道数

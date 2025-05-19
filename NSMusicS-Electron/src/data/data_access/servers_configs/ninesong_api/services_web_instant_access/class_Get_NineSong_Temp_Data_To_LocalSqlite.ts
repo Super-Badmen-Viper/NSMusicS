@@ -65,6 +65,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
     public async get_home_list_of_maximum_playback(
         url: string
     ){
+        url = url.includes('api') ? url : url + '/api';
         const maximum_playback = await this.home_ApiService_of_NineSong.getAlbumList_Play_Count()
         if(maximum_playback != undefined && Array.isArray(maximum_playback)) {
             maximum_playback.map(async (album: any) => {
@@ -105,7 +106,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                         paths: '',
                         description: '',
                         small_image_url: '',
-                        medium_image_url: url + '/api/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=album&target_id=' + album.ID,
+                        medium_image_url: url + '/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=album&target_id=' + album.ID,
                         large_image_url: '',
                         external_url: '',
                         external_info_updated_at: ''
@@ -117,6 +118,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
     public async get_home_list_of_random_search(
         url: string
     ){
+        url = url.includes('api') ? url : url + '/api';
         const random_search = await this.home_ApiService_of_NineSong.getRandomAlbums('0','18')
         if(random_search != undefined && Array.isArray(random_search)) {
             random_search.map(async (album: any) => {
@@ -157,7 +159,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                         paths: '',
                         description: '',
                         small_image_url: '',
-                        medium_image_url: url + '/api/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=album&target_id=' + album.ID,
+                        medium_image_url: url + '/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=album&target_id=' + album.ID,
                         large_image_url: '',
                         external_url: '',
                         external_info_updated_at: ''
@@ -169,6 +171,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
     public async get_home_list_of_recently_added(
         url: string
     ){
+        url = url.includes('api') ? url : url + '/api';
         const recently_added = await this.home_ApiService_of_NineSong.getAlbumList_Recently_Added()
         if(recently_added != undefined && Array.isArray(recently_added)) {
             recently_added.map(async (album: any) => {
@@ -209,7 +212,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                         paths: '',
                         description: '',
                         small_image_url: '',
-                        medium_image_url: url + '/api/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=album&target_id=' + album.ID,
+                        medium_image_url: url + '/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=album&target_id=' + album.ID,
                         large_image_url: '',
                         external_url: '',
                         external_info_updated_at: ''
@@ -221,6 +224,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
     public async get_home_list_of_recently_played(
         url: string
     ){
+        url = url.includes('api') ? url : url + '/api';
         const recently_played = await this.home_ApiService_of_NineSong.getAlbumList_Play_Date()
         if(recently_played != undefined && Array.isArray(recently_played)) {
             recently_played.map(async (album: any) => {
@@ -261,7 +265,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                         paths: '',
                         description: '',
                         small_image_url: '',
-                        medium_image_url: url + '/api/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=album&target_id=' + album.ID,
+                        medium_image_url: url + '/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=album&target_id=' + album.ID,
                         large_image_url: '',
                         external_url: '',
                         external_info_updated_at: ''
@@ -278,6 +282,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
         playlist_id: string,
         _album_id:string, _artist_id:string,
     ){
+        url = url.includes('api') ? url : url + '/api';
         let songlist = [];
         let totalCount = 0;
         if (playlist_id === '') {
@@ -337,7 +342,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                     duration_txt: this.formatTime(song.Duration),
                     id: song.ID,
                     title: song.Title,
-                    path: url + '/api/media/stream?access_token=' + store_server_login_info.server_accessToken + '&media_file_id=' + song.ID,
+                    path: url + '/media/stream?access_token=' + store_server_login_info.server_accessToken + '&media_file_id=' + song.ID,
                     artist: song.Artist,
                     album: song.Album,
                     artist_id: song.ArtistID,
@@ -382,7 +387,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                     rg_album_peak: 0,
                     rg_track_gain: 0,
                     rg_track_peak: 0,
-                    medium_image_url: url + '/api/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=media&target_id=' + song.ID
+                    medium_image_url: url + '/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=media&target_id=' + song.ID
                 }
                 if(store_general_fetch_media_list._load_model === 'search') {
                     store_view_media_page_info.media_File_metadata.push(song)
@@ -408,6 +413,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
         min_year:string,max_year:string,
         _artist_id:string,
     ){
+        url = url.includes('api') ? url : url + '/api';
         const data = await this.albums_ApiService_of_NineSong.getAlbums(
             _start, _end, _sort, _order,
             _starred, _search,
@@ -463,7 +469,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                         paths: '',
                         description: '',
                         small_image_url: '',
-                        medium_image_url: url + '/api/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=album&target_id=' + album.ID,
+                        medium_image_url: url + '/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=album&target_id=' + album.ID,
                         large_image_url: '',
                         external_url: '',
                         external_info_updated_at: ''
@@ -477,6 +483,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
         _start: string, _end:string,
         _sort:string, _order:string, _starred:string, _search:string,
     ){
+        url = url.includes('api') ? url : url + '/api';
         const data = await this.artists_ApiService_of_NineSong.getArtists(
             _start, _end, _sort, _order,
             _starred, _search
@@ -508,7 +515,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                         mbz_artist_id: '',
                         biography: '',
                         small_image_url: '',
-                        medium_image_url: url + '/api/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=artist&target_id=' + artist.ID,
+                        medium_image_url: url + '/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=artist&target_id=' + artist.ID,
                         large_image_url: '',
                         similar_artists: '',
                         external_url: '',
@@ -522,6 +529,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
         url: string,
         _start: string, _end:string,
     ){
+        url = url.includes('api') ? url : url + '/api';
         const data = await this.home_ApiService_of_NineSong.getRandomMedias(
             _start, _end
         )
@@ -536,7 +544,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                     duration_txt: this.formatTime(song.Duration),
                     id: song.ID,
                     title: song.Title,
-                    path: url + '/api/media/stream?access_token=' + store_server_login_info.server_accessToken + '&media_file_id=' + song.ID,
+                    path: url + '/media/stream?access_token=' + store_server_login_info.server_accessToken + '&media_file_id=' + song.ID,
                     artist: song.Artist,
                     album: song.Album,
                     artist_id: song.ArtistID,
@@ -581,7 +589,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                     rg_album_peak: 0,
                     rg_track_gain: 0,
                     rg_track_peak: 0,
-                    medium_image_url: url + '/api/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=album&target_id=' + song.ID
+                    medium_image_url: url + '/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=album&target_id=' + song.ID
                 }
                 store_playlist_list_info.playlist_MediaFiles_temporary.push({
                     ...new_song,

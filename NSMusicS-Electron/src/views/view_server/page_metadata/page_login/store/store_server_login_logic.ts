@@ -4,6 +4,7 @@ import axios from "axios";
 import {store_server_login_info} from "./store_server_login_info";
 import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
+import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {
     store_general_fetch_home_list
 } from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_home/store_general_fetch_home_list";
@@ -18,6 +19,9 @@ export const store_server_login_logic = reactive({
         store_router_data_info.store_router_history_data_of_local = false;
         store_router_data_info.store_router_history_data_of_web = true;
         store_app_configs_info.desktop_system_kind = 'docker';
+        if(store_server_users.server_select_kind === '') {
+            store_server_users.server_select_kind = 'ninesong'
+        }
 
         const currentTime = new Date().getTime();
         store_server_login_info.server_accessToken = String(sessionStorage.getItem("jwt_token"));
