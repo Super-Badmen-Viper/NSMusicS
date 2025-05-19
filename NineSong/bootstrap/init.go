@@ -29,68 +29,16 @@ func NewInitializer(env *Env, db mongo.Database) *Initializer {
 	return &Initializer{env: env, db: db}
 }
 
-func (si *Initializer) isInitialized(ctx context.Context) bool {
-	count, _ := si.db.Collection("system_init").CountDocuments(ctx, bson.M{"key": "initialized"})
-	return count > 0
-}
-
 func (si *Initializer) CheckAndInitialize(ctx context.Context) error {
 	if si.isInitialized(ctx) {
 		return nil
 	}
-
-	required := []string{
-		domain.CollectionUser,
-		domain.CollectionSystemInfo,
-		domain.CollectionSystemConfiguration,
-		domain.CollectionAppConfigs,
-		domain.CollectionAppLibraryConfigs,
-		domain.CollectionAppAudioConfigs,
-		domain.CollectionAppUIConfigs,
-		domain.CollectionAppPlaylistIDConfigs,
-		domain.CollectionAppServerConfigs,
-		domain.CollectionAppMediaFileLibrarys,
-		domain.CollectionFileEntityFolderInfo,
-		domain.CollectionFileEntityFileInfo,
-		domain.CollectionFileEntityAudioMediaFile,
-		domain.CollectionFileEntityAudioMediaMvMetadata,
-		domain.CollectionFileEntityAudioMediaTrackMetadata,
-		domain.CollectionFileEntityAudioMediaKaraokeMetadata,
-		domain.CollectionFileEntityAudioAlbum,
-		domain.CollectionFileEntityAudioArtist,
-		domain.CollectionFileEntityAudioAnnotation,
-		domain.CollectionFileEntityAudioPlaylist,
-		domain.CollectionFileEntityAudioPlaylistTrack,
-		domain.CollectionFileEntityAudioTempMetadata,
-	}
-	for _, coll := range required {
-		if err := si.safeCreateCollection(ctx, coll); err != nil {
-			return fmt.Errorf("创建集合%s失败: %w", coll, err)
-		}
-	}
-
-	if err := si.executeInitialization(ctx); err != nil {
-		return err
-	}
-
-	return si.initializedSystem(ctx)
+	return si.executeInitialization(ctx)
 }
 
-func (si *Initializer) safeCreateCollection(ctx context.Context, collName string) error {
-	if si.collectionExists(ctx, collName) {
-		return nil
-	}
-
-	_, err := si.db.Collection(collName).InsertOne(ctx, bson.M{"__init": true})
-	if err == nil {
-		_, _ = si.db.Collection(collName).DeleteOne(ctx, bson.M{"__init": true})
-	}
-	return err
-}
-
-func (si *Initializer) collectionExists(ctx context.Context, collName string) bool {
-	_, err := si.db.Collection(collName).CountDocuments(ctx, bson.M{"_id": primitive.NewObjectID()})
-	return err == nil
+func (si *Initializer) isInitialized(ctx context.Context) bool {
+	count, _ := si.db.Collection("system_init").CountDocuments(ctx, bson.M{"key": "initialized"})
+	return count > 0
 }
 
 func (si *Initializer) executeInitialization(ctx context.Context) error {
@@ -123,7 +71,7 @@ func (si *Initializer) executeInitialization(ctx context.Context) error {
 		return err
 	}
 
-	if err := si.initAppMediaFileLibrarys(ctx); err != nil {
+	if err := si.initAppMediaFileLibrary(ctx); err != nil {
 		return err
 	}
 
@@ -144,6 +92,18 @@ func (si *Initializer) executeInitialization(ctx context.Context) error {
 	}
 
 	if err := si.initFileEntityAudioMediaFile(ctx); err != nil {
+		return err
+	}
+
+	if err := si.initFileEntityAudioMediaMv(ctx); err != nil {
+		return err
+	}
+
+	if err := si.initFileEntityAudioMediaTrack(ctx); err != nil {
+		return err
+	}
+
+	if err := si.initFileEntityAudioMediaKaraoke(ctx); err != nil {
 		return err
 	}
 
@@ -171,10 +131,10 @@ func (si *Initializer) executeInitialization(ctx context.Context) error {
 		return err
 	}
 
-	return si.initializedSystem(ctx)
+	return si.completeInitialized(ctx)
 }
 
-func (si *Initializer) initializedSystem(ctx context.Context) error {
+func (si *Initializer) completeInitialized(ctx context.Context) error {
 	_, err := si.db.Collection("system_init").InsertOne(ctx, bson.M{
 		"key":            "initialized",
 		"value":          true,
@@ -651,7 +611,7 @@ func (si *Initializer) initAppServerConfigs(ctx context.Context) error {
 	return nil
 }
 
-func (si *Initializer) initAppMediaFileLibrarys(ctx context.Context) error {
+func (si *Initializer) initAppMediaFileLibrary(ctx context.Context) error {
 	coll := si.db.Collection(domain.CollectionAppMediaFileLibrarys)
 
 	initConfigs := []*domain_app_library.AppMediaFileLibrary{
@@ -869,6 +829,7 @@ func (si *Initializer) initFileEntityFolder(ctx context.Context) error {
 	}
 	return nil
 }
+
 func (si *Initializer) initFileEntityFile(ctx context.Context) error {
 	coll := si.db.Collection(domain.CollectionFileEntityFileInfo)
 
@@ -893,6 +854,63 @@ func (si *Initializer) initFileEntityAudioMediaFile(ctx context.Context) error {
 
 	dummyID := primitive.NewObjectID()
 	emptyDoc := &scene_audio_db_models.MediaFileMetadata{
+		ID: dummyID,
+	}
+
+	if _, err := coll.InsertOne(ctx, emptyDoc); err != nil {
+		return err
+	}
+
+	if _, err := coll.DeleteOne(ctx, bson.M{"_id": dummyID}); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (si *Initializer) initFileEntityAudioMediaMv(ctx context.Context) error {
+	coll := si.db.Collection(domain.CollectionFileEntityAudioMediaMvMetadata)
+
+	dummyID := primitive.NewObjectID()
+	emptyDoc := &scene_audio_db_models.MediaMvMetadata{
+		ID: dummyID,
+	}
+
+	if _, err := coll.InsertOne(ctx, emptyDoc); err != nil {
+		return err
+	}
+
+	if _, err := coll.DeleteOne(ctx, bson.M{"_id": dummyID}); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (si *Initializer) initFileEntityAudioMediaTrack(ctx context.Context) error {
+	coll := si.db.Collection(domain.CollectionFileEntityAudioMediaTrackMetadata)
+
+	dummyID := primitive.NewObjectID()
+	emptyDoc := &scene_audio_db_models.MediaTrackMetadata{
+		ID: dummyID,
+	}
+
+	if _, err := coll.InsertOne(ctx, emptyDoc); err != nil {
+		return err
+	}
+
+	if _, err := coll.DeleteOne(ctx, bson.M{"_id": dummyID}); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (si *Initializer) initFileEntityAudioMediaKaraoke(ctx context.Context) error {
+	coll := si.db.Collection(domain.CollectionFileEntityAudioMediaKaraokeMetadata)
+
+	dummyID := primitive.NewObjectID()
+	emptyDoc := &scene_audio_db_models.MediaKaraokeMetadata{
 		ID: dummyID,
 	}
 

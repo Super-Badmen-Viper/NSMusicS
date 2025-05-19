@@ -1,13 +1,15 @@
 package scene_audio_db_models
 
+import "go.mongodb.org/mongo-driver/bson/primitive"
+
 type MediaKaraokeMetadata struct {
-	ID                string      `bson:"karaoke_id"`   // 唯一标识[4](@ref)
-	AccompanimentHash string      `bson:"k_accmp_hash"` // 伴奏文件哈希[4](@ref)
-	LyricsSyncMode    string      `bson:"lyrics_sync"`  // 歌词同步模式(逐字/逐行)[4](@ref)
-	DuetMode          DuetConfig  `bson:"duet_config"`  // 合唱配置[4,5](@ref)
-	RecordingMeta     RecordMeta  `bson:"rec_meta"`     // 录制元数据[4](@ref)
-	AudioProcessing   AudioEngine `bson:"audio_engine"` // 音频引擎参数[4,6](@ref)
-	ScoreSystem       ScoreSystem `bson:"k_score"`      // 多维评分体系[4,7](@ref)
+	ID                primitive.ObjectID `bson:"karaoke_id"`   // 唯一标识[4](@ref)
+	AccompanimentHash string             `bson:"k_accmp_hash"` // 伴奏文件哈希[4](@ref)
+	LyricsSyncMode    string             `bson:"lyrics_sync"`  // 歌词同步模式(逐字/逐行)[4](@ref)
+	DuetMode          DuetConfig         `bson:"duet_config"`  // 合唱配置[4,5](@ref)
+	RecordingMeta     RecordMeta         `bson:"rec_meta"`     // 录制元数据[4](@ref)
+	AudioProcessing   AudioEngine        `bson:"audio_engine"` // 音频引擎参数[4,6](@ref)
+	ScoreSystem       ScoreSystem        `bson:"k_score"`      // 多维评分体系[4,7](@ref)
 }
 
 type ScoreSystem struct {

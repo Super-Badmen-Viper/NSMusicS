@@ -377,13 +377,8 @@ export const store_app_configs_logic_load = reactive({
             if (isElectron) {
                 try {
                     if ('' + system_Configs_Read.app_Configs.value['player_select'] === null || '' + system_Configs_Read.app_Configs.value['player_select'].length < 0) {
-                        if (process.platform != 'linux') {
-                            store_player_audio_logic.player_select = 'mpv'
-                            store_player_audio_logic.player_fade_value = 0;
-                        } else {
-                            store_player_audio_logic.player_select = 'web'
-                            store_player_audio_logic.player_fade_value = 2000;
-                        }
+                        store_player_audio_logic.player_select = 'web'
+                        store_player_audio_logic.player_fade_value = 2000;
                     } else {
                         if (process.platform != 'linux') {
                             if ('' + system_Configs_Read.app_Configs.value['player_select'] === 'mpv') {
@@ -399,13 +394,8 @@ export const store_app_configs_logic_load = reactive({
                         }
                     }
                 } catch {
-                    if (process.platform != 'linux') {
-                        store_player_audio_logic.player_select = 'mpv'
-                        store_player_audio_logic.player_fade_value = 0;
-                    } else {
-                        store_player_audio_logic.player_select = 'web'
-                        store_player_audio_logic.player_fade_value = 2000;
-                    }
+                    store_player_audio_logic.player_select = 'web'
+                    store_player_audio_logic.player_fade_value = 2000;
                 }
             } else {
                 store_player_audio_logic.player_select = 'web'
