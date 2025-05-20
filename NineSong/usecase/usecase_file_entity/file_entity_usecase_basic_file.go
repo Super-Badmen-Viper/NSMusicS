@@ -76,7 +76,6 @@ func (uc *FileUsecase) ProcessDirectory(ctx context.Context, dirPath string, tar
 	}
 
 	coverTempPath, _ := uc.tempRepo.GetTempPath(ctx, "cover")
-	lyricsPath, _ := uc.tempRepo.GetTempPath(ctx, "lyrics")
 	//steamPath, _ := uc.tempRepo.GetTempPath(ctx, "stream")
 
 	folder, err := uc.folderRepo.FindByPath(ctx, dirPath)
@@ -137,7 +136,7 @@ func (uc *FileUsecase) ProcessDirectory(ctx context.Context, dirPath string, tar
 
 			wg.Add(1)
 			fileCount++
-			go uc.processFile(ctx, path, coverTempPath, lyricsPath, folder.ID, &wg, errChan)
+			go uc.processFile(ctx, path, coverTempPath, folder.ID, &wg, errChan)
 			return nil
 		}
 	})
@@ -185,7 +184,6 @@ func (uc *FileUsecase) processFile(
 	ctx context.Context,
 	path string,
 	coverTempPath string,
-	lyricsPath string,
 	folderID primitive.ObjectID,
 	wg *sync.WaitGroup,
 	errChan chan<- error,
@@ -255,7 +253,6 @@ func (uc *FileUsecase) processFile(
 			album,     // 已加载的专辑对象
 			metadataTag,
 			coverTempPath,
-			lyricsPath,
 		); err != nil {
 			errChan <- fmt.Errorf("文件存储失败 %s: %w", path, err)
 			return
@@ -270,7 +267,6 @@ func (uc *FileUsecase) processMediaFilesAndAlbumCover(
 	album *scene_audio_db_models.AlbumMetadata,
 	tag tag.Metadata,
 	coverBasePath string,
-	lyricsBasePath string,
 ) error {
 	// 创建媒体文件存储目录
 	mediaCoverDir := filepath.Join(coverBasePath, "media", media.ID.Hex())
@@ -282,7 +278,11 @@ func (uc *FileUsecase) processMediaFilesAndAlbumCover(
 	var coverPath string
 	defer func() {
 		if coverPath == "" {
-			os.RemoveAll(mediaCoverDir)
+			err := os.RemoveAll(mediaCoverDir)
+			if err != nil {
+				log.Printf("[WARN] 媒体目录删除失败 | 路径:%s | 错误:%v", mediaCoverDir, err)
+				return
+			}
 		}
 	}()
 
@@ -341,19 +341,6 @@ func (uc *FileUsecase) processMediaFilesAndAlbumCover(
 		}
 	}
 
-	// 保存歌词文件（原有逻辑保持不变）
-	if lyrics, ok := tag.Raw()["lyrics"].(string); ok && lyrics != "" {
-		targetDir := filepath.Join(lyricsBasePath, "lyrics", media.ID.Hex())
-		if err := os.MkdirAll(targetDir, 0755); err != nil {
-			return fmt.Errorf("歌词目录创建失败: %w", err)
-		}
-
-		targetPath := filepath.Join(targetDir, "lyrics.lrc")
-		if err := os.WriteFile(targetPath, []byte(lyrics), 0644); err != nil {
-			return fmt.Errorf("歌词写入失败: %w", err)
-		}
-	}
-
 	return nil
 }
 
@@ -368,28 +355,6 @@ func (uc *FileUsecase) saveMediaCover(
 	targetPath := filepath.Join(storageDir, "cover.jpg")
 	if err := os.WriteFile(targetPath, pic.Data, 0644); err != nil {
 		return "", fmt.Errorf("封面写入失败: %w", err)
-	}
-	return targetPath, nil
-}
-
-func (uc *FileUsecase) saveMediaLyrics(
-	mediaID primitive.ObjectID,
-	rawTags map[string]interface{},
-	basePath string,
-) (string, error) {
-	lyrics, ok := rawTags["lyrics"].(string)
-	if !ok || lyrics == "" {
-		return "", nil
-	}
-
-	targetDir := filepath.Join(basePath, "lyrics", mediaID.Hex())
-	if err := os.MkdirAll(targetDir, 0755); err != nil {
-		return "", fmt.Errorf("歌词目录创建失败: %w", err)
-	}
-
-	targetPath := filepath.Join(targetDir, "lyrics.lrc")
-	if err := os.WriteFile(targetPath, []byte(lyrics), 0644); err != nil {
-		return "", fmt.Errorf("歌词写入失败: %w", err)
 	}
 	return targetPath, nil
 }
@@ -589,7 +554,12 @@ func (uc *FileUsecase) createMetadataBasicInfo(
 		log.Printf("文件打开失败: %s | %v", path, err)
 		return nil, err
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Printf("文件关闭失败: %s | %v", path, err)
+		}
+	}(file)
 
 	stat, err := file.Stat()
 	if err != nil {

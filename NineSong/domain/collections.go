@@ -48,6 +48,9 @@ const (
 	CollectionFileEntityAudioMediaFile = "file_entity_audio_media_file"
 )
 const (
+	CollectionFileEntityAudioMediaLyricsMetadata = "file_entity_audio_media_lyrics"
+)
+const (
 	CollectionFileEntityAudioMediaMvMetadata = "file_entity_audio_media_mv"
 )
 const (
