@@ -219,9 +219,12 @@ func buildArtistBaseMatch(search, starred string) bson.D {
 
 func validateArtistSortField(sort string) string {
 	validSortFields := map[string]bool{
-		"name": true, "album_count": true, "song_count": true,
-		"play_count": true, "rating": true, "starred_at": true,
-		"size": true, "play_date": true,
+		"name":        true,
+		"album_count": true, "song_count": true,
+		"play_count": true, "play_date": true,
+		"rating":     true,
+		"starred_at": true,
+		"size":       true,
 		"created_at": true, "updated_at": true,
 	}
 	if validSortFields[sort] {

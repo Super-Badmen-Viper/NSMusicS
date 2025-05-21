@@ -323,8 +323,8 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
         }
         ///
         if (Array.isArray(songlist) && songlist.length > 0) {
-            if(_sort === 'playDate'){
-                songlist = songlist.filter(song => song.playCount > 0)
+            if(_sort === 'play_date'){
+                songlist = songlist.filter(song => song.PlayCount > 0)
             }
             store_general_fetch_player_list._totalCount = totalCount
             let last_index = store_general_fetch_media_list._load_model === 'search' ?
@@ -422,8 +422,8 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
         )
         let album_list = data["ninesong-response"]["albums"]
         if (Array.isArray(album_list) && album_list.length > 0) {
-            if(_sort === 'playDate'){
-                album_list = album_list.filter(album => album.playCount > 0)
+            if(_sort === 'play_date'){
+                album_list = album_list.filter(album => album.PlayCount > 0)
             }
             let last_index = store_view_album_page_info.album_Files_temporary.length
             store_view_album_page_info.album_File_metadata = []
@@ -490,8 +490,8 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
         )
         let artist_list = data["ninesong-response"]["artists"]
         if (Array.isArray(artist_list) && artist_list.length > 0) {
-            if(_sort === 'playDate'){
-                artist_list = artist_list.filter(artist => artist.playCount > 0)
+            if(_sort === 'play_date'){
+                artist_list = artist_list.filter(artist => artist.PlayCount > 0)
             }
             let last_index = store_view_artist_page_info.artist_Files_temporary.length
             store_view_artist_page_info.artist_File_metadata = [];

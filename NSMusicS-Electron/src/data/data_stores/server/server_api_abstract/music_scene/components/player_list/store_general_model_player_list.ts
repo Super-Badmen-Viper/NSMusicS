@@ -15,6 +15,13 @@ import {
 import {
     Get_NineSong_Temp_Data_To_LocalSqlite
 } from "../../../../../../data_access/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite";
+import {
+    Playlist_ApiService_of_NineSong
+} from "../../../../../../data_access/servers_configs/ninesong_api/services_web/Scene/Music/Playlist/index_service";
+import {
+    store_server_login_info
+} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+import {store_local_data_set_playlistInfo} from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_playlistInfo";
 
 export const store_general_model_player_list = reactive({
     async get_playlists_info() {
@@ -145,7 +152,10 @@ export const store_general_model_player_list = reactive({
                 }
             }else if(store_server_users.server_select_kind === 'ninesong'){
                 let playlists = [];
-                const getPlaylists_all = await this.playlist_ApiService_of_NineSong.getPlaylists();
+                const playlist_ApiService_of_NineSong = new Playlist_ApiService_of_NineSong(
+                    store_server_login_info.server_url
+                )
+                const getPlaylists_all = await playlist_ApiService_of_NineSong.getPlaylists();
                 if(getPlaylists_all != undefined) {
                     playlists = getPlaylists_all["ninesong-response"]["playlists"];
                     store_playlist_list_info.playlist_names_ALLLists = [];

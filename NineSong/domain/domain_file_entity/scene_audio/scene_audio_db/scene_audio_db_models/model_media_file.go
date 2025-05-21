@@ -89,6 +89,7 @@ type MediaFileMetadata struct {
 	LastPlayed time.Time `bson:"last_played"` // 最后播放时间戳（UTC）
 	Starred    bool      `bson:"starred"`     // 是否收藏
 	StarredAt  time.Time `bson:"starred_at"`  // 收藏时间
+	Comment    string    `bson:"comment"`     // 用户评论
 
 	// 视觉元素
 	HasCoverArt    bool   `bson:"has_cover_art"`    // 是否包含专辑封面图

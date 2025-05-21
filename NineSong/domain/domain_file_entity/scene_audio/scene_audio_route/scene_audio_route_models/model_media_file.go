@@ -32,6 +32,8 @@ type MediaFileMetadata struct {
 	Rating    int       `bson:"rating"`
 	Starred   bool      `bson:"starred"`
 	StarredAt time.Time `bson:"starred_at"`
+
+	Index int `bson:"index" json:"Index"`
 }
 
 type MediaFileFilterCounts struct {

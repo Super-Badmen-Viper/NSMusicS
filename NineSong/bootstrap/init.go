@@ -1027,8 +1027,9 @@ func (si *Initializer) initFileEntityAudioPlaylist(ctx context.Context) error {
 func (si *Initializer) initFileEntityAudioPlaylistTrack(ctx context.Context) error {
 	coll := si.db.Collection(domain.CollectionFileEntityAudioPlaylistTrack)
 
+	dummyID := primitive.NewObjectID()
 	emptyDoc := &scene_audio_db_models.PlaylistTrackMetadata{
-		ID: 0,
+		ID: dummyID,
 	}
 
 	if _, err := coll.InsertOne(ctx, emptyDoc); err != nil {

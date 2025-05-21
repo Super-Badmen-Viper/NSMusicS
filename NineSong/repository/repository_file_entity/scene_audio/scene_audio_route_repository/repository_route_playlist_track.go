@@ -10,9 +10,11 @@ import (
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/mongo"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	driver "go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type playlistTrackRepository struct {
@@ -31,17 +33,19 @@ func (r *playlistTrackRepository) GetPlaylistTrackItems(
 	ctx context.Context,
 	end, order, sort, start, search, starred, albumId, artistId, year, playlistId string,
 ) ([]scene_audio_route_models.MediaFileMetadata, error) {
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
 	coll := r.db.Collection(r.collection)
 
 	// 构建完整聚合管道
 	pipeline := []bson.D{
-		// 第一阶段：匹配指定播放列表
+		// 匹配播放列表
 		{
 			{Key: "$match", Value: bson.D{
 				{Key: "playlist_id", Value: mustObjectID(playlistId)},
 			}},
 		},
-		// 关联媒体文件数据
+		// 关联媒体文件
 		{
 			{Key: "$lookup", Value: bson.D{
 				{Key: "from", Value: domain.CollectionFileEntityAudioMediaFile},
@@ -82,7 +86,7 @@ func (r *playlistTrackRepository) GetPlaylistTrackItems(
 				{Key: "preserveNullAndEmptyArrays", Value: true},
 			}},
 		},
-		// 合并字段到主文档
+		// 合并字段
 		{
 			{Key: "$addFields", Value: bson.D{
 				{Key: "media_file.play_count", Value: "$annotations.play_count"},
@@ -90,12 +94,20 @@ func (r *playlistTrackRepository) GetPlaylistTrackItems(
 				{Key: "media_file.rating", Value: "$annotations.rating"},
 				{Key: "media_file.starred", Value: "$annotations.starred"},
 				{Key: "media_file.starred_at", Value: "$annotations.starred_at"},
+				{Key: "media_file.index", Value: "$index"}, // 关键修改点
 			}},
 		},
 		// 替换根节点
 		{
 			{Key: "$replaceRoot", Value: bson.D{
-				{Key: "newRoot", Value: "$media_file"},
+				{Key: "newRoot", Value: bson.D{
+					{Key: "$mergeObjects", Value: bson.A{
+						"$media_file",
+						bson.D{
+							{Key: "index", Value: "$index"}, // 保持小写字段名
+						},
+					}},
+				}},
 			}},
 		},
 	}
@@ -125,7 +137,7 @@ func (r *playlistTrackRepository) GetPlaylistTrackItems(
 
 	var results []scene_audio_route_models.MediaFileMetadata
 	if err := cursor.All(ctx, &results); err != nil {
-		return nil, fmt.Errorf("decode error: %w", err)
+		return nil, fmt.Errorf("解码错误: %w", err)
 	}
 
 	return results, nil
@@ -277,23 +289,32 @@ func buildMediaMatch(search, starred, albumId, artistId, year string) bson.D {
 
 func validateMediaSortField(sort string) string {
 	validSortFields := map[string]bool{
+		"index":      true,
 		"play_count": true, "play_date": true, "title": true,
 		"artist": true, "album": true, "year": true,
 		"duration": true, "bit_rate": true, "size": true,
 		"rating": true, "starred_at": true,
 		"created_at": true, "updated_at": true,
 	}
-	if validSortFields[sort] {
-		return sort
+	if strings.ToLower(sort) == "_id" {
+		return "index"
 	}
-	return "_id"
+	if validSortFields[strings.ToLower(sort)] {
+		return strings.ToLower(sort)
+	}
+	return "index"
 }
 
 func buildMediaSortStage(sort, order string) bson.D {
+	if sort == "_id" {
+		sort = "index"
+	}
+
 	sortOrder := 1
 	if order == "desc" {
 		sortOrder = -1
 	}
+
 	return bson.D{
 		{Key: "$sort", Value: bson.D{
 			{Key: sort, Value: sortOrder},
@@ -380,23 +401,18 @@ func (r *playlistTrackRepository) queryMediaFilesWithFilters(
 	limit, _ := strconv.Atoi(end)
 
 	validSortFields := map[string]bool{
-		// 播放相关
+		"title":  true,
+		"artist": true, "album": true,
+		"year":       true,
+		"rating":     true,
+		"starred_at": true,
+		"genre":      true,
 		"play_count": true, "play_date": true,
-		// 用户互动
-		"rating": true, "starred": true, "starred_at": true,
-		// 核心元数据
-		"title": true, "artist": true, "album": true, "year": true, "genre": true,
-		// 技术属性
-		"duration": true, "bit_rate": true, "size": true, "channels": true, "suffix": true,
-		// 时间戳
+		"duration": true, "bit_rate": true, "size": true,
 		"created_at": true, "updated_at": true,
-		// 关联ID
-		"artist_id": true, "album_id": true, "album_artist_id": true,
-		// 扩展属性
-		"has_cover_art": true, "path": true,
 	}
 	if !validSortFields[sort] {
-		sort = "title"
+		sort = "_id"
 	}
 
 	// 构建排序
@@ -435,39 +451,101 @@ func (r *playlistTrackRepository) AddPlaylistTrackItems(
 	playlistId string,
 	mediaFileIds string,
 ) (bool, error) {
-	// 参数校验
 	pID, err := primitive.ObjectIDFromHex(playlistId)
 	if err != nil {
 		return false, errors.New("invalid playlist id format")
 	}
 
-	// 分割并验证媒体文件ID
-	ids, err := splitMediaFileIds(mediaFileIds)
+	mediaIDs, err := splitMediaFileIds(mediaFileIds)
 	if err != nil {
 		return false, fmt.Errorf("invalid media file ids: %w", err)
 	}
 
-	// 构造插入文档
-	docs := make([]interface{}, len(ids))
-	for i, id := range ids {
-		docs[i] = scene_audio_route_models.PlaylistTrackMetadata{
-			ID:          i,
-			PlaylistID:  pID,
-			MediaFileID: id,
-		}
+	// 获取当前最大索引（需确保空集合返回0）
+	maxIndex, err := r.getCurrentMaxIndex(ctx, pID)
+	if err != nil {
+		return false, fmt.Errorf("获取排序索引失败: %w", err)
 	}
 
-	// 使用封装的InsertMany方法
-	coll := r.db.Collection(r.collection)
-	_, err = coll.InsertMany(ctx, docs)
-	if err != nil {
-		if isDuplicateError(err) {
-			return true, nil // 部分插入成功
+	docs := make([]interface{}, 0, len(mediaIDs))
+	for i, mediaID := range mediaIDs {
+		exists, err := r.exists(ctx, pID, mediaID)
+		if err != nil {
+			return false, fmt.Errorf("检查存在性时出错: %w", err)
 		}
-		return false, fmt.Errorf("insert failed: %w", err)
+		if exists {
+			continue
+		}
+
+		docs = append(docs, scene_audio_route_models.PlaylistTrackMetadata{
+			ID:          primitive.NewObjectID(),
+			PlaylistID:  pID,
+			MediaFileID: mediaID,
+			Index:       maxIndex + 1 + i, // 确保连续递增
+		})
+	}
+
+	if len(docs) == 0 {
+		return true, nil // 所有条目已存在时正常返回
+	}
+
+	if _, err := r.db.Collection(r.collection).InsertMany(ctx, docs); err != nil {
+		return false, fmt.Errorf("批量插入失败: %w", err)
 	}
 
 	return true, nil
+}
+
+func (r *playlistTrackRepository) exists(
+	ctx context.Context,
+	playlistID primitive.ObjectID,
+	mediaID primitive.ObjectID,
+) (bool, error) {
+	var track scene_audio_route_models.PlaylistTrackMetadata
+	err := r.db.Collection(r.collection).FindOne(
+		ctx,
+		bson.M{
+			"playlist_id":   playlistID,
+			"media_file_id": mediaID,
+		},
+	).Decode(&track)
+
+	// 核心修复点：处理空查询场景
+	if err != nil {
+		if errors.Is(err, driver.ErrNoDocuments) {
+			return false, nil // 明确返回不存在
+		}
+		return false, fmt.Errorf("查询失败: %w", err) // 其他错误仍抛出
+	}
+	return true, nil
+}
+
+// 获取当前最大排序索引
+func (r *playlistTrackRepository) getCurrentMaxIndex(
+	ctx context.Context,
+	playlistID primitive.ObjectID,
+) (int, error) {
+	limit := int64(1)
+	cursor, err := r.db.Collection(r.collection).Find(ctx, bson.M{
+		"playlist_id": playlistID,
+	}, &options.FindOptions{
+		Sort:  bson.D{{Key: "index", Value: -1}},
+		Limit: &limit,
+	})
+	if err != nil {
+		return 0, err
+	}
+	defer cursor.Close(ctx)
+
+	var maxDoc scene_audio_route_models.PlaylistTrackMetadata
+	if cursor.Next(ctx) {
+		if err := cursor.Decode(&maxDoc); err != nil {
+			return 0, err
+		}
+		return maxDoc.Index, nil
+	}
+
+	return 0, nil // 没有记录时返回0
 }
 
 func (r *playlistTrackRepository) RemovePlaylistTrackItems(
@@ -548,8 +626,4 @@ func splitMediaFileIds(ids string) ([]primitive.ObjectID, error) {
 		objectIDs = append(objectIDs, objID)
 	}
 	return objectIDs, nil
-}
-
-func isDuplicateError(err error) bool {
-	return strings.Contains(err.Error(), "E11000")
 }

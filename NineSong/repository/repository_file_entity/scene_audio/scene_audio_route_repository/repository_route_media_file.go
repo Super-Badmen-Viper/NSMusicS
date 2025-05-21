@@ -199,10 +199,14 @@ func extractCount(data []map[string]int) int {
 
 func validateSortField(sort string) string {
 	validSortFields := map[string]bool{
-		"play_count": true, "play_date": true, "title": true,
-		"artist": true, "album": true, "year": true,
+		"title":  true,
+		"artist": true, "album": true,
+		"year":       true,
+		"rating":     true,
+		"starred_at": true,
+		"genre":      true,
+		"play_count": true, "play_date": true,
 		"duration": true, "bit_rate": true, "size": true,
-		"rating": true, "starred_at": true,
 		"created_at": true, "updated_at": true,
 	}
 	if validSortFields[sort] {

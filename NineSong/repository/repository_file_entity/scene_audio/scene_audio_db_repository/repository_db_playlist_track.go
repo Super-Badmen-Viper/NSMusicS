@@ -68,7 +68,7 @@ func (r *playlistTrackRepository) Upsert(ctx context.Context, file *scene_audio_
 
 	// 处理插入后的ID同步
 	if result.UpsertedID != nil {
-		if oid, ok := result.UpsertedID.(int); ok {
+		if oid, ok := result.UpsertedID.(primitive.ObjectID); ok {
 			file.ID = oid
 		}
 	}
