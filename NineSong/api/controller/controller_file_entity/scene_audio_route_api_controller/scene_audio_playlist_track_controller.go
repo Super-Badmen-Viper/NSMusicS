@@ -53,7 +53,7 @@ func (c *PlaylistTrackController) GetPlaylistTracks(ctx *gin.Context) {
 		return
 	}
 
-	SuccessResponse(ctx, "tracks", results, len(results))
+	SuccessResponse(ctx, "mediaFiles", results, len(results))
 }
 
 func (c *PlaylistTrackController) GetPlaylistFilterCounts(ctx *gin.Context) {
@@ -172,7 +172,6 @@ func (c *PlaylistTrackController) SortPlaylistTracks(ctx *gin.Context) {
 	SuccessResponse(ctx, "result", gin.H{"success": success}, 1)
 }
 
-// 辅助函数
 func parseBindingError(err error) string {
 	if err == nil {
 		return ""

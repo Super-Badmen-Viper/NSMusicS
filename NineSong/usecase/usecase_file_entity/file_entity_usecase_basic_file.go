@@ -5,6 +5,14 @@ import (
 	"crypto/sha256"
 	"errors"
 	"fmt"
+	"io"
+	"log"
+	"os"
+	"path/filepath"
+	"runtime"
+	"sync"
+	"time"
+
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_db/scene_audio_db_interface"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_db/scene_audio_db_models"
@@ -13,13 +21,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"io"
-	"log"
-	"os"
-	"path/filepath"
-	"runtime"
-	"sync"
-	"time"
 )
 
 type FileUsecase struct {
@@ -44,7 +45,7 @@ func NewFileUsecase(
 	detector domain_file_entity.FileDetector,
 	timeoutMinutes int,
 
-	// 音频处理依赖项
+// 音频处理依赖项
 	artistRepo scene_audio_db_interface.ArtistRepository,
 	albumRepo scene_audio_db_interface.AlbumRepository,
 	mediaRepo scene_audio_db_interface.MediaFileRepository,
@@ -234,23 +235,17 @@ func (uc *FileUsecase) processFile(
 	if fileType == domain_file_entity.Audio {
 		mediaFile, album, artist, metadataTag, err := uc.audioExtractor.Extract(path, metadata)
 		if err != nil {
-			log.Printf("音频解析失败: %s | %v", path, err)
-			errChan <- fmt.Errorf("元数据解析失败 %s: %w", path, err)
 			return
 		}
 
-		// 保存层级关系
 		if err := uc.processAudioHierarchy(ctx, artist, album, mediaFile); err != nil {
-			log.Printf("层级处理失败: %s | %v", path, err)
-			errChan <- fmt.Errorf("层级数据写入失败 %s: %w", path, err)
 			return
 		}
 
-		// 保存封面与歌词
 		if err := uc.processMediaFilesAndAlbumCover(
 			ctx,
-			mediaFile, // 媒体文件对象
-			album,     // 已加载的专辑对象
+			mediaFile,
+			album,
 			metadataTag,
 			coverTempPath,
 		); err != nil {
@@ -342,21 +337,6 @@ func (uc *FileUsecase) processMediaFilesAndAlbumCover(
 	}
 
 	return nil
-}
-
-func (uc *FileUsecase) saveMediaCover(
-	pic *tag.Picture,
-	storageDir string,
-) (string, error) {
-	if pic == nil || len(pic.Data) == 0 {
-		return "", nil
-	}
-
-	targetPath := filepath.Join(storageDir, "cover.jpg")
-	if err := os.WriteFile(targetPath, pic.Data, 0644); err != nil {
-		return "", fmt.Errorf("封面写入失败: %w", err)
-	}
-	return targetPath, nil
 }
 
 func (uc *FileUsecase) processAudioHierarchy(
@@ -518,6 +498,7 @@ func (uc *FileUsecase) upsertAlbum(
 
 	existing, err := uc.albumRepo.GetByFilter(ctx, filter)
 	if err != nil {
+
 		log.Printf("组合查询错误: %v", err)
 	}
 	if existing != nil {

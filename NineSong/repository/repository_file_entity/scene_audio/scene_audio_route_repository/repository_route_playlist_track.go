@@ -4,6 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strconv"
+	"strings"
+	"time"
+
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_route/scene_audio_route_interface"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_file_entity/scene_audio/scene_audio_route/scene_audio_route_models"
@@ -12,9 +16,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	driver "go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"strconv"
-	"strings"
-	"time"
 )
 
 type playlistTrackRepository struct {
@@ -320,130 +321,6 @@ func buildMediaSortStage(sort, order string) bson.D {
 			{Key: sort, Value: sortOrder},
 		}},
 	}
-}
-
-func (r *playlistTrackRepository) getPlaylistMediaFileIDs(
-	ctx context.Context,
-	playlistId string,
-) ([]primitive.ObjectID, error) {
-	// 转换PlaylistID
-	objID, err := primitive.ObjectIDFromHex(playlistId)
-	if err != nil {
-		return nil, fmt.Errorf("invalid playlist id: %w", err)
-	}
-
-	// 简单查询获取所有关联的媒体文件ID
-	filter := bson.M{"playlist_id": objID}
-	opts := options.Find().SetProjection(bson.M{"media_file_id": 1})
-
-	cursor, err := r.db.Collection(r.collection).Find(ctx, filter, opts)
-	if err != nil {
-		return nil, fmt.Errorf("database query failed: %w", err)
-	}
-	defer func(cursor mongo.Cursor, ctx context.Context) {
-		err := cursor.Close(ctx)
-		if err != nil {
-			fmt.Printf("error closing cursor: %v\n", err)
-		}
-	}(cursor, ctx)
-
-	var results []struct {
-		MediaFileID primitive.ObjectID `bson:"media_file_id"`
-	}
-	if err := cursor.All(ctx, &results); err != nil {
-		return nil, fmt.Errorf("decode error: %w", err)
-	}
-
-	// 提取ID列表
-	ids := make([]primitive.ObjectID, 0, len(results))
-	for _, item := range results {
-		ids = append(ids, item.MediaFileID)
-	}
-
-	return ids, nil
-}
-func (r *playlistTrackRepository) queryMediaFilesWithFilters(
-	ctx context.Context,
-	mediaFileIDs []primitive.ObjectID,
-	end, order, sort, start, search, starred, albumId, artistId, year string,
-) ([]scene_audio_route_models.MediaFileMetadata, error) {
-	collection := r.db.Collection(domain.CollectionFileEntityAudioMediaFile)
-
-	filter := bson.M{
-		"_id": bson.M{"$in": mediaFileIDs},
-	}
-	if albumId != "" {
-		filter["album_id"] = albumId
-	}
-	if artistId != "" {
-		filter["artist_id"] = artistId
-	}
-	if search != "" {
-		filter["$or"] = []bson.M{
-			{"title": bson.M{"$regex": search, "$options": "i"}},
-			{"artist": bson.M{"$regex": search, "$options": "i"}},
-			{"album": bson.M{"$regex": search, "$options": "i"}},
-		}
-	}
-	if starred != "" {
-		if isStarred, err := strconv.ParseBool(starred); err == nil {
-			filter["starred"] = isStarred
-		}
-	}
-	if year != "" {
-		if yearInt, err := strconv.Atoi(year); err == nil {
-			filter["year"] = yearInt
-		}
-	}
-
-	// 处理分页
-	skip, _ := strconv.Atoi(start)
-	limit, _ := strconv.Atoi(end)
-
-	validSortFields := map[string]bool{
-		"title":  true,
-		"artist": true, "album": true,
-		"year":       true,
-		"rating":     true,
-		"starred_at": true,
-		"genre":      true,
-		"play_count": true, "play_date": true,
-		"duration": true, "bit_rate": true, "size": true,
-		"created_at": true, "updated_at": true,
-	}
-	if !validSortFields[sort] {
-		sort = "_id"
-	}
-
-	// 构建排序
-	sortOrder := 1
-	if order == "desc" {
-		sortOrder = -1
-	}
-
-	opts := options.Find().
-		SetSort(bson.D{{Key: sort, Value: sortOrder}}).
-		SetSkip(int64(skip)).
-		SetLimit(int64(limit))
-
-	// 执行查询
-	cursor, err := collection.Find(ctx, filter, opts)
-	if err != nil {
-		return nil, fmt.Errorf("media files query failed: %w", err)
-	}
-	defer func(cursor mongo.Cursor, ctx context.Context) {
-		err := cursor.Close(ctx)
-		if err != nil {
-			fmt.Printf("error closing cursor: %v\n", err)
-		}
-	}(cursor, ctx)
-
-	var results []scene_audio_route_models.MediaFileMetadata
-	if err := cursor.All(ctx, &results); err != nil {
-		return nil, fmt.Errorf("media files decode error: %w", err)
-	}
-
-	return results, nil
 }
 
 func (r *playlistTrackRepository) AddPlaylistTrackItems(

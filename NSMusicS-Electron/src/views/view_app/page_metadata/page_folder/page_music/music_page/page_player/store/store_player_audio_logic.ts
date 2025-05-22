@@ -18,9 +18,10 @@ import {
 import {
     store_server_login_info
 } from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+import {Howl} from "../../../../../../../../utils/howler/howlerLoader";
 
 export const store_player_audio_logic = reactive({
-    player: new Audio_node_mpv(),
+    player: new Audio_howler(),
     player_state_play_click: false,
     player_state_skip_back_click: false,
     player_state_skip_forward_click: false,
@@ -31,7 +32,7 @@ export const store_player_audio_logic = reactive({
         { label: 'mpv', value: 'mpv' },
         { label: 'web', value: 'web' },
     ],
-    player_select: 'mpv',
+    player_select: 'web',
 
     player_device_kind: [],
     player_device_select: 'default',
@@ -104,11 +105,6 @@ export const store_player_audio_logic = reactive({
                 // TODO: 添加非 Electron 环境下的处理逻辑
                 console.log("Non-Electron environment logic not implemented yet.");
             }
-        } else if (store_player_audio_logic.player_select === 'web') {
-            if (store_player_audio_logic.player && store_player_audio_logic.player.howl) {
-                store_player_audio_logic.player.howl.unload();
-            }
-            store_player_audio_logic.player = new Audio_howler();
         } else {
             // 采用web输出，更加稳定
             if (store_player_audio_logic.player && store_player_audio_logic.player.howl) {
@@ -266,6 +262,7 @@ watch(() => store_player_audio_logic.player_select, async (newValue) => {
             // init
             store_player_audio_logic.player = null;
             store_player_audio_logic.player = new Audio_howler();
+            //
             await ipcRenderer.invoke('mpv-quit');
             // load device
             store_player_audio_logic.player_device_kind = []
@@ -280,7 +277,6 @@ watch(() => store_player_audio_logic.player_select, async (newValue) => {
 watch(() => store_player_audio_logic.player_device_select, (newValue) => {
     if (store_player_audio_logic.player_select === 'web') {
         if (store_player_audio_logic.player_device_select != undefined &&
-            store_player_audio_logic.player_device_select != 'default' &&
             store_player_audio_logic.player_device_select.length > 0
         ) {
             if (store_player_audio_logic.player.howl != null) {

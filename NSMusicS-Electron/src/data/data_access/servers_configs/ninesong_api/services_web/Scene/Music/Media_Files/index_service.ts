@@ -51,7 +51,7 @@ export class Medias_ApiService_of_NineSong extends NineSong_Api_Services_Web {
     ): Promise<any> {
         return this.sendRequest(
             'GET',
-            'medias',
+            'playlists/tracks',
             {
                 playlistId,
                 start,

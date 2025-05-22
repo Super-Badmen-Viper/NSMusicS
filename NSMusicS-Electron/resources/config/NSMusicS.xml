@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <item>
-<version>1.5.8</version>
+<version>1.5.9</version>
 <url> </url>
 <changelog>https://github.com/Super-Badmen-Viper/NSMusicS/releases</changelog>
 <changelog_explain>
-    1.5.8已更新内容;
-    增加迷你播放窗口，竖向模式为仿制AppleMusic迷你播放悬浮窗，横向模式为桌面歌词[进行中];
+    1.5.9已更新内容;
+    由于node-mpv不再维护具有潜在问题(包括但不限于单曲重复播放、唤起MPV组件失败、MPV状态管理权限问题)，现将默认音频输出设置为howler.js Web输出[√];
+    增加迷你播放窗口，竖向模式为仿制AppleMusic迷你播放悬浮窗，横向模式为桌面歌词[√];
     增加服务器配置种类，兼容emby-api[√];
     增加服务器配置种类，兼容jellyfin-api[√];
     优化本地模式的音乐库管理逻辑，使其更加符合本地用户的使用习惯[√];

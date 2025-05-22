@@ -211,7 +211,6 @@ const init_player_howler = async () => {
 
       if (
           store_player_audio_logic.player_device_select != undefined &&
-          store_player_audio_logic.player_device_select != 'default' &&
           store_player_audio_logic.player_device_select.length > 0
       ) {
         const audioElement = store_player_audio_logic.player.howl._sounds[0]._node;

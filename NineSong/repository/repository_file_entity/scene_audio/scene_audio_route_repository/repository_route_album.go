@@ -68,26 +68,28 @@ func (r *albumRepository) GetAlbumItems(
 		},
 	}
 
-	// 构建过滤条件
-	matchStage := buildAlbumMatch(search, starred, artistId, minYear, maxYear)
-	if len(matchStage) > 0 {
-		pipeline = append(pipeline, bson.D{{Key: "$match", Value: matchStage}})
-	}
-
-	// 处理特殊排序条件
+	// 核心逻辑：播放相关排序时过滤无效数据
 	validatedSort := validateAlbumSortField(sort)
-	if validatedSort == "play_date" {
+	if validatedSort == "play_count" || validatedSort == "play_date" {
 		pipeline = append(pipeline, bson.D{
 			{Key: "$match", Value: bson.D{
-				{Key: "play_count", Value: bson.D{{Key: "$gt", Value: 0}}},
+				{Key: "$and", Value: bson.A{
+					bson.D{{Key: "play_count", Value: bson.D{{Key: "$gt", Value: 0}}}},
+					bson.D{{Key: "play_date", Value: bson.D{{Key: "$ne", Value: nil}}}},
+				}},
 			}},
 		})
 	}
 
-	// 添加排序阶段
+	// 其他过滤条件
+	if match := buildAlbumMatch(search, starred, artistId, minYear, maxYear); len(match) > 0 {
+		pipeline = append(pipeline, bson.D{{Key: "$match", Value: match}})
+	}
+
+	// 排序处理
 	pipeline = append(pipeline, buildAlbumSortStage(validatedSort, order))
 
-	// 处理分页
+	// 分页处理
 	pipeline = append(pipeline, buildAlbumPaginationStage(start, end)...)
 
 	// 执行查询
@@ -95,11 +97,7 @@ func (r *albumRepository) GetAlbumItems(
 	if err != nil {
 		return nil, fmt.Errorf("database query failed: %w", err)
 	}
-	defer func() {
-		if cerr := cursor.Close(ctx); cerr != nil {
-			fmt.Printf("cursor close error: %v\n", cerr)
-		}
-	}()
+	defer cursor.Close(ctx)
 
 	var results []scene_audio_route_models.AlbumMetadata
 	if err := cursor.All(ctx, &results); err != nil {
@@ -166,8 +164,8 @@ func (r *albumRepository) GetAlbumFilterItemsCount(
 		return nil, fmt.Errorf("count query failed: %w", err)
 	}
 	defer func() {
-		if cerr := cursor.Close(ctx); cerr != nil {
-			fmt.Printf("cursor close error: %v\n", cerr)
+		if closeErr := cursor.Close(ctx); closeErr != nil {
+			fmt.Printf("cursor close error: %v\n", closeErr)
 		}
 	}()
 

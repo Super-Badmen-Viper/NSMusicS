@@ -45,7 +45,6 @@ const handleImageError = async (event) => {
 import { ref, computed } from "vue";
 import { NCarousel, NCarouselItem } from "naive-ui";
 
-const mousewheelRef = ref(true);
 const directionRef = ref<"horizontal" | "vertical">("vertical");
 const placementRef = ref<"top" | "bottom" | "left" | "right">("right");
 
@@ -75,11 +74,9 @@ const nextSlideStyle = computed(() => {
   >
     <n-carousel
       effect="card"
-      draggable
       :show-dots="false"
       show-arrow
       v-model:current-index="store_player_audio_info.this_audio_Index_of_play_list_carousel"
-      :mousewheel="mousewheelRef"
       :direction="directionRef"
       :dot-placement="placementRef"
       centered-slides

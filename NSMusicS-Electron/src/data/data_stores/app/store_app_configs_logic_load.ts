@@ -30,6 +30,7 @@ import {
 } from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
 import {store_server_auth_token} from "../server/server_api_abstract/auth/auth_token";
 import {store_server_model_statistics} from "../server/server_api_abstract/music_scene/model/model_statistics";
+import {Audio_howler} from "@/data/data_models/app_models/song_Audio_Out/Audio_howler";
 
 export const store_app_configs_logic_load = reactive({
     app_configs_loading: false,
@@ -419,8 +420,9 @@ export const store_app_configs_logic_load = reactive({
                 store_player_audio_logic.player_mpvExtraParameters = '' + system_Configs_Read.app_Configs.value['player_mpvExtraParameters']
                 //
                 let state_player_device_select = false
+                store_player_audio_logic.player_device_select = ''
                 const player_device_select = '' + system_Configs_Read.app_Configs.value['player_device_select']
-                if (player_device_select != undefined) {
+                if (player_device_select != undefined && player_device_select != 'default') {
                     if (player_device_select.trim().length > 0)
                         store_player_audio_logic.player_device_select = player_device_select
                     else
@@ -428,6 +430,9 @@ export const store_app_configs_logic_load = reactive({
                 } else
                     state_player_device_select = true
                 if (state_player_device_select) {
+                    if(store_player_audio_logic.player === undefined){
+                        store_player_audio_logic.player = new Audio_howler();
+                    }
                     await store_player_audio_logic.player.getDevices()
                     if (store_player_audio_logic.player_device_kind != undefined) {
                         if (store_player_audio_logic.player_device_kind.length > 0) {

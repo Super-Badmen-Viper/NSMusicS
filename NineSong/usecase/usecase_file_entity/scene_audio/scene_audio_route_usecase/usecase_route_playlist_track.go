@@ -68,14 +68,19 @@ func (uc *playlistTrackUsecase) GetPlaylistTrackItems(
 		}
 	}
 
-	// 验证排序字段
 	validSortFields := map[string]bool{
-		"title": true, "artist": true, "album": true, "year": true,
-		"play_count": true, "rating": true, "starred_at": true,
-		"duration": true, "created_at": true,
+		"title":  true,
+		"artist": true, "album": true,
+		"year":       true,
+		"rating":     true,
+		"starred_at": true,
+		"genre":      true,
+		"play_count": true, "play_date": true,
+		"duration": true, "bit_rate": true, "size": true,
+		"created_at": true, "updated_at": true,
 	}
 	if !validSortFields[sort] {
-		sort = "title"
+		sort = "_id"
 	}
 
 	// 验证排序方向

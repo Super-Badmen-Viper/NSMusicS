@@ -332,9 +332,6 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                 store_playlist_list_info.playlist_MediaFiles_temporary.length
             store_view_media_page_info.media_File_metadata = [];
             songlist.map(async (song: any, index: number) => {
-                if(playlist_id !== '') {
-                    song.ID = song.mediaFileId
-                }
                 const newsong = {
                     absoluteIndex: index + 1 + last_index,
                     favorite: song.Starred,

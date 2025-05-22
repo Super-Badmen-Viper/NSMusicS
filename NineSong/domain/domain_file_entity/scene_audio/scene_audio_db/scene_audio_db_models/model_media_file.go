@@ -1,8 +1,9 @@
 package scene_audio_db_models
 
 import (
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // MediaFileMetadata 核心元数据结构
@@ -117,4 +118,6 @@ type MediaFileMetadata struct {
 	RGAlbumPeak float64 `bson:"rg_album_peak"` // ReplayGain专辑峰值
 	RGTrackGain float64 `bson:"rg_track_gain"` // ReplayGain曲目增益
 	RGTrackPeak float64 `bson:"rg_track_peak"` // ReplayGain曲目峰值
+
+	Index int `bson:"index" json:"Index"` // 索引（用于排序或其他目的）
 }

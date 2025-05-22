@@ -1500,7 +1500,6 @@ onBeforeUnmount(() => {
                 }">
               <n-carousel
                   effect="card"
-                  draggable
                   :show-arrow="false"
                   :show-dots="false"
                   v-model:current-index="store_player_audio_info.this_audio_Index_of_play_list_carousel"
