@@ -10,8 +10,8 @@ ensuring each operating system (desktop: Windows, Linux, MacOS). Mobile: Android
  The Chinese name of the project is "Nine Songs Music | 九歌", abbreviated as NSMusicS<br> inspired by ["Chu Ci"] | 楚辞, to commemorate ["Qu Yuan"] | 屈原<br>
 
 ## New Function
-[NineSong](https://github.com/Super-Badmen-Viper/NineSong) | NineSong Multimedia(Server) 
-Project Address: https://github.com/Super-Badmen-Viper/NineSong
+[NineSong](https://github.com/Super-Badmen-Viper/NineSong) | NineSong Multimedia(Server)   
+Project Address: https://github.com/Super-Badmen-Viper/NineSong  
 The [NineSong](https://github.com/Super-Badmen-Viper/NineSong) server will be released in June this year, and NSMusicS will be able to deploy Docker and integrate NineSong streaming services by default.  
 Compared to other music servers (Navidrome, Jellyfin, Emby, Plex, Subsonic, Gonic),
 It has better functions, as follows: 
