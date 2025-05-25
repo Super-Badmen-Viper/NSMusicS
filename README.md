@@ -10,8 +10,8 @@ ensuring each operating system (desktop: Windows, Linux, MacOS). Mobile: Android
  The Chinese name of the project is "Nine Songs Music | 九歌", abbreviated as NSMusicS<br> inspired by ["Chu Ci"] | 楚辞, to commemorate ["Qu Yuan"] | 屈原<br>
 
 ## New Function
-NineSong Server will be released in June this year.  
-NSMusicS will support Docker deployment by default and integrate the NineSong streaming service.  
+[NineSong](https://github.com/Super-Badmen-Viper/NineSong) Server will be released in June this year.  
+NSMusicS will support Docker deployment by default and integrate the [NineSong](https://github.com/Super-Badmen-Viper/NineSong) streaming service.  
 Compared to other music servers (such as Navidrome, Jellyfin, Emby, Plex, Subsonic, Gonic), it offers the following enhanced features:
 - More detailed music library management, including remote upload, synchronization, and download.
 - More detailed music metadata TAG management, with support for remote TAG upload and synchronized editing.
@@ -53,8 +53,8 @@ marking a milestone in the NineSong Music Scene as the first application scenari
 - [ ] various music usage scenarios(For NineSong: Server)
 - [x] System backend playback -tray (win10+、MacOS(arm、x64))
 - [ ] System backend playback -tray (which will soon support Linux) 
-      
-## NineSong | NineSong Multimedia(Server) : 九歌多媒体
+    
+## [NineSong](https://github.com/Super-Badmen-Viper/NineSong) | [NineSong Multimedia(Server) : 九歌多媒体](https://github.com/Super-Badmen-Viper/NineSong)
 - [ ] Compatible with streaming media servers (Jellyfin、Emby、Navidrome、Plex)
 - [ ] General file library management(Audio、Video、Image、Text、Document、Archive、Executable、Database、Unknown)
 - [ ] Scene of Streaming Music and Karaoke
