@@ -10,20 +10,22 @@ ensuring each operating system (desktop: Windows, Linux, MacOS). Mobile: Android
  The Chinese name of the project is "Nine Songs Music | 九歌", abbreviated as NSMusicS<br> inspired by ["Chu Ci"] | 楚辞, to commemorate ["Qu Yuan"] | 屈原<br>
 
 ## New Function
-[NineSong](https://github.com/Super-Badmen-Viper/NineSong) | NineSong Multimedia(Server)   
-Project Address: https://github.com/Super-Badmen-Viper/NineSong  
-The [NineSong](https://github.com/Super-Badmen-Viper/NineSong) server will be released in June this year, and NSMusicS will be able to deploy Docker and integrate NineSong streaming services by default.  
-Compared to other music servers (Navidrome, Jellyfin, Emby, Plex, Subsonic, Gonic),
-It has better functions, as follows: 
- - More detailed music library managementand support for remote upload, synchronization, and download of music libraries
- - More detailed music metadata TAG management, supporting remote TAG upload and synchronous modification
- - - Add TAG settings (singer avatar, singer photo (multiple choices), album cover, song sound quality version (multiple choices), song lyrics version (multiple choices))
- - - Added adaptation to the free music TAG API, allowing users to obtain the online TAG of their songs and choose whether to synchronize TAG data。https://musicbrainz.org/、https://www.theaudiodb.com/
- - More detailed music recommendations tailored to your playback data
- - - Add tag word cloud for users to recommend interests
- - More detailed music playback experience, with a variety of playback modes available
- - It can be used through a web browser to automatically respond to changes in the layout of computer and mobile applications based on screen ratio
-
+NineSong Server will be released in June this year.  
+NSMusicS will support Docker deployment by default and integrate the NineSong streaming service.  
+Compared to other music servers (such as Navidrome, Jellyfin, Emby, Plex, Subsonic, Gonic), it offers the following enhanced features:
+- More detailed music library management, including remote upload, synchronization, and download.
+- More detailed music metadata TAG management, with support for remote TAG upload and synchronized editing.
+- Add TAG settings (artist avatar, artist photos (multiple selections), album cover, song quality version (multiple selections), and lyrics version (single selection)).
+- Adaptation of a free music TAG API, allowing users to obtain online TAGs for their songs and choose whether to synchronize TAG data.
+- - https://musicbrainz.org/、https://www.theaudiodb.com/
+- More detailed music recommendations based on your playback data.
+- - Phase 1(June): Add tag clouds to recommend music based on user interests.
+- - Phase 2(August): Use lightweight recommendation algorithms based on usage data.
+- - Phase 3(October): Build a music knowledge graph for smarter recommendations by analyzing music metadata.
+- - Phase 4(December): Combine knowledge graphs with large models for advanced music recommendations.
+- A richer music playback experience with a variety of playback modes for a more comprehensive and refined effect.
+- Multi track sound effect settings and transmission(October)
+ 
 The cross platform version of NSMusicS Flutter for mobile devices will be released by the end of this year
 marking a milestone in the NineSong Music Scene as the first application scenario of the NineSong software ecosystem
 
