@@ -22,7 +22,7 @@ Compared to other music servers (such as Navidrome, Jellyfin, Emby, Plex, Subson
 - - Phase 1(June): Add tag clouds to recommend music based on user interests.
 - - Phase 2(August): Use lightweight recommendation algorithms based on usage data.
 - - Phase 3(October): Build a music knowledge graph for smarter recommendations by analyzing music metadata.
-- - Phase 4(December): Combine knowledge graphs with large models for advanced music recommendations.
+- - Phase 4(December): Combine knowledge graphs with LLM(DeepSeek) for advanced music recommendations.
 - A richer music playback experience with a variety of playback modes for a more comprehensive and refined effect.
 - Multi track sound effect settings and transmission(October)
  

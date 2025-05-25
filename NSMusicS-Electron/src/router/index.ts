@@ -59,14 +59,6 @@ const router = createRouter({
       }
     },
     {
-      path: '/genre',
-      name: 'genre',
-      component: () => import('@/router/router_views/router_music/Router_Genre.vue'),
-      meta: {
-        cleanup: true
-      }
-    },
-    {
       path: '/setting',
       name: 'setting',
       component: () => import('@/router/router_views/router_server/View_Server_Setting.vue'),

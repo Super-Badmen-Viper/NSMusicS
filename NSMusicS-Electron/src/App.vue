@@ -127,18 +127,6 @@ function create_menuOptions_appBar(){
         key: 'artist',
         icon: renderIcon(UserAvatarFilledAlt)
       },
-      // {
-      //   label: computed(() => renderRouterLink('genre', t('entity.genre_other'))),
-      //   key: 'genre',
-      //   icon: renderIcon(TagMultiple24Regular)
-      // },
-      // {
-      //   label: computed(() => t('TabMusic')),
-      //   icon: renderIcon(LibraryMusicOutlined),
-      //   children: [
-      //
-      //   ]
-      // },
   )
   /// 兼容性代码，在更新多模态模式之后，将删除方法部分代码
   store_app_configs_info.menuOptions_selectd_model_1 = false
@@ -372,9 +360,6 @@ routers.afterEach(async (to, from) => {
       store_router_data_info.router_select_model_artist = true
       store_router_data_info.router_name = to.name
       Init_page_artistlists_statistic_Data()
-    }else if(to.name === 'genre'){
-      store_router_data_info.router_select_model_genre = true
-      store_router_data_info.router_name = to.name
     }else if(to.name === 'login') {
       if(!isElectron) {
         store_router_data_info.router_select_model_server_login = true
@@ -383,7 +368,7 @@ routers.afterEach(async (to, from) => {
     }else if(to.name === 'library'){
       store_router_data_info.router_select_model_server_setting = true
       store_router_data_info.router_name = to.name
-    }else{ //  if(to.name === 'setting')
+    }else{
       store_router_data_info.router_select_model_server_setting = true
       store_router_data_info.router_name = to.name
     }

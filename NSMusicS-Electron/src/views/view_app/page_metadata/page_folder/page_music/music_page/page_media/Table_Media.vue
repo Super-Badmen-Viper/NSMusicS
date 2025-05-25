@@ -1039,6 +1039,9 @@ function Refresh_page_songlists_statistic(){
 }
 onMounted(() => {
   Refresh_page_songlists_statistic();
+  store_view_media_page_logic.page_songlists_keyword = ''
+  input_search_InstRef.value?.clear()
+  store_view_media_page_logic.page_songlists_keywordFilter = ""
 })
 const stopWatching_boolHandleItemClick_Favorite = watch(() => store_player_audio_logic.boolHandleItemClick_Favorite, (newValue) => {
   if(newValue) {
@@ -1067,31 +1070,6 @@ onBeforeUnmount(() => {
     <div class="dynamic-scroller-demo">
       <n-space vertical @wheel.prevent style="overflow: hidden;">
         <n-space align="center">
-          <n-space v-if="false">
-            <n-tooltip trigger="hover" placement="top">
-              <template #trigger>
-                <n-button quaternary circle style="margin-left:2px" @click="get_router_history_model_pervious">
-                  <template #icon>
-                    <n-icon size="20" :depth="2"><ChevronLeft16Filled/></n-icon>
-                  </template>
-                </n-button>
-              </template>
-              {{ $t('common.backward') }}
-            </n-tooltip>
-            <div style="margin-top: 4px;">
-              {{ store_router_history_data_of_media.router_select_history_date_of_Media?.id ?? '' }} / {{ store_router_history_data_of_media.router_history_datas_of_Media?.length ?? '' }}
-            </div>
-            <n-tooltip trigger="hover" placement="top">
-              <template #trigger>
-                <n-button quaternary circle style="margin-left:4px" @click="get_router_history_model_next">
-                  <template #icon>
-                    <n-icon size="20" :depth="2"><ChevronRight16Filled/></n-icon>
-                  </template>
-                </n-button>
-              </template>
-              {{ $t('common.forward') }}
-            </n-tooltip>
-          </n-space>
           <n-space>
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
@@ -1949,18 +1927,6 @@ onBeforeUnmount(() => {
       </n-space>
     </n-card>
   </n-modal>
-  <!--  -->
-  <div class="scorller_to_SortAZ" v-if="false">
-    <n-space>
-      <n-button
-          v-for="charCode in Array.from({length: 26}, (_, i) => i + 65)"
-          :key="charCode"
-          text
-          style="display: block;">
-        {{ String.fromCharCode(charCode) }}
-      </n-button>
-    </n-space>
-  </div>
 </template>
 
 <style>

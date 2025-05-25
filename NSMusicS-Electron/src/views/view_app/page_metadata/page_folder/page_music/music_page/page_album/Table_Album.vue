@@ -46,8 +46,8 @@ import {store_router_data_info} from "@/router/router_store/store_router_data_in
 import {store_player_tag_modify} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_tag_modify";
 
 const { t } = useI18n({
-    inheritLocale: true
-  })
+  inheritLocale: true
+})
 
 ////// albumlist_view page_layout gridItems
 const item_album = ref<number>(160)
@@ -617,6 +617,9 @@ function Refresh_page_albumlists_statistic(){
 }
 onMounted(() => {
   Refresh_page_albumlists_statistic();
+  input_search_InstRef.value?.clear()
+  bool_show_search_area.value = false
+  store_view_album_page_logic.page_albumlists_keyword = ""
 })
 const stopWatching_boolHandleItemClick_Played = watch(() => store_player_audio_logic.boolHandleItemClick_Played, (newValue, oldValue) => {
   if (newValue && newValue !== oldValue) {
@@ -638,32 +641,7 @@ onBeforeUnmount(() => {
     <div class="album-wall-container">
       <n-space vertical @wheel.prevent style="overflow: hidden;">
         <n-space align="center">
-          <n-space v-if="store_router_data_info.store_router_history_data_of_local">
-            <n-tooltip trigger="hover" placement="top">
-              <template #trigger>
-                <n-button quaternary circle style="margin-left:2px" @click="get_router_history_model_pervious">
-                  <template #icon>
-                    <n-icon :size="20"><ChevronLeft16Filled/></n-icon>
-                  </template>
-                </n-button>
-              </template>
-              {{ $t('common.backward') }}
-            </n-tooltip>
-            <div style="margin-top: 4px;">
-              {{ store_router_history_data_of_album.router_select_history_date_of_Album?.id ?? '' }} / {{ store_router_history_data_of_album.router_history_datas_of_Album?.length ?? '' }}
-            </div>
-            <n-tooltip trigger="hover" placement="top">
-              <template #trigger>
-                <n-button quaternary circle style="margin-left:4px" @click="get_router_history_model_next">
-                  <template #icon>
-                    <n-icon :size="20"><ChevronRight16Filled/></n-icon>
-                  </template>
-                </n-button>
-              </template>
-              {{ $t('common.forward') }}
-            </n-tooltip>
-          </n-space>
-          <n-space v-if="store_router_data_info.store_router_history_data_of_web">
+          <n-space>
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
                 <n-button quaternary circle style="margin-left:4px"
@@ -689,7 +667,6 @@ onBeforeUnmount(() => {
             {{ $t('common.refresh') }}
           </n-tooltip>
           <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
-
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle @click="show_search_area">

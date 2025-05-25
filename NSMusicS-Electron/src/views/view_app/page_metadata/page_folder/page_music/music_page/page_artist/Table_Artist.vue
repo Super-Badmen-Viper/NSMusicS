@@ -330,11 +330,6 @@ const options_Filter = ref([
     }
   }
 ])
-const options_Filter_handleSelect = () => {
-  store_view_artist_page_logic.page_artistlists_selected = 'artist_list_love'
-  console.log('selected_value_for_artistlistall：'+'artist_list_love');
-  breadcrumbItems.value = store_view_artist_page_logic.page_artistlists_options.find(option => option.value === 'artist_list_love')?.label || '';
-}
 
 ////// dynamicScroller of artistlist_view
 const dynamicScroller = ref(null as any);
@@ -548,18 +543,6 @@ const onScroll = async () => {
   show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150;
 };
 
-//////
-const onRefreshSharp = async () => {
-  if(store_server_user_model.model_server_type_of_web){
-    store_general_fetch_artist_list.fetchData_Artist_of_server_web_start()
-  }else if(store_server_user_model.model_server_type_of_local){
-    input_search_InstRef.value?.clear()
-    bool_show_search_area.value = false
-    store_view_artist_page_logic.page_artistlists_keyword = ""
-    store_general_fetch_artist_list.fetchData_Artist()
-  }
-}
-
 const page_artistlists_statistic = ref<{
   label: '',
   artist_count: '',
@@ -598,20 +581,6 @@ onBeforeUnmount(() => {
     <div class="artist-wall-container">
       <n-space vertical @wheel.prevent style="overflow: hidden;">
         <n-space align="center">
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button quaternary circle
-                        style="margin-left:4px"
-                        @click="onRefreshSharp">
-                <template #icon>
-                  <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
-                </template>
-              </n-button>
-            </template>
-            {{ $t('common.refresh') }}
-          </n-tooltip>
-          <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
-
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle
@@ -655,22 +624,6 @@ onBeforeUnmount(() => {
                 </n-button>
               </template>
               {{ $t('LabelSortOrder') }}
-            </n-tooltip>
-          </n-dropdown>
-
-          <n-dropdown
-              v-if="false"
-              trigger="click" :show-arrow="true"
-              :options="options_Filter" @select="options_Filter_handleSelect">
-            <n-tooltip trigger="hover" placement="top">
-              <template #trigger>
-                <n-button quaternary circle style="margin-left:4px">
-                  <template #icon>
-                    <n-icon :size="20"><Filter20Filled/></n-icon>
-                  </template>
-                </n-button>
-              </template>
-              {{ $t('Filters') }}
             </n-tooltip>
           </n-dropdown>
 
