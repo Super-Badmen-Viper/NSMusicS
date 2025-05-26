@@ -93,8 +93,9 @@ if(store_server_user_model.model_server_type_of_local || (store_server_users.ser
 ){
   options_Sort_key.value = [
     {label:computed(() => t('filter.title')), key: 'title', state_Sort: state_Sort.Default },
-    {label:computed(() => t('entity.artist_other')), key: 'artist', state_Sort: state_Sort.Default },
     {label:computed(() => t('entity.album_other')), key: 'album', state_Sort: state_Sort.Default },
+    {label:computed(() => t('entity.artist_other')), key: 'artist', state_Sort: state_Sort.Default },
+    {label:computed(() => t('table.column.albumArtist')), key: 'album_artist', state_Sort: state_Sort.Default },
     {label:computed(() => t('filter.releaseYear')), key: 'year', state_Sort: state_Sort.Default },
     {label:computed(() => t('filter.duration')), key: 'duration', state_Sort: state_Sort.Default },
     {label:computed(() => t('common.bitrate')), key: 'bit_rate', state_Sort: state_Sort.Default },
@@ -415,13 +416,11 @@ const handleItemClick_title = (title:string) => {
     store_view_media_page_logic.get_page_songlists_keyword(title)
   }
 }
-const handleItemClick_artist = (artist:string) => {
+const handleItemClick_artist = async (artist:string) => {
   if(
       store_server_user_model.model_server_type_of_local
       ||
       (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)
-      ||
-      (store_server_users.server_select_kind === 'ninesong' && store_server_user_model.model_server_type_of_web)
   ) {
     click_count = 0;
     if (store_server_user_model.model_server_type_of_local) {
@@ -437,17 +436,24 @@ const handleItemClick_artist = (artist:string) => {
       store_view_media_page_logic.page_songlists_input_search_Value = artist
       store_view_media_page_logic.get_page_songlists_keyword(artist)
     }
+  }else if(store_server_users.server_select_kind === 'ninesong' && store_server_user_model.model_server_type_of_web){
+    store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
+    store_view_media_page_logic.page_songlists_bool_show_search_area = true
+    store_view_media_page_logic.page_songlists_input_search_Value = artist
+    // 应对接 AllArtistIDs
+    store_view_media_page_logic.get_page_songlists_keyword(artist)
+    // store_general_fetch_media_list.set_artist_id(artist)
+    // await store_general_fetch_media_list.fetchData_Media()
+    // store_general_fetch_media_list.set_artist_id('')
   }else{
     message.warning('Jellyfin / Emby ' + t('ContainerNotSupported') + ' ' + t('setting.hotkey_localSearch'))
   }
 }
-const handleItemClick_album = (album_id:string) => {
+const handleItemClick_album = async (album_id:string) => {
   if(
       store_server_user_model.model_server_type_of_local
       ||
       (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)
-      ||
-      (store_server_users.server_select_kind === 'ninesong' && store_server_user_model.model_server_type_of_web)
   ) {
     click_count = 0;
     if (store_server_user_model.model_server_type_of_local) {
@@ -463,6 +469,13 @@ const handleItemClick_album = (album_id:string) => {
       store_view_media_page_logic.page_songlists_input_search_Value = album_id
       store_view_media_page_logic.get_page_songlists_keyword(album_id)
     }
+  }else if(store_server_users.server_select_kind === 'ninesong' && store_server_user_model.model_server_type_of_web){
+    store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
+    store_view_media_page_logic.page_songlists_bool_show_search_area = true
+    store_view_media_page_logic.page_songlists_input_search_Value = album_id
+    store_general_fetch_media_list.set_album_id(album_id)
+    await store_general_fetch_media_list.fetchData_Media()
+    store_general_fetch_media_list.set_album_id('')
   }else{
     message.warning('Jellyfin / Emby ' + t('ContainerNotSupported') + ' ' + t('setting.hotkey_localSearch'))
   }
@@ -1459,13 +1472,7 @@ onBeforeUnmount(() => {
                       -webkit-line-clamp: 1;
                       overflow: hidden;
                       text-overflow: ellipsis;"
-                      @click="() => {
-                        if(store_server_user_model.model_server_type_of_local) {
-                          handleItemClick_album(store_player_audio_info.page_top_album_id)
-                        }else if(store_server_user_model.model_server_type_of_web) {
-                          handleItemClick_album(store_player_audio_info.page_top_album_name)
-                        }
-                      }">
+                      >
                       {{ store_player_audio_info.this_audio_song_name }}
                     </div>
                   </n-space>
@@ -1622,10 +1629,17 @@ onBeforeUnmount(() => {
                   {{ item.title }}
                 </span>
                 <br>
-                <template v-for="artist in item.artist.split(/[\/|｜]/)">
+                <template v-for="artist in item.artist.split(/[\/|｜、]/)">
                   <span
                     style="font-size: 14px;font-weight: 400;"
-                    @click="handleItemClick_artist(artist)">
+                    @click="()=>{
+                      if(store_server_users.server_select_kind === 'ninesong'){
+                        handleItemClick_artist(artist)
+                        // 应对接 AllArtistIDs
+                      }else{
+                        handleItemClick_artist(artist)
+                      }
+                    }">
                     {{ artist + '&nbsp' }}
                   </span>
                 </template>
@@ -1637,7 +1651,11 @@ onBeforeUnmount(() => {
                     if(store_server_user_model.model_server_type_of_local) {
                       handleItemClick_album(item.album_id)
                     }else if(store_server_user_model.model_server_type_of_web) {
-                      handleItemClick_album(item.album)
+                      if(store_server_users.server_select_kind === 'ninesong'){
+                        handleItemClick_album(item.album_id)
+                      }else{
+                        handleItemClick_album(item.album)
+                      }
                     }
                   }"
                 >{{ item.album }}</span>
@@ -1696,9 +1714,7 @@ onBeforeUnmount(() => {
         <v-contextmenu-item
             v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local"
             @click="()=>{
-              handleItemClick_title(
-                store_playlist_list_info.playlist_Menu_Item.title
-              )
+              handleItemClick_title(store_playlist_list_info.playlist_Menu_Item.title)
             }">
           {{ $t('Search') + $t('LabelTitle') }}
         </v-contextmenu-item>
@@ -1706,24 +1722,31 @@ onBeforeUnmount(() => {
             v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local"
             @click="()=>{
               if(store_server_user_model.model_server_type_of_local) {
-                handleItemClick_album(
-                  store_playlist_list_info.playlist_Menu_Item.album_id
-                )
+                handleItemClick_album(store_playlist_list_info.playlist_Menu_Item.album_id)
               }else if(store_server_user_model.model_server_type_of_web) {
-                handleItemClick_album(
-                  store_playlist_list_info.playlist_Menu_Item.album
-                )
+                if(store_server_users.server_select_kind === 'ninesong'){
+                  handleItemClick_album(store_playlist_list_info.playlist_Menu_Item.album_id)
+                }else{
+                  handleItemClick_album(store_playlist_list_info.playlist_Menu_Item.album)
+                }
               }
             }">
           {{ $t('ViewAlbum') }}
         </v-contextmenu-item>
         <template
             v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local"
-            v-for="artist in store_playlist_list_info.playlist_Menu_Item.artist.split(/[\/|｜]/)">
+            v-for="artist in store_playlist_list_info.playlist_Menu_Item.artist.split(/[\/|｜、]/)">
           <v-contextmenu-item>
             <span
                 style="font-size: 14px;font-weight: 400;"
-                @click="handleItemClick_artist(artist)">
+                @click="()=>{
+                  if(store_server_users.server_select_kind === 'ninesong'){
+                    handleItemClick_artist(artist)
+                    // 应对接 AllArtistIDs
+                  }else{
+                    handleItemClick_artist(artist)
+                  }
+                }">
               {{ $t('ViewAlbumArtist') + ' | ' + artist + '&nbsp' }}
             </span>
           </v-contextmenu-item>

@@ -942,7 +942,7 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
               <span style="font-size: 16px;">
                 -
               </span>
-              <template v-for="artist in store_player_audio_info.this_audio_artist_name.split(/[\/|｜]/)">
+              <template v-for="artist in store_player_audio_info.this_audio_artist_name.split(/[\/|｜、]/)">
                 <span id="bar_artist_name_part" @click="handleItemClick_artist(artist)">{{ artist + '&nbsp' }}</span>
               </template>
             </n-ellipsis>

@@ -286,7 +286,7 @@ onMounted(()=>{
                   {{ item.title }}
                 </span>
                 <br>
-                <template v-for="artist in item.artist.split(/[\/|｜]/)">
+                <template v-for="artist in item.artist.split(/[\/|｜、]/)">
                   <span
                     :style="{
                       color: store_app_configs_info.window_state_miniplayer_playlist ? '#A4A4A4' : '#FFFFFF',
@@ -371,7 +371,7 @@ onMounted(()=>{
                   {{ item.title }}
                 </span>
                 <br>
-                <template v-for="artist in item.artist.split(/[\/|｜]/)">
+                <template v-for="artist in item.artist.split(/[\/|｜、]/)">
                   <span
                     :style="{
                       color: store_app_configs_info.window_state_miniplayer_playlist ? '#A4A4A4' : '#FFFFFF',

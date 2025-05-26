@@ -129,7 +129,8 @@ export const store_player_audio_logic = reactive({
         return `${formattedMinutes}:${formattedSeconds}`;
     },
     formatTime_RunTimeTicks(timestamp: number): string {
-        const milliseconds = Math.floor(timestamp / 10000);
+        const divisor = store_server_users.server_select_kind === 'ninesong' ? 100 : 1;
+        const milliseconds = Math.floor(timestamp / 10000 / divisor);
         const totalSeconds = Math.floor(milliseconds / 1000);
         const minutes = Math.floor(totalSeconds / 60);
         const seconds = Math.floor(totalSeconds % 60);

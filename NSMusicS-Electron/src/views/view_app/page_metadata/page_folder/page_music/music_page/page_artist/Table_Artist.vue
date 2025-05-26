@@ -178,6 +178,7 @@ if(store_server_user_model.model_server_type_of_local || (store_server_users.ser
 ){
   options_Sort_key.value = [
     {label:computed(() => t('entity.artist_other')), key: 'name', state_Sort: state_Sort.Default },
+    {label:computed(() => t('table.column.albumArtist')), key: 'album_artist', state_Sort: state_Sort.Default },
     {label:computed(() => t('entity.album_other')), key: 'album_count', state_Sort: state_Sort.Default },
     {label:computed(() => t('filter.songCount')), key: 'song_count', state_Sort: state_Sort.Default },
     {label:computed(() => t('filter.playCount')), key: 'play_count', state_Sort: state_Sort.Default },

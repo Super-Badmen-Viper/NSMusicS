@@ -677,7 +677,7 @@ onBeforeUnmount(() => {
                 </n-space>
                 <n-space style="margin-top: -2px;">
                   <n-ellipsis style="width: 250px;color: #929292;">
-                    <template v-for="artist in store_player_audio_info.this_audio_artist_name.split(/[\/|｜]/)">
+                    <template v-for="artist in store_player_audio_info.this_audio_artist_name.split(/[\/|｜、]/)">
                       <span id="bar_ar_name_part">{{ artist + '&nbsp' }}</span>
                     </template>
                     <span id="bar_al_name">{{ '—&nbsp' + store_player_audio_info.this_audio_album_name }}</span>
@@ -801,7 +801,7 @@ onBeforeUnmount(() => {
                   </n-space>
                   <n-space style="margin-top: -2px;">
                     <n-ellipsis style="width: 250px;color: #929292;">
-                      <template v-for="artist in store_player_audio_info.this_audio_artist_name.split(/[\/|｜]/)">
+                      <template v-for="artist in store_player_audio_info.this_audio_artist_name.split(/[\/|｜、]/)">
                         <span id="bar_ar_name_part">{{ artist + '&nbsp' }}</span>
                       </template>
                       <span id="bar_al_name">{{ '—&nbsp' + store_player_audio_info.this_audio_album_name }}</span>
