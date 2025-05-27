@@ -385,9 +385,7 @@ const handleItemDbClick = async (media_file:any,index:number) => {
       if(store_server_user_model.model_server_type_of_web){
         /// Data synchronization
         store_general_fetch_media_list.fetchData_Media_of_data_synchronization_to_playlist()
-        if(store_server_users.server_select_kind === 'navidrome'){
-          store_server_user_model.random_play_model = false
-        }
+        store_server_user_model.random_play_model = false
       }
       //
       await store_player_audio_logic.update_current_media_info(media_file, index)
@@ -440,11 +438,10 @@ const handleItemClick_artist = async (artist:string) => {
     store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
     store_view_media_page_logic.page_songlists_bool_show_search_area = true
     store_view_media_page_logic.page_songlists_input_search_Value = artist
-    // 应对接 AllArtistIDs
-    store_view_media_page_logic.get_page_songlists_keyword(artist)
-    // store_general_fetch_media_list.set_artist_id(artist)
-    // await store_general_fetch_media_list.fetchData_Media()
-    // store_general_fetch_media_list.set_artist_id('')
+    // store_view_media_page_logic.get_page_songlists_keyword(artist)
+    store_general_fetch_media_list.set_artist_id(artist)
+    await store_general_fetch_media_list.fetchData_Media()
+    store_general_fetch_media_list.set_artist_id('')
   }else{
     message.warning('Jellyfin / Emby ' + t('ContainerNotSupported') + ' ' + t('setting.hotkey_localSearch'))
   }
@@ -1629,18 +1626,26 @@ onBeforeUnmount(() => {
                   {{ item.title }}
                 </span>
                 <br>
-                <template v-for="artist in item.artist.split(/[\/|｜、]/)">
+                <template v-if="item.compilation && item.compilation === 0" v-for="artist in item.artist.split(/[\/|｜、]/)">
                   <span
                     style="font-size: 14px;font-weight: 400;"
                     @click="()=>{
-                      if(store_server_users.server_select_kind === 'ninesong'){
-                        handleItemClick_artist(artist)
-                        // 应对接 AllArtistIDs
-                      }else{
-                        handleItemClick_artist(artist)
-                      }
+                      handleItemClick_artist(artist)
                     }">
                     {{ artist + '&nbsp' }}
+                  </span>
+                </template>
+                <template v-else v-for="artist in item.all_artist_ids">
+                  <span
+                      style="font-size: 14px;font-weight: 400;"
+                      @click="()=>{
+                      if(store_server_users.server_select_kind === 'ninesong'){
+                        handleItemClick_artist(artist.ArtistID)
+                      }else{
+                        handleItemClick_artist(artist.ArtistName)
+                      }
+                    }">
+                    {{ artist.ArtistName + '&nbsp' }}
                   </span>
                 </template>
               </div>

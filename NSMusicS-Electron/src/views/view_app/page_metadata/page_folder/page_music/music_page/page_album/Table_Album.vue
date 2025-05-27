@@ -427,16 +427,21 @@ const handleItemClick_album = (album:string) => {
 }
 const handleItemClick_artist = (artist_id:string) => {
   if(store_server_user_model.model_server_type_of_local) {
-    bool_show_search_area.value = true;
+    store_view_album_page_logic.page_albumlists_keyword = artist_id
+    store_view_album_page_logic.page_albumlists_input_search_Value = artist_id
+    store_view_media_page_logic.page_songlists_input_search_Value = artist_id
   }else if(store_server_user_model.model_server_type_of_web){
     if(store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
       store_general_fetch_album_list.set_artist_id(artist_id)
+      store_view_album_page_logic.page_albumlists_keyword = artist_id
+      store_view_album_page_logic.page_albumlists_input_search_Value = artist_id
+      store_view_media_page_logic.page_songlists_input_search_Value = artist_id
+    }else if(store_server_users.server_select_kind === 'ninesong'){
+      store_general_fetch_album_list.set_artist_id(artist_id)
+      store_general_fetch_album_list.fetchData_Album()
     }
-    bool_show_search_area.value = true
   }
-  store_view_album_page_logic.page_albumlists_keyword = artist_id
-  store_view_album_page_logic.page_albumlists_input_search_Value = artist_id
-  store_view_media_page_logic.page_songlists_input_search_Value = artist_id
+  bool_show_search_area.value = true
 }
 const Open_this_album_MediaList_click = (album_id:string) => {
   if(store_server_user_model.model_server_type_of_web){
@@ -1020,7 +1025,7 @@ onBeforeUnmount(() => {
                   </div>
                 </div>
               </div>
-              <div :style="{ width: item_album_image + 'px' }">
+              <div id="all_album_artist_name" :style="{ width: item_album_image + 'px' }">
                 <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
                   <div>
                     <span id="album_name"
@@ -1030,23 +1035,40 @@ onBeforeUnmount(() => {
                       {{ item.name }}
                     </span> 
                   </div>
-                  <div>
-                    <span id="album_artist_name"
-                      :style="{ maxWidth: item_album_txt + 'px' }"
-                      @click="() => {
-                        if(store_server_user_model.model_server_type_of_local) {
-                          handleItemClick_artist(item.artist_id)
-                        }else if(store_server_user_model.model_server_type_of_web) {
-                          if(store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
+                  <div :style="{ maxWidth: item_album_txt + 'px' }">
+                    <template v-if="item.compilation && item.compilation === 0" v-for="artist in item.artist.split(/[\/|｜、]/)">
+                      <span
+                        id="album_artist_name"
+                        style="font-size: 14px;font-weight: 400;"
+                        @click="()=>{
+                          if(store_server_user_model.model_server_type_of_local) {
                             handleItemClick_artist(item.artist_id)
-                          }else{
-                            handleItemClick_artist(item.artist)
+                          }else if(store_server_user_model.model_server_type_of_web) {
+                            if(store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
+                              handleItemClick_artist(item.artist_id)
+                            }else{
+                              handleItemClick_artist(item.artist)
+                            }
                           }
-                        }
-                      }"
-                    >
-                      {{ item.artist }}
-                    </span>
+                        }">
+                        {{ artist + '&nbsp' }}
+                      </span>
+                    </template>
+                    <template v-else v-for="artist in item.all_artist_ids">
+                      <span
+                        id="album_artist_name"
+                        style="font-size: 14px;font-weight: 400;"
+                        @click="()=>{
+                          if(store_server_users.server_select_kind === 'ninesong'){
+                            handleItemClick_artist(artist.ArtistID)
+                          }else{
+                            handleItemClick_artist(artist.ArtistName)
+                          }
+                          store_view_album_page_logic.page_albumlists_input_search_Value = artist.ArtistName
+                        }">
+                        {{ artist.ArtistName + '&nbsp' }}
+                      </span>
+                    </template>
                   </div>
                 </div>
               </div>
@@ -1187,14 +1209,16 @@ onBeforeUnmount(() => {
   cursor: pointer;
   color: #3DC3FF;
 }
+#all_album_artist_name{
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 #album_artist_name{
   font-size: 12px;
   font-weight: 500;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1; 
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 #album_artist_name:hover{
   text-decoration: underline;
