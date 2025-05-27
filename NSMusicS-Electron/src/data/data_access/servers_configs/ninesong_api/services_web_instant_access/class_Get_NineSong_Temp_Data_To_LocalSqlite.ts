@@ -283,7 +283,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
         _album_id:string, _artist_id:string,
     ){
         url = url.includes('api') ? url : url + '/api';
-        let songlist = [];
+        let song_list = [];
         let totalCount = 0;
         if (playlist_id === '') {
             const data = await this.medias_ApiService_of_NineSong.getMedias(
@@ -292,7 +292,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                 year,
                 _album_id, _artist_id,
             );
-            songlist = data["ninesong-response"]["mediaFiles"];
+            song_list = data["ninesong-response"]["mediaFiles"];
             totalCount = data["ninesong-response"]["count"];
         } else {
             const data = await this.medias_ApiService_of_NineSong.getMedias_Playlist(
@@ -302,18 +302,18 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                 year,
                 _album_id, _artist_id,
             );
-            songlist = data["ninesong-response"]["mediaFiles"];
+            song_list = data["ninesong-response"]["mediaFiles"];
             totalCount = data["ninesong-response"]["count"];
         }
         ///
-        if (Array.isArray(songlist) && songlist.length > 0) {
+        if (Array.isArray(song_list) && song_list.length > 0) {
             if (store_general_fetch_media_list._load_model === 'search') {
-                const existingSong = store_view_media_page_info.media_Files_temporary.find(item => item.id === songlist[0].ID);
+                const existingSong = store_view_media_page_info.media_Files_temporary.find(item => item.id === song_list[0].ID);
                 if (existingSong) {
                     return;
                 }
             } else {
-                const existingSong = store_playlist_list_info.playlist_MediaFiles_temporary.find(item => item.id === songlist[0].ID);
+                const existingSong = store_playlist_list_info.playlist_MediaFiles_temporary.find(item => item.id === song_list[0].ID);
                 if (existingSong) {
                     return;
                 }
@@ -322,16 +322,16 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
             return;
         }
         ///
-        if (Array.isArray(songlist) && songlist.length > 0) {
+        if (Array.isArray(song_list) && song_list.length > 0) {
             if(_sort === 'play_date'){
-                songlist = songlist.filter(song => song.PlayCount > 0)
+                song_list = song_list.filter(song => song.PlayCount > 0)
             }
             store_general_fetch_player_list._totalCount = totalCount
             let last_index = store_general_fetch_media_list._load_model === 'search' ?
                 store_view_media_page_info.media_Files_temporary.length :
                 store_playlist_list_info.playlist_MediaFiles_temporary.length
             store_view_media_page_info.media_File_metadata = [];
-            songlist.map(async (song: any, index: number) => {
+            song_list.map(async (song: any, index: number) => {
                 const newsong = {
                     absoluteIndex: index + 1 + last_index,
                     favorite: song.Starred,
@@ -527,13 +527,12 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
         _start: string, _end:string,
     ){
         url = url.includes('api') ? url : url + '/api';
-        const data = await this.home_ApiService_of_NineSong.getRandomMedias(
+        let song_list = await this.home_ApiService_of_NineSong.getRandomMedias(
             _start, _end
         )
-        let songlist = data["ninesong-response"]["mediaFiles"]
-        if (Array.isArray(songlist) && songlist.length > 0) {
+        if (Array.isArray(song_list) && song_list.length > 0) {
             let last_index = 0;
-            songlist.map(async (song: any, index: number) => {
+            song_list.map(async (song: any, index: number) => {
                 const new_song = {
                     absoluteIndex: index + 1 + last_index,
                     favorite: song.Starred,
@@ -586,13 +585,13 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                     rg_album_peak: 0,
                     rg_track_gain: 0,
                     rg_track_peak: 0,
-                    medium_image_url: url + '/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=album&target_id=' + song.ID
+                    medium_image_url: url + '/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=media&target_id=' + song.ID
                 }
                 store_playlist_list_info.playlist_MediaFiles_temporary.push({
                     ...new_song,
                     play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
                 });
-                if(index === songlist.length - 1){
+                if(index === song_list.length - 1){
                     const index = store_server_user_model.random_play_model_add
                         ? store_playlist_list_info.playlist_MediaFiles_temporary.length - 10: 0
                     const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[index]

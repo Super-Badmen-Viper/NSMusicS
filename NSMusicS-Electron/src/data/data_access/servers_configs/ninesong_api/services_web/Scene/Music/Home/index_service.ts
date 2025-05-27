@@ -49,7 +49,7 @@ export class Home_ApiService_of_NineSong extends NineSong_Api_Services_Web {
                     end,
                 }
             );
-            return result["ninesong-response"]["medias"];
+            return result["ninesong-response"]["mediaFiles"];
         }catch (error) {
             console.error("Error fetching album list by play count:", error);
         }
