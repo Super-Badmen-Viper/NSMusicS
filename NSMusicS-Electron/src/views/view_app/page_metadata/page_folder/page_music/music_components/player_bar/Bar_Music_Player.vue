@@ -551,7 +551,7 @@ async function Play_Media_Order(model_num: string, increased: number) {
                   store_server_user_model.username,
                   store_server_user_model.token,
                   store_server_user_model.salt,
-                  30,
+                  '30',
                   '',
                   ''
               );

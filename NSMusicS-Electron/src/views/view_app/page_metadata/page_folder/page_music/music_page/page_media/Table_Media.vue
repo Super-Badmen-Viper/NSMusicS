@@ -893,7 +893,7 @@ async function begin_random_play_model() {
           store_server_user_model.username,
           store_server_user_model.token,
           store_server_user_model.salt,
-          10, '', ''
+          '30', '', ''
       )
     } else {
       store_view_media_page_logic.list_options_Hand_Sort = false

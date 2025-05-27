@@ -585,7 +585,7 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
                 });
                 if(index === songlist.length - 1){
                     const index = store_server_user_model.random_play_model_add
-                        ? store_playlist_list_info.playlist_MediaFiles_temporary.length - 10: 0
+                        ? store_playlist_list_info.playlist_MediaFiles_temporary.length - size: 0
                     const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[index]
                     await store_player_audio_logic.update_current_media_info(media_file, index)
                     store_playlist_list_logic.media_page_handleItemDbClick = false
