@@ -311,7 +311,8 @@ export const store_app_configs_logic_save = reactive({
                 'duration_txt',
                 'absoluteIndex',
                 'selected',
-                'playing'
+                'playing',
+                'all_artist_ids'
             ]);
             const data = store_playlist_list_info.playlist_MediaFiles_temporary
                 .filter(item => item.id && !excludedFields.has('id'))

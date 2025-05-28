@@ -539,9 +539,9 @@ onBeforeUnmount(() => {
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
                 <n-button quaternary
-                          @click="()=>{
-                        Play_this_album_MediaList_click(store_view_home_page_info.home_selected_top_album, 'random');
-                      }"
+                          @click="async ()=>{
+                            await Play_this_album_MediaList_click(store_view_home_page_info.home_selected_top_album, 'random');
+                          }"
                           style="margin-right: -6px;">
                   <template #icon>
                     <n-icon :size="20" :depth="2"><Play/></n-icon>
@@ -582,6 +582,7 @@ onBeforeUnmount(() => {
               <n-button quaternary @click="()=>{
                 store_general_fetch_home_list.fetchData_Home_of_maximum_playback();
                 dynamicScroller_maximum_playback.$el.scrollLeft = 0;
+                offset_maximum_playback = 0;
               }">
                 <template #icon>
                   <n-icon :size="20"><ArrowReset24Filled/></n-icon>
@@ -657,8 +658,8 @@ onBeforeUnmount(() => {
                   <div class="hover-content">
                     <button
                         class="play_this_album"
-                        @click="()=>{
-                          Play_this_album_MediaList_click(item, 'maximum');
+                        @click="async ()=>{
+                          await Play_this_album_MediaList_click(item, 'maximum');
                         }"
                         style="
                         border: 0;background-color: transparent;
@@ -755,6 +756,7 @@ onBeforeUnmount(() => {
               <n-button quaternary @click="()=>{
                 store_general_fetch_home_list.fetchData_Home_of_random_search();
                 dynamicScroller_random_search.$el.scrollLeft = 0;
+                offset_random_search = 0;
               }">
                 <template #icon>
                   <n-icon :size="20"><ArrowReset24Filled/></n-icon>
@@ -830,8 +832,8 @@ onBeforeUnmount(() => {
                   <div class="hover-content">
                     <button
                         class="play_this_album"
-                        @click="()=>{
-                          Play_this_album_MediaList_click(item, 'random');
+                        @click="async ()=>{
+                          await Play_this_album_MediaList_click(item, 'random');
                         }"
                         style="
                       border: 0;background-color: transparent;
@@ -927,6 +929,7 @@ onBeforeUnmount(() => {
               <n-button quaternary @click="()=>{
                 store_general_fetch_home_list.fetchData_Home_of_recently_added();
                 dynamicScroller_recently_added.$el.scrollLeft = 0;
+                offset_recently_added = 0;
               }">
                 <template #icon>
                   <n-icon :size="20"><ArrowReset24Filled/></n-icon>
@@ -1002,8 +1005,8 @@ onBeforeUnmount(() => {
                   <div class="hover-content">
                     <button
                         class="play_this_album"
-                        @click="()=>{
-                          Play_this_album_MediaList_click(item, 'recently_added');
+                        @click="async ()=>{
+                          await Play_this_album_MediaList_click(item, 'recently_added');
                         }"
                         style="
                         border: 0;background-color: transparent;
@@ -1099,6 +1102,7 @@ onBeforeUnmount(() => {
               <n-button quaternary @click="()=>{
                 store_general_fetch_home_list.fetchData_Home_of_recently_played();
                 dynamicScroller_recently_played.$el.scrollLeft = 0;
+                offset_recently_played = 0;
               }">
                 <template #icon>
                   <n-icon :size="20"><ArrowReset24Filled/></n-icon>
@@ -1174,8 +1178,8 @@ onBeforeUnmount(() => {
                   <div class="hover-content">
                     <button
                         class="play_this_album"
-                        @click="()=>{
-                          Play_this_album_MediaList_click(item, 'recently_played');
+                        @click="async ()=>{
+                          await Play_this_album_MediaList_click(item, 'recently_played');
                         }"
                         style="
                       border: 0;background-color: transparent;

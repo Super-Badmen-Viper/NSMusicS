@@ -67,7 +67,8 @@
             "mediaLibrary": "Médiální knihovna",
             "mediaLibrary_begin_import": "Zahájit Import",
             "mediaLibrary_media_tag_modify_local": "Momentálně je podporováno pouze místní prohlížení|úprava informací o značkách",
-            "hideHalfLyric": "Skrýt text písně před aktuálně sledovaným textem"
+            "hideHalfLyric": "Skrýt text písně před aktuálně sledovaným textem",
+            "guest": "Host"
         },
         "view_player": {
             "view_seting": {

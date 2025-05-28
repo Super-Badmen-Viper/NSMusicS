@@ -67,7 +67,8 @@
             "mediaLibrary": "メディアライブラリ",
             "mediaLibrary_begin_import": "インポートを開始",
             "mediaLibrary_media_tag_modify_local": "現在、ローカルモードでの閲覧|タグ情報の編集のみサポートされています",
-            "hideHalfLyric": "現在追っている歌詞以前の歌詞を隠す"
+            "hideHalfLyric": "現在追っている歌詞以前の歌詞を隠す",
+            "guest": "ゲスト"
         },
         "view_player": {
             "view_seting": {

@@ -63,8 +63,8 @@ export const store_general_fetch_home_list = reactive({
                 store_view_home_page_info.home_Files_temporary_maximum_playback = get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Maximum_Playback();
             } else if (store_server_user_model.model_server_type_of_web) {
                 if (store_server_users.server_select_kind === 'ninesong') {
-                    const get_Navidrome_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite();
-                    await get_Navidrome_Temp_Data_To_LocalSqlite.get_home_list_of_maximum_playback(
+                    const get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite();
+                    await get_NineSong_Temp_Data_To_LocalSqlite.get_home_list_of_maximum_playback(
                         store_server_login_info.server_url
                     );
                 }else if (store_server_users.server_select_kind === 'navidrome') {

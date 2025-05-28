@@ -67,7 +67,8 @@
             "mediaLibrary": "Libreria Multimediale",
             "mediaLibrary_begin_import": "Inizia Importazione",
             "mediaLibrary_media_tag_modify_local": "Attualmente, è supportata solo la navigazione in modalità locale|modifica delle informazioni dei tag",
-            "hideHalfLyric": "Nascondi le parole prima delle parole attualmente seguite"
+            "hideHalfLyric": "Nascondi le parole prima delle parole attualmente seguite",
+            "guest": "Ospite"
         },
         "view_player": {
             "view_seting": {

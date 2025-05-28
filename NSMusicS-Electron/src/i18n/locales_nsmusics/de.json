@@ -67,7 +67,8 @@
             "mediaLibrary": "Medienbibliothek",
             "mediaLibrary_begin_import": "Import Beginen",
             "mediaLibrary_media_tag_modify_local": "Derzeit wird nur die Lokale-Modus-Navigation|Bearbeitung von Tag-Informationen unterstützt",
-            "hideHalfLyric": "Verstecke die Textzeilen vor den aktuellen verfolgten Textzeilen"
+            "hideHalfLyric": "Verstecke die Textzeilen vor den aktuellen verfolgten Textzeilen",
+            "guest": "Gast"
         },
         "view_player": {
             "view_seting": {

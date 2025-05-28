@@ -67,7 +67,8 @@
             "mediaLibrary": "медијска библиотека",
             "mediaLibrary_begin_import": "Почни увоз",
             "mediaLibrary_media_tag_modify_local": "Тренутно, подржава се само локални режим претраживања|измена информација о ознакама",
-            "hideHalfLyric": "Сакриј текст песме пре текућег пратећег текста"
+            "hideHalfLyric": "Сакриј текст песме пре текућег пратећег текста",
+            "guest": "Гост"
         },
         "view_player": {
             "view_seting": {

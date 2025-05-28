@@ -67,7 +67,8 @@
             "mediaLibrary": "Biblioteka Multimedialna",
             "mediaLibrary_begin_import": "Rozpocznij Import",
             "mediaLibrary_media_tag_modify_local": "Obecnie obsługiwane są tylko przeglądanie w trybie lokalnym|edycja informacji o tagach",
-            "hideHalfLyric": "Ukryj tekst piosenki przed aktualnie śledzonym tekstem"
+            "hideHalfLyric": "Ukryj tekst piosenki przed aktualnie śledzonym tekstem",
+            "guest": "Gość"
         },
         "view_player": {
             "view_seting": {

@@ -880,8 +880,7 @@ onBeforeUnmount(() => {
                   </div>
                 </div>
               </div>
-              <div class="artist_text"
-                   style="margin-left: 2px;"
+              <div style="margin-left: 2px;"
                    :style="{ width: item_artist_image + 'px' }">
                 <div class="artist_left_text_artist_info" :style="{ width: item_artist_txt + 'px' }">
                   <div>
@@ -889,18 +888,30 @@ onBeforeUnmount(() => {
                       {{ item.name }}
                     </span>
                   </div>
-                  <div v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
-                      ">
-                    <span id="artist_artist_name" :style="{ maxWidth: item_artist_txt + 'px' }">
+                  <n-space id="artist_artist_name"
+                           justify="space-between"
+                           :style="{ width: item_artist_image + 'px' }"
+                           v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby')
+                           || store_server_user_model.model_server_type_of_local">
+                    <span>
                        {{ $t('entity.album_other') + ': ' + item.album_count }}
                     </span>
-                  </div>
-                  <div v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
-                             ">
-                    <span id="artist_artist_name" :style="{ maxWidth: item_artist_txt + 'px' }">
+                    <span v-if="store_server_users.server_select_kind === 'ninesong'" >
+                      {{ $t('nsmusics.view_page.guest') + $t('entity.track_other') + ': ' + item.guest_song_count }}
+                    </span>
+                  </n-space>
+                  <n-space id="artist_artist_name"
+                           justify="space-between"
+                           :style="{ width: item_artist_image + 'px' }"
+                           v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby')
+                           || store_server_user_model.model_server_type_of_local">
+                    <span>
                       {{ $t('entity.track_other') + ': ' + item.song_count }}
                     </span>
-                  </div>
+                    <span v-if="store_server_users.server_select_kind === 'ninesong'">
+                       {{ $t('nsmusics.view_page.guest') + $t('entity.album_other') + ': ' + item.guest_album_count }}
+                    </span>
+                  </n-space>
                 </div>
               </div>
             </div>
@@ -1012,20 +1023,6 @@ onBeforeUnmount(() => {
 #artist_artist_name{
   font-size: 12px;
   font-weight: 500;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1; 
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-#artist_artist_name{
-  font-size: 12px;
-  font-weight: 500;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1; 
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .play_this_artist:hover{

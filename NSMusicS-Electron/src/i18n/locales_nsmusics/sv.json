@@ -67,7 +67,8 @@
             "mediaLibrary": "Mediabibliotek",
             "mediaLibrary_begin_import": "Börja Importera",
             "mediaLibrary_media_tag_modify_local": "För närvarande stöds endast lokalt läge för bläddra|ändra tagginformation",
-            "hideHalfLyric": "Dölj texten före den aktuella följande texten"
+            "hideHalfLyric": "Dölj texten före den aktuella följande texten",
+            "guest": "Gäst"
         },
         "view_player": {
             "view_seting": {
