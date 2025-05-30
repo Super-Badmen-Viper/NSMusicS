@@ -1292,7 +1292,7 @@ html, body { scroll-behavior:smooth; }
   margin-left: 30px;
 }
 .view_show_data {
-  width: calc(100vw - 100px);
+  width: calc(100vw - 104px);
   height: calc(100vh - 150px);
 
   margin-left: 30px;

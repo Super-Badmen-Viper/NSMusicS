@@ -2,40 +2,49 @@
 <img src="https://github.com/user-attachments/assets/7534a7e7-c45a-4813-9210-2fc66c686164" width="49%">
 
 ## NSMusicS | Nine Song Music : 九歌音乐
-NSMusicS integrates its own [NineSong](https://github.com/Super-Badmen-Viper/NineSong) streaming server by default, and is also compatible with various mainstream open-source streaming servers,
+NSMusicS integrates its own [NineSong](https://github.com/Super-Badmen-Viper/NineSong) streaming server by default, and is also compatible with various mainstream open-source streaming servers: Navidrome、Jellyfin、Emby.....
   
 And implement cross platform professional music clients for various operating systems, 
 ensuring each operating system (desktop: Windows, Linux, MacOS). Mobile: Android, iOS. Data interoperability between the client and server of the in car system (Android)
-  
-The Chinese name of the project is "Nine Songs Music | 九歌", abbreviated as NSMusicS<br> inspired by ["Chu Ci"] | 楚辞, to commemorate ["Qu Yuan"] | 屈原<br>
 
-## New Function
+For NineSong, it only needs to respond to users around the world who need it and always maintain an open source status. You can use any product you like, whether it's following NineSong or choosing a seemingly famous but actually outdated product that is no longer updated and only maintained to meet the status quo
+
+## [NineSong](https://github.com/Super-Badmen-Viper/NineSong) Server New Function
 [NineSong](https://github.com/Super-Badmen-Viper/NineSong) Server will be released in June this year.  
 NSMusicS will support Docker deployment by default and integrate the [NineSong](https://github.com/Super-Badmen-Viper/NineSong) streaming service.  
 Compared to other music servers (such as Navidrome, Jellyfin, Emby, Plex, Subsonic, Gonic), it offers the following enhanced features:
-- More detailed music library management, including remote upload, synchronization, and download.
-- More detailed music metadata TAG management, with support for remote TAG upload and synchronized editing.
-- Add TAG settings (artist avatar, artist photos (multiple selections), album cover, song quality version (multiple selections), and lyrics version (single selection)).
-- Adaptation of a free music TAG API, allowing users to obtain online TAGs for their songs and choose whether to synchronize TAG data.
-- - https://musicbrainz.org/、https://www.theaudiodb.com/
-- More detailed music recommendations based on your playback data.
-- - Phase 1(June): Add tag clouds to recommend music based on user interests.
-- - Phase 2(August): Use lightweight recommendation algorithms based on usage data.
-- - Phase 3(October): Build a music knowledge graph for smarter recommendations by analyzing music metadata.
-- - Phase 4(December): Combine knowledge graphs with LLM(DeepSeek) for advanced music recommendations.
-- A richer music playback experience with a variety of playback modes for a more comprehensive and refined effect.
-- Multi track sound effect settings and transmission(October)
- 
-The cross platform version of NSMusicS Flutter for mobile devices will be released by the end of this year
-marking a milestone in the [NineSong](https://github.com/Super-Badmen-Viper/NineSong) Music Scene as the first application scenario of the NineSong software ecosystem
+- More comprehensive music library management:
+- - Rich single-level sorting options, supporting multi-level mixed sorting and multi-level mixed filtering;
+- - deeper processing of composite tags to make the relevance between musics more comprehensive;
+- - support for Chinese pinyin fuzzy search; support for quick initial letter jumping;
+- - support for dual-page browsing mode (unlimited virtual list, paged list);
+- More comprehensive music playback experience:
+- - various elegant playback styles[cover Square、cover Rotate、cover Beaut、cover Base、cover AlbumList];
+- - exclusive playback modes for various music files[normal model、cue-music model];
+- More complete TAG import and management:
+- - support for importing complete TAGs from more types of music files (including m4a and cue);
+- - support for user-visualized TAG management, allowing remote uploads, auto-associating, manual merging of artist-album-single TAGs;
+- - support for richer TAG fields: artist profile pictures, artist photos (multiple selection), album covers, song quality versions (multiple selection), and lyrics versions (single selection);
+- Integrated free public welfare music TAG API, allowing users to obtain online TAGs for songs and choose whether to synchronize TAG data.
+- Support for multi-channel audio effects; support for Advanced/Standard/Simple EQ; (October)
+- Personalized music recommendations based on user usage data.
+- - Phase 1 (June): Add tag cloud and recommend music based on user interests.
+- - Phase 2 (August): Use lightweight recommendation algorithms based on usage data.
+- - Phase 3 (October): Build a music knowledge graph by analyzing music metadata to achieve smarter recommendations.
+- - Phase 4 (December): Combine the knowledge graph with LLM (DeepSeek) for advanced music recommendations.
 
- In addition, NSMusicS also supports local mode to use local music libraries. And plan to support various types of network cloud drives，such as webdev，onedriver....
 
- After the initial development and improvement of NSMusicS, it will be integrated into various software ecosystems, such as:
-  - [ ] Xiaomi Home Integration for Home Assistant: 
-  [github: ha_xiaomi_home](https://github.com/XiaoMi/ha_xiaomi_home) (米家集成：智能家居系统)
-  - [ ] Xiaomi ecosystem of people, cars, and homes
-  (小米：人车家全生态)
+The cross platform version of NSMusicS Flutter for mobile devices will be released by the end of this year. marking a milestone in the [NineSong](https://github.com/Super-Badmen-Viper/NineSong) Music Scene as the first application scenario of the NineSong software ecosystem
+
+The NSMusicS client of Huawei HarmonyOS ecosystem will be released in 2026, also in conjunction with [NineSong](https://github.com/Super-Badmen-Viper/NineSong)
+
+In addition, NSMusicS also supports local mode to use local music libraries. And plan to support various types of network cloud drives，such as webdev，onedriver....
+
+After the initial development and improvement of NSMusicS, it will be integrated into various software ecosystems, such as:
+- [ ] Xiaomi Home Integration for Home Assistant: 
+[github: ha_xiaomi_home](https://github.com/XiaoMi/ha_xiaomi_home) (米家集成：智能家居系统)
+- [ ] Xiaomi ecosystem of people, cars, and homes
+(小米：人车家全生态)
 
 ## NSMusicS-Electron | NineSong Music(Desktop-client) : 九歌音乐
 - [x] supporting the Windows10+、MacOS(arm、x64)、Linux platform (which will soon support Docker)
@@ -93,14 +102,15 @@ marking a milestone in the [NineSong](https://github.com/Super-Badmen-Viper/Nine
 - Other | None
 
 ## Version：
-| Project   | Development status | Technology Framework     | Author/Copyright Owner | Operating systems         | LICENSE          |
-| :-----    | :----:              | :----:                   | :----:             | :----:                    | :----:                    | 
-| [NSMusicS : 九歌音乐桌面客户端 <br> (Desktop、Docker)](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">updateing</font>             | electron,nodejs,vue,ts,sqlite,docker [![My Skills](https://skillicons.dev/icons?i=electron,nodejs,vue,ts,sqlite,docker)](https://skillicons.dev)  | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  | Windows<br>Linux(ubuntu+)<br>Docker<br>MacOS | A-GPL 3.0 | Open source / Prohibition of commercial use | 
-| [NineSong : 九歌多媒体服务端 <br> (Docker)](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">updateing</font>             | Go,MongoDB,Gin,JWT,sqlite,docker [![My Skills](https://skillicons.dev/icons?i=go,mongodb,sqlite,docker)](https://skillicons.dev) | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  | Docker | A-GPL 3.0 | Open source / Prohibition of commercial use | 
-| NSMusicS_For_Flutter   |<font color="#00dd00">will developed</font> |  flutter,dart,androidstudio  [![My Skills](https://skillicons.dev/icons?i=flutter,dart,androidstudio)](https://skillicons.dev)   | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | Android11++ <br> IOS <br> HarmonyOS | A-GPL 3.0 | Open source / Prohibition of commercial use | 
-| NSMusicS_For_Audio   |<font color="#00dd00">will developed</font>  | pytorch,py,jupyter,matlab ![My Skills](https://go-skill-icons.vercel.app/api/icons?i=pytorch,py,jupyter,matlab)  | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  |    Windows10++<br>Linux<br>Docker   | A-GPL 3.0 | Open source / Prohibition of commercial use | 
-| NSMusicS_For_KG   |<font color="#00dd00">will developed</font> |  NebulaGraph / Neo4j <image width="200" src="https://www-cdn.nebula-graph.io/nebula-website-5.0/images/logo.png"/>      | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | Windows10++<br>Linux<br>Docker | A-GPL 3.0 | Open source / Prohibition of commercial use | 
-| [NSMusicS-WPF](https://github.com/Super-Badmen-Viper/NSMusicS_WPF) ?-> WinUI3 ??? https://github.com/Super-Badmen-Viper/NSMusicS_WPF  |<font color="#00dd00">need to be refactored</font> |  .net,cs(C#),sqlite ![My Skills](https://go-skill-icons.vercel.app/api/icons?i=dotnet,cs,sqlite)    | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | Windows10++ | A-GPL 3.0 | Open source / Prohibition of commercial use | 
+| Project   | Development status |                                                               Technology Framework                                                               | Author/Copyright Owner | Operating systems         | LICENSE          |
+| :-----    | :----:              |:------------------------------------------------------------------------------------------------------------------------------------------------:| :----:             | :----:                    | :----:                    | 
+| [NSMusicS : (Desktop、Docker)](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">updateing</font>             | electron,nodejs,vue,ts,sqlite,docker [![My Skills](https://skillicons.dev/icons?i=electron,nodejs,vue,ts,sqlite,docker)](https://skillicons.dev) | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  | Windows<br>Linux(ubuntu+)<br>Docker<br>MacOS | A-GPL 3.0 | Open source / Prohibition of commercial use | 
+| [NineSong : (Docker)](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">updateing</font>             |         Go,MongoDB,Gin,JWT,sqlite,docker [![My Skills](https://skillicons.dev/icons?i=go,mongodb,sqlite,docker)](https://skillicons.dev)         | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  | Docker | A-GPL 3.0 | Open source / Prohibition of commercial use | 
+| NSMusicS_For_Flutter   |<font color="#00dd00">will developed</font> |          flutter,dart,androidstudio  [![My Skills](https://skillicons.dev/icons?i=flutter,dart,androidstudio)](https://skillicons.dev)           | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | Android11++ <br> IOS <br> HarmonyOS | A-GPL 3.0 | Open source / Prohibition of commercial use | 
+| NSMusicS_For_HarmonyOS   |<font color="#00dd00">will developed</font> |                                                                      ArkTs,ArkUI                                                                      | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | Android11++ <br> IOS <br> HarmonyOS | A-GPL 3.0 | Open source / Prohibition of commercial use | 
+| NSMusicS_For_Audio   |<font color="#00dd00">will developed</font>  |                 pytorch,py,jupyter,matlab ![My Skills](https://go-skill-icons.vercel.app/api/icons?i=pytorch,py,jupyter,matlab)                  | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  |    Windows10++<br>Linux<br>Docker   | A-GPL 3.0 | Open source / Prohibition of commercial use | 
+| NSMusicS_For_KG   |<font color="#00dd00">will developed</font> |                NebulaGraph / Neo4j <image width="200" src="https://www-cdn.nebula-graph.io/nebula-website-5.0/images/logo.png"/>                 | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | Windows10++<br>Linux<br>Docker | A-GPL 3.0 | Open source / Prohibition of commercial use | 
+| [NSMusicS-WPF](https://github.com/Super-Badmen-Viper/NSMusicS_WPF) ?-> WinUI3 ??? https://github.com/Super-Badmen-Viper/NSMusicS_WPF  |<font color="#00dd00">need to be refactored</font> |                         .net,cs(C#),sqlite ![My Skills](https://go-skill-icons.vercel.app/api/icons?i=dotnet,cs,sqlite)                          | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | Windows10++ | A-GPL 3.0 | Open source / Prohibition of commercial use | 
 
 ## sponsor
 爱发电：https://afdian.com/a/fu_zi_qian  
@@ -172,3 +182,5 @@ npm run build # Package into the current system_configs's software package (such
  - As this project is currently independently developed by Xiang Cheng(myself), programming standards are a personal habit of the Xiang Cheng(myself), and coding standards are not yet standardized enough. However, this project will continue to undergo self refactoring and reverse development. It can be affirmed that in the future, NSMusicS will form a standard coding specification, which will be beneficial for the community to develop third-party NSMusicS plugins, Enable NSMusicS to meet the diverse needs of more potential customers，Most importantly, NSMusicS will always be open source and continuously updated
  - The expectation of the NSMusicS series products is to enable people around the world to use free, open-source, and user-friendly music products
  - 大道之行，天下为公。人神恋歌，九歌韵世。
+
+The Chinese name of the project is "Nine Song Music Super | 九歌音乐", abbreviated as NSMusicS<br> inspired by ["Chu Ci"] | 楚辞, to commemorate ["Qu Yuan"] | 屈原<br>

@@ -89,7 +89,7 @@ const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window
   }
 });
 const updateGridItems = () => {
-  collapsed_width.value = 145;
+  collapsed_width.value = 155;
   if(window.innerWidth > 2460){
     const num = window.innerWidth / 7.53
     itemSize.value = Math.floor(num) + 40;
@@ -1285,6 +1285,7 @@ onBeforeUnmount(() => {
 .home-wall-container {
   width: 100%;
   height: 100%;
+  padding-right: 20px;
   overflow-x: hidden;
   overflow-y: scroll;
 }

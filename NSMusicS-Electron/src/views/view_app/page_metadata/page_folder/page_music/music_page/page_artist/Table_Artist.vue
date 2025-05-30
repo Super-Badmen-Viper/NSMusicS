@@ -584,6 +584,18 @@ onBeforeUnmount(() => {
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle
+                        @click="store_general_fetch_artist_list.fetchData_Artist()">
+                <template #icon>
+                  <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('common.refresh') }}
+          </n-tooltip>
+          <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary circle
                         @click="show_search_area">
                 <template #icon>
                   <n-icon :size="20"><Search20Filled/></n-icon>
