@@ -11,9 +11,9 @@ At the same time, NSMusicS is also compatible with various mainstream open-sourc
 In addition, NSMusicS also supports local mode to use local music libraries. And plan to support various types of network cloud drives，such as webdev，onedriver....
 
 ## [NineSong](https://github.com/Super-Badmen-Viper/NineSong) Server New Function
-[NineSong](https://github.com/Super-Badmen-Viper/NineSong) Server will be released in June this year.
-The Docker version of NSMusicS must be deployed together with the NineSong server to be used and will be released in mid-June. Once you have deployed NSMusicS + NineSong, you will be able to experience a better experience than all currently available GitHub music servers.
-Compared to other music servers (such as Navidrome, Jellyfin, Emby, Plex, Subsonic, Gonic), it offers the following enhanced features:
+The Docker version of NSMusicS must be deployed together with the [NineSong](https://github.com/Super-Badmen-Viper/NineSong) server to be used and will be released in mid-June.    
+Once you have deployed NSMusicS + [NineSong](https://github.com/Super-Badmen-Viper/NineSong), you will be able to experience a better experience than all currently available GitHub music servers.   
+Compared to other music servers (such as Navidrome, Jellyfin, Emby, Plex, Subsonic, Gonic), it offers the following [enhanced features](https://github.com/Super-Badmen-Viper/NineSong):   
 For details of the new features, please visit the [NineSong](https://github.com/Super-Badmen-Viper/NineSong) to learn more
 
 ## NSMusicS-Electron | NineSong Music(Desktop-client) : 九歌音乐
