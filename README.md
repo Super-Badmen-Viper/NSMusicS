@@ -150,9 +150,12 @@ npm run build # Package into the current system_configs's software package (such
   - [jellyfin](https://github.com/jellyfin/jellyfin)
   - [emby](https://github.com/MediaBrowser/Emby)
   - .......
-- NSMusicS Web ImageResource Thanks:
+- NSMusicS ImageResource Thanks:
   - <a href="https://www.freepik.com/free-photo/black-retro-vinyl-record-design-element_12189639.htm#fromView=search&page=5&position=9&uuid=c046ed77-1d8d-4858-b3d8-e8a96afa3d8d">Image by rawpixel.com on Freepik</a>
   - <a href="https://www.freepik.com/free-psd/black-vinyl-record-blank-label-music-nostalgia_411796139.htm#fromView=search&page=7&position=29&uuid=924b9d6f-166d-4abf-ae7a-91cb2c6f7d41&query=vinyl">Image by muhammad.abdullah on Freepik</a>
+  - <a href="https://www.freepik.com/free-vector/cd-cover-design-mockup-vector_3758851.htm#fromView=search&page=2&position=37&uuid=9ffb6fa4-91f6-44b6-855c-0ef30dfc0fdf&query=album">Image by rawpixel.com on Freepik</a>
+  - <a href="https://www.freepik.com/free-vector/cute-astronaut-singing-with-microphone-headset-cartoon-vector-icon-illustration-science-holiday_342437890.htm#fromView=search&page=1&position=41&uuid=35a74e38-4db8-40b0-89c9-4a9267d74826&query=singer">Image by catalyststuff on Freepik</a>
+  - <a href="https://www.freepik.com/free-vector/cd-mock-up_1042134.htm#fromView=search&page=1&position=1&uuid=da331a05-47e9-42d2-ba07-c444e169648f&query=CD">Image by starline on Freepik</a>
 - NSMusicS WPF Of Thanks:
   - [NAudio](https://github.com/naudio/NAudio)
   - [cscore](https://github.com/filoe/cscore)

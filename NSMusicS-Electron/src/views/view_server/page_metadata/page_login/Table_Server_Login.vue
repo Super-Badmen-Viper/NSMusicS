@@ -4,7 +4,7 @@ import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs
 
 //////
 import { useI18n } from 'vue-i18n'
-import error_album from "@/assets/img/error_album.jpg";
+import error_album_old from "@/assets/img/error_album_old.jpg";
 import NSMusicS from "@/assets/img/NSMusicS.png";
 import {darkTheme, NConfigProvider, useMessage} from "naive-ui";
 import {store_server_login_info} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
@@ -30,7 +30,7 @@ async function login(){
       <n-layout
       embedded vertical
       :style="{
-        background: `url(${error_album}) no-repeat center center / cover`
+        background: `url(${error_album_old}) no-repeat center center / cover`
       }">
       <n-space
           style="width: 100vw;height: 100vh;"

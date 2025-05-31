@@ -34,7 +34,7 @@ import {
 
 ////// i18n auto lang
 import {useI18n} from 'vue-i18n'
-import error_album from '@/assets/img/error_album.jpg'
+import error_artist from '@/assets/img/error_artist.jpg'
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 ////// changed_data write to sqlite
 import {
@@ -77,7 +77,7 @@ const gridItems = ref(5);
 const itemSecondarySize = ref(185);
 const errorHandled = ref(new Map());
 const handleImageError = async (item: any) => {
-  let result_src = error_album;
+  let result_src = error_artist;
   if (errorHandled.value.has(item.id)) {
     item.medium_image_url = result_src;
     return;
@@ -98,7 +98,7 @@ const handleImageError = async (item: any) => {
       item.medium_image_url = result_src;
     }
   } else {
-    item.medium_image_url = error_album
+    item.medium_image_url = error_artist
   }
 };
 function getAssetImage(firstImage: string) {

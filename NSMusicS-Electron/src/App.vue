@@ -10,7 +10,8 @@ import {
   TextIndentIncreaseLtr20Filled,
   Settings20Regular,
   WindowNew16Regular,
-  Apps20Regular
+  Apps20Regular,
+  Album24Regular
 } from '@vicons/fluent'
 import {
   AlbumFilled,

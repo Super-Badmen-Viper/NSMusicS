@@ -29,7 +29,7 @@ import {
     store_server_login_info
 } from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
 import {Home_ApiService_of_NineSong} from "../services_web/Scene/Music/Home/index_service";
-import axios from "axios";
+import error_artist from "@/assets/img/error_artist.jpg";
 import error_album from "@/assets/img/error_album.jpg";
 
 export class Get_NineSong_Temp_Data_To_LocalSqlite{
@@ -551,7 +551,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                         medium_image_url: artist.HasCoverArt ?
                             url + '/media/cover?access_token=' + store_server_login_info.server_accessToken + '&type=artist&target_id=' + artist.ID
                             :
-                            error_album,
+                            error_artist,
                         large_image_url: '',
                         similar_artists: '',
                         external_url: '',

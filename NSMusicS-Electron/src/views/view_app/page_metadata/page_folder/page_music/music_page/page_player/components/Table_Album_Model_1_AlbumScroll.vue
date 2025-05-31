@@ -92,6 +92,11 @@ const nextSlideStyle = computed(() => {
       :style="{
         marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? 'calc(28vh - 182px)' : 'calc(28vh - 182px)',
         transition: 'margin 0.4s, height 0.4s',
+        backgroundImage:
+        (!store_playlist_list_info.playlist_MediaFiles_temporary_carousel ||
+          store_playlist_list_info.playlist_MediaFiles_temporary_carousel.length === 0)
+          ? `url(${error_album})` : 'none',
+        backgroundRepeat: 'no-repeat',backgroundSize: 'cover',
       }"
     >
       <n-carousel-item
