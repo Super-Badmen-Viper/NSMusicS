@@ -1626,7 +1626,7 @@ onBeforeUnmount(() => {
                   {{ item.title }}
                 </span>
                 <br>
-                <template v-if="item.compilation && item.compilation === 0" v-for="artist in item.artist.split(/[\/|｜、]/)">
+                <template v-if="item.all_artist_ids === undefined" v-for="artist in item.artist.split(/[\/|｜、]/)">
                   <span
                     style="font-size: 14px;font-weight: 400;"
                     @click="()=>{

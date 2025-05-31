@@ -1036,7 +1036,7 @@ onBeforeUnmount(() => {
                     </span> 
                   </div>
                   <div :style="{ maxWidth: item_album_txt + 'px' }">
-                    <template v-if="item.compilation && item.compilation === 0" v-for="artist in item.artist.split(/[\/|｜、]/)">
+                    <template v-if="item.all_artist_ids === undefined" v-for="artist in item.artist.split(/[\/|｜、]/)">
                       <span
                         id="album_artist_name"
                         style="font-size: 14px;font-weight: 400;"

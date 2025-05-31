@@ -7,44 +7,15 @@ NSMusicS integrates its own [NineSong](https://github.com/Super-Badmen-Viper/Nin
 And implement cross platform professional music clients for various operating systems, 
 ensuring each operating system (desktop: Windows, Linux, MacOS). Mobile: Android, iOS. Data interoperability between the client and server of the in car system (Android)
 
-For NineSong, it only needs to respond to users around the world who need it and always maintain an open source status. You can use any product you like, whether it's following NineSong or choosing a seemingly famous but actually outdated product that is no longer updated and only maintained to meet the status quo
+In addition, NSMusicS also supports local mode to use local music libraries. And plan to support various types of network cloud drives，such as webdev，onedriver....
+
+For NineSong, it only needs to respond to users around the world who need it and always maintain an open source status. You can use any product you like, whether it's following NineSong or choosing a seemingly famous but actually outdated product
 
 ## [NineSong](https://github.com/Super-Badmen-Viper/NineSong) Server New Function
 [NineSong](https://github.com/Super-Badmen-Viper/NineSong) Server will be released in June this year.  
 NSMusicS will support Docker deployment by default and integrate the [NineSong](https://github.com/Super-Badmen-Viper/NineSong) streaming service.  
 Compared to other music servers (such as Navidrome, Jellyfin, Emby, Plex, Subsonic, Gonic), it offers the following enhanced features:
-- More comprehensive music library management:
-- - Rich single-level sorting options, supporting multi-level mixed sorting and multi-level mixed filtering;
-- - deeper processing of composite tags to make the relevance between musics more comprehensive;
-- - support for Chinese pinyin fuzzy search; support for quick initial letter jumping;
-- - support for dual-page browsing mode (unlimited virtual list, paged list);
-- More comprehensive music playback experience:
-- - various elegant playback styles[cover Square、cover Rotate、cover Beaut、cover Base、cover AlbumList];
-- - exclusive playback modes for various music files[normal model、cue-music model];
-- More complete TAG import and management:
-- - support for importing complete TAGs from more types of music files (including m4a and cue);
-- - support for user-visualized TAG management, allowing remote uploads, auto-associating, manual merging of artist-album-single TAGs;
-- - support for richer TAG fields: artist profile pictures, artist photos (multiple selection), album covers, song quality versions (multiple selection), and lyrics versions (single selection);
-- Integrated free public welfare music TAG API, allowing users to obtain online TAGs for songs and choose whether to synchronize TAG data.
-- Support for multi-channel audio effects; support for Advanced/Standard/Simple EQ; (October)
-- Personalized music recommendations based on user usage data.
-- - Phase 1 (June): Add tag cloud and recommend music based on user interests.
-- - Phase 2 (August): Use lightweight recommendation algorithms based on usage data.
-- - Phase 3 (October): Build a music knowledge graph by analyzing music metadata to achieve smarter recommendations.
-- - Phase 4 (December): Combine the knowledge graph with LLM (DeepSeek) for advanced music recommendations.
-
-
-The cross platform version of NSMusicS Flutter for mobile devices will be released by the end of this year. marking a milestone in the [NineSong](https://github.com/Super-Badmen-Viper/NineSong) Music Scene as the first application scenario of the NineSong software ecosystem
-
-The NSMusicS client of Huawei HarmonyOS ecosystem will be released in 2026, also in conjunction with [NineSong](https://github.com/Super-Badmen-Viper/NineSong)
-
-In addition, NSMusicS also supports local mode to use local music libraries. And plan to support various types of network cloud drives，such as webdev，onedriver....
-
-After the initial development and improvement of NSMusicS, it will be integrated into various software ecosystems, such as:
-- [ ] Xiaomi Home Integration for Home Assistant: 
-[github: ha_xiaomi_home](https://github.com/XiaoMi/ha_xiaomi_home) (米家集成：智能家居系统)
-- [ ] Xiaomi ecosystem of people, cars, and homes
-(小米：人车家全生态)
+For details of the new features, please visit the [NineSong](https://github.com/Super-Badmen-Viper/NineSong) to learn more
 
 ## NSMusicS-Electron | NineSong Music(Desktop-client) : 九歌音乐
 - [x] supporting the Windows10+、MacOS(arm、x64)、Linux platform (which will soon support Docker)
@@ -100,6 +71,17 @@ After the initial development and improvement of NSMusicS, it will be integrated
 - QQ群聊
   - NSMusicS交流群（1）：228440692
 - Other | None
+
+## Subsequent updates
+- The cross platform version of NSMusicS Flutter for mobile devices will be released by the end of this year. marking a milestone in the [NineSong](https://github.com/Super-Badmen-Viper/NineSong) Music Scene as the first application scenario of the NineSong software ecosystem
+
+- The NSMusicS client of Huawei HarmonyOS ecosystem will be released in 2026, also in conjunction with [NineSong](https://github.com/Super-Badmen-Viper/NineSong)
+
+- After the initial development and improvement of NSMusicS, it will be integrated into various software ecosystems, such as:
+  - [ ] Xiaomi Home Integration for Home Assistant:
+    [github: ha_xiaomi_home](https://github.com/XiaoMi/ha_xiaomi_home) (米家集成：智能家居系统)
+  - [ ] Xiaomi ecosystem of people, cars, and homes
+    (小米：人车家全生态)
 
 ## Version：
 | Project   | Development status |                                                               Technology Framework                                                               | Author/Copyright Owner | Operating systems         | LICENSE          |
