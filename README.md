@@ -2,18 +2,17 @@
 <img src="https://github.com/user-attachments/assets/7534a7e7-c45a-4813-9210-2fc66c686164" width="49%">
 
 ## NSMusicS | Nine Song Music : 九歌音乐
-NSMusicS integrates its own [NineSong](https://github.com/Super-Badmen-Viper/NineSong) streaming server by default, and is also compatible with various mainstream open-source streaming servers: Navidrome、Jellyfin、Emby.....
-  
-And implement cross platform professional music clients for various operating systems, 
-ensuring each operating system (desktop: Windows, Linux, MacOS). Mobile: Android, iOS. Data interoperability between the client and server of the in car system (Android)
+NSMusicS is a client project that aims to support all platforms. The backend functionality of its Docker web version is implemented by another open-source project of mine: the [NineSong](https://github.com/Super-Badmen-Viper/NineSong) server written in Golang.  
+
+While giving NSMusicS a star, please also give a star to its server, [NineSong](https://github.com/Super-Badmen-Viper/NineSong).
+
+At the same time, NSMusicS is also compatible with various mainstream open-source streaming servers: Navidrome, Jellyfin, Emby. ....
 
 In addition, NSMusicS also supports local mode to use local music libraries. And plan to support various types of network cloud drives，such as webdev，onedriver....
 
-For NineSong, it only needs to respond to users around the world who need it and always maintain an open source status. You can use any product you like, whether it's following NineSong or choosing a seemingly famous but actually outdated product
-
 ## [NineSong](https://github.com/Super-Badmen-Viper/NineSong) Server New Function
-[NineSong](https://github.com/Super-Badmen-Viper/NineSong) Server will be released in June this year.  
-NSMusicS will support Docker deployment by default and integrate the [NineSong](https://github.com/Super-Badmen-Viper/NineSong) streaming service.  
+[NineSong](https://github.com/Super-Badmen-Viper/NineSong) Server will be released in June this year.
+The Docker version of NSMusicS must be deployed together with the NineSong server to be used and will be released in mid-June. Once you have deployed NSMusicS + NineSong, you will be able to experience a better experience than all currently available GitHub music servers.
 Compared to other music servers (such as Navidrome, Jellyfin, Emby, Plex, Subsonic, Gonic), it offers the following enhanced features:
 For details of the new features, please visit the [NineSong](https://github.com/Super-Badmen-Viper/NineSong) to learn more
 
