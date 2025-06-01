@@ -135,6 +135,7 @@ export const store_app_configs_info = reactive({
 });
 watch(() => store_app_configs_info.lang, (newValue) => {
     console.log(newValue)
+    sessionStorage.setItem("jwt_lang", String(newValue));
     store_app_configs_logic_save.save_system_config_of_App_Configs()
 });
 watch(() => store_app_configs_info.app_view_left_menu_select_activeKey, (newValue) => {

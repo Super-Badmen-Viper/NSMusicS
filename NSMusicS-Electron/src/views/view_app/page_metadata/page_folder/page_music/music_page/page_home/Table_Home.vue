@@ -757,6 +757,7 @@ onBeforeUnmount(() => {
                 store_general_fetch_home_list.fetchData_Home_of_random_search();
                 dynamicScroller_random_search.$el.scrollLeft = 0;
                 offset_random_search = 0;
+                store_view_home_page_info.home_selected_top_album_subscript = 0;
               }">
                 <template #icon>
                   <n-icon :size="20"><ArrowReset24Filled/></n-icon>

@@ -1049,9 +1049,11 @@ function Refresh_page_songlists_statistic(){
 }
 onMounted(() => {
   Refresh_page_songlists_statistic();
-  store_view_media_page_logic.page_songlists_keyword = ''
-  input_search_InstRef.value?.clear()
-  store_view_media_page_logic.page_songlists_keywordFilter = ""
+  if(store_router_data_info.router_click) {
+    store_view_media_page_logic.page_songlists_keyword = ''
+    input_search_InstRef.value?.clear()
+    store_view_media_page_logic.page_songlists_keywordFilter = ""
+  }
 })
 const stopWatching_boolHandleItemClick_Favorite = watch(() => store_player_audio_logic.boolHandleItemClick_Favorite, (newValue) => {
   if(newValue) {

@@ -23,6 +23,9 @@ export const store_server_login_logic = reactive({
             store_server_users.server_select_kind = 'ninesong'
         }
 
+        const lang = String(sessionStorage.getItem("jwt_lang"))
+        store_app_configs_info.lang = lang ? lang : 'en';
+
         const currentTime = new Date().getTime();
         store_server_login_info.server_accessToken = String(sessionStorage.getItem("jwt_token"));
         const expireTime = sessionStorage.getItem("jwt_expire_time");
@@ -98,7 +101,10 @@ export const store_server_login_logic = reactive({
                 sessionStorage.setItem("jwt_expire_time", expireTime.toString());
                 sessionStorage.setItem("email", email);
                 await store_app_configs_info.load_app();
-                store_router_data_info.router.push("/home");
+                ///
+                const route = String(sessionStorage.getItem("jwt_route"))
+                const route_path = route && route != "/login" ? route : "/home"
+                store_router_data_info.router.push(route_path);
             }
             return true;
         } catch (error) {

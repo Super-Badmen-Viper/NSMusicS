@@ -753,6 +753,7 @@ import {
 import {
   Get_NineSong_Temp_Data_To_LocalSqlite
 } from "@/data/data_access/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite";
+import {store_router_data_info} from "@/router/router_store/store_router_data_info";
 
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   if(id != null && id.length > 0 && id != 'undefined') {
@@ -801,6 +802,7 @@ const handleItemClick_Rating = (id: any,rating: any) => {
 
 /////// emits audio_info of songlist_view_list
 const handleItemClick_title = (title:string) => {
+  store_router_data_info.router_click = false;
   store_view_media_page_logic.page_songlists_bool_show_search_area = true
   store_view_media_page_logic.page_songlists_input_search_Value = title
   store_view_media_page_logic.get_page_songlists_keyword(title)
@@ -809,6 +811,7 @@ const handleItemClick_title = (title:string) => {
   store_player_audio_logic.player_back_ChevronDouble = player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow;
 }
 const handleItemClick_artist = (artist:string) => {
+  store_router_data_info.router_click = false;
   if(
       store_server_user_model.model_server_type_of_local
       ||
@@ -831,6 +834,7 @@ const handleItemClick_artist = (artist:string) => {
   }
 }
 const handleItemClick_album = (album:string) => {
+  store_router_data_info.router_click = false;
   if(
       store_server_user_model.model_server_type_of_local
       ||

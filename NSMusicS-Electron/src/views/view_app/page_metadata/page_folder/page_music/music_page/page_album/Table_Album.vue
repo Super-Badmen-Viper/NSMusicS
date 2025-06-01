@@ -623,9 +623,11 @@ function Refresh_page_albumlists_statistic(){
 }
 onMounted(() => {
   Refresh_page_albumlists_statistic();
-  input_search_InstRef.value?.clear()
-  bool_show_search_area.value = false
-  store_view_album_page_logic.page_albumlists_keyword = ""
+  if(store_router_data_info.router_click) {
+    input_search_InstRef.value?.clear()
+    bool_show_search_area.value = false
+    store_view_album_page_logic.page_albumlists_keyword = ""
+  }
 })
 const stopWatching_boolHandleItemClick_Played = watch(() => store_player_audio_logic.boolHandleItemClick_Played, (newValue, oldValue) => {
   if (newValue && newValue !== oldValue) {

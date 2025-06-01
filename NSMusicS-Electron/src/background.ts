@@ -374,7 +374,8 @@ async function createWindow() {
             webPreferences: {
                 nodeIntegration: true,
                 contextIsolation: false,
-                webSecurity: false
+                webSecurity: false,
+                userAgent: 'NSMusicS/1.6.0 ' + process.platform + ' NT'
             }
         })
     }
@@ -390,7 +391,8 @@ async function createWindow() {
             webPreferences: {
                 nodeIntegration: true,
                 contextIsolation: false,
-                webSecurity: false
+                webSecurity: false,
+                userAgent: 'NSMusicS/1.6.0 ' + process.platform + ' NT'
             },
             titleBarStyle: 'hidden',
             trafficLightPosition: { x: 6, y: 12 },

@@ -90,6 +90,7 @@ function renderIcon (icon: any) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
 function renderRouterLink (nameValue: any, defaultValue: any){
+  store_router_data_info.router_click = true;
   return () => h(RouterLink, {to: { name: nameValue }}, { default: () => defaultValue })
 }
 function create_menuOptions_appBar(){
@@ -331,66 +332,70 @@ import {store_server_users} from "@/data/data_stores/server/store_server_users";
 routers.beforeEach((to, from, next) => {
   if(to.name !== from.name){
     store_router_data_logic.clear_Files_temporary()
-    next();
+    next()
   }
 });
 routers.afterEach(async (to, from) => {
-  if(to.name !== from.name){
-    try{
-      store_server_model_statistics.get_page_top_info()
-    }catch{}
-    store_router_data_logic.clear_Files_temporary()
-    if(to.name === 'home'){
-      store_router_data_info.router_select_model_home = true
-      store_router_data_info.router_name = to.name
-    }else if (to.name === 'categories') {
-      store_router_data_info.router_select_model_categories = true
-      store_router_data_info.router_name = to.name
-    }else if(to.name === 'update'){
-      store_router_data_info.router_select_model_update = true
-      store_router_data_info.router_name = to.name
-    }else if(to.name === 'song'){
-      store_router_data_info.router_select_model_media = true
-      store_router_data_info.router_name = to.name
-      Init_page_songlists_statistic_Data();
-    }else if(to.name === 'album'){
-      store_router_data_info.router_select_model_album = true
-      store_router_data_info.router_name = to.name
-      Init_page_albumlists_statistic_Data()
-    }else if(to.name === 'artist'){
-      store_router_data_info.router_select_model_artist = true
-      store_router_data_info.router_name = to.name
-      Init_page_artistlists_statistic_Data()
-    }else if(to.name === 'login') {
-      if(!isElectron) {
-        store_router_data_info.router_select_model_server_login = true
-        store_router_data_info.router_name = to.name
-      }
-    }else if(to.name === 'library'){
-      store_router_data_info.router_select_model_server_setting = true
-      store_router_data_info.router_name = to.name
-    }else{
-      store_router_data_info.router_select_model_server_setting = true
-      store_router_data_info.router_name = to.name
+  if (to.name !== from.name) {
+    try {
+      store_server_model_statistics.get_page_top_info();
+    } catch (error) {
+      console.error('获取页面顶部信息失败:', error);
     }
-    ///
-    store_app_configs_info.app_view_left_menu_select_activeKey = to.name
-    console.log(to.name)
-    store_app_configs_logic_save.save_system_config_of_View_Router_History()
-    ///
-    store_app_configs_info.app_view_left_menu_collapsed = true
-    ///
-    if(!store_router_data_logic.clear_UserExperience_Model) {
-      if (to.name != 'song') {
+    store_router_data_logic.clear_Files_temporary();
+    if (to.name === 'home') {
+      store_router_data_info.router_select_model_home = true;
+      store_router_data_info.router_name = to.name;
+    } else if (to.name === 'categories') {
+      store_router_data_info.router_select_model_categories = true;
+      store_router_data_info.router_name = to.name;
+    } else if (to.name === 'update') {
+      store_router_data_info.router_select_model_update = true;
+      store_router_data_info.router_name = to.name;
+    } else if (to.name === 'song') {
+      store_router_data_info.router_select_model_media = true;
+      store_router_data_info.router_name = to.name;
+      Init_page_songlists_statistic_Data();
+    } else if (to.name === 'album') {
+      store_router_data_info.router_select_model_album = true;
+      store_router_data_info.router_name = to.name;
+      Init_page_albumlists_statistic_Data();
+    } else if (to.name === 'artist') {
+      store_router_data_info.router_select_model_artist = true;
+      store_router_data_info.router_name = to.name;
+      Init_page_artistlists_statistic_Data();
+    } else if (to.name === 'login') {
+      if (!isElectron) {
+        store_router_data_info.router_select_model_server_login = true;
+        store_router_data_info.router_name = to.name;
+      }
+    } else if (to.name === 'library') {
+      store_router_data_info.router_select_model_server_setting = true;
+      store_router_data_info.router_name = to.name;
+    } else {
+      store_router_data_info.router_select_model_server_setting = true;
+      store_router_data_info.router_name = to.name;
+    }
+    store_app_configs_info.app_view_left_menu_select_activeKey = to.name;
+    console.log(to.name);
+    store_app_configs_logic_save.save_system_config_of_View_Router_History();
+    store_app_configs_info.app_view_left_menu_collapsed = true;
+    if (!store_router_data_logic.clear_UserExperience_Model) {
+      if (to.name !== 'song') {
         try {
-          if(isElectron) {
-            const memoryUsage = await ipcRenderer.invoke('window-get-memory')
+          if (isElectron) {
+            const memoryUsage = await ipcRenderer.invoke('window-get-memory');
             if (memoryUsage.rss > store_router_data_info.MEMORY_THRESHOLD) {
-              ipcRenderer.send('window-reset-data')
+              ipcRenderer.send('window-reset-data');
             }
           }
-        } catch { }
+        } catch (error) {
+          console.error('获取内存使用情况失败:', error);
+        }
       }
+    }
+    if (to.name !== 'login') {
+      sessionStorage.setItem('jwt_route', String('/' + to.name));
     }
   }
 });

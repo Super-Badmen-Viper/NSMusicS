@@ -14,6 +14,7 @@ export const store_router_data_info = reactive({
     router: null,
     router_name: '',
     router_select: '',
+    router_click: false,
 
     MEMORY_THRESHOLD: 360 * 1024 * 1024,
     
