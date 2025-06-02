@@ -86,6 +86,7 @@ export const store_general_fetch_home_list = reactive({
 
     async fetchData_Home_of_random_search() {
         try {
+            store_view_home_page_info.home_selected_top_album_subscript = 0;
             store_view_home_page_info.home_Files_temporary_random_search = [];
             store_view_home_page_info.home_selected_top_album = undefined;
             if (store_server_user_model.model_server_type_of_local) {
