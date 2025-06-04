@@ -583,15 +583,17 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
                     ...new_song,
                     play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
                 });
-                if(index === songlist.length - 1){
-                    const index = store_server_user_model.random_play_model_add
-                        ? store_playlist_list_info.playlist_MediaFiles_temporary.length - size: 0
-                    const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[index]
-                    await store_player_audio_logic.update_current_media_info(media_file, index)
-                    store_playlist_list_logic.media_page_handleItemDbClick = false
-                    store_player_audio_info.this_audio_restart_play = true
-                    //
-                    store_server_user_model.random_play_model_add = false
+                if(!store_server_user_model.random_play_model_search) {
+                    if (index === songlist.length - 1) {
+                        const index = store_server_user_model.random_play_model_add
+                            ? store_playlist_list_info.playlist_MediaFiles_temporary.length - size : 0
+                        const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[index]
+                        await store_player_audio_logic.update_current_media_info(media_file, index)
+                        store_playlist_list_logic.media_page_handleItemDbClick = false
+                        store_player_audio_info.this_audio_restart_play = true
+                        //
+                        store_server_user_model.random_play_model_add = false
+                    }
                 }
             })
             store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =

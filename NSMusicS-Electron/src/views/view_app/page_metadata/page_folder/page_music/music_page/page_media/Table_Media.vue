@@ -1294,10 +1294,11 @@ onBeforeUnmount(() => {
               {{ $t('Play') }}
             </n-tooltip>
           </n-dropdown>
-
-          <!-- v-if="store_server_user_model.model_server_type_of_web"-->
           <n-tooltip
-            v-if="false"
+            v-if="
+            store_server_user_model.model_server_type_of_web
+            &&
+            (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')"
             trigger="hover" placement="top">
             <template #trigger>
               <div>
@@ -1328,7 +1329,12 @@ onBeforeUnmount(() => {
             </template>
             {{ $t('Shuffle') + ' ' + $t('HeaderLibraries') + ' ' + $t('nsmusics.view_page.allMedia') }}
           </n-tooltip>
-          <n-divider v-if="false" vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
+          <n-divider
+            v-if="
+            store_server_user_model.model_server_type_of_web
+            &&
+            (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')"
+            vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
 
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>

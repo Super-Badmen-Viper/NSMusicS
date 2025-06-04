@@ -339,12 +339,15 @@ async function update_server_config_of_current_user_of_sqlite(value: any, select
         store_app_configs_logic_save.save_system_config_of_App_Configs()
       } else {
         message.error(t('error.invalidServer'), {duration: 3000})
+        return
       }
       if(store_server_user_model.parentid_of_Je_Music === undefined){
         message.error(t('error.invalidServer') + t('TabMusic'),{ duration: 6000 })
+        return
       }
     } catch (e) {
       message.error(t('error.invalidServer'), {duration: 3000})
+      return
     }
   }
   store_server_users.percentage_of_nd = 0
@@ -375,6 +378,12 @@ async function update_server_config_of_current_user_of_sqlite(value: any, select
         order: state_Sort.Ascend
       }];
     }
+  }
+  ///
+  if(store_server_users.server_select_kind != 'jellyfin' && store_server_users.server_select_kind != 'emby') {
+    store_player_audio_logic.drawer_order_height = 198;
+  }else{
+    store_player_audio_logic.drawer_order_height = 160;
   }
 }
 enum state_Sort {

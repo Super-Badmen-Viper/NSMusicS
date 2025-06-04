@@ -69,6 +69,7 @@ export const store_server_user_model = reactive({
 
     random_play_model: false,
     random_play_model_add: false,
+    random_play_model_search: false,
 
     async switchToMode_Local(){
         this.album = 'album'
@@ -92,7 +93,11 @@ export const store_server_user_model = reactive({
         this.playlist = 'server_playlist'
         this.playlist_tracks = 'server_playlist_tracks'
 
-        store_player_audio_logic.drawer_order_height = 198;
+        if(store_server_users.server_select_kind != 'jellyfin' && store_server_users.server_select_kind != 'emby') {
+            store_player_audio_logic.drawer_order_height = 198;
+        }else{
+            store_player_audio_logic.drawer_order_height = 160;
+        }
 
         store_server_user_model.model_select = 'server'
         await this.switchToMode()

@@ -613,31 +613,14 @@ async function begin_random_play_model() {
         store_server_user_model.salt,
         '30', '', ''
     )
-  }else{
-    store_view_media_page_logic.list_options_Hand_Sort = false
-    if (store_server_users.server_select_kind === 'jellyfin') {
-      store_view_media_page_logic.page_songlists_options_Sort_key = [{
-        columnKey: String('Random,SortName'),
-        order: state_Sort.Ascend
-      }];
-    } else if (store_server_users.server_select_kind === 'emby') {
-      store_view_media_page_logic.page_songlists_options_Sort_key = [{
-        columnKey: String('Random'),
-        order: state_Sort.Ascend
-      }];
-    }
-    store_view_media_page_logic.page_songlists_selected = 'song_list_all';
-    ///
-    store_general_fetch_media_list._load_model = 'play'
-    await store_general_fetch_media_list.fetchData_Media_of_server_web()
-    store_general_fetch_media_list._load_model = 'search'
-    ///
   }
-}
-enum state_Sort {
-  Ascend = 'ascend',
-  Descend = 'descend',
-  Default = 'default'
+  ///
+  const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[0];
+  await store_player_audio_logic.update_current_media_info(media_file, 0);
+  console.log(media_file);
+  ///
+  store_playlist_list_logic.media_page_handleItemDbClick = false;
+  store_player_audio_info.this_audio_restart_play = true;
 }
 
 ////// player_configs player_button middle area
@@ -935,6 +918,7 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
     store_player_audio_logic.play_order = 'playback-4';
     message.success(t('ButtonStart') + t('Shuffle'))
   }else{
+    store_server_user_model.random_play_model_search = false;
     message.success(t('Off') + t('Shuffle'))
   }
 });
@@ -1333,7 +1317,12 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
                       <Random />
                     </n-icon>
                   </template>
-                  <div v-if="store_server_user_model.model_server_type_of_web">
+                  <div v-if="
+                    store_server_user_model.model_server_type_of_web
+                    &&
+                    store_server_users.server_select_kind != 'jellyfin'
+                    &&
+                    store_server_users.server_select_kind != 'emby'">
                     {{ $t('Playlists') }}
                   </div>
                   <div v-else>
@@ -1341,20 +1330,27 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
                   </div>
                 </n-button>
                 <n-button
-                    v-if="store_server_user_model.model_server_type_of_web"
-                    quaternary
-                    @click="async () => {
-                      store_player_audio_logic.play_order = 'playback-4';
-                      store_player_audio_logic.drawer_order_show = false;
-                      store_server_user_model.random_play_model = true;
-                      await begin_random_play_model()
-                    }"
-                    :style="{
-                      minWidth: store_player_audio_logic.orderButonWidath + 'px',
-                      display: 'flex',
-                      justifyContent: 'flex-start',
-                    }"
-                    style="margin-left: -16px; margin-top: -6px;">
+                  v-if="
+                    store_server_user_model.model_server_type_of_web
+                    &&
+                    store_server_users.server_select_kind != 'jellyfin'
+                    &&
+                    store_server_users.server_select_kind != 'emby'"
+                  quaternary
+                  @click="async () => {
+                    store_player_audio_logic.play_order = 'playback-2';
+                    // 刷新store_player_audio_logic.play_order响应式状态
+                    store_player_audio_logic.play_order = 'playback-4';
+                    store_player_audio_logic.drawer_order_show = false;
+                    store_server_user_model.random_play_model = true;
+                    await begin_random_play_model()
+                  }"
+                  :style="{
+                    minWidth: store_player_audio_logic.orderButonWidath + 'px',
+                    display: 'flex',
+                    justifyContent: 'flex-start',
+                  }"
+                  style="margin-left: -16px; margin-top: -6px;">
                   <template #icon>
                     <n-icon :size="12">
                       <Random />
