@@ -18,7 +18,7 @@ import {
 import {
   Random
 } from '@vicons/fa'
-import { NIcon, NSlider, NSpace, NText } from 'naive-ui';
+import {NButton, NIcon, NSlider, NSpace, NText} from 'naive-ui';
 
 ////// this_view views_components of navie_ui
 import {onMounted, ref, watch, inject, provide} from 'vue';
@@ -595,6 +595,50 @@ async function Play_Media_Order(model_num: string, increased: number) {
     }
   }
 }
+async function begin_random_play_model() {
+  store_playlist_list_info.playlist_MediaFiles_temporary = [];
+  store_player_audio_logic.play_order = 'playback-4';
+  if (store_server_users.server_select_kind === 'ninesong') {
+    let get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
+    await get_NineSong_Temp_Data_To_LocalSqlite.get_random_song_list(
+        store_server_login_info.server_url,
+        '0','30'
+    )
+  }else if (store_server_users.server_select_kind === 'navidrome') {
+    let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
+    await get_Navidrome_Temp_Data_To_LocalSqlite.get_random_song_list(
+        store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+        store_server_user_model.username,
+        store_server_user_model.token,
+        store_server_user_model.salt,
+        '30', '', ''
+    )
+  }else{
+    store_view_media_page_logic.list_options_Hand_Sort = false
+    if (store_server_users.server_select_kind === 'jellyfin') {
+      store_view_media_page_logic.page_songlists_options_Sort_key = [{
+        columnKey: String('Random,SortName'),
+        order: state_Sort.Ascend
+      }];
+    } else if (store_server_users.server_select_kind === 'emby') {
+      store_view_media_page_logic.page_songlists_options_Sort_key = [{
+        columnKey: String('Random'),
+        order: state_Sort.Ascend
+      }];
+    }
+    store_view_media_page_logic.page_songlists_selected = 'song_list_all';
+    ///
+    store_general_fetch_media_list._load_model = 'play'
+    await store_general_fetch_media_list.fetchData_Media_of_server_web()
+    store_general_fetch_media_list._load_model = 'search'
+    ///
+  }
+}
+enum state_Sort {
+  Ascend = 'ascend',
+  Descend = 'descend',
+  Default = 'default'
+}
 
 ////// player_configs player_button middle area
 const play_skip_back_click = async () => {
@@ -888,6 +932,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
 })
 watch(() => store_server_user_model.random_play_model, (newValue) => {
   if(newValue) {
+    store_player_audio_logic.play_order = 'playback-4';
     message.success(t('ButtonStart') + t('Shuffle'))
   }else{
     message.success(t('Off') + t('Shuffle'))
@@ -992,7 +1037,34 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
               v-if="store_player_audio_logic.orderToolShow"
               trigger="hover" placement="top">
             <template #trigger>
+              <n-badge
+                  v-if="store_server_user_model.random_play_model"
+                  dot
+                  :value="store_server_user_model.random_play_model"
+                  :offset="[-8, 14]">
+                <n-button
+                    quaternary round size="small"
+                    @click="() => {
+                    store_player_audio_logic.drawer_order_show = !store_player_audio_logic.drawer_order_show;
+                  }">
+                  <template #icon>
+                    <n-icon :size="26" v-if="store_player_audio_logic.play_order === 'playback-1'">
+                      <ArrowAutofitDown24Regular/>
+                    </n-icon>
+                    <n-icon :size="26" v-else-if="store_player_audio_logic.play_order === 'playback-2'">
+                      <ArrowRepeatAll16Regular/>
+                    </n-icon>
+                    <n-icon :size="26" v-else-if="store_player_audio_logic.play_order === 'playback-3'">
+                      <RepeatOneRound/>
+                    </n-icon>
+                    <n-icon :size="20" v-else-if="store_player_audio_logic.play_order === 'playback-4'">
+                      <Random/>
+                    </n-icon>
+                  </template>
+                </n-button>
+              </n-badge>
               <n-button
+                  v-else
                   quaternary round size="small"
                   @click="() => {
                     store_player_audio_logic.drawer_order_show = !store_player_audio_logic.drawer_order_show;
@@ -1015,8 +1087,34 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
             </template>
             {{ $t('Play') + $t('common.sortOrder') }}
           </n-tooltip>
+          <n-badge
+              v-if="!store_player_audio_logic.orderToolShow && store_server_user_model.random_play_model"
+              dot
+              :value="store_server_user_model.random_play_model"
+              :offset="[-8, 14]">
+            <n-button
+                quaternary round size="small"
+                @click="() => {
+                  store_player_audio_logic.drawer_order_show = !store_player_audio_logic.drawer_order_show;
+                }">
+              <template #icon>
+                <n-icon :size="26" v-if="store_player_audio_logic.play_order === 'playback-1'">
+                  <ArrowAutofitDown24Regular/>
+                </n-icon>
+                <n-icon :size="26" v-else-if="store_player_audio_logic.play_order === 'playback-2'">
+                  <ArrowRepeatAll16Regular/>
+                </n-icon>
+                <n-icon :size="26" v-else-if="store_player_audio_logic.play_order === 'playback-3'">
+                  <RepeatOneRound/>
+                </n-icon>
+                <n-icon :size="20" v-else-if="store_player_audio_logic.play_order === 'playback-4'">
+                  <Random/>
+                </n-icon>
+              </template>
+            </n-button>
+          </n-badge>
           <n-button
-              v-if="!store_player_audio_logic.orderToolShow"
+              v-if="!store_player_audio_logic.orderToolShow && !store_server_user_model.random_play_model"
               quaternary round size="small"
               @click="() => {
                 store_player_audio_logic.drawer_order_show = !store_player_audio_logic.drawer_order_show;
@@ -1152,7 +1250,7 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
               v-model:show="store_player_audio_logic.drawer_order_show"
               placement="bottom"
               to="#backpanel_order"
-              :height="160"
+              v-model:height="store_player_audio_logic.drawer_order_height"
               show-mask="transparent"
               style="border-radius: 10px;">
             <n-drawer-content>
@@ -1235,7 +1333,34 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
                       <Random />
                     </n-icon>
                   </template>
-                  {{$t('nsmusics.siderbar_player.playback_4')}}
+                  <div v-if="store_server_user_model.model_server_type_of_web">
+                    {{ $t('Playlists') }}
+                  </div>
+                  <div v-else>
+                    {{ $t('nsmusics.siderbar_player.playback_4') }}
+                  </div>
+                </n-button>
+                <n-button
+                    v-if="store_server_user_model.model_server_type_of_web"
+                    quaternary
+                    @click="async () => {
+                      store_player_audio_logic.play_order = 'playback-4';
+                      store_player_audio_logic.drawer_order_show = false;
+                      store_server_user_model.random_play_model = true;
+                      await begin_random_play_model()
+                    }"
+                    :style="{
+                      minWidth: store_player_audio_logic.orderButonWidath + 'px',
+                      display: 'flex',
+                      justifyContent: 'flex-start',
+                    }"
+                    style="margin-left: -16px; margin-top: -6px;">
+                  <template #icon>
+                    <n-icon :size="12">
+                      <Random />
+                    </n-icon>
+                  </template>
+                  {{$t('HeaderLibraries') }}
                 </n-button>
               </n-space>
             </n-drawer-content>

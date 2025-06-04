@@ -178,8 +178,11 @@ export const store_server_ninesong_userdata_logic = reactive({
                     new_data[index] = data;
                 }
                 store_server_users.get_server_config_of_all_user_of_sqlite(new_data)
+
+                return true;
             }
         }
+        return false;
     },
 
     /// server select login

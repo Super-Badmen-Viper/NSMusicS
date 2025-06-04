@@ -1294,8 +1294,10 @@ onBeforeUnmount(() => {
               {{ $t('Play') }}
             </n-tooltip>
           </n-dropdown>
+
+          <!-- v-if="store_server_user_model.model_server_type_of_web"-->
           <n-tooltip
-            v-if="store_server_user_model.model_server_type_of_web"
+            v-if="false"
             trigger="hover" placement="top">
             <template #trigger>
               <div>
@@ -1326,7 +1328,8 @@ onBeforeUnmount(() => {
             </template>
             {{ $t('Shuffle') + ' ' + $t('HeaderLibraries') + ' ' + $t('nsmusics.view_page.allMedia') }}
           </n-tooltip>
-          <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
+          <n-divider v-if="false" vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
+
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle style="margin-left:4px"

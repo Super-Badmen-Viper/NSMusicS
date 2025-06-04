@@ -75,6 +75,7 @@ export const store_player_audio_logic = reactive({
     this_audio_initial_trigger: false,
 
     drawer_order_show: false,
+    drawer_order_height: 160,
     drawer_volume_show: false,
     drawer_theme_show: false,
 

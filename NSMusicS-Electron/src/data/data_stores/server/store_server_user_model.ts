@@ -79,6 +79,7 @@ export const store_server_user_model = reactive({
         this.playlist_tracks = 'playlist_tracks'
 
         store_server_user_model.model_server_type_of_local_server_download = false
+        store_player_audio_logic.drawer_order_height = 160;
 
         store_server_user_model.model_select = 'local'
         await this.switchToMode()
@@ -90,6 +91,8 @@ export const store_server_user_model = reactive({
         this.media_file = 'server_media_file'
         this.playlist = 'server_playlist'
         this.playlist_tracks = 'server_playlist_tracks'
+
+        store_player_audio_logic.drawer_order_height = 198;
 
         store_server_user_model.model_select = 'server'
         await this.switchToMode()
@@ -203,7 +206,7 @@ export const store_server_user_model = reactive({
 })
 watch(() => store_server_user_model.model_server_type_of_web, (newValue) => {
     store_server_user_model.model_server_type_of_local = !newValue
-    if(store_server_user_model.model_server_type_of_web) {
+    if(newValue) {
         store_router_data_info.store_router_history_data_of_local = false
         store_router_data_info.store_router_history_data_of_web = true
     }else{
