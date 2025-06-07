@@ -4,6 +4,8 @@
 ## NSMusicS | Nine Song Music : 九歌音乐
 NSMusicS is a client project that aims to support all platforms. The backend functionality of its Docker web version is implemented by another open-source project of mine: the [NineSong](https://github.com/Super-Badmen-Viper/NineSong) server written in Golang.  
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Super-Badmen-Viper/NSMusicS)
+
 While giving NSMusicS a star, please also give a star to its server, [NineSong](https://github.com/Super-Badmen-Viper/NineSong).
 
 At the same time, NSMusicS is also compatible with various mainstream open-source streaming servers: Navidrome, Jellyfin, Emby. ....

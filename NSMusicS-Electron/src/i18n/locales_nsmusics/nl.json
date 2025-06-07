@@ -68,7 +68,8 @@
             "mediaLibrary_begin_import": "Begin Importeren",
             "mediaLibrary_media_tag_modify_local": "Momenteel wordt alleen lokaal modus bladeren|bewerken van tag-informatie ondersteund",
             "hideHalfLyric": "Verberg de tekst voor de tekst die momenteel wordt gevolgd",
-            "guest": "Gastoptreden"
+            "guest": "Gastoptreden",
+            "disk": "Schijf"
         },
         "view_player": {
             "view_seting": {

@@ -68,7 +68,8 @@
             "mediaLibrary_begin_import": "开始导入",
             "mediaLibrary_media_tag_modify_local": "目前只能在本地模式浏览|修改标签信息",
             "hideHalfLyric": "隱藏當前跟隨的歌詞之前的歌詞",
-            "guest": "客串"
+            "guest": "客串",
+            "disk": "光碟"
         },
         "view_player": {
             "view_seting": {

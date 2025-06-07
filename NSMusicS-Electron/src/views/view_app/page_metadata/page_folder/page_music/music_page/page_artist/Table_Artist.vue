@@ -136,6 +136,9 @@ const updateGridItems = () => {
     gridItems.value = 5;
     itemSecondarySize.value = Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2;
   }
+  if(store_server_users.server_select_kind === 'ninesong'){
+    itemSize.value += 25;
+  }
 };
 onMounted(() => {
   updateGridItems();
@@ -896,7 +899,12 @@ onBeforeUnmount(() => {
                    :style="{ width: item_artist_image + 'px' }">
                 <div class="artist_left_text_artist_info" :style="{ width: item_artist_txt + 'px' }">
                   <div>
-                    <span id="artist_name" style="font-size: 14px;font-weight: 600;" :style="{ maxWidth: item_artist_txt + 'px' }">
+                    <span id="artist_name"
+                          style="font-size: 14px;font-weight: 600;"
+                          :style="{
+                            maxWidth: item_artist_txt + 'px',
+                            textAlign: store_server_users.server_select_kind != 'navidrome' ? 'center' : 'left',
+                          }">
                       {{ item.name }}
                     </span>
                   </div>
@@ -906,7 +914,7 @@ onBeforeUnmount(() => {
                            v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby')
                            || store_server_user_model.model_server_type_of_local">
                     <span>
-                       {{ $t('entity.album_other') + ': ' + item.album_count }}
+                      {{ $t('entity.track_other') + ': ' + item.song_count }}
                     </span>
                     <span v-if="store_server_users.server_select_kind === 'ninesong'" >
                       {{ $t('nsmusics.view_page.guest') + $t('entity.track_other') + ': ' + item.guest_song_count }}
@@ -918,10 +926,22 @@ onBeforeUnmount(() => {
                            v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby')
                            || store_server_user_model.model_server_type_of_local">
                     <span>
-                      {{ $t('entity.track_other') + ': ' + item.song_count }}
+                       {{ $t('entity.album_other') + ': ' + item.album_count }}
                     </span>
                     <span v-if="store_server_users.server_select_kind === 'ninesong'">
                        {{ $t('nsmusics.view_page.guest') + $t('entity.album_other') + ': ' + item.guest_album_count }}
+                    </span>
+                  </n-space>
+                  <n-space id="artist_artist_name"
+                           justify="space-between"
+                           :style="{ width: item_artist_image + 'px' }"
+                           v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby')
+                           || store_server_user_model.model_server_type_of_local">
+                    <span v-if="store_server_users.server_select_kind === 'ninesong'" >
+                      {{ $t('nsmusics.view_page.disk') + ': ' + item.cue_count }}
+                    </span>
+                    <span v-if="store_server_users.server_select_kind === 'ninesong'">
+                       {{ $t('nsmusics.view_page.guest') + $t('nsmusics.view_page.disk') + ': ' + item.guest_cue_count }}
                     </span>
                   </n-space>
                 </div>

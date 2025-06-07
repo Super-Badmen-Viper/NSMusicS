@@ -68,7 +68,8 @@
             "mediaLibrary_begin_import": "Commencer l'Importation",
             "mediaLibrary_media_tag_modify_local": "Actuellement, seul le mode local de navigation|modification des informations des balises est pris en charge",
             "hideHalfLyric": "Masquer les paroles avant les paroles actuellement suivies",
-            "guest": "Participation"
+            "guest": "Participation",
+            "disk": "Disque"
         },
         "view_player": {
             "view_seting": {

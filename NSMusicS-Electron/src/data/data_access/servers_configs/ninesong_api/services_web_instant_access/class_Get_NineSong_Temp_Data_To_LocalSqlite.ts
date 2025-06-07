@@ -541,6 +541,8 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                         sort_artist_name: '',
                         song_count: artist.SongCount,
                         guest_song_count: artist.GuestSongCount,
+                        cue_count: artist.CueCount,
+                        guest_cue_count: artist.GuestCueCount,
                         compilation: artist.Compilation ? 1 : 0,
                         has_cover_art: artist.HasCoverArt ? 1 : 0,
                         size: artist.Size,

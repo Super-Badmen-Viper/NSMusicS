@@ -68,7 +68,8 @@
             "mediaLibrary_begin_import": "Iniciar Importação",
             "mediaLibrary_media_tag_modify_local": "Atualmente, apenas o modo local de navegação|edição de informações de tags é suportado",
             "hideHalfLyric": "Ocultar as letras antes das letras que estão sendo seguidas no momento",
-            "guest": "Participação"
+            "guest": "Participação",
+            "disk": "Disco"
         },
         "view_player": {
             "view_seting": {

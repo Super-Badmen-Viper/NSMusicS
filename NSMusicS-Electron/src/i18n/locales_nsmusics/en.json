@@ -68,7 +68,8 @@
             "mediaLibrary_begin_import": "Begin Import",
             "mediaLibrary_media_tag_modify_local": "Currently, only local mode browsing|editing tag information is supported",
             "hideHalfLyric": "Hide the lyrics before the current followed lyrics",
-            "guest": "Guest"
+            "guest": "Guest",
+            "disk": "Disc"
         },
         "view_player": {
             "view_seting": {

@@ -68,7 +68,8 @@
             "mediaLibrary_begin_import": "Начать Импорт",
             "mediaLibrary_media_tag_modify_local": "В настоящее время поддерживается только локальный режим просмотра|редактирования информации тегов",
             "hideHalfLyric": "Скрыть текст песни перед текущим просматриваемым текстом",
-            "guest": "Гость"
+            "guest": "Гость",
+            "disk": "Диск"
         },
         "view_player": {
             "view_seting": {
