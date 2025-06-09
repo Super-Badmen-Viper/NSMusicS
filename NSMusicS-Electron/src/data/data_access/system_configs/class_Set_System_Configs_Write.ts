@@ -119,7 +119,10 @@ export class Class_Set_System_Configs_Write {
             'absoluteIndex',
             'selected',
             'playing',
-            'all_artist_ids'
+            'all_artist_ids',
+            'all_album_artist_ids',
+            'cue_count',
+            'guest_cue_count'
         ]);
         const filteredData = media_file_of_list.map(item => {
             return Object.keys(item)

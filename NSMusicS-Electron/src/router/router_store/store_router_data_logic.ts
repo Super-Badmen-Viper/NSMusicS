@@ -14,13 +14,11 @@ import {store_router_history_data_of_artist} from "@/router/router_store/store_r
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 import {
-    Get_Navidrome_Temp_Data_To_LocalSqlite
-} from "@/data/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
-import {store_server_users} from "@/data/data_stores/server/store_server_users";
-import { isElectron } from '@/utils/electron/isElectron';
+    store_general_fetch_album_list
+} from "../../data/data_stores/server/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list";
 import {
-    Get_Jellyfin_Temp_Data_To_LocalSqlite
-} from "@/data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
+    store_general_fetch_media_list
+} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list";
 
 export const store_router_data_logic = reactive({
     reset_data(){
@@ -87,6 +85,10 @@ export const store_router_data_logic = reactive({
         store_view_media_page_info.media_Files_temporary = [];
         store_view_album_page_info.album_Files_temporary = [];
         store_view_artist_page_info.artist_Files_temporary = [];
+
+        store_general_fetch_media_list.set_album_id('')
+        store_general_fetch_media_list.set_artist_id('')
+        store_general_fetch_album_list.set_artist_id('')
     },
     clear_Files_temporary_except_home() {
         store_router_data_info.router_select_model_categories = false

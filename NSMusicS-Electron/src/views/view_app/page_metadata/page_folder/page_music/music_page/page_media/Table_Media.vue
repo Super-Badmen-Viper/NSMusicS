@@ -441,7 +441,6 @@ const handleItemClick_artist = async (artist:string) => {
     // store_view_media_page_logic.get_page_songlists_keyword(artist)
     store_general_fetch_media_list.set_artist_id(artist)
     await store_general_fetch_media_list.fetchData_Media()
-    store_general_fetch_media_list.set_artist_id('')
   }else{
     message.warning('Jellyfin / Emby ' + t('ContainerNotSupported') + ' ' + t('setting.hotkey_localSearch'))
   }
@@ -472,7 +471,6 @@ const handleItemClick_album = async (album_id:string) => {
     store_view_media_page_logic.page_songlists_input_search_Value = album_id
     store_general_fetch_media_list.set_album_id(album_id)
     await store_general_fetch_media_list.fetchData_Media()
-    store_general_fetch_media_list.set_album_id('')
   }else{
     message.warning('Jellyfin / Emby ' + t('ContainerNotSupported') + ' ' + t('setting.hotkey_localSearch'))
   }
@@ -1012,10 +1010,11 @@ const onScroll = async () => {
 /////
 const onRefreshSharp = async () => {
   if(store_server_user_model.model_server_type_of_web){
-    if(
-        store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
-    ) {
+    if(store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
       store_player_appearance.player_mode_of_medialist_from_external_import = false;
+    } else if(store_server_users.server_select_kind === 'ninesong') {
+      store_general_fetch_media_list.set_album_id('')
+      store_general_fetch_media_list.set_artist_id('')
     }
     store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
     store_view_media_page_logic.page_songlists_keyword = ''
@@ -1088,6 +1087,8 @@ onBeforeUnmount(() => {
                 <n-button quaternary circle style="margin-left:4px"
                           @click="() => {
                         store_view_media_page_logic.page_songlists_bool_show_search_area = true;
+                        store_general_fetch_media_list.set_album_id('')
+                        store_general_fetch_media_list.set_artist_id('')
                         show_search_area();
                       }">
                   <template #icon>

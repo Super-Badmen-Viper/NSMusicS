@@ -77,13 +77,13 @@ const menuOptions: any[] = reactive([
     children: [
       {label: computed(() => t('TabDashboard')), key: 'type-group-1-1', icon: renderIcon(BlockStorageAlt), disabled: true},
       {label: computed(() => t('General')), key: 'type-group-1-2', icon: renderIcon(Settings), disabled: true},
-      {label: computed(() => t('HeaderUser')), key: 'type-group-1-3', icon: renderIcon(UserMultiple)},
+      {label: computed(() => t('HeaderUser')), key: 'type-group-1-3', icon: renderIcon(UserMultiple), disabled: true},
       {label: computed(() => t('HeaderLibraries')), key: 'type-group-1-4', icon: renderIcon(MediaLibrary),
         children: [
-          {label: computed(() => t('HeaderLibraries')), key: 'type-group-1-4-1'},
+          {label: computed(() => t('HeaderLibraries')), key: 'type-group-1-4-1', disabled: store_server_users.server_select_kind !== 'ninesong'},
           {label: computed(() => t('Display')), key: 'type-group-1-4-2', disabled: true},
           {label: computed(() => t('LabelMetadata')), key: 'type-group-1-4-3', disabled: true},
-          {label: computed(() => t('TabNfoSettings')), key: 'type-group-1-4-4'},
+          {label: computed(() => t('TabNfoSettings')), key: 'type-group-1-4-4', disabled: true},
         ]
       },
       {label: computed(() => t('Play')), key: 'type-group-1-5', icon: renderIcon(PlayCircle16Regular), disabled: true,

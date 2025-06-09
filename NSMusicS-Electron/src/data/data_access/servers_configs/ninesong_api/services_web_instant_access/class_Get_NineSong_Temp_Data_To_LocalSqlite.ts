@@ -329,14 +329,14 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
         ///
         if (Array.isArray(song_list) && song_list.length > 0) {
             if (store_general_fetch_media_list._load_model === 'search') {
-                const existingSong = store_view_media_page_info.media_Files_temporary.find(item => item.id === song_list[0].ID);
-                if (existingSong) {
-                    return;
+                const existing = store_view_media_page_info.media_Files_temporary.find(item => item.id === song_list[0].ID);
+                if (existing) {
+                    console.error("警告，获取的Media项存在重复，服务端的查询业务存在问题")
                 }
             } else {
-                const existingSong = store_playlist_list_info.playlist_MediaFiles_temporary.find(item => item.id === song_list[0].ID);
-                if (existingSong) {
-                    return;
+                const existing = store_playlist_list_info.playlist_MediaFiles_temporary.find(item => item.id === song_list[0].ID);
+                if (existing) {
+                    console.error("警告，获取的Media项存在重复，服务端的查询业务存在问题")
                 }
             }
         }else{
@@ -445,6 +445,12 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
         )
         let album_list = data["ninesong-response"]["albums"]
         if (Array.isArray(album_list) && album_list.length > 0) {
+            const existing = store_view_album_page_info.album_Files_temporary.find(item => item.id === album_list[0].ID);
+            if (existing) {
+                console.error("警告，获取的Album项存在重复，服务端的查询业务存在问题")
+            }
+        }
+        if (Array.isArray(album_list) && album_list.length > 0) {
             if(_sort === 'play_date'){
                 album_list = album_list.filter(album => album.PlayCount > 0)
             }
@@ -517,6 +523,12 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
             _starred, _search
         )
         let artist_list = data["ninesong-response"]["artists"]
+        if (Array.isArray(artist_list) && artist_list.length > 0) {
+            const existing = store_view_artist_page_info.artist_Files_temporary.find(item => item.id === artist_list[0].ID);
+            if (existing) {
+                console.error("警告，获取的Artist项存在重复，服务端的查询业务存在问题")
+            }
+        }
         if (Array.isArray(artist_list) && artist_list.length > 0) {
             if(_sort === 'play_date'){
                 artist_list = artist_list.filter(artist => artist.PlayCount > 0)

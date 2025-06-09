@@ -313,7 +313,7 @@ const user_setting_select_tab_name = ref('tab_pane_1')
 
     <!-- 媒体库管理 -->
     <n-space vertical>
-      <n-space class="n-step-description">
+      <n-space>
         <n-space vertical>
           <n-button
               tertiary

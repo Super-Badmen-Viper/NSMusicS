@@ -294,12 +294,12 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
             if (store_general_fetch_media_list._load_model === 'search') {
                 const existingSong = store_view_media_page_info.media_Files_temporary.find(item => item.id === songlist[0].id);
                 if (existingSong) {
-                    return;
+                    console.error("警告，获取的Media项存在重复，服务端的查询业务存在问题")
                 }
             } else {
                 const existingSong = store_playlist_list_info.playlist_MediaFiles_temporary.find(item => item.id === songlist[0].id);
                 if (existingSong) {
-                    return;
+                    console.error("警告，获取的Media项存在重复，服务端的查询业务存在问题")
                 }
             }
         }else{

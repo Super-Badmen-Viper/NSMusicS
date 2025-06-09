@@ -577,7 +577,7 @@ import {
                  :status="currentStatus">
           <n-step v-if="isElectron"
                   :title="model_server_step_1">
-            <div class="n-step-description" style="font-size:16px;font-weight: 600;">
+            <div style="font-size:16px;font-weight: 600;">
               {{ $t('nsmusics.view_page.modelSelect_explain') }}<br>
               <n-select
                   v-model:value="Type_Server_Model_Open_Value"
@@ -600,7 +600,7 @@ import {
           <!-- server model -->
           <n-step :title="model_server_step_2"
                   v-if="Type_Server_Model_Open_Value === 'server'">
-            <div class="n-step-description">
+            <div>
               <n-space vertical>
                 <n-button
                     tertiary
@@ -786,7 +786,7 @@ import {
           </n-step>
           <n-step :title="model_server_step_3"
                   v-if="isElectron && Type_Server_Model_Open_Value === 'server'">
-            <div class="n-step-description">
+            <div>
               <n-space vertical>
                 <n-space vertical>
                   <n-space vertical>
@@ -851,7 +851,7 @@ import {
           </n-step>
           <n-step :title="model_server_step_4"
                   v-if="Type_Server_Model_Open_Value === 'server'">
-            <div class="n-step-description">
+            <div>
               <n-space vertical>
                 <n-select
                     v-model:value="store_server_users.server_config_of_current_user_of_select_servername"
@@ -865,7 +865,7 @@ import {
           <!-- local model -->
           <n-step :title="model_local_step_1"
                   v-if="Type_Server_Model_Open_Value != 'server'">
-            <div class="n-step-description">
+            <div>
               <n-space vertical>
                 <n-space justify="space-between" align="center">
                   <n-space vertical style="width: 520px;">
@@ -981,7 +981,7 @@ import {
           </n-step>
           <n-step :title="model_local_step_2"
                   v-if="Type_Server_Model_Open_Value != 'server'">
-            <div class="n-step-description">
+            <div>
               <n-space vertical>
                 <n-space vertical>
                   <div style="font-size:15px;font-weight: 600;">
