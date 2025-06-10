@@ -12,6 +12,9 @@ import {
     Auth_Token_ApiService_of_NineSong
 } from "@/data/data_access/servers_configs/ninesong_api/services_web/Auth/Auth_Token/index_service";
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
+import {
+    Folder_Entity_ApiService_of_NineSong
+} from "../../../../../data/data_access/servers_configs/ninesong_api/services_web/Folder_Entity/index_service";
 
 export const store_server_login_logic = reactive({
     jwt_expire_time: 24 * 60 * 60 * 1000,// 24小时
@@ -84,29 +87,34 @@ export const store_server_login_logic = reactive({
             const response = new Auth_Token_ApiService_of_NineSong(
                 url
             );
-            const data = await response.getAuth_Token(
+            const userData = await response.getAuth_Token(
                 email,
                 password,
             )
-            store_server_login_info.server_accessToken = String(data.accessToken);
-            store_server_login_info.server_refreshToken = String(data.refreshToken);
-            store_server_login_info.server_url = url;
-            console.log("登录成功:", data.accessToken);
+            if (userData && userData.accessToken && userData.refreshToken) {
+                store_server_login_info.server_accessToken = String(userData.accessToken);
+                store_server_login_info.server_refreshToken = String(userData.refreshToken);
+                store_server_login_info.server_url = url;
+                console.log("登录成功:", userData.accessToken);
 
-            // 由于Electron初始化调用此方法，检测是否为docker，防止调用load_app陷入无限循环
-            if(store_app_configs_info.desktop_system_kind === 'docker') {
-                store_router_data_info.router_select_model_server_login = false;
-                const expireTime = new Date().getTime() + this.jwt_expire_time
-                sessionStorage.setItem("jwt_token", store_server_login_info.server_accessToken);
-                sessionStorage.setItem("jwt_expire_time", expireTime.toString());
-                sessionStorage.setItem("email", email);
-                await store_app_configs_info.load_app();
-                ///
-                const route = String(sessionStorage.getItem("jwt_route"))
-                const route_path = route && route != "/login" ? route : "/home"
-                store_router_data_info.router.push(route_path);
+                let folder_Entity_ApiService_of_NineSong = new Folder_Entity_ApiService_of_NineSong(url)
+                store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
+
+                // 由于Electron初始化调用此方法，检测是否为docker，防止调用load_app陷入无限循环
+                if (store_app_configs_info.desktop_system_kind === 'docker') {
+                    store_router_data_info.router_select_model_server_login = false;
+                    const expireTime = new Date().getTime() + this.jwt_expire_time
+                    sessionStorage.setItem("jwt_token", store_server_login_info.server_accessToken);
+                    sessionStorage.setItem("jwt_expire_time", expireTime.toString());
+                    sessionStorage.setItem("email", email);
+                    await store_app_configs_info.load_app();
+                    ///
+                    const route = String(sessionStorage.getItem("jwt_route"))
+                    const route_path = route && route != "/login" ? route : "/home"
+                    store_router_data_info.router.push(route_path);
+                }
+                return true;
             }
-            return true;
         } catch (error) {
             console.error("登录失败:", error);
         }

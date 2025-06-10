@@ -9,7 +9,10 @@ export const store_server_users = reactive({
     percentage_of_nd: 0,
 
     server_select_kind: '',
-    
+
+    server_select_library: undefined as Library_Folder_Metadata | undefined,
+    server_all_library: [] as Library_Folder_Metadata [],
+
     server_config_of_current_user_of_sqlite: undefined as Server_Configs_Props | undefined,
     server_config_of_all_user_of_sqlite: [] as Server_Configs_Props[],
     

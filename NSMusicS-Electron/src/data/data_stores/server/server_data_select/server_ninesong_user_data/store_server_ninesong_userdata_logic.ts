@@ -12,6 +12,9 @@ import {store_server_user_model} from "@/data/data_stores/server/store_server_us
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 import { Set_ServerInfo_To_LocalSqlite } from "@/data/data_access/local_configs/class_Set_ServerInfo_To_LocalSqlite";
 import {isElectron} from '@/utils/electron/isElectron';
+import {
+    Folder_Entity_ApiService_of_NineSong
+} from "../../../../data_access/servers_configs/ninesong_api/services_web/Folder_Entity/index_service";
 
 export const store_server_ninesong_userdata_logic = reactive({
     /// docker server manage
@@ -101,6 +104,9 @@ export const store_server_ninesong_userdata_logic = reactive({
                 store_server_login_info.server_accessToken = String(userData.accessToken);
                 store_server_login_info.server_refreshToken = String(userData.refreshToken);
 
+                let folder_Entity_ApiService_of_NineSong = new Folder_Entity_ApiService_of_NineSong(url)
+                store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
+
                 let data: Server_Configs_Props = null;
                 if (isElectron) {
                     let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
@@ -150,6 +156,9 @@ export const store_server_ninesong_userdata_logic = reactive({
             store_server_login_info.server_accessToken = String(userData.accessToken);
             store_server_login_info.server_refreshToken = String(userData.refreshToken);
             store_server_login_info.server_url = url;
+
+            let folder_Entity_ApiService_of_NineSong = new Folder_Entity_ApiService_of_NineSong(url)
+            store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
 
             let data: Server_Configs_Props = null
             if(isElectron) {

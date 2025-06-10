@@ -80,7 +80,7 @@ const menuOptions: any[] = reactive([
       {label: computed(() => t('HeaderUser')), key: 'type-group-1-3', icon: renderIcon(UserMultiple), disabled: true},
       {label: computed(() => t('HeaderLibraries')), key: 'type-group-1-4', icon: renderIcon(MediaLibrary),
         children: [
-          {label: computed(() => t('HeaderLibraries')), key: 'type-group-1-4-1', disabled: store_server_users.server_select_kind !== 'ninesong'},
+          {label: computed(() => t('HeaderLibraries')), key: 'type-group-1-4-1',},
           {label: computed(() => t('Display')), key: 'type-group-1-4-2', disabled: true},
           {label: computed(() => t('LabelMetadata')), key: 'type-group-1-4-3', disabled: true},
           {label: computed(() => t('TabNfoSettings')), key: 'type-group-1-4-4', disabled: true},

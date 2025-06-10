@@ -60,6 +60,9 @@ export class NineSong_Api_Services_Web {
                         data,
                     });
                 }
+                if(response.status === 204) {
+                    return true
+                }
                 return response.data;
             }
             return undefined;

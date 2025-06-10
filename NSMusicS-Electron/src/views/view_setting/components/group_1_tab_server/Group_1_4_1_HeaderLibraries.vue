@@ -3,183 +3,40 @@
 import {
   AddCircle32Regular,
   ArrowReset24Filled,
-  MultiselectLtr20Filled,
-  Delete20Regular,
-  SelectAllOn24Regular,
-  ArrowSort24Regular,TextSortAscending20Regular,TextSortDescending20Regular,
-  Search20Filled,
-  Heart24Regular,Heart28Filled,
-  ChevronLeft16Filled,ChevronRight16Filled,
-  Filter20Filled,PaddingTop20Filled,PaddingDown20Filled,
-  ArrowRepeatAll16Regular,ArrowAutofitDown24Regular,
+  Folder24Regular,
 } from '@vicons/fluent'
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
-import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
-import {BareMetalServer, Close} from "@vicons/carbon";
+import {Close} from "@vicons/carbon";
 import {NButton, NIcon} from "naive-ui";
 
-import { ref, computed, watch, onMounted } from "vue";
+import {ref, computed, watch, onMounted, onBeforeUnmount} from "vue";
 
-import { useMessage } from 'naive-ui'
-const message = useMessage()
-////// server
-const Type_Server_Kinds = [
-  {
-    value: "ninesong",
-    label: "NineSong"
-  },
-  {
-    value: "subsonic",
-    label: "subsonic"
-  },
-  {
-    value: 'navidrome',
-    label: 'navidrome'
-  },
-  {
-    value: "jellyfin",
-    label: "Jellyfin"
-  },
-  {
-    value: "emby",
-    label: "emby"
-  },
-  {
-    value: "webdev",
-    label: "webdev"
-  },
-  {
-    value: "onedrive",
-    label: "onedrive"
-  }
-].map((s) => {
-  s.value = s.value.toLowerCase()
-  return s
+import {
+  Folder_Entity_ApiService_of_NineSong
+} from "@/data/data_access/servers_configs/ninesong_api/services_web/Folder_Entity/index_service";
+import {useI18n} from "vue-i18n";
+const { t } = useI18n({
+  inheritLocale: true
 })
-const Type_Server_Add = ref(false)
-const Type_Server_Model_Open_Value = ref('local')
-const Type_Server_Model_Open_Option = ref([
-  {
-    label: computed(() => t('nsmusics.view_page.modelLocal')),
-    value: 'local',
-  },
-  {
-    label: computed(() => t('nsmusics.view_page.modelServer')),
-    value: 'server',
-  },
-])
-onMounted(() => {
-  store_server_users.percentage_of_nd = 0
-  if(store_server_user_model.model_select === 'local')
-    Type_Server_Model_Open_Value.value = Type_Server_Model_Open_Option.value[0].value
-  else
-    Type_Server_Model_Open_Value.value = Type_Server_Model_Open_Option.value[1].value
-});
-const server_set_of_addUser_of_type = ref(Type_Server_Kinds[2].value)
-// normal login
-const server_set_of_addUser_of_servername = ref('')
-const server_set_of_addUser_of_url = ref('')
-const server_set_of_addUser_of_username = ref('')
-const server_set_of_addUser_of_password = ref('')
-// apikey login
-const server_set_of_addUser_of_apikey = ref('')
-const server_set_of_addUser_of_apikey_user_option = ref([])
-const server_set_of_addUser_of_apikey_load_complete = ref(false)
-async function update_server_apikey_user_option(data: any) {
-  if(store_server_user_model.server_login_model_of_apikey) {
-    store_server_user_model.authorization_of_Je =
-        data.apikey.length > 0
-            ? data.apikey : server_set_of_addUser_of_apikey.value
-    // load User
-    const userService = new Users_ApiService_of_Je(
-        data.url.length > 0
-            ? data.url : server_set_of_addUser_of_url.value
-    )
-    const result = await userService.getUsers_ALL()
-    server_set_of_addUser_of_apikey_user_option.value = []
-    store_server_user_model.userid_of_Je = ''
-    server_set_of_addUser_of_apikey_load_complete.value = false
-    if (result) {
-      if (Array.isArray(result) && result.length > 0) {
-        result.forEach((row: any) => {
-          server_set_of_addUser_of_apikey_user_option.value.push({
-            label: row.Name,
-            value: row.Id
-          });
-        });
-        if (data.init === true || data.init === 'true') {
-          store_server_user_model.userid_of_Je =
-              server_set_of_addUser_of_apikey_user_option.value[0].value
-        } else {
-          store_server_user_model.userid_of_Je = data.userid
-        }
-        // load Library parentid_of_Je
-        const library_ApiService_of_Je = new Library_ApiService_of_Je(server_set_of_addUser_of_url.value)
-        const result_parentIds = await library_ApiService_of_Je.getLibrary_MediaFolders_ALL()
-        store_server_user_model.parentid_of_Je = []
-        if (result_parentIds.Items) {
-          if (Array.isArray(result_parentIds.Items) && result_parentIds.Items.length > 0) {
-            result_parentIds.Items.forEach((row: any) => {
-              store_server_user_model.parentid_of_Je.push({
-                label: row.Name,
-                value: row.Id
-              });
-              if (row.CollectionType === 'music') {
-                store_server_user_model.parentid_of_Je_Music = row.Id
-              }
-            });
-          }
-        }
-        // complete
-        server_set_of_addUser_of_apikey_load_complete.value = true
-      }
-    }
-  }
-  else{
 
-  }
-}
+import { useMessage, MessageReactive } from 'naive-ui'
+const message = useMessage()
+
+const Type_Server_Add = ref(false)
+const server_set_of_addLibrary_of_name = ref('')
+const server_set_of_addLibrary_of_path = ref('')
 /// server add
 async function update_server_addUser() {
   try {
-    server_set_of_addUser_of_url.value = server_set_of_addUser_of_url.value.replace(/\/$/, '');
-    const params = {
-      servername: server_set_of_addUser_of_servername.value,
-      url: server_set_of_addUser_of_url.value,
-      type: server_set_of_addUser_of_type.value,
-      username: server_set_of_addUser_of_username.value,
-      password: server_set_of_addUser_of_password.value,
-      apikey: server_set_of_addUser_of_apikey.value,
-      userid: store_server_user_model.userid_of_Je,
-    };
-    let result = null;
-    if (store_server_user_model.server_login_model_of_apikey) {
-      if (
-          (server_set_of_addUser_of_type.value === 'jellyfin' || server_set_of_addUser_of_type.value === 'emby') &&
-          params.apikey?.length > 0 &&
-          params.userid?.length > 0 &&
-          server_set_of_addUser_of_apikey_load_complete.value
-      ) {
-        result = await store_server_data_select_logic.update_server_addUser(
-            params.servername,
-            params.url,
-            params.apikey,
-            params.userid,
-            params.type
-        );
-      }
-    } else {
-      result = await store_server_data_select_logic.update_server_addUser(
-          params.servername,
-          params.url,
-          params.username,
-          params.password,
-          params.type
-      );
-    }
+    const result = await folder_Entity_ApiService_of_NineSong.createFolder_Entity(
+        server_set_of_addLibrary_of_name.value,
+        server_set_of_addLibrary_of_path.value,
+        1
+    );
     if (result) {
       message.success(t('form.addServer.success'));
+      await scan_server_folder_path([server_set_of_addLibrary_of_path.value], 1, 0);
     } else {
       message.error(t('error.invalidServer'), { duration: 3000 });
     }
@@ -190,11 +47,10 @@ async function update_server_addUser() {
   }
 }
 /// server delete
-async function update_server_deleteUser(id: string, type: string) {
+async function update_server_deleteUser(id: string) {
   try {
-    const result = await store_server_data_select_logic.update_server_deleteUser(
-        id,
-        type
+    const result = await folder_Entity_ApiService_of_NineSong.deleteFolder_Entity(
+        id
     )
     if (result) {
       message.success(t('form.updateServer.success'))
@@ -206,85 +62,77 @@ async function update_server_deleteUser(id: string, type: string) {
   }
 }
 /// server update
-async function update_server_setUser(
-    id:string, server_name:string, url:string,
-    user_name:string, password:string,
-    type: string
-) {
+async function update_server_setUser(id: string, newName: string, newFolderPath: string) {
   try {
-    let result = null;
-    if(store_server_user_model.server_login_model_of_apikey) {
-      if (server_set_of_addUser_of_type.value === 'jellyfin' || server_set_of_addUser_of_type.value === 'emby') {
-        if (server_set_of_addUser_of_apikey_load_complete.value) {
-          result = await store_server_data_select_logic.update_server_setUser(
-              id,
-              server_name, url,
-              user_name, password,
-              type
-          )
-        }
-      }
-    }else{
-      result = await store_server_data_select_logic.update_server_setUser(
-          id,
-          server_name, url,
-          user_name, password,
-          type
-      )
-    }
+    const result = await folder_Entity_ApiService_of_NineSong.updateFolder_Entity(
+        id,
+        newName, newFolderPath,
+    )
     if(result){
       message.success(t('form.updateServer.success'))
     }else{
       message.error(t('error.invalidServer'),{ duration: 3000 })
     }
-    if(store_server_user_model.parentid_of_Je_Music === undefined){
-      message.error(t('error.invalidServer') + t('TabMusic'),{ duration: 6000 })
-    }
   }catch{
     message.error(t('error.invalidServer'),{ duration: 3000 })
   }
 }
-/// server select
-async function update_server_config_of_current_user_of_sqlite(value: any, select_change: any){
-  if(select_change) {
-    try {
-      const index = store_server_users.server_config_of_all_user_of_sqlite.findIndex(item => item.id === value);
-      const user_config = store_server_users.server_config_of_all_user_of_sqlite[index]
-      const result = await store_server_data_select_logic.update_server_config_of_current_user_of_sqlite(
-          value,
-          user_config?.type
-      )
-      if (result) {
-        message.success(t('form.updateServer.success'))
-        if(user_config?.type === 'navidrome'){
-          store_server_users.server_select_kind = 'navidrome'
-        }else if(user_config?.type === 'jellyfin'){
-          store_server_users.server_select_kind = 'jellyfin'
-        }else if(user_config?.type === 'emby'){
-          store_server_users.server_select_kind = 'emby'
-        }else if(user_config?.type === 'ninesong'){
-          store_server_users.server_select_kind = 'ninesong'
-        }
-        store_app_configs_logic_save.save_system_config_of_App_Configs()
-      } else {
-        message.error(t('error.invalidServer'), {duration: 3000})
-      }
-      if(store_server_user_model.parentid_of_Je_Music === undefined){
-        message.error(t('error.invalidServer') + t('TabMusic'),{ duration: 6000 })
-      }
-    } catch (e) {
-      message.error(t('error.invalidServer'), {duration: 3000})
+/// server folder find
+let lastPath = '';
+let lastProcessedPath = ''; // 新增：记录上一次处理的路径
+async function find_server_folder_path(path: string) {
+  // 1. 检查是否为重复操作（当前路径与上一次处理路径相同）
+  const isRepeatOperation = path === lastProcessedPath;
+  server_set_of_addLibrary_of_path.value = path;
+
+  // 2. 保存当前路径到临时变量（用于后续比较）
+  const currentPathBeforeProcessing = lastPath;
+  const result = await folder_Entity_ApiService_of_NineSong.browseFolder_Entity(path);
+  if (result) {
+    // 3. 映射文件夹选项
+    browseFolderOptions.value = result.map((item: any) => ({
+      label: item.name,
+      value: item.path,
+    }));
+
+    browseFolderOptions.value.unshift({
+      label: '...',
+      value: lastPath
+    });
+
+    // 5. 更新路径记录（仅在非重复操作时更新）
+    if (!isRepeatOperation) {
+      // 保存当前操作前的路径作为下次的返回路径
+      lastPath = currentPathBeforeProcessing;
+      // 记录本次处理的路径
+      lastProcessedPath = path;
     }
   }
-  store_server_users.percentage_of_nd = 0
-  // Refresh Playlist(Local / Server)
-  store_playlist_list_info.playlist_MediaFiles_temporary = [];
-  await store_player_audio_logic.player.pause();
-  store_player_audio_info.reset_data()
-  // Close navidrome random model
-  store_server_user_model.random_play_model = false
-  // Refresh play_order(Local / Server)
-  store_player_audio_logic.play_order = 'playback-2'
+}
+///
+const stopWatching_Type_Server_Add = watch(() => Type_Server_Add.value, async (newValue) => {
+  if (newValue) {
+    await find_server_folder_path('')
+  }
+});
+/// server scan
+async function scan_server_folder_path(folder_paths: string[], folder_type: number, scan_model: number){
+  createMessage()
+}
+let messageReactive: MessageReactive | null = null
+const createMessage = () => {
+  if (!messageReactive) {
+    messageReactive = message.info(t('LabelCurrentStatus') + ': ' + t('ScanLibrary'), {
+      closable: true,
+      duration: 5000
+    })
+  }
+}
+const removeMessage = () => {
+  if (messageReactive) {
+    messageReactive.destroy()
+    messageReactive = null
+  }
 }
 
 // gridItems Re render
@@ -301,17 +149,17 @@ const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window
 });
 const updateGridItems = () => {
   collapsed_width.value = 145;
-  if(window.innerWidth > 2460){
+  if(window.innerWidth > 2160){
     const num = window.innerWidth / 7.53
-    itemSize.value = Math.floor(num) + 20;
+    itemSize.value = Math.floor(num) - 100;
     item_library.value = Math.floor(num);
     item_library_image.value = item_library.value - 20;
     item_library_txt.value = item_library.value - 20;
     gridItems.value = 4;
     itemSecondarySize.value = Math.floor(window.innerWidth - (collapsed_width.value + 320)) / gridItems.value - 2;
-  }else if(window.innerWidth > 1660){
+  }else if(window.innerWidth > 1360){
     const num = window.innerWidth / 6.53
-    itemSize.value = Math.floor(num) + 20;
+    itemSize.value = Math.floor(num) - 100;
     item_library.value = Math.floor(num);
     item_library_image.value = item_library.value - 20;
     item_library_txt.value = item_library.value - 20;
@@ -319,7 +167,7 @@ const updateGridItems = () => {
     itemSecondarySize.value = Math.floor(window.innerWidth - (collapsed_width.value + 320)) / gridItems.value - 2;
   }else{
     const num = window.innerWidth / 5.53
-    itemSize.value = Math.floor(num) + 20;
+    itemSize.value = Math.floor(num) - 100;
     item_library.value = Math.floor(num);
     item_library_image.value = item_library.value - 20;
     item_library_txt.value = item_library.value - 20;
@@ -327,11 +175,85 @@ const updateGridItems = () => {
     itemSecondarySize.value = Math.floor(window.innerWidth - (collapsed_width.value + 320)) / gridItems.value - 2;
   }
 };
-onMounted(() => {
+let folder_Entity_ApiService_of_NineSong = new Folder_Entity_ApiService_of_NineSong(store_server_login_info.server_url)
+onMounted(async () => {
   updateGridItems();
+  if(store_server_users.server_select_kind === 'ninesong') {
+    store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
+    console.log(store_server_users.server_all_library)
+  }
+});
+onBeforeUnmount(() => {
+  stopWatching_window_innerWidth()
+  stopWatching_Type_Server_Add()
 });
 
-import error_artist from '@/assets/img/error_artist.jpg'
+import error_album_old from '@/assets/img/error_album_old.jpg'
+import {
+  store_server_login_info
+} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+import {
+  store_player_view
+} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_view";
+import {
+  store_player_appearance
+} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_appearance";
+import {
+  store_player_audio_info
+} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_info";
+
+const contentTypeValue = ref(1)
+const contentTypeOptions = ref([
+  {
+    label: computed(() => t('TabMusic')),
+    value: 1,
+    disabled: true
+  },
+  {
+    label: computed(() => t('HeaderVideos')),
+    value: 2,
+    disabled: true
+  },
+  {
+    label: computed(() => t('HeaderPhotoAlbums')),
+    value: 3,
+    disabled: true
+  },
+  {
+    label: computed(() => t('Movies')),
+    value: 4,
+    disabled: true
+  },
+  {
+    label: computed(() => t('TV')),
+    value: 5,
+    disabled: true
+  },
+  {
+    label: computed(() => t('Books')),
+    value: 6,
+    disabled: true
+  },
+])
+
+const browseFolderOptions = ref([])
+
+const refreshModeValue = ref(0)
+const refreshModeOptions = ref([
+  {
+    label: computed(() => t('ScanForNewAndUpdatedFiles')),
+    value: 0,
+  },
+  {
+    label: computed(() => t('SearchForMissingMetadata')),
+    value: 1,
+  },
+  {
+    label: computed(() => t('ReplaceAllMetadata')),
+    value: 2,
+  },
+])
+
 </script>
 <template>
   <n-space vertical>
@@ -351,7 +273,13 @@ import error_artist from '@/assets/img/error_artist.jpg'
           </template>
           {{ $t('ButtonAddMediaLibrary') }}
         </n-button>
-        <n-button icon-placement="left" secondary strong>
+        <n-button icon-placement="left"
+                  secondary strong
+                  @click="async () => {
+                    await scan_server_folder_path([],1,2,)
+                    removeMessage()
+                  }"
+        >
           <template #icon>
             <NIcon>
               <ArrowReset24Filled />
@@ -366,10 +294,10 @@ import error_artist from '@/assets/img/error_artist.jpg'
             width: 'calc(100vw - ' + (collapsed_width + 320) + 'px)',
          }"
          style="overflow: auto;margin-top: 6px;"
-         :items="store_server_users.server_config_of_all_user_of_sqlite"
+         :items="store_server_users.server_all_library"
          :itemSize="itemSize"
          :grid-items="gridItems"
-         :item-secondary-size="itemSecondarySize">
+         :item-secondary-size="326">
         <!-- :minItemSize="6"> -->
         <template #default="{ item, index, active }">
           <DynamicScrollerItem
@@ -379,47 +307,52 @@ import error_artist from '@/assets/img/error_artist.jpg'
             :data-active="active"
             style="display: flex;"
           >
-            <n-card
+            <n-alert
               class="server_item_info"
+              tag="div"
               @click="() => {
-                let show = false
-                if(item.type !== 'ninesong'){
-                  show = true
-                }else if(store_app_configs_info.desktop_system_kind !== 'docker'){
-                  show = true
-                }
-                if(show){
-                  item.show = !item.show;
-                  store_server_user_model.server_login_model_of_apikey = false
-                }
+                item.show = !item.show;
               }"
-              :style="{ width: 'calc(100vw - ' + (collapsed_width + 660) + 'px)'}"
               style="
-                height: 200px;
-                margin-bottom: 14px;
-                border: 1px solid #f0f0f070;border-radius: 5px;
+                width: 308px;
+                border-radius: 6px;
                 padding: 0;
                 box-shadow: #18181820 0 0 0 1px inset;
               ">
-              <n-space vertical>
-                <n-space vertical>
-                  <img
-                    :src="error_artist"
-                    style="
-                        width: auto;height: 100px;object-fit: cover;
-                        border-radius: 8px;border: 1.5px solid #FFFFFF20;
-                      " alt="">
-                </n-space>
-                <n-space justify="space-between">
+              <template #icon>
+                <n-icon>
+                  <Folder24Regular />
+                </n-icon>
+              </template>
+              <n-space vertical justify="end">
+                <div>
                   <n-space>
-                    <n-icon size="20">
-                      <BareMetalServer />
-                    </n-icon>
-                    <div style="width: 140px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
-                      {{ item.type+' - '+item.server_name }}</div>
+                    <div style="width: 200px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                      {{ item.name }}
+                    </div>
                   </n-space>
-                  <span style="width: 18px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ (index+1) }}</span>
-                </n-space>
+                  <n-space>
+                    <div style="width: 200px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                      <span v-if="item.folderType && item.folderType === 1">
+                        {{ $t('TabMusic') }}
+                      </span>
+                      <span v-if="item.folderType && item.folderType === 2">
+                        {{ $t('HeaderVideos') }}
+                      </span>
+                      <span v-if="item.folderType && item.folderType === 3">
+                        {{ $t('HeaderPhotoAlbums') }}
+                      </span>
+                      <span v-if="item.folderType && item.folderType === 4">
+                        {{ $t('Books') }}
+                      </span>
+                    </div>
+                  </n-space>
+                  <n-space>
+                    <div style="width: 200px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                      {{ item.folderPath }}
+                    </div>
+                  </n-space>
+                </div>
               </n-space>
               <n-modal
                   v-model:show="item.show">
@@ -427,7 +360,7 @@ import error_artist from '@/assets/img/error_artist.jpg'
                   <n-space
                       vertical size="large" style="width: 400px;">
                     <n-space justify="space-between" style="margin-bottom: 12px;">
-                      <span style="font-size: 20px;font-weight: 600;">{{ $t('page.appMenu.manageServers') }}</span>
+                      <span style="font-size: 20px;font-weight: 600;">{{ $t('ManageLibrary') }}</span>
                       <n-button tertiary size="small" @click="item.show = false">
                         <template #icon>
                           <n-icon>
@@ -438,107 +371,52 @@ import error_artist from '@/assets/img/error_artist.jpg'
                     </n-space>
                     <n-form style="margin-top: -12px;">
                       <n-space vertical size="small" style="margin-bottom: 10px;">
-                        <span>{{ $t('form.addServer.input_name') }}</span>
-                        <n-input clearable size="small" v-model:value="item.server_name" placeholder=""/>
+                        <span>{{ $t('ButtonRename') }}</span>
+                        <n-input clearable size="small" v-model:value="item.name" placeholder=""/>
                       </n-space>
                       <n-space vertical size="small" style="margin-bottom: 10px;">
-                        <span>{{ $t('form.addServer.input_url') }}</span>
-                        <n-input-group>
-                          <n-input clearable size="small" v-model:value="item.url" placeholder=""/>
-                        </n-input-group>
+                        <span>{{ $t('Folders') + $t('HeaderPaths') }}</span>
+                        <n-input clearable size="small" v-model:value="item.folderPath" placeholder=""/>
+                      </n-space>
+                      <n-space vertical size="small" style="margin-bottom: 10px;">
+                        <span>{{ $t('LabelRefreshMode')}}</span>
+                        <n-select v-model:value="refreshModeValue" :options="refreshModeOptions" />
                       </n-space>
                     </n-form>
-                    <n-form v-if="store_server_user_model.server_login_model_of_apikey" style="margin-top: -12px;">
-                      <n-space vertical style="margin-bottom: 10px;">
-                        <span>{{ $t('HeaderApiKey') }}</span>
-                        <n-input clearable placeholder="" v-model:value="item.user_name"/>
+                    <n-space justify="space-between">
+                      <n-button strong secondary type="info"
+                                @click="async () => {
+                                  item.show = false;
+                                  await scan_server_folder_path([item.folderPath], 1, refreshModeValue);
+                                  removeMessage()
+                                }">
+                        {{ $t('ScanLibrary') }}
+                      </n-button>
+                      <n-space justify="end">
+                        <n-button strong secondary type="error"
+                                  @click="item.show = false;update_server_deleteUser(item.id);">
+                          {{ $t('common.delete') }}
+                        </n-button>
                         <n-button
                             strong secondary type="info"
-                            @click="update_server_apikey_user_option({
-                                                    servername: item.server_name,
-                                                    url: item.url,
-                                                    apikey: item.user_name,
-                                                    userid: item.password,
-                                                    init: true
-                                                  })">
-                          {{ $t('ButtonOk') }}
+                            @click="()=>{
+                            update_server_setUser(
+                                item.id,
+                                item.name,
+                                item.folderPath,
+                            )
+                          }">
+                          {{ $t('common.save') }}
                         </n-button>
                       </n-space>
-                      <n-space vertical style="margin-bottom: 10px;">
-                        <span>{{ $t('LabelSelectUsers') }}</span>
-                        <n-select
-                            v-model:value="store_server_user_model.userid_of_Je"
-                            :options="server_set_of_addUser_of_apikey_user_option"
-                            style="width: 220px;margin-top: 6px;"
-                        />
-                      </n-space>
-                    </n-form>
-                    <n-form v-else style="margin-top: -12px;">
-                      <n-space vertical size="small" style="margin-bottom: 10px;">
-                        <span v-if="item.type != 'ninesong'">{{ $t('form.addServer.input_username') }}</span>
-                        <span v-else>{{ $t('nsmusics.server_page.server_email') }}</span>
-                        <n-input clearable size="small" v-model:value="item.user_name" placeholder=""/>
-                      </n-space>
-                      <n-space vertical size="small" style="margin-bottom: 10px;">
-                        <span>{{ $t('form.addServer.input_password') }}</span>
-                        <n-input clearable type="password" show-password-on="click" size="small"
-                                 v-model:value="item.password"
-                                 placeholder=""/>
-                      </n-space>
-                    </n-form>
-                    <n-space justify="end">
-                      <n-button strong secondary type="error"
-                                @click="item.show = false;update_server_deleteUser(item.id, item.type);">
-                        {{ $t('common.delete') }}
-                      </n-button>
-                      <n-button
-                          strong secondary type="info"
-                          @click="()=>{
-                                      if(item.type === 'navidrome'){
-                                        server_set_of_addUser_of_type = 'navidrome'
-                                      }else if (item.type === 'jellyfin'){
-                                        server_set_of_addUser_of_type = 'jellyfin'
-                                        if(store_server_user_model.server_login_model_of_apikey) {
-                                          item.password = store_server_user_model.userid_of_Je
-                                        }
-                                      }else if (item.type === 'emby'){
-                                        server_set_of_addUser_of_type = 'emby'
-                                        if(store_server_user_model.server_login_model_of_apikey) {
-                                          item.password = store_server_user_model.userid_of_Je
-                                        }
-                                      }else if (item.type === 'ninesong'){
-                                        server_set_of_addUser_of_type = 'ninesong'
-                                      }
-                                      update_server_setUser(
-                                          item.id,
-                                          item.server_name,item.url,
-                                          item.user_name,item.password,
-                                          item.type
-                                      )
-                                    }">
-                        {{ $t('common.save') }}
-                      </n-button>
                     </n-space>
                   </n-space>
                 </n-card>
               </n-modal>
-            </n-card>
+            </n-alert>
           </DynamicScrollerItem>
         </template>
       </DynamicScroller>
-      LabelContentType
-      TabMusic
-      Movies
-      Books
-      HomeVideosPhotos
-      MusicVideos
-
-      LabelDisplayName
-
-      UseCustomTagDelimiters
-
-      Folders
-      HeaderSelectPath
     </n-space>
     <!-- 服务器添加 -->
     <n-modal
@@ -547,7 +425,7 @@ import error_artist from '@/assets/img/error_artist.jpg'
         <n-space
             vertical size="large" style="width: 400px;">
           <n-space justify="space-between">
-            <span style="font-size: 20px;font-weight: 600;">{{ $t('form.addServer.title') }}</span>
+            <span style="font-size: 20px;font-weight: 600;">{{ $t('ButtonAddMediaLibrary') }}</span>
             <n-button tertiary size="small" @click="Type_Server_Add = !Type_Server_Add">
               <template #icon>
                 <n-icon>
@@ -556,102 +434,47 @@ import error_artist from '@/assets/img/error_artist.jpg'
               </template>
             </n-button>
           </n-space>
-          <n-radio-group v-model:value="server_set_of_addUser_of_type">
-            <n-radio-button
-                style="text-align: center;width: 133px;"
-                :key="Type_Server_Kinds[0].value"
-                :value="Type_Server_Kinds[0].value"
-                :label="Type_Server_Kinds[0].label"
-            />
-            <n-radio-button
-                style="text-align: center;width: 132px;"
-                disabled
-                :key="Type_Server_Kinds[1].value"
-                :value="Type_Server_Kinds[1].value"
-                :label="Type_Server_Kinds[1].label"
-            />
-            <n-radio-button
-                style="text-align: center;width: 133px;"
-                :key="Type_Server_Kinds[2].value"
-                :value="Type_Server_Kinds[2].value"
-                :label="Type_Server_Kinds[2].label"
-            />
-          </n-radio-group>
-          <n-radio-group v-model:value="server_set_of_addUser_of_type">
-            <n-radio-button
-                style="text-align: center;width: 133px;"
-                :key="Type_Server_Kinds[3].value"
-                :value="Type_Server_Kinds[3].value"
-                :label="Type_Server_Kinds[3].label"
-            />
-            <n-radio-button
-                style="text-align: center;width: 133px;"
-                :key="Type_Server_Kinds[4].value"
-                :value="Type_Server_Kinds[4].value"
-                :label="Type_Server_Kinds[4].label"
-            />
-          </n-radio-group>
-          <n-radio-group v-model:value="server_set_of_addUser_of_type">
-            <n-radio-button
-                style="text-align: center;width: 133px;"
-                disabled
-                :key="Type_Server_Kinds[5].value"
-                :value="Type_Server_Kinds[5].value"
-                :label="Type_Server_Kinds[5].label"
-            />
-            <n-radio-button
-                style="text-align: center;width: 133px;"
-                disabled
-                :key="Type_Server_Kinds[6].value"
-                :value="Type_Server_Kinds[6].value"
-                :label="Type_Server_Kinds[6].label"
-            />
-          </n-radio-group>
-          <n-form inline>
-            <n-space vertical style="width: 150px;margin-bottom: 10px;">
-              <span>{{ $t('form.addServer.input_name') }}</span>
-              <n-input clearable placeholder="any" v-model:value="server_set_of_addUser_of_servername"/>
+          <n-form>
+            <n-space vertical style="margin-bottom: 10px;">
+              <span>{{ $t('LabelContentType') }}</span>
+              <n-select v-model:value="contentTypeValue" :options="contentTypeOptions" />
             </n-space>
-            <n-space vertical style="width: 250px;margin-bottom: 10px;">
-              <span>{{ $t('form.addServer.input_url') }}</span>
+            <n-space vertical style="margin-bottom: 10px;">
+              <span>{{ $t('LabelDisplayName') }}</span>
               <n-input-group>
-                <n-input clearable placeholder="http://localhost:4533" v-model:value="server_set_of_addUser_of_url"/>
+                <n-input clearable placeholder="any" v-model:value="server_set_of_addLibrary_of_name"/>
               </n-input-group>
             </n-space>
-          </n-form>
-          <n-form v-if="store_server_user_model.server_login_model_of_apikey" style="margin-top: -12px;">
             <n-space vertical style="margin-bottom: 10px;">
-              <span>{{ $t('HeaderApiKey') }}</span>
-              <n-input clearable placeholder="" v-model:value="server_set_of_addUser_of_apikey"/>
-              <n-button strong secondary type="info"
-                        @click="update_server_apikey_user_option({
-                                          servername: server_set_of_addUser_of_servername,
-                                          url: server_set_of_addUser_of_url,
-                                          apikey: server_set_of_addUser_of_apikey,
-                                          userid: store_server_user_model.userid_of_Je,
-                                          init: true
-                                        })">
-                {{ $t('ButtonOk') }}
-              </n-button>
-            </n-space>
-            <n-space vertical style="margin-bottom: 10px;">
-              <span>{{ $t('LabelSelectUsers') }}</span>
-              <n-select
-                  v-model:value="store_server_user_model.userid_of_Je"
-                  :options="server_set_of_addUser_of_apikey_user_option"
-                  style="width: 220px;margin-top: 6px;"
+              <span>{{ $t('Folders') }}</span>
+              <n-input clearable placeholder="any" v-model:value="server_set_of_addLibrary_of_path"/>
+              <n-select v-model:value="server_set_of_addLibrary_of_path"
+                        :options="browseFolderOptions"
+                        placement="bottom"
+                        @click="find_server_folder_path(server_set_of_addLibrary_of_path)"
+                        @update:value="(value: string) => find_server_folder_path(value)"
               />
-            </n-space>
-          </n-form>
-          <n-form v-else style="margin-top: -12px;">
-            <n-space vertical style="margin-bottom: 10px;">
-              <span v-if="server_set_of_addUser_of_type != 'ninesong'">{{ $t('form.addServer.input_username') }}</span>
-              <span v-else>{{ $t('nsmusics.server_page.server_email') }}</span>
-              <n-input clearable placeholder="" v-model:value="server_set_of_addUser_of_username"/>
-            </n-space>
-            <n-space vertical style="margin-bottom: 10px;">
-              <span>{{ $t('form.addServer.input_password') }}</span>
-              <n-input clearable type="password" show-password-on="click" placeholder="" v-model:value="server_set_of_addUser_of_password"/>
+              <n-list
+                clickable
+                :show-divider="false"
+                style="
+                  height: 160px;
+                  overflow: auto;
+                ">
+                <template #default>
+                  <n-list-item
+                    style="height: 40px;"
+                    :style="{
+                      textAlign: store_player_appearance.player_collapsed_album ? 'center' : 'left'
+                    }"
+                    v-for="(item, index) in browseFolderOptions"
+                    @click="find_server_folder_path(item.value)">
+                    <div class="library_info" style="height: 40px;">
+                      {{ item.label }}
+                    </div>
+                  </n-list-item>
+                </template>
+              </n-list>
             </n-space>
           </n-form>
           <n-space justify="end">
@@ -667,6 +490,11 @@ import error_artist from '@/assets/img/error_artist.jpg'
     </n-modal>
   </n-space>
 </template>
-<style>
-
+<style scoped>
+.library_info{
+  font-size: 14px;
+}
+.library_info:hover {
+  background-color: #f0f0f090;
+}
 </style>

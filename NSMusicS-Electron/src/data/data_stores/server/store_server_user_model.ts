@@ -34,6 +34,9 @@ import {
 import {
     store_server_login_logic
 } from "../../../views/view_server/page_metadata/page_login/store/store_server_login_logic";
+import {
+    Folder_Entity_ApiService_of_NineSong
+} from "../../data_access/servers_configs/ninesong_api/services_web/Folder_Entity/index_service";
 
 export const store_server_user_model = reactive({
     model_select: 'server',
@@ -179,6 +182,9 @@ export const store_server_user_model = reactive({
                     store_server_login_info.server_accessToken = String(userData.accessToken);
                     store_server_login_info.server_refreshToken = String(userData.refreshToken);
                     store_server_auth_token.test_init_server_token();
+
+                    let folder_Entity_ApiService_of_NineSong = new Folder_Entity_ApiService_of_NineSong(url)
+                    store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
                 }else{
                     if (store_app_configs_info.desktop_system_kind === 'docker') {
                         store_server_login_logic.server_logout()
