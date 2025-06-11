@@ -15,6 +15,9 @@ import {ref, computed, watch, onMounted, onBeforeUnmount} from "vue";
 import {
   Folder_Entity_ApiService_of_NineSong
 } from "@/data/data_access/servers_configs/ninesong_api/services_web/Folder_Entity/index_service";
+import {
+  File_Entity_ApiService_of_NineSong
+} from "@/data/data_access/servers_configs/ninesong_api/services_web/File_Entity/Scan Folders/index_service";
 import {useI18n} from "vue-i18n";
 const { t } = useI18n({
   inheritLocale: true
@@ -35,13 +38,13 @@ async function update_server_addUser() {
         1
     );
     if (result) {
-      message.success(t('form.addServer.success'));
-      await scan_server_folder_path([server_set_of_addLibrary_of_path.value], 1, 0);
+      message.success(t('ButtonAddMediaLibrary') + ' | ' + t('LabelFinish'));
+      await scan_server_folder_path(server_set_of_addLibrary_of_path.value, 1, 0);
     } else {
-      message.error(t('error.invalidServer'), { duration: 3000 });
+      message.error(t('ButtonAddMediaLibrary') + ' | ' + t('LabelFailed'), { duration: 3000 });
     }
   } catch (e) {
-    message.error(t('error.invalidServer'), { duration: 3000 });
+    message.error(t('ButtonAddMediaLibrary') + ' | ' + t('LabelFailed'), { duration: 3000 });
   } finally {
     Type_Server_Add.value = !Type_Server_Add.value;
   }
@@ -53,12 +56,16 @@ async function update_server_deleteUser(id: string) {
         id
     )
     if (result) {
-      message.success(t('form.updateServer.success'))
+      message.success(t('HeaderRemoveMediaFolder') + ' | ' + t('LabelFinish'))
+      if(store_server_users.server_select_kind === 'ninesong') {
+        store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
+        console.log(store_server_users.server_all_library)
+      }
     } else {
-      message.error(t('error.invalidServer'), {duration: 3000})
+      message.error(t('HeaderRemoveMediaFolder') + ' | ' + t('LabelFailed'), {duration: 3000})
     }
   }catch{
-    message.error(t('error.invalidServer'),{ duration: 3000 })
+    message.error(t('HeaderRemoveMediaFolder') + ' | ' + t('LabelFailed'),{ duration: 3000 })
   }
 }
 /// server update
@@ -69,45 +76,39 @@ async function update_server_setUser(id: string, newName: string, newFolderPath:
         newName, newFolderPath,
     )
     if(result){
-      message.success(t('form.updateServer.success'))
+      message.success(t('form.editPlaylist.success'))
+      if(store_server_users.server_select_kind === 'ninesong') {
+        store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
+        console.log(store_server_users.server_all_library)
+      }
+      await scan_server_folder_path('', 1, 2,)
     }else{
-      message.error(t('error.invalidServer'),{ duration: 3000 })
+      message.error(t('HeaderError'),{ duration: 3000 })
     }
   }catch{
-    message.error(t('error.invalidServer'),{ duration: 3000 })
+    message.error(t('HeaderError'),{ duration: 3000 })
   }
 }
 /// server folder find
-let lastPath = '';
-let lastProcessedPath = ''; // 新增：记录上一次处理的路径
 async function find_server_folder_path(path: string) {
-  // 1. 检查是否为重复操作（当前路径与上一次处理路径相同）
-  const isRepeatOperation = path === lastProcessedPath;
   server_set_of_addLibrary_of_path.value = path;
-
-  // 2. 保存当前路径到临时变量（用于后续比较）
-  const currentPathBeforeProcessing = lastPath;
+  server_set_of_addLibrary_of_name.value = getFolderNameFromPath(path);
   const result = await folder_Entity_ApiService_of_NineSong.browseFolder_Entity(path);
   if (result) {
-    // 3. 映射文件夹选项
     browseFolderOptions.value = result.map((item: any) => ({
       label: item.name,
       value: item.path,
     }));
-
     browseFolderOptions.value.unshift({
       label: '...',
-      value: lastPath
+      value: '',
     });
-
-    // 5. 更新路径记录（仅在非重复操作时更新）
-    if (!isRepeatOperation) {
-      // 保存当前操作前的路径作为下次的返回路径
-      lastPath = currentPathBeforeProcessing;
-      // 记录本次处理的路径
-      lastProcessedPath = path;
-    }
   }
+}
+function getFolderNameFromPath(path: string): string {
+  const normalizedPath = path.replace(/\\/g, '/').replace(/\/+$/, '');
+  const parts = normalizedPath.split('/');
+  return parts.length > 0 ? parts[parts.length - 1] : path;
 }
 ///
 const stopWatching_Type_Server_Add = watch(() => Type_Server_Add.value, async (newValue) => {
@@ -116,15 +117,79 @@ const stopWatching_Type_Server_Add = watch(() => Type_Server_Add.value, async (n
   }
 });
 /// server scan
-async function scan_server_folder_path(folder_paths: string[], folder_type: number, scan_model: number){
-  createMessage()
+async function scan_server_folder_path(folder_path: string, folder_type: number, scan_model: number) {
+  createMessage();
+  try {
+    // 启动扫描任务（不等待完成）
+    file_Entity_ApiService_of_NineSong.scanFile_Entity(folder_path, folder_type, scan_model);
+
+    // 添加卡顿检测变量[9,10](@ref)
+    let lastProgress = -1; // 上次进度值
+    let sameProgressCount = 0; // 相同进度计数
+    const MAX_SAME_PROGRESS = 10; // 最大允许连续相同进度次数
+
+    // 设置定时器轮询进度
+    const timer = setInterval(async () => {
+      try {
+        const result = await file_Entity_ApiService_of_NineSong.scanProgress();
+
+        // 卡顿检测逻辑[11](@ref)
+        if (result.progress === lastProgress) {
+          sameProgressCount++;
+          if (sameProgressCount >= MAX_SAME_PROGRESS) {
+            clearInterval(timer);
+            removeMessage();
+            updateProgressBar(0);
+            // 刷新媒体库列表
+            if(store_server_users.server_select_kind === 'ninesong') {
+              store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
+              console.log(store_server_users.server_all_library)
+            }
+            return;
+          }
+        } else {
+          sameProgressCount = 0; // 重置计数器
+          lastProgress = result.progress; // 更新最后进度
+        }
+
+        // 更新UI进度显示
+        updateProgressBar(result.progress);
+
+        // 完成时清理
+        if (result && result.progress >= 1) {
+          clearInterval(timer);
+          removeMessage();
+          message.success(t('ScanLibrary') + ' | ' + t('LabelFinish'), { duration: 3000 });
+          // 刷新媒体库列表
+          if(store_server_users.server_select_kind === 'ninesong') {
+            store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
+            console.log(store_server_users.server_all_library)
+          }
+        }
+      } catch (error) {
+        clearInterval(timer);
+        removeMessage();
+      }
+    }, 500); // 每500ms查询一次
+  } catch (error) {
+    console.error('Error starting scan:', error);
+    removeMessage();
+    message.error(t('ScanLibrary') + ' | ' + t('LabelFailed'), { duration: 3000 });
+  }
+}
+const progressBar = ref(0)
+function updateProgressBar(progress: number) {
+  progressBar.value = progress * 100;
+}
+function formatTooltip(value: number): string {
+  return `${value | 0}%`;
 }
 let messageReactive: MessageReactive | null = null
 const createMessage = () => {
+  removeMessage();
   if (!messageReactive) {
     messageReactive = message.info(t('LabelCurrentStatus') + ': ' + t('ScanLibrary'), {
-      closable: true,
-      duration: 5000
+      duration: 6000,
     })
   }
 }
@@ -176,6 +241,7 @@ const updateGridItems = () => {
   }
 };
 let folder_Entity_ApiService_of_NineSong = new Folder_Entity_ApiService_of_NineSong(store_server_login_info.server_url)
+let file_Entity_ApiService_of_NineSong = new File_Entity_ApiService_of_NineSong(store_server_login_info.server_url)
 onMounted(async () => {
   updateGridItems();
   if(store_server_users.server_select_kind === 'ninesong') {
@@ -261,7 +327,7 @@ const refreshModeOptions = ref([
       {{ $t('HeaderLibraries') }} >
     </div>
     <n-space vertical>
-      <n-space justify="start">
+      <n-space justify="start" align="center">
         <n-button icon-placement="left"
                   secondary strong
                   @click="Type_Server_Add = !Type_Server_Add"
@@ -276,8 +342,7 @@ const refreshModeOptions = ref([
         <n-button icon-placement="left"
                   secondary strong
                   @click="async () => {
-                    await scan_server_folder_path([],1,2,)
-                    removeMessage()
+                    scan_server_folder_path('',1,2,)
                   }"
         >
           <template #icon>
@@ -287,6 +352,17 @@ const refreshModeOptions = ref([
           </template>
           {{ $t('ButtonScanAllLibraries') }}
         </n-button>
+        <!--  -->
+        <n-slider :show-tooltip="progressBar !== 0"
+                  v-if="progressBar < 100 && progressBar > 0"
+                  style="
+                  width: 200px;
+                  --n-rail-height: 16px;"
+                  :value="progressBar" :format-tooltip="formatTooltip">
+          <template #thumb>
+            <n-icon-wrapper color="white" :size="0" />
+          </template>
+        </n-slider>
       </n-space>
       <DynamicScroller
          class="table" ref="scrollbar"
@@ -383,16 +459,17 @@ const refreshModeOptions = ref([
                         <n-select v-model:value="refreshModeValue" :options="refreshModeOptions" />
                       </n-space>
                     </n-form>
-                    <n-space justify="space-between">
-                      <n-button strong secondary type="info"
-                                @click="async () => {
-                                  item.show = false;
-                                  await scan_server_folder_path([item.folderPath], 1, refreshModeValue);
-                                  removeMessage()
-                                }">
-                        {{ $t('ScanLibrary') }}
-                      </n-button>
+                    <n-space vertical justify="space-between">
                       <n-space justify="end">
+                        <n-button strong secondary type="info"
+                                  @click="async () => {
+                                    item.show = false;
+                                    scan_server_folder_path(item.folderPath, 1, refreshModeValue);
+                                  }">
+                          {{ $t('ScanLibrary') }}
+                        </n-button>
+                      </n-space>
+                      <n-space justify="space-between">
                         <n-button strong secondary type="error"
                                   @click="item.show = false;update_server_deleteUser(item.id);">
                           {{ $t('common.delete') }}
