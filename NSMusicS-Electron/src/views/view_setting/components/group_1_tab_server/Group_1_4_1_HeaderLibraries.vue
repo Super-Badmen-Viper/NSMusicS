@@ -26,11 +26,26 @@ const { t } = useI18n({
 import { useMessage, MessageReactive } from 'naive-ui'
 const message = useMessage()
 
+const scanningPaths = ref<string[]>([]); // 存储正在扫描的路径
+
 const Type_Server_Add = ref(false)
 const server_set_of_addLibrary_of_name = ref('')
 const server_set_of_addLibrary_of_path = ref('')
+
 /// server add
 async function update_server_addUser() {
+  browseFolderOptions.value.forEach((folder) => {
+    if (folder.value === server_set_of_addLibrary_of_path.value) {
+      message.error(t('ButtonAddMediaLibrary') + ' | ' + t('LabelFailed'), { duration: 3000 });
+      return;
+    }
+  })
+
+  if (scanningPaths.value.includes(server_set_of_addLibrary_of_path.value)) {
+    message.error(t('common.action_other') + ' | ' + t('LabelFailed'), { duration: 3000 });
+    return;
+  }
+
   try {
     const result = await folder_Entity_ApiService_of_NineSong.createFolder_Entity(
         server_set_of_addLibrary_of_name.value,
@@ -49,46 +64,63 @@ async function update_server_addUser() {
     Type_Server_Add.value = !Type_Server_Add.value;
   }
 }
-/// server delete
-async function update_server_deleteUser(id: string) {
+
+/// server delete - 添加路径锁检查
+async function update_server_deleteUser(id: string, folderPath: string) {
+  // 直接检查路径是否在扫描中
+  if (scanningPaths.value.includes(folderPath)) {
+    message.error(t('common.action_other') + ' | ' + t('LabelFailed'), { duration: 3000 });
+    return;
+  }
+
+  if (isScanning) {
+    message.error(t('common.action_other') + ' | ' + t('LabelFailed'), { duration: 3000 });
+    return;
+  }
+
   try {
-    const result = await folder_Entity_ApiService_of_NineSong.deleteFolder_Entity(
-        id
-    )
+    const result = await folder_Entity_ApiService_of_NineSong.deleteFolder_Entity(id);
     if (result) {
-      message.success(t('HeaderRemoveMediaFolder') + ' | ' + t('LabelFinish'))
+      message.success(t('HeaderRemoveMediaFolder') + ' | ' + t('LabelFinish'));
       if(store_server_users.server_select_kind === 'ninesong') {
-        store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
-        console.log(store_server_users.server_all_library)
+        store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All();
       }
+      await scan_server_folder_path(folderPath, 1, 3);
     } else {
-      message.error(t('HeaderRemoveMediaFolder') + ' | ' + t('LabelFailed'), {duration: 3000})
+      message.error(t('HeaderRemoveMediaFolder') + ' | ' + t('LabelFailed'), {duration: 3000});
     }
-  }catch{
-    message.error(t('HeaderRemoveMediaFolder') + ' | ' + t('LabelFailed'),{ duration: 3000 })
+  } catch {
+    message.error(t('HeaderRemoveMediaFolder') + ' | ' + t('LabelFailed'), { duration: 3000 });
   }
 }
+
 /// server update
 async function update_server_setUser(id: string, newName: string, newFolderPath: string) {
+  // 直接检查路径是否在扫描中
+  if (scanningPaths.value.includes(folderPath)) {
+    message.error(t('common.action_other') + ' | ' + t('LabelFailed'), { duration: 3000 });
+    return;
+  }
+
   try {
     const result = await folder_Entity_ApiService_of_NineSong.updateFolder_Entity(
         id,
         newName, newFolderPath,
-    )
-    if(result){
-      message.success(t('form.editPlaylist.success'))
+    );
+    if(result) {
+      message.success(t('form.editPlaylist.success'));
       if(store_server_users.server_select_kind === 'ninesong') {
-        store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
-        console.log(store_server_users.server_all_library)
+        store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All();
       }
-      await scan_server_folder_path('', 1, 2,)
-    }else{
-      message.error(t('HeaderError'),{ duration: 3000 })
+      await scan_server_folder_path('', 1, 2);
+    } else {
+      message.error(t('HeaderError'), { duration: 3000 });
     }
-  }catch{
-    message.error(t('HeaderError'),{ duration: 3000 })
+  } catch {
+    message.error(t('HeaderError'), { duration: 3000 });
   }
 }
+
 /// server folder find
 async function find_server_folder_path(path: string) {
   server_set_of_addLibrary_of_path.value = path;
@@ -105,100 +137,112 @@ async function find_server_folder_path(path: string) {
     });
   }
 }
+
 function getFolderNameFromPath(path: string): string {
   const normalizedPath = path.replace(/\\/g, '/').replace(/\/+$/, '');
   const parts = normalizedPath.split('/');
   return parts.length > 0 ? parts[parts.length - 1] : path;
 }
-///
+
 const stopWatching_Type_Server_Add = watch(() => Type_Server_Add.value, async (newValue) => {
   if (newValue) {
-    await find_server_folder_path('')
+    await find_server_folder_path('');
   }
 });
-/// server scan
+
+/// server scan - 添加路径锁管理
 async function scan_server_folder_path(folder_path: string, folder_type: number, scan_model: number) {
+  // 添加路径到扫描数组
+  scanningPaths.value.push(folder_path);
+
   createMessage();
+  progressBarShow.value = true;
+
   try {
-    // 启动扫描任务（不等待完成）
     file_Entity_ApiService_of_NineSong.scanFile_Entity(folder_path, folder_type, scan_model);
 
-    // 添加卡顿检测变量[9,10](@ref)
-    let lastProgress = -1; // 上次进度值
-    let sameProgressCount = 0; // 相同进度计数
-    const MAX_SAME_PROGRESS = 10; // 最大允许连续相同进度次数
+    let lastProgress = -1;
+    let sameProgressCount = 0;
+    const MAX_SAME_PROGRESS = 5;
 
-    // 设置定时器轮询进度
     const timer = setInterval(async () => {
       try {
         const result = await file_Entity_ApiService_of_NineSong.scanProgress();
 
-        // 卡顿检测逻辑[11](@ref)
         if (result.progress === lastProgress) {
           sameProgressCount++;
           if (sameProgressCount >= MAX_SAME_PROGRESS) {
+            sameProgressCount = 0;
             clearInterval(timer);
             removeMessage();
             updateProgressBar(0);
-            // 刷新媒体库列表
             if(store_server_users.server_select_kind === 'ninesong') {
-              store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
-              console.log(store_server_users.server_all_library)
+              store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All();
             }
+            progressBarShow.value = false;
+
+            // 从数组中移除路径
+            scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
             return;
           }
         } else {
-          sameProgressCount = 0; // 重置计数器
-          lastProgress = result.progress; // 更新最后进度
+          sameProgressCount = 0;
+          lastProgress = result.progress;
         }
 
-        // 更新UI进度显示
         updateProgressBar(result.progress);
 
-        // 完成时清理
-        if (result && result.progress >= 1) {
+        // 扫描完成时移除路径
+        if (result.progress === 1) {
           clearInterval(timer);
-          removeMessage();
-          message.success(t('ScanLibrary') + ' | ' + t('LabelFinish'), { duration: 3000 });
-          // 刷新媒体库列表
-          if(store_server_users.server_select_kind === 'ninesong') {
-            store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
-            console.log(store_server_users.server_all_library)
-          }
+          scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
         }
       } catch (error) {
         clearInterval(timer);
         removeMessage();
+
+        // 错误时移除路径
+        scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
       }
-    }, 500); // 每500ms查询一次
+    }, 500);
   } catch (error) {
     console.error('Error starting scan:', error);
     removeMessage();
     message.error(t('ScanLibrary') + ' | ' + t('LabelFailed'), { duration: 3000 });
+
+    // 错误时移除路径
+    scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
   }
 }
-const progressBar = ref(0)
+
+const progressBar = ref(0);
+const progressBarShow = ref(false);
+
 function updateProgressBar(progress: number) {
   progressBar.value = progress * 100;
 }
+
 function formatTooltip(value: number): string {
   return `${value | 0}%`;
 }
-let messageReactive: MessageReactive | null = null
+
+let messageReactive: MessageReactive | null = null;
+
 const createMessage = () => {
   removeMessage();
   if (!messageReactive) {
     messageReactive = message.info(t('LabelCurrentStatus') + ': ' + t('ScanLibrary'), {
       duration: 6000,
-    })
+    });
   }
-}
+};
+
 const removeMessage = () => {
   if (messageReactive) {
-    messageReactive.destroy()
-    messageReactive = null
+    messageReactive.destroy();
+    messageReactive = null;
   }
-}
+};
 
 // gridItems Re render
 ////// librarylist_view page_layout gridItems
@@ -246,7 +290,7 @@ onMounted(async () => {
   updateGridItems();
   if(store_server_users.server_select_kind === 'ninesong') {
     store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
-    console.log(store_server_users.server_all_library)
+    await find_server_folder_path('')
   }
 });
 onBeforeUnmount(() => {
@@ -354,7 +398,7 @@ const refreshModeOptions = ref([
         </n-button>
         <!--  -->
         <n-slider :show-tooltip="progressBar !== 0"
-                  v-if="progressBar < 100 && progressBar > 0"
+                  v-if="progressBarShow"
                   style="
                   width: 200px;
                   --n-rail-height: 16px;"
@@ -471,7 +515,7 @@ const refreshModeOptions = ref([
                       </n-space>
                       <n-space justify="space-between">
                         <n-button strong secondary type="error"
-                                  @click="item.show = false;update_server_deleteUser(item.id);">
+                                  @click="item.show = false;update_server_deleteUser(item.id, item.folderPath);">
                           {{ $t('common.delete') }}
                         </n-button>
                         <n-button
