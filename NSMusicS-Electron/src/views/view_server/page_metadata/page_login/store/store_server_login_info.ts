@@ -9,4 +9,6 @@ export const store_server_login_info = reactive({
 
     server_accessToken: '',
     server_refreshToken: '',
+
+    scanning_paths: [],
 });

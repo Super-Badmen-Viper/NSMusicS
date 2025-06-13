@@ -26,8 +26,6 @@ const { t } = useI18n({
 import { useMessage, MessageReactive } from 'naive-ui'
 const message = useMessage()
 
-const scanningPaths = ref<string[]>([]); // 存储正在扫描的路径
-
 const Type_Server_Add = ref(false)
 const server_set_of_addLibrary_of_name = ref('')
 const server_set_of_addLibrary_of_path = ref('')
@@ -35,13 +33,13 @@ const server_set_of_addLibrary_of_path = ref('')
 /// server add
 async function update_server_addUser() {
   browseFolderOptions.value.forEach((folder) => {
-    if (folder.value === server_set_of_addLibrary_of_path.value) {
+    if (folder === server_set_of_addLibrary_of_path.value) {
       message.error(t('ButtonAddMediaLibrary') + ' | ' + t('LabelFailed'), { duration: 3000 });
       return;
     }
   })
 
-  if (scanningPaths.value.includes(server_set_of_addLibrary_of_path.value)) {
+  if (store_server_login_info.scanning_paths.includes(server_set_of_addLibrary_of_path.value)) {
     message.error(t('common.action_other') + ' | ' + t('LabelFailed'), { duration: 3000 });
     return;
   }
@@ -68,12 +66,7 @@ async function update_server_addUser() {
 /// server delete - 添加路径锁检查
 async function update_server_deleteUser(id: string, folderPath: string) {
   // 直接检查路径是否在扫描中
-  if (scanningPaths.value.includes(folderPath)) {
-    message.error(t('common.action_other') + ' | ' + t('LabelFailed'), { duration: 3000 });
-    return;
-  }
-
-  if (isScanning) {
+  if (store_server_login_info.scanning_paths.includes(folderPath)) {
     message.error(t('common.action_other') + ' | ' + t('LabelFailed'), { duration: 3000 });
     return;
   }
@@ -97,7 +90,7 @@ async function update_server_deleteUser(id: string, folderPath: string) {
 /// server update
 async function update_server_setUser(id: string, newName: string, newFolderPath: string) {
   // 直接检查路径是否在扫描中
-  if (scanningPaths.value.includes(folderPath)) {
+  if (store_server_login_info.scanning_paths.includes(newFolderPath)) {
     message.error(t('common.action_other') + ' | ' + t('LabelFailed'), { duration: 3000 });
     return;
   }
@@ -153,7 +146,7 @@ const stopWatching_Type_Server_Add = watch(() => Type_Server_Add.value, async (n
 /// server scan - 添加路径锁管理
 async function scan_server_folder_path(folder_path: string, folder_type: number, scan_model: number) {
   // 添加路径到扫描数组
-  scanningPaths.value.push(folder_path);
+  store_server_login_info.scanning_paths.push(folder_path);
 
   createMessage();
   progressBarShow.value = true;
@@ -169,7 +162,7 @@ async function scan_server_folder_path(folder_path: string, folder_type: number,
       try {
         const result = await file_Entity_ApiService_of_NineSong.scanProgress();
 
-        if (result.progress === lastProgress) {
+        if (result.progress === lastProgress || result.progress === 1) {
           sameProgressCount++;
           if (sameProgressCount >= MAX_SAME_PROGRESS) {
             sameProgressCount = 0;
@@ -182,7 +175,7 @@ async function scan_server_folder_path(folder_path: string, folder_type: number,
             progressBarShow.value = false;
 
             // 从数组中移除路径
-            scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
+            store_server_login_info.scanning_paths = store_server_login_info.scanning_paths.filter(p => p !== folder_path);
             return;
           }
         } else {
@@ -195,14 +188,14 @@ async function scan_server_folder_path(folder_path: string, folder_type: number,
         // 扫描完成时移除路径
         if (result.progress === 1) {
           clearInterval(timer);
-          scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
+          store_server_login_info.scanning_paths = store_server_login_info.scanning_paths.filter(p => p !== folder_path);
         }
       } catch (error) {
         clearInterval(timer);
         removeMessage();
 
         // 错误时移除路径
-        scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
+        store_server_login_info.scanning_paths = store_server_login_info.scanning_paths.filter(p => p !== folder_path);
       }
     }, 500);
   } catch (error) {
@@ -211,7 +204,7 @@ async function scan_server_folder_path(folder_path: string, folder_type: number,
     message.error(t('ScanLibrary') + ' | ' + t('LabelFailed'), { duration: 3000 });
 
     // 错误时移除路径
-    scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
+    store_server_login_info.scanning_paths = store_server_login_info.scanning_paths.filter(p => p !== folder_path);
   }
 }
 
@@ -397,7 +390,7 @@ const refreshModeOptions = ref([
           {{ $t('ButtonScanAllLibraries') }}
         </n-button>
         <!--  -->
-        <n-slider :show-tooltip="progressBar !== 0"
+        <n-slider :show-tooltip="progressBar !== 0 && progressBar !== 100"
                   v-if="progressBarShow"
                   style="
                   width: 200px;

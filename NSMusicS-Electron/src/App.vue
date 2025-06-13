@@ -114,6 +114,11 @@ function create_menuOptions_appBar(){
       //   key: 'categories',
       //   icon: renderIcon(Apps20Regular),
       // },
+      // {
+      //   label: computed(() => renderRouterLink('media_cue', t('entity.smartPlaylist') + t('Categories'))),
+      //   key: 'media_cue',
+      //   icon: renderIcon(Apps20Regular),
+      // },
       {
         label: computed(() => renderRouterLink('album', t('entity.album_other'))),
         key: 'album',
@@ -250,6 +255,11 @@ async function handleMenuSelection() {
       store_router_data_info.router_select_model_categories = true;
       fetchDataIfNeeded('categories');
     },
+    'media_cue': () => {
+      clearFilesIfNeeded('media_cue');
+      store_router_data_info.router_select_model_media_cue = true;
+      fetchDataIfNeeded('media_cue');
+    },
     'update': () => {
       clearFilesIfNeeded();
       store_router_data_info.router_select_model_update = true;
@@ -287,12 +297,14 @@ async function handleMenuSelection() {
     await selectedAction();
   }
 }
-function clearFilesIfNeeded(except?: 'home' | 'categories' | 'album' | 'media' | 'artist') {
+function clearFilesIfNeeded(except?: 'home' | 'categories' | 'media_cue' | 'album' | 'media' | 'artist') {
   if (!store_router_data_logic.clear_Memory_Model) {
     if (except === 'home') {
       store_router_data_logic.clear_Files_temporary_except_home();
     } else if (except === 'categories') {
       store_router_data_logic.clear_Files_temporary_except_categories();
+    } else if (except === 'media_cue') {
+      store_router_data_logic.clear_Files_temporary_except_media_cue();
     } else if (except === 'album') {
       store_router_data_logic.clear_Files_temporary_except_album();
     } else if (except === 'media') {
@@ -304,12 +316,14 @@ function clearFilesIfNeeded(except?: 'home' | 'categories' | 'album' | 'media' |
     }
   }
 }
-function fetchDataIfNeeded(type: 'home' | 'categories' | 'album' | 'media' | 'artist') {
+function fetchDataIfNeeded(type: 'home' | 'categories' | 'media_cue' | 'album' | 'media' | 'artist') {
   if (store_router_data_logic.clear_Memory_Model) {
     if (type === 'home') {
       store_general_fetch_home_list.fetchData_Home();
     } else if (type === 'categories') {
       store_general_fetch_home_list.fetchData_Home();
+    } else if (type === 'media_cue') {
+      store_general_fetch_media_list.fetchData_Media();
     } else if (type === 'album') {
       store_general_fetch_album_list.fetchData_Album();
     } else if (type === 'media') {
@@ -348,6 +362,9 @@ routers.afterEach(async (to, from) => {
       store_router_data_info.router_name = to.name;
     } else if (to.name === 'categories') {
       store_router_data_info.router_select_model_categories = true;
+      store_router_data_info.router_name = to.name;
+    } else if (to.name === 'media_cue') {
+      store_router_data_info.router_select_model_media_cue = true;
       store_router_data_info.router_name = to.name;
     } else if (to.name === 'update') {
       store_router_data_info.router_select_model_update = true;
@@ -736,7 +753,6 @@ const { locale } = useI18n({
   useScope: 'global'
 })
 import {store_server_login_logic} from "@/views/view_server/page_metadata/page_login/store/store_server_login_logic";
-import {store_server_login_info} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
 import {
   store_server_model_statistics
 } from "@/data/data_stores/server/server_api_abstract/music_scene/model/model_statistics";
@@ -863,6 +879,9 @@ if(isElectron) {
             <!--Categories View -->
             <RouterView class="view_show_data"
                         v-else-if="store_router_data_info.router_select_model_categories"></RouterView>
+            <!--Categories View -->
+            <RouterView class="view_show_data"
+                        v-else-if="store_router_data_info.router_select_model_media_cue"></RouterView>
             <!--Updateing View-->
             <RouterView class="view_show_data"
                         v-else-if="store_router_data_info.router_select_model_update"></RouterView>

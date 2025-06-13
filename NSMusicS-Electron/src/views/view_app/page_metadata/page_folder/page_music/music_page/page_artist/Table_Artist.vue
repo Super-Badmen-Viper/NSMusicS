@@ -968,8 +968,7 @@ onBeforeUnmount(() => {
           {{ $t('player.addNext') }}
         </v-contextmenu-item>
         <v-contextmenu-item
-            v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
-                  "
+            v-if="store_server_users.server_select_kind === 'navidrome' || store_server_user_model.model_server_type_of_local"
             @click="menu_item_edit_selected_media_tags">
           {{ $t('page.contextMenu.showDetails') }}
         </v-contextmenu-item>

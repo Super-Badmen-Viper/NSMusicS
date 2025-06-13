@@ -26,6 +26,7 @@ import {onBeforeUnmount} from 'vue';
 const get_playerbar_to_switch_playerview = inject('get_playerbar_to_switch_playerview');
 
 import { useI18n } from 'vue-i18n'
+import {store_app_configs_info} from '@/data/data_stores/app/store_app_configs_info'
 import {store_view_media_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
 import {store_server_login_info} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
 const { t } = useI18n({
@@ -269,6 +270,10 @@ const init_player_howler = async () => {
     },
     onloaderror: (id: any, error: any) => {
       store_player_audio_logic.player.isPlaying = false;
+      // if (error === 'No codec support for selected audio sources.'){
+      //   message.error(error,{ duration: 5000 });
+      //   message.error('Web播放组件Howler.js不支持此音频编码，请使用NSMusicS桌面端的MPV播放',{ duration: 5000 });
+      // }
     },
   });
 };

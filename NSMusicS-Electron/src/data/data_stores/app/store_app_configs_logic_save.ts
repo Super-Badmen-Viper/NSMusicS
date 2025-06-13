@@ -83,17 +83,21 @@ export const store_app_configs_logic_save = reactive({
                     player_device_select: String(store_player_audio_logic.player_device_select)
                 }));
             if (isElectron) {
-                let db: any = null;
-                db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
-                db.pragma('journal_mode = WAL');
-                db.exec('PRAGMA foreign_keys = OFF');
-                let system_Configs_Write = new Class_Set_System_Configs_Write()
-                system_Configs_Write.system_app_config(
-                    db,
-                    app_Configs.value)
-                console.log('save config succuessful')
-                db.close();
-                db = null;
+                try {
+                    let db: any = null;
+                    db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
+                    db.pragma('journal_mode = WAL');
+                    db.exec('PRAGMA foreign_keys = OFF');
+                    let system_Configs_Write = new Class_Set_System_Configs_Write()
+                    system_Configs_Write.system_app_config(
+                        db,
+                        app_Configs.value)
+                    console.log('save config succuessful')
+                    db.close();
+                    db = null;
+                }catch (e) {
+                    console.error(e);
+                }
             } else {
                 if (!store_router_data_info.router_select_model_server_login && store_server_login_info.server_accessToken.length > 0) {
                     const data = Object.entries(app_Configs.value).map(([key, value]) => ({
@@ -120,18 +124,22 @@ export const store_app_configs_logic_save = reactive({
     },
     async save_system_library_config() {
         if (isElectron) {
-            let db: any = null;
-            db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
-            db.pragma('journal_mode = WAL');
-            db.exec('PRAGMA foreign_keys = OFF');
+            try {
+                let db: any = null;
+                db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
+                db.pragma('journal_mode = WAL');
+                db.exec('PRAGMA foreign_keys = OFF');
 
-            let system_Configs_Write = new Class_Set_System_Configs_Write()
-            system_Configs_Write.system_library_config(
-                db,
-                store_local_db_info.local_config_of_all_user_of_sqlite)
-            this.save_system_config_of_App_Configs()
-            db.close();
-            db = null;
+                let system_Configs_Write = new Class_Set_System_Configs_Write()
+                system_Configs_Write.system_library_config(
+                    db,
+                    store_local_db_info.local_config_of_all_user_of_sqlite)
+                this.save_system_config_of_App_Configs()
+                db.close();
+                db = null;
+            }catch (e) {
+                console.error(e);
+            }
         } else {
             if (!store_router_data_info.router_select_model_server_login && store_server_login_info.server_accessToken.length > 0) {
                 const data = Object.entries(store_local_db_info.local_config_of_all_user_of_sqlite).map(([key, value]) => ({
@@ -174,16 +182,20 @@ export const store_app_configs_logic_save = reactive({
             }))
         let system_Configs_Write = new Class_Set_System_Configs_Write()
         if(isElectron) {
-            let db: any = null;
-            db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
-            db.pragma('journal_mode = WAL');
-            db.exec('PRAGMA foreign_keys = OFF');
-            system_Configs_Write.system_player_config_of_ui(
-                db,
-                player_Configs_of_UI.value)
-            this.save_system_config_of_App_Configs()
-            db.close();
-            db = null;
+            try {
+                let db: any = null;
+                db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
+                db.pragma('journal_mode = WAL');
+                db.exec('PRAGMA foreign_keys = OFF');
+                system_Configs_Write.system_player_config_of_ui(
+                    db,
+                    player_Configs_of_UI.value)
+                this.save_system_config_of_App_Configs()
+                db.close();
+                db = null;
+            }catch (e) {
+                console.error(e);
+            }
         } else {
             if(!store_router_data_info.router_select_model_server_login && store_server_login_info.server_accessToken.length > 0) {
                 const data = Object.entries(player_Configs_of_UI.value).map(([key, value]) => ({
@@ -240,17 +252,21 @@ export const store_app_configs_logic_save = reactive({
                 player_mode_of_medialist_from_external_import: String(store_player_appearance.player_mode_of_medialist_from_external_import),
             }));
         if(isElectron) {
-            let db: any = null;
-            db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
-            db.pragma('journal_mode = WAL');
-            db.exec('PRAGMA foreign_keys = OFF');
-            let system_Configs_Write = new Class_Set_System_Configs_Write()
-            system_Configs_Write.system_player_config_of_audio(
-                db,
-                player_Configs_of_Audio_Info.value)
-            this.save_system_config_of_App_Configs()
-            db.close();
-            db = null;
+            try {
+                let db: any = null;
+                db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
+                db.pragma('journal_mode = WAL');
+                db.exec('PRAGMA foreign_keys = OFF');
+                let system_Configs_Write = new Class_Set_System_Configs_Write()
+                system_Configs_Write.system_player_config_of_audio(
+                    db,
+                    player_Configs_of_Audio_Info.value)
+                this.save_system_config_of_App_Configs()
+                db.close();
+                db = null;
+            }catch (e) {
+                console.error(e);
+            }
         } else {
             if(!store_router_data_info.router_select_model_server_login && store_server_login_info.server_accessToken.length > 0) {
                 const data = Object.entries(player_Configs_of_Audio_Info.value).map(([key, value]) => ({
@@ -276,31 +292,35 @@ export const store_app_configs_logic_save = reactive({
     },
     async save_system_playlist_item_id_config(){
         if(isElectron) {
-            let db: any = null;
-            if(store_server_user_model.model_server_type_of_local) {
-                db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
-                db.pragma('journal_mode = WAL');
-                db.exec('PRAGMA foreign_keys = OFF');
+            try {
+                let db: any = null;
+                if (store_server_user_model.model_server_type_of_local) {
+                    db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
+                    db.pragma('journal_mode = WAL');
+                    db.exec('PRAGMA foreign_keys = OFF');
 
-                let system_Configs_Write = new Class_Set_System_Configs_Write();
-                system_Configs_Write.system_playlist_item_id_config(
-                    db,
-                    store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds
-                )
-            }else{
-                db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
-                db.pragma('journal_mode = WAL');
-                db.exec('PRAGMA foreign_keys = OFF');
+                    let system_Configs_Write = new Class_Set_System_Configs_Write();
+                    system_Configs_Write.system_playlist_item_id_config(
+                        db,
+                        store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds
+                    )
+                } else {
+                    db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
+                    db.pragma('journal_mode = WAL');
+                    db.exec('PRAGMA foreign_keys = OFF');
 
-                let system_Configs_Write = new Class_Set_System_Configs_Write();
-                system_Configs_Write.system_playlist_item_config(
-                    db,
-                    store_playlist_list_info.playlist_MediaFiles_temporary
-                )
+                    let system_Configs_Write = new Class_Set_System_Configs_Write();
+                    system_Configs_Write.system_playlist_item_config(
+                        db,
+                        store_playlist_list_info.playlist_MediaFiles_temporary
+                    )
+                }
+                await this.save_system_config_of_App_Configs()
+                db.close();
+                db = null;
+            }catch (e) {
+                console.error(e);
             }
-            await this.save_system_config_of_App_Configs()
-            db.close();
-            db = null;
         } else {
             const excludedFields = new Set([
                 'play_id',
@@ -340,17 +360,21 @@ export const store_app_configs_logic_save = reactive({
     },
     async save_system_config_of_Servers_Config(){
         if(isElectron) {
-            let db: any = null;
-            db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
-            db.pragma('journal_mode = WAL');
-            db.exec('PRAGMA foreign_keys = OFF');
-            let system_Configs_Write = new Class_Set_System_Configs_Write()
-            system_Configs_Write.system_servers_config(
-                db,
-                store_server_users.server_config_of_all_user_of_sqlite)
-            await this.save_system_config_of_App_Configs()
-            db.close();
-            db = null;
+            try {
+                let db: any = null;
+                db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
+                db.pragma('journal_mode = WAL');
+                db.exec('PRAGMA foreign_keys = OFF');
+                let system_Configs_Write = new Class_Set_System_Configs_Write()
+                system_Configs_Write.system_servers_config(
+                    db,
+                    store_server_users.server_config_of_all_user_of_sqlite)
+                await this.save_system_config_of_App_Configs()
+                db.close();
+                db = null;
+            }catch (e) {
+                console.error(e);
+            }
         } else {
             // 不提供服务端配置整体写入
             // NineSong app server config 仅支持get查询所有、put单项创建：新ID值、put单项更新：已有ID值
@@ -358,26 +382,30 @@ export const store_app_configs_logic_save = reactive({
     },
     save_system_config_of_View_Router_History(){
         if(isElectron) {
-            let db: any = null;
-            db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
-            db.pragma('journal_mode = WAL');
-            db.exec('PRAGMA foreign_keys = OFF');
+            try {
+                let db: any = null;
+                db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
+                db.pragma('journal_mode = WAL');
+                db.exec('PRAGMA foreign_keys = OFF');
 
-            let system_Configs_Write = new Class_Set_System_Configs_Write();
-            system_Configs_Write.system_view_history(
-                db,
-                store_router_history_data_of_media.router_select_history_date_of_Media,
-                [],
-                undefined,
-                // router_select_history_date_of_Album.value,
-                [],
-                undefined,
-                // router_select_history_date_of_Artist.value,
-                [],
-            )
-            this.save_system_config_of_App_Configs()
-            db.close();
-            db = null;
+                let system_Configs_Write = new Class_Set_System_Configs_Write();
+                system_Configs_Write.system_view_history(
+                    db,
+                    store_router_history_data_of_media.router_select_history_date_of_Media,
+                    [],
+                    undefined,
+                    // router_select_history_date_of_Album.value,
+                    [],
+                    undefined,
+                    // router_select_history_date_of_Artist.value,
+                    [],
+                )
+                this.save_system_config_of_App_Configs()
+                db.close();
+                db = null;
+            }catch (e) {
+                console.error(e);
+            }
         } else {
             // other
         }

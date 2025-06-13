@@ -28,6 +28,7 @@ export const store_router_data_info = reactive({
     router_select_model_menu: false,
     router_select_model_home: false,
     router_select_model_categories: false,
+    router_select_model_media_cue: false,
     router_select_model_update: false,
     router_select_model_media: false,
     router_select_model_album: false,
@@ -44,6 +45,9 @@ watch(() => store_router_data_info.router_select, async (newValue) => {
             store_general_fetch_home_list.fetchData_Home()
         } else if (newValue === 'categories') {
             store_router_data_info.router_select_model_categories = true
+            store_general_fetch_home_list.fetchData_Home()
+        } else if (newValue === 'media_cue') {
+            store_router_data_info.router_select_model_media_cue = true
             store_general_fetch_home_list.fetchData_Home()
         } else if (newValue === 'song') {
             store_router_data_info.router_select_model_media = true

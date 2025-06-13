@@ -1,6 +1,3 @@
-/**
- * you need to import the some interfaces
- */
 import {
     DefineLocaleMessage,
     DefineDateTimeFormat,
