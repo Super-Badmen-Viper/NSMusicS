@@ -29,7 +29,8 @@ const message = useMessage()
 const Type_Server_Add = ref(false)
 const server_set_of_addLibrary_of_name = ref('')
 const server_set_of_addLibrary_of_path = ref('')
-
+const scanningPaths = ref<string[]>([]); // 存储正在扫描的路径
+const scanningAll = ref(false)
 /// server add
 async function update_server_addUser() {
   browseFolderOptions.value.forEach((folder) => {
@@ -39,7 +40,7 @@ async function update_server_addUser() {
     }
   })
 
-  if (store_server_login_info.scanning_paths.includes(server_set_of_addLibrary_of_path.value)) {
+  if (scanningPaths.value.includes(server_set_of_addLibrary_of_path.value)) {
     message.error(t('common.action_other') + ' | ' + t('LabelFailed'), { duration: 3000 });
     return;
   }
@@ -65,32 +66,30 @@ async function update_server_addUser() {
 
 /// server delete - 添加路径锁检查
 async function update_server_deleteUser(id: string, folderPath: string) {
-  // 直接检查路径是否在扫描中
-  if (store_server_login_info.scanning_paths.includes(folderPath)) {
-    message.error(t('common.action_other') + ' | ' + t('LabelFailed'), { duration: 3000 });
-    return;
-  }
-
-  try {
-    const result = await folder_Entity_ApiService_of_NineSong.deleteFolder_Entity(id);
-    if (result) {
-      message.success(t('HeaderRemoveMediaFolder') + ' | ' + t('LabelFinish'));
-      if(store_server_users.server_select_kind === 'ninesong') {
-        store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All();
+  if(scanningPaths.length === 0 && !scanningAll) {
+    try {
+      const result = await folder_Entity_ApiService_of_NineSong.deleteFolder_Entity(id);
+      if (result) {
+        message.success(t('HeaderRemoveMediaFolder') + ' | ' + t('LabelFinish'));
+        if (store_server_users.server_select_kind === 'ninesong') {
+          store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All();
+        }
+        await scan_server_folder_path(folderPath, 1, 3);
+      } else {
+        message.error(t('HeaderRemoveMediaFolder') + ' | ' + t('LabelFailed'), {duration: 3000});
       }
-      await scan_server_folder_path(folderPath, 1, 3);
-    } else {
+    } catch {
       message.error(t('HeaderRemoveMediaFolder') + ' | ' + t('LabelFailed'), {duration: 3000});
     }
-  } catch {
-    message.error(t('HeaderRemoveMediaFolder') + ' | ' + t('LabelFailed'), { duration: 3000 });
+  }else{
+    message.error(t('LibraryScanFanoutConcurrency') + ' | ' + t('LabelFailed'), { duration: 3000 });
   }
 }
 
 /// server update
 async function update_server_setUser(id: string, newName: string, newFolderPath: string) {
   // 直接检查路径是否在扫描中
-  if (store_server_login_info.scanning_paths.includes(newFolderPath)) {
+  if (scanningPaths.value.includes(newFolderPath)) {
     message.error(t('common.action_other') + ' | ' + t('LabelFailed'), { duration: 3000 });
     return;
   }
@@ -146,7 +145,7 @@ const stopWatching_Type_Server_Add = watch(() => Type_Server_Add.value, async (n
 /// server scan - 添加路径锁管理
 async function scan_server_folder_path(folder_path: string, folder_type: number, scan_model: number) {
   // 添加路径到扫描数组
-  store_server_login_info.scanning_paths.push(folder_path);
+  scanningPaths.value.push(folder_path);
 
   createMessage();
   progressBarShow.value = true;
@@ -175,7 +174,8 @@ async function scan_server_folder_path(folder_path: string, folder_type: number,
             progressBarShow.value = false;
 
             // 从数组中移除路径
-            store_server_login_info.scanning_paths = store_server_login_info.scanning_paths.filter(p => p !== folder_path);
+            scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
+            scanningAll.value = false;
             return;
           }
         } else {
@@ -188,14 +188,16 @@ async function scan_server_folder_path(folder_path: string, folder_type: number,
         // 扫描完成时移除路径
         if (result.progress === 1) {
           clearInterval(timer);
-          store_server_login_info.scanning_paths = store_server_login_info.scanning_paths.filter(p => p !== folder_path);
+          scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
+          scanningAll.value = false;
         }
       } catch (error) {
         clearInterval(timer);
         removeMessage();
 
         // 错误时移除路径
-        store_server_login_info.scanning_paths = store_server_login_info.scanning_paths.filter(p => p !== folder_path);
+        scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
+        scanningAll.value = false;
       }
     }, 500);
   } catch (error) {
@@ -204,7 +206,7 @@ async function scan_server_folder_path(folder_path: string, folder_type: number,
     message.error(t('ScanLibrary') + ' | ' + t('LabelFailed'), { duration: 3000 });
 
     // 错误时移除路径
-    store_server_login_info.scanning_paths = store_server_login_info.scanning_paths.filter(p => p !== folder_path);
+    scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
   }
 }
 
@@ -284,11 +286,13 @@ onMounted(async () => {
   if(store_server_users.server_select_kind === 'ninesong') {
     store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
     await find_server_folder_path('')
+    scanningPaths.value = store_server_login_info.scanning_paths
   }
 });
 onBeforeUnmount(() => {
   stopWatching_window_innerWidth()
   stopWatching_Type_Server_Add()
+  store_server_login_info.scanning_paths = scanningPaths.value;
 });
 
 import error_album_old from '@/assets/img/error_album_old.jpg'
@@ -367,8 +371,13 @@ const refreshModeOptions = ref([
       <n-space justify="start" align="center">
         <n-button icon-placement="left"
                   secondary strong
-                  @click="Type_Server_Add = !Type_Server_Add"
-        >
+                  @click="() => {
+                    if(!scanningAll){
+                      Type_Server_Add = !Type_Server_Add
+                    }else{
+                      message.error(t('LibraryScanFanoutConcurrency') + ' | ' + t('LabelFailed'), { duration: 3000 });
+                    }
+                  }">
           <template #icon>
             <NIcon>
               <AddCircle32Regular />
@@ -379,9 +388,14 @@ const refreshModeOptions = ref([
         <n-button icon-placement="left"
                   secondary strong
                   @click="async () => {
-                    scan_server_folder_path('',1,2,)
-                  }"
-        >
+                    if(scanningPaths.length > 0 || scanningAll) {
+                      message.error(t('LibraryScanFanoutConcurrency') + ' | ' + t('LabelFailed'), { duration: 3000 });
+                      return;
+                    }else{
+                      scanningAll = true;
+                      scan_server_folder_path('',1,2,)
+                    }
+                  }">
           <template #icon>
             <NIcon>
               <ArrowReset24Filled />
@@ -424,7 +438,11 @@ const refreshModeOptions = ref([
               class="server_item_info"
               tag="div"
               @click="() => {
-                item.show = !item.show;
+                if(!scanningAll){
+                  item.show = !item.show;
+                }else{
+                  message.error(t('LibraryScanFanoutConcurrency') + ' | ' + t('LabelFailed'), { duration: 3000 });
+                }
               }"
               style="
                 width: 308px;
