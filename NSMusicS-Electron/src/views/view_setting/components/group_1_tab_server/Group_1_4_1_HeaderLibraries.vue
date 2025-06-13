@@ -30,7 +30,6 @@ const Type_Server_Add = ref(false)
 const server_set_of_addLibrary_of_name = ref('')
 const server_set_of_addLibrary_of_path = ref('')
 const scanningPaths = ref<string[]>([]); // 存储正在扫描的路径
-const scanningAll = ref(false)
 /// server add
 async function update_server_addUser() {
   browseFolderOptions.value.forEach((folder) => {
@@ -66,7 +65,7 @@ async function update_server_addUser() {
 
 /// server delete - 添加路径锁检查
 async function update_server_deleteUser(id: string, folderPath: string) {
-  if(scanningPaths.length === 0 && !scanningAll) {
+  if(scanningPaths.length === 0 && !store_server_login_info.scanningAll) {
     try {
       const result = await folder_Entity_ApiService_of_NineSong.deleteFolder_Entity(id);
       if (result) {
@@ -175,7 +174,7 @@ async function scan_server_folder_path(folder_path: string, folder_type: number,
 
             // 从数组中移除路径
             scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
-            scanningAll.value = false;
+            store_server_login_info.scanningAll = false;
             return;
           }
         } else {
@@ -189,7 +188,7 @@ async function scan_server_folder_path(folder_path: string, folder_type: number,
         if (result.progress === 1) {
           clearInterval(timer);
           scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
-          scanningAll.value = false;
+          store_server_login_info.scanningAll = false;
         }
       } catch (error) {
         clearInterval(timer);
@@ -197,7 +196,7 @@ async function scan_server_folder_path(folder_path: string, folder_type: number,
 
         // 错误时移除路径
         scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
-        scanningAll.value = false;
+        store_server_login_info.scanningAll = false;
       }
     }, 500);
   } catch (error) {
@@ -372,7 +371,7 @@ const refreshModeOptions = ref([
         <n-button icon-placement="left"
                   secondary strong
                   @click="() => {
-                    if(!scanningAll){
+                    if(!store_server_login_info.scanningAll){
                       Type_Server_Add = !Type_Server_Add
                     }else{
                       message.error(t('LibraryScanFanoutConcurrency') + ' | ' + t('LabelFailed'), { duration: 3000 });
@@ -388,11 +387,11 @@ const refreshModeOptions = ref([
         <n-button icon-placement="left"
                   secondary strong
                   @click="async () => {
-                    if(scanningPaths.length > 0 || scanningAll) {
+                    if(scanningPaths.length > 0 || store_server_login_info.scanningAll) {
                       message.error(t('LibraryScanFanoutConcurrency') + ' | ' + t('LabelFailed'), { duration: 3000 });
                       return;
                     }else{
-                      scanningAll = true;
+                      store_server_login_info.scanningAll = true;
                       scan_server_folder_path('',1,2,)
                     }
                   }">
@@ -438,7 +437,7 @@ const refreshModeOptions = ref([
               class="server_item_info"
               tag="div"
               @click="() => {
-                if(!scanningAll){
+                if(!store_server_login_info.scanningAll){
                   item.show = !item.show;
                 }else{
                   message.error(t('LibraryScanFanoutConcurrency') + ' | ' + t('LabelFailed'), { duration: 3000 });
@@ -611,7 +610,7 @@ const refreshModeOptions = ref([
           </n-form>
           <n-space justify="end">
             <n-button strong secondary type="error" @click="Type_Server_Add = !Type_Server_Add">
-              {{ $t('common.delete') }}
+              {{ $t('ButtonClose') }}
             </n-button>
             <n-button strong secondary type="info" @click="update_server_addUser();">
               {{ $t('common.save') }}
