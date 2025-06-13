@@ -65,7 +65,7 @@ async function update_server_addUser() {
 
 /// server delete - 添加路径锁检查
 async function update_server_deleteUser(id: string, folderPath: string) {
-  if(scanningPaths.length === 0 && !store_server_login_info.scanningAll) {
+  if(scanningPaths.value.length === 0 && !store_server_login_info.scanningAll) {
     try {
       const result = await folder_Entity_ApiService_of_NineSong.deleteFolder_Entity(id);
       if (result) {
@@ -188,6 +188,7 @@ async function scan_server_folder_path(folder_path: string, folder_type: number,
         if (result.progress === 1) {
           clearInterval(timer);
           scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
+          progressBarShow.value = false;
           store_server_login_info.scanningAll = false;
         }
       } catch (error) {
@@ -196,6 +197,7 @@ async function scan_server_folder_path(folder_path: string, folder_type: number,
 
         // 错误时移除路径
         scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
+        progressBarShow.value = false;
         store_server_login_info.scanningAll = false;
       }
     }, 500);
@@ -206,6 +208,7 @@ async function scan_server_folder_path(folder_path: string, folder_type: number,
 
     // 错误时移除路径
     scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
+    progressBarShow.value = false;
   }
 }
 
@@ -403,8 +406,7 @@ const refreshModeOptions = ref([
           {{ $t('ButtonScanAllLibraries') }}
         </n-button>
         <!--  -->
-        <n-slider :show-tooltip="progressBar !== 0 && progressBar !== 100"
-                  v-if="progressBarShow"
+        <n-slider v-if="progressBarShow"
                   style="
                   width: 200px;
                   --n-rail-height: 16px;"
