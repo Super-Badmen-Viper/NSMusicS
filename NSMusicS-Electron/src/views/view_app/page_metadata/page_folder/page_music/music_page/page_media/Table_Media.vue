@@ -1053,6 +1053,9 @@ onMounted(() => {
     input_search_InstRef.value?.clear()
     store_view_media_page_logic.page_songlists_keywordFilter = ""
   }
+  if(store_general_fetch_media_list._artist_id.length > 0 || store_general_fetch_media_list._album_id.length > 0 || store_general_fetch_media_list._album_artist_id.length > 0){
+    store_view_media_page_logic.page_songlists_bool_show_search_area = true
+  }
 })
 const stopWatching_boolHandleItemClick_Favorite = watch(() => store_player_audio_logic.boolHandleItemClick_Favorite, (newValue) => {
   if(newValue) {
@@ -1073,6 +1076,8 @@ onBeforeUnmount(() => {
   stopWatching_boolHandleItemClick_Played()
   stopWatching_router_history_model_of_Media_scroll()
   dynamicScroller.value = null;
+  store_general_fetch_media_list.set_album_id('')
+  store_general_fetch_media_list.set_artist_id('')
 });
 </script>
 
@@ -1751,18 +1756,13 @@ onBeforeUnmount(() => {
           {{ $t('ViewAlbum') }}
         </v-contextmenu-item>
         <template
-            v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local"
+            v-if="store_server_users.server_select_kind === 'navidrome' || store_server_user_model.model_server_type_of_local"
             v-for="artist in store_playlist_list_info.playlist_Menu_Item.artist.split(/[\/|｜、]/)">
           <v-contextmenu-item>
             <span
                 style="font-size: 14px;font-weight: 400;"
                 @click="()=>{
-                  if(store_server_users.server_select_kind === 'ninesong'){
-                    handleItemClick_artist(artist)
-                    // 应对接 AllArtistIDs
-                  }else{
-                    handleItemClick_artist(artist)
-                  }
+                  handleItemClick_artist(artist)
                 }">
               {{ $t('ViewAlbumArtist') + ' | ' + artist + '&nbsp' }}
             </span>

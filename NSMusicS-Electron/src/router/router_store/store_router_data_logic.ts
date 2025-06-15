@@ -86,10 +86,6 @@ export const store_router_data_logic = reactive({
         store_view_media_page_info.media_Files_temporary = [];
         store_view_album_page_info.album_Files_temporary = [];
         store_view_artist_page_info.artist_Files_temporary = [];
-
-        store_general_fetch_media_list.set_album_id('')
-        store_general_fetch_media_list.set_artist_id('')
-        store_general_fetch_album_list.set_artist_id('')
     },
     clear_Files_temporary_except_home() {
         store_router_data_info.router_select_model_categories = false

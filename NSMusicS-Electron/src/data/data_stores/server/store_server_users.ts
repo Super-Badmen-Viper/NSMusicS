@@ -43,6 +43,8 @@ export const store_server_users = reactive({
             };
             store_server_users.server_config_of_current_user_of_select_servername =
                 store_server_users.server_config_of_all_user_of_sqlite[index].type + ' - ' + store_server_users.server_config_of_all_user_of_sqlite[index].server_name
+            store_server_login_info.server_id = store_server_users.server_config_of_current_user_of_sqlite?.id
+            store_server_login_info.server_name = store_server_users.server_config_of_current_user_of_sqlite?.server_name
             store_server_user_model.username = store_server_users.server_config_of_current_user_of_sqlite?.user_name
             store_server_user_model.password = store_server_users.server_config_of_current_user_of_sqlite?.password
             store_server_login_info.server_url = store_server_users.server_config_of_current_user_of_sqlite?.url

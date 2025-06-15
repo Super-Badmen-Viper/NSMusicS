@@ -330,6 +330,8 @@ export const store_app_configs_logic_load = reactive({
                 store_app_configs_logic_save.save_system_config_of_Servers_Config()
                 /// server login
                 if (store_server_user_model.model_server_type_of_web) {
+                    store_server_login_info.server_id = store_server_users.server_config_of_current_user_of_sqlite?.id
+                    store_server_login_info.server_name = store_server_users.server_config_of_current_user_of_sqlite?.server_name
                     store_server_user_model.username = store_server_users.server_config_of_current_user_of_sqlite?.user_name
                     store_server_user_model.password = store_server_users.server_config_of_current_user_of_sqlite?.password
                     store_server_users.server_select_kind = store_server_users.server_config_of_current_user_of_sqlite?.type

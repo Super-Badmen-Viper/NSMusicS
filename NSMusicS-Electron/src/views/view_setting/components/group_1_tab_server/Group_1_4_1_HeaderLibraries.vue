@@ -52,6 +52,19 @@ async function update_server_addUser() {
     );
     if (result) {
       message.success(t('ButtonAddMediaLibrary') + ' | ' + t('LabelFinish'));
+      if (store_server_users.server_select_kind === 'ninesong') {
+        store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All();
+      }
+      // // 5. 查找匹配的库并提取路径 [关键修改]
+      // const targetLibrary = store_server_users.server_all_library.find(
+      //     lib => lib.name === server_set_of_addLibrary_of_name.value
+      // );
+      // // 6. 触发扫描（优先使用匹配路径，找不到则用输入路径）
+      // await scan_server_folder_path(
+      //     targetLibrary?.folderPath || server_set_of_addLibrary_of_path.value,
+      //     1,
+      //     0
+      // );
       await scan_server_folder_path(server_set_of_addLibrary_of_path.value, 1, 0);
     } else {
       message.error(t('ButtonAddMediaLibrary') + ' | ' + t('LabelFailed'), { duration: 3000 });
@@ -142,37 +155,54 @@ const stopWatching_Type_Server_Add = watch(() => Type_Server_Add.value, async (n
 });
 
 /// server scan - 添加路径锁管理
+const timer = ref<NodeJS.Timeout>();
 async function scan_server_folder_path(folder_path: string, folder_type: number, scan_model: number) {
-  // 添加路径到扫描数组
   scanningPaths.value.push(folder_path);
-
   createMessage();
   progressBarShow.value = true;
 
   try {
-    file_Entity_ApiService_of_NineSong.scanFile_Entity(folder_path, folder_type, scan_model);
+    await file_Entity_ApiService_of_NineSong.scanFile_Entity(folder_path, folder_type, scan_model);
+    startProgressPolling(folder_path)
+  } catch (error) {
+    console.error('Error starting scan:', error);
+    removeMessage();
+    message.error(t('ScanLibrary') + ' | ' + t('LabelFailed'), { duration: 3000 });
+    scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
+    progressBarShow.value = false;
+  }
+}
+const startProgressPolling = (folder_path: string) => {
+  let lastProgress = -1;
+  let sameProgressCount = 0;
+  const MAX_SAME_PROGRESS = 5;
+  const MAX_SAME_PROGRESS_NULL = 10;
 
-    let lastProgress = -1;
-    let sameProgressCount = 0;
-    const MAX_SAME_PROGRESS = 5;
+  // 关键修改1：直接启动定时器（移除setTimeout延迟）
+  timer.value = setInterval(async () => {
+    try {
+      const result = await file_Entity_ApiService_of_NineSong.scanProgress();
 
-    const timer = setInterval(async () => {
-      try {
-        const result = await file_Entity_ApiService_of_NineSong.scanProgress();
+      // 关键修改2：添加active_scan_count检查逻辑
+      if (result.progress === 0 && result.active_scan_count > 0) {
+        // 进度为0但有活跃扫描任务时继续轮询
+        sameProgressCount = 0; // 重置超时计数器
+        updateProgressBar(result.progress);
+        return; // 跳过后续处理继续等待
+      }
 
+      if (result.progress !== 0) {
         if (result.progress === lastProgress || result.progress === 1) {
           sameProgressCount++;
           if (sameProgressCount >= MAX_SAME_PROGRESS) {
-            sameProgressCount = 0;
-            clearInterval(timer);
+            // 进度停滞超时处理
+            clearInterval(timer.value);
             removeMessage();
             updateProgressBar(0);
-            if(store_server_users.server_select_kind === 'ninesong') {
+            if (store_server_users.server_select_kind === 'ninesong') {
               store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All();
             }
             progressBarShow.value = false;
-
-            // 从数组中移除路径
             scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
             store_server_login_info.scanningAll = false;
             return;
@@ -181,36 +211,58 @@ async function scan_server_folder_path(folder_path: string, folder_type: number,
           sameProgressCount = 0;
           lastProgress = result.progress;
         }
-
-        updateProgressBar(result.progress);
-
-        // 扫描完成时移除路径
-        if (result.progress === 1) {
-          clearInterval(timer);
-          scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
+      } else {
+        sameProgressCount++;
+        if (sameProgressCount >= MAX_SAME_PROGRESS_NULL) {
+          // 无进度超时处理
+          clearInterval(timer.value);
+          removeMessage();
+          updateProgressBar(0);
+          if (store_server_users.server_select_kind === 'ninesong') {
+            store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All();
+          }
           progressBarShow.value = false;
+          scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
           store_server_login_info.scanningAll = false;
         }
-      } catch (error) {
-        clearInterval(timer);
-        removeMessage();
+      }
 
-        // 错误时移除路径
+      updateProgressBar(result.progress);
+
+      // 关键修改3：进度为1时完成扫描
+      if (result.progress === 1) {
+        clearInterval(timer.value);
         scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
         progressBarShow.value = false;
         store_server_login_info.scanningAll = false;
+        // 确保更新媒体库数据
+        if (store_server_users.server_select_kind === 'ninesong') {
+          store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All();
+        }
       }
-    }, 500);
-  } catch (error) {
-    console.error('Error starting scan:', error);
-    removeMessage();
-    message.error(t('ScanLibrary') + ' | ' + t('LabelFailed'), { duration: 3000 });
-
-    // 错误时移除路径
-    scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
-    progressBarShow.value = false;
-  }
+    } catch (error) {
+      clearInterval(timer.value);
+      removeMessage();
+      scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
+      progressBarShow.value = false;
+      store_server_login_info.scanningAll = false;
+    }
+  }, 1000); // 直接启动1秒间隔的定时器
 }
+onMounted(async ()=>{
+  const result = await file_Entity_ApiService_of_NineSong.scanProgress();
+  if ((result.progress === 0 && result.active_scan_count > 0) || result.progress > 0) {
+    progressBarShow.value = true;
+    const currentScanPath =
+        store_server_login_info.scanning_paths.length > 0 ?
+            store_server_login_info.scanning_paths[0] : ''
+    startProgressPolling(currentScanPath);
+  }
+})
+onBeforeUnmount(()=>{
+  clearInterval(timer.value);
+  timer.value = undefined
+})
 
 const progressBar = ref(0);
 const progressBarShow = ref(false);

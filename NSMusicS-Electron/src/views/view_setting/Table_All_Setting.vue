@@ -59,6 +59,7 @@ import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {store_local_db_info} from "@/data/data_stores/local/store_local_db_info";
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 import {isElectron} from "@/utils/electron/isElectron";
+import {store_server_login_info} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
 const { t } = useI18n({
   inheritLocale: true
 })
@@ -77,7 +78,7 @@ const menuOptions: any[] = reactive([
     children: [
       {label: computed(() => t('TabDashboard')), key: 'type-group-1-1', icon: renderIcon(BlockStorageAlt), disabled: true},
       {label: computed(() => t('General')), key: 'type-group-1-2', icon: renderIcon(Settings), disabled: true},
-      {label: computed(() => t('HeaderUser')), key: 'type-group-1-3', icon: renderIcon(UserMultiple), disabled: true},
+      {label: computed(() => t('HeaderUser')), key: 'type-group-1-3', icon: renderIcon(UserMultiple)},
       {label: computed(() => t('HeaderLibraries')), key: 'type-group-1-4', icon: renderIcon(MediaLibrary),
         children: [
           {label: computed(() => t('HeaderLibraries')), key: 'type-group-1-4-1',},

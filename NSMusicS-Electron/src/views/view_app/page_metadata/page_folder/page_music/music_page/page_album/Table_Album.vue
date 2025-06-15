@@ -628,6 +628,9 @@ onMounted(() => {
     bool_show_search_area.value = false
     store_view_album_page_logic.page_albumlists_keyword = ""
   }
+  if(store_general_fetch_album_list._artist_id.length > 0){
+    bool_show_search_area.value = true
+  }
 })
 const stopWatching_boolHandleItemClick_Played = watch(() => store_player_audio_logic.boolHandleItemClick_Played, (newValue, oldValue) => {
   if (newValue && newValue !== oldValue) {
@@ -642,6 +645,7 @@ onBeforeUnmount(() => {
   stopWatching_window_innerWidth()
   stopWatching_router_history_model_of_Album_scroll()
   dynamicScroller.value = null;
+  store_general_fetch_album_list.set_artist_id('')
 });
 </script>
 <template>
@@ -1105,6 +1109,8 @@ onBeforeUnmount(() => {
               handleItemClick_artist(store_playlist_list_info.playlist_Menu_Item.artist_id)
             }else if(store_server_user_model.model_server_type_of_web) {
               if(store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
+                handleItemClick_artist(store_playlist_list_info.playlist_Menu_Item.artist_id)
+              }else if(store_server_users.server_select_kind === 'ninesong') {
                 handleItemClick_artist(store_playlist_list_info.playlist_Menu_Item.artist_id)
               }else{
                 handleItemClick_artist(store_playlist_list_info.playlist_Menu_Item.artist)
