@@ -7,9 +7,7 @@ import {store_server_login_info} from "@/views/view_server/page_metadata/page_lo
 import {
   Auth_Info_ApiService_of_NineSong
 } from "@/data/data_access/servers_configs/ninesong_api/services_web/Auth/Auth_Info/index_service";
-import {store_server_login_logic} from "@/views/view_server/page_metadata/page_login/store/store_server_login_logic";
 
-const current_server_email = ref('')
 const new_server_email = ref('')
 const current_password = ref('')
 const new_password = ref('')
@@ -31,13 +29,8 @@ import {
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 const message = useMessage()
 
-async function change_email(current_server_email: string, new_server_email: string){
-  if(current_server_email !== store_server_login_info.server_input_email && current_server_email !== store_server_user_model.username)
-  {
-    message.error(t('nsmusics.server_page.server_email') + t('LogLevel.Error'))
-    return;
-  }
-  if(store_server_login_info.server_input_email === new_server_email || store_server_user_model.username === new_server_email || new_server_email.length === 0){
+async function change_email(new_server_email: string){
+  if(new_server_email.length === 0){
     message.error(t('nsmusics.server_page.server_email') + t('LogLevel.Error'))
     return;
   }
@@ -133,18 +126,14 @@ async function change_password(old_password: string, new_password: string) {
         </div>
         <n-form style="margin-top: -12px;">
           <n-space vertical style="margin-bottom: 10px;">
-            <span>{{ $t('nsmusics.view_page.current') + $t('nsmusics.server_page.server_email') }}</span>
-            <n-input clearable v-model:value="current_server_email" placeholder=""/>
-          </n-space>
-          <n-space vertical style="margin-bottom: 10px;">
-            <span>{{ $t('ButtonOk') + $t('nsmusics.server_page.server_email') }}</span>
+            <span>{{ $t('Reset') + $t('nsmusics.server_page.server_email') }}</span>
             <n-input clearable v-model:value="new_server_email" placeholder=""/>
           </n-space>
         </n-form>
         <n-button icon-placement="left"
                   secondary strong
                   @click="async () => {
-                    await change_email(current_server_email, new_server_email)
+                    await change_email(new_server_email)
                   }">
           {{ $t('ButtonOk') + $t('Reset') }}
         </n-button>
