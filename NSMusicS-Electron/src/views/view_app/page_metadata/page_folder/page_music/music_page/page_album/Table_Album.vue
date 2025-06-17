@@ -63,6 +63,7 @@ import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {
   store_general_model_player_list
 } from "@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list";
+import {debounce} from "lodash";
 const errorHandled = ref(new Map());
 const handleImageError = async (item: any) => {
   let result_src = error_album
@@ -586,7 +587,7 @@ const onScroll = async () => {
 };
 
 //////
-const onRefreshSharp = async () => {
+const onRefreshSharp = debounce(async (event, args) => {
   if(store_server_user_model.model_server_type_of_web){
     store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
     input_search_InstRef.value?.clear()
@@ -599,7 +600,7 @@ const onRefreshSharp = async () => {
     store_view_album_page_logic.page_albumlists_keyword = ""
     store_general_fetch_album_list.fetchData_Album()
   }
-}
+}, 500)
 
 const page_albumlists_statistic = ref<{
   label: '',

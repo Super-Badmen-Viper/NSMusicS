@@ -598,6 +598,7 @@ import {
   Get_NineSong_Temp_Data_To_LocalSqlite
 } from "@/data/data_access/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite";
 import {store_server_login_info} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+import {debounce} from "lodash";
 
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
@@ -1008,7 +1009,7 @@ const onScroll = async () => {
 };
 
 /////
-const onRefreshSharp = async () => {
+const onRefreshSharp = debounce(async (event, args) => {
   if(store_server_user_model.model_server_type_of_web){
     if(store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby') {
       store_player_appearance.player_mode_of_medialist_from_external_import = false;
@@ -1029,7 +1030,7 @@ const onRefreshSharp = async () => {
     store_view_media_page_logic.list_selected_Hand_click = false
     // store_general_fetch_media_list.fetchData_Media()
   }
-}
+}, 500);
 
 const page_songlists_statistic = ref<{
   label: '',

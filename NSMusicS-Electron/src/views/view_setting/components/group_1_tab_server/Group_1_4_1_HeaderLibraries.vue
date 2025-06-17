@@ -168,7 +168,9 @@ async function scan_server_folder_path(folder_path: string, folder_type: number,
     console.error('Error starting scan:', error);
     removeMessage();
     message.error(t('ScanLibrary') + ' | ' + t('LabelFailed'), { duration: 3000 });
-    scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
+    store_server_login_info.scanningAll = false;
+    store_server_login_info.scanning_paths = []
+    scanningPaths.value = []
     progressBarShow.value = false;
   }
 }
@@ -182,6 +184,13 @@ const startProgressPolling = (folder_path: string) => {
   timer.value = setInterval(async () => {
     try {
       const result = await file_Entity_ApiService_of_NineSong.scanProgress();
+
+      if(!result || result.active_scan_count === 0){
+        store_server_login_info.scanningAll = false;
+        store_server_login_info.scanning_paths = []
+        scanningPaths.value = []
+        progressBarShow.value = false;
+      }
 
       // 关键修改2：添加active_scan_count检查逻辑
       if (result.progress === 0 && result.active_scan_count > 0) {
@@ -202,9 +211,10 @@ const startProgressPolling = (folder_path: string) => {
             if (store_server_users.server_select_kind === 'ninesong') {
               store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All();
             }
-            progressBarShow.value = false;
-            scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
             store_server_login_info.scanningAll = false;
+            store_server_login_info.scanning_paths = []
+            scanningPaths.value = []
+            progressBarShow.value = false;
             return;
           }
         } else {
@@ -221,9 +231,10 @@ const startProgressPolling = (folder_path: string) => {
           if (store_server_users.server_select_kind === 'ninesong') {
             store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All();
           }
-          progressBarShow.value = false;
-          scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
           store_server_login_info.scanningAll = false;
+          store_server_login_info.scanning_paths = []
+          scanningPaths.value = []
+          progressBarShow.value = false;
         }
       }
 
@@ -232,9 +243,10 @@ const startProgressPolling = (folder_path: string) => {
       // 关键修改3：进度为1时完成扫描
       if (result.progress === 1) {
         clearInterval(timer.value);
-        scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
-        progressBarShow.value = false;
         store_server_login_info.scanningAll = false;
+        store_server_login_info.scanning_paths = []
+        scanningPaths.value = []
+        progressBarShow.value = false;
         // 确保更新媒体库数据
         if (store_server_users.server_select_kind === 'ninesong') {
           store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All();
@@ -243,9 +255,10 @@ const startProgressPolling = (folder_path: string) => {
     } catch (error) {
       clearInterval(timer.value);
       removeMessage();
-      scanningPaths.value = scanningPaths.value.filter(p => p !== folder_path);
-      progressBarShow.value = false;
       store_server_login_info.scanningAll = false;
+      store_server_login_info.scanning_paths = []
+      scanningPaths.value = []
+      progressBarShow.value = false;
     }
   }, 1000); // 直接启动1秒间隔的定时器
 }
@@ -257,11 +270,15 @@ onMounted(async ()=>{
         store_server_login_info.scanning_paths.length > 0 ?
             store_server_login_info.scanning_paths[0] : ''
     startProgressPolling(currentScanPath);
+  }else if(!result || result.active_scan_count === 0){
+    store_server_login_info.scanningAll = false;
+    store_server_login_info.scanning_paths = []
+    scanningPaths.value = []
+    progressBarShow.value = false;
   }
 })
 onBeforeUnmount(()=>{
   clearInterval(timer.value);
-  timer.value = undefined
 })
 
 const progressBar = ref(0);

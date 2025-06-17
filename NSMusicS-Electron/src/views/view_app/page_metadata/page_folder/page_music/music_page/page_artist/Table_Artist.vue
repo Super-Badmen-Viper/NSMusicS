@@ -63,6 +63,7 @@ import {store_player_appearance} from "@/views/view_app/page_metadata/page_folde
 import {
   store_general_model_player_list
 } from "@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list";
+import {debounce} from "lodash";
 
 const { t } = useI18n({
   inheritLocale: true
@@ -571,6 +572,10 @@ const stopWatching_boolHandleItemClick_Played = watch(() => store_player_audio_l
   }
 }, { immediate: true });
 
+const onRefreshSharp = debounce(async (event, args) => {
+  await store_general_fetch_artist_list.fetchData_Artist()
+}, 500)
+
 ////// view artistlist_view Remove data
 onBeforeUnmount(() => {
   stopWatching_boolHandleItemClick_Played()
@@ -587,7 +592,7 @@ onBeforeUnmount(() => {
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle
-                        @click="store_general_fetch_artist_list.fetchData_Artist()">
+                        @click="onRefreshSharp">
                 <template #icon>
                   <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
                 </template>
