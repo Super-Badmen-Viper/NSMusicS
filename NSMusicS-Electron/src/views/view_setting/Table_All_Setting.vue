@@ -117,7 +117,7 @@ const menuOptions: any[] = reactive([
     children: [
       {label: computed(() => t('TabNetworking')), key: 'type-group-4-1', icon: renderIcon(ContentDeliveryNetwork), disabled: true},
       {label: computed(() => t('HeaderApiKey')), key: 'type-group-4-2', icon: renderIcon(Key24Regular), disabled: true},
-      {label: computed(() => t('TabLogs')), key: 'type-group-4-3', icon: renderIcon(Catalog)},
+      {label: computed(() => t('TabLogs')), key: 'type-group-4-3', icon: renderIcon(Catalog), disabled: true},
       {label: computed(() => t('HeaderAlert')), key: 'type-group-4-4', icon: renderIcon(NotificationsOutline), disabled: true},
       {label: computed(() => t('TabPlugins')), key: 'type-group-4-5', icon: renderIcon(PlugConnected20Regular), disabled: true,
         children: [
