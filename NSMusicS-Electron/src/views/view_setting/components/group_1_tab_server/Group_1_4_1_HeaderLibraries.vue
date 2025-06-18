@@ -175,12 +175,6 @@ async function scan_server_folder_path(folder_path: string, folder_type: number,
   }
 }
 const startProgressPolling = (folder_path: string) => {
-  let lastProgress = -1;
-  let sameProgressCount = 0;
-  const MAX_SAME_PROGRESS = 5;
-  const MAX_SAME_PROGRESS_NULL = 10;
-
-  // 关键修改1：直接启动定时器（移除setTimeout延迟）
   timer.value = setInterval(async () => {
     try {
       const result = await file_Entity_ApiService_of_NineSong.scanProgress();
@@ -192,55 +186,8 @@ const startProgressPolling = (folder_path: string) => {
         progressBarShow.value = false;
       }
 
-      // 关键修改2：添加active_scan_count检查逻辑
-      if (result.progress === 0 && result.active_scan_count > 0) {
-        // 进度为0但有活跃扫描任务时继续轮询
-        sameProgressCount = 0; // 重置超时计数器
-        updateProgressBar(result.progress);
-        return; // 跳过后续处理继续等待
-      }
-
-      if (result.progress !== 0) {
-        if (result.progress === lastProgress || result.progress === 1) {
-          sameProgressCount++;
-          if (sameProgressCount >= MAX_SAME_PROGRESS) {
-            // 进度停滞超时处理
-            clearInterval(timer.value);
-            removeMessage();
-            updateProgressBar(0);
-            if (store_server_users.server_select_kind === 'ninesong') {
-              store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All();
-            }
-            store_server_login_info.scanningAll = false;
-            store_server_login_info.scanning_paths = []
-            scanningPaths.value = []
-            progressBarShow.value = false;
-            return;
-          }
-        } else {
-          sameProgressCount = 0;
-          lastProgress = result.progress;
-        }
-      } else {
-        sameProgressCount++;
-        if (sameProgressCount >= MAX_SAME_PROGRESS_NULL) {
-          // 无进度超时处理
-          clearInterval(timer.value);
-          removeMessage();
-          updateProgressBar(0);
-          if (store_server_users.server_select_kind === 'ninesong') {
-            store_server_users.server_all_library = await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All();
-          }
-          store_server_login_info.scanningAll = false;
-          store_server_login_info.scanning_paths = []
-          scanningPaths.value = []
-          progressBarShow.value = false;
-        }
-      }
-
       updateProgressBar(result.progress);
 
-      // 关键修改3：进度为1时完成扫描
       if (result.progress === 1) {
         clearInterval(timer.value);
         store_server_login_info.scanningAll = false;
@@ -260,7 +207,7 @@ const startProgressPolling = (folder_path: string) => {
       scanningPaths.value = []
       progressBarShow.value = false;
     }
-  }, 1000); // 直接启动1秒间隔的定时器
+  }, 1000);
 }
 onMounted(async ()=>{
   const result = await file_Entity_ApiService_of_NineSong.scanProgress();
