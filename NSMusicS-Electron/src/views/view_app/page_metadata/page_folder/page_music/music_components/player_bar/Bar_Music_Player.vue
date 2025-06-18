@@ -834,65 +834,59 @@ const handleItemClick_Rating = (id: any,rating: any) => {
 
 /////// emits audio_info of songlist_view_list
 const handleItemClick_title = (title:string) => {
-  debounce(async (event, args) => {
-    store_router_data_info.router_click = false;
+  store_router_data_info.router_click = false;
+  store_view_media_page_logic.page_songlists_bool_show_search_area = true
+  store_view_media_page_logic.page_songlists_input_search_Value = title
+  store_view_media_page_logic.get_page_songlists_keyword(title)
+  player_show_hight_animation_value.value = 670;
+  get_playerbar_to_switch_playerview(player_show_hight_animation_value.value);
+  store_player_audio_logic.player_back_ChevronDouble = player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow;
+}
+const handleItemClick_artist = (artist:string) => {
+  store_router_data_info.router_click = false;
+  if(
+      store_server_user_model.model_server_type_of_local
+      ||
+      (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)
+      ||
+      (store_server_users.server_select_kind === 'ninesong' && store_server_user_model.model_server_type_of_web)
+  ) {
     store_view_media_page_logic.page_songlists_bool_show_search_area = true
-    store_view_media_page_logic.page_songlists_input_search_Value = title
-    store_view_media_page_logic.get_page_songlists_keyword(title)
+    store_view_media_page_logic.page_songlists_input_search_Value = artist
+    if (store_server_user_model.model_server_type_of_local) {
+      store_view_media_page_logic.get_page_songlists_keyword(artist + 'accurate_search' + '__artist__')
+    } else if (store_server_user_model.model_server_type_of_web) {
+      store_view_media_page_logic.get_page_songlists_keyword(artist)
+    }
     player_show_hight_animation_value.value = 670;
     get_playerbar_to_switch_playerview(player_show_hight_animation_value.value);
     store_player_audio_logic.player_back_ChevronDouble = player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow;
-  }, 500)
-}
-const handleItemClick_artist = (artist:string) => {
-  debounce(async (event, args) => {
-    store_router_data_info.router_click = false;
-    if (
-        store_server_user_model.model_server_type_of_local
-        ||
-        (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)
-        ||
-        (store_server_users.server_select_kind === 'ninesong' && store_server_user_model.model_server_type_of_web)
-    ) {
-      store_view_media_page_logic.page_songlists_bool_show_search_area = true
-      store_view_media_page_logic.page_songlists_input_search_Value = artist
-      if (store_server_user_model.model_server_type_of_local) {
-        store_view_media_page_logic.get_page_songlists_keyword(artist + 'accurate_search' + '__artist__')
-      } else if (store_server_user_model.model_server_type_of_web) {
-        store_view_media_page_logic.get_page_songlists_keyword(artist)
-      }
-      player_show_hight_animation_value.value = 670;
-      get_playerbar_to_switch_playerview(player_show_hight_animation_value.value);
-      store_player_audio_logic.player_back_ChevronDouble = player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow;
-    } else {
-      message.warning('Jellyfin / Emby ' + t('ContainerNotSupported') + ' ' + t('setting.hotkey_localSearch'))
-    }
-  }, 500)
+  }else{
+    message.warning('Jellyfin / Emby ' + t('ContainerNotSupported') + ' ' + t('setting.hotkey_localSearch'))
+  }
 }
 const handleItemClick_album = (album:string) => {
-  debounce(async (event, args) => {
-    store_router_data_info.router_click = false;
-    if (
-        store_server_user_model.model_server_type_of_local
-        ||
-        (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)
-        ||
-        (store_server_users.server_select_kind === 'ninesong' && store_server_user_model.model_server_type_of_web)
-    ) {
-      store_view_media_page_logic.page_songlists_bool_show_search_area = true
-      store_view_media_page_logic.page_songlists_input_search_Value = album
-      if (store_server_user_model.model_server_type_of_local) {
-        store_view_media_page_logic.get_page_songlists_keyword(album + 'accurate_search' + '__album__')
-      } else if (store_server_user_model.model_server_type_of_web) {
-        store_view_media_page_logic.get_page_songlists_keyword(album)
-      }
-      player_show_hight_animation_value.value = 670;
-      get_playerbar_to_switch_playerview(player_show_hight_animation_value.value);
-      store_player_audio_logic.player_back_ChevronDouble = player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow;
-    } else {
-      message.warning('Jellyfin / Emby ' + t('ContainerNotSupported') + ' ' + t('setting.hotkey_localSearch'))
+  store_router_data_info.router_click = false;
+  if(
+      store_server_user_model.model_server_type_of_local
+      ||
+      (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)
+      ||
+      (store_server_users.server_select_kind === 'ninesong' && store_server_user_model.model_server_type_of_web)
+  ) {
+    store_view_media_page_logic.page_songlists_bool_show_search_area = true
+    store_view_media_page_logic.page_songlists_input_search_Value = album
+    if (store_server_user_model.model_server_type_of_local) {
+      store_view_media_page_logic.get_page_songlists_keyword(album + 'accurate_search' + '__album__')
+    } else if (store_server_user_model.model_server_type_of_web) {
+      store_view_media_page_logic.get_page_songlists_keyword(album)
     }
-  }, 500)
+    player_show_hight_animation_value.value = 670;
+    get_playerbar_to_switch_playerview(player_show_hight_animation_value.value);
+    store_player_audio_logic.player_back_ChevronDouble = player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow;
+  }else{
+    message.warning('Jellyfin / Emby ' + t('ContainerNotSupported') + ' ' + t('setting.hotkey_localSearch'))
+  }
 }
 
 ////// view albumlist_view Remove data
@@ -940,7 +934,7 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
       style="transition: margin 0.4s;"
       :style="{ marginBottom: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '-80px' : '0px' }"
       @mouseleave="()=>{handleMouseMove();leave_back_svg();}"
-      >
+  >
     <div
         class="layout_distribution_3"
         style="transition: margin 0.4s;"
@@ -950,7 +944,7 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
         marginLeft: store_player_appearance.player_show ? '0px' : '72px',
         width: store_player_appearance.player_show ? '100vw' : 'calc(100vw - 72px)',
       }">
-<!--      v-if="store_player_appearance.player_show_of_control_info"-->
+      <!--      v-if="store_player_appearance.player_show_of_control_info"-->
       <div class="gird_Left"
            @mousemove="()=>{
              store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
@@ -1009,10 +1003,10 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
       <n-space
           class="gird_Middle"
           vertical align="center"
-           @mousemove="()=>{
+          @mousemove="()=>{
              store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
            }"
-           @mouseover="()=>{
+          @mouseover="()=>{
              store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
            }">
         <!-- grid_Middle_button_area -->
@@ -1204,31 +1198,31 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
             {{ store_player_audio_logic.current_play_time }}
           </n-space>
           <n-slider
-            style="
+              style="
               width: 320px;
               color: #3DC3FF;
               border-radius: 10px;
               transition: margin 0.4s;
             "
-            v-model:value="store_player_audio_logic.slider_singleValue"
-            :min="0" :max="100" :keyboard="true"
-            :format-tooltip="(value) => {
+              v-model:value="store_player_audio_logic.slider_singleValue"
+              :min="0" :max="100" :keyboard="true"
+              :format-tooltip="(value) => {
               return store_player_audio_logic.formatTime(
                 (value / 100) * store_player_audio_logic.player.isDuration
               );
             }"
-            :on-dragend="()=>{
+              :on-dragend="()=>{
               if(store_player_audio_logic.slider_singleValue >= 99.5 || store_player_audio_logic.slider_singleValue == 0){
                 store_player_audio_logic.player_is_play_ended = true;
                 store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
               }
               store_player_audio_logic.player_range_duration_isDragging = false;
             }"
-            @click="()=>{
+              @click="()=>{
               store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
             }"
-            @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
-            @mouseup="store_player_audio_logic.player_range_duration_isDragging = false"
+              @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
+              @mouseup="store_player_audio_logic.player_range_duration_isDragging = false"
           />
           <n-space style="width: 46px;">
             {{ store_player_audio_logic.total_play_time }}
@@ -1341,14 +1335,14 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
                   </div>
                 </n-button>
                 <n-button
-                  v-if="
+                    v-if="
                     store_server_user_model.model_server_type_of_web
                     &&
                     store_server_users.server_select_kind != 'jellyfin'
                     &&
                     store_server_users.server_select_kind != 'emby'"
-                  quaternary
-                  @click="async () => {
+                    quaternary
+                    @click="async () => {
                     store_player_audio_logic.play_order = 'playback-2';
                     // 刷新store_player_audio_logic.play_order响应式状态
                     store_player_audio_logic.play_order = 'playback-4';
@@ -1356,12 +1350,12 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
                     store_server_user_model.random_play_model = true;
                     await begin_random_play_model()
                   }"
-                  :style="{
+                    :style="{
                     minWidth: store_player_audio_logic.orderButonWidath + 'px',
                     display: 'flex',
                     justifyContent: 'flex-start',
                   }"
-                  style="margin-left: -16px; margin-top: -6px;">
+                    style="margin-left: -16px; margin-top: -6px;">
                   <template #icon>
                     <n-icon :size="12">
                       <Random />
@@ -1452,8 +1446,8 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
                        v-if="store_player_appearance.player_show">
               <template #trigger>
                 <n-button
-                  size="tiny" text
-                  @click="store_player_audio_logic.drawer_theme_show = !store_player_audio_logic.drawer_theme_show">
+                    size="tiny" text
+                    @click="store_player_audio_logic.drawer_theme_show = !store_player_audio_logic.drawer_theme_show">
                   <template #icon>
                     <n-icon
                         :size="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
