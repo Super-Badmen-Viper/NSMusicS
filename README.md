@@ -76,8 +76,7 @@ For details of the new features, please visit the [NineSong](https://github.com/
   - NSMusicS交流群（1）：228440692
 - Other | None
 - 请注意，所有聊天组仅用于日常沟通、功能请求、需求报告和错误报告，只要您态度端正并支持九歌，在我力所能及的情况下，您的需求我都将尽力满足，但是这需要功能需求排期开发，但是您也可以通过赞助等等开源贡献方式来加快你的需求实现。
-- 但是，如果您不是开源项目维护者、开源贡献者、技术合作者、技术专家、高级工程师、赞助商或投资者，请不要与我进行技术辩论或问答，不然我会给你直接踢出群聊。
-- 想对我的开源项目指指点点，请先照照镜子看看自己的实力，我最讨厌和自作聪明啥贡献没有要求一堆的菜鸟懂哥交流技术，大家的时间都很宝贵，开源社区也没有欠你一分钱，相反是你自己搁这白嫖还恬不知耻。你觉得你很厉害，欢迎你来Github开源社区做出比我的九歌更好的免费开源产品，并要有脸有尊严的永远不要使用我的免费开源产品，你能做到这些我就承认你的确在某些方面很厉害，哈哈。
+- 请不要在聊天组与我进行技术辩论或问答，不然我会给你踢出群聊，技术辩论或问答是非常不礼貌的行为，尤其是在我和你不熟、且你没有参与开源贡献的情况下。
 
 ## Subsequent updates
 - The cross platform version of NSMusicS Flutter for mobile devices will be released by the end of this year. marking a milestone in the [NineSong](https://github.com/Super-Badmen-Viper/NineSong) Music Scene as the first application scenario of the NineSong software ecosystem
