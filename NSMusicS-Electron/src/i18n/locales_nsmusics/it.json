@@ -69,7 +69,9 @@
             "mediaLibrary_media_tag_modify_local": "Attualmente, è supportata solo la navigazione in modalità locale|modifica delle informazioni dei tag",
             "hideHalfLyric": "Nascondi le parole prima delle parole attualmente seguite",
             "guest": "Ospite",
-            "disk": "Disco"
+            "disk": "Disco",
+            "warning_web_play_alac": "Rilevato che l'utente utilizza il componente di riproduzione web per riprodurre file m4a codificati in alac. Attivazione del componente ffmpeg del server NineSong per trasformare l'alac in aac come risorsa musicale temporanea.",
+            "warning_mpv_play_alac": "Per favore, attendi la risposta del server. Occorre attendere alcuni secondi affinché la codifica sia completata e la riproduzione inizi, o puoi utilizzare il componente di riproduzione mpv per saltare il passaggio di codifica dell'alac in aac."
         },
         "view_player": {
             "view_seting": {

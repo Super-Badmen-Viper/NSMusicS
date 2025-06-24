@@ -69,7 +69,9 @@
             "mediaLibrary_media_tag_modify_local": "Derzeit wird nur die Lokale-Modus-Navigation|Bearbeitung von Tag-Informationen unterstützt",
             "hideHalfLyric": "Verstecke die Textzeilen vor den aktuellen verfolgten Textzeilen",
             "guest": "Gast",
-            "disk": "Disc"
+            "disk": "Disc",
+            "warning_web_play_alac": "Es wurde festgestellt, dass ein Benutzer das Web-Playback-Component verwendet, um m4a-Dateien im alac-Format abzuspielen. Der ffmpeg-Component des NineSong-Servers wird aktiviert, um alac in aac als temporäre Musikressource umzuwandeln.",
+            "warning_mpv_play_alac": "Bitte warten Sie auf die Serverantwort. Es dauert einige Sekunden, bis die Transkodierung abgeschlossen und die Wiedergabe gestartet wird, oder Sie können das mpv-Playback-Component verwenden, um den Schritt der Transkodierung von alac auf aac zu umgehen."
         },
         "view_player": {
             "view_seting": {

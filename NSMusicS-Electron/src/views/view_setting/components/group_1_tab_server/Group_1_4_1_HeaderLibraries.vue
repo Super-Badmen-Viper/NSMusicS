@@ -235,7 +235,7 @@ onBeforeUnmount(() => {
 const progressBar = ref(0);
 const progressBarShow = ref(false);
 
-function updateProgressBar(progress) {
+function updateProgressBar(progress: number) {
   progressBar.value = progress * 100;
 }
 

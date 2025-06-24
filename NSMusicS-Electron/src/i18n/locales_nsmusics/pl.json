@@ -69,7 +69,9 @@
             "mediaLibrary_media_tag_modify_local": "Obecnie obsługiwane są tylko przeglądanie w trybie lokalnym|edycja informacji o tagach",
             "hideHalfLyric": "Ukryj tekst piosenki przed aktualnie śledzonym tekstem",
             "guest": "Gość",
-            "disk": "Dysk"
+            "disk": "Dysk",
+            "warning_web_play_alac": "Wykryto, że użytkownik wykorzystuje komponent odtwarzacza sieciowego do odtwarzania plików m4a zakodowanych w formacie alac. Włączono komponent ffmpeg na serwerze NineSong, aby przekonwertować alac na aac jako tymczasowy zasób muzyczny.",
+            "warning_mpv_play_alac": "Proszę czekać na odpowiedź serwera. Trzeba poczekać kilka sekund na zakończenie konwersji i rozpoczęcie odtwarzania, można również użyć komponentu odtwarzacza mpv, aby ominąć krok konwersji z alac na aac."
         },
         "view_player": {
             "view_seting": {

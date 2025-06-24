@@ -122,7 +122,8 @@ export class Class_Set_System_Configs_Write {
             'all_artist_ids',
             'all_album_artist_ids',
             'cue_count',
-            'guest_cue_count'
+            'guest_cue_count',
+            'encoding_format'
         ]);
         const filteredData = media_file_of_list.map(item => {
             return Object.keys(item)

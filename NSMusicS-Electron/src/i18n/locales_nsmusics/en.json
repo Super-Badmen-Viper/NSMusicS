@@ -69,7 +69,9 @@
             "mediaLibrary_media_tag_modify_local": "Currently, only local mode browsing|editing tag information is supported",
             "hideHalfLyric": "Hide the lyrics before the current followed lyrics",
             "guest": "Guest",
-            "disk": "Disc"
+            "disk": "Disc",
+            "warning_web_play_alac": "Detected user using web playback component to play m4a file encoded as alac, enabling NineSong server's ffmpeg component to transcode alac to aac temporary music resource",
+            "warning_mpv_play_alac": "Please wait for the server response, it will take several seconds to complete transcoding and playback, or you can use the mpv playback component to skip the alac to aac transcoding step"
         },
         "view_player": {
             "view_seting": {

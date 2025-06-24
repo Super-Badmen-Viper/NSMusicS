@@ -214,6 +214,8 @@ export const store_player_audio_logic = reactive({
         //
         store_player_audio_info.this_audio_play_id = media_file.play_id ?? ''
         store_player_audio_info.this_audio_file_path = media_file.path ?? ''
+        store_player_audio_info.this_audio_song_encoding_format = media_file.encoding_format ?? ''
+        store_player_audio_info.this_audio_song_suffix = media_file.suffix ?? ''
         store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url ?? error_album
         store_player_audio_info.this_audio_artist_name = media_file.artist ?? ''
         store_player_audio_info.this_audio_artist_id = media_file.artist_id ?? ''

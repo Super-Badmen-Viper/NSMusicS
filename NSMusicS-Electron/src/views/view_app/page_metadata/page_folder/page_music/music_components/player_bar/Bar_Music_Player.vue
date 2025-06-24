@@ -33,6 +33,9 @@ const { t } = useI18n({
   inheritLocale: true
 })
 
+import { useMessage } from 'naive-ui'
+const message = useMessage()
+
 //////
 function getAssetImage(firstImage: string) {
   return new URL(firstImage, import.meta.url).href;
@@ -151,7 +154,19 @@ const Play_This_Audio_Path = () => {
         if(store_player_audio_logic.player === null){
           store_player_audio_logic.player = new Audio_node_mpv()
         }
-        await store_player_audio_logic.player.load(store_player_audio_info.this_audio_file_path)
+        const audio_url = store_player_audio_info.this_audio_file_path.indexOf('play_component_type') >= 0
+            ? store_player_audio_info.this_audio_file_path
+            : store_player_audio_info.this_audio_file_path + '&play_component_type=' + store_player_audio_logic.player_select;
+        if(store_player_audio_info.this_audio_song_suffix === 'm4a'){
+          if(store_player_audio_info.this_audio_song_encoding_format === 'alac'){
+            if(store_player_audio_logic.player_select === 'web'){
+              message.success(t('nsmusics.view_page.warning_web_play_alac'), { duration: 10000 });
+              message.success(t('nsmusics.view_page.warning_mpv_play_alac'), { duration: 10000 });
+              message.success(t('setting.transcode'), { duration: 10000 });
+            }
+          }
+        }
+        await store_player_audio_logic.player.load(audio_url)
       }
       else if(store_player_audio_logic.player_select === 'web'){
         await init_player_howler()
@@ -194,8 +209,20 @@ const init_player_howler = async () => {
     media_kind = 'mp3';
   }
   store_player_audio_logic.player = new Audio_howler();
+  const audio_url = store_player_audio_info.this_audio_file_path.indexOf('play_component_type') >= 0
+      ? store_player_audio_info.this_audio_file_path
+      : store_player_audio_info.this_audio_file_path + '&play_component_type=' + store_player_audio_logic.player_select
+  if(store_player_audio_info.this_audio_song_suffix === 'm4a'){
+    if(store_player_audio_info.this_audio_song_encoding_format === 'alac'){
+      if(store_player_audio_logic.player_select === 'web'){
+        message.success(t('nsmusics.view_page.warning_web_play_alac'), { duration: 10000 });
+        message.success(t('nsmusics.view_page.warning_mpv_play_alac'), { duration: 10000 });
+        message.success(t('setting.transcode'), { duration: 10000 });
+      }
+    }
+  }
   store_player_audio_logic.player.howl = new Howl({
-    src: [store_player_audio_info.this_audio_file_path],
+    src: [audio_url],
     format: store_player_audio_logic.player_dolby
         ? ['dolby', media_kind]
         : [],
@@ -435,9 +462,7 @@ watch(
     }, 300)
 );
 ////// player_configs player_button order area
-import { useMessage } from 'naive-ui'
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
-const message = useMessage()
 const backpanel_order_leave = () => {
   if(!store_player_appearance.player_show) {
     // store_player_audio_logic.drawer_order_show = false;
@@ -1005,10 +1030,10 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
           vertical align="center"
           @mousemove="()=>{
              store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
-           }"
+          }"
           @mouseover="()=>{
              store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
-           }">
+          }">
         <!-- grid_Middle_button_area -->
         <n-space class="grid_Middle_button_area"
                  :style="{

@@ -44,6 +44,9 @@ export const store_player_audio_info = reactive({
     this_audio_artist_rating: 0,
     this_audio_artist_favorite: 0,
 
+    this_audio_song_encoding_format: '',
+    this_audio_song_suffix: '',
+
     page_top_vinyl_image_url: vinyl,
     page_top_album_image_url: error_album,
     page_top_album_id: '',
@@ -67,6 +70,9 @@ export const store_player_audio_info = reactive({
             this.this_audio_file_medium_image_url = error_album;
             this.page_top_album_image_url = error_album;
             this.this_audio_restart_play = false;
+
+            this.this_audio_song_encoding_format = '';
+            this.this_audio_song_suffix = '';
 
             this.this_audio_artist_name = '';
             this.this_audio_artist_id = '';

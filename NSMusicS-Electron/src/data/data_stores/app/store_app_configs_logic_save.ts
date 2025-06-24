@@ -332,7 +332,11 @@ export const store_app_configs_logic_save = reactive({
                 'absoluteIndex',
                 'selected',
                 'playing',
-                'all_artist_ids'
+                'all_artist_ids',
+                'all_album_artist_ids',
+                'cue_count',
+                'guest_cue_count',
+                'encoding_format'
             ]);
             const data = store_playlist_list_info.playlist_MediaFiles_temporary
                 .filter(item => item.id && !excludedFields.has('id'))
