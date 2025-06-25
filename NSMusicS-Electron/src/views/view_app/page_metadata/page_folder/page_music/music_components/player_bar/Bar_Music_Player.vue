@@ -156,13 +156,17 @@ const Play_This_Audio_Path = () => {
         }
         const audio_url = store_player_audio_info.this_audio_file_path.indexOf('play_component_type') >= 0
             ? store_player_audio_info.this_audio_file_path
-            : store_player_audio_info.this_audio_file_path + '&play_component_type=' + store_player_audio_logic.player_select;
-        if(store_player_audio_info.this_audio_song_suffix === 'm4a'){
-          if(store_player_audio_info.this_audio_song_encoding_format === 'alac'){
-            if(store_player_audio_logic.player_select === 'web'){
-              message.success(t('nsmusics.view_page.warning_web_play_alac'), { duration: 10000 });
-              message.success(t('nsmusics.view_page.warning_mpv_play_alac'), { duration: 10000 });
-              message.success(t('setting.transcode'), { duration: 10000 });
+            : store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong' ?
+                store_player_audio_info.this_audio_file_path + '&play_component_type=' + store_player_audio_logic.player_select
+                : store_player_audio_info.this_audio_file_path
+        if(store_server_user_model.model_server_type_of_web) {
+          if (store_server_users.server_select_kind === 'ninesong') {
+            if (store_player_audio_info.this_audio_song_suffix === 'm4a') {
+              if (store_player_audio_info.this_audio_song_encoding_format === 'alac') {
+                if (store_player_audio_logic.player_select === 'web') {
+                  message.success(t('setting.transcode'), {duration: 10000});
+                }
+              }
             }
           }
         }
@@ -211,13 +215,17 @@ const init_player_howler = async () => {
   store_player_audio_logic.player = new Audio_howler();
   const audio_url = store_player_audio_info.this_audio_file_path.indexOf('play_component_type') >= 0
       ? store_player_audio_info.this_audio_file_path
-      : store_player_audio_info.this_audio_file_path + '&play_component_type=' + store_player_audio_logic.player_select
-  if(store_player_audio_info.this_audio_song_suffix === 'm4a'){
-    if(store_player_audio_info.this_audio_song_encoding_format === 'alac'){
-      if(store_player_audio_logic.player_select === 'web'){
-        message.success(t('nsmusics.view_page.warning_web_play_alac'), { duration: 10000 });
-        message.success(t('nsmusics.view_page.warning_mpv_play_alac'), { duration: 10000 });
-        message.success(t('setting.transcode'), { duration: 10000 });
+      : store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong' ?
+          store_player_audio_info.this_audio_file_path + '&play_component_type=' + store_player_audio_logic.player_select
+          : store_player_audio_info.this_audio_file_path
+  if(store_server_user_model.model_server_type_of_web) {
+    if (store_server_users.server_select_kind === 'ninesong') {
+      if (store_player_audio_info.this_audio_song_suffix === 'm4a') {
+        if (store_player_audio_info.this_audio_song_encoding_format === 'alac') {
+          if (store_player_audio_logic.player_select === 'web') {
+            message.success(t('setting.transcode'), {duration: 10000});
+          }
+        }
       }
     }
   }
