@@ -15,6 +15,9 @@ import contextmenu from 'v-contextmenu'
 import 'v-contextmenu/dist/themes/default.css'
 app.use(contextmenu)
 
+import { setupHammerDirective } from "./utils/hammer/hammer"
+setupHammerDirective(app);
+
 import router from './router'
 app.use(router)
 

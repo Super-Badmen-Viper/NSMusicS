@@ -70,9 +70,12 @@ import {store_general_fetch_artist_list} from "@/data/data_stores/server/server_
 
 ////// BrowserWindow
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
+let mobile_model = false
 window.addEventListener('resize', () => {
   store_app_configs_info.window_innerWidth = window.innerWidth;
   store_app_configs_info.window_innerHeight = window.innerHeight;
+
+  mobile_model = window.innerWidth / window.innerHeight < 0.5;
 
   store_player_appearance.player_lyric_fontSize_Num =
       store_player_appearance.player_use_lyric_skip_forward ?
@@ -757,6 +760,8 @@ import {
   store_server_model_statistics
 } from "@/data/data_stores/server/server_api_abstract/music_scene/model/model_statistics";
 import {store_server_login_info} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+import View_Mini_Music_Player_Mobile
+  from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/View_Mini_Music_Player_Mobile.vue";
 onMounted(()=>{
   create_menuOptions_appBar()
 })
@@ -985,7 +990,7 @@ if(isElectron) {
                 <n-tooltip trigger="hover" placement="top"
                            v-if="isElectron">
                   <template #trigger>
-                    <n-button quaternary circle 
+                    <n-button quaternary circle
                               :style="{
                                 marginRight:
                                   store_app_configs_info.desktop_system_kind != 'darwin' ? '4px' : '30px'
@@ -1033,8 +1038,8 @@ if(isElectron) {
                 <n-tooltip trigger="hover" placement="top"
                            v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'">
                   <template #trigger>
-                    <n-button 
-                        quaternary circle 
+                    <n-button
+                        quaternary circle
                         style="margin-right:4px"
                           @click="() => {
                             if(isElectron) {
@@ -1097,9 +1102,14 @@ if(isElectron) {
               style="z-index: 203;">
             <View_Screen_Music_Player
                 class="view_music_player"
-                v-if="store_player_appearance.player_show && !store_app_configs_info.window_state_miniplayer"
+                v-if="store_player_appearance.player_show && !store_app_configs_info.window_state_miniplayer && !mobile_model"
                 :style="{ height: `calc(100vh - ${store_player_appearance.player_show_hight_animation_value}vh)` }">
             </View_Screen_Music_Player>
+            <View_Mini_Music_Player_Mobile
+                class="view_music_player"
+                v-if="store_player_appearance.player_show && !store_app_configs_info.window_state_miniplayer && mobile_model"
+                :style="{ height: `calc(100vh - ${store_player_appearance.player_show_hight_animation_value}vh)` }">
+            </View_Mini_Music_Player_Mobile>
           </n-config-provider>
           <!-- bottom PlayerBar and PlayerView -->
           <n-config-provider
@@ -1283,7 +1293,9 @@ if(isElectron) {
   </n-message-provider>
 </template>
 <style scoped>
-html, body { scroll-behavior:smooth; }
+html, body {
+  scroll-behavior:smooth;
+}
 
 .this_App {
   width: 100vw;

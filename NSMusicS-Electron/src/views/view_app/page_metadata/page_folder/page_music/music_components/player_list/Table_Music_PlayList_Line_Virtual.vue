@@ -225,6 +225,10 @@ const onScrollEnd = async () => {
   isScrolling.value = false;
 };
 
+const handleDoubleTap = (item: any, index: number) => {
+  store_playlist_list_logic.handleItemDbClick(item, index);
+};
+
 onMounted(()=>{
   store_playlist_list_info.playlist_DragSort_Model = false
 });
@@ -278,8 +282,9 @@ onMounted(()=>{
             :data-index="index"
             :data-active="active"
             class="message"
-            v-contextmenu:contextmenu @contextmenu.prevent="store_playlist_list_info.playlist_Menu_Item_Id = item.id"
-            @Dblclick="store_playlist_list_logic.handleItemDbClick(item,index)">
+            v-contextmenu:contextmenu
+            @contextmenu.prevent="store_playlist_list_info.playlist_Menu_Item_Id = item.id"
+            v-hammer:doubletap="() => handleDoubleTap(item, index)" >
             <div
               :style="{
                 width: store_app_configs_info.window_state_miniplayer_playlist ? '280px' : '488px',

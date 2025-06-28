@@ -237,9 +237,8 @@ const init_player_howler = async () => {
     autoplay: false,
     html5: true,
     loop: false,
-    volume: 1.0,
     onplay: async () => {
-      store_player_audio_logic.player.howl.fade(0, 1, store_player_audio_logic.player_fade_value);
+      store_player_audio_logic.player.howl.fade(0, Number(store_player_audio_logic.play_volume), store_player_audio_logic.player_fade_value);
       store_player_audio_logic.player.isPlaying = true;
       if (isElectron) {
         await ipcRenderer.invoke('i18n-tray-music-pause', true);
@@ -286,7 +285,7 @@ const init_player_howler = async () => {
       }
     },
     onend: () => {
-      store_player_audio_logic.player.howl.fade(1, 0, store_player_audio_logic.player_fade_value);
+      store_player_audio_logic.player.howl.fade(Number(store_player_audio_logic.play_volume), 0, store_player_audio_logic.player_fade_value);
       setTimeout(async () => {
         store_player_audio_logic.player.isPlaying = false;
         if (store_player_audio_logic.player_no_progress_jump) {
@@ -395,7 +394,7 @@ const Init_Audio_Player = async () => {
           if(store_player_audio_logic.player.howl == null)
             Play_This_Audio_Path()
           else {
-            store_player_audio_logic.player.howl.fade(1, 0, store_player_audio_logic.player_fade_value);
+            store_player_audio_logic.player.howl.fade(Number(store_player_audio_logic.play_volume), 0, store_player_audio_logic.player_fade_value);
             await store_player_audio_logic.player.play();
           }
         }
@@ -410,7 +409,7 @@ const Init_Audio_Player = async () => {
         await store_player_audio_logic.player.pause();
       }
       else if(store_player_audio_logic.player_select === 'web'){
-        store_player_audio_logic.player.howl.fade(1, 0, store_player_audio_logic.player_fade_value);
+        store_player_audio_logic.player.howl.fade(Number(store_player_audio_logic.play_volume), 0, store_player_audio_logic.player_fade_value);
         await store_player_audio_logic.player.pause();
       }
     }
@@ -1231,31 +1230,31 @@ watch(() => store_server_user_model.random_play_model, (newValue) => {
             {{ store_player_audio_logic.current_play_time }}
           </n-space>
           <n-slider
-              style="
-              width: 320px;
-              color: #3DC3FF;
-              border-radius: 10px;
-              transition: margin 0.4s;
-            "
-              v-model:value="store_player_audio_logic.slider_singleValue"
-              :min="0" :max="100" :keyboard="true"
-              :format-tooltip="(value) => {
+            style="
+            width: 320px;
+            color: #3DC3FF;
+            border-radius: 10px;
+            transition: margin 0.4s;
+          "
+            v-model:value="store_player_audio_logic.slider_singleValue"
+            :min="0" :max="100" :keyboard="true"
+            :format-tooltip="(value) => {
               return store_player_audio_logic.formatTime(
                 (value / 100) * store_player_audio_logic.player.isDuration
               );
             }"
-              :on-dragend="()=>{
+            :on-dragend="()=>{
               if(store_player_audio_logic.slider_singleValue >= 99.5 || store_player_audio_logic.slider_singleValue == 0){
                 store_player_audio_logic.player_is_play_ended = true;
                 store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
               }
               store_player_audio_logic.player_range_duration_isDragging = false;
             }"
-              @click="()=>{
+            @click="()=>{
               store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
             }"
-              @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
-              @mouseup="store_player_audio_logic.player_range_duration_isDragging = false"
+            @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
+            @mouseup="store_player_audio_logic.player_range_duration_isDragging = false"
           />
           <n-space style="width: 46px;">
             {{ store_player_audio_logic.total_play_time }}
