@@ -46,7 +46,7 @@
     "uuid": "^9.0.1",
     "v-contextmenu": "^3.2.0",
     "vue-draggable-plus": "^0.5.3",
-    "vue-i18n": "next",
+    "vue-i18n": "11.0.0-rc.1",
     "vue-rate": "next",
     "vue-virtual-scroller": "next"
   },
