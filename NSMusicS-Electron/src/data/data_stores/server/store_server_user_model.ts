@@ -37,6 +37,9 @@ import {
 import {
     Folder_Entity_ApiService_of_NineSong
 } from "../../data_access/servers_configs/ninesong_api/services_web/Folder_Entity/index_service";
+import {
+    store_general_fetch_player_list
+} from "./server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list";
 
 export const store_server_user_model = reactive({
     model_select: 'server',
@@ -110,6 +113,7 @@ export const store_server_user_model = reactive({
             store_server_user_model.random_play_model = false;
             // Refresh Current AudioInfo
             await store_player_audio_info.reset_data();
+            store_general_fetch_player_list._totalCount = 0;
             store_view_media_page_logic.page_songlists_selected = 'song_list_all'
             store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
             store_view_artist_page_logic.page_artistlists_selected = 'artist_list_all'

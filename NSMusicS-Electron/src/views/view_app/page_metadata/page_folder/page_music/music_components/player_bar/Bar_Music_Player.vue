@@ -508,28 +508,7 @@ const backpanel_order_click = () => {
   }
 };
 async function Play_Media_Order(model_num: string, increased: number) {
-  let last_index = 0;
-  if (store_server_user_model.model_server_type_of_local) {
-    last_index = store_playlist_list_info.playlist_MediaFiles_temporary.length;
-  } else if (store_server_user_model.model_server_type_of_web) {
-    if (!store_server_user_model.random_play_model) {
-      if (store_playlist_list_info.playlist_MediaFiles_temporary.length >= 30) {
-        if (store_general_fetch_player_list._totalCount != undefined) {
-          if (store_general_fetch_player_list._totalCount < store_playlist_list_info.playlist_MediaFiles_temporary.length) {
-            store_general_fetch_player_list._totalCount = store_playlist_list_info.playlist_MediaFiles_temporary.length;
-          }
-        } else {
-          store_general_fetch_player_list._totalCount = store_playlist_list_info.playlist_MediaFiles_temporary.length;
-        }
-      } else {
-        store_general_fetch_player_list._totalCount = store_playlist_list_info.playlist_MediaFiles_temporary.length;
-      }
-      last_index = store_general_fetch_player_list._totalCount;
-    } else {
-      last_index = store_playlist_list_info.playlist_MediaFiles_temporary.length;
-    }
-  }
-
+  let last_index = store_playlist_list_info.playlist_MediaFiles_temporary.length;
   if (last_index > 0) {
     let index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
         (item: any) =>
