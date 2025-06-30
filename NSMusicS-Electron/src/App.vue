@@ -61,9 +61,12 @@ import {store_router_data_logic} from "@/router/router_store/store_router_data_l
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 import {store_app_configs_logic_theme} from "@/data/data_stores/app/store_app_configs_logic_theme";
 import {store_general_fetch_media_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list";
+import {store_general_fetch_media_cue_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list";
 import {store_general_fetch_home_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_home/store_general_fetch_home_list";
 import {store_general_fetch_album_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list";
 import {store_general_fetch_artist_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_artist/store_general_fetch_artist_list";
+import {store_view_media_cue_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media_cue/store/store_view_media_cue_page_logic";
+import {store_view_media_cue_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media_cue/store/store_view_media_cue_page_info";
 
 ////// BrowserWindow
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
@@ -109,16 +112,6 @@ function create_menuOptions_appBar(){
         key: 'home',
         icon: renderIcon(Home28Regular),
       },
-      // {
-      //   label: computed(() => renderRouterLink('categories', t('entity.smartPlaylist') + t('Categories'))),
-      //   key: 'categories',
-      //   icon: renderIcon(Apps20Regular),
-      // },
-      // {
-      //   label: computed(() => renderRouterLink('media_cue', t('entity.smartPlaylist') + t('Categories'))),
-      //   key: 'media_cue',
-      //   icon: renderIcon(Apps20Regular),
-      // },
       {
         label: computed(() => renderRouterLink('album', t('entity.album_other'))),
         key: 'album',
@@ -130,10 +123,20 @@ function create_menuOptions_appBar(){
         icon: renderIcon(MusicNoteRound)
       },
       {
+        label: computed(() => renderRouterLink('media_cue', t('nsmusics.view_page.disk'))),
+        key: 'media_cue',
+        icon: renderIcon(LibraryMusicOutlined),
+      },
+      {
         label: computed(() => renderRouterLink('artist', t('entity.artist_other'))),
         key: 'artist',
         icon: renderIcon(UserAvatarFilledAlt)
       },
+      // {
+      //   label: computed(() => renderRouterLink('categories', t('entity.smartPlaylist') + t('Categories'))),
+      //   key: 'categories',
+      //   icon: renderIcon(Apps20Regular),
+      // },
   )
   /// 兼容性代码，在更新多模态模式之后，将删除方法部分代码
   store_app_configs_info.menuOptions_selectd_model_1 = false
@@ -271,7 +274,7 @@ async function handleMenuSelection() {
     },
     'song': async () => {
       clearFilesIfNeeded('media');
-      await fetchDataIfNeeded('media');
+      fetchDataIfNeeded('media');
       store_router_data_info.router_select_model_media = true;
     },
     'artist': () => {
@@ -323,7 +326,7 @@ function fetchDataIfNeeded(type: 'home' | 'categories' | 'media_cue' | 'album' |
     } else if (type === 'categories') {
       store_general_fetch_home_list.fetchData_Home();
     } else if (type === 'media_cue') {
-      store_general_fetch_media_list.fetchData_Media();
+      store_general_fetch_media_cue_list.fetchData_Media();
     } else if (type === 'album') {
       store_general_fetch_album_list.fetchData_Album();
     } else if (type === 'media') {
@@ -366,6 +369,7 @@ routers.afterEach(async (to, from) => {
     } else if (to.name === 'media_cue') {
       store_router_data_info.router_select_model_media_cue = true;
       store_router_data_info.router_name = to.name;
+      Init_page_cuelists_statistic_Data();
     } else if (to.name === 'update') {
       store_router_data_info.router_select_model_update = true;
       store_router_data_info.router_name = to.name;
@@ -529,6 +533,121 @@ const Init_page_songlists_statistic_Data = () => {
     }
     store_view_media_page_logic.page_songlists_options.push(temp_playlist);
     store_view_media_page_logic.page_songlists.push(temp_playlist)
+  });
+}
+///// view of media
+const Init_page_cuelists_statistic_Data = () => {
+  store_view_media_cue_page_logic.page_songlists_options = [];
+  store_view_media_cue_page_logic.page_songlists_statistic = [];
+  store_view_media_cue_page_logic.page_songlists = []
+  ///
+  const temp_Play_List_ALL: Play_List = {
+    label: computed(() => t('nsmusics.view_page.allDisk')),
+    value: 'song_list_all',
+    id: 'song_list_all',
+    name: computed(() => t('nsmusics.view_page.allDisk')),
+    comment: computed(() => t('nsmusics.view_page.allDisk')),
+    duration: 0,
+    song_count: store_view_media_cue_page_info.media_item_count + ' *',
+    public: 0,
+    created_at: '',
+    updated_at: '',
+    path: '',
+    sync: 0,
+    size: 0,
+    rules: null,
+    evaluated_at: '',
+    owner_id: ''
+  }
+  store_view_media_cue_page_logic.page_songlists_options.push(temp_Play_List_ALL);
+  store_view_media_cue_page_logic.page_songlists_statistic.push({
+    label: temp_Play_List_ALL.label,
+    song_count: temp_Play_List_ALL.song_count.toString(),
+    id: temp_Play_List_ALL.id
+  });
+  store_view_media_cue_page_logic.page_songlists.push(temp_Play_List_ALL)
+  ///
+  const temp_Play_List_Love: Play_List = {
+    label: computed(() => t('nsmusics.view_page.loveDisk')),
+    value: 'song_list_love',
+    id: 'song_list_love',
+    name: computed(() => t('nsmusics.view_page.loveDisk')),
+    comment: computed(() => t('nsmusics.view_page.loveDisk')),
+    duration: 0,
+    song_count: store_view_media_cue_page_info.media_starred_count + ' *',
+    public: 0,
+    created_at: '',
+    updated_at: '',
+    path: '',
+    sync: 0,
+    size: 0,
+    rules: null,
+    evaluated_at: '',
+    owner_id: ''
+  }
+  store_view_media_cue_page_logic.page_songlists_options.push(temp_Play_List_Love);
+  store_view_media_cue_page_logic.page_songlists_statistic.push({
+    label: temp_Play_List_Love.label,
+    song_count: temp_Play_List_Love.song_count.toString(),
+    id: temp_Play_List_Love.id
+  });
+  store_view_media_cue_page_logic.page_songlists.push(temp_Play_List_Love)
+  ///
+  const temp_Play_List_Recently: Play_List = {
+    label: computed(() => t('nsmusics.view_page.recentPlay')),
+    value: 'song_list_recently',
+    id: 'song_list_recently',
+    name: computed(() => t('nsmusics.view_page.recentPlay')),
+    comment: computed(() => t('nsmusics.view_page.recentPlay')),
+    duration: 0,
+    song_count: store_view_media_cue_page_info.media_recently_count > 0 ? store_view_media_cue_page_info.media_recently_count : '*' + ' *',
+    public: 0,
+    created_at: '',
+    updated_at: '',
+    path: '',
+    sync: 0,
+    size: 0,
+    rules: null,
+    evaluated_at: '',
+    owner_id: ''
+  }
+  store_view_media_cue_page_logic.page_songlists_options.push(temp_Play_List_Recently);
+  store_view_media_cue_page_logic.page_songlists_statistic.push({
+    label: temp_Play_List_Recently.label,
+    song_count:
+        store_server_user_model.model_server_type_of_local || store_server_users.server_select_kind === 'ninesong' ?
+            temp_Play_List_Recently.song_count.toString() : '*' + ' *',
+    id: temp_Play_List_Recently.id
+  });
+  store_view_media_cue_page_logic.page_songlists.push(temp_Play_List_Recently)
+  //////
+  store_view_media_cue_page_logic.page_songlists_statistic.push({
+    label: computed(() => t('entity.playlist_other')),
+    song_count: store_view_media_cue_page_info.media_playlist_count + ' *',
+    id: 'song_list_all_PlayList'
+  });
+  //////
+  store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.forEach((item: any) =>{
+    const temp_playlist: Play_List = {
+      label: item.playlist.name,
+      value: item.playlist.id,
+      id: item.playlist.id,
+      name: item.playlist.name,
+      comment: item.playlist.comment,
+      duration: item.playlist.duration,
+      song_count: item.playlist.song_count + ' *',
+      public: item.playlist.public,
+      created_at: item.playlist.created_at,
+      updated_at: item.playlist.updated_at,
+      path: item.playlist.path,
+      sync: item.playlist.sync,
+      size: item.playlist.size,
+      rules: item.playlist.rules,
+      evaluated_at: item.playlist.evaluated_at,
+      owner_id: item.playlist.owner_id
+    }
+    store_view_media_cue_page_logic.page_songlists_options.push(temp_playlist);
+    store_view_media_cue_page_logic.page_songlists.push(temp_playlist)
   });
 }
 ////// view of album
@@ -727,6 +846,7 @@ const Init_page_artistlists_statistic_Data = () => {
 watch(() => store_playlist_list_logic.playlist_names_StartUpdate, (newValue) => {
   if(newValue) {
     Init_page_songlists_statistic_Data();
+    Init_page_cuelists_statistic_Data();
     store_playlist_list_logic.playlist_names_StartUpdate = false
     console.log("store_playlist_list_logic.playlist_names_StartUpdate")
   }

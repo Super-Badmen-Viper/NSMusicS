@@ -17,6 +17,8 @@
         "view_page": {
             "allMedia": "所有歌曲",
             "loveMedia": "收藏歌曲",
+            "allDisk": "所有光碟",
+            "loveDisk": "收藏光碟",
             "allAlbum": "所有專輯",
             "loveAlbum": "收藏專輯",
             "allArtist": "所有歌手",
@@ -71,7 +73,8 @@
             "guest": "客串",
             "disk": "光碟",
             "warning_web_play_alac": "檢測到用戶使用web播放組件播放編碼為alac的m4a文件，正在啟用NineSong服务端的ffmpeg組件將alac轉碼為aac臨時音樂資源",
-            "warning_mpv_play_alac": "請等待服務端響應, 需要等待數秒鐘轉碼完成並播放, 或者使用mpv播放組件即可跳過alac轉碼aac步驟"
+            "warning_mpv_play_alac": "請等待服務端響應, 需要等待數秒鐘轉碼完成並播放, 或者使用mpv播放組件即可跳過alac轉碼aac步驟",
+            "virtual_orbit_division": "虛擬分軌"
         },
         "view_player": {
             "view_seting": {

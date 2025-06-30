@@ -17,6 +17,8 @@
         "view_page": {
             "allMedia": "Todas as Músicas",
             "loveMedia": "Favoritos",
+            "allDisk": "Todos os Discos",
+            "loveDisk": "Discos Favoritos",
             "allAlbum": "Todos os Álbuns",
             "loveAlbum": "Álbuns Favoritos",
             "allArtist": "Todos os Artistas",
@@ -71,7 +73,8 @@
             "guest": "Participação",
             "disk": "Disco",
             "warning_web_play_alac": "Detected that the user is using the web playback component to play m4a files encoded as alac. Enabling NineSong server's ffmpeg component to transcode alac to aac temporary music resource.",
-            "warning_mpv_play_alac": "Please wait for the server response. It will take several seconds to complete transcoding and playback, or you can use the mpv playback component to skip the alac to aac transcoding step."
+            "warning_mpv_play_alac": "Please wait for the server response. It will take several seconds to complete transcoding and playback, or you can use the mpv playback component to skip the alac to aac transcoding step.",
+            "virtual_orbit_division": "Divisão de Trilha Virtual"
         },
         "view_player": {
             "view_seting": {

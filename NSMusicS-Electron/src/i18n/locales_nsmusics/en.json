@@ -17,6 +17,8 @@
         "view_page": {
             "allMedia": "all Media",
             "loveMedia": "love Media",
+            "allDisk": "All Discs",
+            "loveDisk": "Favorite Discs",
             "allAlbum": "all Album",
             "loveAlbum": "love Album",
             "allArtist": "all Artist",
@@ -71,7 +73,8 @@
             "guest": "Guest",
             "disk": "Disc",
             "warning_web_play_alac": "Detected user using web playback component to play m4a file encoded as alac, enabling NineSong server's ffmpeg component to transcode alac to aac temporary music resource",
-            "warning_mpv_play_alac": "Please wait for the server response, it will take several seconds to complete transcoding and playback, or you can use the mpv playback component to skip the alac to aac transcoding step"
+            "warning_mpv_play_alac": "Please wait for the server response, it will take several seconds to complete transcoding and playback, or you can use the mpv playback component to skip the alac to aac transcoding step",
+            "virtual_orbit_division": "Virtual Track Division"
         },
         "view_player": {
             "view_seting": {

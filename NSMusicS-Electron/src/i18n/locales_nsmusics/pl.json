@@ -17,6 +17,8 @@
         "view_page": {
             "allMedia": "Wszystkie utwory",
             "loveMedia": "Ulubione",
+            "allDisk": "Wszystkie Płyty",
+            "loveDisk": "Ulubione Płyty",
             "allAlbum": "Wszystkie albumy",
             "loveAlbum": "Ulubione albumy",
             "allArtist": "Wszyscy artyści",
@@ -71,7 +73,8 @@
             "guest": "Gość",
             "disk": "Dysk",
             "warning_web_play_alac": "Wykryto, że użytkownik wykorzystuje komponent odtwarzacza sieciowego do odtwarzania plików m4a zakodowanych w formacie alac. Włączono komponent ffmpeg na serwerze NineSong, aby przekonwertować alac na aac jako tymczasowy zasób muzyczny.",
-            "warning_mpv_play_alac": "Proszę czekać na odpowiedź serwera. Trzeba poczekać kilka sekund na zakończenie konwersji i rozpoczęcie odtwarzania, można również użyć komponentu odtwarzacza mpv, aby ominąć krok konwersji z alac na aac."
+            "warning_mpv_play_alac": "Proszę czekać na odpowiedź serwera. Trzeba poczekać kilka sekund na zakończenie konwersji i rozpoczęcie odtwarzania, można również użyć komponentu odtwarzacza mpv, aby ominąć krok konwersji z alac na aac.",
+            "virtual_orbit_division": "Wirtualne Dzielenie Toru"
         },
         "view_player": {
             "view_seting": {

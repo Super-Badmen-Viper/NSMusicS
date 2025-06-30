@@ -17,6 +17,8 @@
         "view_page": {
             "allMedia": "Všechny Skvely",
             "loveMedia": "Oblíbené",
+            "allDisk": "Všechny disky",
+            "loveDisk": "Oblíbené disky",
             "allAlbum": "Všechny Alby",
             "loveAlbum": "Oblíbené Alby",
             "allArtist": "Všichni Umělci",
@@ -71,7 +73,8 @@
             "guest": "Host",
             "disk": "Disk",
             "warning_web_play_alac": "Zjištěno, že uživatel používá webovou komponentu pro přehrávání souborů m4a zakódovaných jako alac. Připojujeme ffmpeg komponentu na serveru NineSong pro překódování alac do aac jako dočasné zdroje hudby.",
-            "warning_mpv_play_alac": "Čekajte prosím na odpověď serveru. Bude potřeba čekat několik sekund na dokončení překódování a zapnutí přehrávání, nebo můžete použít komponentu přehrávače mpv, abyste překročili krok překódování alac na aac."
+            "warning_mpv_play_alac": "Čekajte prosím na odpověď serveru. Bude potřeba čekat několik sekund na dokončení překódování a zapnutí přehrávání, nebo můžete použít komponentu přehrávače mpv, abyste překročili krok překódování alac na aac.",
+            "virtual_orbit_division": "Virtuální Dělení Tematického Okruhu"
         },
         "view_player": {
             "view_seting": {

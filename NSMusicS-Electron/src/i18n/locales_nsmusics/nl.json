@@ -17,6 +17,8 @@
         "view_page": {
             "allMedia": "Alle nummers",
             "loveMedia": "Favorieten",
+            "allDisk": "Alle Schijven",
+            "loveDisk": "Geliefde Schijven",
             "allAlbum": "Alle albums",
             "loveAlbum": "Favoriete albums",
             "allArtist": "Alle artiesten",
@@ -71,7 +73,8 @@
             "guest": "Gastoptreden",
             "disk": "Schijf",
             "warning_web_play_alac": "Gebruiker wordt gedetecteerd het gebruik van de webweergavecomponent om m4a-bestanden gecodeerd als alac te bekijken. Schakel de ffmpeg-component van de NineSong-server in om alac om te zetten naar aac als tijdelijke muziekbron.",
-            "warning_mpv_play_alac": "Wacht op het serverantwoord. Het kost enkele seconden om de codering te voltooien en af te spelen, of gebruik de mpv-weergavecomponent om het coderingsstap van alac naar aac over te slaan."
+            "warning_mpv_play_alac": "Wacht op het serverantwoord. Het kost enkele seconden om de codering te voltooien en af te spelen, of gebruik de mpv-weergavecomponent om het coderingsstap van alac naar aac over te slaan.",
+            "virtual_orbit_division": "Virtuele Spoorverdeling"
         },
         "view_player": {
             "view_seting": {

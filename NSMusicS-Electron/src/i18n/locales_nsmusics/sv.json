@@ -17,6 +17,8 @@
         "view_page": {
             "allMedia": "Alla Låtar",
             "loveMedia": "Favoritlåtar",
+            "allDisk": "Alla Disks",
+            "loveDisk": "Favorit Disks",
             "allAlbum": "Alla Album",
             "loveAlbum": "Favoritalbum",
             "allArtist": "Alla Artister",
@@ -71,7 +73,8 @@
             "guest": "Gäst",
             "disk": "Disc",
             "warning_web_play_alac": "Detekterade att användaren använder webbåteruppningskomponenten för att spela m4a-filer kodade som alac. Aktiverar NineSong-servers ffmpeckomponenten för att omkoda alac till aac som tillfällig musikresurs.",
-            "warning_mpv_play_alac": "Vänligen vänta på svaret från servern. Det tar några sekunder att slutföra omkodningen och uppspelningsväntan, eller du kan använda mpv-spelningskomponenten för att hoppa över omkodning av alac till aac."
+            "warning_mpv_play_alac": "Vänligen vänta på svaret från servern. Det tar några sekunder att slutföra omkodningen och uppspelningsväntan, eller du kan använda mpv-spelningskomponenten för att hoppa över omkodning av alac till aac.",
+            "virtual_orbit_division": "Virtuell Spårindelning"
         },
         "view_player": {
             "view_seting": {

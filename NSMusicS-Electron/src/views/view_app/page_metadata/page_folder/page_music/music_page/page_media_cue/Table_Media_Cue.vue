@@ -145,12 +145,12 @@ if(store_server_user_model.model_server_type_of_local || (store_server_users.ser
   ]
 }
 let options_Sort = computed(() => {
-  if(store_view_media_page_logic.page_songlists_options_Sort_key != null && store_view_media_page_logic.page_songlists_options_Sort_key.length > 0){
+  if(store_view_media_cue_page_logic.page_songlists_options_Sort_key != null && store_view_media_cue_page_logic.page_songlists_options_Sort_key.length > 0){
     options_Sort_key.value.forEach(element => {
-      if(element.key === store_view_media_page_logic.page_songlists_options_Sort_key[0].columnKey)
-        if(store_view_media_page_logic.page_songlists_options_Sort_key[0].order === state_Sort.Ascend)
+      if(element.key === store_view_media_cue_page_logic.page_songlists_options_Sort_key[0].columnKey)
+        if(store_view_media_cue_page_logic.page_songlists_options_Sort_key[0].order === state_Sort.Ascend)
           element.state_Sort = state_Sort.Ascend
-        else if(store_view_media_page_logic.page_songlists_options_Sort_key[0].order === state_Sort.Descend)
+        else if(store_view_media_cue_page_logic.page_songlists_options_Sort_key[0].order === state_Sort.Descend)
           element.state_Sort = state_Sort.Descend
     });
   }
@@ -203,8 +203,8 @@ const handleSelect_Sort = (key: string | number) => {
       _state_Sort_ = state_Sort.Descend;
       break;
   }
-  store_view_media_page_logic.list_options_Hand_Sort = true
-  store_view_media_page_logic.page_songlists_options_Sort_key = [{
+  store_view_media_cue_page_logic.list_options_Hand_Sort = true
+  store_view_media_cue_page_logic.page_songlists_options_Sort_key = [{
     columnKey: String(key),
     order: _state_Sort_
   }];
@@ -215,12 +215,12 @@ const options_Sort_key_Default_key = ref<string>()
 const options_Sort_key_Default = ref<SortItem[]>()
 // lineItems Search(filter)
 const show_search_area = () => {
-  if(store_view_media_page_logic.page_songlists_bool_show_search_area)
+  if(store_view_media_cue_page_logic.page_songlists_bool_show_search_area)
   {
-    store_view_media_page_logic.page_songlists_bool_show_search_area = false
+    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = false
     input_search_InstRef.value?.clear()
     if(bool_input_search){
-      // store_view_media_page_logic.list_data_StartUpdate = true
+      // store_view_media_cue_page_logic.list_data_StartUpdate = true
       back_search_default()
       bool_input_search = false
       scrollTo(0)
@@ -229,12 +229,12 @@ const show_search_area = () => {
       store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
     }
     input_search_InstRef.value?.clear()
-    store_view_media_page_logic.page_songlists_keywordFilter = ""
+    store_view_media_cue_page_logic.page_songlists_keywordFilter = ""
     click_search()
   }
   else
   {
-    store_view_media_page_logic.page_songlists_bool_show_search_area = true
+    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true
     options_Sort_key_Default.value = options_Sort_key.value.slice()
     options_Sort_key.value.forEach(element => {//保存 sort key
       if(element.state_Sort != state_Sort.Default)
@@ -245,16 +245,16 @@ const show_search_area = () => {
 const input_search_InstRef = ref<InputInst>()
 let bool_input_search = false
 const click_search = () => {
-  if (store_view_media_page_logic.page_songlists_input_search_Value){
-    const page_songlists_keyword = store_view_media_page_logic.page_songlists_input_search_Value.toLowerCase();
-    store_view_media_page_logic.get_page_songlists_keyword(page_songlists_keyword)
+  if (store_view_media_cue_page_logic.page_songlists_input_search_Value){
+    const page_songlists_keyword = store_view_media_cue_page_logic.page_songlists_input_search_Value.toLowerCase();
+    store_view_media_cue_page_logic.get_page_songlists_keyword(page_songlists_keyword)
     bool_input_search = true
     options_Sort_key.value.forEach(element => {
       element.state_Sort = state_Sort.Default
     });
   }else{
-    store_view_media_page_logic.page_songlists_keywordFilter = ""
-    store_view_media_page_logic.list_data_StartUpdate = true
+    store_view_media_cue_page_logic.page_songlists_keywordFilter = ""
+    store_view_media_cue_page_logic.list_data_StartUpdate = true
     bool_input_search = false
     back_search_default()
     ///
@@ -270,13 +270,13 @@ const back_search_default = () => {
       if (options_Sort_key.value[i].key === options_Sort_key_Default_key.value) {
         const sortersArray: { columnKey: string; order: string }[] = [];
         if (options_Sort_key.value[i].state_Sort === 'default') {
-          store_view_media_page_logic.list_options_Hand_Sort = true
-          store_view_media_page_logic.page_songlists_options_Sort_key = null
+          store_view_media_cue_page_logic.list_options_Hand_Sort = true
+          store_view_media_cue_page_logic.page_songlists_options_Sort_key = null
         } else {
           const sorter = { columnKey: options_Sort_key.value[i].key, order: options_Sort_key.value[i].state_Sort };
           sortersArray.push(sorter);
-          store_view_media_page_logic.list_options_Hand_Sort = true
-          store_view_media_page_logic.page_songlists_options_Sort_key = sortersArray
+          store_view_media_cue_page_logic.list_options_Hand_Sort = true
+          store_view_media_cue_page_logic.page_songlists_options_Sort_key = sortersArray
         }
         break;
       }
@@ -284,20 +284,20 @@ const back_search_default = () => {
   }
 }
 onMounted(() => {
-  store_view_media_page_logic.page_songlists_input_search_Value = store_view_media_page_logic.page_songlists_keyword
-  if(store_view_media_page_logic.page_songlists_input_search_Value.length > 0){
-    store_view_media_page_logic.page_songlists_bool_show_search_area = true
+  store_view_media_cue_page_logic.page_songlists_input_search_Value = store_view_media_cue_page_logic.page_songlists_keyword
+  if(store_view_media_cue_page_logic.page_songlists_input_search_Value.length > 0){
+    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true
     bool_input_search = true
   }
   else{
-    store_view_media_page_logic.page_songlists_bool_show_search_area = false
+    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = false
     bool_input_search = false
   }
 
   if(store_general_fetch_media_list._album_id.length > 0){
-    store_view_media_page_logic.page_songlists_bool_show_search_area = true
+    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true
     bool_input_search = true
-    store_view_media_page_logic.page_songlists_input_search_Value = store_general_fetch_media_list._album_id
+    store_view_media_cue_page_logic.page_songlists_input_search_Value = store_general_fetch_media_list._album_id
   }
 });
 // lineItems Filter To Favorite
@@ -315,17 +315,17 @@ const onUpdate = (viewStartIndex: any, viewEndIndex: any, visibleStartIndex: any
   updateParts.viewEndIdx = viewEndIndex
   updateParts.visibleStartIdx = visibleStartIndex
   updateParts.visibleEndIdx = visibleEndIndex
-  
+
   store_router_history_data_of_media.router_history_model_of_Media_scroller_value = viewEndIndex
 
   show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150;
 }
 const show_top_selectedlist = ref(false)
 const stopWatching_router_history_model_of_Media_scroll = watch(() => store_router_history_data_of_media.router_history_model_of_Media_scroll,(newValue) => {
-    if (newValue) {
-      scrollTo(store_router_history_data_of_media.router_history_model_of_Media_scroller_value)
-      store_router_history_data_of_media.router_history_model_of_Media_scroll = false
-    }
+  if (newValue) {
+    scrollTo(store_router_history_data_of_media.router_history_model_of_Media_scroller_value)
+    store_router_history_data_of_media.router_history_model_of_Media_scroll = false
+  }
 })
 const scrollTo = (value :number) => {
   if (dynamicScroller !== null) {
@@ -352,18 +352,18 @@ const page_songlists_handleselected_updatevalue = async (value: any) => {
       store_server_user_model.model_server_type_of_web && (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')
   ) {
     store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
-    store_view_media_page_logic.page_songlists_keyword = ''
+    store_view_media_cue_page_logic.page_songlists_keyword = ''
     input_search_InstRef.value?.clear()
-    store_view_media_page_logic.page_songlists_bool_show_search_area = false
+    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = false
   }
   /// navidrome/local
-  store_view_media_page_logic.set_media_Files_selected_all(false)
-  store_view_media_page_logic.list_selected_Hand_click = true
-  await store_view_media_page_logic.get_page_songlists_selected(value)
+  store_view_media_cue_page_logic.set_media_Files_selected_all(false)
+  store_view_media_cue_page_logic.list_selected_Hand_click = true
+  await store_view_media_cue_page_logic.get_page_songlists_selected(value)
   console.log('selected_value_for_songlistall：'+value);
-  breadcrumbItems.value = store_view_media_page_logic.page_songlists_options.find(option => option.value === value)?.label || '';
+  breadcrumbItems.value = store_view_media_cue_page_logic.page_songlists_options.find(option => option.value === value)?.label || '';
   bool_start_play.value = true
-  store_view_media_page_logic.set_media_Files_selected_all(false)
+  store_view_media_cue_page_logic.set_media_Files_selected_all(false)
 };
 
 ////// router_music history
@@ -402,16 +402,16 @@ const handleItemDbClick = async (media_file:any,index:number) => {
 const handleItemClick_title = (title:string) => {
   if(store_server_user_model.model_server_type_of_local) {
     click_count = 0;
-    store_view_media_page_logic.page_songlists_input_search_Value = title//+'accurate_search'+'__title__'
-    store_view_media_page_logic.get_page_songlists_keyword(title)
-    store_view_media_page_logic.page_songlists_bool_show_search_area = false
+    store_view_media_cue_page_logic.page_songlists_input_search_Value = title//+'accurate_search'+'__title__'
+    store_view_media_cue_page_logic.get_page_songlists_keyword(title)
+    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = false
     show_search_area()
     click_search()
     scrollTo(0)
   }else if(store_server_user_model.model_server_type_of_web){
-    store_view_media_page_logic.page_songlists_bool_show_search_area = true
-    store_view_media_page_logic.page_songlists_input_search_Value = title
-    store_view_media_page_logic.get_page_songlists_keyword(title)
+    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true
+    store_view_media_cue_page_logic.page_songlists_input_search_Value = title
+    store_view_media_cue_page_logic.get_page_songlists_keyword(title)
   }
 }
 const handleItemClick_artist = async (artist:string) => {
@@ -422,23 +422,23 @@ const handleItemClick_artist = async (artist:string) => {
   ) {
     click_count = 0;
     if (store_server_user_model.model_server_type_of_local) {
-      store_view_media_page_logic.page_songlists_input_search_Value = artist//+'accurate_search'+'__artist__'//artist不参与精确搜索
-      store_view_media_page_logic.get_page_songlists_keyword(artist)
-      store_view_media_page_logic.page_songlists_bool_show_search_area = false
+      store_view_media_cue_page_logic.page_songlists_input_search_Value = artist//+'accurate_search'+'__artist__'//artist不参与精确搜索
+      store_view_media_cue_page_logic.get_page_songlists_keyword(artist)
+      store_view_media_cue_page_logic.page_songlists_bool_show_search_area = false
       show_search_area()
       click_search()
       scrollTo(0)
     } else if (store_server_user_model.model_server_type_of_web) {
       store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
-      store_view_media_page_logic.page_songlists_bool_show_search_area = true
-      store_view_media_page_logic.page_songlists_input_search_Value = artist
-      store_view_media_page_logic.get_page_songlists_keyword(artist)
+      store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true
+      store_view_media_cue_page_logic.page_songlists_input_search_Value = artist
+      store_view_media_cue_page_logic.get_page_songlists_keyword(artist)
     }
   }else if(store_server_users.server_select_kind === 'ninesong' && store_server_user_model.model_server_type_of_web){
     store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
-    store_view_media_page_logic.page_songlists_bool_show_search_area = true
-    store_view_media_page_logic.page_songlists_input_search_Value = artist
-    // store_view_media_page_logic.get_page_songlists_keyword(artist)
+    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true
+    store_view_media_cue_page_logic.page_songlists_input_search_Value = artist
+    // store_view_media_cue_page_logic.get_page_songlists_keyword(artist)
     store_general_fetch_media_list.set_artist_id(artist)
     await store_general_fetch_media_list.fetchData_Media()
   }else{
@@ -453,22 +453,22 @@ const handleItemClick_album = async (album_id:string) => {
   ) {
     click_count = 0;
     if (store_server_user_model.model_server_type_of_local) {
-      store_view_media_page_logic.page_songlists_input_search_Value = album_id + 'accurate_search' + '__album__'
-      store_view_media_page_logic.get_page_songlists_keyword(album_id + 'accurate_search' + '__album__')
-      store_view_media_page_logic.page_songlists_bool_show_search_area = false
+      store_view_media_cue_page_logic.page_songlists_input_search_Value = album_id + 'accurate_search' + '__album__'
+      store_view_media_cue_page_logic.get_page_songlists_keyword(album_id + 'accurate_search' + '__album__')
+      store_view_media_cue_page_logic.page_songlists_bool_show_search_area = false
       show_search_area()
       click_search()
       scrollTo(0)
     } else if (store_server_user_model.model_server_type_of_web) {
       store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
-      store_view_media_page_logic.page_songlists_bool_show_search_area = true
-      store_view_media_page_logic.page_songlists_input_search_Value = album_id
-      store_view_media_page_logic.get_page_songlists_keyword(album_id)
+      store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true
+      store_view_media_cue_page_logic.page_songlists_input_search_Value = album_id
+      store_view_media_cue_page_logic.get_page_songlists_keyword(album_id)
     }
   }else if(store_server_users.server_select_kind === 'ninesong' && store_server_user_model.model_server_type_of_web){
     store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
-    store_view_media_page_logic.page_songlists_bool_show_search_area = true
-    store_view_media_page_logic.page_songlists_input_search_Value = album_id
+    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true
+    store_view_media_cue_page_logic.page_songlists_input_search_Value = album_id
     store_general_fetch_media_list.set_album_id(album_id)
     await store_general_fetch_media_list.fetchData_Media()
   }else{
@@ -478,7 +478,7 @@ const handleItemClick_album = async (album_id:string) => {
 const Open_this_artist_all_artist_list_click = (artist_id:string) => {
   if(store_server_user_model.model_server_type_of_web){
     store_general_fetch_media_list.set_artist_id(artist_id)
-    store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+    store_view_media_cue_page_logic.page_songlists_selected = 'song_list_all'
     store_general_fetch_album_list.set_artist_id(artist_id)
     store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
   }
@@ -490,7 +490,7 @@ const Open_this_artist_all_artist_list_click = (artist_id:string) => {
   }else{
     // Jellyfin 有相当一部分flac媒体无法识别为专辑
     store_player_appearance.player_mode_of_medialist_from_external_import = false
-    store_view_media_page_logic.page_songlists_keyword = artist_id
+    store_view_media_cue_page_logic.page_songlists_keyword = artist_id
     store_router_data_info.router.push('song')
   }
 }
@@ -501,8 +501,8 @@ const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id, favorite)
   page_songlists_statistic.value.forEach((item: any) => {
     if(item.id === 'song_list_love') {
-      store_view_media_page_info.media_starred_count += !favorite ? 1 : -1;
-      item.song_count = store_view_media_page_info.media_starred_count + ' *';
+      store_view_media_cue_page_info.media_starred_count += !favorite ? 1 : -1;
+      item.song_count = store_view_media_cue_page_info.media_starred_count + ' *';
     }
   });
   if (id === store_player_audio_info.this_audio_song_id){
@@ -522,7 +522,7 @@ let after_rating = false;
 const handleItemClick_Rating = (id_rating: any) => {
   click_count = 0;
   const rating_item: Media_File | undefined =
-      store_view_media_page_info.media_Files_temporary.find(
+      store_view_media_cue_page_info.media_Files_temporary.find(
           (mediaFile: Media_File) =>
               mediaFile.id
               ===
@@ -569,8 +569,8 @@ import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_i
 import {store_player_audio_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_info";
 import {store_playlist_list_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info"
 import {store_playlist_list_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_logic";
-import {store_view_media_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
-import {store_view_media_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
+import {store_view_media_cue_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media_cue/store/store_view_media_cue_page_info";
+import {store_view_media_cue_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media_cue/store/store_view_media_cue_page_logic";
 import {store_player_appearance} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_appearance";
 import {store_router_history_data_of_media} from "@/router/router_store/store_router_history_data_of_media";
 import {store_local_data_set_mediaInfo} from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_mediaInfo";
@@ -636,7 +636,7 @@ async function update_playlist_addPlaylist(){
             playlist_set_of_addPlaylist_of_public.value
         )
         //
-        store_view_media_page_info.media_playlist_count++;
+        store_view_media_cue_page_info.media_playlist_count++;
       }
     }
     else {
@@ -645,7 +645,7 @@ async function update_playlist_addPlaylist(){
 
     page_songlists_statistic.value.forEach((item: any) => {
       if(item.id === 'song_list_all_PlayList') {
-        item.song_count = store_view_media_page_info.media_playlist_count + ' *';
+        item.song_count = store_view_media_cue_page_info.media_playlist_count + ' *';
       }
     });
   }catch (e) {
@@ -701,12 +701,12 @@ async function update_playlist_deletePlaylist(){
             playlist_update_emit_id.value
         )
         if (result !== undefined) {
-          store_view_media_page_info.media_playlist_count--;
+          store_view_media_cue_page_info.media_playlist_count--;
         }
       }
       page_songlists_statistic.value.forEach((item: any) => {
         if (item.id === 'song_list_all_PlayList') {
-          item.song_count = store_view_media_page_info.media_playlist_count + ' *';
+          item.song_count = store_view_media_cue_page_info.media_playlist_count + ' *';
         }
       });
     }
@@ -726,26 +726,26 @@ async function update_playlist_addMediaFile(id: any, playlist_id: any){
 }
 async function update_playlist_deleteMediaFile(id: any){
   try{
-    if(store_view_media_page_logic.page_songlists_selected === 'song_list_all'){
+    if(store_view_media_cue_page_logic.page_songlists_selected === 'song_list_all'){
 
-    }else if(store_view_media_page_logic.page_songlists_selected === 'song_list_love'){
+    }else if(store_view_media_cue_page_logic.page_songlists_selected === 'song_list_love'){
       await store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id, true)
-    }else if(store_view_media_page_logic.page_songlists_selected === 'song_list_recently'){
+    }else if(store_view_media_cue_page_logic.page_songlists_selected === 'song_list_recently'){
 
     }else{
       if(store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby'){
         await store_local_data_set_mediaInfo.Set_MediaInfo_Delete_Selected_Playlist(
             store_playlist_list_info.playlist_Menu_Item_IndexId,
-            store_view_media_page_logic.page_songlists_selected
+            store_view_media_cue_page_logic.page_songlists_selected
         )
       }else{
         await store_local_data_set_mediaInfo.Set_MediaInfo_Delete_Selected_Playlist(
             id,
-            store_view_media_page_logic.page_songlists_selected
+            store_view_media_cue_page_logic.page_songlists_selected
         )
       }
     }
-    store_view_media_page_info.media_Files_temporary = store_view_media_page_info.media_Files_temporary.filter((media: any) => media.id !== id);
+    store_view_media_cue_page_info.media_Files_temporary = store_view_media_cue_page_info.media_Files_temporary.filter((media: any) => media.id !== id);
     message.success(t('common.delete'))
     store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
   }catch (e) {
@@ -755,65 +755,65 @@ async function update_playlist_deleteMediaFile(id: any){
 /// update selected media_file
 const Type_Selected_Media_File_To_Playlist = ref(false)
 async function update_playlist_addMediaFile_selected(playlist_id: any) {
-  await store_view_media_page_logic.get_selected_playlist_add_MediaFile(playlist_id)
+  await store_view_media_cue_page_logic.get_selected_playlist_add_MediaFile(playlist_id)
   message.success(t('common.add'))
   Type_Selected_Media_File_To_Playlist.value = false;
   click_open_bulk_operation()
 }
 async function update_lovelist_addMediaFile_selected() {
-  store_view_media_page_logic.get_selected_lovelist_add_MediaFile(true)
+  store_view_media_cue_page_logic.get_selected_lovelist_add_MediaFile(true)
   message.success(t('common.add'))
   Type_Selected_Media_File_To_Playlist.value = false;
   click_open_bulk_operation()
 }
 async function update_button_deleteMediaFile_selected(){
-  if(store_view_media_page_logic.page_songlists_selected === 'song_list_all'){
-    await update_locallist_deleteMediaFile_selected(store_view_media_page_logic.page_songlists_selected)
-  }else if(store_view_media_page_logic.page_songlists_selected === 'song_list_love'){
-    await update_lovelist_deleteMediaFile_selected(store_view_media_page_logic.page_songlists_selected)
-  }else if(store_view_media_page_logic.page_songlists_selected !== 'song_list_all'){
-    await update_playlist_deleteMediaFile_selected(store_view_media_page_logic.page_songlists_selected)
+  if(store_view_media_cue_page_logic.page_songlists_selected === 'song_list_all'){
+    await update_locallist_deleteMediaFile_selected(store_view_media_cue_page_logic.page_songlists_selected)
+  }else if(store_view_media_cue_page_logic.page_songlists_selected === 'song_list_love'){
+    await update_lovelist_deleteMediaFile_selected(store_view_media_cue_page_logic.page_songlists_selected)
+  }else if(store_view_media_cue_page_logic.page_songlists_selected !== 'song_list_all'){
+    await update_playlist_deleteMediaFile_selected(store_view_media_cue_page_logic.page_songlists_selected)
   }
-  store_view_media_page_info.media_Files_temporary =
-      store_view_media_page_info.media_Files_temporary.filter(
-          file => !store_view_media_page_info.media_Files_selected.some(
+  store_view_media_cue_page_info.media_Files_temporary =
+      store_view_media_cue_page_info.media_Files_temporary.filter(
+          file => !store_view_media_cue_page_info.media_Files_selected.some(
               selected => selected.id === file.id));
   message.success(t('common.delete'))
 }
 async function update_playlist_deleteMediaFile_selected(playlist_id: any) {
-  await store_view_media_page_logic.get_selected_playlist_delete_MediaFile(playlist_id)
+  await store_view_media_cue_page_logic.get_selected_playlist_delete_MediaFile(playlist_id)
   Type_Selected_Media_File_To_Playlist.value = false;
   click_open_bulk_operation()
 }
 async function update_locallist_deleteMediaFile_selected(playlist_id: any) {
-  store_view_media_page_logic.get_selected_locallist_delete_MediaFile(playlist_id)
+  store_view_media_cue_page_logic.get_selected_locallist_delete_MediaFile(playlist_id)
   Type_Selected_Media_File_To_Playlist.value = false;
   click_open_bulk_operation()
 }
 async function update_lovelist_deleteMediaFile_selected(playlist_id: any) {
-  store_view_media_page_logic.get_selected_lovelist_delete_MediaFile(playlist_id)
+  store_view_media_cue_page_logic.get_selected_lovelist_delete_MediaFile(playlist_id)
   Type_Selected_Media_File_To_Playlist.value = false;
   click_open_bulk_operation()
 }
 async function update_recentlist_deletetMediaFile_selected(playlist_id: any) {
-  store_view_media_page_logic.get_selected_recentlist_deletet_MediaFile(playlist_id)
+  store_view_media_cue_page_logic.get_selected_recentlist_deletet_MediaFile(playlist_id)
   Type_Selected_Media_File_To_Playlist.value = false;
   click_open_bulk_operation()
 }
 
 ////// bulk_operation and select_line
 const click_select_MediaList_ALL_Line = () => {
-  if(store_view_media_page_info.media_Files_selected.length == 0){
-    store_view_media_page_logic.set_media_Files_selected_all(true)
+  if(store_view_media_cue_page_info.media_Files_selected.length == 0){
+    store_view_media_cue_page_logic.set_media_Files_selected_all(true)
   }else{
-    store_view_media_page_logic.set_media_Files_selected_all(false)
+    store_view_media_cue_page_logic.set_media_Files_selected_all(false)
   }
 }
 const click_open_bulk_operation = () => {
   if(bool_start_play.value == true)
   {
     bool_start_play.value = false
-    store_view_media_page_logic.set_media_Files_selected_all(false)
+    store_view_media_cue_page_logic.set_media_Files_selected_all(false)
   }
   else{
     bool_start_play.value = true
@@ -860,7 +860,7 @@ const begin_select_MediaList_ALL_Line_of_playback = (key: string | number) => {
   } else {
     store_player_audio_logic.play_order = 'playback-4';
   }
-  const mediaFiles = store_view_media_page_info.media_Files_temporary;
+  const mediaFiles = store_view_media_cue_page_info.media_Files_temporary;
   if (mediaFiles.length > 0) {
     let index;
     if (key === 'options_dropdown_play_mode_1' || key === 'options_dropdown_play_mode_2') {
@@ -892,14 +892,14 @@ async function begin_random_play_model() {
           '30', '', ''
       )
     } else {
-      store_view_media_page_logic.list_options_Hand_Sort = false
+      store_view_media_cue_page_logic.list_options_Hand_Sort = false
       if (store_server_users.server_select_kind === 'jellyfin') {
-        store_view_media_page_logic.page_songlists_options_Sort_key = [{
+        store_view_media_cue_page_logic.page_songlists_options_Sort_key = [{
           columnKey: String('Random,SortName'),
           order: state_Sort.Ascend
         }];
       } else if (store_server_users.server_select_kind === 'emby') {
-        store_view_media_page_logic.page_songlists_options_Sort_key = [{
+        store_view_media_cue_page_logic.page_songlists_options_Sort_key = [{
           columnKey: String('Random'),
           order: state_Sort.Ascend
         }];
@@ -907,23 +907,23 @@ async function begin_random_play_model() {
       await page_songlists_handleselected_updatevalue('song_list_all')
       // await store_general_fetch_media_list.fetchData_Media()
       scrollTo(0)
-      if (store_view_media_page_info.media_Files_temporary.length > 0) {
+      if (store_view_media_cue_page_info.media_Files_temporary.length > 0) {
         click_count = 2
         bool_start_play.value = true
-        await handleItemDbClick(store_view_media_page_info.media_Files_temporary[0], 0)
+        await handleItemDbClick(store_view_media_cue_page_info.media_Files_temporary[0], 0)
       }
     }
     store_server_user_model.random_play_model = true;
   }else{
     store_server_user_model.random_play_model = false;
-    store_view_media_page_logic.list_options_Hand_Sort = true
+    store_view_media_cue_page_logic.list_options_Hand_Sort = true
     if (store_server_users.server_select_kind === 'ninesong') {
-      store_view_media_page_logic.page_songlists_options_Sort_key = [{
+      store_view_media_cue_page_logic.page_songlists_options_Sort_key = [{
         columnKey: String('_id'),
         order: state_Sort.Ascend
       }];
     }else if (store_server_users.server_select_kind === 'navidrome') {
-      store_view_media_page_logic.page_songlists_options_Sort_key = [{
+      store_view_media_cue_page_logic.page_songlists_options_Sort_key = [{
         columnKey: String('id'),
         order: state_Sort.Ascend
       }];
@@ -941,7 +941,7 @@ async function begin_random_play_model() {
 const contextmenu = ref(null as any)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
 function menu_item_add_to_playlist_end() {
-  const item: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find((mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id);
+  const item: Media_File | undefined = store_view_media_cue_page_info.media_Files_temporary.find((mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id);
   if (item != undefined && item != 'undefined') {
     const newItem: any = JSON.parse(JSON.stringify(item));
     newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000;
@@ -959,7 +959,7 @@ function menu_item_add_to_playlist_end() {
 }
 function menu_item_add_to_playlist_next() {
   const item: Media_File | undefined =
-      store_view_media_page_info.media_Files_temporary.find((mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id);
+      store_view_media_cue_page_info.media_Files_temporary.find((mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id);
   if (item != undefined && item != 'undefined') {
     let index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
         (item: any) => item.id === store_player_audio_info.this_audio_song_id
@@ -982,7 +982,7 @@ function menu_item_add_to_playlist_next() {
 }
 function menu_item_edit_selected_media_tags(){
   store_player_tag_modify.player_show_tag_kind = 'media'
-  const item: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find((mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id);
+  const item: Media_File | undefined = store_view_media_cue_page_info.media_Files_temporary.find((mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id);
   if (item != undefined && item != 'undefined') {
     store_player_tag_modify.player_current_media_path = item.path
     store_player_tag_modify.player_current_media_id = item.id
@@ -1018,19 +1018,19 @@ const onRefreshSharp = debounce(async (event, args) => {
       store_general_fetch_media_list.set_artist_id('')
     }
     store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
-    store_view_media_page_logic.page_songlists_keyword = ''
+    store_view_media_cue_page_logic.page_songlists_keyword = ''
     input_search_InstRef.value?.clear()
-    store_view_media_page_logic.page_songlists_keywordFilter = ""
-    store_view_media_page_logic.page_songlists_bool_show_search_area = false
+    store_view_media_cue_page_logic.page_songlists_keywordFilter = ""
+    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = false
     store_general_fetch_media_list.fetchData_Media_of_server_web_start()
   }else if(store_server_user_model.model_server_type_of_local){
-    store_view_media_page_logic.page_songlists_bool_show_search_area = true;
+    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true;
     show_search_area();
-    store_view_media_page_logic.page_songlists_keywordFilter = ""
-    store_view_media_page_logic.list_selected_Hand_click = false
+    store_view_media_cue_page_logic.page_songlists_keywordFilter = ""
+    store_view_media_cue_page_logic.list_selected_Hand_click = false
     // store_general_fetch_media_list.fetchData_Media()
   }
-}, 500)
+}, 500);
 
 const page_songlists_statistic = ref<{
   label: '',
@@ -1039,20 +1039,23 @@ const page_songlists_statistic = ref<{
 }[]>([])
 function Refresh_page_songlists_statistic(){
   page_songlists_statistic.value = []
-  store_view_media_page_logic.page_songlists_statistic.forEach((item: any, index: number) => {
+  store_view_media_cue_page_logic.page_songlists_statistic.forEach((item: any, index: number) => {
     page_songlists_statistic.value.push({
-      label: store_view_media_page_logic.page_songlists_statistic[index].label,
-      song_count: store_view_media_page_logic.page_songlists_statistic[index].song_count,
-      id: store_view_media_page_logic.page_songlists_statistic[index].id,
+      label: store_view_media_cue_page_logic.page_songlists_statistic[index].label,
+      song_count: store_view_media_cue_page_logic.page_songlists_statistic[index].song_count,
+      id: store_view_media_cue_page_logic.page_songlists_statistic[index].id,
     });
   });
 }
 onMounted(() => {
   Refresh_page_songlists_statistic();
   if(store_router_data_info.router_click) {
-    store_view_media_page_logic.page_songlists_keyword = ''
+    store_view_media_cue_page_logic.page_songlists_keyword = ''
     input_search_InstRef.value?.clear()
-    store_view_media_page_logic.page_songlists_keywordFilter = ""
+    store_view_media_cue_page_logic.page_songlists_keywordFilter = ""
+  }
+  if(store_general_fetch_media_list._artist_id.length > 0 || store_general_fetch_media_list._album_id.length > 0 || store_general_fetch_media_list._album_artist_id.length > 0){
+    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true
   }
 })
 const stopWatching_boolHandleItemClick_Favorite = watch(() => store_player_audio_logic.boolHandleItemClick_Favorite, (newValue) => {
@@ -1074,6 +1077,8 @@ onBeforeUnmount(() => {
   stopWatching_boolHandleItemClick_Played()
   stopWatching_router_history_model_of_Media_scroll()
   dynamicScroller.value = null;
+  store_general_fetch_media_list.set_album_id('')
+  store_general_fetch_media_list.set_artist_id('')
 });
 </script>
 
@@ -1087,7 +1092,7 @@ onBeforeUnmount(() => {
               <template #trigger>
                 <n-button quaternary circle style="margin-left:4px"
                           @click="() => {
-                        store_view_media_page_logic.page_songlists_bool_show_search_area = true;
+                        store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true;
                         store_general_fetch_media_list.set_album_id('')
                         store_general_fetch_media_list.set_artist_id('')
                         show_search_area();
@@ -1126,13 +1131,13 @@ onBeforeUnmount(() => {
             {{ $t('Search') }}
           </n-tooltip>
           <n-tooltip trigger="hover" placement="top"
-                     v-if="store_view_media_page_logic.page_songlists_bool_show_search_area">
+                     v-if="store_view_media_cue_page_logic.page_songlists_bool_show_search_area">
             <template #trigger>
               <n-input-group style="width: 144px;">
                 <n-input
                     style="width: 144px;"
                     ref="input_search_InstRef"
-                    v-model:value="store_view_media_page_logic.page_songlists_input_search_Value"
+                    v-model:value="store_view_media_cue_page_logic.page_songlists_input_search_Value"
                     @keydown.enter="click_search"/>
               </n-input-group>
             </template>
@@ -1158,7 +1163,7 @@ onBeforeUnmount(() => {
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-badge
-                  :value="store_view_media_page_logic.page_songlists_filter_year"
+                  :value="store_view_media_cue_page_logic.page_songlists_filter_year"
                   :offset="[22, 17]">
                 <n-button quaternary circle style="margin-left:4px" @click="Type_Filter_Show = true">
                   <template #icon>
@@ -1183,9 +1188,9 @@ onBeforeUnmount(() => {
                     <n-space vertical>
                       <n-input clearable placeholder=""
                                style="width: 200px;"
-                               v-model:value="store_view_media_page_logic.page_songlists_filter_year"/>
+                               v-model:value="store_view_media_cue_page_logic.page_songlists_filter_year"/>
                       <n-button strong secondary
-                                @click="store_view_media_page_logic.page_songlists_filter_year = 0">
+                                @click="store_view_media_cue_page_logic.page_songlists_filter_year = 0">
                         {{ $t('common.clear') }}
                       </n-button>
                     </n-space>
@@ -1200,14 +1205,14 @@ onBeforeUnmount(() => {
                     <span style="font-size:14px;font-weight: 600;">{{ $t('HeaderLibraries') }}</span>
                     <n-space vertical>
                       <n-select
-                          :value="store_view_media_page_logic.page_songlists_filter_path_folder"
+                          :value="store_view_media_cue_page_logic.page_songlists_filter_path_folder"
                           :options="store_local_db_info.local_config_of_all_user_of_select"
                           style="width: 200px;"
                           @update:value="(value: any) => {
-                        store_view_media_page_logic.page_songlists_filter_path_folder = value
+                        store_view_media_cue_page_logic.page_songlists_filter_path_folder = value
                       }"/>
                       <n-button strong secondary
-                                @click="store_view_media_page_logic.page_songlists_filter_path_folder = ''">
+                                @click="store_view_media_cue_page_logic.page_songlists_filter_path_folder = ''">
                         {{ $t('common.clear') }}
                       </n-button>
                     </n-space>
@@ -1217,9 +1222,9 @@ onBeforeUnmount(() => {
             </n-card>
           </n-modal>
 
-          <n-divider v-if="store_view_media_page_logic.page_songlists_selected !== 'song_list_recently'" vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
+          <n-divider v-if="store_view_media_cue_page_logic.page_songlists_selected !== 'song_list_recently'" vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
           <n-tooltip
-              v-if="store_view_media_page_logic.page_songlists_selected !== 'song_list_recently'"
+              v-if="store_view_media_cue_page_logic.page_songlists_selected !== 'song_list_recently'"
               trigger="hover" placement="top">
             <template #trigger>
               <n-button
@@ -1253,14 +1258,14 @@ onBeforeUnmount(() => {
               {{ $t('action.addToPlaylist') }}
             </n-tooltip>
             <n-tooltip trigger="hover" placement="top"
-             v-if="
+                       v-if="
               (store_server_user_model.model_select !== 'server')
               ||
               (store_server_user_model.model_select === 'server'
-               && store_view_media_page_logic.page_songlists_selected !== 'song_list_all')
+               && store_view_media_cue_page_logic.page_songlists_selected !== 'song_list_all')
               ||
               (store_server_user_model.model_select === 'server'
-                && store_view_media_page_logic.page_songlists_selected !== 'song_list_all'
+                && store_view_media_cue_page_logic.page_songlists_selected !== 'song_list_all'
                 && !store_server_user_model.model_server_type_of_web)
              ">
               <template #trigger>
@@ -1272,17 +1277,17 @@ onBeforeUnmount(() => {
               </template>
               {{ $t('Delete') }}
             </n-tooltip>
-            <n-p style="margin-top: 6px;"> {{ $t('nsmusics.view_page.selectedMedia') + ' ' + store_view_media_page_info.media_Files_selected.length }} * </n-p>
+            <n-p style="margin-top: 6px;"> {{ $t('nsmusics.view_page.selectedMedia') + ' ' + store_view_media_cue_page_info.media_Files_selected.length }} * </n-p>
           </n-space>
 
           <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
           <n-dropdown
-            v-if="store_server_users.server_select_kind != 'jellyfin' &&
+              v-if="store_server_users.server_select_kind != 'jellyfin' &&
                   store_server_users.server_select_kind != 'emby' &&
                   store_server_user_model.model_server_type_of_local"
-            trigger="click" :show-arrow="true"
-            :options="options_dropdown_play_mode"
-            @select="begin_select_MediaList_ALL_Line_of_playback"
+              trigger="click" :show-arrow="true"
+              :options="options_dropdown_play_mode"
+              @select="begin_select_MediaList_ALL_Line_of_playback"
           >
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
@@ -1297,11 +1302,11 @@ onBeforeUnmount(() => {
             </n-tooltip>
           </n-dropdown>
           <n-tooltip
-            v-if="
+              v-if="
             store_server_user_model.model_server_type_of_web
             &&
             (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')"
-            trigger="hover" placement="top">
+              trigger="hover" placement="top">
             <template #trigger>
               <div>
                 <n-badge
@@ -1332,11 +1337,11 @@ onBeforeUnmount(() => {
             {{ $t('Shuffle') + ' ' + $t('HeaderLibraries') + ' ' + $t('nsmusics.view_page.allMedia') }}
           </n-tooltip>
           <n-divider
-            v-if="
+              v-if="
             store_server_user_model.model_server_type_of_web
             &&
             (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby')"
-            vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
+              vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
 
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
@@ -1371,10 +1376,10 @@ onBeforeUnmount(() => {
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
                 <n-select size="small"
-                    :value="store_view_media_page_logic.page_songlists_selected"
-                    :options="store_view_media_page_logic.page_songlists_options"
-                    style="width: 181px;"
-                    @update:value="page_songlists_handleselected_updatevalue" />
+                          :value="store_view_media_cue_page_logic.page_songlists_selected"
+                          :options="store_view_media_cue_page_logic.page_songlists_options"
+                          style="width: 181px;"
+                          @update:value="page_songlists_handleselected_updatevalue" />
               </template>
               {{ $t('Select') + $t('LabelPlaylist') }}
             </n-tooltip>
@@ -1408,26 +1413,26 @@ onBeforeUnmount(() => {
         </n-space>
       </n-space>
       <DynamicScroller
-        class="table" ref="dynamicScroller"
-        :style="{
+          class="table" ref="dynamicScroller"
+          :style="{
           width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)',
           height: show_top_selectedlist ? 'calc(100vh - 236px)' : 'calc(100vh - 194px)'
         }"
-        :items="store_view_media_page_info.media_Files_temporary"
-        :minItemSize="50"
-        :emit-update="true"
-        key-field="absoluteIndex"
-        @resize="onResize"
-        @update="onUpdate"
-        @scroll-start="onScrollStart"
-        @scroll-end="onScrollEnd"
-        @scroll="onScroll"
+          :items="store_view_media_cue_page_info.media_Files_temporary"
+          :minItemSize="50"
+          :emit-update="true"
+          key-field="absoluteIndex"
+          @resize="onResize"
+          @update="onUpdate"
+          @scroll-start="onScrollStart"
+          @scroll-end="onScrollEnd"
+          @scroll="onScroll"
       >
         <template #before>
           <div class="notice">
             <div
-              :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)'}"
-              style="
+                :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)'}"
+                style="
               position: absolute;
               z-index: 0;
               height: 298px;
@@ -1439,22 +1444,22 @@ onBeforeUnmount(() => {
               background-color: transparent;
               ">
               <img
-                :style="{
+                  :style="{
                   width: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
                   height: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
                   minHeight: '280px',
                   WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, 1) 100%)'
                 }"
-                style="
+                  style="
                   margin-left: 200px;transform: translateY(-25%);
                   object-fit: cover;object-position: center;
                 "
-                :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
-                alt=""
+                  :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                  alt=""
               />
             </div>
             <n-page-header
-              style="
+                style="
                 position: relative;
                 z-index: 1;
                 width: calc(100vw - 220px);height: 300px;
@@ -1465,16 +1470,16 @@ onBeforeUnmount(() => {
                 <n-space vertical align="start" style="height: 280px;margin-left: 12px;">
                   <n-space style="margin-top: 26px;margin-left: 11px;">
                     <div style="font-size: 32px;font-weight: 600;">
-                      {{ $t('entity.track_other')}}
+                      {{ $t('nsmusics.view_page.disk')}}
                     </div>
                     <div v-if="store_player_audio_info.this_audio_song_name.length > 0" style="font-size: 32px;font-weight: 600;margin-top: -2px">
                       {{" : "}}
                     </div>
                     <div
-                      :style="{
+                        :style="{
                         maxWidth: 'calc(100vw - ' + (collapsed_width + 540) + 'px)'
                       }"
-                      style="
+                        style="
                       text-align: left;cursor: pointer;
                       font-size: 32px;font-weight: 600;
                       display: -webkit-box;
@@ -1482,7 +1487,7 @@ onBeforeUnmount(() => {
                       -webkit-line-clamp: 1;
                       overflow: hidden;
                       text-overflow: ellipsis;"
-                      >
+                    >
                       {{ store_player_audio_info.this_audio_song_name }}
                     </div>
                   </n-space>
@@ -1493,8 +1498,8 @@ onBeforeUnmount(() => {
                     <n-tooltip trigger="hover" placement="top">
                       <template #trigger>
                         <n-select
-                            :value="store_view_media_page_logic.page_songlists_selected"
-                            :options="store_view_media_page_logic.page_songlists_options" style="width: 166px;"
+                            :value="store_view_media_cue_page_logic.page_songlists_selected"
+                            :options="store_view_media_cue_page_logic.page_songlists_options" style="width: 166px;"
                             @update:value="page_songlists_handleselected_updatevalue" />
                       </template>
                       {{ $t('Select') + $t('LabelPlaylist') }}
@@ -1540,13 +1545,13 @@ onBeforeUnmount(() => {
               </template>
               <template #avatar>
                 <img
-                  style="
+                    style="
                     width: 280px;height: 280px;
                     border-radius: 12px;
                     object-fit: cover;
                     margin-left: -3px;"
-                  :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
-                  alt=""
+                    :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                    alt=""
                 />
               </template>
               <template #extra>
@@ -1563,12 +1568,12 @@ onBeforeUnmount(() => {
         </template>
         <template #default="{ item, index, active }">
           <DynamicScrollerItem
-            :item="item"
-            :active="active"
-            :data-index="index"
-            :data-active="active"
-            v-contextmenu:contextmenu
-            @contextmenu.prevent="
+              :item="item"
+              :active="active"
+              :data-index="index"
+              :data-active="active"
+              v-contextmenu:contextmenu
+              @contextmenu.prevent="
               () => {
                 store_playlist_list_info.playlist_Menu_Item_Id = item.id;
                 store_playlist_list_info.playlist_Menu_Item_Rating = item.rating;
@@ -1576,35 +1581,35 @@ onBeforeUnmount(() => {
                 store_playlist_list_info.playlist_Menu_Item = item;
               }
             "
-            class="message"
-            :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)'}"
-            @click="handleItemClick"
-            @Dblclick="handleItemDbClick(item,index)">
+              class="message"
+              :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)'}"
+              @click="handleItemClick"
+              @Dblclick="handleItemDbClick(item,index)">
             <div class="media_info" :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)'}">
               <input type="checkbox" class="checkbox"
-                 v-if="!bool_start_play"
-                 v-model="item.selected"
-                 @change="(event) => {
+                     v-if="!bool_start_play"
+                     v-model="item.selected"
+                     @change="(event) => {
                   item.selected = event.target.checked;
-                  store_view_media_page_logic.set_media_Files_selected(item)
+                  store_view_media_cue_page_logic.set_media_Files_selected(item)
                 }"
               />
               <div
-                style="margin-left: 8px;
+                  style="margin-left: 8px;
                   width: 60px;height: 60px;
                   border-radius: 10px;border: 1.5px solid #FFFFFF20;
                   overflow: hidden;">
                 <div style="position: relative; display: inline-block;">
                   <img
-                    :key="item.id"
-                    :src="item.medium_image_url"
-                    @error="handleImageError(item)"
-                    style="width: 60px; height: 60px; object-fit: cover;"
-                    alt=""
+                      :key="item.id"
+                      :src="item.medium_image_url"
+                      @error="handleImageError(item)"
+                      style="width: 60px; height: 60px; object-fit: cover;"
+                      alt=""
                   />
                   <div
-                    class="hover-overlay"
-                    style="
+                      class="hover-overlay"
+                      style="
                       width: 70px; height: 70px;
                       position: absolute;
                       top: 50%;left: 50%;
@@ -1615,16 +1620,16 @@ onBeforeUnmount(() => {
 
                   </div>
                   <icon
-                    class="hover-overlay"
-                    color="#FFFFFF"
-                    size="28"
-                    style="
+                      class="hover-overlay"
+                      color="#FFFFFF"
+                      size="28"
+                      style="
                       position: absolute;
                       top: 50%;left: 50%;
                       transform: translate(-50%, -60%);
                       cursor: pointer;
                     "
-                    @click="() => {
+                      @click="() => {
                       click_count = 2;
                       handleItemDbClick(item, index);
                     }">
@@ -1634,15 +1639,15 @@ onBeforeUnmount(() => {
               </div>
               <div class="songlist_title">
                 <span
-                  style="font-size: 16px;font-weight: 550;"
-                  @click="handleItemClick_title(item.title)">
+                    style="font-size: 16px;font-weight: 550;"
+                    @click="handleItemClick_title(item.title)">
                   {{ item.title }}
                 </span>
                 <br>
                 <template v-if="item.all_artist_ids === undefined" v-for="artist in item.artist.split(/[\/|｜、]/)">
                   <span
-                    style="font-size: 14px;font-weight: 400;"
-                    @click="()=>{
+                      style="font-size: 14px;font-weight: 400;"
+                      @click="()=>{
                       handleItemClick_artist(artist)
                     }">
                     {{ artist + '&nbsp' }}
@@ -1664,8 +1669,8 @@ onBeforeUnmount(() => {
               </div>
               <div class="songlist_album">
                 <span
-                  style="font-size: 14px;font-weight: 600;"
-                  @click="() => {
+                    style="font-size: 14px;font-weight: 600;"
+                    @click="() => {
                     if(store_server_user_model.model_server_type_of_local) {
                       handleItemClick_album(item.album_id)
                     }else if(store_server_user_model.model_server_type_of_web) {
@@ -1680,11 +1685,11 @@ onBeforeUnmount(() => {
               </div>
               <div style="margin-left: auto; margin-right: 0; width: 40px; display: flex; flex-direction: row;">
                 <button
-                  @click="()=>{
+                    @click="()=>{
                     handleItemClick_Favorite(item.id, item.favorite);
                     item.favorite = !item.favorite;
                   }"
-                  style="
+                    style="
                     border: 0; background-color: transparent;
                     width: 28px; height: 28px;
                     margin-top: 2px;margin-right: 10px;
@@ -1721,9 +1726,9 @@ onBeforeUnmount(() => {
       <v-contextmenu ref="contextmenu" class="v-contextmenu-item v-contextmenu-item--hover" style="z-index: 999">
         <v-contextmenu-submenu :title="menu_item_add_to_songlist">
           <v-contextmenu-item
-            v-for="n in store_playlist_list_info.playlist_names_ALLLists"
-            :key="n.value"
-            @click="update_playlist_addMediaFile(store_playlist_list_info.playlist_Menu_Item_Id,n.value)"
+              v-for="n in store_playlist_list_info.playlist_names_ALLLists"
+              :key="n.value"
+              @click="update_playlist_addMediaFile(store_playlist_list_info.playlist_Menu_Item_Id,n.value)"
           >
             {{ n.label }}
           </v-contextmenu-item>
@@ -1752,18 +1757,13 @@ onBeforeUnmount(() => {
           {{ $t('ViewAlbum') }}
         </v-contextmenu-item>
         <template
-            v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local"
+            v-if="store_server_users.server_select_kind === 'navidrome' || store_server_user_model.model_server_type_of_local"
             v-for="artist in store_playlist_list_info.playlist_Menu_Item.artist.split(/[\/|｜、]/)">
           <v-contextmenu-item>
             <span
                 style="font-size: 14px;font-weight: 400;"
                 @click="()=>{
-                  if(store_server_users.server_select_kind === 'ninesong'){
-                    handleItemClick_artist(artist)
-                    // 应对接 AllArtistIDs
-                  }else{
-                    handleItemClick_artist(artist)
-                  }
+                  handleItemClick_artist(artist)
                 }">
               {{ $t('ViewAlbumArtist') + ' | ' + artist + '&nbsp' }}
             </span>
@@ -1780,11 +1780,11 @@ onBeforeUnmount(() => {
         </v-contextmenu-item>
         <v-contextmenu-divider v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local"/>
         <v-contextmenu-item
-          v-if="
-            store_view_media_page_logic.page_songlists_selected !== 'song_list_all' &&
-            store_view_media_page_logic.page_songlists_selected !== 'song_list_love' &&
-            store_view_media_page_logic.page_songlists_selected !== 'song_list_recently'"
-          @click="update_playlist_deleteMediaFile(store_playlist_list_info.playlist_Menu_Item_Id)">
+            v-if="
+            store_view_media_cue_page_logic.page_songlists_selected !== 'song_list_all' &&
+            store_view_media_cue_page_logic.page_songlists_selected !== 'song_list_love' &&
+            store_view_media_cue_page_logic.page_songlists_selected !== 'song_list_recently'"
+            @click="update_playlist_deleteMediaFile(store_playlist_list_info.playlist_Menu_Item_Id)">
           {{ $t('common.delete') }}
         </v-contextmenu-item>
         <v-contextmenu-item @click="menu_item_add_to_playlist_end">
@@ -1802,19 +1802,19 @@ onBeforeUnmount(() => {
             v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
                   "/>
         <v-contextmenu-item
-          v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
+            v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
                 ">
           <rate
-            class="viaSlot"
-            style="margin-left: -12px;margin-top: -12px;height: 16px;"
-            :length="5"
-            v-model="store_playlist_list_info.playlist_Menu_Item_Rating"
-            @before-rate="(value) => {
+              class="viaSlot"
+              style="margin-left: -12px;margin-top: -12px;height: 16px;"
+              :length="5"
+              v-model="store_playlist_list_info.playlist_Menu_Item_Rating"
+              @before-rate="(value) => {
               if(store_playlist_list_info.playlist_Menu_Item_Rating == 1){
                 before_rating = true
               }
             }"
-            @after-rate="(value) => {
+              @after-rate="(value) => {
               if(store_playlist_list_info.playlist_Menu_Item_Rating == 1 && before_rating == true){
                 after_rating = true
                 before_rating = false
@@ -1835,7 +1835,7 @@ onBeforeUnmount(() => {
   </n-space>
   <!-- 管理播放列表 -->
   <n-modal
-    v-model:show="Type_Update_Playlist">
+      v-model:show="Type_Update_Playlist">
     <n-card style="width: 450px;border-radius: 4px;">
       <n-space
           vertical size="large" style="width: 400px;">
@@ -1854,8 +1854,8 @@ onBeforeUnmount(() => {
           </n-button>
         </n-space>
         <n-select
-          :options="store_playlist_list_info.playlist_names_ALLLists" style="width: 166px;"
-          @update:value="update_playlist_set_of_updatePlaylist_of_playlistname" />
+            :options="store_playlist_list_info.playlist_names_ALLLists" style="width: 166px;"
+            @update:value="update_playlist_set_of_updatePlaylist_of_playlistname" />
         <n-form>
           <n-space
               v-if="(store_server_users.server_select_kind != 'jellyfin' &&store_server_users.server_select_kind != 'emby') || store_server_user_model.model_server_type_of_local
@@ -1864,14 +1864,14 @@ onBeforeUnmount(() => {
             <span>{{ $t('common.name') }}</span>
             <n-input clearable placeholder="" v-model:value="playlist_set_of_updatePlaylist_of_playlistcomment"/>
           </n-space>
-<!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server'">-->
-<!--            <span>{{ $t('filter.comment') }}</span>-->
-<!--            <n-input clearable placeholder="" v-model:value="playlist_set_of_updatePlaylist_of_comment"/>-->
-<!--          </n-space>-->
-<!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server'">-->
-<!--            <span>{{ $t('form.createPlaylist.input_public') }}</span>-->
-<!--            <n-switch v-model:value="playlist_set_of_updatePlaylist_of_public"/>-->
-<!--          </n-space>-->
+          <!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server'">-->
+          <!--            <span>{{ $t('filter.comment') }}</span>-->
+          <!--            <n-input clearable placeholder="" v-model:value="playlist_set_of_updatePlaylist_of_comment"/>-->
+          <!--          </n-space>-->
+          <!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server'">-->
+          <!--            <span>{{ $t('form.createPlaylist.input_public') }}</span>-->
+          <!--            <n-switch v-model:value="playlist_set_of_updatePlaylist_of_public"/>-->
+          <!--          </n-space>-->
         </n-form>
         <n-space justify="end">
           <n-button strong secondary type="error"
@@ -1894,7 +1894,7 @@ onBeforeUnmount(() => {
   </n-modal>
   <!-- 添加播放列表 -->
   <n-modal
-    v-model:show="Type_Add_Playlist">
+      v-model:show="Type_Add_Playlist">
     <n-card style="width: 450px;border-radius: 4px;">
       <n-space
           vertical size="large" style="width: 400px;">
@@ -1913,14 +1913,14 @@ onBeforeUnmount(() => {
             <span>{{ $t('common.name') }}</span>
             <n-input clearable placeholder="" v-model:value="playlist_set_of_addPlaylist_of_playlistname"/>
           </n-space>
-<!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server'">-->
-<!--            <span>{{ $t('filter.comment') }}</span>-->
-<!--            <n-input clearable placeholder="" v-model:value="playlist_set_of_addPlaylist_of_comment"/>-->
-<!--          </n-space>-->
-<!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server'">-->
-<!--            <span>{{ $t('form.createPlaylist.input_public') }}</span>-->
-<!--            <n-switch v-model:value="playlist_set_of_addPlaylist_of_public" />-->
-<!--          </n-space>-->
+          <!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server'">-->
+          <!--            <span>{{ $t('filter.comment') }}</span>-->
+          <!--            <n-input clearable placeholder="" v-model:value="playlist_set_of_addPlaylist_of_comment"/>-->
+          <!--          </n-space>-->
+          <!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server'">-->
+          <!--            <span>{{ $t('form.createPlaylist.input_public') }}</span>-->
+          <!--            <n-switch v-model:value="playlist_set_of_addPlaylist_of_public" />-->
+          <!--          </n-space>-->
         </n-form>
         <n-space justify="end">
           <n-button strong secondary type="info" @click="update_playlist_addPlaylist();">
@@ -1932,12 +1932,12 @@ onBeforeUnmount(() => {
   </n-modal>
   <!-- 选中歌曲添加 -->
   <n-modal
-    v-model:show="Type_Selected_Media_File_To_Playlist">
+      v-model:show="Type_Selected_Media_File_To_Playlist">
     <n-card style="width: 450px;border-radius: 4px;">
       <n-space
-        vertical size="large" style="width: 400px;">
+          vertical size="large" style="width: 400px;">
         <n-space justify="space-between">
-          <span style="font-size: 20px;font-weight: 600;">{{ $t('nsmusics.view_page.selectedMedia') + ' ' + store_view_media_page_info.media_Files_selected.length + ' * ' + $t('form.addToPlaylist.title')  }}</span>
+          <span style="font-size: 20px;font-weight: 600;">{{ $t('nsmusics.view_page.selectedMedia') + ' ' + store_view_media_cue_page_info.media_Files_selected.length + ' * ' + $t('form.addToPlaylist.title')  }}</span>
           <n-button tertiary size="small" @click="Type_Selected_Media_File_To_Playlist = !Type_Selected_Media_File_To_Playlist;">
             <template #icon>
               <n-icon>
@@ -1948,19 +1948,19 @@ onBeforeUnmount(() => {
         </n-space>
         <n-space>
           <n-button
-            key="song_love"
-            class="songlist_more"
-            style="width: 100px;height: 24px;border: 0; background-color: transparent;display: block;"
-            @click="update_lovelist_addMediaFile_selected"
+              key="song_love"
+              class="songlist_more"
+              style="width: 100px;height: 24px;border: 0; background-color: transparent;display: block;"
+              @click="update_lovelist_addMediaFile_selected"
           >
             {{ $t('nsmusics.view_page.loveMedia') }}
           </n-button>
           <n-button
-            v-for="n in store_playlist_list_info.playlist_names_ALLLists"
-            :key="n.value"
-            class="songlist_more"
-            style="width: 100px;height: 24px;border: 0; background-color: transparent;display: block;"
-            @click="update_playlist_addMediaFile_selected(n.value)"
+              v-for="n in store_playlist_list_info.playlist_names_ALLLists"
+              :key="n.value"
+              class="songlist_more"
+              style="width: 100px;height: 24px;border: 0; background-color: transparent;display: block;"
+              @click="update_playlist_addMediaFile_selected(n.value)"
           >
             {{ n.label }}
           </n-button>

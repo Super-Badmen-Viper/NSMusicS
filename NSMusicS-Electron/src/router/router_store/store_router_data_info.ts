@@ -9,6 +9,9 @@ import {store_playlist_appearance} from "@/views/view_app/page_metadata/page_fol
 import {
     store_general_model_player_list
 } from "@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list";
+import {
+    store_general_fetch_media_cue_list
+} from "../../data/data_stores/server/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list";
 
 export const store_router_data_info = reactive({
     router: null,
@@ -48,7 +51,7 @@ watch(() => store_router_data_info.router_select, async (newValue) => {
             store_general_fetch_home_list.fetchData_Home()
         } else if (newValue === 'media_cue') {
             store_router_data_info.router_select_model_media_cue = true
-            store_general_fetch_home_list.fetchData_Home()
+            await store_general_fetch_media_cue_list.fetchData_Media();
         } else if (newValue === 'song') {
             store_router_data_info.router_select_model_media = true
             await store_general_fetch_media_list.fetchData_Media()
