@@ -114,6 +114,7 @@ export const store_server_user_model = reactive({
             // Refresh Current AudioInfo
             await store_player_audio_info.reset_data();
             store_general_fetch_player_list._totalCount = 0;
+            store_view_media_page_logic.page_songlists_keywordFilter = ''
             store_view_media_page_logic.page_songlists_selected = 'song_list_all'
             store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
             store_view_artist_page_logic.page_artistlists_selected = 'artist_list_all'

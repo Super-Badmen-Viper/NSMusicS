@@ -5,9 +5,6 @@ import {
   Home28Regular,
   FullScreenMaximize24Filled,
   FullScreenMinimize24Filled,
-  PeopleCommunity16Regular,
-  SlideMicrophone32Regular,
-  TextIndentIncreaseLtr20Filled,
   Settings20Regular,
   WindowNew16Regular,
   Apps20Regular,
@@ -531,11 +528,6 @@ const Init_page_songlists_statistic_Data = () => {
       owner_id: item.playlist.owner_id
     }
     store_view_media_page_logic.page_songlists_options.push(temp_playlist);
-    // store_view_media_page_logic.page_songlists_statistic.push({
-    //   label: temp_playlist.label,
-    //   song_count: temp_playlist.song_count.toString(),
-    //   id: temp_playlist.id
-    // });
     store_view_media_page_logic.page_songlists.push(temp_playlist)
   });
 }
@@ -759,9 +751,6 @@ import {store_server_login_logic} from "@/views/view_server/page_metadata/page_l
 import {
   store_server_model_statistics
 } from "@/data/data_stores/server/server_api_abstract/music_scene/model/model_statistics";
-import {store_server_login_info} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
-import View_Mini_Music_Player_Mobile
-  from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/View_Mini_Music_Player_Mobile.vue";
 onMounted(()=>{
   create_menuOptions_appBar()
 })
@@ -1102,14 +1091,9 @@ if(isElectron) {
               style="z-index: 203;">
             <View_Screen_Music_Player
                 class="view_music_player"
-                v-if="store_player_appearance.player_show && !store_app_configs_info.window_state_miniplayer && !mobile_model"
+                v-if="store_player_appearance.player_show && !store_app_configs_info.window_state_miniplayer"
                 :style="{ height: `calc(100vh - ${store_player_appearance.player_show_hight_animation_value}vh)` }">
             </View_Screen_Music_Player>
-            <View_Mini_Music_Player_Mobile
-                class="view_music_player"
-                v-if="store_player_appearance.player_show && !store_app_configs_info.window_state_miniplayer && mobile_model"
-                :style="{ height: `calc(100vh - ${store_player_appearance.player_show_hight_animation_value}vh)` }">
-            </View_Mini_Music_Player_Mobile>
           </n-config-provider>
           <!-- bottom PlayerBar and PlayerView -->
           <n-config-provider

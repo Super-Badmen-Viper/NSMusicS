@@ -1043,11 +1043,23 @@ onBeforeUnmount(() => {
                     </span> 
                   </div>
                   <div :style="{ maxWidth: item_album_txt + 'px' }">
-                    <template v-if="item.all_artist_ids === undefined" v-for="artist in item.artist.split(/[\/|｜、]/)">
+                    <template v-if="store_server_users.server_select_kind === 'ninesong' && store_server_user_model.model_server_type_of_web"
+                              v-for="artist in item.all_artist_ids">
                       <span
                         id="album_artist_name"
                         style="font-size: 14px;font-weight: 400;"
                         @click="()=>{
+                          handleItemClick_artist(artist.ArtistID)
+                          store_view_album_page_logic.page_albumlists_input_search_Value = artist.ArtistName
+                        }">
+                        {{ artist.ArtistName + '&nbsp' }}
+                      </span>
+                    </template>
+                    <template v-else v-for="artist in item.artist.split(/[\/|｜、]/)">
+                      <span
+                          id="album_artist_name"
+                          style="font-size: 14px;font-weight: 400;"
+                          @click="()=>{
                           if(store_server_user_model.model_server_type_of_local) {
                             handleItemClick_artist(item.artist_id)
                           }else if(store_server_user_model.model_server_type_of_web) {
@@ -1059,21 +1071,6 @@ onBeforeUnmount(() => {
                           }
                         }">
                         {{ artist + '&nbsp' }}
-                      </span>
-                    </template>
-                    <template v-else v-for="artist in item.all_artist_ids">
-                      <span
-                        id="album_artist_name"
-                        style="font-size: 14px;font-weight: 400;"
-                        @click="()=>{
-                          if(store_server_users.server_select_kind === 'ninesong'){
-                            handleItemClick_artist(artist.ArtistID)
-                          }else{
-                            handleItemClick_artist(artist.ArtistName)
-                          }
-                          store_view_album_page_logic.page_albumlists_input_search_Value = artist.ArtistName
-                        }">
-                        {{ artist.ArtistName + '&nbsp' }}
                       </span>
                     </template>
                   </div>

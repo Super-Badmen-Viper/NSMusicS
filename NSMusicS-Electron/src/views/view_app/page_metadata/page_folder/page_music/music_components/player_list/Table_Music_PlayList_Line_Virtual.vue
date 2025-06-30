@@ -60,7 +60,6 @@ const handleImageError = async (item: any) => {
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
 import {VueDraggable} from "vue-draggable-plus";
-import {store_general_fetch_player_list} from "@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list";
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 const { t } = useI18n({
   inheritLocale: true
@@ -78,8 +77,6 @@ const message = useMessage()
 import {
   store_general_fetch_media_list
 } from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list";
-import {store_player_audio_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
-import {store_view_media_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
 import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
 import {
   store_general_model_player_list

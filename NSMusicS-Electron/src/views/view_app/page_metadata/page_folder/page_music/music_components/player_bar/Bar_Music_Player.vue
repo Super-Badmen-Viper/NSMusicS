@@ -304,10 +304,6 @@ const init_player_howler = async () => {
     },
     onloaderror: (id: any, error: any) => {
       store_player_audio_logic.player.isPlaying = false;
-      // if (error === 'No codec support for selected audio sources.'){
-      //   message.error(error,{ duration: 5000 });
-      //   message.error('Web播放组件Howler.js不支持此音频编码，请使用NSMusicS桌面端的MPV播放',{ duration: 5000 });
-      // }
     },
   });
 };

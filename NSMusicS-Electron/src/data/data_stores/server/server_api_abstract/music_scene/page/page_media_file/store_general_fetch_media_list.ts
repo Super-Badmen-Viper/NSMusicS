@@ -58,8 +58,10 @@ export const store_general_fetch_media_list = reactive({
 
                         // load media_Files_temporary data
                         if (store_router_history_data_of_media.router_history_model_of_Media === 0) {
-                            const sortKey = store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 && store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default' ?
-                                store_view_media_page_logic.page_songlists_options_Sort_key[0].columnKey : 'id';
+                            const sortKey = store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 &&
+                                store_view_media_page_logic.page_songlists_options_Sort_key[0].columnKey !== '_id' &&
+                                store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default' ?
+                                    store_view_media_page_logic.page_songlists_options_Sort_key[0].columnKey : 'id';
                             const sortOrder = store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 && store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default' ?
                                 store_view_media_page_logic.page_songlists_options_Sort_key[0].order.replace('end', '') : '';
                             if (store_view_media_page_logic.page_songlists_keywordFilter.length === 0) {
@@ -85,6 +87,10 @@ export const store_general_fetch_media_list = reactive({
                                         store_view_media_page_logic.page_songlists_keywordFilter,
                                         pathFilter
                                     );
+                                }
+                            }else{
+                                if(store_view_media_page_logic.page_songlists_keywordFilter === '_id') {
+                                    store_view_media_page_logic.page_songlists_keywordFilter = '';
                                 }
                             }
                             ///
@@ -114,8 +120,10 @@ export const store_general_fetch_media_list = reactive({
                                     page_songlists_keywordFilter: store_view_media_page_logic.page_songlists_keywordFilter,
                                     stmt_string: stmt_media_file_string,
                                     page_lists_selected: store_view_media_page_logic.page_songlists_selected,
-                                    columnKey: store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 && store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default' ?
-                                        store_view_media_page_logic.page_songlists_options_Sort_key[0].columnKey : 'id',
+                                    columnKey: store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 &&
+                                        store_view_media_page_logic.page_songlists_options_Sort_key[0].columnKey !== '_id' &&
+                                        store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default' ?
+                                            store_view_media_page_logic.page_songlists_options_Sort_key[0].columnKey : 'id',
                                     order: store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 && store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default' ?
                                         store_view_media_page_logic.page_songlists_options_Sort_key[0].order.replace('end', '') : '',
                                     page_lists_scrollindex: store_router_history_data_of_media.router_history_model_of_Media_scroller_value,

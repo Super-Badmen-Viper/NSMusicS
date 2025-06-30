@@ -378,6 +378,11 @@ async function update_server_config_of_current_user_of_sqlite(value: any, select
         order: state_Sort.Ascend
       }];
     }
+  }else if(store_server_user_model.model_server_type_of_local){
+    store_view_media_page_logic.page_songlists_options_Sort_key = [{
+      columnKey: String('id'),
+      order: state_Sort.Ascend
+    }];
   }
   ///
   if(store_server_users.server_select_kind != 'jellyfin' && store_server_users.server_select_kind != 'emby') {

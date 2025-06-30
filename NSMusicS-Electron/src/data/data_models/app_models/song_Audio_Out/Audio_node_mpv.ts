@@ -117,7 +117,7 @@ export class Audio_node_mpv {
     async setVolume(volume: number) {
         try{
             if(isElectron) {
-                await ipcRenderer.invoke('mpv-set-volume', volume != 0 ? volume / 100 : 0)
+                await ipcRenderer.invoke('mpv-set-volume', volume)
             }
         }catch {}
     }

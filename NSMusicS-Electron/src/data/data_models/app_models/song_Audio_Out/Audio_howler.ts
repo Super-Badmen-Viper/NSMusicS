@@ -65,7 +65,7 @@ export class Audio_howler {
     }
     setVolume(volume: number) {
         if (this.howl) {
-            this.howl.volume(volume != 0 ? volume / 100 : 0);
+            this.howl.volume(volume);
         }
     }
     setFade(from: any, to: any, duration: any){
