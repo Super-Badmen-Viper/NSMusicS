@@ -550,6 +550,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                         error_album,
                     cue_tracks: song.CueTracks,
                     cue_track_count: song.CueTrackCount,
+                    cue_track_show: false,
                 }
                 if(store_general_fetch_media_list._load_model === 'search') {
                     store_view_media_cue_page_info.media_File_metadata.push(song)

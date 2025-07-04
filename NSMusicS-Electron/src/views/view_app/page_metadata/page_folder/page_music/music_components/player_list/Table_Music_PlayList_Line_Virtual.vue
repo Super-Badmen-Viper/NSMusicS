@@ -281,7 +281,9 @@ onMounted(()=>{
             class="message"
             v-contextmenu:contextmenu
             @contextmenu.prevent="store_playlist_list_info.playlist_Menu_Item_Id = item.id"
-            v-hammer:doubletap="() => handleDoubleTap(item, index)" >
+            @dblclick="store_playlist_list_logic.handleItemDbClick(item, index)"
+            >
+<!--            v-hammer:doubletap="() => handleDoubleTap(item, index)"-->
             <div
               :style="{
                 width: store_app_configs_info.window_state_miniplayer_playlist ? '280px' : '488px',

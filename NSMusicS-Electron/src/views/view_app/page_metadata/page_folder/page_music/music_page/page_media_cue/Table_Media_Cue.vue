@@ -1582,10 +1582,16 @@ onBeforeUnmount(() => {
               }
             "
               class="message"
-              :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)'}"
+              :style="{
+                width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)',
+                height: item.cue_track_count > 0 ? (70 * item.cue_track_count) + 'px' : '70px',
+              }"
               @click="handleItemClick"
               @Dblclick="handleItemDbClick(item,index)">
-            <div class="media_info" :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)'}">
+            <div class="media_info"
+                 :style="{
+                   width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)',
+                 }">
               <input type="checkbox" class="checkbox"
                      v-if="!bool_start_play"
                      v-model="item.selected"
@@ -1719,6 +1725,14 @@ onBeforeUnmount(() => {
                   @click="click_count = 0">
                 {{ item.absoluteIndex }}
               </span>
+            </div>
+            <div
+              class="media_info"
+              :style="{
+                width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)',
+              }"
+              v-for="track in item.cue_tracks" :key="track.TRACK">
+              {{ track.TRACK + ' : ' + track.Title }}
             </div>
           </DynamicScrollerItem>
         </template>
