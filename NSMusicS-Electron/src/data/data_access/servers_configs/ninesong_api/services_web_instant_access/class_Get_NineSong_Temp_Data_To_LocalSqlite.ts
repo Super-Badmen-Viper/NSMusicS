@@ -499,7 +499,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                     duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.CueDuration),
                     id: song.ID,
                     title: song.Title,
-                    path: url + '/media/stream?access_token=' + store_server_login_info.server_accessToken + '&media_file_id=' + song.ID,
+                    path: url + '/media/stream?access_token=' + store_server_login_info.server_accessToken + '&cue_model=true&media_file_id=' + song.ID,
                     artist: song.Performer,
                     artist_id: song.PerformerID,
                     album: song.FileName,

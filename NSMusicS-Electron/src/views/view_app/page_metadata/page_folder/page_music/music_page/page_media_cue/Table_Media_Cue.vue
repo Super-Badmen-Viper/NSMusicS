@@ -1588,18 +1588,12 @@ onBeforeUnmount(() => {
               }"
               @click="handleItemClick"
               @Dblclick="handleItemDbClick(item,index)">
-            <div class="media_info"
-                 :style="{
-                   width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)',
-                 }">
-              <input type="checkbox" class="checkbox"
-                     v-if="!bool_start_play"
-                     v-model="item.selected"
-                     @change="(event) => {
-                  item.selected = event.target.checked;
-                  store_view_media_cue_page_logic.set_media_Files_selected(item)
-                }"
-              />
+            <div
+                class="media_info"
+                :style="{
+                width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)',
+              }"
+                v-for="track in item.cue_tracks" :key="track.TRACK">
               <div
                   style="margin-left: 8px;
                   width: 60px;height: 60px;
@@ -1645,12 +1639,19 @@ onBeforeUnmount(() => {
               </div>
               <div class="songlist_title">
                 <span
+                    v-if="track.Title !== undefined && track.Title !== ''"
                     style="font-size: 16px;font-weight: 550;"
-                    @click="handleItemClick_title(item.title)">
-                  {{ item.title }}
+                    @click="handleItemClick_title(track.Title)">
+                  {{ track.Title}}
+                </span>
+                <span
+                    v-else
+                    style="font-size: 16px;font-weight: 550;"
+                    @click="handleItemClick_title(track.Title)">
+                  {{ $t('Unknown') + $t('MediaInfoTitle') }}
                 </span>
                 <br>
-                <template v-if="item.all_artist_ids === undefined" v-for="artist in item.artist.split(/[\/|｜、]/)">
+                <template v-if="track.Performer !== undefined && track.Performer !== ''" v-for="artist in track.Performer.split(/[\/|｜、 &]/)">
                   <span
                       style="font-size: 14px;font-weight: 400;"
                       @click="()=>{
@@ -1659,35 +1660,22 @@ onBeforeUnmount(() => {
                     {{ artist + '&nbsp' }}
                   </span>
                 </template>
-                <template v-else v-for="artist in item.all_artist_ids">
-                  <span
-                      style="font-size: 14px;font-weight: 400;"
-                      @click="()=>{
-                      if(store_server_users.server_select_kind === 'ninesong'){
-                        handleItemClick_artist(artist.ArtistID)
-                      }else{
-                        handleItemClick_artist(artist.ArtistName)
-                      }
-                    }">
-                    {{ artist.ArtistName + '&nbsp' }}
-                  </span>
-                </template>
+                <span
+                  v-else
+                  style="font-size: 14px;font-weight: 400;"
+                  @click="()=>{
+                    handleItemClick_artist(item.artist)
+                  }">
+                  {{ item.artist }}
+                </span>
               </div>
               <div class="songlist_album">
                 <span
                     style="font-size: 14px;font-weight: 600;"
                     @click="() => {
-                    if(store_server_user_model.model_server_type_of_local) {
-                      handleItemClick_album(item.album_id)
-                    }else if(store_server_user_model.model_server_type_of_web) {
-                      if(store_server_users.server_select_kind === 'ninesong'){
-                        handleItemClick_album(item.album_id)
-                      }else{
-                        handleItemClick_album(item.album)
-                      }
-                    }
+                    handleItemClick_album(item.title)
                   }"
-                >{{ item.album }}</span>
+                >{{ item.title }}</span>
               </div>
               <div style="margin-left: auto; margin-right: 0; width: 40px; display: flex; flex-direction: row;">
                 <button
@@ -1723,16 +1711,8 @@ onBeforeUnmount(() => {
                   class="index"
                   style="margin-left: auto; text-align: left;margin-top: 4px;font-size: 14px;font-weight: 600;"
                   @click="click_count = 0">
-                {{ item.absoluteIndex }}
+                {{ item.absoluteIndex + '-' + track.TRACK }}
               </span>
-            </div>
-            <div
-              class="media_info"
-              :style="{
-                width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)',
-              }"
-              v-for="track in item.cue_tracks" :key="track.TRACK">
-              {{ track.TRACK + ' : ' + track.Title }}
             </div>
           </DynamicScrollerItem>
         </template>
