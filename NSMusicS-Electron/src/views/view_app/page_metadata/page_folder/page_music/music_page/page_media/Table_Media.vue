@@ -144,6 +144,7 @@ if(store_server_user_model.model_server_type_of_local || (store_server_users.ser
     {label:computed(() => t('OptionRandom')), key: 'Random', state_Sort: state_Sort.Default },
   ]
 }
+let Select_Sort_Model = false
 let options_Sort = computed(() => {
   if(store_view_media_page_logic.page_songlists_options_Sort_key != null && store_view_media_page_logic.page_songlists_options_Sort_key.length > 0){
     options_Sort_key.value.forEach(element => {
@@ -208,6 +209,14 @@ const handleSelect_Sort = (key: string | number) => {
     columnKey: String(key),
     order: _state_Sort_
   }];
+
+  const sortKey = store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 &&
+  store_view_media_page_logic.page_songlists_options_Sort_key[0].columnKey !== '_id' &&
+  store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default' ?
+      store_view_media_page_logic.page_songlists_options_Sort_key[0].columnKey : 'id';
+  const sortOrder = store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 && store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default' ?
+      store_view_media_page_logic.page_songlists_options_Sort_key[0].order.replace('end', '') : '';
+  Select_Sort_Model = !((sortKey === '_id' || sortKey === 'id') && (sortOrder === '' || sortOrder === 'ascend'));
 
   scrollTo(0)
 }
@@ -1150,7 +1159,18 @@ onBeforeUnmount(() => {
               :options="options_Sort" @select="handleSelect_Sort">
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
-                <n-button quaternary circle style="margin-left:4px">
+                <n-badge
+                  v-if="Select_Sort_Model"
+                  dot
+                  value="1"
+                  :offset="[-18, 5]">
+                  <n-button quaternary circle style="margin-left:4px">
+                    <template #icon>
+                      <n-icon :size="20" :depth="2"><ArrowSort24Regular/></n-icon>
+                    </template>
+                  </n-button>
+                </n-badge>
+                <n-button v-else quaternary circle style="margin-left:4px">
                   <template #icon>
                     <n-icon :size="20" :depth="2"><ArrowSort24Regular/></n-icon>
                   </template>
@@ -1644,7 +1664,7 @@ onBeforeUnmount(() => {
                   {{ item.title }}
                 </span>
                 <br>
-                <template v-if="item.all_artist_ids === undefined" v-for="artist in item.artist.split(/[\/|｜、 &]/)">
+                <template v-if="item.all_artist_ids === undefined" v-for="artist in item.artist.split(/[\/|｜、 & (Feat. ]/)">
                   <span
                     style="font-size: 14px;font-weight: 400;"
                     @click="()=>{
