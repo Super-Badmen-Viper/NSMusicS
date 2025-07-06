@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import login from '@/views/view_server/page_metadata/page_login/Table_Server_Login.vue'
+import login from '@/views/view_server/page_login/Table_Server_Login.vue'
 import {store_router_data_info} from "@/router/router_store/store_router_data_info";
 
 onMounted(async () => {

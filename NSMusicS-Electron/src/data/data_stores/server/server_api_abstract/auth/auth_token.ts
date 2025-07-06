@@ -7,13 +7,13 @@ import {
 } from "@/data/data_stores/server/store_server_users";
 import {
     store_player_audio_info
-} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_info";
+} from "@/views/view_app/music_page/page_player/store/store_player_audio_info";
 import {
     store_playlist_list_info
-} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info";
+} from "@/views/view_app/music_components/player_list/store/store_playlist_list_info";
 import {
     store_player_audio_logic
-} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
+} from "@/views/view_app/music_page/page_player/store/store_player_audio_logic";
 import {
     Users_ApiService_of_Je
 } from "@/data/data_access/servers_configs/jellyfin_api/services_web/Users/index_service";
@@ -26,10 +26,10 @@ import {
 import {store_server_model_statistics} from "../music_scene/model/model_statistics";
 import {
     store_server_login_logic
-} from "@/views/view_server/page_metadata/page_login/store/store_server_login_logic";
+} from "@/views/view_server/page_login/store/store_server_login_logic";
 import {
     store_server_login_info
-} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+} from "@/views/view_server/page_login/store/store_server_login_info";
 
 export const store_server_auth_token = reactive({
     async init_login_server(){

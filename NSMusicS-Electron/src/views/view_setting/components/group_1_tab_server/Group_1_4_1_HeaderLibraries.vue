@@ -320,16 +320,16 @@ onBeforeUnmount(() => {
 import error_album_old from '@/assets/img/error_album_old.jpg'
 import {
   store_server_login_info
-} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+} from "@/views/view_server/page_login/store/store_server_login_info";
 import {
   store_player_view
-} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_view";
+} from "@/views/view_app/music_page/page_player/store/store_player_view";
 import {
   store_player_appearance
-} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_appearance";
+} from "@/views/view_app/music_page/page_player/store/store_player_appearance";
 import {
   store_player_audio_info
-} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_info";
+} from "@/views/view_app/music_page/page_player/store/store_player_audio_info";
 
 const contentTypeValue = ref(1)
 const contentTypeOptions = ref([

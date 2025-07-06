@@ -2,7 +2,7 @@ import {reactive} from 'vue'
 import {store_router_data_info} from "@/router/router_store/store_router_data_info";
 import {
     store_server_login_info
-} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+} from "@/views/view_server/page_login/store/store_server_login_info";
 import axios from "axios";
 import {
     Auth_Token_ApiService_of_NineSong

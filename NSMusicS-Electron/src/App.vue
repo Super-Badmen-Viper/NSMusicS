@@ -41,22 +41,22 @@ import {
 import {darkTheme, NConfigProvider, NIcon} from 'naive-ui'
 import {h, onMounted, computed, watch, provide} from 'vue';
 import {RouterLink, RouterView, useRouter} from 'vue-router';
-import Bar_Music_Player from '@/views/view_app/page_metadata/page_folder/page_music/music_components/player_bar/Bar_Music_Player.vue'
-import Bar_Music_PlayList from '@/views/view_app/page_metadata/page_folder/page_music/music_drawer/View_Player_PlayList.vue'
-import View_Screen_Music_Player from '@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/View_Screen_Music_Player.vue'
+import Bar_Music_Player from '@/views/view_app/music_components/player_bar/Bar_Music_Player.vue'
+import Bar_Music_PlayList from '@/views/view_app/music_drawer/View_Player_PlayList.vue'
+import View_Screen_Music_Player from '@/views/view_app/music_page/page_player/View_Screen_Music_Player.vue'
 import {store_app_configs_info} from '@/data/data_stores/app/store_app_configs_info'
-import {store_player_appearance} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_appearance";
-import {store_player_sound_effects} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_sound_effects";
-import {store_player_sound_speed} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_sound_speed";
-import {store_player_sound_more} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_sound_more";
-import {store_playlist_appearance} from '@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_appearance'
-import {store_playlist_list_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info"
-import {store_playlist_list_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_logic"
+import {store_player_appearance} from "@/views/view_app/music_page/page_player/store/store_player_appearance";
+import {store_player_sound_effects} from "@/views/view_app/music_page/page_player/store/store_player_sound_effects";
+import {store_player_sound_speed} from "@/views/view_app/music_page/page_player/store/store_player_sound_speed";
+import {store_player_sound_more} from "@/views/view_app/music_page/page_player/store/store_player_sound_more";
+import {store_playlist_appearance} from '@/views/view_app/music_components/player_list/store/store_playlist_appearance'
+import {store_playlist_list_info} from "@/views/view_app/music_components/player_list/store/store_playlist_list_info"
+import {store_playlist_list_logic} from "@/views/view_app/music_components/player_list/store/store_playlist_list_logic"
 import {store_server_user_model} from '@/data/data_stores/server/store_server_user_model'
-import {store_view_media_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
-import {store_view_album_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_logic"
-import {store_view_artist_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_info"
-import {store_view_artist_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_logic"
+import {store_view_media_page_logic} from "@/views/view_app/music_page/page_media/store/store_view_media_page_logic";
+import {store_view_album_page_logic} from "@/views/view_app/music_page/page_album/store/store_view_album_page_logic"
+import {store_view_artist_page_info} from "@/views/view_app/music_page/page_artist/store/store_view_artist_page_info"
+import {store_view_artist_page_logic} from "@/views/view_app/music_page/page_artist/store/store_view_artist_page_logic"
 import {store_router_data_info} from "@/router/router_store/store_router_data_info";
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
@@ -66,8 +66,8 @@ import {store_general_fetch_media_cue_list} from "@/data/data_stores/server/serv
 import {store_general_fetch_home_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_home/store_general_fetch_home_list";
 import {store_general_fetch_album_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list";
 import {store_general_fetch_artist_list} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_artist/store_general_fetch_artist_list";
-import {store_view_media_cue_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media_cue/store/store_view_media_cue_page_logic";
-import {store_view_media_cue_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media_cue/store/store_view_media_cue_page_info";
+import {store_view_media_cue_page_logic} from "@/views/view_app/music_page/page_media_cue/store/store_view_media_cue_page_logic";
+import {store_view_media_cue_page_info} from "@/views/view_app/music_page/page_media_cue/store/store_view_media_cue_page_info";
 
 ////// BrowserWindow
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
@@ -365,9 +365,9 @@ provide('get_playerbar_to_switch_playerview', get_playerbar_to_switch_playerview
 store_router_data_info.router = useRouter();
 import routers from './router'
 import {store_app_configs_logic_update} from "@/data/data_stores/app/store_app_configs_logic_update";
-import {store_player_audio_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
-import {store_view_media_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
-import {store_view_album_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_info";
+import {store_player_audio_logic} from "@/views/view_app/music_page/page_player/store/store_player_audio_logic";
+import {store_view_media_page_info} from "@/views/view_app/music_page/page_media/store/store_view_media_page_info";
+import {store_view_album_page_info} from "@/views/view_app/music_page/page_album/store/store_view_album_page_info";
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
 routers.beforeEach((to, from, next) => {
   if(to.name !== from.name){
@@ -886,17 +886,17 @@ import { openLink } from '@/utils/electron/openLink';
 const computed_i18n_Label_Update = computed(() => t('filter.recentlyUpdated'));
 
 ////
-import {store_player_tag_modify} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_tag_modify";
-import View_Edit_Tag from "@/views/view_app/page_metadata/page_folder/page_music/music_drawer/View_Edit_Tag.vue";
-import View_Player_Effect from "@/views/view_app/page_metadata/page_folder/page_music/music_drawer/View_Player_Effect.vue";
-import View_Mini_Music_Player from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/View_Mini_Music_Player.vue";
+import {store_player_tag_modify} from "@/views/view_app/music_page/page_player/store/store_player_tag_modify";
+import View_Edit_Tag from "@/views/view_app/music_drawer/View_Edit_Tag.vue";
+import View_Player_Effect from "@/views/view_app/music_drawer/View_Player_Effect.vue";
+import View_Mini_Music_Player from "@/views/view_app/music_page/page_player/View_Mini_Music_Player.vue";
 
 ////// Load Configs
 const { locale } = useI18n({
   inheritLocale: true,
   useScope: 'global'
 })
-import {store_server_login_logic} from "@/views/view_server/page_metadata/page_login/store/store_server_login_logic";
+import {store_server_login_logic} from "@/views/view_server/page_login/store/store_server_login_logic";
 import {
   store_server_model_statistics
 } from "@/data/data_stores/server/server_api_abstract/music_scene/model/model_statistics";

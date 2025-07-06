@@ -6,7 +6,7 @@ import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 import {
     store_server_login_info
-} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+} from "@/views/view_server/page_login/store/store_server_login_info";
 import {
     Annotation_ApiService_of_NineSong
 } from "@/data/data_access/servers_configs/ninesong_api/services_web/Scene/Music/Annotation/index_service";

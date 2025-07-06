@@ -9,13 +9,13 @@ import {isElectron} from "@/utils/electron/isElectron";
 import {store_server_ninesong_userdata_logic} from "./server_ninesong_user_data/store_server_ninesong_userdata_logic";
 import {
     store_view_media_page_logic
-} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
+} from "@/views/view_app/music_page/page_media/store/store_view_media_page_logic";
 import {
     store_view_album_page_logic
-} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_logic";
+} from "@/views/view_app/music_page/page_album/store/store_view_album_page_logic";
 import {
     store_view_artist_page_logic
-} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_logic";
+} from "@/views/view_app/music_page/page_artist/store/store_view_artist_page_logic";
 
 export const store_server_data_select_logic = reactive({
     /// server add

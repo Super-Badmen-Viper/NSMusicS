@@ -1,7 +1,7 @@
 import { reactive } from 'vue'
-import {store_playlist_list_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info"
+import {store_playlist_list_info} from "@/views/view_app/music_components/player_list/store/store_playlist_list_info"
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
-import {store_playlist_list_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_logic"
+import {store_playlist_list_logic} from "@/views/view_app/music_components/player_list/store/store_playlist_list_logic"
 import {
     Get_PlaylistInfo_From_LocalSqlite
 } from "@/data/data_access/local_configs/class_Get_PlaylistInfo_From_LocalSqlite";
@@ -20,7 +20,7 @@ import {
 } from "../../../../../../data_access/servers_configs/ninesong_api/services_web/Scene/Music/Playlist/index_service";
 import {
     store_server_login_info
-} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+} from "@/views/view_server/page_login/store/store_server_login_info";
 import {store_local_data_set_playlistInfo} from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_playlistInfo";
 
 export const store_general_model_player_list = reactive({

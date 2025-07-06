@@ -14,7 +14,7 @@ import {
 } from "@/data/data_access/servers_configs/ninesong_api/services_web/Scene/Music/Annotation/index_service";
 import {
     store_server_login_info
-} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+} from "@/views/view_server/page_login/store/store_server_login_info";
 
 export const store_server_data_set_albumInfo = reactive({
     async Set_AlbumInfo_To_Favorite_Server(item_id: string, value: Boolean) {

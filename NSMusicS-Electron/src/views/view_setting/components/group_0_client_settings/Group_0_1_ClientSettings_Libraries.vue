@@ -60,7 +60,7 @@ import { store_server_users } from '@/data/data_stores/server/store_server_users
 import {ref, onMounted, watch, onBeforeUnmount, computed, h} from 'vue';
 import {NButton, NIcon} from 'naive-ui'
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
-import {store_player_audio_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
+import {store_player_audio_logic} from "@/views/view_app/music_page/page_player/store/store_player_audio_logic";
 import {store_local_db_info} from "@/data/data_stores/local/store_local_db_info";
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
 import {store_server_data_select_logic} from "@/data/data_stores/server/server_data_select/store_server_data_select_logic";
@@ -561,11 +561,11 @@ import {
 } from "@/data/data_access/servers_configs/jellyfin_api/services_web/Library/index_service";
 import {
   store_playlist_list_info
-} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info";
-import {store_player_audio_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_info";
+} from "@/views/view_app/music_components/player_list/store/store_playlist_list_info";
+import {store_player_audio_info} from "@/views/view_app/music_page/page_player/store/store_player_audio_info";
 import {
   store_view_media_page_logic
-} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
+} from "@/views/view_app/music_page/page_media/store/store_view_media_page_logic";
 </script>
 
 <template>

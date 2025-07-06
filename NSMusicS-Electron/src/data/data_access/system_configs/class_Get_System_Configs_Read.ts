@@ -7,7 +7,7 @@ import { isElectron } from '@/utils/electron/isElectron';
 import axios from "axios";
 import {
     store_server_login_info
-} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+} from "@/views/view_server/page_login/store/store_server_login_info";
 
 export class Class_Get_System_Configs_Read {
     public app_Configs = ref(

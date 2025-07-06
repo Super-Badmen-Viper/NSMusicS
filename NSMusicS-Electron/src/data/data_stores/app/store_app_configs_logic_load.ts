@@ -3,17 +3,17 @@ import {darkTheme, lightTheme} from 'naive-ui'
 import {Class_Get_System_Configs_Read} from '@/data/data_access/system_configs/class_Get_System_Configs_Read'
 import {Get_PlaylistInfo_From_LocalSqlite} from "@/data/data_access/local_configs/class_Get_PlaylistInfo_From_LocalSqlite";
 import {store_app_configs_info} from '@/data/data_stores/app/store_app_configs_info'
-import {store_player_appearance} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_appearance";
-import {store_player_audio_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_info";
-import {store_player_audio_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
-import {store_playlist_list_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_info"
-import {store_playlist_list_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_components/player_list/store/store_playlist_list_logic"
+import {store_player_appearance} from "@/views/view_app/music_page/page_player/store/store_player_appearance";
+import {store_player_audio_info} from "@/views/view_app/music_page/page_player/store/store_player_audio_info";
+import {store_player_audio_logic} from "@/views/view_app/music_page/page_player/store/store_player_audio_logic";
+import {store_playlist_list_info} from "@/views/view_app/music_components/player_list/store/store_playlist_list_info"
+import {store_playlist_list_logic} from "@/views/view_app/music_components/player_list/store/store_playlist_list_logic"
 import {store_server_users} from '@/data/data_stores/server/store_server_users'
 import {store_server_user_model} from '@/data/data_stores/server/store_server_user_model'
-import {store_view_media_page_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_logic";
-import {store_view_media_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
-import {store_view_album_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_info";
-import {store_view_artist_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_info"
+import {store_view_media_page_logic} from "@/views/view_app/music_page/page_media/store/store_view_media_page_logic";
+import {store_view_media_page_info} from "@/views/view_app/music_page/page_media/store/store_view_media_page_info";
+import {store_view_album_page_info} from "@/views/view_app/music_page/page_album/store/store_view_album_page_info";
+import {store_view_artist_page_info} from "@/views/view_app/music_page/page_artist/store/store_view_artist_page_info"
 import {store_router_data_info} from "@/router/router_store/store_router_data_info";
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
 import {store_router_history_data_of_media} from "@/router/router_store/store_router_history_data_of_media";
@@ -27,7 +27,7 @@ import {store_local_db_info} from "@/data/data_stores/local/store_local_db_info"
 import {isElectron} from "@/utils/electron/isElectron";
 import {
     store_server_login_info
-} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+} from "@/views/view_server/page_login/store/store_server_login_info";
 import {store_server_auth_token} from "../server/server_api_abstract/auth/auth_token";
 import {store_server_model_statistics} from "../server/server_api_abstract/music_scene/model/model_statistics";
 import {Audio_howler} from "@/data/data_models/app_models/song_Audio_Out/Audio_howler";

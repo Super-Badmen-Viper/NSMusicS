@@ -3,7 +3,7 @@ import {NButton} from "naive-ui";
 
 import {ref} from "vue";
 
-import {store_server_login_info} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+import {store_server_login_info} from "@/views/view_server/page_login/store/store_server_login_info";
 import {
   Auth_Info_ApiService_of_NineSong
 } from "@/data/data_access/servers_configs/ninesong_api/services_web/Auth/Auth_Info/index_service";

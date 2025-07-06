@@ -1,5 +1,5 @@
 import { reactive } from 'vue';
-import { store_view_home_page_info } from '@/views/view_app/page_metadata/page_folder/page_music/music_page/page_home/store/store_view_home_page_info';
+import { store_view_home_page_info } from '@/views/view_app/music_page/page_home/store/store_view_home_page_info';
 import { Get_HomeDataInfos_From_LocalSqlite } from '@/data/data_access/local_configs/class_Get_HomeDataInfos_From_LocalSqlite';
 import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model';
 import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite';
@@ -10,7 +10,7 @@ import {
 } from "@/data/data_access/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite";
 import {
     store_server_login_info
-} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+} from "@/views/view_server/page_login/store/store_server_login_info";
 
 export const store_general_fetch_home_list = reactive({
     async fetchData_Home() {

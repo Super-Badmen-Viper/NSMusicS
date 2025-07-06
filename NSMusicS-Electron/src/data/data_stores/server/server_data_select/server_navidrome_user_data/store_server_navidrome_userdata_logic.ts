@@ -15,7 +15,7 @@ import { hash } from 'spark-md5';
 import {store_server_ninesong_userdata_logic} from "../server_ninesong_user_data/store_server_ninesong_userdata_logic";
 import {
     store_server_login_info
-} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+} from "@/views/view_server/page_login/store/store_server_login_info";
 
 export const store_server_navidrome_userdata_logic = reactive({
     /// server add

@@ -4,7 +4,7 @@ import error_album from '@/assets/img/error_album.jpg'
 import { isElectron } from '@/utils/electron/isElectron';
 import {
     store_view_media_page_info
-} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
+} from "@/views/view_app/music_page/page_media/store/store_view_media_page_info";
 
 export class Get_PlaylistInfo_From_LocalSqlite {
     public Get_Playlist_Count(): number {

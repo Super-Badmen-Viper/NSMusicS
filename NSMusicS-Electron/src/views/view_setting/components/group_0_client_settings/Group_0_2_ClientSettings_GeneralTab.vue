@@ -65,7 +65,7 @@ onBeforeUnmount(() => {
 import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
 import {ref, onMounted, watch, onBeforeUnmount, computed, h} from 'vue';
 import {NButton, NIcon} from 'naive-ui'
-import {store_player_audio_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
+import {store_player_audio_logic} from "@/views/view_app/music_page/page_player/store/store_player_audio_logic";
 import {store_app_configs_logic_theme} from "@/data/data_stores/app/store_app_configs_logic_theme";
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
 const theme_value = ref('lightTheme')

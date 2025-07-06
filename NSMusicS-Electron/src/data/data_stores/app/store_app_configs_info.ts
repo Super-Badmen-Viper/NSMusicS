@@ -5,7 +5,7 @@ import {store_router_data_info} from "@/router/router_store/store_router_data_in
 import {store_app_configs_logic_load} from "./store_app_configs_logic_load";
 import {
     store_player_audio_logic
-} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
+} from "@/views/view_app/music_page/page_player/store/store_player_audio_logic";
 import {store_app_configs_logic_update} from "./store_app_configs_logic_update";
 
 export const store_app_configs_info = reactive({

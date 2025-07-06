@@ -1,7 +1,7 @@
 import { reactive } from 'vue';
-import { store_view_media_page_info } from '@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info';
-import { store_view_album_page_info } from '@/views/view_app/page_metadata/page_folder/page_music/music_page/page_album/store/store_view_album_page_info';
-import { store_view_artist_page_info } from '@/views/view_app/page_metadata/page_folder/page_music/music_page/page_artist/store/store_view_artist_page_info';
+import { store_view_media_page_info } from '@/views/view_app/music_page/page_media/store/store_view_media_page_info';
+import { store_view_album_page_info } from '@/views/view_app/music_page/page_album/store/store_view_album_page_info';
+import { store_view_artist_page_info } from '@/views/view_app/music_page/page_artist/store/store_view_artist_page_info';
 import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info';
 import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model';
 import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite';

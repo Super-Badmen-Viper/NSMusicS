@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { store_server_login_info } from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+import { store_server_login_info } from "@/views/view_server/page_login/store/store_server_login_info";
 import { store_server_user_model } from "@/data/data_stores/server/store_server_user_model";
 
 export class NineSong_Api_Services_Web {

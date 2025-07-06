@@ -10,8 +10,8 @@ const { t } = useI18n({
 ////// this_view views_components
 import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
 import {ref, onMounted, computed} from 'vue';
-import {store_player_audio_logic} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_audio_logic";
-import {store_player_appearance} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_player/store/store_player_appearance";
+import {store_player_audio_logic} from "@/views/view_app/music_page/page_player/store/store_player_audio_logic";
+import {store_player_appearance} from "@/views/view_app/music_page/page_player/store/store_player_appearance";
 import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
 const theme_value = ref('lightTheme')
 const theme_options = ref([

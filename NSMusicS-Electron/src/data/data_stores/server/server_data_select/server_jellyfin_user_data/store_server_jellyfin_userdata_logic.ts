@@ -15,7 +15,7 @@ import {store_server_ninesong_userdata_logic} from "../server_ninesong_user_data
 import {store_server_model_statistics} from "../../server_api_abstract/music_scene/model/model_statistics";
 import {
     store_server_login_info
-} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
+} from "@/views/view_server/page_login/store/store_server_login_info";
 
 export const store_server_jellyfin_userdata_logic = reactive({
     // server add

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import {store_router_data_info} from "@/router/router_store/store_router_data_info";
-import Table_Categories from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_categories/Table_Categories.vue";
+import Table_Categories from "@/views/view_app/music_page/page_categories/Table_Categories.vue";
 
 onMounted(async () => {
   store_router_data_info.router_select = 'categories'
