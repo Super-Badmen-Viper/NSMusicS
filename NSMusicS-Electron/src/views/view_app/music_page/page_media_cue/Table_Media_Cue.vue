@@ -1670,7 +1670,7 @@ onBeforeUnmount(() => {
                   {{ $t('Unknown') + $t('MediaInfoTitle') }}
                 </span>
                 <br>
-                <template v-if="track.Performer !== undefined && track.Performer !== ''" v-for="artist in track.Performer.split(/[\/|｜、 &]/)">
+                <template v-if="track.Performer !== undefined && track.Performer !== ''" v-for="artist in track.Performer.split(/[\/|｜、]/)">
                   <span
                       style="font-size: 14px;font-weight: 400;"
                       @click="()=>{
