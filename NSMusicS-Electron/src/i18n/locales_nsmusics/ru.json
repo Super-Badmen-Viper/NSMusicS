@@ -6,7 +6,8 @@
             "identifyMedia": "Идентификатор",
             "scoreGeneration": "Ноты",
             "lyricsProduction": "Текст",
-            "musicCommunity": "Сообщество"
+            "musicCommunity": "Сообщество",
+            "charts": "Графики"
         },
         "siderbar_player": {
             "playback_1": "Последовательное воспроизведение",

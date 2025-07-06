@@ -6,7 +6,8 @@
             "identifyMedia": "Identifizieren",
             "scoreGeneration": "Noten",
             "lyricsProduction": "Lyrisch",
-            "musicCommunity": "Gemeinschaft"
+            "musicCommunity": "Gemeinschaft",
+            "charts": "Diagramme"
         },
         "siderbar_player": {
             "playback_1": "Sequenzielles Abspielen",

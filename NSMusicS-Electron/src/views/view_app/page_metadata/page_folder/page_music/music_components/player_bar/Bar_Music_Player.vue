@@ -26,7 +26,9 @@ import {onBeforeUnmount} from 'vue';
 const get_playerbar_to_switch_playerview = inject('get_playerbar_to_switch_playerview');
 
 import { useI18n } from 'vue-i18n'
-import {store_app_configs_info} from '@/data/data_stores/app/store_app_configs_info'
+import {store_server_data_set_mediaInfo} from "@/data/data_stores/server/server_api_synchronization/store_server_data_set_mediaInfo";
+import {store_server_data_set_albumInfo} from "@/data/data_stores/server/server_api_synchronization/store_server_data_set_albumInfo";
+import {store_server_data_set_artistInfo} from "@/data/data_stores/server/server_api_synchronization/store_server_data_set_artistInfo";
 import {store_view_media_page_info} from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_media/store/store_view_media_page_info";
 import {store_server_login_info} from "@/views/view_server/page_metadata/page_login/store/store_server_login_info";
 const { t } = useI18n({
@@ -284,7 +286,7 @@ const init_player_howler = async () => {
         await ipcRenderer.invoke('i18n-tray-music-pause', false);
       }
     },
-    onend: () => {
+    onend: async () => {
       store_player_audio_logic.player.howl.fade(Number(store_player_audio_logic.play_volume), 0, store_player_audio_logic.player_fade_value);
       setTimeout(async () => {
         store_player_audio_logic.player.isPlaying = false;
@@ -298,6 +300,16 @@ const init_player_howler = async () => {
 
           store_player_audio_logic.player.isPlaying = false;
           store_player_audio_logic.player_is_play_ended = true;
+
+          await store_server_data_set_mediaInfo.Set_MediaInfo_To_PlayCompleteCount_of_Media_File_Server(
+              store_player_audio_info.this_audio_song_id
+          );
+          await store_server_data_set_albumInfo.Set_AlbumInfo_To_PlayCompleteCount_of_Album_Server(
+              store_player_audio_info.this_audio_album_id,
+          )
+          await store_server_data_set_artistInfo.Set_ArtistInfo_To_PlayCompleteCount_of_Artist_Server(
+              store_player_audio_info.this_audio_artist_id,
+          )
         }
         Play_Media_Switching();
       }, store_player_audio_logic.player_fade_value);
@@ -331,12 +343,7 @@ const handleMpvStopped = debounce(async (event, args) => {
       (item: any) =>
           item.play_id === store_player_audio_info.this_audio_play_id
   );
-  let last_play = false;
-  if (store_server_user_model.model_server_type_of_local) {
-    last_play = index >= store_playlist_list_info.playlist_MediaFiles_temporary.length - 1;
-  } else if (store_server_user_model.model_server_type_of_web) {
-    last_play = index >= store_general_fetch_player_list._totalCount - 1;
-  }
+  let last_play = index >= store_playlist_list_info.playlist_MediaFiles_temporary.length - 1;
   if (last_play && store_player_audio_logic.play_order === 'playback-1') {
     await store_player_audio_logic.player.pause();
   } else {
@@ -353,6 +360,16 @@ const handleMpvStopped = debounce(async (event, args) => {
     }
     Play_Media_Switching();
   }
+
+  await store_server_data_set_mediaInfo.Set_MediaInfo_To_PlayCompleteCount_of_Media_File_Server(
+      store_player_audio_info.this_audio_song_id
+  );
+  await store_server_data_set_albumInfo.Set_AlbumInfo_To_PlayCompleteCount_of_Album_Server(
+      store_player_audio_info.this_audio_album_id,
+  )
+  await store_server_data_set_artistInfo.Set_ArtistInfo_To_PlayCompleteCount_of_Artist_Server(
+      store_player_audio_info.this_audio_artist_id,
+  )
 }, 300);
 
 if(isElectron) {

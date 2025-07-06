@@ -6,7 +6,8 @@
             "identifyMedia": "Identificar",
             "scoreGeneration": "Partituras",
             "lyricsProduction": "Creación",
-            "musicCommunity": "Comunidad"
+            "musicCommunity": "Comunidad",
+            "charts": "Gráficos"
         },
         "siderbar_player": {
             "playback_1": "Reproducción secuencial",

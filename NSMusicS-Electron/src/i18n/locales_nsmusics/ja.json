@@ -6,7 +6,8 @@
             "identifyMedia": "識別",
             "scoreGeneration": "楽譜",
             "lyricsProduction": "歌詞制作",
-            "musicCommunity": "コミュニティ"
+            "musicCommunity": "コミュニティ",
+            "charts": "チャート"
         },
         "siderbar_player": {
             "playback_1": "順序再生",

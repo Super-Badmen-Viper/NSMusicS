@@ -8,7 +8,8 @@ import {
   Settings20Regular,
   WindowNew16Regular,
   Apps20Regular,
-  Album24Regular
+  ChartMultiple24Regular,
+  TagMultiple24Regular
 } from '@vicons/fluent'
 import {
   AlbumFilled,
@@ -108,6 +109,17 @@ function create_menuOptions_appBar(){
   )
   store_app_configs_info.app_view_menuOptions.push(
       {
+        label: computed(() => renderRouterLink('chart', t('Play') + t('Data') + t('nsmusics.siderbar_menu.charts'))),
+        key: 'chart',
+        icon: renderIcon(ChartMultiple24Regular),
+      },
+      {
+        label: computed(() => renderRouterLink('categories', t('entity.smartPlaylist') + t('Categories'))),
+        key: 'categories',
+        icon: renderIcon(Apps20Regular),
+      },
+      {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
+      {
         label: computed(() => renderRouterLink('home', t('common.home'))),
         key: 'home',
         icon: renderIcon(Home28Regular),
@@ -123,34 +135,28 @@ function create_menuOptions_appBar(){
         icon: renderIcon(MusicNoteRound)
       },
       {
-        label: computed(() => renderRouterLink('media_cue', t('nsmusics.view_page.disk'))),
-        key: 'media_cue',
-        icon: renderIcon(LibraryMusicOutlined),
-      },
-      {
         label: computed(() => renderRouterLink('artist', t('entity.artist_other'))),
         key: 'artist',
         icon: renderIcon(UserAvatarFilledAlt)
       },
-      // {
-      //   label: computed(() => renderRouterLink('categories', t('entity.smartPlaylist') + t('Categories'))),
-      //   key: 'categories',
-      //   icon: renderIcon(Apps20Regular),
-      // },
+      {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
+      {
+        label: computed(() => renderRouterLink('media_cue', t('nsmusics.view_page.disk'))),
+        key: 'media_cue',
+        icon: renderIcon(LibraryMusicOutlined),
+      },
+      {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
+      {
+        label: computed(() => renderRouterLink('tag', t('Identify'))),
+        key: 'tag',
+        icon: renderIcon(TagMultiple24Regular),
+      },
   )
   /// 兼容性代码，在更新多模态模式之后，将删除方法部分代码
   store_app_configs_info.menuOptions_selectd_model_1 = false
   store_app_configs_info.menuOptions_selectd_model_2 = false
   store_app_configs_info.menuOptions_selectd_model_3 = false
   store_app_configs_info.menuOptions_selectd_model_4 = false
-  store_app_configs_info.app_view_menuOptions.push(
-      {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
-      {
-        label: computed(() => renderRouterLink('update', t('HeaderLibraries'))),
-        key: 'library',
-        icon: renderIcon(MediaLibrary)
-      },
-  )
   // store_app_configs_info.app_view_menuOptions.push(
   //     {
   //       label: computed(() => renderRouterLink('update', t('nsmusics.siderbar_menu.karaoke'))),

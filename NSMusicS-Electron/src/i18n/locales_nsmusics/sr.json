@@ -6,7 +6,8 @@
             "identifyMedia": "Идентификуј",
             "scoreGeneration": "Ноте",
             "lyricsProduction": "Производња",
-            "musicCommunity": "Заједница"
+            "musicCommunity": "Заједница",
+            "charts": "Графикони"
         },
         "siderbar_player": {
             "playback_1": "Последовано пуштање",

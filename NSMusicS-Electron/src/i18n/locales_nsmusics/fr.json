@@ -6,7 +6,8 @@
             "identifyMedia": "Identifier",
             "scoreGeneration": "Partitions",
             "lyricsProduction": "Paroles",
-            "musicCommunity": "musicale"
+            "musicCommunity": "musicale",
+            "charts": "Graphiques"
         },
         "siderbar_player": {
             "playback_1": "Lecture séquentielle",

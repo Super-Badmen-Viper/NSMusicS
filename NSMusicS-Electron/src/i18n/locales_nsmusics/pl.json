@@ -6,7 +6,8 @@
             "identifyMedia": "Zidentyfikuj",
             "scoreGeneration": "Nuty",
             "lyricsProduction": "Twórz",
-            "musicCommunity": "Społeczność"
+            "musicCommunity": "Społeczność",
+            "charts": "Wykresy"
         },
         "siderbar_player": {
             "playback_1": "Odtwarzanie kolejno",

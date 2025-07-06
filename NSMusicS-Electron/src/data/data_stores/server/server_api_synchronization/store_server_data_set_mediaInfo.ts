@@ -119,6 +119,14 @@ export const store_server_data_set_mediaInfo = reactive({
             }
         }
     },
+    async Set_MediaInfo_To_PlayCompleteCount_of_Media_File_Server(item_id: any){
+        if(store_server_user_model.model_server_type_of_web) {
+            if(store_server_users.server_select_kind === 'ninesong'){
+                await new Annotation_ApiService_of_NineSong(store_server_login_info.server_url)
+                    .setScrobbleComplete(item_id, 'media');
+            }
+        }
+    },
 
     async Set_MediaInfo_Add_Selected_Playlist_Server(media_file_id: any, playlist_id: any){
         if(store_server_user_model.model_server_type_of_local || (store_server_users.server_select_kind === 'navidrome' && store_server_user_model.model_server_type_of_web)) {

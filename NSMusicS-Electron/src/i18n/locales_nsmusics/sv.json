@@ -6,7 +6,8 @@
             "identifyMedia": "Identifiera",
             "scoreGeneration": "Noter",
             "lyricsProduction": "Skapa",
-            "musicCommunity": "Gemenskap"
+            "musicCommunity": "Gemenskap",
+            "charts": "Diagram"
         },
         "siderbar_player": {
             "playback_1": "Sequentiellt uppspelning",

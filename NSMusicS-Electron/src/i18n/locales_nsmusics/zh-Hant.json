@@ -6,7 +6,8 @@
             "identifyMedia": "聽歌識曲",
             "scoreGeneration": "樂譜生成",
             "lyricsProduction": "歌詞製作",
-            "musicCommunity": "音樂社區"
+            "musicCommunity": "音樂社區",
+            "charts": "圖表"
         },
         "siderbar_player": {
             "playback_1": "順序播放",

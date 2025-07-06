@@ -35,6 +35,22 @@ const router = createRouter({
       }
     },
     {
+      path: '/chart',
+      name: 'chart',
+      component: () => import('@/router/router_views/router_music/Router_Home.vue'),
+      meta: {
+        cleanup: true
+      }
+    },
+    {
+      path: '/tag',
+      name: 'tag',
+      component: () => import('@/router/router_views/router_music/Router_Home.vue'),
+      meta: {
+        cleanup: true
+      }
+    },
+    {
       path: '/media_cue',
       name: 'media_cue',
       component: () => import('@/router/router_views/router_music/Router_Media_Cue.vue'),

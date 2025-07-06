@@ -6,7 +6,8 @@
             "identifyMedia": "听歌识曲",
             "scoreGeneration": "乐谱生成",
             "lyricsProduction": "歌词制作",
-            "musicCommunity": "音乐社区"
+            "musicCommunity": "音乐社区",
+            "charts": "图表"
         },
         "siderbar_player": {
             "playback_1": "顺序播放",

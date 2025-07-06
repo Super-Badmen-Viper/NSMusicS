@@ -80,5 +80,13 @@ export const store_server_data_set_artistInfo = reactive({
             await new Annotation_ApiService_of_NineSong(store_server_login_info.server_url)
                 .setScrobble(item_id, 'artist');
         }
+    },
+    async Set_ArtistInfo_To_PlayCompleteCount_of_Artist_Server(item_id: any) {
+        if(
+            store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong'
+        ) {
+            await new Annotation_ApiService_of_NineSong(store_server_login_info.server_url)
+                .setScrobbleComplete(item_id, 'artist');
+        }
     }
 });

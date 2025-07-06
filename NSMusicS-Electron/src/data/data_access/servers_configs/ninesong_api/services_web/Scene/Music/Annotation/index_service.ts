@@ -51,4 +51,16 @@ export class Annotation_ApiService_of_NineSong extends NineSong_Api_Services_Web
             }
         );
     }
+    public async setScrobbleComplete(
+        item_id: string, item_type: string,
+    ): Promise<any> {
+        return this.sendRequest(
+            'POST',
+            'annotations/scrobble/complete',
+            {
+                item_id,
+                item_type,
+            }
+        );
+    }
 }
