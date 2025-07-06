@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import Table_Home_List_ALL_Line from '@/views/view_app/page_metadata/page_folder/page_music/music_page/page_home/Table_Home.vue'
 import {store_router_data_info} from "@/router/router_store/store_router_data_info";
+import Table_Tag from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_tag/Table_Tag.vue";
 
 onMounted(async () => {
   store_router_data_info.router_select = 'tag'
@@ -10,7 +10,7 @@ onMounted(async () => {
 
 <template>
   <div class="view_show">
-    <Table_Home_List_ALL_Line/>
+    <Table_Tag/>
   </div>
 </template>
 

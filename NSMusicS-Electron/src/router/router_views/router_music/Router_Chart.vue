@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import Table_Home_List_ALL_Line from '@/views/view_app/page_metadata/page_folder/page_music/music_page/page_home/Table_Home.vue'
 import {store_router_data_info} from "@/router/router_store/store_router_data_info";
+import Table_Charts from "@/views/view_app/page_metadata/page_folder/page_music/music_page/page_charts/Table_Charts.vue";
 
 onMounted(async () => {
-  store_router_data_info.router_select = 'chart'
+  store_router_data_info.router_select = 'charts'
 });
 </script>
 
 <template>
   <div class="view_show">
-    <Table_Home_List_ALL_Line/>
+    <Table_Charts/>
+    Hello Charts
   </div>
 </template>
 

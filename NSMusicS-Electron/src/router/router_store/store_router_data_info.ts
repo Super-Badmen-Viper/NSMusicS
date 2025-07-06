@@ -31,6 +31,8 @@ export const store_router_data_info = reactive({
     router_select_model_menu: false,
     router_select_model_home: false,
     router_select_model_categories: false,
+    router_select_model_charts: false,
+    router_select_model_tag: false,
     router_select_model_media_cue: false,
     router_select_model_update: false,
     router_select_model_media: false,
@@ -48,6 +50,12 @@ watch(() => store_router_data_info.router_select, async (newValue) => {
             store_general_fetch_home_list.fetchData_Home()
         } else if (newValue === 'categories') {
             store_router_data_info.router_select_model_categories = true
+            store_general_fetch_home_list.fetchData_Home()
+        } else if (newValue === 'charts') {
+            store_router_data_info.router_select_model_charts = true
+            store_general_fetch_home_list.fetchData_Home()
+        } else if (newValue === 'tag') {
+            store_router_data_info.router_select_model_tag = true
             store_general_fetch_home_list.fetchData_Home()
         } else if (newValue === 'media_cue') {
             store_router_data_info.router_select_model_media_cue = true

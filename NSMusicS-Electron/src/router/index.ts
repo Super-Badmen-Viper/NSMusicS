@@ -29,15 +29,15 @@ const router = createRouter({
     {
       path: '/categories',
       name: 'categories',
-      component: () => import('@/router/router_views/router_music/Router_Home.vue'),
+      component: () => import('@/router/router_views/router_music/Router_Categories.vue'),
       meta: {
         cleanup: true
       }
     },
     {
-      path: '/chart',
-      name: 'chart',
-      component: () => import('@/router/router_views/router_music/Router_Home.vue'),
+      path: '/charts',
+      name: 'charts',
+      component: () => import('@/router/router_views/router_music/Router_Chart.vue'),
       meta: {
         cleanup: true
       }
@@ -45,7 +45,7 @@ const router = createRouter({
     {
       path: '/tag',
       name: 'tag',
-      component: () => import('@/router/router_views/router_music/Router_Home.vue'),
+      component: () => import('@/router/router_views/router_music/Router_Tag.vue'),
       meta: {
         cleanup: true
       }

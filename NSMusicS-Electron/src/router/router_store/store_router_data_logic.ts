@@ -74,6 +74,8 @@ export const store_router_data_logic = reactive({
         store_router_data_info.router_select_model_menu = false
         store_router_data_info.router_select_model_home = false
         store_router_data_info.router_select_model_categories = false
+        store_router_data_info.router_select_model_charts = false
+        store_router_data_info.router_select_model_tag = false
         store_router_data_info.router_select_model_media_cue = false
         store_router_data_info.router_select_model_update = false
         store_router_data_info.router_select_model_media = false
@@ -89,6 +91,8 @@ export const store_router_data_logic = reactive({
     },
     clear_Files_temporary_except_home() {
         store_router_data_info.router_select_model_categories = false
+        store_router_data_info.router_select_model_charts = false
+        store_router_data_info.router_select_model_tag = false
         store_router_data_info.router_select_model_media_cue = false
         store_router_data_info.router_select_model_menu = false
         store_router_data_info.router_select_model_update = false
@@ -101,6 +105,8 @@ export const store_router_data_logic = reactive({
     },
     clear_Files_temporary_except_categories() {
         store_router_data_info.router_select_model_home = false
+        store_router_data_info.router_select_model_charts = false
+        store_router_data_info.router_select_model_tag = false
         store_router_data_info.router_select_model_media_cue = false
         store_router_data_info.router_select_model_menu = false
         store_router_data_info.router_select_model_update = false
@@ -111,9 +117,45 @@ export const store_router_data_logic = reactive({
         store_view_album_page_info.album_Files_temporary = [];
         store_view_artist_page_info.artist_Files_temporary = [];
     },
+    clear_Files_temporary_except_charts() {
+        store_router_data_info.router_select_model_menu = false
+        store_router_data_info.router_select_model_home = false
+        store_router_data_info.router_select_model_categories = false
+        store_router_data_info.router_select_model_tag = false
+        store_router_data_info.router_select_model_media_cue = false
+        store_router_data_info.router_select_model_update = false
+        store_router_data_info.router_select_model_media = false
+        store_router_data_info.router_select_model_album = false
+        store_router_data_info.router_select_model_artist = false
+        store_view_home_page_info.home_Files_temporary_maximum_playback = []
+        store_view_home_page_info.home_Files_temporary_random_search = []
+        store_view_home_page_info.home_Files_temporary_recently_added = []
+        store_view_home_page_info.home_Files_temporary_recently_played = []
+        store_view_album_page_info.album_Files_temporary = [];
+        store_view_artist_page_info.artist_Files_temporary = [];
+    },
+    clear_Files_temporary_except_tag() {
+        store_router_data_info.router_select_model_menu = false
+        store_router_data_info.router_select_model_home = false
+        store_router_data_info.router_select_model_categories = false
+        store_router_data_info.router_select_model_charts = false
+        store_router_data_info.router_select_model_media_cue = false
+        store_router_data_info.router_select_model_update = false
+        store_router_data_info.router_select_model_media = false
+        store_router_data_info.router_select_model_album = false
+        store_router_data_info.router_select_model_artist = false
+        store_view_home_page_info.home_Files_temporary_maximum_playback = []
+        store_view_home_page_info.home_Files_temporary_random_search = []
+        store_view_home_page_info.home_Files_temporary_recently_added = []
+        store_view_home_page_info.home_Files_temporary_recently_played = []
+        store_view_album_page_info.album_Files_temporary = [];
+        store_view_artist_page_info.artist_Files_temporary = [];
+    },
     clear_Files_temporary_except_media_cue() {
         store_router_data_info.router_select_model_home = false
         store_router_data_info.router_select_model_categories = false
+        store_router_data_info.router_select_model_charts = false
+        store_router_data_info.router_select_model_tag = false
         store_router_data_info.router_select_model_menu = false
         store_router_data_info.router_select_model_update = false
         store_router_data_info.router_select_model_media = false
@@ -127,6 +169,8 @@ export const store_router_data_logic = reactive({
         store_router_data_info.router_select_model_menu = false
         store_router_data_info.router_select_model_home = false
         store_router_data_info.router_select_model_categories = false
+        store_router_data_info.router_select_model_charts = false
+        store_router_data_info.router_select_model_tag = false
         store_router_data_info.router_select_model_media_cue = false
         store_router_data_info.router_select_model_update = false
         store_router_data_info.router_select_model_media = false
@@ -142,6 +186,8 @@ export const store_router_data_logic = reactive({
         store_router_data_info.router_select_model_menu = false
         store_router_data_info.router_select_model_home = false
         store_router_data_info.router_select_model_categories = false
+        store_router_data_info.router_select_model_charts = false
+        store_router_data_info.router_select_model_tag = false
         store_router_data_info.router_select_model_media_cue = false
         store_router_data_info.router_select_model_update = false
         store_router_data_info.router_select_model_album = false
@@ -157,6 +203,8 @@ export const store_router_data_logic = reactive({
         store_router_data_info.router_select_model_menu = false
         store_router_data_info.router_select_model_home = false
         store_router_data_info.router_select_model_categories = false
+        store_router_data_info.router_select_model_charts = false
+        store_router_data_info.router_select_model_tag = false
         store_router_data_info.router_select_model_media_cue = false
         store_router_data_info.router_select_model_update = false
         store_router_data_info.router_select_model_media = false

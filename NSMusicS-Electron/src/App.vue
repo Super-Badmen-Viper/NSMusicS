@@ -24,7 +24,7 @@ import {
 } from '@vicons/material'
 import {
   Close,
-  Hearing,
+  DataClass,
   UserAvatarFilledAlt,
   MediaCast,
   BareMetalServer,
@@ -109,21 +109,21 @@ function create_menuOptions_appBar(){
   )
   store_app_configs_info.app_view_menuOptions.push(
       {
-        label: computed(() => renderRouterLink('chart', t('Play') + t('Data') + t('nsmusics.siderbar_menu.charts'))),
-        key: 'chart',
-        icon: renderIcon(ChartMultiple24Regular),
-      },
-      {
         label: computed(() => renderRouterLink('categories', t('entity.smartPlaylist') + t('Categories'))),
         key: 'categories',
-        icon: renderIcon(Apps20Regular),
+        icon: renderIcon(DataClass),
       },
-      {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
+      {
+        label: computed(() => renderRouterLink('charts', t('Play') + t('Data') + t('nsmusics.siderbar_menu.charts'))),
+        key: 'charts',
+        icon: renderIcon(ChartMultiple24Regular),
+      },
       {
         label: computed(() => renderRouterLink('home', t('common.home'))),
         key: 'home',
         icon: renderIcon(Home28Regular),
       },
+      {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
       {
         label: computed(() => renderRouterLink('album', t('entity.album_other'))),
         key: 'album',
@@ -139,7 +139,6 @@ function create_menuOptions_appBar(){
         key: 'artist',
         icon: renderIcon(UserAvatarFilledAlt)
       },
-      {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
       {
         label: computed(() => renderRouterLink('media_cue', t('nsmusics.view_page.disk'))),
         key: 'media_cue',
@@ -254,15 +253,25 @@ async function get_playerbar_to_switch_playerview(value: any) {
 }
 async function handleMenuSelection() {
   const menuActions: { [key: string]: () => void | Promise<void> } = {
-    'home': () => {
-      clearFilesIfNeeded('home');
-      store_router_data_info.router_select_model_home = true;
-      fetchDataIfNeeded('home');
-    },
     'categories': () => {
       clearFilesIfNeeded('categories');
       store_router_data_info.router_select_model_categories = true;
       fetchDataIfNeeded('categories');
+    },
+    'charts': () => {
+      clearFilesIfNeeded('charts');
+      store_router_data_info.router_select_model_charts = true;
+      fetchDataIfNeeded('charts');
+    },
+    'tag': () => {
+      clearFilesIfNeeded('tag');
+      store_router_data_info.router_select_model_tag = true;
+      fetchDataIfNeeded('tag');
+    },
+    'home': () => {
+      clearFilesIfNeeded('home');
+      store_router_data_info.router_select_model_home = true;
+      fetchDataIfNeeded('home');
     },
     'media_cue': () => {
       clearFilesIfNeeded('media_cue');
@@ -306,12 +315,16 @@ async function handleMenuSelection() {
     await selectedAction();
   }
 }
-function clearFilesIfNeeded(except?: 'home' | 'categories' | 'media_cue' | 'album' | 'media' | 'artist') {
+function clearFilesIfNeeded(except?: 'home' | 'categories' | 'charts' | 'tag' | 'media_cue' | 'album' | 'media' | 'artist') {
   if (!store_router_data_logic.clear_Memory_Model) {
     if (except === 'home') {
       store_router_data_logic.clear_Files_temporary_except_home();
     } else if (except === 'categories') {
       store_router_data_logic.clear_Files_temporary_except_categories();
+    } else if (except === 'charts') {
+      store_router_data_logic.clear_Files_temporary_except_charts();
+    } else if (except === 'tag') {
+      store_router_data_logic.clear_Files_temporary_except_tag();
     } else if (except === 'media_cue') {
       store_router_data_logic.clear_Files_temporary_except_media_cue();
     } else if (except === 'album') {
@@ -325,11 +338,15 @@ function clearFilesIfNeeded(except?: 'home' | 'categories' | 'media_cue' | 'albu
     }
   }
 }
-function fetchDataIfNeeded(type: 'home' | 'categories' | 'media_cue' | 'album' | 'media' | 'artist') {
+function fetchDataIfNeeded(type: 'home' | 'categories' | 'charts' | 'tag' | 'media_cue' | 'album' | 'media' | 'artist') {
   if (store_router_data_logic.clear_Memory_Model) {
     if (type === 'home') {
       store_general_fetch_home_list.fetchData_Home();
     } else if (type === 'categories') {
+      store_general_fetch_home_list.fetchData_Home();
+    } else if (type === 'charts') {
+      store_general_fetch_home_list.fetchData_Home();
+    } else if (type === 'tag') {
       store_general_fetch_home_list.fetchData_Home();
     } else if (type === 'media_cue') {
       store_general_fetch_media_cue_list.fetchData_Media();
@@ -371,6 +388,12 @@ routers.afterEach(async (to, from) => {
       store_router_data_info.router_name = to.name;
     } else if (to.name === 'categories') {
       store_router_data_info.router_select_model_categories = true;
+      store_router_data_info.router_name = to.name;
+    } else if (to.name === 'charts') {
+      store_router_data_info.router_select_model_charts = true;
+      store_router_data_info.router_name = to.name;
+    } else if (to.name === 'tag') {
+      store_router_data_info.router_select_model_tag = true;
       store_router_data_info.router_name = to.name;
     } else if (to.name === 'media_cue') {
       store_router_data_info.router_select_model_media_cue = true;
@@ -1000,7 +1023,13 @@ if(isElectron) {
             <!--Categories View -->
             <RouterView class="view_show_data"
                         v-else-if="store_router_data_info.router_select_model_categories"></RouterView>
-            <!--Categories View -->
+            <!--Charts View -->
+            <RouterView class="view_show_data"
+                        v-else-if="store_router_data_info.router_select_model_charts"></RouterView>
+            <!--Tag View -->
+            <RouterView class="view_show_data"
+                        v-else-if="store_router_data_info.router_select_model_tag"></RouterView>
+            <!--MediaCue View -->
             <RouterView class="view_show_data"
                         v-else-if="store_router_data_info.router_select_model_media_cue"></RouterView>
             <!--Updateing View-->
