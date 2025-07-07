@@ -5,120 +5,137 @@ function random() {
 export const dimensions = [
   {
     type: "media_file",
-    name: "单曲",
+    name: "乐曲",
     items: [
-      { name: "七里香", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-07" },
-      { name: "以父之名", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-06" },
-      { name: "晴天", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-05" },
-      { name: "夜曲", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-04" },
-      { name: "青花瓷", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-03" },
-      { name: "稻香", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-02" },
-      { name: "双截棍", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-01" },
-      { name: "简单爱", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-30" },
-      { name: "听妈妈的话", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-29" },
-      { name: "东风破", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-28" }
+      { name: "七里香", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-07" },
+      { name: "以父之名", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-06" },
+      { name: "晴天", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-05" },
+      { name: "夜曲", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-04" },
+      { name: "青花瓷", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-03" },
+      { name: "稻香", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-02" },
+      { name: "双截棍", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-01" },
+      { name: "简单爱", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-30" },
+      { name: "听妈妈的话", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-29" },
+      { name: "东风破", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-28" }
     ].sort((a, b) => b.play_count - a.play_count).slice(0, 10)
   },
   {
     type: "album",
     name: "专辑",
     items: [
-      { name: "叶惠美", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-04" },
-      { name: "范特西", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-03" },
-      { name: "十一月的萧邦", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-02" },
-      { name: "七里香", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "极25-07-01" },
-      { name: "八度空间", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-30" },
-      { name: "我很忙", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-29" },
-      { name: "魔杰座", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-28" },
-      { name: "跨时代", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-27" },
-      { name: "十二新作", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-26" },
-      { name: "哎呦，不错哦", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-25" }
+      { name: "叶惠美", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-04" },
+      { name: "范特西", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-03" },
+      { name: "十一月的萧邦", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-02" },
+      { name: "七里香", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "极25-07-01" },
+      { name: "八度空间", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-30" },
+      { name: "我很忙", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-29" },
+      { name: "魔杰座", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-28" },
+      { name: "跨时代", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-27" },
+      { name: "十二新作", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-26" },
+      { name: "哎呦，不错哦", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-25" }
     ].sort((a, b) => b.play_count - a.play_count).slice(0, 10)
   },
   {
     type: "artist",
     name: "艺术家",
     items: [
-      { name: "周杰伦", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-01" },
-      { name: "林俊杰", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-30" },
-      { name: "陈奕迅", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-29" },
-      { name: "邓紫棋", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-28" },
-      { name: "薛之谦", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-27" },
-      { name: "李荣浩", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-26" },
-      { name: "王力宏", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-25" },
-      { name: "张杰", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-24" },
-      { name: "华晨宇", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-23" },
-      { name: "毛不易", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-22" }
+      { name: "周杰伦", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-01" },
+      { name: "林俊杰", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-30" },
+      { name: "陈奕迅", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-29" },
+      { name: "邓紫棋", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-28" },
+      { name: "薛之谦", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-27" },
+      { name: "李荣浩", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-26" },
+      { name: "王力宏", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-25" },
+      { name: "张杰", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-24" },
+      { name: "华晨宇", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-23" },
+      { name: "毛不易", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-22" }
     ].sort((a, b) => b.play_count - a.play_count).slice(0, 10)
   },
   {
     type: "media_cue",
     name: "光盘",
     items: [
-      { name: "经典CD-001", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-28" },
-      { name: "怀旧CD-002", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-27" },
-      { name: "摇滚CD-003", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-26" },
-      { name: "流行CD-004", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-25" },
-      { name: "电子CD-005", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-24" },
-      { name: "爵士CD-006", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-23" },
-      { name: "古典CD-007", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-22" },
-      { name: "民谣CD-008", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-21" },
-      { name: "蓝调CD-009", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-20" },
-      { name: "乡村CD-010", play_count: random(), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-19" }
+      { name: "经典CD-001", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-28" },
+      { name: "怀旧CD-002", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-27" },
+      { name: "摇滚CD-003", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-26" },
+      { name: "流行CD-004", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-25" },
+      { name: "电子CD-005", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-24" },
+      { name: "爵士CD-006", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-23" },
+      { name: "古典CD-007", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-22" },
+      { name: "民谣CD-008", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-21" },
+      { name: "蓝调CD-009", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-20" },
+      { name: "乡村CD-010", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-19" }
     ].sort((a, b) => b.play_count - a.play_count).slice(0, 10)
   }
 ];
 
-export default function getData(selectedCategory = "单曲") {
-  // 获取选中的维度数据
+export default function getData(selectedCategory = "乐曲") {
   const category = dimensions.find(d => d.name === selectedCategory);
   if (!category) return {};
 
   const items = category.items;
 
-  // 准备极坐标数据
-  const data = [];
-  const angleStep = 360 / items.length; // 等分角度
+  // 准备极坐标数据 - 三种分组类型
+  const groups = {
+    group1: { name: "高完播率", color: "#FF6B88" }, // 粉色
+    group2: { name: "中完播率", color: "#36A2EB" }, // 蓝色
+    group3: { name: "低完播率", color: "#FFCE56" }  // 黄色
+  };
 
+  const data = [];
+  const groupData = {
+    group1: [],
+    group2: [],
+    group3: []
+  };
+
+  const maxRadius = Math.max(...items.map(item => item.play_count)) * 1.2;
+
+  // 准备散点数据
   items.forEach((item, index) => {
-    const angle = index * angleStep; // 计算角度位置
+    const angle = (index * 360) / items.length; // 均匀分布的角度
     const completionRate = Math.round((item.play_complete_count / item.play_count) * 100);
 
-    data.push({
-      value: [angle, item.play_count], // [角度, 播放次数]
+    // 根据完播率分组
+    let groupKey = "group3"; // 低完播率 (<50%)
+    if (completionRate >= 70) groupKey = "group1"; // 高完播率
+    else if (completionRate >= 50) groupKey = "group2"; // 中完播率
+
+    const scatterData = {
+      value: [angle, Math.random() * maxRadius], // 随机半径位置
       name: item.name,
       play_count: item.play_count,
       rating: item.rating,
       starred: item.starred,
       play_complete_count: item.play_complete_count,
       play_date: item.play_date,
-      completion_rate: completionRate
-    });
-  });
+      completion_rate: completionRate,
+      symbolSize: 10 + Math.sqrt(item.play_count) * 2, // 点大小与播放次数相关
+      symbol: "circle"
+    };
 
-  // 计算最大播放次数和最小播放次数
-  const maxPlayCount = Math.max(...items.map(item => item.play_count));
-  const minPlayCount = Math.min(...items.map(item => item.play_count));
+    // 添加到对应分组
+    groupData[groupKey].push(scatterData);
+  });
 
   return {
     textStyle: {
-      fontFamily: 'Inter, "Helvetica Neue", Arial, sans-serif',
-      fontWeight: 300
+      fontWeight: 600,
+      fontSize: 14,
+      color: "#333"
     },
     title: {
       text: `${selectedCategory}播放分布`,
       top: "5%",
       left: "center"
     },
-    polar: {
-      radius: "70%",
-      center: ["50%", "50%"]
-    },
     tooltip: {
       trigger: "item",
-      backgroundColor: 'rgba(50,50,50,0.9)',
+      backgroundColor: 'rgba(255,255,255,0.9)',
+      borderWidth: 1,
+      borderColor: '#E0E0E0',
       textStyle: {
-        color: '#fff',
+        color: '#333',
         fontSize: 14
       },
       extraCssText: 'border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);',
@@ -132,11 +149,11 @@ export default function getData(selectedCategory = "单曲") {
         const stars = '★'.repeat(Math.floor(data.rating)) + '☆'.repeat(5 - Math.floor(data.rating));
 
         return `
-          <div style="font-weight:bold;font-size:16px;margin-bottom:8px;">${data.name}</div>
+          <div style="font-weight:bold;font-size:16px;color:#E53935;margin-bottom:8px;">${data.name}</div>
           <div style="display:flex;flex-direction:column;gap:4px;">
             <div>类型: ${selectedCategory}</div>
-            <div>播放次数: ${data.play_count} 次</div>
-            <div>完整播放: ${data.play_complete_count} 次 (完成率: ${data.completion_rate}%)</div>
+            <div>播放次数: <b>${data.play_count}</b> 次</div>
+            <div>完整播放: ${data.play_complete_count} 次 (完播率: ${data.completion_rate}%)</div>
             <div>评分: ${data.rating} ${stars}</div>
             <div>收藏状态: ${starStatus}</div>
             <div>最近播放: ${data.play_date}</div>
@@ -144,86 +161,131 @@ export default function getData(selectedCategory = "单曲") {
         `;
       }
     },
-    angleAxis: {
-      type: "value",
-      startAngle: 0,
-      max: 360,
-      axisLabel: {
-        show: false
+    legend: {
+      show: true,
+      right: "5%",
+      top: "10%",
+      orient: "vertical",
+      data: [groups.group1.name, groups.group2.name, groups.group3.name],
+      textStyle: {
+        fontSize: 12
       },
-      splitLine: {
+      itemGap: 10
+    },
+    polar: {
+      center: ["50%", "50%"],
+      radius: "65%",
+    },
+    angleAxis: {
+      clockwise: true,
+      startAngle: 90, // 从12点方向开始
+      min: 0,
+      max: 360,
+      axisLine: {
         show: true,
         lineStyle: {
-          color: "rgba(200, 200, 200, 0.3)"
+          color: "#81C784" // 绿色边框
+        }
+      },
+      axisLabel: {
+        show: true,
+        fontSize: 10
+      },
+      splitLine: {
+        lineStyle: {
+          color: "rgba(129, 199, 132, 0.5)" // 浅绿色辅助线
         }
       }
     },
     radiusAxis: {
       min: 0,
-      max: maxPlayCount * 1.2,
+      max: maxRadius,
+      axisLine: {
+        show: true,
+        lineStyle: {
+          color: "#81C784" // 绿色边框
+        }
+      },
       axisLabel: {
-        formatter: "{value}次"
+        formatter: "{value}",
+        fontSize: 10
+      },
+      splitLine: {
+        lineStyle: {
+          color: "rgba(129, 199, 132, 0.5)" // 浅绿色辅助线
+        }
       }
     },
     series: [
+      // 类型1 - 高完播率
       {
-        coordinateSystem: "polar",
-        name: selectedCategory,
+        name: groups.group1.name,
         type: "scatter",
-        symbolSize: function(data) {
-          // 根据完成率动态调整点的大小
-          const size = 8 + (data[2] * 0.3);
-          return Math.min(30, Math.max(10, size));
+        coordinateSystem: "polar",
+        symbolSize: function(val) {
+          return val[2]?.symbolSize || 20;
         },
+        data: groupData.group1,
         itemStyle: {
-          color: function(params) {
-            // 根据评分生成渐变色
-            const rating = params.data.rating;
-            return rating > 4 ?
-                'hsl(210, 100%, 56%)' :
-                rating > 3 ?
-                    'hsl(160, 100%, 37%)' :
-                    rating > 2 ?
-                        'hsl(40, 100%, 50%)' :
-                        'hsl(0, 100%, 45%)';
-          }
+          color: groups.group1.color
         },
-        label: {
-          show: true,
-          formatter: function(params) {
-            // 简略显示名称，避免过长
-            return params.data.name.length > 6
-                ? params.data.name.substring(0, 6) + '...'
-                : params.data.name;
-          },
-          position: "outside",
-          fontSize: 12,
-          fontWeight: 'bold'
-        },
-        data: data,
         emphasis: {
-          label: {
-            show: true,
-            fontSize: 14,
-            fontWeight: "bold"
-          },
           itemStyle: {
-            shadowBlur: 10,
-            shadowColor: "rgba(0, 0, 0, 0.5)",
-            borderColor: '#fff',
+            shadowBlur: 15,
+            shadowColor: groups.group1.color,
+            borderColor: "#fff",
+            borderWidth: 2
+          }
+        }
+      },
+      // 类型2 - 中完播率
+      {
+        name: groups.group2.name,
+        type: "scatter",
+        coordinateSystem: "polar",
+        symbolSize: function(val) {
+          return val[2]?.symbolSize || 20;
+        },
+        data: groupData.group2,
+        itemStyle: {
+          color: groups.group2.color
+        },
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 15,
+            shadowColor: groups.group2.color,
+            borderColor: "#fff",
+            borderWidth: 2
+          }
+        }
+      },
+      // 类型3 - 低完播率
+      {
+        name: groups.group3.name,
+        type: "scatter",
+        coordinateSystem: "polar",
+        symbolSize: function(val) {
+          return val[2]?.symbolSize || 20;
+        },
+        data: groupData.group3,
+        itemStyle: {
+          color: groups.group3.color
+        },
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 15,
+            shadowColor: groups.group3.color,
+            borderColor: "#fff",
             borderWidth: 2
           }
         }
       }
     ],
     animationDuration: 1000,
-    visualMap: {
-      show: false,
-      min: minPlayCount,
-      max: maxPlayCount,
-      inRange: {
-        colorLightness: [0.7, 0.3] // 根据值映射明度
-      }
+    grid: {
+      top: "15%",
+      bottom: "10%",
+      containLabel: true
     }
   };
 }

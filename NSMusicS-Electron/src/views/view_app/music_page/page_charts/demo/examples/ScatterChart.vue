@@ -24,7 +24,7 @@ use([
 ]);
 
 const loading = shallowRef(false);
-const selectedCategory = ref("单曲");
+const selectedCategory = ref("乐曲");
 const loadingOptions = {
   text: "加载中…",
   color: "#4ea397",
@@ -41,11 +41,8 @@ const dimensionOptions = computed(() => {
 
 function handleCategoryChange(newCategory: string) {
   loading.value = true;
-
-  setTimeout(() => {
-    option.value = getData(newCategory);
-    loading.value = false;
-  }, 300);
+  option.value = getData(newCategory);
+  loading.value = false;
 }
 
 function refresh() {
@@ -59,14 +56,14 @@ function refresh() {
 </script>
 
 <template>
-  <v-example id="scatter" title="播放数据分析" desc="(播放次数 vs 完成率，点大小=评分，颜色=收藏状态)">
+  <v-example id="scatter" title="播放数据分析" desc="散点图：总播放次数 vs 完播率，点大小=评分，颜色=收藏状态">
     <template #head>
       <n-space style="width: 100%; justify-content: center; margin: 10px 0;">
         <n-select
-            v-model:value="selectedCategory"
-            :options="dimensionOptions"
-            style="width: 220px;"
-            @update:value="handleCategoryChange"
+          v-model:value="selectedCategory"
+          :options="dimensionOptions"
+          style="width: 160px;"
+          @update:value="handleCategoryChange"
         />
       </n-space>
     </template>

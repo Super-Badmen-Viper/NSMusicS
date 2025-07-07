@@ -17,12 +17,12 @@ use([CanvasRenderer, SVGRenderer]);
 </script>
 
 <template>
-  <div>
+  <div style="margin-left: -20px;">
     <!--    <logo-chart />-->
 
-    <h1 style="text-align: center;">
-      <a href="https://github.com/ecomfe/vue-echarts">Vue-ECharts</a>
-    </h1>
+    <div style="text-align: center;font-weight: bold;font-size: 32px;margin-bottom: 10px;">
+      Vue-ECharts
+    </div>
 
     <bar-chart />
     <pie-chart />

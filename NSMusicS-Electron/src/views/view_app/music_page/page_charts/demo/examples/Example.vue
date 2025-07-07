@@ -1,9 +1,11 @@
 <template>
-  <h3 :id="id" style="text-align: center;">
-    <a :href="`#${id}`">
+  <h3 :id="id"
+      style="text-align: center;">
+    <a style="font-weight: bold;font-size: 20px;">
       {{ title }}
-      <small v-if="desc">{{ desc }}</small>
     </a>
+    <br>
+    <span v-if="desc" style="font-weight: bold;font-size: 15px;">{{ desc }}</span>
   </h3>
   <section>
     <slot name="head"/>
@@ -45,12 +47,11 @@ defineProps({
   display: flex;
   justify-content: center;
   width: fit-content;
-  margin: 2em auto;
+  margin: 1em auto;
 
   .echarts {
-    width: calc(60vw + 4em);
-    height: 360px;
-    max-width: 720px;
+    width: calc(70vw);
+    height: 38vw;
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     box-shadow: 0 0 45px rgba(0, 0, 0, 0.2);
