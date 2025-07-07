@@ -15,7 +15,7 @@ const collapsed_width = ref<number>(80);
           class="table"
           style="overflow: hidden;border-radius: 4px;"
           :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 160) + 'px)'}">
-        <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
+        <span style="font-size: 24px;font-weight: 800;">Not open || 未开放</span>
       </n-card>
     </n-layout>
   </div>

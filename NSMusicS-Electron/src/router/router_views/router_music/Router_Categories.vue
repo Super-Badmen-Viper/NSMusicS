@@ -10,7 +10,10 @@ onMounted(async () => {
 
 <template>
   <div class="view_show">
-    <Table_Categories/>
+<!--    <Table_Categories/>-->
+    <span style="font-weight: bold;font-size: 24px;">
+      {{ $t('common.comingSoon') }}
+    </span>
   </div>
 </template>
 

@@ -2,81 +2,85 @@
 import { use } from "echarts/core";
 import { PieChart } from "echarts/charts";
 import {
-  PolarComponent,
   TitleComponent,
   LegendComponent,
-  TooltipComponent
+  TooltipComponent,
+  VisualMapComponent // 添加视觉映射组件
 } from "echarts/components";
-import { shallowRef, onMounted } from "vue";
+import {shallowRef, ref, watch, computed} from "vue";
 import VChart from 'vue-echarts';
 import VExample from "./Example.vue";
-import getData from "../data/pie";
+import getData, { dimensions } from "../data/pie";
+import {NSelect} from "naive-ui"; // 导入维度数据
 
 use([
   PieChart,
-  PolarComponent,
   TitleComponent,
   LegendComponent,
-  TooltipComponent
+  TooltipComponent,
+  VisualMapComponent
 ]);
 
-const option = shallowRef(getData());
-const pie = shallowRef(null);
+const loading = shallowRef(false);
+const selectedCategory = ref("单曲");
+const loadingOptions = {
+  text: "加载中…",
+  color: "#4ea397",
+  maskColor: "rgba(255, 255, 255, 0.4)"
+};
+const option = shallowRef(getData(selectedCategory.value));
 
-let timer = null;
-
-onMounted(() => {
-  startActions();
-
-  return () => {
-    stopActions();
-  };
+const dimensionOptions = computed(() => {
+  return dimensions.map(dim => ({
+    label: dim.name,
+    value: dim.name
+  }));
 });
 
-function startActions() {
-  let dataIndex = -1;
+function handleCategoryChange(newCategory: string) {
+  loading.value = true;
 
-  const dataLen = option.value?.series?.[0]?.data?.length || 0;
-
-  if (!pie.value || dataLen === 0) {
-    return;
-  }
-
-  clearInterval(timer);
-
-  timer = setInterval(() => {
-    if (!pie.value) {
-      clearInterval(timer);
-
-      return;
-    }
-
-    pie.value.dispatchAction({
-      type: "downplay",
-      seriesIndex: 0,
-      dataIndex
-    });
-    dataIndex = (dataIndex + 1) % dataLen;
-    pie.value.dispatchAction({
-      type: "highlight",
-      seriesIndex: 0,
-      dataIndex
-    });
-    pie.value.dispatchAction({
-      type: "showTip",
-      seriesIndex: 0,
-      dataIndex
-    });
-  }, 1000);
+  setTimeout(() => {
+    option.value = getData(newCategory);
+    loading.value = false;
+  }, 300);
 }
 
-function stopActions() {
-  clearInterval(timer);
+function refresh() {
+  loading.value = true;
+
+  setTimeout(() => {
+    option.value = getData(selectedCategory.value);
+    loading.value = false;
+  }, 300);
 }
 </script>
 
 <template>
-  <v-example id="pie" title="Pie chart" desc="(with action dispatch)">
-    <v-chart ref="pie" :option="option" autoresize />
+  <v-example id="pie" title="音乐播放分布" desc="(饼图展示播放占比)">
+    <template #head>
+      <n-space style="width: 100%; justify-content: center; margin: 10px 0;">
+        <n-select
+            v-model:value="selectedCategory"
+            :options="dimensionOptions"
+            style="width: 220px;"
+            @update:value="handleCategoryChange"
+        />
+      </n-space>
+    </template>
+    <v-chart
+      ref="pie"
+      :option="option"
+      autoresize
+      :loading="loading"
+      :loadingOptions="loadingOptions"
+    />
+    <template #extra>
+
+    </template>
   </v-example>
 </template>
+
+<style scoped>
+
+</style>

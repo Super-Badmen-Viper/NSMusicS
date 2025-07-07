@@ -1322,7 +1322,7 @@ if(isElectron) {
         ">
         <n-drawer-content v-if="store_player_sound_more.player_show_sound_more">
           <template #default>
-            <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
+            <span style="font-size: 24px;font-weight: 800;">Not open || 未开放</span>
           </template>
         </n-drawer-content>
       </n-drawer>
@@ -1338,7 +1338,7 @@ if(isElectron) {
         ">
         <n-drawer-content v-if="store_player_sound_speed.player_show_sound_speed">
           <template #default>
-            <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
+            <span style="font-size: 24px;font-weight: 800;">Not open || 未开放</span>
           </template>
         </n-drawer-content>
       </n-drawer>
@@ -1362,19 +1362,23 @@ if(isElectron) {
                 <View_Player_Effect/>
               </n-tab-pane>
               <n-tab-pane name="001" tab="均衡器">
-                <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
-              </n-tab-pane>
-              <n-tab-pane name="002" tab="九歌音效">
-                <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
-              </n-tab-pane>
-              <n-tab-pane name="003" tab="声学适配">
-                <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
+                <span style="font-weight: bold;font-size: 24px;">
+                  {{ $t('common.comingSoon') }}
+                </span>
               </n-tab-pane>
               <n-tab-pane name="004" tab="多音轨">
-                <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
+                <span style="font-weight: bold;font-size: 24px;">
+                  {{ $t('common.comingSoon') }}
+                </span>
+              </n-tab-pane>
+              <n-tab-pane name="002" tab="九歌音效">
+                <span style="font-size: 24px;font-weight: 800;">Not open || 未开放</span>
+              </n-tab-pane>
+              <n-tab-pane name="003" tab="声学适配">
+                <span style="font-size: 24px;font-weight: 800;">Not open || 未开放</span>
               </n-tab-pane>
               <n-tab-pane name="005" tab="音效制作">
-                <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
+                <span style="font-size: 24px;font-weight: 800;">Not open || 未开放</span>
               </n-tab-pane>
             </n-tabs>
           </template>

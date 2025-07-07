@@ -1,66 +1,87 @@
 <script setup lang="ts">
 import { use } from "echarts/core";
-import { LineChart } from "echarts/charts";
+import { ScatterChart } from "echarts/charts";
 import {
   PolarComponent,
   TitleComponent,
   LegendComponent,
-  TooltipComponent
+  TooltipComponent,
+  VisualMapComponent // 添加视觉映射组件
 } from "echarts/components";
-import { computed, shallowRef } from "vue";
+import { computed, shallowRef, ref, watch } from "vue";
 import VChart from 'vue-echarts';
 import VExample from "./Example.vue";
-import getData from "../data/polar";
+import getData, { dimensions } from "../data/polar";
+import {NSelect} from "naive-ui";
 
 use([
-  LineChart,
+  ScatterChart,
   PolarComponent,
   TitleComponent,
   LegendComponent,
-  TooltipComponent
+  TooltipComponent,
+  VisualMapComponent
 ]);
 
-const option = shallowRef(getData());
-const theme = shallowRef("dark");
 const loading = shallowRef(false);
-const loadingOptions = computed(() =>
-  theme.value === "dark"
-    ? {
-        color: "#fff",
-        textColor: "#fff",
-        maskColor: "rgba(0, 0, 0, 0.7)"
-      }
-    : null
-);
-const style = computed(() => {
-  return theme.value === "dark"
-    ? loading.value
-      ? "background-color: #05040d"
-      : "background-color: #100c2a"
-    : "";
+const selectedCategory = ref("单曲");
+const loadingOptions = {
+  text: "加载中…",
+  color: "#4ea397",
+  maskColor: "rgba(255, 255, 255, 0.4)"
+};
+const option = shallowRef(getData(selectedCategory.value));
+
+const dimensionOptions = computed(() => {
+  return dimensions.map(dim => ({
+    label: dim.name,
+    value: dim.name
+  }));
 });
+
+function handleCategoryChange(newCategory: string) {
+  loading.value = true;
+
+  setTimeout(() => {
+    option.value = getData(newCategory);
+    loading.value = false;
+  }, 300);
+}
+
+function refresh() {
+  loading.value = true;
+
+  setTimeout(() => {
+    option.value = getData(selectedCategory.value);
+    loading.value = false;
+  }, 300);
+}
 </script>
 
 <template>
-  <v-example id="polar" title="Polar plot" desc="(with built-in theme)">
+  <v-example id="polar" title="极坐标播放分布" desc="(展示播放次数、完成率和评分)">
+    <template #head>
+      <n-space style="width: 100%; justify-content: center; margin: 10px 0;">
+        <n-select
+            v-model:value="selectedCategory"
+            :options="dimensionOptions"
+            style="width: 220px;"
+            @update:value="handleCategoryChange"
+        />
+      </n-space>
+    </template>
     <v-chart
       :option="option"
       autoresize
       :loading="loading"
-      :loading-options="loadingOptions"
-      :theme="theme"
-      :style="style"
+      :loadingOptions="loadingOptions"
     />
     <template #extra>
-      <p class="actions">
-        Theme
-        <select v-model="theme">
-          <option :value="null">Default</option>
-          <option value="dark">Dark</option>
-        </select>
-        <input id="loading-check" type="checkbox" v-model="loading" />
-        <label for="loading-check">Loading</label>
-      </p>
+
     </template>
   </v-example>
 </template>
+
+<style scoped>
+
+</style>

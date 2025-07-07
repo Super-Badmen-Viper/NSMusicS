@@ -17,48 +17,24 @@ use([CanvasRenderer, SVGRenderer]);
 </script>
 
 <template>
-  <main>
-    <logo-chart />
+  <div>
+    <!--    <logo-chart />-->
 
-    <h1>
+    <h1 style="text-align: center;">
       <a href="https://github.com/ecomfe/vue-echarts">Vue-ECharts</a>
     </h1>
-    <p class="desc">
-      Vue.js component for Apache ECharts™. (<a
-        href="https://github.com/ecomfe/vue-echarts#readme"
-        >docs</a
-      >)
-    </p>
-
-    <h2 class="sep">Examples</h2>
-    <p>
-      <small
-        >See
-        <a href="https://echarts.apache.org/examples/en/index.html"
-          >echarts.apache.org/examples</a
-        >
-        for all examples.</small
-      >
-    </p>
 
     <bar-chart />
     <pie-chart />
     <polar-chart />
     <scatter-chart />
-    <geo-chart />
-    <radar-chart />
-    <connect-chart />
-    <gl-chart />
-    <manual-chart />
-
-    <footer>
-      <a href="//github.com/Justineo">@Justineo</a>|
-      <a href="//github.com/ecomfe/vue-echarts/blob/master/LICENSE"
-        >MIT License</a
-      >|
-      <a href="//github.com/ecomfe/vue-echarts">View on GitHub</a>
-    </footer>
-  </main>
+    <!--    <geo-chart />-->
+    <!--    <radar-chart />-->
+    <!--    <connect-chart />-->
+    <!--    <gl-chart />-->
+    <!--    <manual-chart />-->
+    <br>
+  </div>
 </template>
 
 <style scoped>

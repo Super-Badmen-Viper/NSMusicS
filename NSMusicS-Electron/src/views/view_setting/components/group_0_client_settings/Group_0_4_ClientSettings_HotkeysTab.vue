@@ -15,7 +15,9 @@ const { t } = useI18n({
       {{ $t('page.setting.hotkeysTab') }} >
     </div>
       <n-space vertical>
-        <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
+        <span style="font-weight: bold;font-size: 24px;">
+          {{ $t('common.comingSoon') }}
+        </span>
       </n-space>
       <br>
     </n-space>

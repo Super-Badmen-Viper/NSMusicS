@@ -2,76 +2,79 @@
 import { use, registerTheme } from "echarts/core";
 import { BarChart } from "echarts/charts";
 import { GridComponent, DatasetComponent } from "echarts/components";
-import { shallowRef, onBeforeUnmount } from "vue";
+import { shallowRef, ref, computed } from "vue";
 import VChart from 'vue-echarts';
 import VExample from "./Example.vue";
-import getData from "../data/bar";
+import getData, { dimensions } from "../data/bar";
 import theme from "../theme.json";
+import { NSelect } from 'naive-ui';
 
 use([BarChart, DatasetComponent, GridComponent]);
 registerTheme("ovilia-green", theme);
 
-const seconds = shallowRef(0);
 const loading = shallowRef(false);
+const selectedCategory = ref("单曲");
 const loadingOptions = {
-  text: "Loading…",
+  text: "加载中…",
   color: "#4ea397",
   maskColor: "rgba(255, 255, 255, 0.4)"
 };
-const option = shallowRef(getData());
+const option = shallowRef(getData(selectedCategory.value));
 
-let timer = null;
-
-onBeforeUnmount(() => {
-  clearInterval(timer);
+const dimensionOptions = computed(() => {
+  return dimensions.map(dim => ({
+    label: dim.name,
+    value: dim.name
+  }));
 });
 
-function tick() {
-  seconds.value--;
+function handleCategoryChange(newCategory: string) {
+  loading.value = true;
 
-  if (seconds.value === 0) {
-    clearInterval(timer);
+  setTimeout(() => {
+    option.value = getData(newCategory);
     loading.value = false;
-    option.value = getData();
-  }
+  }, 300);
 }
 
 function refresh() {
-  // simulating async data from server
-  seconds.value = 3;
   loading.value = true;
 
-  timer = setInterval(tick, 1000);
+  setTimeout(() => {
+    option.value = getData(selectedCategory.value);
+    loading.value = false;
+  }, 300);
 }
 </script>
 
 <template>
   <v-example
     id="bar"
-    title="Bar chart"
-    desc="(with async data &amp; custom theme)"
+    title="音乐播放数据"
+    desc="（按维度分类展示播放次数）"
   >
+    <template #head>
+      <n-space style="width: 100%; justify-content: center; margin: 10px 0;">
+        <n-select
+            v-model:value="selectedCategory"
+            :options="dimensionOptions"
+            style="width: 220px;"
+            @update:value="handleCategoryChange"
+        />
+      </n-space>
+    </template>
     <v-chart
       :option="option"
-      theme="ovilia-green"
       autoresize
       :loading="loading"
       :loadingOptions="loadingOptions"
     />
     <template #extra>
-      <p v-if="seconds <= 0">
-        <small>Loaded.</small>
-      </p>
-      <p v-else>
-        <small>
-          Data coming in
-          <b>{{ seconds }}</b>
-          second{{ seconds > 1 ? "s" : "" }}...
-        </small>
-      </p>
-      <p class="actions">
-        <button @click="refresh" :disabled="seconds > 0">Refresh</button>
-      </p>
+
     </template>
   </v-example>
 </template>
+
+<style scoped>
+
+</style>

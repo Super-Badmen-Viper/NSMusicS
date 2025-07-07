@@ -44,7 +44,7 @@ const player_lyric_panel_fontfamily_options = ref([
           {{ $t('page.setting.windowTab') }} >
         </div>
         <n-space vertical>
-          <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
+          <span style="font-size: 24px;font-weight: 800;">Not open || 未开放</span>
         </n-space>
         <br>
       </n-space>

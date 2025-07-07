@@ -1,12 +1,14 @@
 <template>
-  <h3 :id="id">
+  <h3 :id="id" style="text-align: center;">
     <a :href="`#${id}`">
       {{ title }}
       <small v-if="desc">{{ desc }}</small>
     </a>
   </h3>
   <section>
-    <figure class="fig hero" v-if="!split">
+    <slot name="head"/>
+    <figure class="fig hero"
+            v-if="!split">
       <slot />
     </figure>
     <div class="split" v-else>
