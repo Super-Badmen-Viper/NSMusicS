@@ -304,12 +304,12 @@ const init_player_howler = async () => {
           await store_server_data_set_mediaInfo.Set_MediaInfo_To_PlayCompleteCount_of_Media_File_Server(
               store_player_audio_info.this_audio_song_id
           );
-          await store_server_data_set_albumInfo.Set_AlbumInfo_To_PlayCompleteCount_of_Album_Server(
-              store_player_audio_info.this_audio_album_id,
-          )
-          await store_server_data_set_artistInfo.Set_ArtistInfo_To_PlayCompleteCount_of_Artist_Server(
-              store_player_audio_info.this_audio_artist_id,
-          )
+          // await store_server_data_set_albumInfo.Set_AlbumInfo_To_PlayCompleteCount_of_Album_Server(
+          //     store_player_audio_info.this_audio_album_id,
+          // )
+          // await store_server_data_set_artistInfo.Set_ArtistInfo_To_PlayCompleteCount_of_Artist_Server(
+          //     store_player_audio_info.this_audio_artist_id,
+          // )
         }
         Play_Media_Switching();
       }, store_player_audio_logic.player_fade_value);
@@ -364,12 +364,12 @@ const handleMpvStopped = debounce(async (event, args) => {
   await store_server_data_set_mediaInfo.Set_MediaInfo_To_PlayCompleteCount_of_Media_File_Server(
       store_player_audio_info.this_audio_song_id
   );
-  await store_server_data_set_albumInfo.Set_AlbumInfo_To_PlayCompleteCount_of_Album_Server(
-      store_player_audio_info.this_audio_album_id,
-  )
-  await store_server_data_set_artistInfo.Set_ArtistInfo_To_PlayCompleteCount_of_Artist_Server(
-      store_player_audio_info.this_audio_artist_id,
-  )
+  // await store_server_data_set_albumInfo.Set_AlbumInfo_To_PlayCompleteCount_of_Album_Server(
+  //     store_player_audio_info.this_audio_album_id,
+  // )
+  // await store_server_data_set_artistInfo.Set_ArtistInfo_To_PlayCompleteCount_of_Artist_Server(
+  //     store_player_audio_info.this_audio_artist_id,
+  // )
 }, 300);
 
 if(isElectron) {

@@ -1,95 +1,48 @@
 <script setup lang="ts">
 import { use, registerTheme } from "echarts/core";
-import { BarChart } from "echarts/charts";
+import { BarChart, ScatterChart } from "echarts/charts";
 import { GridComponent, DatasetComponent } from "echarts/components";
-import { shallowRef, ref, computed } from "vue";
+import {shallowRef, ref, computed, watch, onBeforeUnmount, onMounted} from "vue";
 import VChart from 'vue-echarts';
 import VExample from "./Example.vue";
-import theme from "../theme.json";
-import { NSelect } from 'naive-ui';
-import {useI18n} from "vue-i18n";
+import { NSelect, NSpace } from 'naive-ui';
+import { useI18n } from "vue-i18n";
 
-use([BarChart, DatasetComponent, GridComponent]);
-registerTheme("ovilia-green", theme);
-
-// 随机数据生成函数
-function random() {
-  return Math.round(300 + Math.random() * 700) / 10;
-}
-const dimensions = [
-  {
-    type: "media_file",
-    name: "乐曲",
-    items: [
-      { name: "七里香", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-07" },
-      { name: "以父之名", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-06" },
-      { name: "晴天", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-05" },
-      { name: "夜曲", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-04" },
-      { name: "青花瓷", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-03" },
-      { name: "稻香", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-02" },
-      { name: "双截棍", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-01" },
-      { name: "简单爱", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-30" },
-      { name: "听妈妈的话", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-29" },
-      { name: "东风破", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-28" }
-    ].sort((a, b) => a.play_count - b.play_count).slice(0, 10)
-  },
-  {
-    type: "album",
-    name: "专辑",
-    items: [
-      { name: "叶惠美", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-04" },
-      { name: "范特西", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-03" },
-      { name: "十一月的萧邦", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-02" },
-      { name: "七里香", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-01" },
-      { name: "八度空间", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-30" },
-      { name: "我很忙", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-29" },
-      { name: "魔杰座", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-28" },
-      { name: "跨时代", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-27" },
-      { name: "十二新作", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-26" },
-      { name: "哎呦，不错哦", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-25" }
-    ].sort((a, b) => a.play_count - b.play_count).slice(0, 10)
-  },
-  {
-    type: "artist",
-    name: "艺术家",
-    items: [
-      { name: "周杰伦", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-01" },
-      { name: "林俊杰", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-30" },
-      { name: "陈奕迅", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-29" },
-      { name: "邓紫棋", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-28" },
-      { name: "薛之谦", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-27" },
-      { name: "李荣浩", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-26" },
-      { name: "王力宏", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-25" },
-      { name: "张杰", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-24" },
-      { name: "华晨宇", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-23" },
-      { name: "毛不易", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-22" }
-    ].sort((a, b) => a.play_count - b.play_count).slice(0, 10)
-  },
-  {
-    type: "media_cue",
-    name: "光盘",
-    items: [
-      { name: "经典CD-001", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-28" },
-      { name: "怀旧CD-002", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-27" },
-      { name: "摇滚CD-003", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-26" },
-      { name: "流行CD-004", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-25" },
-      { name: "电子CD-005", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-24" },
-      { name: "爵士CD-006", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-23" },
-      { name: "古典CD-007", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-22" },
-      { name: "民谣CD-008", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-21" },
-      { name: "蓝调CD-009", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-20" },
-      { name: "乡村CD-010", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-19" }
-    ].sort((a, b) => a.play_count - b.play_count).slice(0, 10)
-  }
-];
+use([BarChart, ScatterChart, DatasetComponent, GridComponent]);
 
 import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
+import { store_view_charts_page_info } from "@/views/view_app/music_page/page_charts/store/store_view_charts_page_info";
 
-const selectedCategory = ref("乐曲");
+const selectedCategory = ref("media_file");
 
-function getData(selectedCategory = "乐曲", theme: 'lightTheme' | 'darkTheme' = 'lightTheme') {
+// 颜色插值辅助函数
+function interpolateColor(color1, color2, factor) {
+  // 将十六进制颜色转换为RGB
+  const hexToRgb = hex => {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return [r, g, b];
+  };
+
+  // 将RGB转换为十六进制
+  const rgbToHex = (r, g, b) =>
+      `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+
+  const [r1, g1, b1] = hexToRgb(color1);
+  const [r2, g2, b2] = hexToRgb(color2);
+
+  // 计算中间值
+  const r = Math.round(r1 + (r2 - r1) * factor);
+  const g = Math.round(g1 + (g2 - g1) * factor);
+  const b = Math.round(b1 + (b2 - b1) * factor);
+
+  return rgbToHex(r, g, b);
+}
+
+function getData(selectedCategory = "media_file", theme: 'lightTheme' | 'darkTheme' = 'lightTheme') {
   // 获取选中的维度数据
-  const category = dimensions.find(d => d.name === selectedCategory);
+  const category = store_view_charts_page_info.charts_data_temporary.find(d => d.type === selectedCategory);
   if (!category) return {};
 
   const items = category.items;
@@ -119,6 +72,7 @@ function getData(selectedCategory = "乐曲", theme: 'lightTheme' | 'darkTheme' 
       play_date: item.play_date,
       rating: item.rating,
       starred: item.starred,
+      play_count: item.play_count,
       play_complete_count: item.play_complete_count,
       completion_rate: Math.round((item.play_complete_count / item.play_count) * 100)
     };
@@ -131,7 +85,7 @@ function getData(selectedCategory = "乐曲", theme: 'lightTheme' | 'darkTheme' 
       color: textColor // 动态文本颜色
     },
     title: {
-      text: `${selectedCategory}播放排名`,
+      text: `${category.name}播放排名`,
       top: "5%",
       left: "center",
       textStyle: {
@@ -228,13 +182,24 @@ function getData(selectedCategory = "乐曲", theme: 'lightTheme' | 'darkTheme' 
         data: playCountData,
         itemStyle: {
           color: function(params) {
-            // 根据完播率生成渐变色
-            const completionRate = categoryMap[yAxisData[params.dataIndex]].completion_rate;
-            return completionRate > 80 ?
-                'hsl(160, 100%, 37%)' :
-                completionRate > 60 ?
-                    'hsl(40, 100%, 50%)' :
-                    'hsl(0, 100%, 45%)';
+            const play_count = categoryMap[yAxisData[params.dataIndex]].play_count;
+            const minPlayCount = Math.min(...playCountData);
+            const maxPlayCount = Math.max(...playCountData);
+            const ratio = (maxPlayCount === minPlayCount) ? 0.5 :
+                (play_count - minPlayCount) / (maxPlayCount - minPlayCount);
+
+            // 新三色渐变：青绿(#2ecc71) → 浓青(#3498db) → 橙红(#ff7c5b)
+            if (ratio >= 0.66) {
+              // 高值区间：浓青→橙红渐变（ratio: 0.66~1.0）
+              const t = (ratio - 0.66) / 0.34;
+              return interpolateColor("#3498db", "#ff7c5b", t);
+            } else if (ratio >= 0.33) {
+              // 中值区间：青绿→浓青渐变（ratio: 0.33~0.66）
+              const t = (ratio - 0.33) / 0.33;
+              return interpolateColor("#2ecc71", "#3498db", t);
+            } else {
+              return "#2ecc71"; // 低值区间：青绿色
+            }
           },
           borderRadius: [0, 16, 16, 0]
         },
@@ -272,19 +237,6 @@ function getData(selectedCategory = "乐曲", theme: 'lightTheme' | 'darkTheme' 
             rating: rating
           };
         }),
-        itemStyle: {
-          color: function(params) {
-            // 根据评分生成颜色
-            const rating = params.data.rating;
-            return rating > 4 ?
-                'hsl(210, 100%, 56%)' :
-                rating > 3 ?
-                    'hsl(160, 100%, 37%)' :
-                    rating > 2 ?
-                        'hsl(40, 100%, 50%)' :
-                        'hsl(0, 100%, 45%)';
-          }
-        },
         label: {
           show: false
         }
@@ -304,9 +256,9 @@ const loadingOptions = {
 const option = shallowRef(getData(selectedCategory.value, store_app_configs_info.theme_name));
 
 const dimensionOptions = computed(() => {
-  return dimensions.map(dim => ({
+  return store_view_charts_page_info.charts_data_temporary.map(dim => ({
     label: dim.name,
-    value: dim.name
+    value: dim.type
   }));
 });
 
@@ -320,6 +272,27 @@ let unwatch_theme_name = watch(
     }
 );
 
+// 新增：图表数据变化监听器
+let unwatch_charts_data = watch(
+    () => store_view_charts_page_info.charts_data_temporary,
+    (newData) => {
+      // 检查当前选中的分类是否在新数据中存在
+      const currentCategory = selectedCategory.value;
+      const categoryExists = newData.some(d => d.type === currentCategory);
+
+      if (!categoryExists && newData.length > 0) {
+        // 如果当前选中的分类不存在，则选择第一个分类
+        selectedCategory.value = newData[0].type;
+      }
+
+      // 更新图表
+      loading.value = true;
+      option.value = getData(selectedCategory.value, store_app_configs_info.theme_name);
+      loading.value = false;
+    },
+    { deep: true } // 深度监听，确保数组内部变化也能触发更新
+);
+
 // 分类切换处理
 function handleCategoryChange(newCategory: string) {
   loading.value = true;
@@ -330,15 +303,14 @@ function handleCategoryChange(newCategory: string) {
 // 刷新数据
 function refresh() {
   loading.value = true;
-  setTimeout(() => {
-    option.value = getData(selectedCategory.value, store_app_configs_info.theme_name);
-    loading.value = false;
-  }, 300);
+  option.value = getData(selectedCategory.value, store_app_configs_info.theme_name);
+  loading.value = false;
 }
 
 // 清理监听器
 onBeforeUnmount(() => {
   unwatch_theme_name();
+  unwatch_charts_data(); // 新增：清理图表数据监听器
 });
 
 const { t } = useI18n({
@@ -357,6 +329,7 @@ const title = computed(() => t('TabMusic') + t('Play') + t('Sort'));
             style="width: 160px;"
             @update:value="handleCategoryChange"
         />
+        <n-button @click="refresh" type="primary">刷新数据</n-button>
       </n-space>
     </template>
     <v-chart

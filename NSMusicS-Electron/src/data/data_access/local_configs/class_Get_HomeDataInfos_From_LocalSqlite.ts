@@ -5,7 +5,7 @@ import error_album from '@/assets/img/error_album.jpg'
 import { isElectron } from '@/utils/electron/isElectron';
 
 export class Get_HomeDataInfos_From_LocalSqlite {
-    public Get_Annotation_Maximum_Playback() {
+    public Get_Annotation_Album_Maximum_Playback() {
         if(isElectron) {
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             db.pragma('journal_mode = WAL');
@@ -86,7 +86,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         }
         return undefined
     }
-    public Get_AlbumFiles_Random_Search() {
+    public Get_Annotation_Album_Random_Search() {
         if(isElectron) {
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             db.pragma('journal_mode = WAL');
@@ -157,7 +157,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         }
         return undefined
     }
-    public Get_Annotation_Recently_Added() {
+    public Get_Annotation_Album_Recently_Added() {
         if(isElectron) {
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             db.pragma('journal_mode = WAL');
@@ -228,7 +228,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         }
         return undefined
     }
-    public Get_Annotation_Recently_Played() {
+    public Get_Annotation_Album_Recently_Played() {
         if(isElectron) {
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             db.pragma('journal_mode = WAL');

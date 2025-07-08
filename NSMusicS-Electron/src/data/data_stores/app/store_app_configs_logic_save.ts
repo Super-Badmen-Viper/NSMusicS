@@ -328,6 +328,7 @@ export const store_app_configs_logic_save = reactive({
                 'rating',
                 'play_count',
                 'play_date',
+                'play_complete_count',
                 'duration_txt',
                 'absoluteIndex',
                 'selected',

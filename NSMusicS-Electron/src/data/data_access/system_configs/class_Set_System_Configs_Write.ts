@@ -115,6 +115,7 @@ export class Class_Set_System_Configs_Write {
             'rating',
             'play_count',
             'play_date',
+            'play_complete_count',
             'duration_txt',
             'absoluteIndex',
             'selected',

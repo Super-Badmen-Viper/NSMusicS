@@ -77,6 +77,9 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                 store_view_home_page_info.home_Files_temporary_maximum_playback.push(
                     {
                         favorite: album.Starred,
+                        play_count: album.PlayCount,
+                        play_date: album.PlayDate,
+                        play_complete_count: album.PlayCompleteCount,
                         rating: album.Rating,
                         id: album.ID,
                         name: album.Name,
@@ -135,6 +138,9 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                 store_view_home_page_info.home_Files_temporary_random_search.push(
                     {
                         favorite: album.Starred,
+                        play_count: album.PlayCount,
+                        play_date: album.PlayDate,
+                        play_complete_count: album.PlayCompleteCount,
                         rating: album.Rating,
                         id: album.ID,
                         name: album.Name,
@@ -193,6 +199,9 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                 store_view_home_page_info.home_Files_temporary_recently_added.push(
                     {
                         favorite: album.Starred,
+                        play_count: album.PlayCount,
+                        play_date: album.PlayDate,
+                        play_complete_count: album.PlayCompleteCount,
                         rating: album.Rating,
                         id: album.ID,
                         name: album.Name,
@@ -251,6 +260,9 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                 store_view_home_page_info.home_Files_temporary_recently_played.push(
                     {
                         favorite: album.Starred,
+                        play_count: album.PlayCount,
+                        play_date: album.PlayDate,
+                        play_complete_count: album.PlayCompleteCount,
                         rating: album.Rating,
                         id: album.ID,
                         name: album.Name,
@@ -360,6 +372,9 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                 const newsong = {
                     absoluteIndex: index + 1 + last_index,
                     favorite: song.Starred,
+                    play_count: song.PlayCount,
+                    play_date: song.PlayDate,
+                    play_complete_count: song.PlayCompleteCount,
                     rating: song.Rating,
                     duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.Duration),
                     id: song.ID,
@@ -495,6 +510,9 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                 const newsong = {
                     absoluteIndex: index + 1 + last_index,
                     favorite: song.Starred,
+                    play_count: song.PlayCount,
+                    play_date: song.PlayDate,
+                    play_complete_count: song.PlayCompleteCount,
                     rating: song.Rating,
                     duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.CueDuration),
                     id: song.ID,
@@ -603,6 +621,9 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                     {
                         absoluteIndex: index + 1 + last_index,
                         favorite: album.Starred,
+                        play_count: album.PlayCount,
+                        play_date: album.PlayDate,
+                        play_complete_count: album.PlayCompleteCount,
                         rating: album.Rating,
                         id: album.ID,
                         name: album.Name,
@@ -682,6 +703,9 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                     {
                         absoluteIndex: index + 1 + last_index,
                         favorite: artist.Starred,
+                        play_count: artist.PlayCount,
+                        play_date: artist.PlayDate,
+                        play_complete_count: artist.PlayCompleteCount,
                         rating: artist.Rating,
                         id: artist.ID,
                         name: artist.Name,
@@ -728,6 +752,9 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
                 const new_song = {
                     absoluteIndex: index + 1 + last_index,
                     favorite: song.Starred,
+                    play_count: song.PlayCount,
+                    play_date: song.PlayDate,
+                    play_complete_count: song.PlayCompleteCount,
                     rating: song.Rating,
                     duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.Duration),
                     id: song.ID,
