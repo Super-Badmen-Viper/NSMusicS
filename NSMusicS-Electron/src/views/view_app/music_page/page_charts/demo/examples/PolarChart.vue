@@ -56,7 +56,7 @@ function refresh() {
 </script>
 
 <template>
-  <v-example id="polar" title="极坐标播放分布" desc="极坐标散点图：展示总播放次数、完播率和评分">
+  <v-example id="polar" title="极坐标播放分布" desc="极坐标散点图：展示总播放次数、完播率">
     <template #head>
       <n-space style="width: 100%; justify-content: center; margin: 10px 0;">
         <n-select

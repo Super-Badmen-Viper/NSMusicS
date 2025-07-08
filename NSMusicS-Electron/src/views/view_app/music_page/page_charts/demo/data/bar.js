@@ -144,8 +144,8 @@ export default function getMusicData(selectedCategory = "乐曲") {
     grid: {
       left: '5%',
       right: '15%',
-      bottom: '15%',
-      top: '10%',
+      bottom: '10%',
+      top: '15%',
       containLabel: true
     },
     xAxis: {
@@ -185,7 +185,8 @@ export default function getMusicData(selectedCategory = "乐曲") {
                 completionRate > 60 ?
                     'hsl(40, 100%, 50%)' :
                     'hsl(0, 100%, 45%)';
-          }
+          },
+          borderRadius: [0, 16, 16, 0]
         },
         label: {
           show: true,

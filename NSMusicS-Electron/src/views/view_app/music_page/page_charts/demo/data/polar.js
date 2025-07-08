@@ -26,7 +26,7 @@ export const dimensions = [
       { name: "叶惠美", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-04" },
       { name: "范特西", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-03" },
       { name: "十一月的萧邦", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-02" },
-      { name: "七里香", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "极25-07-01" },
+      { name: "七里香", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-01" },
       { name: "八度空间", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-30" },
       { name: "我很忙", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-29" },
       { name: "魔杰座", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-28" },
@@ -82,27 +82,30 @@ export default function getData(selectedCategory = "乐曲") {
     group3: { name: "低完播率", color: "#FFCE56" }  // 黄色
   };
 
-  const data = [];
   const groupData = {
     group1: [],
     group2: [],
     group3: []
   };
 
-  const maxRadius = Math.max(...items.map(item => item.play_count)) * 1.2;
-
   // 准备散点数据
   items.forEach((item, index) => {
-    const angle = (index * 360) / items.length; // 均匀分布的角度
-    const completionRate = Math.round((item.play_complete_count / item.play_count) * 100);
+    // 计算完播率百分比
+    const completionRate = Math.min(
+        100,
+        Math.round((item.play_complete_count / item.play_count) * 100)
+    );
 
     // 根据完播率分组
-    let groupKey = "group3"; // 低完播率 (<50%)
-    if (completionRate >= 70) groupKey = "group1"; // 高完播率
-    else if (completionRate >= 50) groupKey = "group2"; // 中完播率
+    let groupKey = "group3"; // 低完播率: <50%
+    if (completionRate >= 80) groupKey = "group1"; // 高完播率: ≥80%
+    else if (completionRate >= 50) groupKey = "group2"; // 中完播率: 50-79%
+
+    // 关键修复：使用索引均匀分布角度
+    const angle = (index * 360) / items.length;
 
     const scatterData = {
-      value: [angle, Math.random() * maxRadius], // 随机半径位置
+      value: [completionRate, angle], // [角度, 半径]
       name: item.name,
       play_count: item.play_count,
       rating: item.rating,
@@ -110,7 +113,7 @@ export default function getData(selectedCategory = "乐曲") {
       play_complete_count: item.play_complete_count,
       play_date: item.play_date,
       completion_rate: completionRate,
-      symbolSize: 10 + Math.sqrt(item.play_count) * 2, // 点大小与播放次数相关
+      symbolSize: Math.sqrt(item.play_count), // 点大小与播放次数相关
       symbol: "circle"
     };
 
@@ -121,13 +124,13 @@ export default function getData(selectedCategory = "乐曲") {
   return {
     textStyle: {
       fontWeight: 600,
-      fontSize: 14,
+      fontSize: 8,
       color: "#333"
     },
     title: {
       text: `${selectedCategory}播放分布`,
-      top: "5%",
-      left: "center"
+      left: "5%",
+      top: "5%"
     },
     tooltip: {
       trigger: "item",
@@ -138,15 +141,22 @@ export default function getData(selectedCategory = "乐曲") {
         color: '#333',
         fontSize: 14
       },
-      extraCssText: 'border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);',
+      extraCssText: 'border-radius: 8px; box-shadow: 0 4极px 12px rgba(0,0,0,0.15);',
       formatter: function(params) {
         const data = params.data;
+        if (data.name.includes("无数据")) {
+          return `${data.name}`;
+        }
+
         const starStatus = data.starred
             ? '<span style="color:#67C23A;">✓ 已收藏</span>'
             : '<span style="color:#F56C6C;">✗ 未收藏</span>';
 
         // 生成星级评分（1-5星）
-        const stars = '★'.repeat(Math.floor(data.rating)) + '☆'.repeat(5 - Math.floor(data.rating));
+        const ratingValue = parseFloat(data.rating);
+        const fullStars = '★'.repeat(Math.floor(ratingValue));
+        const halfStar = ratingValue % 1 >= 0.5 ? '½' : '';
+        const emptyStars = '☆'.repeat(5 - Math.ceil(ratingValue));
 
         return `
           <div style="font-weight:bold;font-size:16px;color:#E53935;margin-bottom:8px;">${data.name}</div>
@@ -154,7 +164,7 @@ export default function getData(selectedCategory = "乐曲") {
             <div>类型: ${selectedCategory}</div>
             <div>播放次数: <b>${data.play_count}</b> 次</div>
             <div>完整播放: ${data.play_complete_count} 次 (完播率: ${data.completion_rate}%)</div>
-            <div>评分: ${data.rating} ${stars}</div>
+            <div>评分: ${data.rating} ${fullStars}${halfStar}${emptyStars}</div>
             <div>收藏状态: ${starStatus}</div>
             <div>最近播放: ${data.play_date}</div>
           </div>
@@ -173,47 +183,37 @@ export default function getData(selectedCategory = "乐曲") {
       itemGap: 10
     },
     polar: {
+      id: 'mainPolar',
       center: ["50%", "50%"],
-      radius: "65%",
     },
     angleAxis: {
+      polarId: 'mainPolar',
       clockwise: true,
-      startAngle: 90, // 从12点方向开始
-      min: 0,
-      max: 360,
+      startAngle: 0,
       axisLine: {
         show: true,
-        lineStyle: {
-          color: "#81C784" // 绿色边框
-        }
+        lineStyle: { color: "#81C784" }
       },
       axisLabel: {
         show: true,
         fontSize: 10
       },
       splitLine: {
-        lineStyle: {
-          color: "rgba(129, 199, 132, 0.5)" // 浅绿色辅助线
-        }
+        lineStyle: { color: "rgba(129, 199, 132, 0.5)" }
       }
     },
     radiusAxis: {
-      min: 0,
-      max: maxRadius,
+      polarId: 'mainPolar',
       axisLine: {
         show: true,
-        lineStyle: {
-          color: "#81C784" // 绿色边框
-        }
+        lineStyle: { color: "#81C784" }
       },
       axisLabel: {
         formatter: "{value}",
         fontSize: 10
       },
       splitLine: {
-        lineStyle: {
-          color: "rgba(129, 199, 132, 0.5)" // 浅绿色辅助线
-        }
+        lineStyle: { color: "rgba(129, 199, 132, 0.5)" }
       }
     },
     series: [
@@ -222,8 +222,9 @@ export default function getData(selectedCategory = "乐曲") {
         name: groups.group1.name,
         type: "scatter",
         coordinateSystem: "polar",
+        polarId: 'mainPolar',
         symbolSize: function(val) {
-          return val[2]?.symbolSize || 20;
+          return val.symbolSize || 20;
         },
         data: groupData.group1,
         itemStyle: {
@@ -236,6 +237,12 @@ export default function getData(selectedCategory = "乐曲") {
             borderColor: "#fff",
             borderWidth: 2
           }
+        },
+        label: {
+          show: true,
+          formatter: '{b}',
+          position: 'right',
+          fontSize: 12
         }
       },
       // 类型2 - 中完播率
@@ -243,8 +250,9 @@ export default function getData(selectedCategory = "乐曲") {
         name: groups.group2.name,
         type: "scatter",
         coordinateSystem: "polar",
+        polarId: 'mainPolar',
         symbolSize: function(val) {
-          return val[2]?.symbolSize || 20;
+          return val.symbolSize || 20;
         },
         data: groupData.group2,
         itemStyle: {
@@ -257,6 +265,12 @@ export default function getData(selectedCategory = "乐曲") {
             borderColor: "#fff",
             borderWidth: 2
           }
+        },
+        label: {
+          show: true,
+          formatter: '{b}',
+          position: 'right',
+          fontSize: 12
         }
       },
       // 类型3 - 低完播率
@@ -264,8 +278,9 @@ export default function getData(selectedCategory = "乐曲") {
         name: groups.group3.name,
         type: "scatter",
         coordinateSystem: "polar",
+        polarId: 'mainPolar',
         symbolSize: function(val) {
-          return val[2]?.symbolSize || 20;
+          return val.symbolSize || 20;
         },
         data: groupData.group3,
         itemStyle: {
@@ -278,13 +293,19 @@ export default function getData(selectedCategory = "乐曲") {
             borderColor: "#fff",
             borderWidth: 2
           }
+        },
+        label: {
+          show: true,
+          formatter: '{b}',
+          position: 'right',
+          fontSize: 12
         }
       }
     ],
     animationDuration: 1000,
     grid: {
-      top: "15%",
-      bottom: "10%",
+      top: "10%",
+      bottom: "0%",
       containLabel: true
     }
   };

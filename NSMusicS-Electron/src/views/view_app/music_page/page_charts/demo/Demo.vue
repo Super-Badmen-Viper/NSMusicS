@@ -23,6 +23,13 @@ use([CanvasRenderer, SVGRenderer]);
     <div style="text-align: center;font-weight: bold;font-size: 32px;margin-bottom: 10px;">
       Vue-ECharts
     </div>
+    <div style="text-align: center;font-weight: bold;font-size: 16px;margin-bottom: 16px;">
+      此页面用于可视化浏览你的播放数据<br>
+      不要觉得这玩意没用，它是后续：猜你喜欢(推荐系统)与年(季、月、周)度听歌报告 的重要组成部分<br>
+      NSMusicS与NineSong的每一个组件，都是通用应用场景组件<br>
+      这些组件成熟后，就能够轻松集成互联其它应用场景(ToC与ToB皆可)<br>
+      沉淀！！！九歌软件生态！！！
+    </div>
 
     <bar-chart />
     <pie-chart />

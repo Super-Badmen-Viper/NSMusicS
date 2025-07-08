@@ -92,13 +92,9 @@ export default function getData(selectedCategory = "乐曲") {
     };
   });
 
-  // 计算最大播放次数和完播率，用于坐标轴范围
-  const maxPlayCount = Math.max(...items.map(item => item.play_count)) * 1.1;
-  const maxCompletionRate = 110; // 完播率最大110% (超过100%的情况)
-
   return {
     grid: {
-      top: "15%",
+      top: "20%",
       right: "12%",
       left: "8%",
       bottom: "5%",
@@ -156,8 +152,6 @@ export default function getData(selectedCategory = "乐曲") {
       nameTextStyle: {
         padding: [5, 0, 0, 0]
       },
-      min: 0,
-      max: maxPlayCount,
       splitLine: {
         lineStyle: {
           type: "dashed",
@@ -170,8 +164,6 @@ export default function getData(selectedCategory = "乐曲") {
       name: "完播率 (%)",
       nameLocation: "end",
       nameGap: 25,
-      min: 0,
-      max: maxCompletionRate,
       axisLabel: {
         formatter: "{value}%"
       },
