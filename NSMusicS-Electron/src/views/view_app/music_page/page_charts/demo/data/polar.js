@@ -134,14 +134,12 @@ export default function getData(selectedCategory = "乐曲") {
     },
     tooltip: {
       trigger: "item",
-      backgroundColor: 'rgba(255,255,255,0.9)',
-      borderWidth: 1,
-      borderColor: '#E0E0E0',
+      backgroundColor: 'rgba(50,50,50,0.9)',
       textStyle: {
-        color: '#333',
+        color: '#fff',
         fontSize: 14
       },
-      extraCssText: 'border-radius: 8px; box-shadow: 0 4极px 12px rgba(0,0,0,0.15);',
+      extraCssText: 'border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);',
       formatter: function(params) {
         const data = params.data;
         if (data.name.includes("无数据")) {
@@ -196,11 +194,14 @@ export default function getData(selectedCategory = "乐曲") {
       },
       axisLabel: {
         show: true,
-        fontSize: 10
+        textStyle: {
+          color: '#fff',
+          fontSize: 12
+        },
       },
       splitLine: {
         lineStyle: { color: "rgba(129, 199, 132, 0.5)" }
-      }
+      },
     },
     radiusAxis: {
       polarId: 'mainPolar',
@@ -210,7 +211,10 @@ export default function getData(selectedCategory = "乐曲") {
       },
       axisLabel: {
         formatter: "{value}",
-        fontSize: 10
+        textStyle: {
+          color: '#fff',
+          fontSize: 12
+        },
       },
       splitLine: {
         lineStyle: { color: "rgba(129, 199, 132, 0.5)" }

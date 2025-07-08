@@ -12,6 +12,7 @@ import GeoChart from "@/views/view_app/music_page/page_charts/demo/examples/GeoC
 import ConnectChart from "@/views/view_app/music_page/page_charts/demo/examples/ConnectChart.vue";
 // import GlChart from "@/views/view_app/music_page/page_charts/demo/examples/GlChart.vue";
 import ManualChart from "@/views/view_app/music_page/page_charts/demo/examples/ManualChart.vue";
+import {darkTheme, lightTheme, NConfigProvider} from "naive-ui";
 
 use([CanvasRenderer, SVGRenderer]);
 </script>

@@ -107,13 +107,17 @@ export default function getData(selectedCategory = "乐曲") {
     title: {
       text: `${selectedCategory}播放数据分析`,
       top: "5%",
-      left: "center"
+      left: "center",
+      textStyle: {
+        color: '#ffffff',
+        fontSize: 18
+      },
     },
     tooltip: {
       trigger: "item",
       backgroundColor: 'rgba(50,50,50,0.9)',
       textStyle: {
-        color: '#fff',
+        color: '#ffffff',
         fontSize: 14
       },
       extraCssText: 'border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);',
@@ -140,22 +144,33 @@ export default function getData(selectedCategory = "乐曲") {
       }
     },
     legend: {
-      top: "6%",
-      right: "5%",
-      data: [selectedCategory]
+      top: "26px",
+      right: "20px",
+      data: [selectedCategory],
+      textStyle: {
+        color: '#ffffff',
+        fontSize: 14
+      },
     },
     xAxis: {
       type: "value",
       name: "播放次数",
       nameLocation: "end",
       nameGap: 10,
+      axisLabel: {
+        formatter: "{value}",
+        textStyle: {
+          color: '#ffffff',
+          fontSize: 12
+        },
+      },
       nameTextStyle: {
-        padding: [5, 0, 0, 0]
+        color: '#ffffff',
       },
       splitLine: {
         lineStyle: {
           type: "dashed",
-          color: "rgba(200, 200, 200, 0.3)"
+          color: '#ffffff80'
         }
       }
     },
@@ -165,12 +180,19 @@ export default function getData(selectedCategory = "乐曲") {
       nameLocation: "end",
       nameGap: 25,
       axisLabel: {
-        formatter: "{value}%"
+        formatter: "{value}%",
+        textStyle: {
+          color: '#ffffff',
+          fontSize: 12
+        },
+      },
+      nameTextStyle: {
+        color: '#ffffff',
       },
       splitLine: {
         lineStyle: {
           type: "dashed",
-          color: "rgba(200, 200, 200, 0.3)"
+          color: '#ffffff80'
         }
       }
     },
@@ -189,7 +211,7 @@ export default function getData(selectedCategory = "乐曲") {
         color: ["#5470c6", "#91cc75", "#fac858", "#ee6666"]
       },
       textStyle: {
-        color: '#333'
+        color: '#ffffff',
       }
     },
     series: [
@@ -206,7 +228,7 @@ export default function getData(selectedCategory = "乐曲") {
             // 根据收藏状态设置颜色
             return params.data.starred ? "#ee6666" : "#5470c6";
           },
-          borderColor: "#fff",
+          borderColor: "#ffffff",
           borderWidth: 1,
           shadowBlur: 8,
           shadowColor: "rgba(0, 0, 0, 0.3)",
@@ -220,7 +242,7 @@ export default function getData(selectedCategory = "乐曲") {
             fontSize: 12,
             backgroundColor: "rgba(255,255,255,0.8)",
             padding: [3, 5],
-            borderRadius: 4
+            borderRadius: 4,
           },
           itemStyle: {
             shadowBlur: 12,

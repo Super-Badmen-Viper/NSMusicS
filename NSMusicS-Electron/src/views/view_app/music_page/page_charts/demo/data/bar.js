@@ -109,7 +109,7 @@ export default function getMusicData(selectedCategory = "乐曲") {
     title: {
       text: `${selectedCategory}播放排名`,
       top: "5%",
-      left: "center"
+      left: "center",
     },
     tooltip: {
       trigger: "item",
@@ -166,10 +166,6 @@ export default function getMusicData(selectedCategory = "乐曲") {
           return value;
         }
       }
-    },
-    legend: {
-      data: ['播放次数', '评分'],
-      bottom: 5
     },
     series: [
       {
