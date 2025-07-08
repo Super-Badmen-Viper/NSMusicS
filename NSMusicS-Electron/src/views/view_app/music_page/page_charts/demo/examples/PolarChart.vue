@@ -54,13 +54,15 @@ function getData(selectedCategory = "media_file", theme: 'lightTheme' | 'darkThe
     group3: []
   };
 
+  const maxPlayCount = Math.max(...items.map(item => item.play_count));
+  const angleUpperBound = maxPlayCount + 30;
+
   // 准备散点数据
   items.forEach((item, index) => {
     // 计算完播率百分比
-    const completionRate = Math.min(
-        100,
-        Math.round((item.play_complete_count / item.play_count) * 100)
-    );
+    const completionRate = item.play_count > 0
+        ? Math.min(100, Math.round((item.play_complete_count / item.play_count) * 100))
+        : 0;
 
     // 根据完播率分组
     let groupKey = "group3"; // 低完播率: <50%
@@ -68,10 +70,10 @@ function getData(selectedCategory = "media_file", theme: 'lightTheme' | 'darkThe
     else if (completionRate >= 50) groupKey = "group2"; // 中完播率: 50-79%
 
     // 优化角度分布：按数据点均匀分布在360度圆周上
-    const angle = (index * 360) / items.length;
+    const angle = Math.min(360, (item.play_count / angleUpperBound) * 360)
 
     const scatterData = {
-      value: [completionRate, angle], // [角度, 半径] ：[角度, 完播率][2,3](@ref)
+      value: [completionRate, angle],
       name: item.name,
       play_count: item.play_count,
       rating: item.rating,
@@ -160,45 +162,35 @@ function getData(selectedCategory = "media_file", theme: 'lightTheme' | 'darkThe
       polarId: 'mainPolar',
       clockwise: true,
       startAngle: 0,
+      min: 0,
+      max: 360, // 角度范围0-360度[5](@ref)
       axisLine: {
         show: true,
-        lineStyle: {
-          color: axisLineColor // 动态轴线颜色
-        }
+        lineStyle: { color: axisLineColor }
       },
       axisLabel: {
         show: true,
-        textStyle: {
-          color: textColor, // 动态标签颜色
-          fontSize: 12
+        formatter: function(val) { // 显示实际播放次数
+          return Math.round((val / 360) * angleUpperBound);
         },
+        textStyle: { color: textColor, fontSize: 12 }
       },
-      splitLine: {
-        lineStyle: {
-          color: splitLineColor // 动态分割线颜色
-        }
-      },
+      splitLine: { lineStyle: { color: splitLineColor } }
     },
     radiusAxis: {
       polarId: 'mainPolar',
+      min: 0,
+      max: 100, // 完播率范围0-100%[6](@ref)
+      splitNumber: 5, // 将半径轴分为5段
       axisLine: {
         show: true,
-        lineStyle: {
-          color: axisLineColor // 动态轴线颜色
-        }
+        lineStyle: { color: axisLineColor }
       },
       axisLabel: {
-        formatter: "{value}%", // 添加百分比符号[3](@ref)
-        textStyle: {
-          color: textColor, // 动态标签颜色
-          fontSize: 12
-        },
+        formatter: "{value}%", // 正确显示百分比
+        textStyle: { color: textColor, fontSize: 12 }
       },
-      splitLine: {
-        lineStyle: {
-          color: splitLineColor // 动态分割线颜色
-        }
-      }
+      splitLine: { lineStyle: { color: splitLineColor } }
     },
     series: [
       // 类型1 - 高完播率
