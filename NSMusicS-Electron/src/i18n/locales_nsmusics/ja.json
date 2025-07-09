@@ -75,7 +75,9 @@
             "disk": "ディスク",
             "warning_web_play_alac": "ユーザーがウェブ再生コンポーネントを使用して、alacエンコードされたm4aファイルを再生していることを検知しました。NineSongサーバーのffmpegコンポーネントを有効にして、alacをaacの一時音楽リソースに変換中です。",
             "warning_mpv_play_alac": "サーバーの応答をお待ちください。数秒待って変換が完了し再生までお待ちください。またはmpv再生コンポーネントをご利用いただければ、alacをaacに変換する手間が省けます。",
-            "virtual_orbit_division": "バーチャルトラック分割"
+            "virtual_orbit_division": "バーチャルトラック分割",
+            "multi_level_sort": "マルチレベルソート",
+            "count": "カウント"
         },
         "view_player": {
             "view_seting": {

@@ -23,6 +23,23 @@ export class MediaCues_ApiService_of_NineSong extends NineSong_Api_Services_Web 
             }
         );
     }
+    public async getMediaCuesSort(
+        start: string, end: string,
+        multi_sorts: string,
+        starred: string, search: string,
+        year: string,
+        artist_id: string,
+    ): Promise<any> {
+        const params: Record<string, string | string[]> = {
+            start,
+            end,
+            starred,
+            search,
+            year,
+            artist_id
+        };
+        return this.sendRequest('GET', 'cues/sort', params, undefined, multi_sorts);
+    }
     public async getMediaCuesCounts(
         starred: string, search: string,
         year: string,

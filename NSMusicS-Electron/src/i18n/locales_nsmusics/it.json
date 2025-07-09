@@ -75,7 +75,9 @@
             "disk": "Disco",
             "warning_web_play_alac": "Rilevato che l'utente utilizza il componente di riproduzione web per riprodurre file m4a codificati in alac. Attivazione del componente ffmpeg del server NineSong per trasformare l'alac in aac come risorsa musicale temporanea.",
             "warning_mpv_play_alac": "Per favore, attendi la risposta del server. Occorre attendere alcuni secondi affinché la codifica sia completata e la riproduzione inizi, o puoi utilizzare il componente di riproduzione mpv per saltare il passaggio di codifica dell'alac in aac.",
-            "virtual_orbit_division": "Divisone della Corsia Virtuale"
+            "virtual_orbit_division": "Divisone della Corsia Virtuale",
+            "multi_level_sort": "Classificazione Multilivello",
+            "count": "Conteggio"
         },
         "view_player": {
             "view_seting": {

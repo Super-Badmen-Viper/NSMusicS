@@ -15,6 +15,7 @@ export class NineSong_Api_Services_Web {
      * @param endpoint API 端点
      * @param params 查询参数
      * @param data 请求体数据
+     * @param params_str 查询字符串
      * @returns 响应数据
      */
     protected async sendRequest(
@@ -22,11 +23,17 @@ export class NineSong_Api_Services_Web {
         endpoint: string,
         params?: Record<string, string>,
         data?: any,
+        params_str: string,
     ): Promise<any> {
         let headers = {
             Authorization: `Bearer ${store_server_login_info.server_accessToken}`
         };
-        const queryString = params ? new URLSearchParams(params).toString() : '';
+        let params_to_string = new URLSearchParams(params).toString()
+        if(params_str != undefined && params_str.length > 0){
+            params_to_string += '&' + params_str
+        }
+        const queryString = params ? params_to_string : '';
+
         const url = this.baseUrl.includes('api')
             ? `${this.baseUrl}/${endpoint}${queryString ? `?${queryString}` : ''}`
             : `${this.baseUrl}/api/${endpoint}${queryString ? `?${queryString}` : ''}`;

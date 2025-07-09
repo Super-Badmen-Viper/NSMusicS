@@ -399,6 +399,7 @@ export const store_general_fetch_album_list = reactive({
                         String(this._end),
                         _sort,
                         _order,
+                        store_view_album_page_logic.page_albumlists_multi_sort,
                         _starred,
                         _search,
                         store_view_album_page_logic.page_albumlists_filter_year > 0 ? store_view_album_page_logic.page_albumlists_filter_year : '',

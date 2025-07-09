@@ -64,6 +64,7 @@ import {
   store_general_model_player_list
 } from "@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list";
 import {debounce} from "lodash";
+import {MultipleStopOutlined} from "@vicons/material";
 
 const { t } = useI18n({
   inheritLocale: true
@@ -228,6 +229,7 @@ const options_Sort = computed(() => {
   });
 });
 const handleSelect_Sort = (key: string | number) => {
+  store_view_artist_page_logic.page_artistlists_multi_sort = ''
   let _state_Sort_: state_Sort = state_Sort.Default;
   let idx: number = -1;
   for (let i = 0; i < options_Sort_key.value.length; i++) {
@@ -452,6 +454,134 @@ const handleItemClick_Rating = (id_rating: any) => {
   }
 }
 
+/// multi_level_sort
+interface SortCondition {
+  key: string;
+  order: string;
+}
+const allSortKeys = computed(() => [
+  {label: t('entity.artist_other'), value: 'name', },
+  {label: t('entity.album_other'), value: 'album_count', },
+  {label: t('filter.songCount'), value: 'song_count', },
+  {label: t('filter.playCount'), value: 'play_count', },
+  {label: t('common.favorite')+t('LabelLevel'), value: 'rating', },
+  {label: t('LabelSize'), value: 'size', },
+  {label: t('common.favorite')+t('LabelDate'), value: 'starred_at', },
+  {label: t('filter.dateAdded'), value: 'created_at', },
+  {label: t('filter.recentlyUpdated'), value: 'updated_at', },
+]);
+const allSortOrders = computed(() => [
+  { label: t('Ascending'), value: 'asc' },
+  { label: t('Descending'), value: 'desc' }
+]);
+const availableSortKeys = computed(() => {
+  const usedKeys = sortConditions.value
+      .map(condition => condition.key)
+      .filter(key => key);
+  return allSortKeys.value.map(group => ({
+    ...group,
+    disabled: usedKeys.includes(group.value)
+  }));
+});
+const Type_Multi_Sort = ref(false);
+const conditionCount = ref(3)
+const sortConditions = ref<SortCondition[]>([])
+const initializeConditions = () => {
+  const currentLength = sortConditions.value.length;
+  const targetLength = conditionCount.value;
+
+  // 减少条件数量：截断数组
+  if (targetLength < currentLength) {
+    sortConditions.value = sortConditions.value.slice(0, targetLength);
+  }
+  // 增加条件数量：添加新条件
+  else if (targetLength > currentLength) {
+    const newConditions = Array(targetLength - currentLength)
+        .fill(null)
+        .map(() => ({ key: '', order: '' }));
+    sortConditions.value = [...sortConditions.value, ...newConditions];
+  }
+}
+const stopWatching_conditionCount = watch(conditionCount, (newCount) => {
+  if (newCount > allSortKeys.value.length) {
+    conditionCount.value = allSortKeys.value.length;
+    return;
+  }
+  initializeConditions();
+  updateStoreSortParam();
+});
+const usedKeys = computed(() => sortConditions.value.map(condition => condition.key).filter(key => key))
+const getAvailableKeysForIndex = (index: number) => {
+  const currentKey = sortConditions.value[index].key
+  return allSortKeys.value.map(option => {
+    const isUsed = usedKeys.value.includes(option.value) && option.value !== currentKey
+    return {
+      ...option,
+      disabled: isUsed
+    }
+  })
+}
+const generateSortQuery = () => {
+  const validConditions = sortConditions.value.filter(
+      condition => condition.key && condition.order
+  )
+  return validConditions.map(
+      condition => `sort=${condition.key}:${condition.order}`
+  ).join('&')
+}
+const updateStoreSortParam = () => {
+  store_view_artist_page_logic.page_artistlists_multi_sort = generateSortQuery()
+  store_general_fetch_artist_list.fetchData_Artist_of_server_web_start()
+}
+const handleKeyChange = (value: string, index: number) => {
+  sortConditions.value[index].key = value
+  if (value) {
+    sortConditions.value[index].order = 'asc' // 默认升序
+  } else {
+    sortConditions.value[index].order = ''
+  }
+  updateStoreSortParam()
+}
+const handleOrderChange = (value: string, index: number) => {
+  sortConditions.value[index].order = value
+  updateStoreSortParam()
+}
+const parseSortQuery = (query: string): SortCondition[] => {
+  if (!query) return [];
+
+  const conditions: SortCondition[] = [];
+  const params = new URLSearchParams(query);
+
+  const sortValues = params.getAll('sort');
+  for (const value of sortValues) {
+    const [key, order] = value.split(':');
+    if (key && (order === 'asc' || order === 'desc')) {
+      conditions.push({ key, order });
+    }
+  }
+  return conditions;
+};
+onMounted(() => {
+  const storedQuery = store_view_artist_page_logic.page_artistlists_multi_sort;
+
+  if (storedQuery) {
+    // 解析存储的排序条件
+    const parsedConditions = parseSortQuery(storedQuery);
+
+    if (parsedConditions.length > 0) {
+      // 更新条件数量和排序条件
+      conditionCount.value = parsedConditions.length;
+      sortConditions.value = parsedConditions;
+    } else {
+      // 存储值无效时回退默认初始化
+      initializeConditions();
+    }
+  } else {
+    // 无存储值时使用默认初始化
+    initializeConditions();
+  }
+});
+
 const contextmenu = ref(null as any)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
 const message = useMessage()
@@ -588,13 +718,14 @@ onBeforeUnmount(() => {
   stopWatching_boolHandleItemClick_Played()
   stopWatching_window_innerWidth()
   stopWatching_router_history_model_of_Artist_scroll()
+  stopWatching_conditionCount()
   dynamicScroller.value = null;
 });
 </script>
 <template>
   <n-space vertical :size="12">
     <div class="artist-wall-container">
-      <n-space vertical @wheel.prevent style="overflow: hidden;">
+      <n-space vertical @wheel.prevent style="overflow: hidden;margin-left: 4px;">
         <n-space align="center">
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
@@ -649,13 +780,13 @@ onBeforeUnmount(() => {
                     dot
                     value="1"
                     :offset="[-18, 5]">
-                  <n-button quaternary circle style="margin-left:4px">
+                  <n-button quaternary circle>
                     <template #icon>
                       <n-icon :size="20" :depth="2"><ArrowSort24Regular/></n-icon>
                     </template>
                   </n-button>
                 </n-badge>
-                <n-button v-else quaternary circle style="margin-left:4px">
+                <n-button v-else quaternary circle>
                   <template #icon>
                     <n-icon :size="20" :depth="2"><ArrowSort24Regular/></n-icon>
                   </template>
@@ -665,10 +796,77 @@ onBeforeUnmount(() => {
             </n-tooltip>
           </n-dropdown>
 
+          <n-tooltip trigger="hover" placement="top"
+                     v-if="store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong'">
+            <template #trigger>
+              <n-badge
+                  v-if="store_view_artist_page_logic.page_artistlists_multi_sort.length > 0"
+                  dot
+                  value="1"
+                  :offset="[-18, 5]">
+                <n-button quaternary circle
+                          style="rotate: 90deg"
+                          @click="Type_Multi_Sort = true">
+                  <template #icon>
+                    <n-icon :size="20" :depth="2"><MultipleStopOutlined/></n-icon>
+                  </template>
+                </n-button>
+              </n-badge>
+              <n-button v-else quaternary circle
+                        style="rotate: 90deg"
+                        @click="Type_Multi_Sort = true">
+                <template #icon>
+                  <n-icon :size="20" :depth="2"><MultipleStopOutlined/></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('OptionCustomUsers') + $t('nsmusics.view_page.multi_level_sort') }}
+          </n-tooltip>
+          <n-modal transform-origin="mouse" v-model:show="Type_Multi_Sort">
+            <n-card style="width: 450px; border-radius: 4px;">
+              <n-space justify="space-between" align="center" style="margin-bottom: 10px;">
+                <span style="font-size: 20px; font-weight: 600;">
+                  {{ $t('OptionCustomUsers') + $t('nsmusics.view_page.multi_level_sort') }}
+                </span>
+                <n-space align="center">
+                  <span>{{ $t('Sort') + $t('nsmusics.view_page.count') }}</span>
+                  <n-input-number
+                      v-model:value="conditionCount"
+                      :min="0"
+                      :max="allSortKeys.length"
+                      size="small"
+                      style="width: 80px;"
+                  />
+                </n-space>
+              </n-space>
+              <n-space justify="space-between" align="center" style="margin-bottom: 10px;">
+                {{ store_view_artist_page_logic.page_artistlists_multi_sort }}
+              </n-space>
+              <n-space vertical size="large" style="width: 400px;">
+                <n-space justify="space-around" v-for="(_, index) in sortConditions" :key="index">
+                  <n-select
+                      style="width: 300px;"
+                      :options="getAvailableKeysForIndex(index)"
+                      v-model:value="sortConditions[index].key"
+                      @update:value="(value) => handleKeyChange(value, index)"
+                      :placeholder="$t('SelectSortField')"
+                  />
+                  <n-select
+                      style="width: 80px;"
+                      :options="allSortOrders"
+                      v-model:value="sortConditions[index].order"
+                      :disabled="!sortConditions[index].key"
+                      @update:value="(value) => handleOrderChange(value, index)"
+                  />
+                </n-space>
+              </n-space>
+            </n-card>
+          </n-modal>
+
           <n-divider vertical style="width: 2px;height: 20px;margin-top: -2px;"/>
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
-              <n-button quaternary circle style="margin-left:4px"
+              <n-button quaternary circle
                         @click="dynamicScroller.$el.scrollTop = 0;">
                 <template #icon>
                   <n-icon :size="20" :depth="2"><PaddingTop20Filled/></n-icon>
@@ -679,7 +877,7 @@ onBeforeUnmount(() => {
           </n-tooltip>
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
-              <n-button quaternary circle style="margin-left:4px"
+              <n-button quaternary circle
                         @click="dynamicScroller.$el.scrollTop = dynamicScroller.$el.scrollHeight;">
                 <template #icon>
                   <n-icon :size="20" :depth="2"><PaddingDown20Filled/></n-icon>

@@ -13,6 +13,7 @@ export const store_view_artist_page_logic = reactive({
     page_artistlists_keyword: '',
     page_artistlists_get_keyword_model_num: 0,
     page_artistlists_options_Sort_key: [],
+    page_artistlists_multi_sort: ''
 });
 watch(() => store_view_artist_page_logic.page_artistlists_options_Sort_key, (newValue) => {
     if (newValue != null) {

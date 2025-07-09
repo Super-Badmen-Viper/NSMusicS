@@ -340,6 +340,7 @@ export const store_general_fetch_artist_list = reactive({
                         String(this._end),
                         _sort,
                         _order,
+                        store_view_artist_page_logic.page_artistlists_multi_sort,
                         _starred,
                         _search,
                     );

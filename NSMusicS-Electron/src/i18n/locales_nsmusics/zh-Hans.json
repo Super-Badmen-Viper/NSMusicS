@@ -75,7 +75,9 @@
             "disk":"光盘",
             "warning_web_play_alac": "检测到用户使用web播放组件播放编码为alac的m4a文件，正在启用NineSong服务端的ffmpeg组件将alac转码为aac临时音乐资源",
             "warning_mpv_play_alac": "请等待服务端响应, 需要等待数秒钟转码完成并播放, 或者使用mpv播放组件即可跳过alac转码aac步骤",
-            "virtual_orbit_division": "虚拟分轨"
+            "virtual_orbit_division": "虚拟分轨",
+            "multi_level_sort": "多级排序",
+            "count": "数量"
         },
         "view_player": {
             "view_seting": {

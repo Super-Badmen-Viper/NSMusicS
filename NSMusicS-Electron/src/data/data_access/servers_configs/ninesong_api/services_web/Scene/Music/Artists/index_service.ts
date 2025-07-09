@@ -19,6 +19,19 @@ export class Artists_ApiService_of_NineSong extends NineSong_Api_Services_Web {
             }
         );
     }
+    public async getArtistsSort(
+        start: string, end: string,
+        multi_sorts: string,
+        starred: string, search: string,
+    ): Promise<any> {
+        const params: Record<string, string | string[]> = {
+            start,
+            end,
+            starred,
+            search,
+        };
+        return this.sendRequest('GET', 'artists/sort', params, undefined, multi_sorts);
+    }
     public async getArtistCounts(
         starred: string, search: string
     ): Promise<any> {

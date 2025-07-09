@@ -314,7 +314,9 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
     public async get_media_list(
         url: string,
         _start: string, _end:string,
-        _sort:string, _order:string, _starred:string, _search:string,
+        _sort:string, _order:string,
+        multi_sorts: string,
+        _starred:string, _search:string,
         year:string,
         playlist_id: string,
         _album_id:string, _artist_id:string,
@@ -323,24 +325,49 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
         let song_list = [];
         let totalCount = 0;
         if (playlist_id === '') {
-            const data = await this.medias_ApiService_of_NineSong.getMedias(
-                _start, _end, _sort, _order,
-                _starred, _search,
-                year,
-                _album_id, _artist_id,
-            );
-            song_list = data["ninesong-response"]["mediaFiles"];
-            totalCount = data["ninesong-response"]["count"];
+            if (multi_sorts.length === 0) {
+                const data = await this.medias_ApiService_of_NineSong.getMedias(
+                    _start, _end, _sort, _order,
+                    _starred, _search,
+                    year,
+                    _album_id, _artist_id,
+                );
+                song_list = data["ninesong-response"]["mediaFiles"];
+                totalCount = data["ninesong-response"]["count"];
+            }else{
+                const data = await this.medias_ApiService_of_NineSong.getMediasSort(
+                    _start, _end,
+                    multi_sorts,
+                    _starred, _search,
+                    year,
+                    _album_id, _artist_id,
+                );
+                song_list = data["ninesong-response"]["mediaFiles"];
+                totalCount = data["ninesong-response"]["count"];
+            }
         } else {
-            const data = await this.medias_ApiService_of_NineSong.getMedias_Playlist(
-                playlist_id,
-                _start, _end, _sort, _order,
-                _starred, _search,
-                year,
-                _album_id, _artist_id,
-            );
-            song_list = data["ninesong-response"]["mediaFiles"];
-            totalCount = data["ninesong-response"]["count"];
+            if (multi_sorts.length === 0) {
+                const data = await this.medias_ApiService_of_NineSong.getMedias_Playlist(
+                    playlist_id,
+                    _start, _end, _sort, _order,
+                    _starred, _search,
+                    year,
+                    _album_id, _artist_id,
+                );
+                song_list = data["ninesong-response"]["mediaFiles"];
+                totalCount = data["ninesong-response"]["count"];
+            }else{
+                const data = await this.medias_ApiService_of_NineSong.getMedias_PlaylistSort(
+                    playlist_id,
+                    _start, _end,
+                    multi_sorts,
+                    _starred, _search,
+                    year,
+                    _album_id, _artist_id,
+                );
+                song_list = data["ninesong-response"]["mediaFiles"];
+                totalCount = data["ninesong-response"]["count"];
+            }
         }
         ///
         if (Array.isArray(song_list) && song_list.length > 0) {
@@ -452,7 +479,9 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
     public async get_media_cue_list(
         url: string,
         _start: string, _end:string,
-        _sort:string, _order:string, _starred:string, _search:string,
+        _sort:string, _order:string,
+        multi_sorts: string,
+        _starred:string, _search:string,
         year:string,
         playlist_id: string,
         _artist_id:string,
@@ -461,24 +490,40 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
         let song_list = [];
         let totalCount = 0;
         if (playlist_id === '') {
-            const data = await this.mediaCues_ApiService_of_NineSong.getMediaCues(
-                _start, _end, _sort, _order,
-                _starred, _search,
-                year,
-                _artist_id,
-            );
-            song_list = data["ninesong-response"]["cueFiles"];
-            totalCount = data["ninesong-response"]["count"];
+            if (multi_sorts.length === 0) {
+                const data = await this.mediaCues_ApiService_of_NineSong.getMediaCues(
+                    _start, _end, _sort, _order,
+                    _starred, _search,
+                    year,
+                    _artist_id,
+                );
+                song_list = data["ninesong-response"]["cueFiles"];
+                totalCount = data["ninesong-response"]["count"];
+            }else{
+                const data = await this.mediaCues_ApiService_of_NineSong.getMediaCuesSort(
+                    _start, _end,
+                    multi_sorts,
+                    _starred, _search,
+                    year,
+                    _artist_id,
+                );
+                song_list = data["ninesong-response"]["cueFiles"];
+                totalCount = data["ninesong-response"]["count"];
+            }
         } else {
-            const data = await this.mediaCues_ApiService_of_NineSong.getMediaCues_Playlist(
-                playlist_id,
-                _start, _end, _sort, _order,
-                _starred, _search,
-                year,
-                _artist_id,
-            );
-            song_list = data["ninesong-response"]["cueFiles"];
-            totalCount = data["ninesong-response"]["count"];
+            if (multi_sorts.length === 0) {
+                const data = await this.mediaCues_ApiService_of_NineSong.getMediaCues_Playlist(
+                    playlist_id,
+                    _start, _end, _sort, _order,
+                    _starred, _search,
+                    year,
+                    _artist_id,
+                );
+                song_list = data["ninesong-response"]["cueFiles"];
+                totalCount = data["ninesong-response"]["count"];
+            }else{
+
+            }
         }
         ///
         if (Array.isArray(song_list) && song_list.length > 0) {
@@ -589,18 +634,32 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
     public async get_album_list(
         url: string,
         _start: string, _end:string,
-        _sort:string, _order:string, _starred:string, _search:string,
+        _sort:string, _order:string,
+        multi_sorts: string,
+        _starred:string, _search:string,
         min_year:string,max_year:string,
         _artist_id:string,
     ){
         url = url.includes('api') ? url : url + '/api';
-        const data = await this.albums_ApiService_of_NineSong.getAlbums(
-            _start, _end, _sort, _order,
-            _starred, _search,
-            min_year,max_year,
-            _artist_id
-        )
-        let album_list = data["ninesong-response"]["albums"]
+        let album_list = []
+        if (multi_sorts.length === 0) {
+            const data = await this.albums_ApiService_of_NineSong.getAlbums(
+                _start, _end, _sort, _order,
+                _starred, _search,
+                min_year, max_year,
+                _artist_id
+            )
+            album_list = data["ninesong-response"]["albums"]
+        }else{
+            const data = await this.albums_ApiService_of_NineSong.getAlbumsSort(
+                _start, _end,
+                multi_sorts,
+                _starred, _search,
+                min_year, max_year,
+                _artist_id
+            )
+            album_list = data["ninesong-response"]["albums"]
+        }
         if (Array.isArray(album_list) && album_list.length > 0) {
             const existing = store_view_album_page_info.album_Files_temporary.find(item => item.id === album_list[0].ID);
             if (existing) {
@@ -675,14 +734,26 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite{
     public async get_artist_list(
         url: string,
         _start: string, _end:string,
-        _sort:string, _order:string, _starred:string, _search:string,
+        _sort:string, _order:string,
+        multi_sorts: string,
+        _starred:string, _search:string,
     ){
         url = url.includes('api') ? url : url + '/api';
-        const data = await this.artists_ApiService_of_NineSong.getArtists(
-            _start, _end, _sort, _order,
-            _starred, _search
-        )
-        let artist_list = data["ninesong-response"]["artists"]
+        let artist_list = []
+        if (multi_sorts.length === 0) {
+            const data = await this.artists_ApiService_of_NineSong.getArtists(
+                _start, _end, _sort, _order,
+                _starred, _search
+            )
+            artist_list = data["ninesong-response"]["artists"]
+        }else{
+            const data = await this.artists_ApiService_of_NineSong.getArtistsSort(
+                _start, _end,
+                multi_sorts,
+                _starred, _search
+            )
+            artist_list = data["ninesong-response"]["artists"]
+        }
         if (Array.isArray(artist_list) && artist_list.length > 0) {
             const existing = store_view_artist_page_info.artist_Files_temporary.find(item => item.id === artist_list[0].ID);
             if (existing) {

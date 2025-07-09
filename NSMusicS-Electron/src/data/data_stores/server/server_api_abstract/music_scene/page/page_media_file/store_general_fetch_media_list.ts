@@ -637,6 +637,7 @@ export const store_general_fetch_media_list = reactive({
                         limit,
                         _sort,
                         _order,
+                        store_view_media_page_logic.page_songlists_multi_sort,
                         _starred,
                         _search,
                         store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : '',

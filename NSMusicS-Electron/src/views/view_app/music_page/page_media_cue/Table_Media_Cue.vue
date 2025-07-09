@@ -180,6 +180,7 @@ let options_Sort = computed(() => {
   });
 });
 const handleSelect_Sort = (key: string | number) => {
+  store_view_media_cue_page_logic.page_songlists_multi_sort = ''
   let _state_Sort_: state_Sort = state_Sort.Default;
   let idx: number = -1;
   for (let i = 0; i < options_Sort_key.value.length; i++) {
@@ -608,6 +609,11 @@ import {
 } from "@/data/data_access/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite";
 import {store_server_login_info} from "@/views/view_server/page_login/store/store_server_login_info";
 import {debounce} from "lodash";
+import {store_view_media_page_logic} from "@/views/view_app/music_page/page_media/store/store_view_media_page_logic";
+import {MultipleStopOutlined} from "@vicons/material";
+import {
+  store_general_fetch_media_cue_list
+} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list";
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
 const playlist_set_of_addPlaylist_of_comment = ref('')
@@ -945,6 +951,138 @@ async function begin_random_play_model() {
   }
 }
 
+/// multi_level_sort
+interface SortCondition {
+  key: string;
+  order: string;
+}
+const allSortKeys = computed(() => [
+  { label: t('filter.title'), value: 'title' },
+  { label: t('entity.album_other'), value: 'album' },
+  { label: t('entity.artist_other'), value: 'artist' },
+  { label: t('table.column.albumArtist'), value: 'album_artist' },
+  { label: t('filter.releaseYear'), value: 'year' },
+  { label: t('filter.duration'), value: 'duration' },
+  { label: t('common.bitrate'), value: 'bit_rate' },
+  { label: t('LabelSize'), value: 'size' },
+  { label: t('filter.playCount'), value: 'play_count' },
+  { label: t('common.favorite') + t('LabelLevel'), value: 'rating' },
+  { label: t('common.favorite') + t('LabelDate'), value: 'starred_at' },
+  { label: t('filter.dateAdded'), value: 'created_at' },
+  { label: t('filter.recentlyUpdated'), value: 'updated_at' },
+]);
+const allSortOrders = computed(() => [
+  { label: t('Ascending'), value: 'asc' },
+  { label: t('Descending'), value: 'desc' }
+]);
+const availableSortKeys = computed(() => {
+  const usedKeys = sortConditions.value
+      .map(condition => condition.key)
+      .filter(key => key);
+  return allSortKeys.value.map(group => ({
+    ...group,
+    disabled: usedKeys.includes(group.value)
+  }));
+});
+const Type_Multi_Sort = ref(false);
+const conditionCount = ref(3)
+const sortConditions = ref<SortCondition[]>([])
+const initializeConditions = () => {
+  const currentLength = sortConditions.value.length;
+  const targetLength = conditionCount.value;
+
+  // 减少条件数量：截断数组
+  if (targetLength < currentLength) {
+    sortConditions.value = sortConditions.value.slice(0, targetLength);
+  }
+  // 增加条件数量：添加新条件
+  else if (targetLength > currentLength) {
+    const newConditions = Array(targetLength - currentLength)
+        .fill(null)
+        .map(() => ({ key: '', order: '' }));
+    sortConditions.value = [...sortConditions.value, ...newConditions];
+  }
+}
+const stopWatching_conditionCount = watch(conditionCount, (newCount) => {
+  if (newCount > allSortKeys.value.length) {
+    conditionCount.value = allSortKeys.value.length;
+    return;
+  }
+  initializeConditions();
+  updateStoreSortParam();
+});
+const usedKeys = computed(() => sortConditions.value.map(condition => condition.key).filter(key => key))
+const getAvailableKeysForIndex = (index: number) => {
+  const currentKey = sortConditions.value[index].key
+  return allSortKeys.value.map(option => {
+    const isUsed = usedKeys.value.includes(option.value) && option.value !== currentKey
+    return {
+      ...option,
+      disabled: isUsed
+    }
+  })
+}
+const generateSortQuery = () => {
+  const validConditions = sortConditions.value.filter(
+      condition => condition.key && condition.order
+  )
+  return validConditions.map(
+      condition => `sort=${condition.key}:${condition.order}`
+  ).join('&')
+}
+const updateStoreSortParam = () => {
+  store_view_media_cue_page_logic.page_songlists_multi_sort = generateSortQuery()
+  store_general_fetch_media_cue_list.fetchData_Media_of_server_web_start()
+}
+const handleKeyChange = (value: string, index: number) => {
+  sortConditions.value[index].key = value
+  if (value) {
+    sortConditions.value[index].order = 'asc' // 默认升序
+  } else {
+    sortConditions.value[index].order = ''
+  }
+  updateStoreSortParam()
+}
+const handleOrderChange = (value: string, index: number) => {
+  sortConditions.value[index].order = value
+  updateStoreSortParam()
+}
+const parseSortQuery = (query: string): SortCondition[] => {
+  if (!query) return [];
+
+  const conditions: SortCondition[] = [];
+  const params = new URLSearchParams(query);
+
+  const sortValues = params.getAll('sort');
+  for (const value of sortValues) {
+    const [key, order] = value.split(':');
+    if (key && (order === 'asc' || order === 'desc')) {
+      conditions.push({ key, order });
+    }
+  }
+  return conditions;
+};
+onMounted(() => {
+  const storedQuery = store_view_media_cue_page_logic.page_songlists_multi_sort;
+
+  if (storedQuery) {
+    // 解析存储的排序条件
+    const parsedConditions = parseSortQuery(storedQuery);
+
+    if (parsedConditions.length > 0) {
+      // 更新条件数量和排序条件
+      conditionCount.value = parsedConditions.length;
+      sortConditions.value = parsedConditions;
+    } else {
+      // 存储值无效时回退默认初始化
+      initializeConditions();
+    }
+  } else {
+    // 无存储值时使用默认初始化
+    initializeConditions();
+  }
+});
+
 ////// right menu
 const contextmenu = ref(null as any)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
@@ -1084,6 +1222,7 @@ onBeforeUnmount(() => {
   stopWatching_boolHandleItemClick_Favorite()
   stopWatching_boolHandleItemClick_Played()
   stopWatching_router_history_model_of_Media_scroll()
+  stopWatching_conditionCount()
   dynamicScroller.value = null;
   store_general_fetch_media_list.set_album_id('')
   store_general_fetch_media_list.set_artist_id('')
@@ -1098,7 +1237,7 @@ onBeforeUnmount(() => {
           <n-space>
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
-                <n-button quaternary circle style="margin-left:4px"
+                <n-button quaternary circle
                           @click="() => {
                         store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true;
                         store_general_fetch_media_list.set_album_id('')
@@ -1163,13 +1302,13 @@ onBeforeUnmount(() => {
                     dot
                     value="1"
                     :offset="[-18, 5]">
-                  <n-button quaternary circle style="margin-left:4px">
+                  <n-button quaternary circle>
                     <template #icon>
                       <n-icon :size="20" :depth="2"><ArrowSort24Regular/></n-icon>
                     </template>
                   </n-button>
                 </n-badge>
-                <n-button v-else quaternary circle style="margin-left:4px">
+                <n-button v-else quaternary circle>
                   <template #icon>
                     <n-icon :size="20" :depth="2"><ArrowSort24Regular/></n-icon>
                   </template>
@@ -1179,12 +1318,79 @@ onBeforeUnmount(() => {
             </n-tooltip>
           </n-dropdown>
 
+          <n-tooltip trigger="hover" placement="top"
+                     v-if="store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong'">
+            <template #trigger>
+              <n-badge
+                  v-if="store_view_media_cue_page_logic.page_songlists_multi_sort.length > 0"
+                  dot
+                  value="1"
+                  :offset="[-18, 5]">
+                <n-button quaternary circle
+                          style="rotate: 90deg"
+                          @click="Type_Multi_Sort = true">
+                  <template #icon>
+                    <n-icon :size="20" :depth="2"><MultipleStopOutlined/></n-icon>
+                  </template>
+                </n-button>
+              </n-badge>
+              <n-button v-else quaternary circle
+                        style="rotate: 90deg"
+                        @click="Type_Multi_Sort = true">
+                <template #icon>
+                  <n-icon :size="20" :depth="2"><MultipleStopOutlined/></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('OptionCustomUsers') + $t('nsmusics.view_page.multi_level_sort') }}
+          </n-tooltip>
+          <n-modal transform-origin="mouse" v-model:show="Type_Multi_Sort">
+            <n-card style="width: 450px; border-radius: 4px;">
+              <n-space justify="space-between" align="center" style="margin-bottom: 10px;">
+                <span style="font-size: 20px; font-weight: 600;">
+                  {{ $t('OptionCustomUsers') + $t('nsmusics.view_page.multi_level_sort') }}
+                </span>
+                <n-space align="center">
+                  <span>{{ $t('Sort') + $t('nsmusics.view_page.count') }}</span>
+                  <n-input-number
+                      v-model:value="conditionCount"
+                      :min="0"
+                      :max="allSortKeys.length"
+                      size="small"
+                      style="width: 80px;"
+                  />
+                </n-space>
+              </n-space>
+              <n-space justify="space-between" align="center" style="margin-bottom: 10px;">
+                {{ store_view_media_cue_page_logic.page_songlists_multi_sort }}
+              </n-space>
+              <n-space vertical size="large" style="width: 400px;">
+                <n-space justify="space-around" v-for="(_, index) in sortConditions" :key="index">
+                  <n-select
+                      style="width: 300px;"
+                      :options="getAvailableKeysForIndex(index)"
+                      v-model:value="sortConditions[index].key"
+                      @update:value="(value) => handleKeyChange(value, index)"
+                      :placeholder="$t('SelectSortField')"
+                  />
+                  <n-select
+                      style="width: 80px;"
+                      :options="allSortOrders"
+                      v-model:value="sortConditions[index].order"
+                      :disabled="!sortConditions[index].key"
+                      @update:value="(value) => handleOrderChange(value, index)"
+                  />
+                </n-space>
+              </n-space>
+            </n-card>
+          </n-modal>
+
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-badge
                   :value="store_view_media_cue_page_logic.page_songlists_filter_year"
                   :offset="[22, 17]">
-                <n-button quaternary circle style="margin-left:4px" @click="Type_Filter_Show = true">
+                <n-button quaternary circle @click="Type_Filter_Show = true">
                   <template #icon>
                     <n-icon :size="20"><Filter20Filled/></n-icon>
                   </template>
@@ -1247,7 +1453,7 @@ onBeforeUnmount(() => {
               trigger="hover" placement="top">
             <template #trigger>
               <n-button
-                  quaternary circle style="margin-left:4px" @click="click_open_bulk_operation">
+                  quaternary circle @click="click_open_bulk_operation">
                 <template #icon>
                   <n-icon :size="20" :depth="2"><MultiselectLtr20Filled/></n-icon>
                 </template>
@@ -1258,7 +1464,7 @@ onBeforeUnmount(() => {
           <n-space v-if="!bool_start_play">
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
-                <n-button quaternary circle style="margin-left:4px" @click="click_select_MediaList_ALL_Line">
+                <n-button quaternary circle @click="click_select_MediaList_ALL_Line">
                   <template #icon>
                     <n-icon :size="20" :depth="2"><SelectAllOn24Regular/></n-icon>
                   </template>
@@ -1268,7 +1474,7 @@ onBeforeUnmount(() => {
             </n-tooltip>
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
-                <n-button quaternary circle style="margin-left:4px" @click="Type_Selected_Media_File_To_Playlist = !Type_Selected_Media_File_To_Playlist">
+                <n-button quaternary circle @click="Type_Selected_Media_File_To_Playlist = !Type_Selected_Media_File_To_Playlist">
                   <template #icon>
                     <n-icon :size="20" :depth="2"><AddCircle32Regular/></n-icon>
                   </template>
@@ -1288,7 +1494,7 @@ onBeforeUnmount(() => {
                 && !store_server_user_model.model_server_type_of_web)
              ">
               <template #trigger>
-                <n-button quaternary circle style="margin-left:4px" @click="update_button_deleteMediaFile_selected">
+                <n-button quaternary circle @click="update_button_deleteMediaFile_selected">
                   <template #icon>
                     <n-icon :size="20" :depth="2"><Delete20Regular/></n-icon>
                   </template>
@@ -1364,7 +1570,7 @@ onBeforeUnmount(() => {
 
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
-              <n-button quaternary circle style="margin-left:4px"
+              <n-button quaternary circle
                         @click="() =>{
                           dynamicScroller.$el.scrollTop = 0;
                         }">
@@ -1377,7 +1583,7 @@ onBeforeUnmount(() => {
           </n-tooltip>
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
-              <n-button quaternary circle style="margin-left:4px"
+              <n-button quaternary circle
                         @click="() => {
                           dynamicScroller.$el.scrollTop = dynamicScroller.$el.scrollHeight;
                         }">
