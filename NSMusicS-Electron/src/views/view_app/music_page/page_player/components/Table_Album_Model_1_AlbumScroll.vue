@@ -110,7 +110,9 @@ const nextSlideStyle = computed(() => {
         <div class="image-wrapper">
           <img
             class="carousel-img"
-            :src="getAssetImage(item.medium_image_url)"
+            :src="index === store_player_audio_info.this_audio_Index_of_play_list_carousel
+              ? getAssetImage(store_player_audio_info.page_top_album_image_url)
+              : getAssetImage(item.medium_image_url)"
             :alt="`Carousel Image ${index + 1}`"
             @error="handleImageError"
           />
@@ -191,7 +193,7 @@ const nextSlideStyle = computed(() => {
   position: relative;
   display: inline-block;
   width: 55vh;
-  height: 55vh;
+  height: 56vh;
 }
 
 .carousel-img {
