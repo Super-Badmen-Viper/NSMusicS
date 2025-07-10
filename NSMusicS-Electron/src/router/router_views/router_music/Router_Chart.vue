@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
-import {store_router_data_info} from "@/router/router_store/store_router_data_info";
-import Table_Charts from "@/views/view_app/music_page/page_charts/Table_Charts.vue";
-import Demo from "@/views/view_app/music_page/page_charts/demo/Demo.vue";
+import { onMounted } from 'vue'
+import { store_router_data_info } from '@/router/router_store/store_router_data_info'
+import Table_Charts from '@/views/view_app/music_page/page_charts/Table_Charts.vue'
+import Demo from '@/views/view_app/music_page/page_charts/demo/Demo.vue'
 
 onMounted(async () => {
   store_router_data_info.router_select = 'charts'
-});
+})
 </script>
 
 <template>
   <div class="view_show">
-<!--    <Table_Charts/>-->
-    <Demo/>
+    <!--    <Table_Charts/>-->
+    <Demo />
   </div>
 </template>
 

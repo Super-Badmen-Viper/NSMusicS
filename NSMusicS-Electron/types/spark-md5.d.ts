@@ -1,1 +1,1 @@
-declare module "spark-md5"
+declare module 'spark-md5'

@@ -1,91 +1,91 @@
 <script setup lang="ts">
-import { use } from "echarts/core";
-import { Bar3DChart } from "echarts-gl/charts";
-import { VisualMapComponent } from "echarts/components";
-import { GlobeComponent } from "echarts-gl/components";
-import { shallowRef, onMounted } from "vue";
-import VChart from 'vue-echarts';
-import VExample from "./Example.vue";
-import world from "../assets/world.jpg";
-import starfield from "../assets/starfield.jpg";
+import { use } from 'echarts/core'
+import { Bar3DChart } from 'echarts-gl/charts'
+import { VisualMapComponent } from 'echarts/components'
+import { GlobeComponent } from 'echarts-gl/components'
+import { shallowRef, onMounted } from 'vue'
+import VChart from 'vue-echarts'
+import VExample from './Example.vue'
+import world from '../assets/world.jpg'
+import starfield from '../assets/starfield.jpg'
 
-use([Bar3DChart, VisualMapComponent, GlobeComponent]);
+use([Bar3DChart, VisualMapComponent, GlobeComponent])
 
-const option = shallowRef();
-const loading = shallowRef(true);
+const option = shallowRef()
+const loading = shallowRef(true)
 
 const initOptions = {
-  renderer: "canvas"
-};
+  renderer: 'canvas',
+}
 
 const loadingOptions = {
-  text: "Loading...",
-  color: "#000",
-  textColor: "#fff",
-  maskColor: "transparent"
-};
+  text: 'Loading...',
+  color: '#000',
+  textColor: '#fff',
+  maskColor: 'transparent',
+}
 
 onMounted(() => {
-  import("../data/population.json").then(({ default: data }) => {
-    loading.value = false;
+  import('../data/population.json').then(({ default: data }) => {
+    loading.value = false
 
     data = data
-      .filter(dataItem => dataItem[2] > 0)
-      .map(dataItem => [dataItem[0], dataItem[1], Math.sqrt(dataItem[2])]);
+      .filter((dataItem) => dataItem[2] > 0)
+      .map((dataItem) => [dataItem[0], dataItem[1], Math.sqrt(dataItem[2])])
 
     option.value = {
-      backgroundColor: "#000",
+      backgroundColor: '#000',
       globe: {
         baseTexture: world,
         heightTexture: world,
-        shading: "lambert",
+        shading: 'lambert',
         environment: starfield,
         light: {
           main: {
-            intensity: 2
-          }
+            intensity: 2,
+          },
         },
         viewControl: {
-          autoRotate: false
-        }
+          autoRotate: false,
+        },
       },
       visualMap: {
-        bottom: "3%",
-        left: "3%",
+        bottom: '3%',
+        left: '3%',
         max: 40,
         calculable: true,
         realtime: false,
         inRange: {
-          colorLightness: [0.2, 0.9]
+          colorLightness: [0.2, 0.9],
         },
         textStyle: {
-          color: "#fff"
+          color: '#fff',
         },
         controller: {
           inRange: {
-            color: "orange"
-          }
+            color: 'orange',
+          },
         },
         outOfRange: {
-          colorAlpha: 0
-        }
+          colorAlpha: 0,
+        },
       },
       series: [
         {
-          type: "bar3D",
-          coordinateSystem: "globe",
+          type: 'bar3D',
+          coordinateSystem: 'globe',
           data: data,
           barSize: 0.6,
           minHeight: 0.2,
           silent: true,
           itemStyle: {
-            color: "orange"
-          }
-        }
-      ]
-    };
-  });
-});
+            color: 'orange',
+          },
+        },
+      ],
+    }
+  })
+})
 </script>
 
 <template>

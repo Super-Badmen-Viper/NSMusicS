@@ -1,1 +1,1 @@
-declare module "uuid"
+declare module 'uuid'

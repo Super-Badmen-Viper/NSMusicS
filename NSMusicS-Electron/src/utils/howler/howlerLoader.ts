@@ -1,13 +1,13 @@
-let Howl;
+let Howl
 
-const isElectron = window && window.process && window.process.type === 'renderer';
+const isElectron = window && window.process && window.process.type === 'renderer'
 
-if(isElectron) {
-    Howl = require('howler').Howl;
+if (isElectron) {
+  Howl = require('howler').Howl
 } else {
-    import('howler').then((module) => {
-        Howl = module.Howl;
-    });
+  import('howler').then((module) => {
+    Howl = module.Howl
+  })
 }
 
-export { Howl };
+export { Howl }

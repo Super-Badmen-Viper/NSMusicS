@@ -5,7 +5,7 @@ import Table_Music_Effect from '@/views/view_app/music_components/player_effect/
 <template>
   <n-space class="this_Bar_Music_Effect">
     <div class="layout_distribution_4">
-      <Table_Music_Effect/>
+      <Table_Music_Effect />
     </div>
   </n-space>
 </template>

@@ -1,6 +1,3 @@
 {
-  "files": [
-    "./Demo.vue",
-    "./examples/RadarChart.vue"
-  ],
+  "files": ["./Demo.vue", "./examples/RadarChart.vue"]
 }

@@ -1,17 +1,13 @@
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 <template>
   <n-space vertical>
-    <div style="font-weight: 600;font-size: 16px;margin-bottom: 4px;">
-<!--      {{ $t('TabServer') }} >-->DLNA >
+    <div style="font-weight: 600; font-size: 16px; margin-bottom: 4px">
+      <!--      {{ $t('TabServer') }} >-->DLNA >
     </div>
     <n-space vertical>
-      <span style="font-size: 24px;font-weight: 800;">Not open || 未开放</span>
+      <span style="font-size: 24px; font-weight: 800">Not open || 未开放</span>
     </n-space>
-    <br>
+    <br />
   </n-space>
 </template>
-<style>
-
-</style>
+<style></style>

@@ -1,21 +1,21 @@
-import { inject } from "@vercel/analytics";
-import { createApp } from "vue";
-import { createPinia } from "pinia";
-import Demo from "./Demo.vue";
+import { inject } from '@vercel/analytics'
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import Demo from './Demo.vue'
 
-const SAMPLE_RATE = 0.5;
+const SAMPLE_RATE = 0.5
 
 inject({
-  beforeSend: event => {
+  beforeSend: (event) => {
     if (Math.random() > SAMPLE_RATE) {
-      return null;
+      return null
     }
 
-    return event;
-  }
-});
+    return event
+  },
+})
 
-const pinia = createPinia();
-const app = createApp(Demo);
-app.use(pinia);
-app.mount("#app");
+const pinia = createPinia()
+const app = createApp(Demo)
+app.use(pinia)
+app.mount('#app')

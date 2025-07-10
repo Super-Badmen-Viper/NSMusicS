@@ -1,17 +1,17 @@
 <script setup lang="ts">
 //////
-import {store_player_audio_logic} from "@/views/view_app/music_page/page_player/store/store_player_audio_logic";
-import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
-import {store_player_appearance} from "@/views/view_app/music_page/page_player/store/store_player_appearance";
+import { store_player_audio_logic } from '@/views/view_app/music_page/page_player/store/store_player_audio_logic'
+import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
+import { store_player_appearance } from '@/views/view_app/music_page/page_player/store/store_player_appearance'
 
 import { useI18n } from 'vue-i18n'
-import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
+import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
 const { t } = useI18n({
-  inheritLocale: true
+  inheritLocale: true,
 })
 
 /////// 设置：播放
-const player_fade_model_options_selected = ref<{label:any,value:any}>();
+const player_fade_model_options_selected = ref()
 const player_fade_model_options = ref([
   {
     label: computed(() => t('setting.playbackStyle_optionNormal')),
@@ -23,28 +23,30 @@ const player_fade_model_options = ref([
   },
 ])
 const update_player_fade_model_options_selected = () => {
-  if(player_fade_model_options_selected.value === 'playbackStyle_optionNormal'){
+  if (player_fade_model_options_selected.value === 'playbackStyle_optionNormal') {
     store_player_audio_logic.player_fade_value = 0
-  }else if(player_fade_model_options_selected.value === 'playbackStyle_optionCrossFade'){
+  } else if (player_fade_model_options_selected.value === 'playbackStyle_optionCrossFade') {
     store_player_audio_logic.player_fade_value = 2000
   }
 }
 const update_player_fade_value = () => {
-  if(store_player_audio_logic.player_fade_value != 0){
+  if (store_player_audio_logic.player_fade_value != 0) {
     player_fade_model_options_selected.value = 'playbackStyle_optionCrossFade'
-  }else{
+  } else {
     player_fade_model_options_selected.value = 'playbackStyle_optionNormal'
   }
 }
 const update_player_dolby = () => {
-  if(store_player_audio_logic.player_dolby){
+  if (store_player_audio_logic.player_dolby) {
     store_player_audio_logic.player_select = 'web'
   }
 }
 const update_player_samp_value = (value: any) => {
   store_player_audio_logic.player_samp_value = value
 }
-const computed_i18n_Label_mpvExtraParameters = computed(() => t('setting.mpvExtraParameters_help') + ':\n--gapless-audio=weak\n--prefetch-playlist=yes');
+const computed_i18n_Label_mpvExtraParameters = computed(
+  () => t('setting.mpvExtraParameters_help') + ':\n--gapless-audio=weak\n--prefetch-playlist=yes'
+)
 const update_player_mpvExtraParameters = (value: any) => {
   store_player_audio_logic.player_mpvExtraParameters = value
 }
@@ -97,330 +99,361 @@ const player_audio_channel_kind = ref([
   { label: 'downmix', value: 'downmix' },
   { label: '22.2', value: '22.2' },
   { label: 'auto', value: 'auto' },
-]);
-const player_replayGainMode_kind  = ref([
+])
+const player_replayGainMode_kind = ref([
   { label: 'Track', value: 'track' },
   { label: 'Album', value: 'album' },
   { label: computed(() => t('common.none')), value: 'no' },
 ])
 onMounted(() => {
-  if(store_player_audio_logic.player_fade_value > 0) {
+  if (store_player_audio_logic.player_fade_value > 0) {
     player_fade_model_options_selected.value = player_fade_model_options.value[1].value
-  }else {
+  } else {
     player_fade_model_options_selected.value = player_fade_model_options.value[0].value
   }
   //
-  if(store_player_audio_logic.player_gaplessAudio === 'no'){
+  if (store_player_audio_logic.player_gaplessAudio === 'no') {
     store_player_audio_logic.player_gaplessAudio = player_gaplessAudio_kind.value[0].value
-  }else if (store_player_audio_logic.player_gaplessAudio === 'yes'){
+  } else if (store_player_audio_logic.player_gaplessAudio === 'yes') {
     store_player_audio_logic.player_gaplessAudio = player_gaplessAudio_kind.value[1].value
-  }else{
+  } else {
     store_player_audio_logic.player_gaplessAudio = player_gaplessAudio_kind.value[2].value
   }
   //
-  if(store_player_audio_logic.player_replayGainMode === 'track'){
+  if (store_player_audio_logic.player_replayGainMode === 'track') {
     store_player_audio_logic.player_replayGainMode = player_replayGainMode_kind.value[0].value
-  }else if(store_player_audio_logic.player_replayGainMode === 'album'){
+  } else if (store_player_audio_logic.player_replayGainMode === 'album') {
     store_player_audio_logic.player_replayGainMode = player_replayGainMode_kind.value[1].value
-  }else{
+  } else {
     store_player_audio_logic.player_replayGainMode = player_replayGainMode_kind.value[2].value
   }
 })
 
 //////
-import { openLink } from '@/utils/electron/openLink';
+import { openLink } from '@/utils/electron/openLink'
 </script>
 <template>
   <n-space vertical :size="12">
     <div class="dynamic-scroller-demo">
-      <n-scrollbar style="max-height: 70vh;">
+      <n-scrollbar style="max-height: 70vh">
         <n-space vertical>
           <n-space justify="space-between" align="center">
             <n-space vertical>
-              <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioPlayer') }}</span>
-              <div style="margin-top: -10px;">
-                <span style="font-size:12px;">{{ $t('setting.audioPlayer_description') + " | " + $t('nsmusics.view_page.audio_player_web_explain') }}</span>
+              <span style="font-size: 16px; font-weight: 600">{{ $t('setting.audioPlayer') }}</span>
+              <div style="margin-top: -10px">
+                <span style="font-size: 12px">{{
+                  $t('setting.audioPlayer_description') +
+                  ' | ' +
+                  $t('nsmusics.view_page.audio_player_web_explain')
+                }}</span>
               </div>
             </n-space>
             <n-select
-                v-model:value="store_player_audio_logic.player_select"
-                :options="store_player_audio_logic.player_kind"
-                :disabled="store_app_configs_info.desktop_system_kind === 'linux' || store_app_configs_info.desktop_system_kind === 'docker'"
-                @update:value="() => {
-                        store_router_data_logic.clear_Memory_Model = false;
-                        store_router_data_logic.clear_Equilibrium_Model = false;
-                        store_router_data_logic.clear_UserExperience_Model = true; }"
-                placeholder="not enabled"
-                :reset-menu-on-options-change="false"
-                style="width: 207px;margin-top: -4px;"
+              v-model:value="store_player_audio_logic.player_select"
+              :options="store_player_audio_logic.player_kind"
+              :disabled="
+                store_app_configs_info.desktop_system_kind === 'linux' ||
+                store_app_configs_info.desktop_system_kind === 'docker'
+              "
+              @update:value="
+                () => {
+                  store_router_data_logic.clear_Memory_Model = false
+                  store_router_data_logic.clear_Equilibrium_Model = false
+                  store_router_data_logic.clear_UserExperience_Model = true
+                }
+              "
+              placeholder="not enabled"
+              :reset-menu-on-options-change="false"
+              style="width: 207px; margin-top: -4px"
             />
           </n-space>
           <n-space justify="space-between" align="center">
             <n-space vertical>
-              <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioDevice') }}</span>
-              <div style="margin-top: -10px;">
-                <span style="font-size:12px;">{{ $t('setting.audioDevice_description') }}</span>
+              <span style="font-size: 16px; font-weight: 600">{{ $t('setting.audioDevice') }}</span>
+              <div style="margin-top: -10px">
+                <span style="font-size: 12px">{{ $t('setting.audioDevice_description') }}</span>
               </div>
             </n-space>
             <n-select
-                v-model:value="store_player_audio_logic.player_device_select"
-                :options="store_player_audio_logic.player_device_kind"
+              v-model:value="store_player_audio_logic.player_device_select"
+              :options="store_player_audio_logic.player_device_kind"
+              :disabled="store_player_audio_logic.player_select === 'mpv'"
+              placeholder="not enabled"
+              :reset-menu-on-options-change="false"
+              style="width: 207px; margin-top: -4px"
+            />
+          </n-space>
+          <n-space justify="space-between" align="center">
+            <n-space vertical>
+              <span style="font-size: 16px; font-weight: 600">{{
+                $t('setting.playbackStyle_description')
+              }}</span>
+              <div style="margin-top: -10px">
+                <span style="font-size: 12px">{{ $t('setting.playbackStyle_description') }}</span>
+              </div>
+            </n-space>
+            <n-select
+              v-model:value="player_fade_model_options_selected"
+              :options="player_fade_model_options"
+              @update:value="update_player_fade_model_options_selected"
+              :disabled="store_player_audio_logic.player_select === 'mpv'"
+              placeholder="not enabled"
+              :reset-menu-on-options-change="false"
+              style="width: 207px; margin-top: -4px"
+            />
+          </n-space>
+          <n-space justify="space-between" align="center">
+            <n-space vertical>
+              <span style="font-size: 16px; font-weight: 600">{{
+                $t('setting.crossfadeStyle')
+              }}</span>
+              <div style="margin-top: -10px">
+                <span style="font-size: 12px">{{ $t('setting.crossfadeStyle_description') }}</span>
+              </div>
+            </n-space>
+            <n-input-group style="width: 207px; margin-top: -4px">
+              <n-input
+                clearable
+                v-model:value="store_player_audio_logic.player_fade_value"
+                @update:value="update_player_fade_value"
                 :disabled="store_player_audio_logic.player_select === 'mpv'"
-                placeholder="not enabled"
-                :reset-menu-on-options-change="false"
-                style="width: 207px;margin-top: -4px;"
-            />
-          </n-space>
-          <n-space justify="space-between" align="center">
-            <n-space vertical>
-              <span style="font-size:16px;font-weight: 600;">{{ $t('setting.playbackStyle_description') }}</span>
-              <div style="margin-top: -10px;">
-                <span style="font-size:12px;">{{ $t('setting.playbackStyle_description') }}</span>
-              </div>
-            </n-space>
-            <n-select
-                v-model:value="player_fade_model_options_selected"
-                :options="player_fade_model_options"
-                @update:value="update_player_fade_model_options_selected"
-                :disabled="store_player_audio_logic.player_select === 'mpv'"
-                placeholder="not enabled"
-                :reset-menu-on-options-change="false"
-                style="width: 207px;margin-top: -4px;"
-            />
-          </n-space>
-          <n-space justify="space-between" align="center">
-            <n-space vertical>
-              <span style="font-size:16px;font-weight: 600;">{{ $t('setting.crossfadeStyle') }}</span>
-              <div style="margin-top: -10px;">
-                <span style="font-size:12px;">{{ $t('setting.crossfadeStyle_description') }}</span>
-              </div>
-            </n-space>
-            <n-input-group style="width: 207px;margin-top: -4px;">
-              <n-input clearable
-                       v-model:value="store_player_audio_logic.player_fade_value"
-                       @update:value="update_player_fade_value"
-                       :disabled="store_player_audio_logic.player_select === 'mpv'"
               />
               <n-input-group-label>ms</n-input-group-label>
             </n-input-group>
           </n-space>
-          <n-divider style="margin: 0;"/>
-          <n-space justify="space-between" align="center"
-                   >
+          <n-divider style="margin: 0" />
+          <n-space justify="space-between" align="center">
             <n-space vertical>
-              <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioPlayer') + ' | mpv' }}</span>
+              <span style="font-size: 16px; font-weight: 600">{{
+                $t('setting.audioPlayer') + ' | mpv'
+              }}</span>
             </n-space>
           </n-space>
-          <n-space
-              justify="space-between" align="center"
-              style="margin-left: 30px;"
-              >
+          <n-space justify="space-between" align="center" style="margin-left: 30px">
             <n-space vertical>
-              <span style="font-size:16px;font-weight: 600;">{{ $t('setting.mpvExtraParameters') }}</span>
-              <div style="margin-top: -10px;">
-                <span style="font-size:12px;">{{ $t('setting.mpvExtraParameters') }}</span>
+              <span style="font-size: 16px; font-weight: 600">{{
+                $t('setting.mpvExtraParameters')
+              }}</span>
+              <div style="margin-top: -10px">
+                <span style="font-size: 12px">{{ $t('setting.mpvExtraParameters') }}</span>
               </div>
-              <div style="margin-top: -10px;margin-left: -3px;">
-                <a style="font-size: 15px;cursor: pointer;" @click="openLink('https://mpv.io/manual/stable/#audio')">https://mpv.io/manual/stable/#audio</a>
+              <div style="margin-top: -10px; margin-left: -3px">
+                <a
+                  style="font-size: 15px; cursor: pointer"
+                  @click="openLink('https://mpv.io/manual/stable/#audio')"
+                  >https://mpv.io/manual/stable/#audio</a
+                >
               </div>
             </n-space>
             <n-input
-                style="width: 207px;margin-top: -4px;"
-                :value="store_player_audio_logic.player_mpvExtraParameters"
-                @update:value="update_player_mpvExtraParameters"
-                type="textarea"
-                :placeholder="computed_i18n_Label_mpvExtraParameters"
+              style="width: 207px; margin-top: -4px"
+              :value="store_player_audio_logic.player_mpvExtraParameters"
+              @update:value="update_player_mpvExtraParameters"
+              type="textarea"
+              :placeholder="computed_i18n_Label_mpvExtraParameters"
             />
           </n-space>
-          <n-space
-              justify="space-between" align="center"
-              style="margin-left: 30px;"
-              >
+          <n-space justify="space-between" align="center" style="margin-left: 30px">
             <n-space vertical>
-              <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.audio_channel') }}</span>
-              <div style="margin-top: -10px;">
-                <span style="font-size:12px;">{{ $t('nsmusics.view_page.audio_channel_explain') }}</span>
+              <span style="font-size: 16px; font-weight: 600">{{
+                $t('nsmusics.view_page.audio_channel')
+              }}</span>
+              <div style="margin-top: -10px">
+                <span style="font-size: 12px">{{
+                  $t('nsmusics.view_page.audio_channel_explain')
+                }}</span>
               </div>
             </n-space>
             <n-select
-                v-model:value="store_player_audio_logic.player_audio_channel"
-                :options="player_audio_channel_kind"
-                :disabled="store_player_audio_logic.player_select != 'mpv'"
-                placeholder="not enabled"
-                :reset-menu-on-options-change="false"
-                style="width: 207px;margin-top: -4px;"
+              v-model:value="store_player_audio_logic.player_audio_channel"
+              :options="player_audio_channel_kind"
+              :disabled="store_player_audio_logic.player_select != 'mpv'"
+              placeholder="not enabled"
+              :reset-menu-on-options-change="false"
+              style="width: 207px; margin-top: -4px"
             />
           </n-space>
-          <n-space
-              vertical
-              style="margin-left: 30px;"
-              >
+          <n-space vertical style="margin-left: 30px">
             <n-space vertical>
-              <span style="font-size:16px;font-weight: 600;">{{ $t('setting.sampleRate') }}</span>
-              <div style="margin-top: -10px;">
-                <span style="font-size:12px;">{{ $t('setting.sampleRate_description') }}</span>
+              <span style="font-size: 16px; font-weight: 600">{{ $t('setting.sampleRate') }}</span>
+              <div style="margin-top: -10px">
+                <span style="font-size: 12px">{{ $t('setting.sampleRate_description') }}</span>
               </div>
             </n-space>
             <n-space justify="space-between" align="center">
               <div></div>
-              <n-input-group style="width: 207px;margin-top: -4px;">
-                <n-input clearable
-                         :disabled="store_player_audio_logic.player_select != 'mpv'"
-                         default-value="48000"
-                         :value="store_player_audio_logic.player_samp_value"
-                         @update:value="update_player_samp_value"
+              <n-input-group style="width: 207px; margin-top: -4px">
+                <n-input
+                  clearable
+                  :disabled="store_player_audio_logic.player_select != 'mpv'"
+                  default-value="48000"
+                  :value="store_player_audio_logic.player_samp_value"
+                  @update:value="update_player_samp_value"
                 />
                 <n-input-group-label>Hz</n-input-group-label>
               </n-input-group>
             </n-space>
           </n-space>
-          <n-space
-              justify="space-between" align="center"
-              style="margin-left: 30px;"
-              >
+          <n-space justify="space-between" align="center" style="margin-left: 30px">
             <n-space vertical>
-              <span style="font-size:16px;font-weight: 600;">{{ $t('setting.gaplessAudio') }}</span>
-              <div style="margin-top: -10px;">
-                <span style="font-size:12px;">{{ $t('setting.gaplessAudio_description') }}</span>
+              <span style="font-size: 16px; font-weight: 600">{{
+                $t('setting.gaplessAudio')
+              }}</span>
+              <div style="margin-top: -10px">
+                <span style="font-size: 12px">{{ $t('setting.gaplessAudio_description') }}</span>
               </div>
             </n-space>
             <n-select
-                v-model:value="store_player_audio_logic.player_gaplessAudio"
-                :options="player_gaplessAudio_kind"
-                :disabled="store_player_audio_logic.player_select != 'mpv'"
-                placeholder="not enabled"
-                :reset-menu-on-options-change="false"
-                style="width: 207px;margin-top: -4px;"
+              v-model:value="store_player_audio_logic.player_gaplessAudio"
+              :options="player_gaplessAudio_kind"
+              :disabled="store_player_audio_logic.player_select != 'mpv'"
+              placeholder="not enabled"
+              :reset-menu-on-options-change="false"
+              style="width: 207px; margin-top: -4px"
             />
           </n-space>
-          <n-space
-              justify="space-between" align="center"
-              style="margin-left: 30px;"
-              >
+          <n-space justify="space-between" align="center" style="margin-left: 30px">
             <n-space vertical>
-              <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioExclusiveMode')}}</span>
-              <div style="margin-top: -10px;">
-                <span style="font-size:12px;">{{ $t('setting.audioExclusiveMode_description') }}</span>
+              <span style="font-size: 16px; font-weight: 600">{{
+                $t('setting.audioExclusiveMode')
+              }}</span>
+              <div style="margin-top: -10px">
+                <span style="font-size: 12px">{{
+                  $t('setting.audioExclusiveMode_description')
+                }}</span>
               </div>
             </n-space>
             <n-switch
-                :disabled="store_player_audio_logic.player_select != 'mpv'"
-                v-model:value="store_player_audio_logic.player_audioExclusiveMode"
+              :disabled="store_player_audio_logic.player_select != 'mpv'"
+              v-model:value="store_player_audio_logic.player_audioExclusiveMode"
             >
             </n-switch>
           </n-space>
-          <n-space
-              justify="space-between" align="center"
-              style="margin-left: 30px;"
-              >
+          <n-space justify="space-between" align="center" style="margin-left: 30px">
             <n-space vertical>
-              <span style="font-size:16px;font-weight: 600;">{{ $t('setting.replayGainMode') }}</span>
-              <div style="margin-top: -10px;">
-                <span style="font-size:12px;">{{ $t('setting.replayGainMode_description') }}</span>
+              <span style="font-size: 16px; font-weight: 600">{{
+                $t('setting.replayGainMode')
+              }}</span>
+              <div style="margin-top: -10px">
+                <span style="font-size: 12px">{{ $t('setting.replayGainMode_description') }}</span>
               </div>
             </n-space>
             <n-select
-                v-model:value="store_player_audio_logic.player_replayGainMode"
-                :options="player_replayGainMode_kind"
-                :disabled="store_player_audio_logic.player_select != 'mpv'"
-                placeholder="not enabled"
-                :reset-menu-on-options-change="false"
-                style="width: 207px;margin-top: -4px;"
+              v-model:value="store_player_audio_logic.player_replayGainMode"
+              :options="player_replayGainMode_kind"
+              :disabled="store_player_audio_logic.player_select != 'mpv'"
+              placeholder="not enabled"
+              :reset-menu-on-options-change="false"
+              style="width: 207px; margin-top: -4px"
             />
           </n-space>
-          <n-space
-              justify="space-between" align="center"
-              style="margin-left: 30px;"
-              >
+          <n-space justify="space-between" align="center" style="margin-left: 30px">
             <n-space vertical>
-              <span style="font-size:16px;font-weight: 600;">{{ $t('setting.replayGainPreamp') }}</span>
-              <div style="margin-top: -10px;">
-                <span style="font-size:12px;">{{ $t('setting.replayGainPreamp_description') }}</span>
+              <span style="font-size: 16px; font-weight: 600">{{
+                $t('setting.replayGainPreamp')
+              }}</span>
+              <div style="margin-top: -10px">
+                <span style="font-size: 12px">{{
+                  $t('setting.replayGainPreamp_description')
+                }}</span>
               </div>
             </n-space>
-            <n-input-group style="width: 207px;margin-top: -4px;">
-              <n-input clearable
-                       :disabled="store_player_audio_logic.player_select != 'mpv'"
-                       default-value="48000"
-                       v-model:value="store_player_audio_logic.player_replayGainPreamp"
-              />
-            </n-input-group>
-          </n-space>
-          <n-space
-              justify="space-between" align="center"
-              style="margin-left: 30px;"
-              >
-            <n-space vertical>
-              <span style="font-size:16px;font-weight: 600;">{{ $t('setting.replayGainClipping')}}</span>
-              <div style="margin-top: -10px;">
-                <span style="font-size:12px;">{{ $t('setting.replayGainClipping_description') }}</span>
-              </div>
-            </n-space>
-            <n-switch
+            <n-input-group style="width: 207px; margin-top: -4px">
+              <n-input
+                clearable
                 :disabled="store_player_audio_logic.player_select != 'mpv'"
-                v-model:value="store_player_audio_logic.player_replayGainClip"
-            >
-            </n-switch>
-          </n-space>
-          <n-space
-              justify="space-between" align="center"
-              style="margin-left: 30px;"
-              >
-            <n-space vertical>
-              <span style="font-size:16px;font-weight: 600;">{{ $t('setting.replayGainFallback') }}</span>
-              <div style="margin-top: -10px;">
-                <span style="font-size:12px;">{{ $t('setting.replayGainFallback_description') }}</span>
-              </div>
-            </n-space>
-            <n-input-group style="width: 207px;margin-top: -4px;">
-              <n-input clearable
-                       :disabled="store_player_audio_logic.player_select != 'mpv'"
-                       default-value="48000"
-                       v-model:value="store_player_audio_logic.player_replayGainFallback"
+                default-value="48000"
+                v-model:value="store_player_audio_logic.player_replayGainPreamp"
               />
             </n-input-group>
           </n-space>
-          <n-divider style="margin: 0;"/>
-          <n-space justify="space-between" align="center"
-                   >
+          <n-space justify="space-between" align="center" style="margin-left: 30px">
             <n-space vertical>
-              <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioPlayer') + ' | web' }}</span>
-            </n-space>
-          </n-space>
-          <n-space
-              justify="space-between" align="center"
-              style="margin-left: 30px;"
-              >
-            <n-space vertical>
-              <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.dolby_switching')}}</span>
-              <div style="margin-top: -10px;">
-                <span style="font-size:12px;">{{ $t('nsmusics.view_page.dolby_switching_explain') }}</span>
+              <span style="font-size: 16px; font-weight: 600">{{
+                $t('setting.replayGainClipping')
+              }}</span>
+              <div style="margin-top: -10px">
+                <span style="font-size: 12px">{{
+                  $t('setting.replayGainClipping_description')
+                }}</span>
               </div>
             </n-space>
             <n-switch
-                :disabled="store_player_audio_logic.player_select != 'web'"
-                v-model:value="store_player_audio_logic.player_dolby"
-                @update:value="update_player_dolby"
+              :disabled="store_player_audio_logic.player_select != 'mpv'"
+              v-model:value="store_player_audio_logic.player_replayGainClip"
             >
             </n-switch>
           </n-space>
-          <n-divider style="margin: 0;"/>
+          <n-space justify="space-between" align="center" style="margin-left: 30px">
+            <n-space vertical>
+              <span style="font-size: 16px; font-weight: 600">{{
+                $t('setting.replayGainFallback')
+              }}</span>
+              <div style="margin-top: -10px">
+                <span style="font-size: 12px">{{
+                  $t('setting.replayGainFallback_description')
+                }}</span>
+              </div>
+            </n-space>
+            <n-input-group style="width: 207px; margin-top: -4px">
+              <n-input
+                clearable
+                :disabled="store_player_audio_logic.player_select != 'mpv'"
+                default-value="48000"
+                v-model:value="store_player_audio_logic.player_replayGainFallback"
+              />
+            </n-input-group>
+          </n-space>
+          <n-divider style="margin: 0" />
           <n-space justify="space-between" align="center">
             <n-space vertical>
-              <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_player.view_seting.player_use_lottie') }}</span>
-              <div style="margin-top: -10px;">
-                <span style="font-size:12px;">{{ $t('nsmusics.view_player.view_seting.player_use_lottie_explain') }}</span>
+              <span style="font-size: 16px; font-weight: 600">{{
+                $t('setting.audioPlayer') + ' | web'
+              }}</span>
+            </n-space>
+          </n-space>
+          <n-space justify="space-between" align="center" style="margin-left: 30px">
+            <n-space vertical>
+              <span style="font-size: 16px; font-weight: 600">{{
+                $t('nsmusics.view_page.dolby_switching')
+              }}</span>
+              <div style="margin-top: -10px">
+                <span style="font-size: 12px">{{
+                  $t('nsmusics.view_page.dolby_switching_explain')
+                }}</span>
               </div>
             </n-space>
             <n-switch
-                v-model:value="store_player_appearance.player_use_lottie_animation">
+              :disabled="store_player_audio_logic.player_select != 'web'"
+              v-model:value="store_player_audio_logic.player_dolby"
+              @update:value="update_player_dolby"
+            >
+            </n-switch>
+          </n-space>
+          <n-divider style="margin: 0" />
+          <n-space justify="space-between" align="center">
+            <n-space vertical>
+              <span style="font-size: 16px; font-weight: 600">{{
+                $t('nsmusics.view_player.view_seting.player_use_lottie')
+              }}</span>
+              <div style="margin-top: -10px">
+                <span style="font-size: 12px">{{
+                  $t('nsmusics.view_player.view_seting.player_use_lottie_explain')
+                }}</span>
+              </div>
+            </n-space>
+            <n-switch v-model:value="store_player_appearance.player_use_lottie_animation">
             </n-switch>
           </n-space>
           <n-space justify="space-between" align="center">
             <n-space vertical>
-              <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') }}</span>
-              <div style="margin-top: -10px;">
-                <span style="font-size:12px;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') }}</span>
+              <span style="font-size: 16px; font-weight: 600">{{
+                $t('nsmusics.view_player.view_seting.coverBaseVague')
+              }}</span>
+              <div style="margin-top: -10px">
+                <span style="font-size: 12px">{{
+                  $t('nsmusics.view_player.view_seting.coverBaseVague')
+                }}</span>
               </div>
             </n-space>
             <n-switch v-model:value="store_player_appearance.player_use_background_filter_blur">
@@ -428,9 +461,13 @@ import { openLink } from '@/utils/electron/openLink';
           </n-space>
           <n-space justify="space-between" align="center">
             <n-space vertical>
-              <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_player.view_seting.player_use_playbar_auto_hide') }}</span>
-              <div style="margin-top: -10px;">
-                <span style="font-size:12px;">{{ $t('nsmusics.view_player.view_seting.player_use_playbar_auto_hide_explain') }}</span>
+              <span style="font-size: 16px; font-weight: 600">{{
+                $t('nsmusics.view_player.view_seting.player_use_playbar_auto_hide')
+              }}</span>
+              <div style="margin-top: -10px">
+                <span style="font-size: 12px">{{
+                  $t('nsmusics.view_player.view_seting.player_use_playbar_auto_hide_explain')
+                }}</span>
               </div>
             </n-space>
             <n-switch v-model:value="store_player_appearance.player_use_playbar_auto_hide">

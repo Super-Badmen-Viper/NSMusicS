@@ -1,34 +1,31 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue'
 
 ////// lineItems Re render
-const collapsed_width = ref<number>(80);
+const collapsed_width = ref(80)
 </script>
 <template>
   <div class="view">
-    <n-layout
-        embedded
-        content-style="margin-left: 9px;"
-        vertical
-        :size="12" >
+    <n-layout embedded content-style="margin-left: 9px;" vertical :size="12">
       <n-card
-          class="table"
-          style="overflow: hidden;border-radius: 4px;"
-          :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 160) + 'px)'}">
-        <span style="font-size: 24px;font-weight: 800;">Not open || 未开放</span>
+        class="table"
+        style="overflow: hidden; border-radius: 4px"
+        :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 160) + 'px)' }"
+      >
+        <span style="font-size: 24px; font-weight: 800">Not open || 未开放</span>
       </n-card>
     </n-layout>
   </div>
 </template>
 <style scoped>
-.view{
+.view {
   height: calc(100vh - 160px);
   overflow: auto;
-  overflow-x:hidden;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
 }
-.table{
+.table {
   height: calc(100vh - 160px);
   overflow: auto;
 }

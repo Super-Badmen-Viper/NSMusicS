@@ -1,17 +1,12 @@
 <script setup lang="ts">
-import { use, registerMap } from "echarts/core";
-import { ScatterChart, EffectScatterChart } from "echarts/charts";
-import {
-  GeoComponent,
-  TitleComponent,
-  LegendComponent,
-  TooltipComponent
-} from "echarts/components";
-import { shallowRef } from "vue";
-import VChart from 'vue-echarts';
-import VExample from "./Example.vue";
-import getData from "../data/map";
-import chinaMap from "../china.json";
+import { use, registerMap } from 'echarts/core'
+import { ScatterChart, EffectScatterChart } from 'echarts/charts'
+import { GeoComponent, TitleComponent, LegendComponent, TooltipComponent } from 'echarts/components'
+import { shallowRef } from 'vue'
+import VChart from 'vue-echarts'
+import VExample from './Example.vue'
+import getData from '../data/map'
+import chinaMap from '../china.json'
 
 use([
   ScatterChart,
@@ -19,37 +14,32 @@ use([
   GeoComponent,
   TitleComponent,
   LegendComponent,
-  TooltipComponent
-]);
+  TooltipComponent,
+])
 
-registerMap("china", chinaMap);
+registerMap('china', chinaMap)
 
-const option = shallowRef(getData());
-const map = shallowRef(null);
-const open = shallowRef(false);
+const option = shallowRef(getData())
+const map = shallowRef(null)
+const open = shallowRef(false)
 
-let img = null;
+let img = null
 
 function convert() {
   img = {
     src: map.value.getDataURL({
-      pixelRatio: window.devicePixelRatio || 1
+      pixelRatio: window.devicePixelRatio || 1,
     }),
     width: map.value.getWidth(),
-    height: map.value.getHeight()
-  };
-  open.value = true;
+    height: map.value.getHeight(),
+  }
+  open.value = true
 }
 </script>
 
 <template>
   <v-example id="map" title="Map" desc="(with GeoJSON & image converter)">
-    <v-chart
-      ref="map"
-      :option="option"
-      autoresize
-      style="background-color: #404a59"
-    />
+    <v-chart ref="map" :option="option" autoresize style="background-color: #404a59" />
     <template #extra>
       <p class="actions">
         <button @click="convert">Convert to image</button>

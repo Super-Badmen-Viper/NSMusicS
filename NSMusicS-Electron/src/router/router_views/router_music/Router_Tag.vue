@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
-import {store_router_data_info} from "@/router/router_store/store_router_data_info";
-import Table_Tag from "@/views/view_app/music_page/page_tag/Table_Tag.vue";
+import { onMounted } from 'vue'
+import { store_router_data_info } from '@/router/router_store/store_router_data_info'
+import Table_Tag from '@/views/view_app/music_page/page_tag/Table_Tag.vue'
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n({
-  inheritLocale: true
+  inheritLocale: true,
 })
 
 onMounted(async () => {
   store_router_data_info.router_select = 'tag'
-});
+})
 </script>
 
 <template>
   <div class="view_show">
-<!--    <Table_Tag/>-->
-    <span style="font-weight: bold;font-size: 24px;">
+    <!--    <Table_Tag/>-->
+    <span style="font-weight: bold; font-size: 24px">
       {{ $t('common.comingSoon') }}
     </span>
   </div>

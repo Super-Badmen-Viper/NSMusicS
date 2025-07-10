@@ -5,7 +5,7 @@ import Table_Music_PlayList from '@/views/view_app/music_components/player_list/
 <template>
   <n-space class="this_Bar_Music_PlayList">
     <div class="layout_distribution_4">
-      <Table_Music_PlayList/>
+      <Table_Music_PlayList />
     </div>
   </n-space>
 </template>

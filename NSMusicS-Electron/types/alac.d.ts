@@ -1,1 +1,1 @@
-declare module "alac";
+declare module 'alac'

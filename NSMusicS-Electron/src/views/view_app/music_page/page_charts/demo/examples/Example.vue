@@ -1,16 +1,14 @@
 <template>
-  <h3 :id="id"
-      style="text-align: center;">
-    <a style="font-weight: bold;font-size: 20px;">
+  <h3 :id="id" style="text-align: center">
+    <a style="font-weight: bold; font-size: 20px">
       {{ title }}
     </a>
-    <br>
-    <span v-if="desc" style="font-weight: bold;font-size: 15px;">{{ desc }}</span>
+    <br />
+    <span v-if="desc" style="font-weight: bold; font-size: 15px">{{ desc }}</span>
   </h3>
   <section>
-    <slot name="head"/>
-    <figure class="fig hero"
-            v-if="!split">
+    <slot name="head" />
+    <figure class="fig hero" v-if="!split">
       <slot />
     </figure>
     <div class="split" v-else>
@@ -26,20 +24,20 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue";
+import { defineProps } from 'vue'
 
 defineProps({
   id: {
     type: String,
-    required: true
+    required: true,
   },
   title: {
     type: String,
-    required: true
+    required: true,
   },
   desc: String,
-  split: Boolean
-});
+  split: Boolean,
+})
 </script>
 
 <style>

@@ -1,96 +1,373 @@
 <script setup lang="ts">
-import { use } from "echarts/core";
-import { CanvasRenderer, SVGRenderer } from "echarts/renderers";
+import { use } from 'echarts/core'
+import { CanvasRenderer, SVGRenderer } from 'echarts/renderers'
 
-// import LogoChart from "@/views/view_app/music_page/page_charts/demo/examples/LogoChart.vue";
-import BarChart from "@/views/view_app/music_page/page_charts/demo/examples/BarChart.vue";
-import PieChart from "@/views/view_app/music_page/page_charts/demo/examples/PieChart.vue";
-import PolarChart from "@/views/view_app/music_page/page_charts/demo/examples/PolarChart.vue";
-import ScatterChart from "@/views/view_app/music_page/page_charts/demo/examples/ScatterChart.vue";
-import GeoChart from "@/views/view_app/music_page/page_charts/demo/examples/GeoChart.vue";
-// import RadarChart from "@/views/view_app/music_page/page_charts/demo/examples/RadarChart.vue";
-import ConnectChart from "@/views/view_app/music_page/page_charts/demo/examples/ConnectChart.vue";
-// import GlChart from "@/views/view_app/music_page/page_charts/demo/examples/GlChart.vue";
-import ManualChart from "@/views/view_app/music_page/page_charts/demo/examples/ManualChart.vue";
-import {darkTheme, lightTheme, NConfigProvider} from "naive-ui";
-import {onMounted} from "vue";
-import {
-  store_general_fetch_charts_list
-} from "@/data/data_stores/server/server_api_abstract/music_scene/page/page_charts/store_general_fetch_charts_list";
-import {store_view_charts_page_info} from "@/views/view_app/music_page/page_charts/store/store_view_charts_page_info";
-import {store_view_home_page_info} from "@/views/view_app/music_page/page_home/store/store_view_home_page_info";
+import BarChart from '@/views/view_app/music_page/page_charts/demo/examples/BarChart.vue'
+import PieChart from '@/views/view_app/music_page/page_charts/demo/examples/PieChart.vue'
+import PolarChart from '@/views/view_app/music_page/page_charts/demo/examples/PolarChart.vue'
+import ScatterChart from '@/views/view_app/music_page/page_charts/demo/examples/ScatterChart.vue'
+import { onMounted } from 'vue'
+import { store_view_charts_page_info } from '@/views/view_app/music_page/page_charts/store/store_view_charts_page_info'
 
-use([CanvasRenderer, SVGRenderer]);
+use([CanvasRenderer, SVGRenderer])
 
 function random() {
-  return Math.round(300 + Math.random() * 700) / 10;
+  return Math.round(300 + Math.random() * 700) / 10
 }
-onMounted(async ()=>{
+onMounted(async () => {
   store_view_charts_page_info.charts_data_temporary = [
     {
-      type: "media_file",
-      name: "乐曲",
+      type: 'media_file',
+      name: '乐曲',
       items: [
-        { name: "七里香", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-07" },
-        { name: "以父之名", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-06" },
-        { name: "晴天", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-05" },
-        { name: "夜曲", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-04" },
-        { name: "青花瓷", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-03" },
-        { name: "稻香", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-02" },
-        { name: "双截棍", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-01" },
-        { name: "简单爱", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-30" },
-        { name: "听妈妈的话", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-29" },
-        { name: "东风破", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-28" }
-      ].sort((a, b) => a.play_count - b.play_count).slice(0, 10)
+        {
+          name: '七里香',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-07-07',
+        },
+        {
+          name: '以父之名',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-07-06',
+        },
+        {
+          name: '晴天',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-07-05',
+        },
+        {
+          name: '夜曲',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-07-04',
+        },
+        {
+          name: '青花瓷',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-07-03',
+        },
+        {
+          name: '稻香',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-07-02',
+        },
+        {
+          name: '双截棍',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-07-01',
+        },
+        {
+          name: '简单爱',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-30',
+        },
+        {
+          name: '听妈妈的话',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-29',
+        },
+        {
+          name: '东风破',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-28',
+        },
+      ]
+        .sort((a, b) => a.play_count - b.play_count)
+        .slice(0, 10),
     },
     {
-      type: "album",
-      name: "专辑",
+      type: 'album',
+      name: '专辑',
       items: [
-        { name: "叶惠美", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-04" },
-        { name: "范特西", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-03" },
-        { name: "十一月的萧邦", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-02" },
-        { name: "七里香", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-01" },
-        { name: "八度空间", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-30" },
-        { name: "我很忙", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-29" },
-        { name: "魔杰座", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-28" },
-        { name: "跨时代", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-27" },
-        { name: "十二新作", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-26" },
-        { name: "哎呦，不错哦", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-25" }
-      ].sort((a, b) => a.play_count - b.play_count).slice(0, 10)
+        {
+          name: '叶惠美',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-07-04',
+        },
+        {
+          name: '范特西',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-07-03',
+        },
+        {
+          name: '十一月的萧邦',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-07-02',
+        },
+        {
+          name: '七里香',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-07-01',
+        },
+        {
+          name: '八度空间',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-30',
+        },
+        {
+          name: '我很忙',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-29',
+        },
+        {
+          name: '魔杰座',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-28',
+        },
+        {
+          name: '跨时代',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-27',
+        },
+        {
+          name: '十二新作',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-26',
+        },
+        {
+          name: '哎呦，不错哦',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-25',
+        },
+      ]
+        .sort((a, b) => a.play_count - b.play_count)
+        .slice(0, 10),
     },
     {
-      type: "artist",
-      name: "艺术家",
+      type: 'artist',
+      name: '艺术家',
       items: [
-        { name: "周杰伦", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-07-01" },
-        { name: "林俊杰", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-30" },
-        { name: "陈奕迅", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-29" },
-        { name: "邓紫棋", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-28" },
-        { name: "薛之谦", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-27" },
-        { name: "李荣浩", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-26" },
-        { name: "王力宏", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-25" },
-        { name: "张杰", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-24" },
-        { name: "华晨宇", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-23" },
-        { name: "毛不易", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-22" }
-      ].sort((a, b) => a.play_count - b.play_count).slice(0, 10)
+        {
+          name: '周杰伦',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-07-01',
+        },
+        {
+          name: '林俊杰',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-30',
+        },
+        {
+          name: '陈奕迅',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-29',
+        },
+        {
+          name: '邓紫棋',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-28',
+        },
+        {
+          name: '薛之谦',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-27',
+        },
+        {
+          name: '李荣浩',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-26',
+        },
+        {
+          name: '王力宏',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-25',
+        },
+        {
+          name: '张杰',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-24',
+        },
+        {
+          name: '华晨宇',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-23',
+        },
+        {
+          name: '毛不易',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-22',
+        },
+      ]
+        .sort((a, b) => a.play_count - b.play_count)
+        .slice(0, 10),
     },
     {
-      type: "media_cue",
-      name: "光盘",
+      type: 'media_cue',
+      name: '光盘',
       items: [
-        { name: "经典CD-001", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-28" },
-        { name: "怀旧CD-002", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-27" },
-        { name: "摇滚CD-003", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-26" },
-        { name: "流行CD-004", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-25" },
-        { name: "电子CD-005", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-24" },
-        { name: "爵士CD-006", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-23" },
-        { name: "古典CD-007", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-22" },
-        { name: "民谣CD-008", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-21" },
-        { name: "蓝调CD-009", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-20" },
-        { name: "乡村CD-010", play_count: Math.floor(random()), rating: (Math.random() * 5).toFixed(1), starred: Math.random() > 0.3, play_complete_count: Math.floor(random() * 0.8), play_date: "2025-06-19" }
-      ].sort((a, b) => a.play_count - b.play_count).slice(0, 10)
-    }
+        {
+          name: '经典CD-001',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-28',
+        },
+        {
+          name: '怀旧CD-002',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-27',
+        },
+        {
+          name: '摇滚CD-003',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-26',
+        },
+        {
+          name: '流行CD-004',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-25',
+        },
+        {
+          name: '电子CD-005',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-24',
+        },
+        {
+          name: '爵士CD-006',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-23',
+        },
+        {
+          name: '古典CD-007',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-22',
+        },
+        {
+          name: '民谣CD-008',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-21',
+        },
+        {
+          name: '蓝调CD-009',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-20',
+        },
+        {
+          name: '乡村CD-010',
+          play_count: Math.floor(random()),
+          rating: (Math.random() * 5).toFixed(1),
+          starred: Math.random() > 0.3,
+          play_complete_count: Math.floor(random() * 0.8),
+          play_date: '2025-06-19',
+        },
+      ]
+        .sort((a, b) => a.play_count - b.play_count)
+        .slice(0, 10),
+    },
   ]
   // ///
   // await store_general_fetch_charts_list.fetchData_Charts();
@@ -126,17 +403,17 @@ onMounted(async ()=>{
 </script>
 
 <template>
-  <div style="margin-left: -20px;">
+  <div style="margin-left: -20px">
     <!--    <logo-chart />-->
 
-    <div style="text-align: center;font-weight: bold;font-size: 32px;margin-bottom: 10px;">
+    <div style="text-align: center; font-weight: bold; font-size: 32px; margin-bottom: 10px">
       Vue-ECharts
     </div>
-    <div style="text-align: center;font-weight: bold;font-size: 16px;margin-bottom: 16px;">
-      此页面用于可视化浏览你的播放数据<br>
-      它是后续：猜你喜欢(推荐系统)与年(季、月、周)度听歌报告 的重要组成部分<br>
-      NSMusicS与NineSong的每一个组件，都是通用应用场景组件<br>
-      这些组件成熟后，就能够轻松集成互联其它应用场景(ToC与ToB皆可)<br>
+    <div style="text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 16px">
+      此页面用于可视化浏览你的播放数据<br />
+      它是后续：猜你喜欢(推荐系统)与年(季、月、周)度听歌报告 的重要组成部分<br />
+      NSMusicS与NineSong的每一个组件，都是通用应用场景组件<br />
+      这些组件成熟后，就能够轻松集成互联其它应用场景(ToC与ToB皆可)<br />
     </div>
 
     <bar-chart />
@@ -148,7 +425,7 @@ onMounted(async ()=>{
     <!--    <connect-chart />-->
     <!--    <gl-chart />-->
     <!--    <manual-chart />-->
-    <br>
+    <br />
   </div>
 </template>
 
@@ -166,7 +443,7 @@ html {
 body {
   margin: 0;
   padding: 3em 0 0;
-  font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+  font-family: Inter, 'Helvetica Neue', Arial, sans-serif;
   font-weight: 300;
   color: #666;
   text-align: center;
@@ -192,7 +469,7 @@ h3 {
 
 h1 {
   margin-bottom: 1em;
-  font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+  font-family: Inter, 'Helvetica Neue', Arial, sans-serif;
 }
 
 h2 {
@@ -213,7 +490,7 @@ h2 {
 
   &::before,
   &::after {
-    content: "";
+    content: '';
     display: block;
     width: 48px;
     border-bottom: 1px dotted currentColor;
@@ -271,8 +548,8 @@ pre {
 pre,
 code,
 textarea {
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-    "Liberation Mono", monospace;
+  font-family:
+    ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
 }
 
 footer {
@@ -404,7 +681,7 @@ select {
       font-size: 0.8em;
     }
 
-    input[type="checkbox"] {
+    input[type='checkbox'] {
       display: none;
 
       &:checked + label {
