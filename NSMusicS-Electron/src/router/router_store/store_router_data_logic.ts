@@ -23,6 +23,7 @@ import {
 export const store_router_data_logic = reactive({
     reset_data(){
         store_view_media_page_logic.page_songlists_keywordFilter = ""
+        store_view_media_page_logic.page_songlists_multi_sort = ""
         store_view_media_page_logic.page_songlists_selected = 'song_list_all'
         store_view_album_page_logic.page_albumlists_keyword = ''
         store_view_album_page_logic.page_albumlists_selected = 'album_list_all'

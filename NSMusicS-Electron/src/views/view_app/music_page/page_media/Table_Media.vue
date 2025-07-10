@@ -182,6 +182,8 @@ let options_Sort = computed(() => {
 });
 const handleSelect_Sort = (key: string | number) => {
   store_view_media_page_logic.page_songlists_multi_sort = ''
+  updateSortConditions()
+  //
   let _state_Sort_: state_Sort = state_Sort.Default;
   let idx: number = -1;
   for (let i = 0; i < options_Sort_key.value.length; i++) {
@@ -862,6 +864,11 @@ const initializeConditions = () => {
         .fill(null)
         .map(() => ({ key: '', order: '' }));
     sortConditions.value = [...sortConditions.value, ...newConditions];
+  }else{
+    sortConditions.value.forEach(condition => {
+      condition.key = '';
+      condition.order = '';
+    })
   }
 }
 const stopWatching_conditionCount = watch(conditionCount, (newCount) => {
@@ -923,7 +930,7 @@ const parseSortQuery = (query: string): SortCondition[] => {
   }
   return conditions;
 };
-onMounted(() => {
+const updateSortConditions = () => {
   const storedQuery = store_view_media_page_logic.page_songlists_multi_sort;
 
   if (storedQuery) {
@@ -942,6 +949,9 @@ onMounted(() => {
     // 无存储值时使用默认初始化
     initializeConditions();
   }
+}
+onMounted(() => {
+  updateSortConditions()
 });
 
 ////// bulk_operation and select_line
@@ -1347,21 +1357,11 @@ onBeforeUnmount(() => {
                 <span style="font-size: 20px; font-weight: 600;">
                   {{ $t('OptionCustomUsers') + $t('nsmusics.view_page.multi_level_sort') }}
                 </span>
-                <n-space align="center">
-                  <span>{{ $t('Sort') + $t('nsmusics.view_page.count') }}</span>
-                  <n-input-number
-                      v-model:value="conditionCount"
-                      :min="0"
-                      :max="allSortKeys.length"
-                      size="small"
-                      style="width: 80px;"
-                  />
-                </n-space>
               </n-space>
               <n-space justify="space-between" align="center" style="margin-bottom: 10px;">
                 {{ store_view_media_page_logic.page_songlists_multi_sort }}
               </n-space>
-              <n-space vertical size="large" style="width: 400px;">
+              <n-space vertical size="large" style="width: 400px;margin-bottom: 10px;">
                 <n-space justify="space-around" v-for="(_, index) in sortConditions" :key="index">
                   <n-select
                       style="width: 300px;"
@@ -1376,6 +1376,29 @@ onBeforeUnmount(() => {
                       v-model:value="sortConditions[index].order"
                       :disabled="!sortConditions[index].key"
                       @update:value="(value) => handleOrderChange(value, index)"
+                  />
+                </n-space>
+              </n-space>
+              <n-space size="large" align="center" justify="space-between">
+                <n-space>
+                  <n-button secondary strong
+                            @click="()=>{
+                              store_view_media_page_logic.page_songlists_multi_sort = ''
+                              updateSortConditions()
+                            }">
+                    {{ $t('common.clear') + $t('Sort') }}
+                  </n-button>
+                </n-space>
+                <n-space>
+                  <span style="font-size: 14px;font-weight: 600;">
+                    {{ $t('Sort') + $t('nsmusics.view_page.count') }}
+                  </span>
+                  <n-input-number
+                      v-model:value="conditionCount"
+                      :min="0"
+                      :max="allSortKeys.length"
+                      size="small"
+                      style="width: 80px;"
                   />
                 </n-space>
               </n-space>

@@ -32,6 +32,7 @@ watch(() => store_view_album_page_logic.page_albumlists_options_Sort_key, async 
     }
 });
 watch(() => store_view_album_page_logic.page_albumlists_keyword, (newValue) => {
+    store_view_album_page_logic.page_albumlists_multi_sort = ""
     if(newValue.indexOf('accurate_search') > 0){
         newValue = newValue.replace('accurate_search','');
         if(newValue.indexOf('__title__') > 0){
@@ -77,4 +78,7 @@ watch(() => store_view_album_page_logic.page_albumlists_filter_year, async (newV
     store_app_configs_logic_save.save_system_config_of_App_Configs()
     store_view_album_page_logic.page_albumlists_keyword = ""
     await store_general_fetch_album_list.fetchData_Album()
+});
+watch(() => store_view_album_page_logic.page_albumlists_multi_sort, async (newValue) => {
+    store_general_fetch_album_list.fetchData_Album_of_server_web_start()
 });

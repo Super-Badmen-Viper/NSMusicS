@@ -169,6 +169,7 @@ export const store_view_media_cue_page_logic = reactive({
     },
 
     async get_page_songlists_keyword(newValue: any){
+        store_view_media_cue_page_logic.page_songlists_multi_sort = ""
         this.page_songlists_keyword = newValue
         if (newValue.indexOf('accurate_search') > 0) {
             newValue = newValue.replace('accurate_search', '');
@@ -249,4 +250,7 @@ watch(() => store_view_media_cue_page_logic.page_songlists_filter_path_folder, a
     store_view_media_cue_page_logic.page_songlists_keywordFilter = ""
     store_view_media_cue_page_logic.list_selected_Hand_click = false
     await store_general_fetch_media_cue_list.fetchData_Media()
+});
+watch(() => store_view_media_cue_page_logic.page_songlists_multi_sort, async (newValue) => {
+    store_general_fetch_media_cue_list.fetchData_Media_of_server_web_start()
 });

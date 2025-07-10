@@ -23,6 +23,7 @@ watch(() => store_view_artist_page_logic.page_artistlists_options_Sort_key, (new
     }
 });
 watch(() => store_view_artist_page_logic.page_artistlists_keyword, (newValue) => {
+    store_view_artist_page_logic.page_artistlists_multi_sort = ""
     if(newValue.indexOf('accurate_search') > 0){
         newValue = newValue.replace('accurate_search','');
         if(newValue.indexOf('__title__') > 0){
@@ -61,4 +62,7 @@ watch(() => store_view_artist_page_logic.list_data_StartUpdate, (newValue) => {
         store_view_artist_page_logic.list_data_StartUpdate = false
         console.log('page_artistlists_reset_data?:' + newValue)
     }
+});
+watch(() => store_view_artist_page_logic.page_artistlists_multi_sort, (newValue) => {
+    store_general_fetch_artist_list.fetchData_Artist_of_server_web_start()
 });
