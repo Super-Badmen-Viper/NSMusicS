@@ -22,12 +22,6 @@ onMounted(() => {
 });
 
 ////// changed_data write to sqlite
-const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
-  console.log('handleItemClick_Favorite_id：'+id+'  _favorite:'+!favorite)
-}
-const handleItemClick_Rating = (id: any,rating: number) => {
-  console.log('handleItemClick_Rating_id：'+id+'  _rating:'+rating)
-}
 import error_album from '@/assets/img/error_album.jpg'
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 const errorHandled = ref(new Map());

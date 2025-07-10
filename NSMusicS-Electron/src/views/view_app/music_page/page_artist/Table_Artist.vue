@@ -842,8 +842,9 @@ onBeforeUnmount(() => {
               <n-space justify="space-between" align="center" style="margin-bottom: 10px;">
                 {{ store_view_media_page_logic.page_songlists_multi_sort }}
               </n-space>
-              <n-space vertical size="large" style="width: 400px;margin-bottom: 10px;">
-                <n-space justify="space-around" v-for="(_, index) in sortConditions" :key="index">
+              <n-space vertical size="large"
+                       style="width: 400px;margin-bottom: 12px;">
+                <n-space justify="space-between" v-for="(_, index) in sortConditions" :key="index">
                   <n-select
                       style="width: 300px;"
                       :options="getAvailableKeysForIndex(index)"
@@ -860,7 +861,8 @@ onBeforeUnmount(() => {
                   />
                 </n-space>
               </n-space>
-              <n-space size="large" align="center" justify="space-between">
+              <n-space size="large" align="center" justify="space-between"
+                       style="width: 400px;margin-bottom: 6px;">
                 <n-space>
                   <n-button secondary strong
                             @click="()=>{
@@ -870,15 +872,14 @@ onBeforeUnmount(() => {
                     {{ $t('common.clear') + $t('Sort') }}
                   </n-button>
                 </n-space>
-                <n-space>
-                  <span style="font-size: 14px;font-weight: 600;">
+                <n-space align="center">
+                  <span style="font-size: 14px;font-weight: 500;margin-right: 8px;">
                     {{ $t('Sort') + $t('nsmusics.view_page.count') }}
                   </span>
                   <n-input-number
                       v-model:value="conditionCount"
                       :min="0"
                       :max="allSortKeys.length"
-                      size="small"
                       style="width: 80px;"
                   />
                 </n-space>
