@@ -91,13 +91,13 @@ function create_menuOptions_appBar() {
     { key: 'divider-1', type: 'divider', props: { style: { marginLeft: '22px' } } }
   )
   store_app_configs_info.app_view_menuOptions.push(
-    {
-      label: computed(() =>
-        renderRouterLink('categories', t('entity.smartPlaylist') + t('Categories'))
-      ),
-      key: 'categories',
-      icon: renderIcon(DataClass),
-    },
+    // {
+    //   label: computed(() =>
+    //     renderRouterLink('categories', t('entity.smartPlaylist') + t('Categories'))
+    //   ),
+    //   key: 'categories',
+    //   icon: renderIcon(DataClass),
+    // },
     {
       label: computed(() =>
         renderRouterLink('charts', t('Play') + t('Data') + t('nsmusics.siderbar_menu.charts'))
