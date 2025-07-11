@@ -15,6 +15,8 @@
     "./src/*.ext"
   ],
   "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
     "composite": true,
     "noEmit": true,
     "module": "ESNext",

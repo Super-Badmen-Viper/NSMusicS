@@ -615,7 +615,7 @@ const refreshModeOptions = ref([
                           type="error"
                           @click="
                             () => {
-                              item.show = false;
+                              item.show = false
                               update_server_deleteUser(item.id, item.folderPath)
                             }
                           "

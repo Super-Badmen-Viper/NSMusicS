@@ -2022,6 +2022,27 @@ onBeforeUnmount(() => {
           </n-space>
         </n-space>
       </n-space>
+
+      <div style="margin-left: 10px">
+        <span
+          v-if="
+            store_server_user_model.model_server_type_of_web &&
+            store_server_users.server_select_kind === 'ninesong'
+          "
+          style="font-weight: bold; font-size: 20px"
+        >
+          {{ $t('common.comingSoon') + ' ' + $t('error.serverRequired') + ' : NineSong v1.0.0' }}
+          <br />
+          CUE页面管理与播放模式未完善，但仍可使用MPV音频播放器进行播放
+          <br />
+          注意：MPV播放组件仅可在桌面端客户端使用，而Web客户端则不支持MPV
+        </span>
+        <div v-else style="font-size: 24px; font-weight: bold; margin-top: 20px">
+          {{ $t('error.serverRequired') + ': NineSong' }}
+          <br />
+        </div>
+      </div>
+
       <DynamicScroller
         class="table"
         ref="dynamicScroller"

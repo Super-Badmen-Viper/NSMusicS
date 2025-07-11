@@ -804,7 +804,9 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
   /// file count
   public async get_count_of_media_file(url: string, username: string, token: string, salt: string) {
     try {
-      const media_library_scanning_ApiService_of_ND = new Media_library_scanning_ApiService_of_ND(url)
+      const media_library_scanning_ApiService_of_ND = new Media_library_scanning_ApiService_of_ND(
+        url
+      )
       const getScanStatus = await media_library_scanning_ApiService_of_ND.getScanStatus(
         username,
         token,

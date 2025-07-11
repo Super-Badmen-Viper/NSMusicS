@@ -5,6 +5,8 @@ import Table_Tag from '@/views/view_app/music_page/page_tag/Table_Tag.vue'
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
+import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
+import { store_server_users } from '@/data/data_stores/server/store_server_users'
 const { t } = useI18n({
   inheritLocale: true,
 })
@@ -17,9 +19,21 @@ onMounted(async () => {
 <template>
   <div class="view_show">
     <!--    <Table_Tag/>-->
-    <span style="font-weight: bold; font-size: 24px">
-      {{ $t('common.comingSoon') }}
-    </span>
+    <div
+      v-if="
+        store_server_user_model.model_server_type_of_web &&
+        store_server_users.server_select_kind === 'ninesong'
+      "
+      style="margin-top: 50px"
+    >
+      <span style="font-weight: bold; font-size: 24px">
+        {{ $t('common.comingSoon') + ' ' + $t('error.serverRequired') + ' : NineSong v1.0.0' }}
+      </span>
+    </div>
+    <div v-else style="font-size: 24px; font-weight: bold; margin-top: 20px">
+      {{ $t('error.serverRequired') + ': NineSong' }}
+      <br />
+    </div>
   </div>
 </template>
 

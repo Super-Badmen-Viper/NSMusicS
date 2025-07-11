@@ -25,32 +25,7 @@ onMounted(async () => {
       "
     />
     <div v-else style="font-size: 24px; font-weight: bold; margin-top: 20px">
-      {{
-        $t('nsmusics.view_page.current') +
-        $t('LabelWeb') +
-        ': ' +
-        $t('nsmusics.view_page.disk') +
-        $t('List') +
-        ' ( CUE ' +
-        $t('nsmusics.view_page.disk') +
-        $t('nsmusics.view_page.virtual_orbit_division') +
-        $t('List') +
-        ' ) '
-      }}
-      <br />
       {{ $t('error.serverRequired') + ': NineSong' }}
-      <br />
-      <br />
-      {{
-        'CUE ' +
-        $t('nsmusics.view_page.disk') +
-        $t('nsmusics.view_page.virtual_orbit_division') +
-        ' ' +
-        $t('AudioProfileNotSupported') +
-        ': Navidrome、Jellyfin、Emby'
-      }}
-      <br />
-      {{ $t('SelectServer') + ': NineSong' }}
       <br />
     </div>
   </div>

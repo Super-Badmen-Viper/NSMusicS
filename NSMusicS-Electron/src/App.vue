@@ -17,11 +17,7 @@ import {
   MinusRound,
   LibraryMusicOutlined,
 } from '@vicons/material'
-import {
-  Close,
-  DataClass,
-  UserAvatarFilledAlt,
-} from '@vicons/carbon'
+import { Close, DataClass, UserAvatarFilledAlt } from '@vicons/carbon'
 import { ArrowsMaximize, ArrowsMinimize } from '@vicons/tabler'
 
 ////// views_components

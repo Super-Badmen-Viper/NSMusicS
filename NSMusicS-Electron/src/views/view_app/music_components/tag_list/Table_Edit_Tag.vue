@@ -93,7 +93,8 @@ async function save_edit_tag() {
           const save_tag = JSON.parse(
             JSON.stringify(store_player_tag_modify.player_current_media_tag)
           )
-          const item: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find(
+          const item: Media_File | undefined =
+            store_view_media_page_info.media_Files_temporary.find(
               (mediaFile: Media_File) =>
                 mediaFile.path === store_player_tag_modify.player_current_media_path
             )

@@ -2,6 +2,8 @@
 import { onMounted } from 'vue'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import Table_Categories from '@/views/view_app/music_page/page_categories/Table_Categories.vue'
+import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
+import { store_server_users } from '@/data/data_stores/server/store_server_users'
 
 onMounted(async () => {
   store_router_data_info.router_select = 'categories'
@@ -11,9 +13,21 @@ onMounted(async () => {
 <template>
   <div class="view_show">
     <!--    <Table_Categories/>-->
-    <span style="font-weight: bold; font-size: 24px">
-      {{ $t('common.comingSoon') }}
-    </span>
+    <div
+      v-if="
+        store_server_user_model.model_server_type_of_web &&
+        store_server_users.server_select_kind === 'ninesong'
+      "
+      style="margin-top: 50px"
+    >
+      <span style="font-weight: bold; font-size: 24px">
+        {{ $t('common.comingSoon') }}
+      </span>
+    </div>
+    <div v-else style="font-size: 24px; font-weight: bold; margin-top: 20px">
+      {{ $t('error.serverRequired') + ': NineSong' }}
+      <br />
+    </div>
   </div>
 </template>
 

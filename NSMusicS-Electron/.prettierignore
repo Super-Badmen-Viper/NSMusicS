@@ -1,0 +1,12 @@
+node_modules/
+dist/
+build/
+release/
+resources/
+coverage/
+*.log
+
+.idea/
+
+**/*.min.js
+**/*.min.css

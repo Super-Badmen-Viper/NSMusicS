@@ -11,15 +11,11 @@ export class Get_AnnotationInfo_To_LocalSqlite {
       try {
         db.exec('BEGIN TRANSACTION')
         const annotations = db
-          .prepare(
-            `SELECT ann_id, item_id FROM annotation WHERE item_type = ?`
-          )
+          .prepare(`SELECT ann_id, item_id FROM annotation WHERE item_type = ?`)
           .all(item_type)
         const validAnnotations = annotations.filter((annotation) => {
           const exists = db
-            .prepare(
-              `SELECT 1 FROM ${tableName} WHERE id = ?`
-            )
+            .prepare(`SELECT 1 FROM ${tableName} WHERE id = ?`)
             .get(annotation.item_id)
           return exists !== undefined
         })

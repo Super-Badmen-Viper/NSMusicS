@@ -288,7 +288,8 @@ export const store_general_fetch_media_list = reactive({
               })
             store_view_media_page_logic.list_data_Hand_Search = false
             if (store_view_media_page_logic.page_songlists_selected === 'song_list_recently') {
-              const new_sort: Media_File[] = store_view_media_page_info.media_Files_temporary.slice()
+              const new_sort: Media_File[] =
+                store_view_media_page_info.media_Files_temporary.slice()
               store_view_media_page_info.media_Files_temporary = []
               order_play_date.forEach((id) => {
                 const index = new_sort.findIndex((item) => item.id === id)

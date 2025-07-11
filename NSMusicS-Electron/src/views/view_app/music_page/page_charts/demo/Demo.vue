@@ -8,6 +8,8 @@ import PolarChart from '@/views/view_app/music_page/page_charts/demo/examples/Po
 import ScatterChart from '@/views/view_app/music_page/page_charts/demo/examples/ScatterChart.vue'
 import { onMounted } from 'vue'
 import { store_view_charts_page_info } from '@/views/view_app/music_page/page_charts/store/store_view_charts_page_info'
+import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
+import { store_server_users } from '@/data/data_stores/server/store_server_users'
 
 use([CanvasRenderer, SVGRenderer])
 
@@ -400,20 +402,38 @@ onMounted(async () => {
   //         .slice(0, 10);
   // ///
 })
+
+////// i18n auto lang
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n({
+  inheritLocale: true,
+})
 </script>
 
 <template>
+  <span
+    v-if="
+      store_server_user_model.model_server_type_of_web &&
+      store_server_users.server_select_kind === 'ninesong'
+    "
+    style="font-weight: bold; font-size: 24px"
+  >
+    {{ $t('common.comingSoon') + ' ' + $t('error.serverRequired') + ' : NineSong v1.0.0' }}
+  </span>
+  <div v-else style="font-size: 24px; font-weight: bold; margin-top: 20px">
+    {{ $t('error.serverRequired') + ': NineSong' }}
+    <br />
+  </div>
   <div style="margin-left: -20px">
     <!--    <logo-chart />-->
-
     <div style="text-align: center; font-weight: bold; font-size: 32px; margin-bottom: 10px">
       Vue-ECharts
     </div>
     <div style="text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 16px">
       此页面用于可视化浏览你的播放数据<br />
-      它是后续：猜你喜欢(推荐系统)与年(季、月、周)度听歌报告 的重要组成部分<br />
+      它是后续：猜你喜欢(推荐系统)、智能分类、年(季、月、周)度听歌报告 的重要组成部分<br />
       NSMusicS与NineSong的每一个组件，都是通用应用场景组件<br />
-      这些组件成熟后，就能够轻松集成互联其它应用场景(ToC与ToB皆可)<br />
+      这些组件开发成熟后，就能够轻松集成与互联其它的应用场景(ToC与ToB皆可)<br />
     </div>
 
     <bar-chart />
