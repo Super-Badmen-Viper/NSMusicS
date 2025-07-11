@@ -254,7 +254,7 @@ const init_player_howler = async () => {
   store_player_audio_logic.player.howl = new Howl({
     src: [audio_url],
     format: store_player_audio_logic.player_dolby ? ['dolby', media_kind] : [],
-    autoplay: false,
+    autoplay: true,
     html5: true,
     loop: false,
     onplay: async () => {
