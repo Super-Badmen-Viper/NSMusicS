@@ -77,7 +77,13 @@
       "warning_mpv_play_alac": "請等待服務端響應, 需要等待數秒鐘轉碼完成並播放, 或者使用mpv播放組件即可跳過alac轉碼aac步驟",
       "virtual_orbit_division": "虛擬分軌",
       "multi_level_sort": "多級排序",
-      "count": "數量"
+      "count": "數量",
+      "list_type": "列表類型",
+      "paging_list": "分頁列表",
+      "virtual_list": "虛擬列表",
+      "list_view": "列表視圖",
+      "row_level_view": "行級視圖",
+      "intra_row_block_level_view": "行內區塊級視圖"
     },
     "view_player": {
       "view_seting": {

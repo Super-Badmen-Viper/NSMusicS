@@ -77,7 +77,13 @@
       "warning_mpv_play_alac": "Čekajte prosím na odpověď serveru. Bude potřeba čekat několik sekund na dokončení překódování a zapnutí přehrávání, nebo můžete použít komponentu přehrávače mpv, abyste překročili krok překódování alac na aac.",
       "virtual_orbit_division": "Virtuální Dělení Tematického Okruhu",
       "multi_level_sort": "Víceúrovňové řazení",
-      "count": "Počet"
+      "count": "Počet",
+      "list_type": "Typ seznamu",
+      "paging_list": "Stránkovaný seznam",
+      "virtual_list": "Virtuální seznam",
+      "list_view": "Zobrazení seznamu",
+      "row_level_view": "Zobrazení na úrovni řádku",
+      "intra_row_block_level_view": "Inline-blockové zobrazení"
     },
     "view_player": {
       "view_seting": {

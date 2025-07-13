@@ -77,7 +77,13 @@
       "warning_mpv_play_alac": "Wacht op het serverantwoord. Het kost enkele seconden om de codering te voltooien en af te spelen, of gebruik de mpv-weergavecomponent om het coderingsstap van alac naar aac over te slaan.",
       "virtual_orbit_division": "Virtuele Spoorverdeling",
       "multi_level_sort": "Meerterniveau Classificatie",
-      "count": "Tellen"
+      "count": "Tellen",
+      "list_type": "Lijsttype",
+      "paging_list": "Pagina lijst",
+      "virtual_list": "Virtuele lijst",
+      "list_view": "Lijstweergave",
+      "row_level_view": "Weergave op rijniveau",
+      "intra_row_block_level_view": "Inline-blokweergave"
     },
     "view_player": {
       "view_seting": {

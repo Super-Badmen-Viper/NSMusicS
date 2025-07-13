@@ -77,7 +77,13 @@
       "warning_mpv_play_alac": "Per favore, attendi la risposta del server. Occorre attendere alcuni secondi affinché la codifica sia completata e la riproduzione inizi, o puoi utilizzare il componente di riproduzione mpv per saltare il passaggio di codifica dell'alac in aac.",
       "virtual_orbit_division": "Divisone della Corsia Virtuale",
       "multi_level_sort": "Classificazione Multilivello",
-      "count": "Conteggio"
+      "count": "Conteggio",
+      "list_type": "Tipo di Elenco",
+      "paging_list": "Elenco Paginato",
+      "virtual_list": "Elenco Virtuale",
+      "list_view": "Vista Elenco",
+      "row_level_view": "Vista a Livello di Riga",
+      "intra_row_block_level_view": "Vista Blocco In-linea"
     },
     "view_player": {
       "view_seting": {

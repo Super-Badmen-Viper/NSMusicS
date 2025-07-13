@@ -77,7 +77,13 @@
       "warning_mpv_play_alac": "Molimo sačekajte odgovor servera. Treba pričekati nekoliko sekundi da bi se prekodiranje i reprodukcija završila, ili možete koristiti mpv komponentu za reprodukciju kako biste preskokali korak prekodiranja alac u aac.",
       "virtual_orbit_division": "Виртуелна Деловање Трага",
       "multi_level_sort": "Višeslojno Urеđivање",
-      "count": "Brojanje"
+      "count": "Brojanje",
+      "list_type": "Тип листе",
+      "paging_list": "Листа са страницама",
+      "virtual_list": "Виртуелна листа",
+      "list_view": "Преглед листе",
+      "row_level_view": "Приказ на нивоу реда",
+      "intra_row_block_level_view": "Уграђени блок приказ"
     },
     "view_player": {
       "view_seting": {

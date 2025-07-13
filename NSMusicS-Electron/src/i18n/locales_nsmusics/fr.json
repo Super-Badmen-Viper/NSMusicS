@@ -77,7 +77,13 @@
       "warning_mpv_play_alac": "Veuillez patienter pendant la réponse du serveur. Il faut attendre quelques secondes que la transcoding soit terminée et que la lecture commence, ou vous pouvez utiliser le composant de lecture mpv pour sauter l'étape de transcoding de l'alac à l'aac",
       "virtual_orbit_division": "Division de Voie Virtuelle",
       "multi_level_sort": "Tri Multiniveau",
-      "count": "Compter"
+      "count": "Compter",
+      "list_type": "Type de Liste",
+      "paging_list": "Liste Paginée",
+      "virtual_list": "Liste Virtuelle",
+      "list_view": "Vue Liste",
+      "row_level_view": "Vue Niveau Ligne",
+      "intra_row_block_level_view": "Vue Bloc en Ligne"
     },
     "view_player": {
       "view_seting": {

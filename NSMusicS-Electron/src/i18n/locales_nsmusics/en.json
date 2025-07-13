@@ -77,7 +77,13 @@
       "warning_mpv_play_alac": "Please wait for the server response, it will take several seconds to complete transcoding and playback, or you can use the mpv playback component to skip the alac to aac transcoding step",
       "virtual_orbit_division": "Virtual Track Division",
       "multi_level_sort": "Multi-level Sorting",
-      "count": "Count"
+      "count": "Count",
+      "list_type": "List Type",
+      "paging_list": "Paging List",
+      "virtual_list": "Virtual List",
+      "list_view": "List View",
+      "row_level_view": "Row-level View",
+      "intra_row_block_level_view": "Inline-block View"
     },
     "view_player": {
       "view_seting": {

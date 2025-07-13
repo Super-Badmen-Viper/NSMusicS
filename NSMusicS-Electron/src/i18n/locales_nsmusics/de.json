@@ -77,7 +77,13 @@
       "warning_mpv_play_alac": "Bitte warten Sie auf die Serverantwort. Es dauert einige Sekunden, bis die Transkodierung abgeschlossen und die Wiedergabe gestartet wird, oder Sie können das mpv-Playback-Component verwenden, um den Schritt der Transkodierung von alac auf aac zu umgehen.",
       "virtual_orbit_division": "Virtuelle Spurteilung",
       "multi_level_sort": "Mehrstufige Sortierung",
-      "count": "Anzahl"
+      "count": "Anzahl",
+      "list_type": "Listentyp",
+      "paging_list": "Seitenbasierte Liste",
+      "virtual_list": "Virtuelle Liste",
+      "list_view": "Listenansicht",
+      "row_level_view": "Zeilenbasierte Ansicht",
+      "intra_row_block_level_view": "Inline-Block-Ansicht"
     },
     "view_player": {
       "view_seting": {

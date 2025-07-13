@@ -77,7 +77,13 @@
       "warning_mpv_play_alac": "サーバーの応答をお待ちください。数秒待って変換が完了し再生までお待ちください。またはmpv再生コンポーネントをご利用いただければ、alacをaacに変換する手間が省けます。",
       "virtual_orbit_division": "バーチャルトラック分割",
       "multi_level_sort": "マルチレベルソート",
-      "count": "カウント"
+      "count": "カウント",
+      "list_type": "リストタイプ",
+      "paging_list": "ページングリスト",
+      "virtual_list": "仮想リスト",
+      "list_view": "リストビュー",
+      "row_level_view": "行レベルビュー",
+      "intra_row_block_level_view": "インラインブロックビュー"
     },
     "view_player": {
       "view_seting": {

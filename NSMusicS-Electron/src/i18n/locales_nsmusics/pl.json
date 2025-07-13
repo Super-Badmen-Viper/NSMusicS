@@ -77,7 +77,13 @@
       "warning_mpv_play_alac": "Proszę czekać na odpowiedź serwera. Trzeba poczekać kilka sekund na zakończenie konwersji i rozpoczęcie odtwarzania, można również użyć komponentu odtwarzacza mpv, aby ominąć krok konwersji z alac na aac.",
       "virtual_orbit_division": "Wirtualne Dzielenie Toru",
       "multi_level_sort": "Wielopoziomowe Sortowanie",
-      "count": "Liczba"
+      "count": "Liczba",
+      "list_type": "Typ Listy",
+      "paging_list": "Lista Stronicowana",
+      "virtual_list": "Lista Wirtualna",
+      "list_view": "Widok Listy",
+      "row_level_view": "Widok na Poziomie Wiersza",
+      "intra_row_block_level_view": "Widok Bloku Wewnątrz Wiersza"
     },
     "view_player": {
       "view_seting": {

@@ -77,7 +77,13 @@
       "warning_mpv_play_alac": "Vänligen vänta på svaret från servern. Det tar några sekunder att slutföra omkodningen och uppspelningsväntan, eller du kan använda mpv-spelningskomponenten för att hoppa över omkodning av alac till aac.",
       "virtual_orbit_division": "Virtuell Spårindelning",
       "multi_level_sort": "Flernivåsortering",
-      "count": "Räkna"
+      "count": "Räkna",
+      "list_type": "Listtyp",
+      "paging_list": "Pagineringslista",
+      "virtual_list": "Virtuell lista",
+      "list_view": "Listvy",
+      "row_level_view": "Radnivåvy",
+      "intra_row_block_level_view": "Inline-blockvy"
     },
     "view_player": {
       "view_seting": {
