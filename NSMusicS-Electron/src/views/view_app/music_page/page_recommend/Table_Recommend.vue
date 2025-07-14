@@ -1,167 +1,3 @@
-<template>
-  <n-message-provider>
-    <n-space vertical :size="24" style="padding: 24px">
-      <!-- Step 1: Select Tags and Genres -->
-      <n-card>
-        <template #header>
-          <n-space align="center" justify="space-between">
-            <n-h3 style="margin: 0">第一步：选择推荐标签</n-h3>
-            <n-select
-              v-model:value="displayMode"
-              :options="displayModeOptions"
-              style="width: 150px"
-            />
-          </n-space>
-        </template>
-        <n-space align="center">
-          <n-button @click="fetchWordCloudTags" type="primary" ghost :loading="loading.tags"
-            >获取高频标签</n-button
-          >
-          <n-button @click="fetchWordCloudGenres" type="success" ghost :loading="loading.genres"
-            >获取高频流派</n-button
-          >
-          <n-button
-            @click="clearSelections"
-            type="error"
-            ghost
-            :disabled="selectedWords.length === 0"
-            >清空选择</n-button
-          >
-        </n-space>
-
-        <!-- Current Selections Summary -->
-        <div v-if="selectedWords.length > 0" style="margin-top: 20px">
-          <n-h4>当前选择</n-h4>
-          <n-space style="margin-top: 10px">
-            <n-tag
-              v-for="word in selectedWords"
-              :key="`selected-${word.id}`"
-              :type="word.type === 'genre' ? 'success' : 'primary'"
-              closable
-              @close="removeWordSelection(word)"
-              round
-            >
-              {{ word.name }}
-            </n-tag>
-          </n-space>
-        </div>
-
-        <n-divider />
-
-        <!-- View Mode: Tags -->
-        <div v-if="displayMode === 'tags'">
-          <n-h4 style="margin-bottom: 10px;">标签 (Tags)</n-h4>
-          <n-empty
-            v-if="wordCloudTags.length === 0"
-            description="请先获取高频标签"
-            style="margin-top: 20px"
-          ></n-empty>
-          <n-space v-else>
-            <n-tag
-              v-for="word in wordCloudTags"
-              :key="word.id"
-              :type="isSelectedWord(word) ? 'primary' : 'default'"
-              :bordered="!isSelectedWord(word)"
-              @click="toggleWordSelection(word)"
-              class="custom-tag"
-              round
-            >
-              {{ word.name }} ({{ word.count }})
-            </n-tag>
-          </n-space>
-
-          <n-h4 style="margin-top: 20px;margin-bottom: 10px;">流派 (Genres)</n-h4>
-          <n-empty
-            v-if="wordCloudGenres.length === 0"
-            description="请先获取高频流派"
-            style="margin-top: 20px"
-          ></n-empty>
-          <n-space v-else>
-            <n-tag
-              v-for="word in wordCloudGenres"
-              :key="word.id"
-              :type="isSelectedWord(word) ? 'success' : 'default'"
-              :bordered="!isSelectedWord(word)"
-              @click="toggleWordSelection(word)"
-              class="custom-tag"
-              round
-            >
-              {{ word.name }} ({{ word.count }})
-            </n-tag>
-          </n-space>
-        </div>
-
-        <!-- View Mode: Chart -->
-        <div v-if="displayMode === 'chart'">
-          <n-empty
-            v-if="wordCloudTags.length === 0 && wordCloudGenres.length === 0"
-            description="请先获取标签或流派数据"
-            style="margin-top: 20px; height: 400px"
-          ></n-empty>
-          <div v-else style="width: 100%; height: 500px;">
-            <div ref="wordCloudChartRef" style="width: 100%; height: 100%;"></div>
-          </div>
-        </div>
-      </n-card>
-
-      <!-- Step 2: Get Recommended Songs -->
-      <n-card>
-        <template #header>
-          <n-h3 style="margin: 0">第二步：获取推荐歌曲</n-h3>
-        </template>
-        <n-button
-          @click="fetchRecommendedSongs"
-          :disabled="selectedWords.length === 0"
-          type="primary"
-          :loading="loading.recs"
-        >
-          获取推荐
-        </n-button>
-        <n-empty
-          v-if="recommendedSongs.length === 0"
-          description="暂无推荐歌曲"
-          style="margin-top: 20px"
-        ></n-empty>
-        <n-list v-else style="margin-top: 20px" bordered>
-          <n-checkbox-group v-model:value="selectedSongIds">
-            <n-list-item v-for="song in recommendedSongs" :key="song.id">
-              <n-space align="center">
-                <n-checkbox :value="song.id" />
-                <n-thing :title="song.name">
-                  <template #description>
-                    <n-text depth="3">Score: {{ song.score }}</n-text>
-                  </template>
-                </n-thing>
-              </n-space>
-            </n-list-item>
-          </n-checkbox-group>
-        </n-list>
-      </n-card>
-
-      <!-- Step 3: Get Song Details -->
-      <n-card>
-        <template #header>
-          <n-h3 style="margin: 0">第三步：获取歌曲信息</n-h3>
-        </template>
-        <n-button
-          @click="fetchSongDetails"
-          :disabled="recommendedSongs.length === 0 || selectedSongIds.length === 0"
-          type="primary"
-          :loading="loading.details"
-        >
-          获取歌曲详情
-        </n-button>
-        <n-data-table
-          :columns="columns"
-          :data="finalSongList"
-          :pagination="{ pageSize: 10 }"
-          style="margin-top: 20px"
-        />
-      </n-card>
-    </n-space>
-  </n-message-provider>
-</template>
-
 <script setup lang="ts">
 import { ref, computed, reactive, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import {
@@ -170,18 +6,12 @@ import {
   NCard,
   NButton,
   NTag,
-  NCheckboxGroup,
-  NCheckbox,
   NDataTable,
   NH3,
   NH4,
   NDivider,
-  NList,
-  NListItem,
   NEmpty,
   NSelect,
-  NThing,
-  NText,
   useMessage,
 } from 'naive-ui'
 import * as echarts from 'echarts/core'
@@ -190,6 +20,11 @@ import { CanvasRenderer } from 'echarts/renderers'
 import 'echarts-wordcloud'
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_access/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_view_recommend_page_info } from '@/views/view_app/music_page/page_recommend/store/store_view_recommend_page_info'
+import { store_playlist_list_info } from '@/views/view_app/music_components/player_list/store/store_playlist_list_info'
+import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
+import {
+  store_playlist_list_logic
+} from '@/views/view_app/music_components/player_list/store/store_playlist_list_logic'
 
 echarts.use([TooltipComponent, VisualMapComponent, CanvasRenderer])
 
@@ -199,39 +34,35 @@ const message = useMessage()
 // --- Reactive State ---
 const loading = reactive({ tags: false, genres: false, recs: false, details: false })
 const selectedWords = ref<any[]>([])
-const selectedSongIds = ref<string[]>([])
-const displayMode = ref('chart') // 默认视图改为词云图
+const displayMode = ref('chart')
 const displayModeOptions = [
   { label: '词云图视图', value: 'chart' },
   { label: '标签视图', value: 'tags' },
 ]
+let recommendationDebounceTimer: any = null
 
 // --- ECharts State ---
-const wordCloudChartRef = ref<HTMLElement | null>(null);
-let chartInstance: echarts.ECharts | null = null;
+const wordCloudChartRef = ref<HTMLElement | null>(null)
+let chartInstance: echarts.ECharts | null = null
 
 // --- Computed Properties ---
 const wordCloudTags = computed(() => store_view_recommend_page_info.recommend_WordCloudTag_metadata)
 const wordCloudGenres = computed(
   () => store_view_recommend_page_info.recommend_WordCloudGenre_metadata
 )
-const recommendedSongs = computed(
-  () => store_view_recommend_page_info.recommend_MediaSearch_metadata
-)
 const finalSongList = computed(() => store_view_recommend_page_info.recommend_MediaFiles_temporary)
 
 const combinedWordCloudData = computed(() => {
   const tags = wordCloudTags.value.map(tag => ({ ...tag, type: 'tag' }))
   const genres = wordCloudGenres.value.map(genre => ({ ...genre, type: 'genre' }))
-  return [...tags, ...genres]
-});
+  return [...tags, ...genres].sort((a, b) => b.count - a.count)
+})
 
 // --- Data Table Columns ---
 const columns = [
   { title: '标题', key: 'title', resizable: true },
   { title: '歌手', key: 'artist', resizable: true },
   { title: '专辑', key: 'album', resizable: true },
-  { title: '时长', key: 'duration_txt', resizable: true },
 ]
 
 // --- Methods ---
@@ -275,65 +106,51 @@ const fetchWordCloudTags = async () => {
   loading.tags = true
   try {
     await get_NineSong_Temp_Data_To_LocalSqlite.get_recommend_word_cloud()
-    message.success('高频标签获取成功')
   } catch (e) {
     message.error('获取高频标签失败')
   } finally {
     loading.tags = false
   }
-  store_view_recommend_page_info.recommend_MediaSearch_metadata = []
-  store_view_recommend_page_info.recommend_MediaFiles_metadata = []
-  store_view_recommend_page_info.recommend_MediaFiles_temporary = []
 }
 
 const fetchWordCloudGenres = async () => {
   loading.genres = true
   try {
     await get_NineSong_Temp_Data_To_LocalSqlite.get_recommend_word_cloud_genre()
-    message.success('高频流派获取成功')
   } catch (e) {
     message.error('获取高频流派失败')
   } finally {
     loading.genres = false
   }
-  store_view_recommend_page_info.recommend_MediaSearch_metadata = []
-  store_view_recommend_page_info.recommend_MediaFiles_metadata = []
-  store_view_recommend_page_info.recommend_MediaFiles_temporary = []
 }
 
-const fetchRecommendedSongs = async () => {
+const fetchRecommendationsAndDetails = async () => {
   if (selectedWords.value.length === 0) {
-    message.warning('请至少选择一个标签或流派!')
+    store_view_recommend_page_info.recommend_MediaFiles_temporary = []
     return
   }
+
   loading.recs = true
+  loading.details = true
   store_view_recommend_page_info.recommend_MediaSearch_metadata = []
-  selectedSongIds.value = []
   store_view_recommend_page_info.recommend_MediaFiles_temporary = []
+
   try {
     const keywords = selectedWords.value.map((w) => w.name).join(',')
     await get_NineSong_Temp_Data_To_LocalSqlite.get_recommend_result(keywords)
-    message.success('推荐歌曲获取成功')
+
+    const recommendedSongs = store_view_recommend_page_info.recommend_MediaSearch_metadata
+    if (recommendedSongs.length > 0) {
+      const ids = recommendedSongs.map((s: any) => s.id).join(',')
+      await get_NineSong_Temp_Data_To_LocalSqlite.get_recommend_medias(ids)
+      message.success(`成功获取 ${finalSongList.value.length} 首推荐歌曲`)
+    } else {
+      message.info('没有找到匹配的歌曲')
+    }
   } catch (e) {
     message.error('获取推荐歌曲失败')
   } finally {
     loading.recs = false
-  }
-}
-
-const fetchSongDetails = async () => {
-  if (selectedSongIds.value.length === 0) {
-    message.warning('请至少选择一首推荐歌曲!')
-    return
-  }
-  loading.details = true
-  try {
-    const ids = selectedSongIds.value.join(',')
-    await get_NineSong_Temp_Data_To_LocalSqlite.get_recommend_medias(ids)
-    message.success('歌曲详情获取成功')
-  } catch (e) {
-    message.error('获取歌曲详情失败')
-  } finally {
     loading.details = false
   }
 }
@@ -343,16 +160,20 @@ let resizeObserver: ResizeObserver | null = null
 
 const resizeCharts = () => {
   if (chartInstance) {
-    chartInstance.resize();
+    chartInstance.resize()
   }
-};
+}
 
-onMounted(() => {
-  const chartContainer = document.querySelector('.n-card')
-  if (chartContainer) {
-    resizeObserver = new ResizeObserver(resizeCharts)
-    resizeObserver.observe(chartContainer)
-  }
+onMounted(async () => {
+  // 1. 先加载数据
+  await Promise.all([fetchWordCloudTags(), fetchWordCloudGenres()])
+
+  // 2. 延迟初始化图表（等待DOM更新）
+  setTimeout(() => {
+    if (displayMode.value === 'chart') {
+      initOrUpdateChart()
+    }
+  }, 100)
 })
 
 onBeforeUnmount(() => {
@@ -363,25 +184,31 @@ onBeforeUnmount(() => {
 })
 
 const initOrUpdateChart = () => {
-  if (!wordCloudChartRef.value) return;
+  if (!wordCloudChartRef.value) return
 
-  chartInstance = echarts.getInstanceByDom(wordCloudChartRef.value) || echarts.init(wordCloudChartRef.value);
-  const words = combinedWordCloudData.value;
-
-  if (words.length === 0) {
-    chartInstance.clear();
-    return;
+  if (chartInstance) {
+    chartInstance.dispose()
   }
 
-  const counts = words.map(w => w.count).filter(c => c > 0);
-  const maxCount = counts.length > 0 ? Math.max(...counts) : 100;
-  const minCount = counts.length > 0 ? Math.min(...counts) : 1;
+  const container = wordCloudChartRef.value
+  container.style.visibility = 'visible'
+  chartInstance = echarts.init(container)
+
+  const words = combinedWordCloudData.value
+
+  if (words.length === 0) {
+    chartInstance.clear()
+    return
+  }
+
+  const counts = words.map((w) => w.count).filter((c) => c > 0)
+  const maxCount = counts.length > 0 ? Math.max(...counts) : 100
 
   const chartData = words.map((word) => ({
     name: word.name,
     value: Number(word.count) || 0,
-    originalData: word
-  }));
+    originalData: word,
+  }))
 
   const vibrantColors = [
     '#FF6B6B',
@@ -398,7 +225,7 @@ const initOrUpdateChart = () => {
     '#F0A6CA',
     '#B8E0D2',
     '#95B8D1',
-    '#EAC435'
+    '#EAC435',
   ]
 
   const option = {
@@ -418,9 +245,9 @@ const initOrUpdateChart = () => {
       show: true,
       min: 1,
       max: maxCount,
-      orient: 'horizontal',
-      left: 'center',
-      bottom: 0,
+      orient: 'vertical',
+      left: 0,
+      top: 'center',
       inRange: {
         color: vibrantColors,
       },
@@ -430,9 +257,9 @@ const initOrUpdateChart = () => {
       {
         type: 'wordCloud',
         shape: 'circle',
-        sizeRange: [12, 60],
+        sizeRange: [12, 30],
         rotationRange: [-45, 45],
-        gridSize: 8,
+        gridSize: 3,
         drawOutOfBound: false,
         data: chartData,
         selectedMode: 'multiple',
@@ -464,74 +291,375 @@ const initOrUpdateChart = () => {
     ],
   }
 
-  chartInstance.setOption(option, true);
-  syncChartSelectionState();
+  chartInstance.setOption(option, true)
+  syncChartSelectionState()
 
-  chartInstance.off('click');
+  chartInstance.off('click')
   chartInstance.on('click', (params: any) => {
-    toggleWordSelection(params.data.originalData);
-  });
-};
+    toggleWordSelection(params.data.originalData)
+  })
+
+  setTimeout(() => {
+    if (chartInstance && !chartInstance.isDisposed()) {
+      chartInstance.resize()
+    }
+  }, 50)
+}
 
 const syncChartSelectionState = () => {
   if (chartInstance && wordCloudChartRef.value) {
     const selectedIndices = combinedWordCloudData.value
-      .map((word, index) => isSelectedWord(word) ? index : -1)
-      .filter(index => index !== -1);
+      .map((word, index) => (isSelectedWord(word) ? index : -1))
+      .filter((index) => index !== -1)
 
-    chartInstance.dispatchAction({ type: 'unselect', seriesIndex: 0 });
+    chartInstance.dispatchAction({ type: 'unselect', seriesIndex: 0 })
     if (selectedIndices.length > 0) {
-      chartInstance.dispatchAction({ type: 'select', seriesIndex: 0, dataIndex: selectedIndices });
+      chartInstance.dispatchAction({ type: 'select', seriesIndex: 0, dataIndex: selectedIndices })
     }
   }
-};
-
-
+}
 
 // --- Watchers ---
 watch(displayMode, (newMode) => {
   if (newMode === 'chart') {
     nextTick(() => {
-      initOrUpdateChart();
-      syncChartSelectionState();
-    });
+      initOrUpdateChart()
+      syncChartSelectionState()
+    })
   }
-});
+})
 
 watch(
   combinedWordCloudData,
   () => {
     if (displayMode.value === 'chart') {
       nextTick(() => {
-        initOrUpdateChart();
-        syncChartSelectionState();
-      });
+        initOrUpdateChart()
+        syncChartSelectionState()
+      })
     }
   },
   { deep: true }
-);
+)
 
-// Initialize chart on mount when in chart mode
-nextTick(() => {
-  if (displayMode.value === 'chart') {
-    initOrUpdateChart();
+watch(selectedWords, () => {
+  clearTimeout(recommendationDebounceTimer)
+  recommendationDebounceTimer = setTimeout(() => {
+    fetchRecommendationsAndDetails()
+  }, 500) // 500ms debounce
+}, { deep: true })
+
+////// changed_data write to sqlite
+import error_album from '@/assets/img/error_album.jpg'
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
+const errorHandled = ref(new Map())
+const handleImageError = async (item: any) => {
+  let result_src = error_album
+  if (errorHandled.value.has(item.id)) {
+    item.medium_image_url = result_src
+    return
   }
-});
+  errorHandled.value.set(item.id, true)
+  ///
+  if (isElectron) {
+    const originalSrc = item.medium_image_url
+    try {
+      const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc)
+      if (newImagePath.length > 0) {
+        item.medium_image_url = newImagePath
+      } else {
+        item.medium_image_url = result_src
+      }
+    } catch (error) {
+      console.error('Error handling image error:', error)
+      item.medium_image_url = result_src
+    }
+  } else {
+    item.medium_image_url = error_album
+  }
+}
 </script>
 
+<template>
+  <n-message-provider>
+    <div class="recommend-container">
+      <!-- Left Panel: Tag Selection -->
+      <div class="left-panel">
+        <n-card class="selection-card" :bordered="false">
+          <template #header>
+            <n-space align="center" justify="space-between">
+              <n-h3 style="margin: 0">选择推荐标签</n-h3>
+              <n-space align="center" justify="end">
+                <n-button
+                  @click="clearSelections"
+                  type="error"
+                  ghost
+                  :disabled="selectedWords.length === 0">
+                  清空选择
+                </n-button>
+                <n-select
+                  v-model:value="displayMode"
+                  :options="displayModeOptions"
+                  style="width: 150px"
+                />
+              </n-space>
+            </n-space>
+          </template>
+
+          <!-- Current Selections Summary -->
+          <div v-if="selectedWords.length > 0" style="margin-bottom: 10px;">
+            <n-h4>当前选择</n-h4>
+            <n-space style="margin-top: -10px;">
+              <n-tag
+                v-for="word in selectedWords"
+                :key="`selected-${word.id}`"
+                :type="word.type === 'genre' ? 'success' : 'primary'"
+                closable
+                @close="removeWordSelection(word)"
+                round
+              >
+                {{ word.name }}
+              </n-tag>
+            </n-space>
+          </div>
+
+          <!-- View Mode: Tags -->
+          <div v-if="displayMode === 'tags'" class="tag-view-container">
+            <n-h4 style="margin-bottom: 10px;">标签 (Tags)</n-h4>
+            <n-empty
+              v-if="wordCloudTags.length === 0"
+              description="正在加载高频标签..."
+              style="margin-top: 20px"
+            ></n-empty>
+            <n-space v-else>
+              <n-tag
+                v-for="word in wordCloudTags"
+                :key="word.id"
+                :type="isSelectedWord(word) ? 'primary' : 'default'"
+                :bordered="!isSelectedWord(word)"
+                @click="toggleWordSelection(word)"
+                class="custom-tag"
+                round
+              >
+                {{ word.name }} ({{ word.count }})
+              </n-tag>
+            </n-space>
+
+            <n-h4 style="margin-top: 20px;margin-bottom: 10px;">流派 (Genres)</n-h4>
+            <n-empty
+              v-if="wordCloudGenres.length === 0"
+              description="正在加载高频流派..."
+              style="margin-top: 20px"
+            ></n-empty>
+            <n-space v-else>
+              <n-tag
+                v-for="word in wordCloudGenres"
+                :key="word.id"
+                :type="isSelectedWord(word) ? 'success' : 'default'"
+                :bordered="!isSelectedWord(word)"
+                @click="toggleWordSelection(word)"
+                class="custom-tag"
+                round
+              >
+                {{ word.name }} ({{ word.count }})
+              </n-tag>
+            </n-space>
+          </div>
+
+          <!-- View Mode: Chart -->
+          <div v-if="displayMode === 'chart'" class="chart-view-container">
+            <n-empty
+              v-if="wordCloudTags.length === 0 && wordCloudGenres.length === 0"
+              description="正在加载标签和流派数据..."
+            ></n-empty>
+            <div v-else class="word-cloud-wrapper">
+              <div ref="wordCloudChartRef" style="width: 50vw; height: 60vh;"></div>
+            </div>
+          </div>
+        </n-card>
+      </div>
+
+      <!-- Right Panel: Recommended Songs -->
+      <div class="right-panel">
+        <n-card class="results-card" :bordered="false">
+          <template #header>
+            <n-h3 style="margin: 0">推荐歌曲</n-h3>
+          </template>
+          <n-data-table
+            v-if="false"
+            :columns="columns"
+            :data="finalSongList"
+            :loading="loading.recs || loading.details"
+          />
+          <DynamicScroller
+            class="table"
+            :items="store_view_recommend_page_info.recommend_MediaFiles_temporary"
+            key-field="play_id"
+            :minItemSize="50"
+          >
+            <template #default="{ item, index, active }">
+              <DynamicScrollerItem
+                :item="item"
+                :active="active"
+                :data-index="index"
+                :data-active="active"
+                class="message"
+                @dblclick="()=>{
+                  store_playlist_list_logic.handleItemDbClick(item, index);
+                  store_playlist_list_info.playlist_MediaFiles_temporary = store_view_recommend_page_info.recommend_MediaFiles_temporary;
+                }"
+              >
+                <!--            v-hammer:doubletap="() => handleDoubleTap(item, index)"-->
+                <div
+                  style="width: 499px; height: 70px;"
+                  class="media_info">
+                  <div
+                    style="width: 58px; height: 58px;border-radius: 4px; border: 1.5px solid #ffffff20; overflow: hidden"
+                  >
+                    <img
+                      :key="item.absoluteIndex"
+                      :src="item.medium_image_url"
+                      @error="handleImageError(item)"
+                      style="width: 100%; height: 100%; object-fit: cover"
+                    />
+                  </div>
+                  <div
+                    style="width: 240px;font-size: 15px;"
+                    class="title_playlist"
+                  >
+                  <span style="font-size: 16px;font-weight: 600;">
+                    {{ item.title }}
+                  </span>
+                  <br />
+                  <template v-for="artist in item.artist.split(/[\/|｜、]/)">
+                    <span>
+                      {{ artist + '&nbsp' }}
+                    </span>
+                  </template>
+                  </div>
+                  <span
+                    class="index"
+                    style="text-align: left; font-size: 15px"
+                  >
+                    {{ index + 1 }}
+                  </span>
+                </div>
+              </DynamicScrollerItem>
+            </template>
+          </DynamicScroller>
+        </n-card>
+      </div>
+    </div>
+  </n-message-provider>
+</template>
+
 <style scoped>
-.n-card {
+.recommend-container {
+  display: flex;
+  margin-left: 10px;
+  margin-top: 20px;
+  box-sizing: border-box;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.left-panel {
+  width: 55%;
+  margin-right: 24px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.right-panel {
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.selection-card,
+.results-card {
   border-radius: 8px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
-.n-h3,
-.n-h4 {
-  margin: 0;
+
+.chart-view-container {
+  flex: 1;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
 }
-.custom-tag {
+
+.word-cloud-wrapper {
+  flex: 1;
+  min-height: 300px;
+  position: relative;
+}
+
+.n-empty {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.table {
+  height: calc(100vh - 212px);
+}
+.message {
+  display: flex;
+  align-items: left;
+}
+.media_info {
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+
+  transition: background-color 0.3s;
+}
+.media_info:hover {
+  background-color: #ffffff24;
+}
+.index {
+  width: 50px;
+  margin-left: 12px;
+}
+.title_playlist {
+  margin-left: 10px;
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.title_playlist :hover {
+  text-decoration: underline;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  color: #3dc3ff;
 }
-.custom-tag:hover {
-  transform: translateY(-2px);
+.duration_txt {
+  margin-left: 20px;
+  text-align: left;
+  width: 50px;
+}
+
+::-webkit-scrollbar {
+  display: auto;
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #88888850;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-track {
+  background-color: #f1f1f105;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #88888850;
+  border-radius: 4px;
 }
 </style>

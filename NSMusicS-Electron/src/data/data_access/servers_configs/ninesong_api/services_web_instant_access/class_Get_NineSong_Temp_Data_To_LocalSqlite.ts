@@ -1305,7 +1305,10 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
             : error_album,
         }
         store_view_recommend_page_info.recommend_MediaFiles_metadata.push(song)
-        store_view_recommend_page_info.recommend_MediaFiles_temporary.push(newsong)
+        store_view_recommend_page_info.recommend_MediaFiles_temporary.push({
+          ...newsong,
+          play_id: newsong.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
+        })
       })
     }
   }
