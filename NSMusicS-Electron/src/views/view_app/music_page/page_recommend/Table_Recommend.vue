@@ -50,7 +50,7 @@
 
         <!-- View Mode: Tags -->
         <div v-if="displayMode === 'tags'">
-          <n-h4>标签 (Tags)</n-h4>
+          <n-h4 style="margin-bottom: 10px;">标签 (Tags)</n-h4>
           <n-empty
             v-if="wordCloudTags.length === 0"
             description="请先获取高频标签"
@@ -70,7 +70,7 @@
             </n-tag>
           </n-space>
 
-          <n-h4 style="margin-top: 20px">流派 (Genres)</n-h4>
+          <n-h4 style="margin-top: 20px;margin-bottom: 10px;">流派 (Genres)</n-h4>
           <n-empty
             v-if="wordCloudGenres.length === 0"
             description="请先获取高频流派"
@@ -98,46 +98,8 @@
             description="请先获取标签或流派数据"
             style="margin-top: 20px; height: 400px"
           ></n-empty>
-          <div v-else style="display: flex; flex-direction: column; align-items: center">
-            <!-- Tag Word Cloud -->
-            <div style="width: 100%; position: relative">
-              <n-h4 style="text-align: center; margin: 8px 0">标签 (Tags)</n-h4>
-              <div
-                v-if="wordCloudTags.length > 0"
-                ref="tagCloudChartRef"
-                style="width: 100%; height: 380px"
-              ></div>
-              <n-empty
-                v-else
-                description="暂无标签数据"
-                style="
-                  height: 380px;
-                  display: flex;
-                  flex-direction: column;
-                  justify-content: center;
-                "
-              ></n-empty>
-            </div>
-
-            <!-- Genre Word Cloud -->
-            <div style="width: 100%; position: relative; margin-top: 20px">
-              <n-h4 style="text-align: center; margin: 8px 0">流派 (Genres)</n-h4>
-              <div
-                v-if="wordCloudGenres.length > 0"
-                ref="genreCloudChartRef"
-                style="width: 100%; height: 380px"
-              ></div>
-              <n-empty
-                v-else
-                description="暂无流派数据"
-                style="
-                  height: 380px;
-                  display: flex;
-                  flex-direction: column;
-                  justify-content: center;
-                "
-              ></n-empty>
-            </div>
+          <div v-else style="width: 100%; height: 500px;">
+            <div ref="wordCloudChartRef" style="width: 100%; height: 100%;"></div>
           </div>
         </div>
       </n-card>
@@ -240,15 +202,13 @@ const selectedWords = ref<any[]>([])
 const selectedSongIds = ref<string[]>([])
 const displayMode = ref('chart') // 默认视图改为词云图
 const displayModeOptions = [
-  { label: '标签视图', value: 'tags' },
   { label: '词云图视图', value: 'chart' },
+  { label: '标签视图', value: 'tags' },
 ]
 
 // --- ECharts State ---
-const tagCloudChartRef = ref<HTMLElement | null>(null)
-const genreCloudChartRef = ref<HTMLElement | null>(null)
-let tagChartInstance: echarts.ECharts | null = null
-let genreChartInstance: echarts.ECharts | null = null
+const wordCloudChartRef = ref<HTMLElement | null>(null);
+let chartInstance: echarts.ECharts | null = null;
 
 // --- Computed Properties ---
 const wordCloudTags = computed(() => store_view_recommend_page_info.recommend_WordCloudTag_metadata)
@@ -259,6 +219,12 @@ const recommendedSongs = computed(
   () => store_view_recommend_page_info.recommend_MediaSearch_metadata
 )
 const finalSongList = computed(() => store_view_recommend_page_info.recommend_MediaFiles_temporary)
+
+const combinedWordCloudData = computed(() => {
+  const tags = wordCloudTags.value.map(tag => ({ ...tag, type: 'tag' }))
+  const genres = wordCloudGenres.value.map(genre => ({ ...genre, type: 'genre' }))
+  return [...tags, ...genres]
+});
 
 // --- Data Table Columns ---
 const columns = [
@@ -376,13 +342,10 @@ const fetchSongDetails = async () => {
 let resizeObserver: ResizeObserver | null = null
 
 const resizeCharts = () => {
-  if (tagChartInstance) {
-    tagChartInstance.resize()
+  if (chartInstance) {
+    chartInstance.resize();
   }
-  if (genreChartInstance) {
-    genreChartInstance.resize()
-  }
-}
+};
 
 onMounted(() => {
   const chartContainer = document.querySelector('.n-card')
@@ -399,34 +362,26 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', resizeCharts)
 })
 ;('')
-const initOrUpdateChart = (type: 'tag' | 'genre') => {
-  const containerRef = type === 'tag' ? tagCloudChartRef.value : genreCloudChartRef.value
-  const words = type === 'tag' ? wordCloudTags.value : wordCloudGenres.value
-  const colorFunc = type === 'tag' ? getTagColor : getGenreColor
+const initOrUpdateChart = () => {
+  if (!wordCloudChartRef.value) return;
 
-  if (!containerRef) return
-
-  const chartInstance =
-    type === 'tag'
-      ? (tagChartInstance = echarts.getInstanceByDom(containerRef) || echarts.init(containerRef))
-      : (genreChartInstance = echarts.getInstanceByDom(containerRef) || echarts.init(containerRef))
+  chartInstance = echarts.getInstanceByDom(wordCloudChartRef.value) || echarts.init(wordCloudChartRef.value);
+  const words = combinedWordCloudData.value;
 
   if (words.length === 0) {
-    chartInstance.clear()
-    return
+    chartInstance.clear();
+    return;
   }
 
-  const counts = words.map((w) => w.count).filter((c) => c > 0)
-  const maxCount = counts.length > 0 ? Math.max(...counts) : 100
+  const counts = words.map(w => w.count).filter(c => c > 0);
+  const maxCount = counts.length > 0 ? Math.max(...counts) : 100;
+  const minCount = counts.length > 0 ? Math.min(...counts) : 1;
 
   const chartData = words.map((word) => ({
     name: word.name,
     value: Number(word.count) || 0,
-    originalData: { ...word, type },
-    itemStyle: {
-      color: colorFunc(word.name),
-    },
-  }))
+    originalData: word
+  }));
 
   const vibrantColors = [
     '#FF6B6B',
@@ -459,7 +414,7 @@ const initOrUpdateChart = (type: 'tag' | 'genre') => {
       },
     },
     visualMap: {
-      show: true, // 只在标签词云显示视觉映射
+      show: true,
       min: 1,
       max: maxCount,
       orient: 'horizontal',
@@ -474,7 +429,7 @@ const initOrUpdateChart = (type: 'tag' | 'genre') => {
       {
         type: 'wordCloud',
         shape: 'circle',
-        sizeRange: [12, 80],
+        sizeRange: [12, 60],
         rotationRange: [-45, 45],
         gridSize: 8,
         drawOutOfBound: false,
@@ -508,107 +463,59 @@ const initOrUpdateChart = (type: 'tag' | 'genre') => {
     ],
   }
 
-  chartInstance.setOption(option, true)
-  syncChartSelectionState()
+  chartInstance.setOption(option, true);
+  syncChartSelectionState();
 
-  chartInstance.off('click')
+  chartInstance.off('click');
   chartInstance.on('click', (params: any) => {
-    toggleWordSelection(params.data.originalData)
-  })
-}
+    toggleWordSelection(params.data.originalData);
+  });
+};
 
 const syncChartSelectionState = () => {
-  if (tagChartInstance && tagCloudChartRef.value) {
-    const tagIndices = wordCloudTags.value
-      .map((_, index) =>
-        isSelectedWord({ ...wordCloudTags.value[index], type: 'tag' }) ? index : -1
-      )
-      .filter((index) => index !== -1)
+  if (chartInstance && wordCloudChartRef.value) {
+    const selectedIndices = combinedWordCloudData.value
+      .map((word, index) => isSelectedWord(word) ? index : -1)
+      .filter(index => index !== -1);
 
-    tagChartInstance.dispatchAction({ type: 'unselect', seriesIndex: 0 })
-    if (tagIndices.length > 0) {
-      tagChartInstance.dispatchAction({ type: 'select', seriesIndex: 0, dataIndex: tagIndices })
+    chartInstance.dispatchAction({ type: 'unselect', seriesIndex: 0 });
+    if (selectedIndices.length > 0) {
+      chartInstance.dispatchAction({ type: 'select', seriesIndex: 0, dataIndex: selectedIndices });
     }
   }
+};
 
-  if (genreChartInstance && genreCloudChartRef.value) {
-    const genreIndices = wordCloudGenres.value
-      .map((_, index) =>
-        isSelectedWord({ ...wordCloudGenres.value[index], type: 'genre' }) ? index : -1
-      )
-      .filter((index) => index !== -1)
 
-    genreChartInstance.dispatchAction({ type: 'unselect', seriesIndex: 0 })
-    if (genreIndices.length > 0) {
-      genreChartInstance.dispatchAction({ type: 'select', seriesIndex: 0, dataIndex: genreIndices })
-    }
-  }
-}
-
-// 为标签生成特定颜色
-const getTagColor = (tag: string) => {
-  const tagColors: Record<string, string> = {
-    摇滚: '#FF6B6B',
-    流行: '#FFD166',
-    电子: '#06D6A0',
-    古典: '#118AB2',
-    爵士: '#073B4C',
-    民谣: '#EF476F',
-    嘻哈: '#9C89B8',
-    金属: '#F0A6CA',
-    蓝调: '#B8E0D2',
-  }
-  return tagColors[tag] || `hsl(${Math.floor(Math.random() * 360)}, 70%, 60%)`
-}
-
-// 为流派生成特定颜色
-const getGenreColor = (genre: string) => {
-  const genreColors: Record<string, string> = {
-    电子舞曲: '#FF6B6B',
-    独立摇滚: '#FFD166',
-    氛围音乐: '#06D6A0',
-    交响乐: '#118AB2',
-    放克: '#073B4C',
-    雷鬼: '#EF476F',
-    乡村: '#9C89B8',
-    'R&B': '#F0A6CA',
-    世界音乐: '#B8E0D2',
-  }
-  return genreColors[genre] || `hsl(${Math.floor(Math.random() * 360)}, 70%, 60%)`
-}
 
 // --- Watchers ---
 watch(displayMode, (newMode) => {
   if (newMode === 'chart') {
     nextTick(() => {
-      initOrUpdateChart('tag')
-      initOrUpdateChart('genre')
-      syncChartSelectionState()
-    })
+      initOrUpdateChart();
+      syncChartSelectionState();
+    });
   }
-})
+});
 
 watch(
-  [wordCloudTags, wordCloudGenres],
+  combinedWordCloudData,
   () => {
     if (displayMode.value === 'chart') {
       nextTick(() => {
-        initOrUpdateChart('tag')
-        initOrUpdateChart('genre')
-        syncChartSelectionState()
-      })
+        initOrUpdateChart();
+        syncChartSelectionState();
+      });
     }
   },
   { deep: true }
-)
+);
 
-// Initialize charts on mount when in chart mode
+// Initialize chart on mount when in chart mode
 nextTick(() => {
   if (displayMode.value === 'chart') {
-    initOrUpdateChart('tag')
-    initOrUpdateChart('genre')
+    initOrUpdateChart();
   }
-})
+});
 </script>
 
 <style scoped>
