@@ -2192,12 +2192,18 @@ onBeforeUnmount(() => {
               <template #extra>
                 <div style="margin-left: 10px">
                   <span
-                      v-if="
+                    v-if="
                       store_server_user_model.model_server_type_of_web &&
                       store_server_users.server_select_kind === 'ninesong'
                     "
-                      style="font-weight: bold; font-size: 15px">
-                    {{ $t('common.comingSoon') + ' ' + $t('error.serverRequired') + ' : NineSong v1.0.0' }}
+                    style="font-weight: bold; font-size: 15px"
+                  >
+                    {{
+                      $t('common.comingSoon') +
+                      ' ' +
+                      $t('error.serverRequired') +
+                      ' : NineSong v1.0.0'
+                    }}
                     <br />
                     CUE页面管理与播放模式未完善，但仍可使用MPV音频播放器进行播放;
                     <br />

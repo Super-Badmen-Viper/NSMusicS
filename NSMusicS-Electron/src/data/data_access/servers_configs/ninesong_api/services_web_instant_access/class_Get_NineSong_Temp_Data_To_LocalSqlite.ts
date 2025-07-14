@@ -24,6 +24,8 @@ import error_artist from '@/assets/img/error_artist.jpg'
 import error_album from '@/assets/img/error_album.jpg'
 import { MediaCues_ApiService_of_NineSong } from '../services_web/Scene/Music/Media_Cue_Files/index_service'
 import { store_view_media_cue_page_info } from '@/views/view_app/music_page/page_media_cue/store/store_view_media_cue_page_info'
+import { Recommend_ApiService_of_NineSong } from '../services_web/Scene/Music/Recommend/index_service'
+import { store_view_recommend_page_info } from '../../../../../views/view_app/music_page/page_recommend/store/store_view_recommend_page_info'
 
 export class Get_NineSong_Temp_Data_To_LocalSqlite {
   private artists_ApiService_of_NineSong = new Artists_ApiService_of_NineSong(
@@ -48,6 +50,9 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     store_server_login_info.server_url
   )
   private retrieval_ApiService_of_NineSong = new Retrieval_ApiService_of_NineSong(
+    store_server_login_info.server_url
+  )
+  private recommend_ApiService_of_NineSong = new Recommend_ApiService_of_NineSong(
     store_server_login_info.server_url
   )
 
@@ -1132,6 +1137,176 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
           store_view_media_page_logic.page_songlists.push(temp_playlist)
         }
       }
+    }
+  }
+
+  public async get_recommend_word_cloud() {
+    let all_word_clouds = []
+    const result = await this.recommend_ApiService_of_NineSong.getWordCloudTag()
+    if (result != undefined) {
+      all_word_clouds = result['ninesong-response']['wordClouds']
+    }
+    if (all_word_clouds != undefined && all_word_clouds.length > 0) {
+      store_view_recommend_page_info.recommend_WordCloudTag_metadata = []
+      all_word_clouds.map((word: any) => {
+        store_view_recommend_page_info.recommend_WordCloudTag_metadata.push({
+          id: word.ID,
+          name: word.Name,
+          count: word.Count,
+          type: word.Type,
+          rank: word.Rank,
+        })
+      })
+    } else {
+      await this.get_recommend_high_frequency()
+    }
+  }
+
+  public async get_recommend_word_cloud_genre() {
+    let all_word_clouds = []
+    const result = await this.recommend_ApiService_of_NineSong.getWordCloudGenre()
+    if (result != undefined) {
+      all_word_clouds = result['ninesong-response']['wordClouds']
+    }
+    if (all_word_clouds != undefined && all_word_clouds.length > 0) {
+      store_view_recommend_page_info.recommend_WordCloudGenre_metadata = []
+      all_word_clouds.map((word: any) => {
+        store_view_recommend_page_info.recommend_WordCloudGenre_metadata.push({
+          id: word.ID,
+          name: word.Name,
+          count: word.Count,
+          type: word.Type,
+          rank: word.Rank,
+        })
+      })
+    }
+  }
+
+  public async get_recommend_high_frequency() {
+    let all_word_clouds = []
+    const result = await this.recommend_ApiService_of_NineSong.getHighFrequency(100)
+    if (result != undefined) {
+      all_word_clouds = result['ninesong-response']['wordClouds']
+    }
+    if (all_word_clouds != undefined && all_word_clouds.length > 0) {
+      store_view_recommend_page_info.recommend_WordCloudTag_metadata = []
+      all_word_clouds.map((word: any) => {
+        store_view_recommend_page_info.recommend_WordCloudTag_metadata.push({
+          id: word.ID,
+          name: word.Name,
+          count: word.Count,
+          type: word.Type,
+          rank: word.Rank,
+        })
+      })
+    }
+  }
+
+  public async get_recommend_result(keywords: string) {
+    let all_medias = []
+    const result = await this.recommend_ApiService_of_NineSong.getRecommended(keywords)
+    if (result != undefined) {
+      all_medias = result['ninesong-response']['wordClouds']
+    }
+    if (all_medias != undefined && all_medias.length > 0) {
+      store_view_recommend_page_info.recommend_MediaSearch_metadata = []
+      all_medias.map((word: any) => {
+        store_view_recommend_page_info.recommend_MediaSearch_metadata.push({
+          id: word.ID,
+          type: word.Type,
+          name: word.Name,
+          score: word.Score,
+        })
+      })
+    }
+  }
+
+  public async get_recommend_medias(ids: string) {
+    let url = store_server_login_info.server_url
+    url = url.includes('api') ? url : url + '/api'
+    let song_list = []
+    const result = await this.medias_ApiService_of_NineSong.getMedia_Ids(ids)
+    if (result != undefined) {
+      song_list = result['ninesong-response']['mediaFiles']
+    }
+    if (song_list != undefined && song_list.length > 0) {
+      store_view_recommend_page_info.recommend_MediaFiles_metadata = []
+      store_view_recommend_page_info.recommend_MediaFiles_temporary = []
+      song_list.map(async (song: any, index: number) => {
+        const newsong = {
+          absoluteIndex: index + 1,
+          favorite: song.Starred,
+          play_count: song.PlayCount,
+          play_date: song.PlayDate,
+          play_complete_count: song.PlayCompleteCount,
+          rating: song.Rating,
+          duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.Duration),
+          id: song.ID,
+          title: song.Title,
+          path:
+            url +
+            '/media/stream?access_token=' +
+            store_server_login_info.server_accessToken +
+            '&media_file_id=' +
+            song.ID,
+          artist: song.Artist,
+          album: song.Album,
+          artist_id: song.ArtistID,
+          album_id: song.AlbumID,
+          album_artist: song.AlbumArtist,
+          has_cover_art: song.HasCoverArt ? 1 : 0,
+          track_number: 0,
+          disc_number: 0,
+          year: song.Year,
+          size: song.Size,
+          suffix: song.Suffix,
+          duration: song.Duration,
+          bit_rate: song.BitRate,
+          encoding_format: song.EncodingFormat,
+          genre: song.Genre,
+          compilation: song.Compilation ? 1 : 0,
+          created_at: song.CreatedAt,
+          updated_at: song.UpdatedAt,
+          all_artist_ids: song.AllArtistIDs,
+          all_album_artist_ids: song.AllAlbumArtistIDs,
+          full_text: '',
+          album_artist_id: song.AlbumArtistID,
+          order_album_name: '',
+          order_album_artist_name: '',
+          order_artist_name: '',
+          sort_album_name: '',
+          sort_artist_name: '',
+          sort_album_artist_name: '',
+          sort_title: '',
+          disc_subtitle: '',
+          mbz_track_id: '',
+          mbz_album_id: '',
+          mbz_artist_id: '',
+          mbz_album_artist_id: '',
+          mbz_album_type: '',
+          mbz_album_comment: '',
+          catalog_num: '',
+          comment: '',
+          lyrics: '',
+          bpm: 0,
+          channels: 0,
+          order_title: '',
+          mbz_release_track_id: '',
+          rg_album_gain: 0,
+          rg_album_peak: 0,
+          rg_track_gain: 0,
+          rg_track_peak: 0,
+          medium_image_url: song.HasCoverArt
+            ? url +
+              '/media/cover?access_token=' +
+              store_server_login_info.server_accessToken +
+              '&type=media&target_id=' +
+              song.ID
+            : error_album,
+        }
+        store_view_recommend_page_info.recommend_MediaFiles_metadata.push(song)
+        store_view_recommend_page_info.recommend_MediaFiles_temporary.push(newsong)
+      })
     }
   }
 }

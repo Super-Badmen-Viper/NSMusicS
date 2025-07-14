@@ -24,6 +24,11 @@ export class Medias_ApiService_of_NineSong extends NineSong_Api_Services_Web {
       artist_id,
     })
   }
+  public async getMedia_Ids(ids: string): Promise<any> {
+    return this.sendRequest('GET', 'medias/ids', {
+      ids,
+    })
+  }
   public async getMediasSort(
     start: string,
     end: string,
