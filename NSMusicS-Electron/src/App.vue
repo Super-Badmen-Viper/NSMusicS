@@ -107,9 +107,7 @@ function create_menuOptions_appBar() {
       icon: renderIcon(ChartMultiple24Regular),
     },
     {
-      label: computed(() =>
-        renderRouterLink('recommend', t('Play') + t('Data') + t('nsmusics.siderbar_menu.charts'))
-      ),
+      label: computed(() => renderRouterLink('recommend', t('nsmusics.view_page.recommend'))),
       key: 'recommend',
       icon: renderIcon(FindInPageFilled),
     },
@@ -259,7 +257,16 @@ async function handleMenuSelection() {
   }
 }
 function clearFilesIfNeeded(
-  except?: 'home' | 'categories' | 'charts' | 'recommend' | 'tag' | 'media_cue' | 'album' | 'media' | 'artist'
+  except?:
+    | 'home'
+    | 'categories'
+    | 'charts'
+    | 'recommend'
+    | 'tag'
+    | 'media_cue'
+    | 'album'
+    | 'media'
+    | 'artist'
 ) {
   if (!store_router_data_logic.clear_Memory_Model) {
     if (except === 'home') {
@@ -286,7 +293,16 @@ function clearFilesIfNeeded(
   }
 }
 function fetchDataIfNeeded(
-  type: 'home' | 'categories' | 'charts' | 'recommend' | 'tag' | 'media_cue' | 'album' | 'media' | 'artist'
+  type:
+    | 'home'
+    | 'categories'
+    | 'charts'
+    | 'recommend'
+    | 'tag'
+    | 'media_cue'
+    | 'album'
+    | 'media'
+    | 'artist'
 ) {
   if (store_router_data_logic.clear_Memory_Model) {
     if (type === 'home') {
@@ -1262,7 +1278,9 @@ if (isElectron) {
                       "
                     >
                       <template #icon>
-                        <n-icon size="20" :depth="2" v-if="store_app_configs_info.window_max"><FullScreenMinimize24Filled /></n-icon>
+                        <n-icon size="20" :depth="2" v-if="store_app_configs_info.window_max"
+                          ><FullScreenMinimize24Filled
+                        /></n-icon>
                         <n-icon size="20" :depth="2" v-else><FullScreenMaximize24Filled /></n-icon>
                       </template>
                     </n-button>

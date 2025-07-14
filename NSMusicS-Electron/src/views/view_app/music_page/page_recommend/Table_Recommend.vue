@@ -12,8 +12,9 @@ import {
   NDivider,
   NEmpty,
   NSelect,
+  NInput,
   useMessage,
-  useThemeVars
+  useThemeVars,
 } from 'naive-ui'
 import * as echarts from 'echarts/core'
 import { TooltipComponent, VisualMapComponent } from 'echarts/components'
@@ -23,9 +24,7 @@ import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_access/server
 import { store_view_recommend_page_info } from '@/views/view_app/music_page/page_recommend/store/store_view_recommend_page_info'
 import { store_playlist_list_info } from '@/views/view_app/music_components/player_list/store/store_playlist_list_info'
 import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
-import {
-  store_playlist_list_logic
-} from '@/views/view_app/music_components/player_list/store/store_playlist_list_logic'
+import { store_playlist_list_logic } from '@/views/view_app/music_components/player_list/store/store_playlist_list_logic'
 
 echarts.use([TooltipComponent, VisualMapComponent, CanvasRenderer])
 
@@ -38,7 +37,7 @@ const loading = reactive({ tags: false, genres: false, recs: false, details: fal
 const selectedWords = ref<any[]>([])
 const displayMode = ref('chart')
 const displayModeOptions = [
-  { label: '词云图视图', value: 'chart' },
+  { label: '词云视图', value: 'chart' },
   { label: '标签视图', value: 'tags' },
 ]
 let recommendationDebounceTimer: any = null
@@ -71,24 +70,6 @@ const lerp = (start: number, end: number, t: number) => {
   return start * (1 - t) + end * t
 }
 
-const dynamicSizeRange = computed(() => {
-  const width = store_app_configs_info.window_innerWidth
-  // Clamp the width to a reasonable range for scaling
-  const t = Math.max(0, Math.min(1, (width - 400) / (1200 - 400)))
-
-  const minFontSize = lerp(10, 14, t)
-  const maxFontSize = lerp(25, 40, t)
-  return [minFontSize, maxFontSize]
-})
-
-const dynamicGridSize = computed(() => {
-  const width = store_app_configs_info.window_innerWidth
-  const t = Math.max(0, Math.min(1, (width - 400) / (1200 - 400)))
-
-  // Inversely scale grid size: larger screen -> smaller grid size (denser packing)
-  return Math.round(lerp(8, 3, t))
-})
-
 // --- Computed Properties ---
 const wordCloudTags = computed(() => store_view_recommend_page_info.recommend_WordCloudTag_metadata)
 const wordCloudGenres = computed(
@@ -97,8 +78,8 @@ const wordCloudGenres = computed(
 const finalSongList = computed(() => store_view_recommend_page_info.recommend_MediaFiles_temporary)
 
 const combinedWordCloudData = computed(() => {
-  const tags = wordCloudTags.value.map(tag => ({ ...tag, type: 'tag' }))
-  const genres = wordCloudGenres.value.map(genre => ({ ...genre, type: 'genre' }))
+  const tags = wordCloudTags.value.map((tag) => ({ ...tag, type: 'tag' }))
+  const genres = wordCloudGenres.value.map((genre) => ({ ...genre, type: 'genre' }))
   return [...tags, ...genres].sort((a, b) => b.count - a.count)
 })
 
@@ -143,6 +124,38 @@ const toggleWordSelection = (word: any) => {
   if (displayMode.value === 'chart') {
     syncChartSelectionState()
   }
+}
+
+const newTagInput = ref('')
+
+const handleManualAddTag = () => {
+  const label = newTagInput.value.trim()
+  if (!label) {
+    newTagInput.value = ''
+    return
+  }
+
+  if (selectedWords.value.some((w) => w.name.toLowerCase() === label.toLowerCase())) {
+    message.warning(`标签 '${label}' 已选择`)
+    newTagInput.value = ''
+    return
+  }
+
+  const existingWord = combinedWordCloudData.value.find(
+    (w) => w.name.toLowerCase() === label.toLowerCase()
+  )
+  if (existingWord) {
+    toggleWordSelection(existingWord)
+  } else {
+    const newWord = {
+      id: `custom-${Date.now()}-${label}`,
+      name: label,
+      type: 'custom',
+      count: 1,
+    }
+    toggleWordSelection(newWord)
+  }
+  newTagInput.value = ''
 }
 
 // --- API Fetching Methods ---
@@ -211,13 +224,6 @@ const resizeCharts = () => {
   }, 150) // 150ms debounce
 }
 
-const stopWatching_window_innerWidth = watch(
-  () => store_app_configs_info.window_innerWidth,
-  (newValue, oldValue) => {
-    initOrUpdateChart()
-  }
-)
-
 onMounted(async () => {
   // 1. 先加载数据
   await Promise.all([fetchWordCloudTags(), fetchWordCloudGenres()])
@@ -237,11 +243,26 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
+  // Stop watching for window width changes
   stopWatching_window_innerWidth()
+  stopWatching_displayMode()
+  stopWatching_combinedWordCloudData()
+  stopWatching_selectedWords()
+
+  // Clean up timers
+  clearTimeout(resizeDebounceTimer)
+  clearTimeout(recommendationDebounceTimer)
+
+  // Disconnect the resize observer
   if (resizeObserver) {
     resizeObserver.disconnect()
   }
+
+  // Dispose of the chart instance
   chartInstance?.dispose()
+
+  // Clear temporary data
+  store_view_recommend_page_info.recommend_MediaFiles_temporary = []
 })
 
 const initOrUpdateChart = () => {
@@ -274,9 +295,6 @@ const initOrUpdateChart = () => {
     value: Number(word.count) || 0,
     originalData: word,
   }))
-
-  
-  
 
   const vibrantColors = [
     '#FF6B6B',
@@ -380,15 +398,16 @@ const syncChartSelectionState = () => {
 }
 
 // --- Watchers ---
-watch(
+const stopWatching_window_innerWidth = watch(
   () => store_app_configs_info.window_innerWidth,
   () => {
     // Debounce the chart update when window width changes, which triggers a full recalculation
     resizeCharts()
+    initOrUpdateChart()
   }
 )
 
-watch(displayMode, (newMode) => {
+const stopWatching_displayMode = watch(displayMode, (newMode) => {
   if (newMode === 'chart') {
     nextTick(() => {
       initOrUpdateChart()
@@ -397,7 +416,7 @@ watch(displayMode, (newMode) => {
   }
 })
 
-watch(
+const stopWatching_combinedWordCloudData = watch(
   combinedWordCloudData,
   () => {
     if (displayMode.value === 'chart') {
@@ -410,20 +429,16 @@ watch(
   { deep: true }
 )
 
-watch(
-  () => store_app_configs_info.window_innerWidth,
+const stopWatching_selectedWords = watch(
+  selectedWords,
   () => {
-    // Debounce the chart update when window width changes
-    resizeCharts()
-  }
+    clearTimeout(recommendationDebounceTimer)
+    recommendationDebounceTimer = setTimeout(() => {
+      fetchRecommendationsAndDetails()
+    }, 500) // 500ms debounce
+  },
+  { deep: true }
 )
-
-watch(selectedWords, () => {
-  clearTimeout(recommendationDebounceTimer)
-  recommendationDebounceTimer = setTimeout(() => {
-    fetchRecommendationsAndDetails()
-  }, 500) // 500ms debounce
-}, { deep: true })
 
 ////// changed_data write to sqlite
 import error_album from '@/assets/img/error_album.jpg'
@@ -460,7 +475,6 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n({
   inheritLocale: true,
 })
-
 </script>
 
 <template>
@@ -472,15 +486,16 @@ const { t } = useI18n({
           <template #header>
             <n-space align="center" justify="space-between">
               <n-h3 style="margin: 0">
-                {{$t('Select') + $t('nsmusics.view_page.recommend') + $t('Tags') }}
+                {{ $t('Select') + $t('nsmusics.view_page.recommend') + $t('Tags') }}
               </n-h3>
               <n-space align="center" justify="end">
                 <n-button
                   @click="clearSelections"
                   type="error"
                   ghost
-                  :disabled="selectedWords.length === 0">
-                  {{ $t('nsmusics.view_page.current') + $t('Select') }}
+                  :disabled="selectedWords.length === 0"
+                >
+                  {{ $t('common.clear') + $t('nsmusics.view_page.current') + $t('Select') }}
                 </n-button>
                 <n-select
                   v-model:value="displayMode"
@@ -492,27 +507,34 @@ const { t } = useI18n({
           </template>
 
           <!-- Current Selections Summary -->
-          <div v-if="selectedWords.length > 0" style="margin-bottom: 10px;">
-            <n-h4>
-              {{ $t('common.clear') + $t('Select') }}
-            </n-h4>
-            <n-space style="margin-top: -10px;">
+          <div style="margin-bottom: 10px">
+            <n-space align="center">
               <n-tag
                 v-for="word in selectedWords"
-                :key="`selected-${word.id}`"
-                :type="word.type === 'genre' ? 'success' : 'primary'"
+                :key="word.id"
+                :type="
+                  word.type === 'genre' ? 'success' : word.type === 'tag' ? 'primary' : 'default'
+                "
                 closable
                 @close="removeWordSelection(word)"
                 round
               >
                 {{ word.name }}
               </n-tag>
+              <n-input
+                v-model:value="newTagInput"
+                size="small"
+                placeholder="输入并按 Enter 确认"
+                style="width: 180px"
+                @keyup.enter="handleManualAddTag"
+                @blur="handleManualAddTag"
+              />
             </n-space>
           </div>
 
           <!-- View Mode: Tags -->
           <div v-show="displayMode === 'tags'" class="tag-view-container">
-            <n-h4 style="margin-bottom: 10px;">
+            <n-h4 style="margin-bottom: 10px">
               {{ $t('Tags') }}
             </n-h4>
             <n-empty
@@ -534,7 +556,7 @@ const { t } = useI18n({
               </n-tag>
             </n-space>
 
-            <n-h4 style="margin-top: 20px;margin-bottom: 10px;">
+            <n-h4 style="margin-top: 20px; margin-bottom: 10px">
               {{ $t('entity.genre_other') }}
             </n-h4>
             <n-empty
@@ -564,7 +586,7 @@ const { t } = useI18n({
               description="正在加载标签和流派数据..."
             ></n-empty>
             <div v-else class="word-cloud-wrapper">
-              <div ref="wordCloudChartRef" style="width: 100%; height: 100%;"></div>
+              <div ref="wordCloudChartRef" style="width: 100%; height: 100%"></div>
             </div>
           </div>
         </n-card>
@@ -597,25 +619,36 @@ const { t } = useI18n({
                 :data-index="index"
                 :data-active="active"
                 class="message"
-                @dblclick="()=>{
-                  store_playlist_list_logic.handleItemDbClick(item, index);
-                  store_playlist_list_info.playlist_MediaFiles_temporary = store_view_recommend_page_info.recommend_MediaFiles_temporary;
-                }"
+                @dblclick="
+                  () => {
+                    store_playlist_list_logic.handleItemDbClick(item, index)
+                    store_playlist_list_info.playlist_MediaFiles_temporary =
+                      store_view_recommend_page_info.recommend_MediaFiles_temporary
+                  }
+                "
               >
                 <!--            v-hammer:doubletap="() => handleDoubleTap(item, index)"-->
                 <div class="media_info">
                   <!-- Album Art -->
-                  <div style="width: 58px; height: 58px; border-radius: 4px; overflow: hidden; flex-shrink: 0;">
+                  <div
+                    style="
+                      width: 58px;
+                      height: 58px;
+                      border-radius: 4px;
+                      overflow: hidden;
+                      flex-shrink: 0;
+                    "
+                  >
                     <img
                       :key="item.absoluteIndex"
                       :src="item.medium_image_url"
                       @error="handleImageError(item)"
-                      style="width: 100%; height: 100%; object-fit: cover;"
+                      style="width: 100%; height: 100%; object-fit: cover"
                     />
                   </div>
                   <!-- Title and Artist (Flexible) -->
-                  <div class="title_playlist" style="flex: 1; min-width: 0;">
-                    <span style="font-size: 16px; font-weight: 600;">
+                  <div class="title_playlist" style="flex: 1; min-width: 0">
+                    <span style="font-size: 16px; font-weight: 600">
                       {{ item.title }}
                     </span>
                     <br />
@@ -677,7 +710,9 @@ const { t } = useI18n({
   background-color: var(--card-color);
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  transition: box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
+  transition:
+    box-shadow 0.3s ease-in-out,
+    border-color 0.3s ease-in-out;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
   flex: 1;
   display: flex;
@@ -685,13 +720,11 @@ const { t } = useI18n({
   min-height: 0;
 }
 
-
 .selection-card:hover,
 .results-card:hover {
   border-color: var(--primary-color-hover);
   box-shadow: 0 0 7px 0 var(--primary-color-suppl);
 }
-
 
 .selection-card :deep(.n-card__content),
 .results-card :deep(.n-card__content) {
@@ -705,7 +738,8 @@ const { t } = useI18n({
   padding: 1rem 1.5rem;
 }
 
-.n-h3, .n-h4 {
+.n-h3,
+.n-h4 {
   color: var(--text-color-1);
 }
 
@@ -819,4 +853,3 @@ const { t } = useI18n({
   background-color: var(--scrollbar-color-hover);
 }
 </style>
-
