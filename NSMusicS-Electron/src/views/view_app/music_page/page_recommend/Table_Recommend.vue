@@ -361,7 +361,7 @@ onBeforeUnmount(() => {
   }
   window.removeEventListener('resize', resizeCharts)
 })
-;('')
+
 const initOrUpdateChart = () => {
   if (!wordCloudChartRef.value) return;
 
@@ -398,7 +398,7 @@ const initOrUpdateChart = () => {
     '#F0A6CA',
     '#B8E0D2',
     '#95B8D1',
-    '#EAC435',
+    '#EAC435'
   ]
 
   const option = {
@@ -406,6 +406,7 @@ const initOrUpdateChart = () => {
       show: true,
       formatter: (params: any) => {
         const data = params.data
+        const type = data.originalData.type
         return `
           <div style="font-weight:bold">${data.name}</div>
           <div>出现次数: ${data.value}</div>
