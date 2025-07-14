@@ -83,7 +83,8 @@
       "virtual_list": "虛擬列表",
       "list_view": "列表視圖",
       "row_level_view": "行級視圖",
-      "intra_row_block_level_view": "行內區塊級視圖"
+      "intra_row_block_level_view": "行內區塊級視圖",
+      "recommend": "推薦"
     },
     "view_player": {
       "view_seting": {

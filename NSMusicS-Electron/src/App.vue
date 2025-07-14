@@ -16,6 +16,7 @@ import {
   BrowserUpdatedFilled,
   MinusRound,
   LibraryMusicOutlined,
+  FindInPageFilled,
 } from '@vicons/material'
 import { Close, DataClass, UserAvatarFilledAlt } from '@vicons/carbon'
 import { ArrowsMaximize, ArrowsMinimize } from '@vicons/tabler'
@@ -106,6 +107,13 @@ function create_menuOptions_appBar() {
       icon: renderIcon(ChartMultiple24Regular),
     },
     {
+      label: computed(() =>
+        renderRouterLink('recommend', t('Play') + t('Data') + t('nsmusics.siderbar_menu.charts'))
+      ),
+      key: 'recommend',
+      icon: renderIcon(FindInPageFilled),
+    },
+    {
       label: computed(() => renderRouterLink('home', t('common.home'))),
       key: 'home',
       icon: renderIcon(Home28Regular),
@@ -193,6 +201,11 @@ async function handleMenuSelection() {
       store_router_data_info.router_select_model_charts = true
       fetchDataIfNeeded('charts')
     },
+    recommend: () => {
+      clearFilesIfNeeded('recommend')
+      store_router_data_info.router_select_model_recommend = true
+      fetchDataIfNeeded('recommend')
+    },
     tag: () => {
       clearFilesIfNeeded('tag')
       store_router_data_info.router_select_model_tag = true
@@ -246,7 +259,7 @@ async function handleMenuSelection() {
   }
 }
 function clearFilesIfNeeded(
-  except?: 'home' | 'categories' | 'charts' | 'tag' | 'media_cue' | 'album' | 'media' | 'artist'
+  except?: 'home' | 'categories' | 'charts' | 'recommend' | 'tag' | 'media_cue' | 'album' | 'media' | 'artist'
 ) {
   if (!store_router_data_logic.clear_Memory_Model) {
     if (except === 'home') {
@@ -255,6 +268,8 @@ function clearFilesIfNeeded(
       store_router_data_logic.clear_Files_temporary_except_categories()
     } else if (except === 'charts') {
       store_router_data_logic.clear_Files_temporary_except_charts()
+    } else if (except === 'recommend') {
+      store_router_data_logic.clear_Files_temporary_except_recommend()
     } else if (except === 'tag') {
       store_router_data_logic.clear_Files_temporary_except_tag()
     } else if (except === 'media_cue') {
@@ -271,7 +286,7 @@ function clearFilesIfNeeded(
   }
 }
 function fetchDataIfNeeded(
-  type: 'home' | 'categories' | 'charts' | 'tag' | 'media_cue' | 'album' | 'media' | 'artist'
+  type: 'home' | 'categories' | 'charts' | 'recommend' | 'tag' | 'media_cue' | 'album' | 'media' | 'artist'
 ) {
   if (store_router_data_logic.clear_Memory_Model) {
     if (type === 'home') {
@@ -279,6 +294,8 @@ function fetchDataIfNeeded(
     } else if (type === 'categories') {
       store_general_fetch_home_list.fetchData_Home()
     } else if (type === 'charts') {
+      store_general_fetch_home_list.fetchData_Home()
+    } else if (type === 'recommend') {
       store_general_fetch_home_list.fetchData_Home()
     } else if (type === 'tag') {
       store_general_fetch_home_list.fetchData_Home()
@@ -325,6 +342,9 @@ routers.afterEach(async (to, from) => {
       store_router_data_info.router_name = to.name
     } else if (to.name === 'charts') {
       store_router_data_info.router_select_model_charts = true
+      store_router_data_info.router_name = to.name
+    } else if (to.name === 'recommend') {
+      store_router_data_info.router_select_model_recommend = true
       store_router_data_info.router_name = to.name
     } else if (to.name === 'tag') {
       store_router_data_info.router_select_model_tag = true
@@ -988,6 +1008,11 @@ if (isElectron) {
               class="view_show_data"
               v-else-if="store_router_data_info.router_select_model_charts"
             ></RouterView>
+            <!--Recommend View -->
+            <RouterView
+              class="view_show_data"
+              v-else-if="store_router_data_info.router_select_model_recommend"
+            ></RouterView>
             <!--Tag View -->
             <RouterView
               class="view_show_data"
@@ -1126,6 +1151,9 @@ if (isElectron) {
                           }
                           store_app_configs_info.window_full = !store_app_configs_info.window_full
                           store_app_configs_info.window_max = store_app_configs_info.window_full
+                          //
+                          store_app_configs_info.window_innerWidth = window.innerWidth
+                          store_app_configs_info.window_innerHeight = window.innerHeight
                         }
                       "
                     >
@@ -1226,14 +1254,15 @@ if (isElectron) {
                               store_app_configs_info.window_max = !store_app_configs_info.window_max
                               store_app_configs_info.window_full = false
                             }
+                            //
+                            store_app_configs_info.window_innerWidth = window.innerWidth
+                            store_app_configs_info.window_innerHeight = window.innerHeight
                           }
                         }
                       "
                     >
                       <template #icon>
-                        <n-icon size="20" :depth="2" v-if="store_app_configs_info.window_max"
-                          ><FullScreenMinimize24Filled
-                        /></n-icon>
+                        <n-icon size="20" :depth="2" v-if="store_app_configs_info.window_max"><FullScreenMinimize24Filled /></n-icon>
                         <n-icon size="20" :depth="2" v-else><FullScreenMaximize24Filled /></n-icon>
                       </template>
                     </n-button>

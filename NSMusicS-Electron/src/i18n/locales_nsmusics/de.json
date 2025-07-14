@@ -83,7 +83,8 @@
       "virtual_list": "Virtuelle Liste",
       "list_view": "Listenansicht",
       "row_level_view": "Zeilenbasierte Ansicht",
-      "intra_row_block_level_view": "Inline-Block-Ansicht"
+      "intra_row_block_level_view": "Inline-Block-Ansicht",
+      "recommend": "Empfehlen"
     },
     "view_player": {
       "view_seting": {

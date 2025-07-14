@@ -43,6 +43,14 @@ const router = createRouter({
       },
     },
     {
+      path: '/recommend',
+      name: 'recommend',
+      component: () => import('@/router/router_views/router_music/Router_Recommend.vue'),
+      meta: {
+        cleanup: true,
+      },
+    },
+    {
       path: '/tag',
       name: 'tag',
       component: () => import('@/router/router_views/router_music/Router_Tag.vue'),

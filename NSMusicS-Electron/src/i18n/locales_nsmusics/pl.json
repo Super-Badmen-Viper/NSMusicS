@@ -83,7 +83,8 @@
       "virtual_list": "Lista Wirtualna",
       "list_view": "Widok Listy",
       "row_level_view": "Widok na Poziomie Wiersza",
-      "intra_row_block_level_view": "Widok Bloku Wewnątrz Wiersza"
+      "intra_row_block_level_view": "Widok Bloku Wewnątrz Wiersza",
+      "recommend": "Poleć"
     },
     "view_player": {
       "view_seting": {

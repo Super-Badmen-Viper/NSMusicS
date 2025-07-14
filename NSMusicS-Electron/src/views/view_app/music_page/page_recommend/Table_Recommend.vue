@@ -13,6 +13,7 @@ import {
   NEmpty,
   NSelect,
   useMessage,
+  useThemeVars
 } from 'naive-ui'
 import * as echarts from 'echarts/core'
 import { TooltipComponent, VisualMapComponent } from 'echarts/components'
@@ -30,6 +31,7 @@ echarts.use([TooltipComponent, VisualMapComponent, CanvasRenderer])
 
 const get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
 const message = useMessage()
+const themeVars = useThemeVars()
 
 // --- Reactive State ---
 const loading = reactive({ tags: false, genres: false, recs: false, details: false })
@@ -44,6 +46,48 @@ let recommendationDebounceTimer: any = null
 // --- ECharts State ---
 const wordCloudChartRef = ref<HTMLElement | null>(null)
 let chartInstance: echarts.ECharts | null = null
+
+// --- Proportional Scaling Logic ---
+// Reactive property for word size range based on window width
+const proportionalSizeRange = computed(() => {
+  const width = store_app_configs_info.window_innerWidth
+  // Normalize width to a 0-1 range based on typical screen sizes
+  const t = Math.max(0, Math.min(1, (width - 500) / (1600 - 500)))
+  const minFontSize = lerp(10, 14, t)
+  const maxFontSize = lerp(25, 45, t)
+  return [minFontSize, maxFontSize]
+})
+
+// Reactive property for word grid size based on window width
+const proportionalGridSize = computed(() => {
+  const width = store_app_configs_info.window_innerWidth
+  const t = Math.max(0, Math.min(1, (width - 500) / (1600 - 500)))
+  // Inverse scaling: larger screen -> smaller grid size for denser packing
+  return Math.round(lerp(8, 3, t))
+})
+
+// --- Computed EChart Properties for Proportional Scaling ---
+const lerp = (start: number, end: number, t: number) => {
+  return start * (1 - t) + end * t
+}
+
+const dynamicSizeRange = computed(() => {
+  const width = store_app_configs_info.window_innerWidth
+  // Clamp the width to a reasonable range for scaling
+  const t = Math.max(0, Math.min(1, (width - 400) / (1200 - 400)))
+
+  const minFontSize = lerp(10, 14, t)
+  const maxFontSize = lerp(25, 40, t)
+  return [minFontSize, maxFontSize]
+})
+
+const dynamicGridSize = computed(() => {
+  const width = store_app_configs_info.window_innerWidth
+  const t = Math.max(0, Math.min(1, (width - 400) / (1200 - 400)))
+
+  // Inversely scale grid size: larger screen -> smaller grid size (denser packing)
+  return Math.round(lerp(8, 3, t))
+})
 
 // --- Computed Properties ---
 const wordCloudTags = computed(() => store_view_recommend_page_info.recommend_WordCloudTag_metadata)
@@ -158,41 +202,62 @@ const fetchRecommendationsAndDetails = async () => {
 // --- ECharts Logic ---
 let resizeObserver: ResizeObserver | null = null
 
+let resizeDebounceTimer: any = null
 const resizeCharts = () => {
-  if (chartInstance) {
-    chartInstance.resize()
-  }
+  clearTimeout(resizeDebounceTimer)
+  resizeDebounceTimer = setTimeout(() => {
+    // Re-run the init/update logic to recalculate dynamic parameters
+    initOrUpdateChart()
+  }, 150) // 150ms debounce
 }
+
+const stopWatching_window_innerWidth = watch(
+  () => store_app_configs_info.window_innerWidth,
+  (newValue, oldValue) => {
+    initOrUpdateChart()
+  }
+)
 
 onMounted(async () => {
   // 1. 先加载数据
   await Promise.all([fetchWordCloudTags(), fetchWordCloudGenres()])
 
   // 2. 延迟初始化图表（等待DOM更新）
-  setTimeout(() => {
+  nextTick(() => {
     if (displayMode.value === 'chart') {
       initOrUpdateChart()
     }
-  }, 100)
+
+    // Setup ResizeObserver to handle chart resizing
+    if (wordCloudChartRef.value) {
+      resizeObserver = new ResizeObserver(resizeCharts)
+      resizeObserver.observe(wordCloudChartRef.value)
+    }
+  })
 })
 
 onBeforeUnmount(() => {
+  stopWatching_window_innerWidth()
   if (resizeObserver) {
     resizeObserver.disconnect()
   }
-  window.removeEventListener('resize', resizeCharts)
+  chartInstance?.dispose()
 })
 
 const initOrUpdateChart = () => {
   if (!wordCloudChartRef.value) return
 
-  if (chartInstance) {
-    chartInstance.dispose()
-  }
-
   const container = wordCloudChartRef.value
-  container.style.visibility = 'visible'
-  chartInstance = echarts.init(container)
+
+  // Initialize chart only if it doesn't exist
+  if (!chartInstance || chartInstance.isDisposed()) {
+    chartInstance = echarts.init(container)
+
+    // Add event listeners only once
+    chartInstance.on('click', (params: any) => {
+      toggleWordSelection(params.data.originalData)
+    })
+  }
 
   const words = combinedWordCloudData.value
 
@@ -209,6 +274,9 @@ const initOrUpdateChart = () => {
     value: Number(word.count) || 0,
     originalData: word,
   }))
+
+  
+  
 
   const vibrantColors = [
     '#FF6B6B',
@@ -257,9 +325,9 @@ const initOrUpdateChart = () => {
       {
         type: 'wordCloud',
         shape: 'circle',
-        sizeRange: [12, 30],
+        sizeRange: proportionalSizeRange.value, // Use reactive computed value
         rotationRange: [-45, 45],
-        gridSize: 3,
+        gridSize: proportionalGridSize.value, // Use reactive computed value
         drawOutOfBound: false,
         data: chartData,
         selectedMode: 'multiple',
@@ -294,16 +362,8 @@ const initOrUpdateChart = () => {
   chartInstance.setOption(option, true)
   syncChartSelectionState()
 
-  chartInstance.off('click')
-  chartInstance.on('click', (params: any) => {
-    toggleWordSelection(params.data.originalData)
-  })
-
-  setTimeout(() => {
-    if (chartInstance && !chartInstance.isDisposed()) {
-      chartInstance.resize()
-    }
-  }, 50)
+  // The initial resize call can be made here or in onMounted
+  chartInstance.resize()
 }
 
 const syncChartSelectionState = () => {
@@ -320,6 +380,14 @@ const syncChartSelectionState = () => {
 }
 
 // --- Watchers ---
+watch(
+  () => store_app_configs_info.window_innerWidth,
+  () => {
+    // Debounce the chart update when window width changes, which triggers a full recalculation
+    resizeCharts()
+  }
+)
+
 watch(displayMode, (newMode) => {
   if (newMode === 'chart') {
     nextTick(() => {
@@ -340,6 +408,14 @@ watch(
     }
   },
   { deep: true }
+)
+
+watch(
+  () => store_app_configs_info.window_innerWidth,
+  () => {
+    // Debounce the chart update when window width changes
+    resizeCharts()
+  }
 )
 
 watch(selectedWords, () => {
@@ -378,6 +454,13 @@ const handleImageError = async (item: any) => {
     item.medium_image_url = error_album
   }
 }
+
+////// i18n auto lang
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n({
+  inheritLocale: true,
+})
+
 </script>
 
 <template>
@@ -388,14 +471,16 @@ const handleImageError = async (item: any) => {
         <n-card class="selection-card" :bordered="false">
           <template #header>
             <n-space align="center" justify="space-between">
-              <n-h3 style="margin: 0">选择推荐标签</n-h3>
+              <n-h3 style="margin: 0">
+                {{$t('Select') + $t('nsmusics.view_page.recommend') + $t('Tags') }}
+              </n-h3>
               <n-space align="center" justify="end">
                 <n-button
                   @click="clearSelections"
                   type="error"
                   ghost
                   :disabled="selectedWords.length === 0">
-                  清空选择
+                  {{ $t('nsmusics.view_page.current') + $t('Select') }}
                 </n-button>
                 <n-select
                   v-model:value="displayMode"
@@ -408,7 +493,9 @@ const handleImageError = async (item: any) => {
 
           <!-- Current Selections Summary -->
           <div v-if="selectedWords.length > 0" style="margin-bottom: 10px;">
-            <n-h4>当前选择</n-h4>
+            <n-h4>
+              {{ $t('common.clear') + $t('Select') }}
+            </n-h4>
             <n-space style="margin-top: -10px;">
               <n-tag
                 v-for="word in selectedWords"
@@ -424,8 +511,10 @@ const handleImageError = async (item: any) => {
           </div>
 
           <!-- View Mode: Tags -->
-          <div v-if="displayMode === 'tags'" class="tag-view-container">
-            <n-h4 style="margin-bottom: 10px;">标签 (Tags)</n-h4>
+          <div v-show="displayMode === 'tags'" class="tag-view-container">
+            <n-h4 style="margin-bottom: 10px;">
+              {{ $t('Tags') }}
+            </n-h4>
             <n-empty
               v-if="wordCloudTags.length === 0"
               description="正在加载高频标签..."
@@ -445,7 +534,9 @@ const handleImageError = async (item: any) => {
               </n-tag>
             </n-space>
 
-            <n-h4 style="margin-top: 20px;margin-bottom: 10px;">流派 (Genres)</n-h4>
+            <n-h4 style="margin-top: 20px;margin-bottom: 10px;">
+              {{ $t('entity.genre_other') }}
+            </n-h4>
             <n-empty
               v-if="wordCloudGenres.length === 0"
               description="正在加载高频流派..."
@@ -467,13 +558,13 @@ const handleImageError = async (item: any) => {
           </div>
 
           <!-- View Mode: Chart -->
-          <div v-if="displayMode === 'chart'" class="chart-view-container">
+          <div v-show="displayMode === 'chart'" class="chart-view-container">
             <n-empty
               v-if="wordCloudTags.length === 0 && wordCloudGenres.length === 0"
               description="正在加载标签和流派数据..."
             ></n-empty>
             <div v-else class="word-cloud-wrapper">
-              <div ref="wordCloudChartRef" style="width: 50vw; height: 60vh;"></div>
+              <div ref="wordCloudChartRef" style="width: 100%; height: 100%;"></div>
             </div>
           </div>
         </n-card>
@@ -483,7 +574,9 @@ const handleImageError = async (item: any) => {
       <div class="right-panel">
         <n-card class="results-card" :bordered="false">
           <template #header>
-            <n-h3 style="margin: 0">推荐歌曲</n-h3>
+            <n-h3 style="margin: 0">
+              {{ $t('nsmusics.view_page.recommend') + $t('Songs') }}
+            </n-h3>
           </template>
           <n-data-table
             v-if="false"
@@ -510,37 +603,30 @@ const handleImageError = async (item: any) => {
                 }"
               >
                 <!--            v-hammer:doubletap="() => handleDoubleTap(item, index)"-->
-                <div
-                  style="width: 499px; height: 70px;"
-                  class="media_info">
-                  <div
-                    style="width: 58px; height: 58px;border-radius: 4px; border: 1.5px solid #ffffff20; overflow: hidden"
-                  >
+                <div class="media_info">
+                  <!-- Album Art -->
+                  <div style="width: 58px; height: 58px; border-radius: 4px; overflow: hidden; flex-shrink: 0;">
                     <img
                       :key="item.absoluteIndex"
                       :src="item.medium_image_url"
                       @error="handleImageError(item)"
-                      style="width: 100%; height: 100%; object-fit: cover"
+                      style="width: 100%; height: 100%; object-fit: cover;"
                     />
                   </div>
-                  <div
-                    style="width: 240px;font-size: 15px;"
-                    class="title_playlist"
-                  >
-                  <span style="font-size: 16px;font-weight: 600;">
-                    {{ item.title }}
-                  </span>
-                  <br />
-                  <template v-for="artist in item.artist.split(/[\/|｜、]/)">
-                    <span>
-                      {{ artist + '&nbsp' }}
+                  <!-- Title and Artist (Flexible) -->
+                  <div class="title_playlist" style="flex: 1; min-width: 0;">
+                    <span style="font-size: 16px; font-weight: 600;">
+                      {{ item.title }}
                     </span>
-                  </template>
+                    <br />
+                    <template v-for="artist in item.artist.split(/[\/|｜、]/)">
+                      <span>
+                        {{ artist + '&nbsp;' }}
+                      </span>
+                    </template>
                   </div>
-                  <span
-                    class="index"
-                    style="text-align: left; font-size: 15px"
-                  >
+                  <!-- Index -->
+                  <span class="index">
                     {{ index + 1 }}
                   </span>
                 </div>
@@ -555,49 +641,156 @@ const handleImageError = async (item: any) => {
 
 <style scoped>
 .recommend-container {
+  --card-color: v-bind('themeVars.cardColor');
+  --border-color: v-bind('themeVars.borderColor');
+  --primary-color-hover: v-bind('themeVars.primaryColorHover');
+  --primary-color-suppl: v-bind('themeVars.primaryColorSuppl');
+  --text-color-1: v-bind('themeVars.textColor1');
+  --text-color-2: v-bind('themeVars.textColor2');
+  --text-color-3: v-bind('themeVars.textColor3');
+  --hover-color: v-bind('themeVars.hoverColor');
+  --scrollbar-color: v-bind('themeVars.scrollbarColor');
+  --scrollbar-color-hover: v-bind('themeVars.scrollbarColorHover');
+
   display: flex;
-  margin-left: 10px;
-  margin-top: 20px;
+  padding: 10px;
+  gap: 1.5rem;
+  height: calc(100vh - 144px);
   box-sizing: border-box;
-  overflow-y: scroll;
-  overflow-x: hidden;
 }
 
-.left-panel {
-  width: 55%;
-  margin-right: 24px;
+.left-panel,
+.right-panel {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  flex-shrink: 0;
+  width: 55%;
 }
 
 .right-panel {
   width: 45%;
+}
+
+.selection-card,
+.results-card {
+  background-color: var(--card-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  transition: box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 0;
 }
 
-.selection-card,
-.results-card {
-  border-radius: 8px;
+
+.selection-card:hover,
+.results-card:hover {
+  border-color: var(--primary-color-hover);
+  box-shadow: 0 0 7px 0 var(--primary-color-suppl);
+}
+
+
+.selection-card :deep(.n-card__content),
+.results-card :deep(.n-card__content) {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  overflow-y: auto;
+  min-height: 0;
+  padding: 0 1.5rem; /* Add padding back to content */
+}
+
+:deep(.n-card-header) {
+  padding: 1rem 1.5rem;
+}
+
+.n-h3, .n-h4 {
+  color: var(--text-color-1);
+}
+
+.tag-view-container {
+  padding: 1rem 0; /* Adjust padding */
+}
+
+.custom-tag {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.custom-tag:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px var(--primary-color-suppl);
 }
 
 .chart-view-container {
   flex: 1;
-  min-height: 400px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
 .word-cloud-wrapper {
-  flex: 1;
-  min-height: 300px;
-  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.table {
+  height: 100%;
+}
+
+.message {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.message:hover {
+  background-color: var(--hover-color);
+}
+
+.media_info {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.media_info img {
+  border-radius: 4px;
+  border: 1.5px solid var(--border-color);
+}
+
+.title_playlist {
+  margin-left: 1rem;
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--text-color-1);
+}
+
+.title_playlist span:first-child {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.title_playlist span:not(:first-child) {
+  font-size: 0.875rem;
+  color: var(--text-color-2);
+}
+
+.title_playlist:hover {
+  color: var(--primary-color-hover);
+}
+
+.index {
+  width: 50px;
+  margin-left: 12px;
+  color: var(--text-color-3);
+  text-align: center;
 }
 
 .n-empty {
@@ -607,59 +800,23 @@ const handleImageError = async (item: any) => {
   justify-content: center;
 }
 
-.table {
-  height: calc(100vh - 212px);
-}
-.message {
-  display: flex;
-  align-items: left;
-}
-.media_info {
-  display: flex;
-  align-items: center;
-  border-radius: 4px;
-
-  transition: background-color 0.3s;
-}
-.media_info:hover {
-  background-color: #ffffff24;
-}
-.index {
-  width: 50px;
-  margin-left: 12px;
-}
-.title_playlist {
-  margin-left: 10px;
-  text-align: left;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-.title_playlist :hover {
-  text-decoration: underline;
-  cursor: pointer;
-  color: #3dc3ff;
-}
-.duration_txt {
-  margin-left: 20px;
-  text-align: left;
-  width: 50px;
-}
-
 ::-webkit-scrollbar {
-  display: auto;
-  width: 6px;
+  width: 8px;
 }
-::-webkit-scrollbar-thumb {
-  background-color: #88888850;
-  border-radius: 4px;
-}
+
 ::-webkit-scrollbar-track {
-  background-color: #f1f1f105;
-  border-radius: 4px;
+  background: transparent;
 }
-::-webkit-scrollbar-thumb:hover {
-  background-color: #88888850;
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-color);
   border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-color-hover);
 }
 </style>
+

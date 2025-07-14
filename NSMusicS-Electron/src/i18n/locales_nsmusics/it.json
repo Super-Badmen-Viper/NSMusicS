@@ -83,7 +83,8 @@
       "virtual_list": "Elenco Virtuale",
       "list_view": "Vista Elenco",
       "row_level_view": "Vista a Livello di Riga",
-      "intra_row_block_level_view": "Vista Blocco In-linea"
+      "intra_row_block_level_view": "Vista Blocco In-linea",
+      "recommend": "Consiglia"
     },
     "view_player": {
       "view_seting": {

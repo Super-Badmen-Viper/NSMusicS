@@ -28,6 +28,7 @@ export const store_router_data_info = reactive({
   router_select_model_home: false,
   router_select_model_categories: false,
   router_select_model_charts: false,
+  router_select_model_recommend: false,
   router_select_model_tag: false,
   router_select_model_media_cue: false,
   router_select_model_update: false,
@@ -51,6 +52,9 @@ watch(
         store_general_fetch_home_list.fetchData_Home()
       } else if (newValue === 'charts') {
         store_router_data_info.router_select_model_charts = true
+        store_general_fetch_home_list.fetchData_Home()
+      } else if (newValue === 'recommend') {
+        store_router_data_info.router_select_model_recommend = true
         store_general_fetch_home_list.fetchData_Home()
       } else if (newValue === 'tag') {
         store_router_data_info.router_select_model_tag = true

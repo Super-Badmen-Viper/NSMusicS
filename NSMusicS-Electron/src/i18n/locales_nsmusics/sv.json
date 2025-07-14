@@ -83,7 +83,8 @@
       "virtual_list": "Virtuell lista",
       "list_view": "Listvy",
       "row_level_view": "Radnivåvy",
-      "intra_row_block_level_view": "Inline-blockvy"
+      "intra_row_block_level_view": "Inline-blockvy",
+      "recommend": "Rekommendera"
     },
     "view_player": {
       "view_seting": {
