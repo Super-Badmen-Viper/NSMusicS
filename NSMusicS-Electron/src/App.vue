@@ -914,6 +914,34 @@ if (isElectron) {
     store_app_configs_logic_save.save_system_config_of_Player_Configs_of_Audio_Info()
   })
 }
+
+function fullMaximize(){
+  if (isElectron) {
+    if (store_app_configs_info.desktop_system_kind === 'linux') {
+      ipcRenderer.send('window-fullscreen')
+      store_app_configs_info.window_full =
+        !store_app_configs_info.window_full
+      store_app_configs_info.window_max = store_app_configs_info.window_full
+    } else {
+      ipcRenderer.send('window-max')
+      store_app_configs_info.window_max = !store_app_configs_info.window_max
+      store_app_configs_info.window_full = false
+    }
+    //
+    store_app_configs_info.window_innerWidth = window.innerWidth
+    store_app_configs_info.window_innerHeight = window.innerHeight
+  }
+}
+function fullScreen(){
+  if (isElectron) {
+    ipcRenderer.send('window-fullscreen')
+  }
+  store_app_configs_info.window_full = !store_app_configs_info.window_full
+  store_app_configs_info.window_max = store_app_configs_info.window_full
+  //
+  store_app_configs_info.window_innerWidth = window.innerWidth
+  store_app_configs_info.window_innerHeight = window.innerHeight
+}
 </script>
 <template>
   <n-message-provider>
@@ -1046,32 +1074,32 @@ if (isElectron) {
             ></RouterView>
             <!--Media View-->
             <RouterView
-              class="view_show_table"
+              class="view_show_data"
               v-else-if="store_router_data_info.router_select_model_media"
             ></RouterView>
             <!--Album View-->
             <RouterView
-              class="view_show_table"
+              class="view_show_data"
               v-else-if="store_router_data_info.router_select_model_album"
             ></RouterView>
             <!--Artist View-->
             <RouterView
-              class="view_show_table"
+              class="view_show_data"
               v-else-if="store_router_data_info.router_select_model_artist"
             ></RouterView>
             <!--Genre View-->
             <RouterView
-              class="view_show_table"
+              class="view_show_data"
               v-else-if="store_router_data_info.router_select_model_genre"
             ></RouterView>
             <!--Server_setting View-->
             <RouterView
-              class="view_show_table"
+              class="view_show_data"
               v-else-if="store_router_data_info.router_select_model_server_setting"
             ></RouterView>
             <!--Server_library View-->
             <RouterView
-              class="view_show_table"
+              class="view_show_data"
               v-else-if="store_router_data_info.router_select_model_server_library"
             ></RouterView>
             <!--Top Bar-->
@@ -1160,18 +1188,7 @@ if (isElectron) {
                       quaternary
                       circle
                       style="margin-right: 4px"
-                      @click="
-                        () => {
-                          if (isElectron) {
-                            ipcRenderer.send('window-fullscreen')
-                          }
-                          store_app_configs_info.window_full = !store_app_configs_info.window_full
-                          store_app_configs_info.window_max = store_app_configs_info.window_full
-                          //
-                          store_app_configs_info.window_innerWidth = window.innerWidth
-                          store_app_configs_info.window_innerHeight = window.innerHeight
-                        }
-                      "
+                      @click="fullScreen"
                     >
                       <template #icon>
                         <n-icon size="19" :depth="2" v-if="store_app_configs_info.window_full">
@@ -1257,25 +1274,7 @@ if (isElectron) {
                       quaternary
                       circle
                       style="margin-right: 4px"
-                      @click="
-                        () => {
-                          if (isElectron) {
-                            if (store_app_configs_info.desktop_system_kind === 'linux') {
-                              ipcRenderer.send('window-fullscreen')
-                              store_app_configs_info.window_full =
-                                !store_app_configs_info.window_full
-                              store_app_configs_info.window_max = store_app_configs_info.window_full
-                            } else {
-                              ipcRenderer.send('window-max')
-                              store_app_configs_info.window_max = !store_app_configs_info.window_max
-                              store_app_configs_info.window_full = false
-                            }
-                            //
-                            store_app_configs_info.window_innerWidth = window.innerWidth
-                            store_app_configs_info.window_innerHeight = window.innerHeight
-                          }
-                        }
-                      "
+                      @click="fullMaximize"
                     >
                       <template #icon>
                         <n-icon size="20" :depth="2" v-if="store_app_configs_info.window_max"
@@ -1582,12 +1581,6 @@ body {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-}
-.view_show_table {
-  width: calc(100vw - 100px);
-  height: calc(100vh - 200px);
-
-  margin-left: 30px;
 }
 .view_show_data {
   width: calc(100vw - 104px);

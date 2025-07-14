@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, reactive, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, reactive, watch, nextTick, onMounted, onBeforeUnmount, onUnmounted } from 'vue'
 import {
   NMessageProvider,
   NSpace,
@@ -51,7 +51,7 @@ let chartInstance: echarts.ECharts | null = null
 const proportionalSizeRange = computed(() => {
   const width = store_app_configs_info.window_innerWidth
   // Normalize width to a 0-1 range based on typical screen sizes
-  const t = Math.max(0, Math.min(1, (width - 500) / (1600 - 500)))
+  const t = Math.max(0, Math.min(1, (width - 500) / 1100))
   const minFontSize = lerp(10, 14, t)
   const maxFontSize = lerp(25, 45, t)
   return [minFontSize, maxFontSize]
@@ -60,7 +60,7 @@ const proportionalSizeRange = computed(() => {
 // Reactive property for word grid size based on window width
 const proportionalGridSize = computed(() => {
   const width = store_app_configs_info.window_innerWidth
-  const t = Math.max(0, Math.min(1, (width - 500) / (1600 - 500)))
+  const t = Math.max(0, Math.min(1, (width - 500) / 1100))
   // Inverse scaling: larger screen -> smaller grid size for denser packing
   return Math.round(lerp(8, 3, t))
 })
@@ -263,6 +263,13 @@ onBeforeUnmount(() => {
 
   // Clear temporary data
   store_view_recommend_page_info.recommend_MediaFiles_temporary = []
+})
+
+onUnmounted(() => {
+  if (store_view_recommend_page_info.recommend_MediaFiles_temporary.length > 0) {
+    store_view_recommend_page_info.recommend_MediaFiles_temporary = []
+    console.log('Table_Recommend unmounted, temporary data cleared')
+  }
 })
 
 const initOrUpdateChart = () => {
@@ -507,30 +514,28 @@ const { t } = useI18n({
           </template>
 
           <!-- Current Selections Summary -->
-          <div style="margin-bottom: 10px">
-            <n-space align="center">
-              <n-tag
-                v-for="word in selectedWords"
-                :key="word.id"
-                :type="
-                  word.type === 'genre' ? 'success' : word.type === 'tag' ? 'primary' : 'default'
-                "
-                closable
-                @close="removeWordSelection(word)"
-                round
-              >
-                {{ word.name }}
-              </n-tag>
-              <n-input
-                v-model:value="newTagInput"
-                size="small"
-                placeholder="输入并按 Enter 确认"
-                style="width: 180px"
-                @keyup.enter="handleManualAddTag"
-                @blur="handleManualAddTag"
-              />
-            </n-space>
-          </div>
+          <n-space align="center">
+            <n-tag
+              v-for="word in selectedWords"
+              :key="word.id"
+              :type="
+                word.type === 'genre' ? 'success' : word.type === 'tag' ? 'primary' : 'default'
+              "
+              closable
+              @close="removeWordSelection(word)"
+              round
+            >
+              {{ word.name }}
+            </n-tag>
+            <n-input
+              v-model:value="newTagInput"
+              size="small"
+              placeholder="输入并按 Enter 确认"
+              style="width: 180px"
+              @keyup.enter="handleManualAddTag"
+              @blur="handleManualAddTag"
+            />
+          </n-space>
 
           <!-- View Mode: Tags -->
           <div v-show="displayMode === 'tags'" class="tag-view-container">
@@ -771,6 +776,7 @@ const { t } = useI18n({
 }
 
 .table {
+  width: 100%;
   height: 100%;
 }
 
