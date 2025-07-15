@@ -1448,10 +1448,7 @@ onBeforeUnmount(() => {
                   }"
                   alt=""
                 />
-                <div
-                  class="hover-overlay"
-                  @dblclick="Open_this_album_MediaList_click(item.id)"
-                >
+                <div class="hover-overlay" @dblclick="Open_this_album_MediaList_click(item.id)">
                   <div class="hover-content">
                     <button
                       class="play-this-album-button"
@@ -1523,7 +1520,11 @@ onBeforeUnmount(() => {
               </div>
               <div class="album-info" :style="{ width: `${item_album_image}px` }">
                 <div class="album-text" :style="{ width: `${item_album_txt}px` }">
-                  <div class="album-name" :style="{ maxWidth: `${item_album_txt}px` }">
+                  <div
+                    class="album-name"
+                    :style="{ maxWidth: `${item_album_txt}px` }"
+                    @click="handleItemClick_album(item.name)"
+                  >
                     {{ item.name }}
                   </div>
                   <div class="artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
@@ -1681,30 +1682,13 @@ onBeforeUnmount(() => {
   overflow-y: scroll;
 }
 
-.category-section {
-  margin-bottom: -8px;
-}
-
-.category-header {
-  width: calc(100vw - 200px);
-}
-
-.category-title {
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.no-data-placeholder {
-  margin-top: 2px;
-  color: #ffffff80;
-}
-
 .album-wall {
   overflow-y: auto;
   width: calc(100vw - 200px);
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 .album {
@@ -1720,7 +1704,7 @@ onBeforeUnmount(() => {
 
 .album-cover-container {
   position: relative;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   transition: all 0.3s ease;
 }
@@ -1829,10 +1813,20 @@ onBeforeUnmount(() => {
   -webkit-line-clamp: 1;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: pointer;
 }
 
 .album-name {
   font-weight: 600;
+}
+
+.album-name:hover {
+  text-decoration: underline;
+  color: #3dc3ff;
+}
+.artist-name:hover {
+  text-decoration: underline;
+  color: #3dc3ff;
 }
 
 .RateCustom.viaSlot .icon {

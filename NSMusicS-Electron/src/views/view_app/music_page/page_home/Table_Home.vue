@@ -249,8 +249,7 @@ async function update_playlist_addAlbum(id: any, playlist_id: any) {
         store_server_users.server_select_kind != 'emby') ||
       store_server_user_model.model_server_type_of_local
     const is_emby_recently_added =
-      store_server_users.server_select_kind === 'emby' &&
-      recently_added_contextmenu_of_emby.value
+      store_server_users.server_select_kind === 'emby' && recently_added_contextmenu_of_emby.value
 
     recently_added_contextmenu_of_emby.value = false
 
@@ -282,8 +281,7 @@ async function add_to_playlist(next: boolean) {
       store_server_users.server_select_kind != 'emby') ||
     store_server_user_model.model_server_type_of_local
   const is_emby_recently_added =
-    store_server_users.server_select_kind === 'emby' &&
-    recently_added_contextmenu_of_emby.value
+    store_server_users.server_select_kind === 'emby' && recently_added_contextmenu_of_emby.value
 
   recently_added_contextmenu_of_emby.value = false
   let matchingItems = []
@@ -387,7 +385,8 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="home-wall-container">
-    <n-space vertical class="category-section">
+    <n-space vertical class="category-section"
+             v-if="store_view_home_page_info.home_Files_temporary_maximum_playback.length !== 0">
       <n-space
         justify="space-between"
         align="center"
@@ -453,7 +452,6 @@ onBeforeUnmount(() => {
       <DynamicScroller
         class="home-wall"
         ref="dynamicScroller_maximum_playback"
-        v-if="store_view_home_page_info.home_Files_temporary_maximum_playback.length !== 0"
         :style="{
           width: `calc(100vw - ${collapsed_width - 18}px)`,
           height: `${item_album_image + 80}px`,
@@ -578,7 +576,8 @@ onBeforeUnmount(() => {
       </DynamicScroller>
     </n-space>
 
-    <n-space vertical class="category-section">
+    <n-space vertical class="category-section"
+             v-if="store_view_home_page_info.home_Files_temporary_random_search.length !== 0">
       <n-space
         justify="space-between"
         align="center"
@@ -644,7 +643,6 @@ onBeforeUnmount(() => {
       <DynamicScroller
         class="home-wall"
         ref="dynamicScroller_random_search"
-        v-if="store_view_home_page_info.home_Files_temporary_random_search.length !== 0"
         :style="{
           width: `calc(100vw - ${collapsed_width - 18}px)`,
           height: `${item_album_image + 80}px`,
@@ -769,7 +767,8 @@ onBeforeUnmount(() => {
       </DynamicScroller>
     </n-space>
 
-    <n-space vertical class="category-section">
+    <n-space vertical class="category-section"
+             v-if="store_view_home_page_info.home_Files_temporary_recently_added.length !== 0">
       <n-space
         justify="space-between"
         align="center"
@@ -834,7 +833,6 @@ onBeforeUnmount(() => {
       <DynamicScroller
         class="home-wall"
         ref="dynamicScroller_recently_added"
-        v-if="store_view_home_page_info.home_Files_temporary_recently_added.length !== 0"
         :style="{
           width: `calc(100vw - ${collapsed_width - 18}px)`,
           height: `${item_album_image + 80}px`,
@@ -959,7 +957,8 @@ onBeforeUnmount(() => {
       </DynamicScroller>
     </n-space>
 
-    <n-space vertical class="category-section">
+    <n-space vertical class="category-section"
+             v-if="store_view_home_page_info.home_Files_temporary_recently_played.length !== 0">
       <n-space
         justify="space-between"
         align="center"
@@ -1025,7 +1024,6 @@ onBeforeUnmount(() => {
       <DynamicScroller
         class="home-wall"
         ref="dynamicScroller_recently_played"
-        v-if="store_view_home_page_info.home_Files_temporary_recently_played.length !== 0"
         :style="{
           width: `calc(100vw - ${collapsed_width - 18}px)`,
           height: `${item_album_image + 80}px`,
@@ -1219,7 +1217,7 @@ onBeforeUnmount(() => {
 
 .album-cover-container {
   position: relative;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   transition: all 0.3s ease;
 }
@@ -1382,4 +1380,3 @@ onBeforeUnmount(() => {
   background-color: #88888880;
 }
 </style>
-

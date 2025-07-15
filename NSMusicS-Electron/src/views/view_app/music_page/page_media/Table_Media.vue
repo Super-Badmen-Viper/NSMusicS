@@ -2234,50 +2234,48 @@ onBeforeUnmount(() => {
                   border-radius: 10px;
                   border: 1.5px solid #ffffff20;
                   overflow: hidden;
+                  position: relative;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
                 "
               >
-                <div style="position: relative; display: inline-block">
-                  <img
-                    :key="item.id"
-                    :src="item.medium_image_url"
-                    @error="handleImageError(item)"
-                    style="width: 60px; height: 60px; object-fit: cover"
-                    alt=""
-                  />
-                  <div
-                    class="hover-overlay"
-                    style="
-                      width: 70px;
-                      height: 70px;
-                      position: absolute;
-                      top: 50%;
-                      left: 50%;
-                      transform: translate(-50%, -60%);
-                      filter: blur(3px);
-                      cursor: pointer;
-                    "
-                  ></div>
-                  <icon
-                    class="hover-overlay"
-                    color="#FFFFFF"
-                    size="28"
-                    style="
-                      position: absolute;
-                      top: 50%;
-                      left: 50%;
-                      transform: translate(-50%, -60%);
-                      cursor: pointer;
-                    "
-                    @click="
-                      () => {
-                        click_count = 2
-                        handleItemDbClick(item, index)
-                      }
-                    "
-                  >
-                    <Play />
-                  </icon>
-                </div>
+                <img
+                  :key="item.id"
+                  :src="item.medium_image_url"
+                  @error="handleImageError(item)"
+                  style="width: 100%; height: 100%; object-fit: cover; position: absolute;"
+                  alt=""
+                />
+                <div
+                  class="hover-overlay"
+                  style="
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    top: 0;
+                    filter: blur(3px);
+                    cursor: pointer;
+                  "
+                ></div>
+                <icon
+                  class="hover-overlay"
+                  color="#FFFFFF"
+                  :size="28"
+                  style="
+                    position: relative;
+                    z-index: 1;
+                    cursor: pointer;
+                  "
+                  @click="
+                    () => {
+                      click_count = 2
+                      handleItemDbClick(item, index)
+                    }
+                  "
+                >
+                  <Play style="margin-left: 25%;margin-top: 25%;"/>
+                </icon>
               </div>
               <div class="songlist_title">
                 <span
@@ -2778,7 +2776,7 @@ onBeforeUnmount(() => {
   </n-modal>
 </template>
 
-<style>
+<style scoped>
 .n-base-selection .n-base-selection-label .n-base-selection-input .n-base-selection-input__content {
   font-size: 15px;
   font-weight: 600;

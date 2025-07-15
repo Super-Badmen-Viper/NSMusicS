@@ -10,6 +10,8 @@ import { onMounted } from 'vue'
 import { store_view_charts_page_info } from '@/views/view_app/music_page/page_charts/store/store_view_charts_page_info'
 import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
 import { store_server_users } from '@/data/data_stores/server/store_server_users'
+import { store_general_fetch_charts_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_charts/store_general_fetch_charts_list'
+import { store_view_home_page_info } from '@/views/view_app/music_page/page_home/store/store_view_home_page_info'
 
 use([CanvasRenderer, SVGRenderer])
 
@@ -371,36 +373,36 @@ onMounted(async () => {
         .slice(0, 10),
     },
   ]
-  // ///
-  // await store_general_fetch_charts_list.fetchData_Charts();
-  // ///
-  // store_view_charts_page_info.charts_data_temporary[1].items = [];
-  // store_view_charts_page_info.charts_album_metadata =
-  //     store_view_home_page_info.home_Files_temporary_maximum_playback;
-  // // 使用 Set 记录已添加的 ID 实现去重[6,7,8](@ref)
-  // const addedIds = new Set();
-  // const loopLength = Math.min(store_view_charts_page_info.charts_album_metadata.length, 8);
-  // for (let i = 0; i < loopLength; i++) {
-  //   const row = store_view_charts_page_info.charts_album_metadata[i];
-  //   // 跳过重复 ID[6,8](@ref)
-  //   if (addedIds.has(row.id)) continue;
-  //   addedIds.add(row.id); // 记录新 ID
-  //   store_view_charts_page_info.charts_data_temporary[1].items.push({
-  //     id: row.id,
-  //     name: row.name,
-  //     play_count: row.play_count,
-  //     rating: row.rating,
-  //     starred: row.favorite,
-  //     play_complete_count: row.play_complete_count,
-  //     play_date: row.play_date,
-  //   });
-  // }
-  // // 排序 + 切片（保留前10条）[6](@ref)
-  // store_view_charts_page_info.charts_data_temporary[1].items =
-  //     store_view_charts_page_info.charts_data_temporary[1].items
-  //         .sort((a, b) => a.play_count - b.play_count)
-  //         .slice(0, 10);
-  // ///
+  ///
+  await store_general_fetch_charts_list.fetchData_Charts();
+  ///
+  store_view_charts_page_info.charts_data_temporary[1].items = [];
+  store_view_charts_page_info.charts_album_metadata =
+      store_view_home_page_info.home_Files_temporary_maximum_playback;
+  // 使用 Set 记录已添加的 ID 实现去重[6,7,8](@ref)
+  const addedIds = new Set();
+  const loopLength = Math.min(store_view_charts_page_info.charts_album_metadata.length, 8);
+  for (let i = 0; i < loopLength; i++) {
+    const row = store_view_charts_page_info.charts_album_metadata[i];
+    // 跳过重复 ID[6,8](@ref)
+    if (addedIds.has(row.id)) continue;
+    addedIds.add(row.id); // 记录新 ID
+    store_view_charts_page_info.charts_data_temporary[1].items.push({
+      id: row.id,
+      name: row.name,
+      play_count: row.play_count,
+      rating: row.rating,
+      starred: row.favorite,
+      play_complete_count: row.play_complete_count,
+      play_date: row.play_date,
+    });
+  }
+  // 排序 + 切片（保留前10条）[6](@ref)
+  store_view_charts_page_info.charts_data_temporary[1].items =
+      store_view_charts_page_info.charts_data_temporary[1].items
+          .sort((a, b) => a.play_count - b.play_count)
+          .slice(0, 10);
+  ///
 })
 
 ////// i18n auto lang
@@ -411,18 +413,21 @@ const { t } = useI18n({
 </script>
 
 <template>
-  <div style="margin-left: -20px;">
+  <div style="margin-left: -20px">
     <!--    <logo-chart />-->
     <div style="text-align: center; font-weight: bold; font-size: 32px; margin-bottom: 10px">
       Vue-ECharts
-      <span v-if="
-            (store_server_user_model.model_server_type_of_web &&
+      <span
+        v-if="
+          (store_server_user_model.model_server_type_of_web &&
             store_server_users.server_select_kind != 'ninesong') ||
-            store_server_user_model.model_server_type_of_local
-            " style="color: crimson;font-weight: 600;">
-          {{ ' | ' + $t('error.serverRequired') + ': NineSong' }}
-          <br />
-        </span>
+          store_server_user_model.model_server_type_of_local
+        "
+        style="color: crimson; font-weight: 600"
+      >
+        {{ ' | ' + $t('error.serverRequired') + ': NineSong' }}
+        <br />
+      </span>
     </div>
     <div style="text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 16px">
       此页面用于可视化浏览你的播放数据<br />
@@ -444,6 +449,4 @@ const { t } = useI18n({
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

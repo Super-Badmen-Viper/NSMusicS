@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { ref, computed, reactive, watch, nextTick, onMounted, onBeforeUnmount, onUnmounted } from 'vue'
+import {
+  ref,
+  computed,
+  reactive,
+  watch,
+  nextTick,
+  onMounted,
+  onBeforeUnmount,
+  onUnmounted,
+} from 'vue'
 import {
   NMessageProvider,
   NSpace,
@@ -488,20 +497,24 @@ const { t } = useI18n({
 
 <template>
   <n-message-provider>
-    <div style="position: absolute;top: 0;">
-      <div style="font-size: 20px;font-weight: 600;margin-left: 11px;">
+    <div style="position: absolute; top: 0">
+      <div style="font-size: 20px; font-weight: 600; margin-left: 11px">
         推荐系统：阶段 1 | 词云(标签)推荐
-        <span v-if="
+        <span
+          v-if="
             (store_server_user_model.model_server_type_of_web &&
-            store_server_users.server_select_kind != 'ninesong') ||
+              store_server_users.server_select_kind != 'ninesong') ||
             store_server_user_model.model_server_type_of_local
-            " style="color: crimson;font-weight: 600;">
+          "
+          style="color: crimson; font-weight: 600"
+        >
           {{ ' | ' + $t('error.serverRequired') + ': NineSong' }}
           <br />
         </span>
       </div>
-      <div style="font-size: 12px;margin-left: 11px;">
-        阶段 1: 词云(标签)推荐 -> 阶段 2: 播放相似度推荐 -> 阶段 3: 知识图谱推荐 -> 阶段 4: DeepSeek大模型推荐
+      <div style="font-size: 12px; margin-left: 11px">
+        阶段 1: 词云(标签)推荐 -> 阶段 2: 播放相似度推荐 -> 阶段 3: 知识图谱推荐 -> 阶段 4:
+        DeepSeek大模型推荐
       </div>
     </div>
 

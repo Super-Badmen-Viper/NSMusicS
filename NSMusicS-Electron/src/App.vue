@@ -915,12 +915,11 @@ if (isElectron) {
   })
 }
 
-function fullMaximize(){
+function fullMaximize() {
   if (isElectron) {
     if (store_app_configs_info.desktop_system_kind === 'linux') {
       ipcRenderer.send('window-fullscreen')
-      store_app_configs_info.window_full =
-        !store_app_configs_info.window_full
+      store_app_configs_info.window_full = !store_app_configs_info.window_full
       store_app_configs_info.window_max = store_app_configs_info.window_full
     } else {
       ipcRenderer.send('window-max')
@@ -932,7 +931,7 @@ function fullMaximize(){
     store_app_configs_info.window_innerHeight = window.innerHeight
   }
 }
-function fullScreen(){
+function fullScreen() {
   if (isElectron) {
     ipcRenderer.send('window-fullscreen')
   }
@@ -1184,12 +1183,7 @@ function fullScreen(){
                   "
                 >
                   <template #trigger>
-                    <n-button
-                      quaternary
-                      circle
-                      style="margin-right: 4px"
-                      @click="fullScreen"
-                    >
+                    <n-button quaternary circle style="margin-right: 4px" @click="fullScreen">
                       <template #icon>
                         <n-icon size="19" :depth="2" v-if="store_app_configs_info.window_full">
                           <ArrowsMinimize />
@@ -1270,12 +1264,7 @@ function fullScreen(){
                   v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'"
                 >
                   <template #trigger>
-                    <n-button
-                      quaternary
-                      circle
-                      style="margin-right: 4px"
-                      @click="fullMaximize"
-                    >
+                    <n-button quaternary circle style="margin-right: 4px" @click="fullMaximize">
                       <template #icon>
                         <n-icon size="20" :depth="2" v-if="store_app_configs_info.window_max"
                           ><FullScreenMinimize24Filled

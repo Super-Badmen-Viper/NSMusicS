@@ -1181,30 +1181,32 @@ onBeforeUnmount(() => {
         <template #after> </template>
         <template #default="{ item, index, active }">
           <DynamicScrollerItem
-            style="margin-left: 7px"
             :item="item"
             :active="active"
             :data-index="index"
-            :data-active="active"
             v-contextmenu:contextmenu
-            @contextmenu.prevent="store_playlist_list_info.playlist_Menu_Item_Id = item.id"
+            @contextmenu.prevent="
+              () => {
+                store_playlist_list_info.playlist_Menu_Item = item
+                store_playlist_list_info.playlist_Menu_Item_Id = item.id
+              }
+            "
           >
             <div :key="item.id" class="artist">
               <div
+                class="artist-cover-container"
                 :style="{
-                  width: item_artist_image + 'px',
-                  height: item_artist_image + 'px',
-                  position: 'relative',
+                  width: `${item_artist_image}px`,
+                  height: `${item_artist_image}px`,
                 }"
               >
                 <img
+                  class="artist-cover-image"
                   :src="item.medium_image_url"
                   @error="handleImageError(item)"
-                  style="objectfit: cover; objectposition: center; border: 1.5px solid #ffffff20"
                   :style="{
-                    width: item_artist_image + 'px',
-                    height: item_artist_image + 'px',
-                    borderRadius: '600px',
+                    width: `${item_artist_image}px`,
+                    height: `${item_artist_image}px`,
                   }"
                   alt=""
                 />
@@ -1214,22 +1216,13 @@ onBeforeUnmount(() => {
                 >
                   <div class="hover-content">
                     <button
-                      class="play_this_artist"
+                      class="play-this-artist-button"
                       @click="Play_this_artist_all_media_list_click(item.id)"
-                      style="
-                        border: 0;
-                        background-color: transparent;
-                        width: 50px;
-                        height: 50px;
-                        cursor: pointer;
-                      "
                     >
-                      <icon :size="42" color="#FFFFFF" style="margin-left: -2px; margin-top: 3px"
-                        ><PlayCircle24Regular
-                      /></icon>
+                      <icon :size="42" color="#FFFFFF"><PlayCircle24Regular /></icon>
                     </button>
                     <div
-                      class="hover_buttons_top"
+                      class="hover-buttons-top"
                       v-if="
                         (store_server_users.server_select_kind != 'jellyfin' &&
                           store_server_users.server_select_kind != 'emby') ||
@@ -1238,23 +1231,17 @@ onBeforeUnmount(() => {
                     >
                       <rate
                         class="viaSlot"
-                        style="margin-right: 8px"
                         :length="5"
                         v-model="item.rating"
                         @before-rate="
-                          (value) => {
-                            if (item.rating == 1) {
-                              before_rating = true
-                            }
+                          () => {
+                            before_rating = item.rating === 1
                           }
                         "
                         @after-rate="
                           (value) => {
-                            if (item.rating == 1 && before_rating == true) {
-                              after_rating = true
-                              before_rating = false
-                            }
-                            handleItemClick_Rating(item.id + '-' + value)
+                            after_rating = item.rating === 1 && before_rating
+                            handleItemClick_Rating(`${item.id}-${value}`)
                             if (after_rating) {
                               item.rating = 0
                               after_rating = false
@@ -1263,52 +1250,29 @@ onBeforeUnmount(() => {
                         "
                       />
                     </div>
-                    <div class="hover_buttons_bottom">
+                    <div class="hover-buttons-bottom">
                       <button
-                        class="open_this_artist"
-                        @click="Open_this_artist_all_artist_list_click(item.id)"
-                        style="
-                          border: 0;
-                          background-color: transparent;
-                          width: 28px;
-                          height: 28px;
-                          cursor: pointer;
+                        v-if="
+                          store_server_user_model.model_server_type_of_local ||
+                          (store_server_users.server_select_kind !== 'jellyfin' &&
+                            store_server_users.server_select_kind !== 'emby')
                         "
+                        class="open-this-artist-button"
+                        @click="Open_this_artist_all_artist_list_click(item.id)"
                       >
-                        <icon :size="20" color="#FFFFFF" style="margin-left: -2px; margin-top: 3px"
-                          ><Open28Filled
-                        /></icon>
+                        <icon :size="20" color="#FFFFFF"><Open28Filled /></icon>
                       </button>
                       <button
-                        class="love_this_artist"
+                        class="love-this-artist-button"
                         @click="
                           () => {
                             handleItemClick_Favorite(item.id, item.favorite)
                             item.favorite = !item.favorite
                           }
                         "
-                        style="
-                          border: 0;
-                          background-color: transparent;
-                          width: 28px;
-                          height: 28px;
-                          cursor: pointer;
-                        "
                       >
-                        <icon
-                          v-if="item.favorite"
-                          :size="20"
-                          color="red"
-                          style="margin-left: -2px; margin-top: 3px"
-                          ><Heart28Filled
-                        /></icon>
-                        <icon
-                          v-else
-                          :size="20"
-                          color="#FFFFFF"
-                          style="margin-left: -2px; margin-top: 3px"
-                          ><Heart24Regular
-                        /></icon>
+                        <icon v-if="item.favorite" :size="20" color="red"><Heart28Filled /></icon>
+                        <icon v-else :size="20" color="#FFFFFF"><Heart24Regular /></icon>
                       </button>
                     </div>
                   </div>
@@ -1463,117 +1427,146 @@ onBeforeUnmount(() => {
 .artist-wall-container {
   width: 100%;
   height: 100%;
+  padding-right: 20px;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
+
 .artist-wall {
   overflow-y: auto;
   width: calc(100vw - 200px);
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
+
 .artist {
   float: left;
   flex-direction: column;
-  align-items: left;
+  transition: all 0.3s ease;
+  margin-top: 10px;
 }
-.artist .hover-overlay {
+
+.artist:hover {
+  transform: translateY(-10px);
+}
+
+.artist-cover-container {
+  position: relative;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  margin-left: 10px;
+}
+
+.artist-cover-image {
+  object-fit: cover;
+  object-position: center;
+  border: 1.5px solid #ffffff20;
+  border-radius: 10px;
+}
+
+.hover-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  border-radius: 4px;
-  background: #00000090;
+  border-radius: 10px;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.2) 100%);
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s ease;
 }
+
 .artist:hover .hover-overlay {
   opacity: 1;
 }
-.artist .hover-content {
+
+.hover-content {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
 }
-.artist .hover_buttons_top {
-  position: absolute;
-  top: 2px;
-  left: 0;
-}
-.artist .hover_buttons_bottom {
-  position: absolute;
-  bottom: 3px;
-  right: 3px;
+
+.play-this-artist-button,
+.open-this-artist-button,
+.love-this-artist-button {
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.artist_left_text_artist_info {
+.play-this-artist-button:hover,
+.open-this-artist-button:hover,
+.love-this-artist-button:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
+}
+
+.play-this-artist-button {
+  width: 50px;
+  height: 50px;
+}
+
+.play-this-artist-button .icon {
+  margin-left: -2px;
+  margin-top: 3px;
+}
+
+.hover-buttons-top {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: auto;
+}
+
+.hover-buttons-bottom {
+  position: absolute;
+  bottom: 8px;
+  right: 14px;
+  display: flex;
+  gap: 8px;
+}
+
+.open-this-artist-button,
+.love-this-artist-button {
+  width: 28px;
+  height: 28px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.open-this-artist-button .icon,
+.love-this-artist-button .icon {
+  margin: 0;
+}
+
+.artist-info {
   float: left;
   text-align: left;
 }
-#artist_name {
+
+.artist-text {
   margin-top: 2px;
-  font-size: 15px;
-  font-weight: 500;
+}
+
+.artist-name,
+.artist-name {
+  font-size: 14px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-#artist_artist_name {
-  font-size: 12px;
-  font-weight: 500;
-}
 
-.play_this_artist:hover {
-  color: #3dc3ff;
-}
-.open_this_artist:hover {
-  color: #3dc3ff;
-}
-.love_this_artist:hover {
-  color: #3dc3ff;
-}
-.RateCustom.viaSlot .icon {
-  width: 15px;
-  height: 25px;
-  margin: 0;
-}
-.Rate.viaSlot .Rate__star {
-  width: 25px;
-  height: 25px;
-}
-.Rate.viaSlot .Rate__star:nth-child(8).filled {
-  color: red;
-}
-.Rate.viaSlot .Rate__star:nth-child(8).hover {
-  color: red;
-}
-
-.v-contextmenu-item {
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-.v-contextmenu-item--hover {
-  color: #3dc3ff;
-  background-color: transparent;
-}
-
-::-webkit-scrollbar {
-  display: auto;
-  width: 6px;
-}
-::-webkit-scrollbar-thumb {
-  background-color: #88888850;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-track {
-  background-color: #f1f1f105;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background-color: #88888850;
-  border-radius: 4px;
+.artist-name {
+  font-weight: 600;
 }
 </style>
