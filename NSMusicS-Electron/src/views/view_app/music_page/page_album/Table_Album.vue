@@ -1417,7 +1417,6 @@ onBeforeUnmount(() => {
         <template #after> </template>
         <template #default="{ item, index, active }">
           <DynamicScrollerItem
-            style="margin-left: 7px"
             :item="item"
             :active="active"
             :data-index="index"
@@ -1432,48 +1431,41 @@ onBeforeUnmount(() => {
           >
             <div :key="item.id" class="album">
               <div
+                class="album-cover-container"
                 :style="{
-                  width: item_album_image + 'px',
-                  height: item_album_image + 'px',
+                  width: `${item_album_image}px`,
+                  height: `${item_album_image}px`,
                   position: 'relative',
                 }"
               >
                 <img
+                  class="album-cover-image"
                   :src="item.medium_image_url"
                   @error="handleImageError(item)"
-                  style="
-                    objectfit: cover;
-                    objectposition: center;
-                    border: 1.5px solid #ffffff20;
-                    border-radius: 4px;
-                  "
-                  :style="{ width: item_album_image + 'px', height: item_album_image + 'px' }"
+                  :style="{
+                    width: `${item_album_image}px`,
+                    height: `${item_album_image}px`,
+                  }"
                   alt=""
                 />
-                <div class="hover-overlay" @dblclick="Open_this_album_MediaList_click(item.id)">
+                <div
+                  class="hover-overlay"
+                  @dblclick="Open_this_album_MediaList_click(item.id)"
+                >
                   <div class="hover-content">
                     <button
-                      class="play_this_album"
+                      class="play-this-album-button"
                       @click="
                         () => {
                           Play_this_album_MediaList_click(item.id)
                           store_player_audio_info.this_audio_artist_id = item.artist_id
                         }
                       "
-                      style="
-                        border: 0;
-                        background-color: transparent;
-                        width: 50px;
-                        height: 50px;
-                        cursor: pointer;
-                      "
                     >
-                      <icon :size="42" color="#FFFFFF" style="margin-left: -2px; margin-top: 3px"
-                        ><PlayCircle24Regular
-                      /></icon>
+                      <icon :size="42" color="#FFFFFF"><PlayCircle24Regular /></icon>
                     </button>
                     <div
-                      class="hover_buttons_top"
+                      class="hover-buttons-top"
                       v-if="
                         (store_server_users.server_select_kind != 'jellyfin' &&
                           store_server_users.server_select_kind != 'emby') ||
@@ -1482,9 +1474,8 @@ onBeforeUnmount(() => {
                     >
                       <rate
                         class="viaSlot"
-                        style="margin-right: 8px"
-                        :length="5"
                         v-model="item.rating"
+                        :length="5"
                         @before-rate="
                           (value) => {
                             if (item.rating == 1) {
@@ -1507,70 +1498,35 @@ onBeforeUnmount(() => {
                         "
                       />
                     </div>
-                    <div class="hover_buttons_bottom">
+                    <div class="hover-buttons-bottom">
                       <button
-                        class="open_this_artist"
+                        class="open-this-artist-button"
                         @click="Open_this_album_MediaList_click(item.id)"
-                        style="
-                          border: 0;
-                          background-color: transparent;
-                          width: 28px;
-                          height: 28px;
-                          cursor: pointer;
-                        "
                       >
-                        <icon :size="20" color="#FFFFFF" style="margin-left: -2px; margin-top: 3px"
-                          ><Open28Filled
-                        /></icon>
+                        <icon :size="20" color="#FFFFFF"><Open28Filled /></icon>
                       </button>
                       <button
-                        class="love_this_album"
+                        class="love-this-album-button"
                         @click="
                           () => {
                             handleItemClick_Favorite(item.id, item.favorite)
                             item.favorite = !item.favorite
                           }
                         "
-                        style="
-                          border: 0;
-                          background-color: transparent;
-                          width: 28px;
-                          height: 28px;
-                          cursor: pointer;
-                        "
                       >
-                        <icon
-                          v-if="item.favorite"
-                          :size="20"
-                          color="red"
-                          style="margin-left: -2px; margin-top: 3px"
-                          ><Heart28Filled
-                        /></icon>
-                        <icon
-                          v-else
-                          :size="20"
-                          color="#FFFFFF"
-                          style="margin-left: -2px; margin-top: 3px"
-                          ><Heart24Regular
-                        /></icon>
+                        <icon v-if="item.favorite" :size="20" color="red"><Heart28Filled /></icon>
+                        <icon v-else :size="20" color="#FFFFFF"><Heart24Regular /></icon>
                       </button>
                     </div>
                   </div>
                 </div>
               </div>
-              <div id="all_album_artist_name" :style="{ width: item_album_image + 'px' }">
-                <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
-                  <div>
-                    <span
-                      id="album_name"
-                      style="font-size: 14px; font-weight: 600"
-                      :style="{ maxWidth: item_album_txt + 'px' }"
-                      @click="handleItemClick_album(item.name)"
-                    >
-                      {{ item.name }}
-                    </span>
+              <div class="album-info" :style="{ width: `${item_album_image}px` }">
+                <div class="album-text" :style="{ width: `${item_album_txt}px` }">
+                  <div class="album-name" :style="{ maxWidth: `${item_album_txt}px` }">
+                    {{ item.name }}
                   </div>
-                  <div :style="{ maxWidth: item_album_txt + 'px' }">
+                  <div class="artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
                     <template
                       v-if="
                         store_server_users.server_select_kind === 'ninesong' &&
@@ -1579,8 +1535,6 @@ onBeforeUnmount(() => {
                       v-for="artist in item.all_artist_ids"
                     >
                       <span
-                        id="album_artist_name"
-                        style="font-size: 14px; font-weight: 400"
                         @click="
                           () => {
                             handleItemClick_artist(artist.ArtistID)
@@ -1594,8 +1548,6 @@ onBeforeUnmount(() => {
                     </template>
                     <template v-else v-for="artist in item.artist.split(/[\/|｜、]/)">
                       <span
-                        id="album_artist_name"
-                        style="font-size: 14px; font-weight: 400"
                         @click="
                           () => {
                             if (store_server_user_model.model_server_type_of_local) {
@@ -1707,7 +1659,7 @@ onBeforeUnmount(() => {
     </div>
   </n-space>
 </template>
-<style>
+<style scoped>
 .n-base-selection .n-base-selection-label .n-base-selection-input .n-base-selection-input__content {
   font-size: 15px;
   font-weight: 600;
@@ -1724,7 +1676,29 @@ onBeforeUnmount(() => {
 .album-wall-container {
   width: 100%;
   height: 100%;
+  padding-right: 20px;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
+
+.category-section {
+  margin-bottom: -8px;
+}
+
+.category-header {
+  width: calc(100vw - 200px);
+}
+
+.category-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.no-data-placeholder {
+  margin-top: 2px;
+  color: #ffffff80;
+}
+
 .album-wall {
   overflow-y: auto;
   width: calc(100vw - 200px);
@@ -1732,86 +1706,133 @@ onBeforeUnmount(() => {
   flex-direction: column;
   overflow-x: hidden;
 }
+
 .album {
   float: left;
   flex-direction: column;
-  align-items: left;
+  transition: all 0.3s ease;
+  margin-top: 10px;
 }
-.album .hover-overlay {
+
+.album:hover {
+  transform: translateY(-10px);
+}
+
+.album-cover-container {
+  position: relative;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.album-cover-image {
+  object-fit: cover;
+  object-position: center;
+  border: 1.5px solid #ffffff20;
+  border-radius: 10px;
+}
+
+.hover-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  border-radius: 4px;
-  background: #00000090;
+  border-radius: 10px;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.2) 100%);
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s ease;
 }
+
 .album:hover .hover-overlay {
   opacity: 1;
 }
-.album .hover-content {
+
+.hover-content {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
 }
-.album .hover_buttons_top {
-  position: absolute;
-  top: 2px;
-  left: 0;
-}
-.album .hover_buttons_bottom {
-  position: absolute;
-  bottom: 3px;
-  right: 3px;
+
+.play-this-album-button,
+.open-this-artist-button,
+.love-this-album-button {
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.album_left_text_album_info {
+.play-this-album-button:hover,
+.open-this-artist-button:hover,
+.love-this-album-button:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
+}
+
+.play-this-album-button {
+  width: 50px;
+  height: 50px;
+}
+
+.play-this-album-button .icon {
+  margin-left: -2px;
+  margin-top: 3px;
+}
+
+.hover-buttons-top {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: auto;
+}
+
+.hover-buttons-bottom {
+  position: absolute;
+  bottom: 8px;
+  right: 14px;
+  display: flex;
+  gap: 8px;
+}
+
+.open-this-artist-button,
+.love-this-album-button {
+  width: 28px;
+  height: 28px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.open-this-artist-button .icon,
+.love-this-album-button .icon {
+  margin: 0;
+}
+
+.album-info {
   float: left;
   text-align: left;
 }
-#album_name {
+
+.album-text {
   margin-top: 2px;
-  font-size: 15px;
-  font-weight: 500;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-#album_name:hover {
-  text-decoration: underline;
-  cursor: pointer;
-  color: #3dc3ff;
-}
-#all_album_artist_name {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-#album_artist_name {
-  font-size: 12px;
-  font-weight: 500;
-}
-#album_artist_name:hover {
-  text-decoration: underline;
-  cursor: pointer;
-  color: #3dc3ff;
 }
 
-.play_this_album:hover {
-  color: #3dc3ff;
+.album-name,
+.artist-name {
+  font-size: 14px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.open_this_artist:hover {
-  color: #3dc3ff;
-}
-.love_this_album:hover {
-  color: #3dc3ff;
+
+.album-name {
+  font-weight: 600;
 }
 
 .RateCustom.viaSlot .icon {
@@ -1819,13 +1840,13 @@ onBeforeUnmount(() => {
   height: 25px;
   margin: 0;
 }
+
 .Rate.viaSlot .Rate__star {
   width: 25px;
   height: 25px;
 }
-.Rate.viaSlot .Rate__star:nth-child(8).filled {
-  color: red;
-}
+
+.Rate.viaSlot .Rate__star:nth-child(8).filled,
 .Rate.viaSlot .Rate__star:nth-child(8).hover {
   color: red;
 }
@@ -1834,25 +1855,27 @@ onBeforeUnmount(() => {
   margin-top: 5px;
   margin-bottom: 5px;
 }
+
 .v-contextmenu-item--hover {
   color: #3dc3ff;
   background-color: transparent;
 }
 
 ::-webkit-scrollbar {
-  display: auto;
   width: 6px;
+  height: 8px;
 }
+
 ::-webkit-scrollbar-thumb {
   background-color: #88888850;
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-track {
-  background-color: #f1f1f105;
-  border-radius: 4px;
+  background-color: transparent;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #88888850;
-  border-radius: 4px;
+  background-color: #88888880;
 }
 </style>

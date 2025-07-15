@@ -1238,7 +1238,7 @@ onBeforeUnmount(() => {
   width: 100%;
   height: 100%;
   border-radius: 10px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.2) 100%);
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.2) 100%);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -1282,8 +1282,8 @@ onBeforeUnmount(() => {
 
 .hover-buttons-top {
   position: absolute;
-  top: 8px;
-  right: 18px;
+  top: 4px;
+  left: 4px;
   width: auto;
 }
 
