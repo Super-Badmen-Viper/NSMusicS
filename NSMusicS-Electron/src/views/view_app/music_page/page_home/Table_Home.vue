@@ -474,16 +474,16 @@ onBeforeUnmount(() => {
               }
             "
           >
-            <div :key="item.id" class="album">
+            <div :key="item.id" class="home-album">
               <div
-                class="album-cover-container"
+                class="home-album-cover-container"
                 :style="{
                   width: `${item_album_image}px`,
                   height: `${item_album_image}px`,
                 }"
               >
                 <img
-                  class="album-cover-image"
+                  class="home-album-cover-image"
                   :src="item.medium_image_url"
                   @error="handleImageError(item)"
                   :style="{
@@ -493,18 +493,18 @@ onBeforeUnmount(() => {
                   alt=""
                 />
                 <div
-                  class="hover-overlay"
+                  class="home-album-hover-overlay"
                   @dblclick="Open_this_album_MediaList_click(item, 'maximum')"
                 >
-                  <div class="hover-content">
+                  <div class="home-album-hover-content">
                     <button
-                      class="play-this-album-button"
+                      class="play-this-home-album-button"
                       @click="Play_this_album_MediaList_click(item, 'maximum')"
                     >
                       <icon :size="42" color="#FFFFFF"><PlayCircle24Regular /></icon>
                     </button>
                     <div
-                      class="hover-buttons-top"
+                      class="home-album-hover-buttons-top"
                       v-if="
                         (store_server_users.server_select_kind !== 'jellyfin' &&
                           store_server_users.server_select_kind !== 'emby') ||
@@ -532,20 +532,20 @@ onBeforeUnmount(() => {
                         "
                       />
                     </div>
-                    <div class="hover-buttons-bottom">
+                    <div class="home-album-hover-buttons-bottom">
                       <button
                         v-if="
                           store_server_user_model.model_server_type_of_local ||
                           (store_server_users.server_select_kind !== 'jellyfin' &&
                             store_server_users.server_select_kind !== 'emby')
                         "
-                        class="open-this-artist-button"
+                        class="open-this-home-artist-button"
                         @click="Open_this_album_MediaList_click(item, 'maximum')"
                       >
                         <icon :size="20" color="#FFFFFF"><Open28Filled /></icon>
                       </button>
                       <button
-                        class="love-this-album-button"
+                        class="love-this-home-album-button"
                         @click="
                           () => {
                             handleItemClick_Favorite(item.id, item.favorite)
@@ -560,12 +560,12 @@ onBeforeUnmount(() => {
                   </div>
                 </div>
               </div>
-              <div class="album-info" :style="{ width: `${item_album_image}px` }">
-                <div class="album-text" :style="{ width: `${item_album_txt}px` }">
-                  <div class="album-name" :style="{ maxWidth: `${item_album_txt}px` }">
+              <div class="home-album-info" :style="{ width: `${item_album_image}px` }">
+                <div class="home-album-text" :style="{ width: `${item_album_txt}px` }">
+                  <div class="home-album-name" :style="{ maxWidth: `${item_album_txt}px` }">
                     {{ item.name }}
                   </div>
-                  <div class="artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
+                  <div class="home-artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
                     {{ item.artist }}
                   </div>
                 </div>
@@ -665,16 +665,16 @@ onBeforeUnmount(() => {
               }
             "
           >
-            <div :key="item.id" class="album">
+            <div :key="item.id" class="home-album">
               <div
-                class="album-cover-container"
+                class="home-album-cover-container"
                 :style="{
                   width: `${item_album_image}px`,
                   height: `${item_album_image}px`,
                 }"
               >
                 <img
-                  class="album-cover-image"
+                  class="home-album-cover-image"
                   :src="item.medium_image_url"
                   @error="handleImageError(item)"
                   :style="{
@@ -684,18 +684,18 @@ onBeforeUnmount(() => {
                   alt=""
                 />
                 <div
-                  class="hover-overlay"
+                  class="home-album-hover-overlay"
                   @dblclick="Open_this_album_MediaList_click(item, 'random')"
                 >
-                  <div class="hover-content">
+                  <div class="home-album-hover-content">
                     <button
-                      class="play-this-album-button"
+                      class="play-this-home-album-button"
                       @click="Play_this_album_MediaList_click(item, 'random')"
                     >
                       <icon :size="42" color="#FFFFFF"><PlayCircle24Regular /></icon>
                     </button>
                     <div
-                      class="hover-buttons-top"
+                      class="home-album-hover-buttons-top"
                       v-if="
                         (store_server_users.server_select_kind !== 'jellyfin' &&
                           store_server_users.server_select_kind !== 'emby') ||
@@ -723,20 +723,20 @@ onBeforeUnmount(() => {
                         "
                       />
                     </div>
-                    <div class="hover-buttons-bottom">
+                    <div class="home-album-hover-buttons-bottom">
                       <button
                         v-if="
                           store_server_user_model.model_server_type_of_local ||
                           (store_server_users.server_select_kind !== 'jellyfin' &&
                             store_server_users.server_select_kind !== 'emby')
                         "
-                        class="open-this-artist-button"
+                        class="open-this-home-artist-button"
                         @click="Open_this_album_MediaList_click(item, 'random')"
                       >
                         <icon :size="20" color="#FFFFFF"><Open28Filled /></icon>
                       </button>
                       <button
-                        class="love-this-album-button"
+                        class="love-this-home-album-button"
                         @click="
                           () => {
                             handleItemClick_Favorite(item.id, item.favorite)
@@ -751,12 +751,12 @@ onBeforeUnmount(() => {
                   </div>
                 </div>
               </div>
-              <div class="album-info" :style="{ width: `${item_album_image}px` }">
-                <div class="album-text" :style="{ width: `${item_album_txt}px` }">
-                  <div class="album-name" :style="{ maxWidth: `${item_album_txt}px` }">
+              <div class="home-album-info" :style="{ width: `${item_album_image}px` }">
+                <div class="home-album-text" :style="{ width: `${item_album_txt}px` }">
+                  <div class="home-album-name" :style="{ maxWidth: `${item_album_txt}px` }">
                     {{ item.name }}
                   </div>
-                  <div class="artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
+                  <div class="home-artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
                     {{ item.artist }}
                   </div>
                 </div>
@@ -856,16 +856,16 @@ onBeforeUnmount(() => {
               }
             "
           >
-            <div :key="item.id" class="album">
+            <div :key="item.id" class="home-album">
               <div
-                class="album-cover-container"
+                class="home-album-cover-container"
                 :style="{
                   width: `${item_album_image}px`,
                   height: `${item_album_image}px`,
                 }"
               >
                 <img
-                  class="album-cover-image"
+                  class="home-album-cover-image"
                   :src="item.medium_image_url"
                   @error="handleImageError(item)"
                   :style="{
@@ -875,18 +875,18 @@ onBeforeUnmount(() => {
                   alt=""
                 />
                 <div
-                  class="hover-overlay"
+                  class="home-album-hover-overlay"
                   @dblclick="Open_this_album_MediaList_click(item, 'recently_added')"
                 >
-                  <div class="hover-content">
+                  <div class="home-album-hover-content">
                     <button
-                      class="play-this-album-button"
+                      class="play-this-home-album-button"
                       @click="Play_this_album_MediaList_click(item, 'recently_added')"
                     >
                       <icon :size="42" color="#FFFFFF"><PlayCircle24Regular /></icon>
                     </button>
                     <div
-                      class="hover-buttons-top"
+                      class="home-album-hover-buttons-top"
                       v-if="
                         (store_server_users.server_select_kind !== 'jellyfin' &&
                           store_server_users.server_select_kind !== 'emby') ||
@@ -914,19 +914,19 @@ onBeforeUnmount(() => {
                         "
                       />
                     </div>
-                    <div class="hover-buttons-bottom">
+                    <div class="home-album-hover-buttons-bottom">
                       <button
                         v-if="
                           store_server_user_model.model_server_type_of_local ||
                           store_server_users.server_select_kind !== 'jellyfin'
                         "
-                        class="open-this-artist-button"
+                        class="open-this-home-artist-button"
                         @click="Open_this_album_MediaList_click(item, 'recently_added')"
                       >
                         <icon :size="20" color="#FFFFFF"><Open28Filled /></icon>
                       </button>
                       <button
-                        class="love-this-album-button"
+                        class="love-this-home-album-button"
                         @click="
                           () => {
                             handleItemClick_Favorite(item.id, item.favorite)
@@ -941,12 +941,12 @@ onBeforeUnmount(() => {
                   </div>
                 </div>
               </div>
-              <div class="album-info" :style="{ width: `${item_album_image}px` }">
-                <div class="album-text" :style="{ width: `${item_album_txt}px` }">
-                  <div class="album-name" :style="{ maxWidth: `${item_album_txt}px` }">
+              <div class="home-album-info" :style="{ width: `${item_album_image}px` }">
+                <div class="home-album-text" :style="{ width: `${item_album_txt}px` }">
+                  <div class="home-album-name" :style="{ maxWidth: `${item_album_txt}px` }">
                     {{ item.name }}
                   </div>
-                  <div class="artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
+                  <div class="home-artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
                     {{ item.artist }}
                   </div>
                 </div>
@@ -1046,16 +1046,16 @@ onBeforeUnmount(() => {
               }
             "
           >
-            <div :key="item.id" class="album">
+            <div :key="item.id" class="home-album">
               <div
-                class="album-cover-container"
+                class="home-album-cover-container"
                 :style="{
                   width: `${item_album_image}px`,
                   height: `${item_album_image}px`,
                 }"
               >
                 <img
-                  class="album-cover-image"
+                  class="home-album-cover-image"
                   :src="item.medium_image_url"
                   @error="handleImageError(item)"
                   :style="{
@@ -1065,18 +1065,18 @@ onBeforeUnmount(() => {
                   alt=""
                 />
                 <div
-                  class="hover-overlay"
+                  class="home-album-hover-overlay"
                   @dblclick="Open_this_album_MediaList_click(item, 'recently_played')"
                 >
-                  <div class="hover-content">
+                  <div class="home-album-hover-content">
                     <button
-                      class="play-this-album-button"
+                      class="play-this-home-album-button"
                       @click="Play_this_album_MediaList_click(item, 'recently_played')"
                     >
                       <icon :size="42" color="#FFFFFF"><PlayCircle24Regular /></icon>
                     </button>
                     <div
-                      class="hover-buttons-top"
+                      class="home-album-hover-buttons-top"
                       v-if="
                         (store_server_users.server_select_kind !== 'jellyfin' &&
                           store_server_users.server_select_kind !== 'emby') ||
@@ -1104,20 +1104,20 @@ onBeforeUnmount(() => {
                         "
                       />
                     </div>
-                    <div class="hover-buttons-bottom">
+                    <div class="home-album-hover-buttons-bottom">
                       <button
                         v-if="
                           store_server_user_model.model_server_type_of_local ||
                           (store_server_users.server_select_kind !== 'jellyfin' &&
                             store_server_users.server_select_kind !== 'emby')
                         "
-                        class="open-this-artist-button"
+                        class="open-this-home-artist-button"
                         @click="Open_this_album_MediaList_click(item, 'recently_played')"
                       >
                         <icon :size="20" color="#FFFFFF"><Open28Filled /></icon>
                       </button>
                       <button
-                        class="love-this-album-button"
+                        class="love-this-home-album-button"
                         @click="
                           () => {
                             handleItemClick_Favorite(item.id, item.favorite)
@@ -1132,12 +1132,12 @@ onBeforeUnmount(() => {
                   </div>
                 </div>
               </div>
-              <div class="album-info" :style="{ width: `${item_album_image}px` }">
-                <div class="album-text" :style="{ width: `${item_album_txt}px` }">
-                  <div class="album-name" :style="{ maxWidth: `${item_album_txt}px` }">
+              <div class="home-album-info" :style="{ width: `${item_album_image}px` }">
+                <div class="home-album-text" :style="{ width: `${item_album_txt}px` }">
+                  <div class="home-album-name" :style="{ maxWidth: `${item_album_txt}px` }">
                     {{ item.name }}
                   </div>
-                  <div class="artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
+                  <div class="home-artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
                     {{ item.artist }}
                   </div>
                 </div>
@@ -1169,7 +1169,7 @@ onBeforeUnmount(() => {
   </div>
 </template>
 
-<style scoped>
+<style>
 .home-wall-container {
   width: 100%;
   height: 100%;
@@ -1204,32 +1204,32 @@ onBeforeUnmount(() => {
   overflow-x: auto;
 }
 
-.album {
+.home-album {
   float: left;
   flex-direction: column;
   transition: all 0.3s ease;
   margin-top: 10px;
 }
 
-.album:hover {
+.home-album:hover {
   transform: translateY(-10px);
 }
 
-.album-cover-container {
+.home-album-cover-container {
   position: relative;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   transition: all 0.3s ease;
 }
 
-.album-cover-image {
+.home-album-cover-image {
   object-fit: cover;
   object-position: center;
   border: 1.5px solid #ffffff20;
   border-radius: 10px;
 }
 
-.hover-overlay {
+.home-album-hover-overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -1241,51 +1241,51 @@ onBeforeUnmount(() => {
   transition: opacity 0.3s ease;
 }
 
-.album:hover .hover-overlay {
+.home-album:hover .home-album-hover-overlay {
   opacity: 1;
 }
 
-.hover-content {
+.home-album-hover-content {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
 }
 
-.play-this-album-button,
-.open-this-artist-button,
-.love-this-album-button {
+.play-this-home-album-button,
+.open-this-home-artist-button,
+.love-this-home-album-button {
   border: 0;
   background-color: transparent;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.play-this-album-button:hover,
-.open-this-artist-button:hover,
-.love-this-album-button:hover {
+.play-this-home-album-button:hover,
+.open-this-home-artist-button:hover,
+.love-this-home-album-button:hover {
   transform: scale(1.1);
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
 }
 
-.play-this-album-button {
+.play-this-home-album-button {
   width: 50px;
   height: 50px;
 }
 
-.play-this-album-button .icon {
+.play-this-home-album-button .icon {
   margin-left: -2px;
   margin-top: 3px;
 }
 
-.hover-buttons-top {
+.home-album-hover-buttons-top {
   position: absolute;
   top: 4px;
   left: 4px;
   width: auto;
 }
 
-.hover-buttons-bottom {
+.home-album-hover-buttons-bottom {
   position: absolute;
   bottom: 8px;
   right: 14px;
@@ -1293,8 +1293,8 @@ onBeforeUnmount(() => {
   gap: 8px;
 }
 
-.open-this-artist-button,
-.love-this-album-button {
+.open-this-home-artist-button,
+.love-this-home-album-button {
   width: 28px;
   height: 28px;
   background-color: rgba(0, 0, 0, 0.3);
@@ -1304,22 +1304,22 @@ onBeforeUnmount(() => {
   align-items: center;
 }
 
-.open-this-artist-button .icon,
-.love-this-album-button .icon {
+.open-this-home-artist-button .icon,
+.love-this-home-album-button .icon {
   margin: 0;
 }
 
-.album-info {
+.home-album-info {
   float: left;
   text-align: left;
 }
 
-.album-text {
+.home-album-text {
   margin-top: 2px;
 }
 
-.album-name,
-.artist-name {
+.home-album-name,
+.home-artist-name {
   font-size: 14px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -1328,7 +1328,7 @@ onBeforeUnmount(() => {
   text-overflow: ellipsis;
 }
 
-.album-name {
+.home-album-name {
   font-weight: 600;
 }
 

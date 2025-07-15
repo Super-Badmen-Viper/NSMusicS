@@ -1660,7 +1660,7 @@ onBeforeUnmount(() => {
     </div>
   </n-space>
 </template>
-<style scoped>
+<style>
 .n-base-selection .n-base-selection-label .n-base-selection-input .n-base-selection-input__content {
   font-size: 15px;
   font-weight: 600;

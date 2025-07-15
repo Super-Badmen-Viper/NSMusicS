@@ -134,7 +134,7 @@ const updateGridItems = () => {
     store_server_user_model.model_server_type_of_web &&
     store_server_users.server_select_kind === 'ninesong'
   ) {
-    itemSize.value += 25
+    itemSize.value += 35
   }
 }
 onMounted(() => {
@@ -1280,13 +1280,12 @@ onBeforeUnmount(() => {
               </div>
               <div style="margin-left: 2px" :style="{ width: item_artist_image + 'px' }">
                 <div
-                  class="artist_left_text_artist_info"
+                  class="artist-text"
                   :style="{ width: item_artist_txt + 'px' }"
                 >
                   <div>
                     <span
-                      id="artist_name"
-                      style="font-size: 14px; font-weight: 600"
+                      class="artist-name"
                       :style="{
                         maxWidth: item_artist_txt + 'px',
                         textAlign:
@@ -1297,7 +1296,6 @@ onBeforeUnmount(() => {
                     </span>
                   </div>
                   <n-space
-                    id="artist_artist_name"
                     justify="space-between"
                     :style="{ width: item_artist_image + 'px' }"
                     v-if="
@@ -1327,7 +1325,6 @@ onBeforeUnmount(() => {
                     </span>
                   </n-space>
                   <n-space
-                    id="artist_artist_name"
                     justify="space-between"
                     :style="{ width: item_artist_image + 'px' }"
                     v-if="
@@ -1348,7 +1345,6 @@ onBeforeUnmount(() => {
                     </span>
                   </n-space>
                   <n-space
-                    id="artist_artist_name"
                     justify="space-between"
                     :style="{ width: item_artist_image + 'px' }"
                     v-if="
@@ -1547,26 +1543,21 @@ onBeforeUnmount(() => {
   margin: 0;
 }
 
-.artist-info {
+.artist-text {
   float: left;
   text-align: left;
+  margin-left: 9px;
 }
 
-.artist-text {
-  margin-top: 2px;
-}
-
-.artist-name,
 .artist-name {
   font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.artist-name {
-  font-weight: 600;
 }
 </style>
