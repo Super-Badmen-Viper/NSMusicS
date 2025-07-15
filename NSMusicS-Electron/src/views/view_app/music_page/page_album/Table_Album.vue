@@ -1803,20 +1803,6 @@ onBeforeUnmount(() => {
   cursor: pointer;
   color: #3dc3ff;
 }
-#album_time {
-  font-size: 12px;
-  font-weight: 500;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-#album_time:hover {
-  text-decoration: underline;
-  cursor: pointer;
-  color: #3dc3ff;
-}
 
 .play_this_album:hover {
   color: #3dc3ff;

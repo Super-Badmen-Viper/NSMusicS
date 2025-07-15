@@ -1535,10 +1535,6 @@ onBeforeUnmount(() => {
 .love_this_artist:hover {
   color: #3dc3ff;
 }
-.more_this_artist:hover {
-  color: #3dc3ff;
-}
-
 .RateCustom.viaSlot .icon {
   width: 15px;
   height: 25px;
