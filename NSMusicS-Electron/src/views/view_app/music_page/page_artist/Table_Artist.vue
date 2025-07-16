@@ -825,7 +825,7 @@ onBeforeUnmount(() => {
   <n-space vertical :size="12">
     <div class="artist-wall-container">
       <n-space vertical @wheel.prevent style="overflow: hidden; margin-left: 4px">
-        <n-space align="center">
+        <n-space align="center" style="margin-top: 3px;">
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle @click="onRefreshSharp">
@@ -1441,6 +1441,7 @@ onBeforeUnmount(() => {
 .artist-wall {
   overflow-y: auto;
   width: calc(100vw - 200px);
+  margin-top: -10px;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;

@@ -1210,6 +1210,9 @@ onBeforeUnmount(() => {
   width: calc(100vw - 200px);
   margin-left: 9px;
 }
+.category-header:nth-child(1) {
+  margin-top: 18px;
+}
 
 .category-title {
   font-size: 16px;
@@ -1409,5 +1412,14 @@ onBeforeUnmount(() => {
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: #88888880;
+}
+
+.n-button {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.n-button:hover {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
 }
 </style>

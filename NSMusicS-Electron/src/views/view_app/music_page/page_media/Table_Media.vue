@@ -1496,8 +1496,8 @@ onBeforeUnmount(() => {
 <template>
   <n-space vertical :size="12">
     <div class="dynamic-scroller-demo">
-      <n-space vertical @wheel.prevent style="overflow: hidden">
-        <n-space align="center">
+      <n-space vertical @wheel.prevent style="overflow: hidden;">
+        <n-space align="center" style="margin-top: 3px;">
           <n-space>
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
@@ -2817,6 +2817,7 @@ onBeforeUnmount(() => {
 }
 .table {
   width: calc(100vw - 200px);
+  margin-top: -10px;
 }
 .message {
   width: calc(100vw - 230px);

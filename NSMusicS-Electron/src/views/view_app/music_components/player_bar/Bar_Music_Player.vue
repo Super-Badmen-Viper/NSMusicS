@@ -1685,7 +1685,7 @@ watch(
                   @click="Set_Playlist_Show"
                 >
                   <template #icon>
-                    <n-icon  :size="42"><QueueMusicRound /></n-icon>
+                    <n-icon :size="42"><QueueMusicRound /></n-icon>
                   </template>
                 </n-button>
               </n-badge>
@@ -2073,4 +2073,12 @@ watch(
   color: var(--primary-color-hover);
 }
 
+.n-button {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.n-button:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
+}
 </style>

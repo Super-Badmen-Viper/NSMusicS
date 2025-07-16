@@ -983,7 +983,7 @@ onBeforeUnmount(() => {
   <n-space vertical :size="12">
     <div class="album-wall-container">
       <n-space vertical @wheel.prevent style="overflow: hidden">
-        <n-space align="center">
+        <n-space align="center" style="margin-top: 3px;">
           <n-space>
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
@@ -1698,6 +1698,7 @@ onBeforeUnmount(() => {
 .album-wall {
   overflow-y: auto;
   width: calc(100vw - 200px);
+  margin-top: -10px;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;

@@ -452,7 +452,7 @@ const themeVars = useThemeVars()
   </div>
 </template>
 
-<style>
+<style scoped>
 .home-wall-container {
   width: 100%;
   height: 100%;
