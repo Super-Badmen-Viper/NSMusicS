@@ -30,6 +30,8 @@ export const store_player_audio_logic = reactive({
   player_device_kind: [],
   player_device_select: 'default',
 
+  player_model_cue: false,
+
   play_order: 'playback-2',
   play_volume: 100,
   player_fade_value: 2000,
@@ -129,6 +131,27 @@ export const store_player_audio_logic = reactive({
 
     return `${formattedMinutes}:${formattedSeconds}`
   },
+  formatStrTime(currentStr: string): number {
+    // 1. 分割时间字符串为分钟、秒、毫秒三部分
+    const parts = currentStr.split(':');
+
+    // 2. 验证格式有效性（必须为三段且全为数字）
+    if (parts.length !== 3 || parts.some(part => isNaN(parseInt(part)))) {
+      throw new Error(`Invalid time format: "${currentStr}". Expected "MM:SS:ms"`);
+    }
+
+    // 3. 解析时间分量
+    const minutes = parseInt(parts[0], 10);
+    const seconds = parseInt(parts[1], 10);
+    const milliseconds = parseInt(parts[2], 10);
+
+    // 4. 计算总毫秒数（核心转换逻辑）
+    return (
+      minutes * 60 * 1000 + // 分钟转毫秒
+      seconds * 1000 +      // 秒转毫秒
+      milliseconds          // 毫秒直接累加
+    );
+  },
   formatTime_RunTimeTicks(timestamp: number): string {
     const divisor = store_server_users.server_select_kind === 'ninesong' ? 100 : 1
     const milliseconds = Math.floor(timestamp / 10000 / divisor)
@@ -165,7 +188,7 @@ export const store_player_audio_logic = reactive({
       }
     }
   },
-  async update_current_media_info(media_file: any, index: number) {
+  async update_current_media_info(media_file: any, index: any) {
     if (store_server_user_model.model_server_type_of_web) {
       if (store_server_users.server_select_kind === 'ninesong') {
         const retrieval = new Retrieval_ApiService_of_NineSong(store_server_login_info.server_url)
@@ -207,12 +230,24 @@ export const store_player_audio_logic = reactive({
       await store_player_audio_info.set_lyric(media_file.lyrics)
     }
     //
+    const index_num = typeof index === 'number' ? index : index.split('-')[1]
+    // cue
+    if(media_file.cue_tracks === undefined){
+      store_player_audio_info.this_audio_cue_track_current_no = 0;
+      store_player_audio_info.this_audio_cue_track_current_indexes = [];
+      store_player_audio_info.this_audio_cue_tracks = [];
+      store_player_audio_logic.player_model_cue = false;
+    }else{
+      store_player_audio_info.this_audio_cue_track_current_no = index_num;
+      store_player_audio_info.this_audio_cue_track_current_indexes = media_file.cue_tracks[index_num - 1].INDEXES;
+      store_player_audio_logic.player_model_cue = true;
+    }
+    // normall
     store_player_audio_info.this_audio_play_id = media_file.play_id ?? ''
     store_player_audio_info.this_audio_file_path = media_file.path ?? ''
     store_player_audio_info.this_audio_song_encoding_format = media_file.encoding_format ?? ''
     store_player_audio_info.this_audio_song_suffix = media_file.suffix ?? ''
-    store_player_audio_info.this_audio_file_medium_image_url =
-      media_file.medium_image_url ?? error_album
+    store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url ?? error_album
     store_player_audio_info.this_audio_artist_name = media_file.artist ?? ''
     store_player_audio_info.this_audio_artist_id = media_file.artist_id ?? ''
     store_player_audio_info.this_audio_song_name = media_file.title ?? ''
@@ -221,7 +256,7 @@ export const store_player_audio_logic = reactive({
     store_player_audio_info.this_audio_song_favorite = media_file.favorite ?? false
     store_player_audio_info.this_audio_album_id = media_file.album_id ?? ''
     store_player_audio_info.this_audio_album_name = media_file.album ?? ''
-    store_player_audio_info.this_audio_Index_of_play_list = index
+    store_player_audio_info.this_audio_Index_of_play_list = index_num
     //
     store_player_tag_modify.player_current_media_starred = media_file.favorite ?? false
     store_player_tag_modify.player_current_media_playCount = media_file.play_count ?? 0

@@ -198,24 +198,34 @@ const Play_This_Audio_Path = () => {
       timer = setInterval(synchronize_playback_time, 200)
       await store_player_audio_logic.player.setVolume(Number(store_player_audio_logic.play_volume))
       await store_player_audio_logic.player.play()
-      if (
-        store_player_audio_logic.slider_init_singleValue != 0 &&
-        store_player_audio_logic.player_init_play
-      ) {
-        if (store_player_audio_logic.player_select === 'mpv') {
+      if (!store_player_audio_logic.player_model_cue) {
+        if (
+          store_player_audio_logic.slider_init_singleValue != 0 &&
+          store_player_audio_logic.player_init_play
+        ) {
+          if (store_player_audio_logic.player_select === 'mpv') {
+            store_player_audio_logic.play_go_duration(
+              store_player_audio_logic.slider_init_singleValue,
+              true
+            )
+            store_player_audio_logic.slider_init_singleValue = 0
+          }
+        } else {
+          // init play logic
+          store_player_audio_logic.slider_init_singleValue = 0
           store_player_audio_logic.play_go_duration(
             store_player_audio_logic.slider_init_singleValue,
             true
           )
-          store_player_audio_logic.slider_init_singleValue = 0
         }
       } else {
-        // init play logic
-        store_player_audio_logic.slider_init_singleValue = 0
-        store_player_audio_logic.play_go_duration(
-          store_player_audio_logic.slider_init_singleValue,
-          true
-        )
+        if (store_player_audio_info.this_audio_cue_track_current_indexes.length > 0) {
+          const track_str = store_player_audio_info.this_audio_cue_track_current_indexes[0].TIME
+          if (track_str.length > 0) {
+            const track_time = store_player_audio_logic.formatStrTime(track_str)
+            store_player_audio_logic.player.setCurrentTime(track_time / 1000)
+          }
+        }
       }
       Set_MediaInfo_To_PlayCount()
     }
@@ -1671,7 +1681,7 @@ watch(
                 <n-button
                   strong
                   secondary
-                  id="gird_Right_current_playlist_button_area_of_button"
+                  class="gird_Right_current_playlist_button_area_of_button"
                   @click="Set_Playlist_Show"
                 >
                   <template #icon>
@@ -2054,23 +2064,13 @@ watch(
   margin-right: 20px;
   border-radius: 10px;
 }
-.gird_Right #gird_Right_current_playlist_button_area_of_button {
+.gird_Right .gird_Right_current_playlist_button_area_of_button {
   width: 60px;
   height: 60px;
   border-radius: 10px;
 }
-.gird_Right #gird_Right_current_playlist_button_area_of_button :hover {
+.gird_Right .gird_Right_current_playlist_button_area_of_button :hover {
   color: var(--primary-color-hover);
 }
 
-.n-button {
-  border: 0;
-  background-color: transparent;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.n-button:hover {
-  transform: scale(1.2);
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
-}
 </style>

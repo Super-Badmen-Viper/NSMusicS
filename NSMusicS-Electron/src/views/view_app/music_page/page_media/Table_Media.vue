@@ -2209,7 +2209,7 @@ onBeforeUnmount(() => {
             class="message"
             :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)' }"
             @click="handleItemClick"
-            @Dblclick="handleItemDbClick(item, index)"
+            @dblclick="handleItemDbClick(item, index)"
           >
             <div
               class="media_info"

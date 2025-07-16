@@ -577,7 +577,7 @@ const get_router_history_model_next = () => {
 const handleItemClick = () => {
   click_count++
 }
-const handleItemDbClick = async (media_file: any, index: number) => {
+const handleItemDbClick = async (media_file: any, index: any) => {
   if (bool_start_play.value == true) {
     if (click_count >= 2) {
       click_count = 0
@@ -2025,7 +2025,7 @@ onBeforeUnmount(() => {
       </n-space>
 
       <DynamicScroller
-        class="table"
+        class="table_media_cue"
         ref="dynamicScroller"
         :style="{
           width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)',
@@ -2100,7 +2100,7 @@ onBeforeUnmount(() => {
                     </div>
                     <div
                       :style="{
-                        maxWidth: 'calc(100vw - ' + (collapsed_width + 540) + 'px)',
+                        maxWidth: 'calc(100vw - ' + (collapsed_width + 700) + 'px)',
                       }"
                       style="
                         text-align: left;
@@ -2236,199 +2236,204 @@ onBeforeUnmount(() => {
                 store_playlist_list_info.playlist_Menu_Item = item
               }
             "
-            class="message"
+            class="message_media_cue"
             :style="{
               width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)',
-              height: item.cue_track_count > 0 ? 70 * item.cue_track_count + 'px' : '70px',
+              height: item.cue_track_count > 0 ? 80 * item.cue_track_count + 'px' : '70px',
             }"
-            @click="handleItemClick"
-            @Dblclick="handleItemDbClick(item, index)"
-          >
+            @click="handleItemClick">
             <div
-              class="media_info"
-              :style="{
-                width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)',
-              }"
               v-for="track in item.cue_tracks"
-              :key="track.TRACK"
-            >
+              :key="track.TRACK">
               <div
-                style="
-                  margin-left: 8px;
-                  width: 60px;
-                  height: 60px;
-                  border-radius: 10px;
-                  border: 1.5px solid #ffffff20;
-                  overflow: hidden;
-                "
-              >
-                <div style="position: relative; display: inline-block">
+                class="media_cue_info"
+                :style="{
+                  width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)',
+                }"
+                @dblclick="()=>{
+                  store_player_audio_info.this_audio_cue_tracks = item.cue_tracks;
+                  handleItemDbClick(item, item.absoluteIndex + '-' + track.TRACK);
+                }">
+                <input
+                  type="checkbox"
+                  class="checkbox"
+                  v-if="!bool_start_play"
+                  v-model="track.selected"
+                  @change="
+                    (event) => {
+                      track.selected = event.target.checked
+                      store_view_media_cue_page_logic.set_media_Files_selected(track)
+                    }
+                  "
+                />
+                <div
+                  style="
+                    margin-left: 8px;
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 10px;
+                    border: 1.5px solid #ffffff20;
+                    overflow: hidden;
+                    position: relative;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                  "
+                >
                   <img
                     :key="item.id"
                     :src="item.medium_image_url"
                     @error="handleImageError(item)"
-                    style="width: 60px; height: 60px; object-fit: cover"
+                    style="width: 100%; height: 100%; object-fit: cover; position: absolute;"
                     alt=""
                   />
-                  <div
-                    class="hover-overlay"
-                    style="
-                      width: 70px;
-                      height: 70px;
-                      position: absolute;
-                      top: 50%;
-                      left: 50%;
-                      transform: translate(-50%, -60%);
-                      filter: blur(3px);
-                      cursor: pointer;
-                    "
-                  ></div>
                   <icon
                     class="hover-overlay"
                     color="#FFFFFF"
-                    size="28"
+                    :size="28"
                     style="
-                      position: absolute;
-                      top: 50%;
-                      left: 50%;
-                      transform: translate(-50%, -60%);
+                      position: relative;
+                      z-index: 1;
                       cursor: pointer;
                     "
                     @click="
                       () => {
-                        click_count = 2
-                        handleItemDbClick(item, index)
+                        click_count = 2;
+                        store_player_audio_info.this_audio_cue_tracks = item.cue_tracks;
+                        handleItemDbClick(item, item.absoluteIndex + '-' + track.TRACK);
                       }
                     "
                   >
-                    <Play />
+                    <Play style="margin-left: 25%;margin-top: 25%;"/>
                   </icon>
                 </div>
-              </div>
-              <div class="songlist_title">
-                <span
-                  v-if="track.Title !== undefined && track.Title !== ''"
-                  style="font-size: 16px; font-weight: 550"
-                  @click="handleItemClick_title(track.Title)"
-                >
-                  {{ track.Title }}
-                </span>
-                <span
-                  v-else
-                  style="font-size: 16px; font-weight: 550"
-                  @click="handleItemClick_title(track.Title)"
-                >
-                  {{ $t('Unknown') + $t('MediaInfoTitle') }}
-                </span>
-                <br />
-                <template
-                  v-if="track.Performer !== undefined && track.Performer !== ''"
-                  v-for="artist in track.Performer.split(/[\/|｜、]/)"
-                >
+                <div class="songlist_cue_name">
                   <span
+                    v-if="track.Title !== undefined && track.Title !== ''"
+                    class="songlist_cue_title"
+                    style="font-size: 16px; font-weight: 550"
+                    @click="handleItemClick_title(track.Title)"
+                  >
+                    {{ track.Title }}
+                  </span>
+                  <span
+                    v-else
+                    class="songlist_cue_title"
+                    style="font-size: 16px; font-weight: 550"
+                    @click="handleItemClick_title(track.Title)"
+                  >
+                    {{ $t('Unknown') + $t('MediaInfoTitle') }}
+                  </span>
+                  <br />
+                  <template
+                    v-if="track.Performer !== undefined && track.Performer !== ''"
+                    v-for="artist in track.Performer.split(/[\/|｜、]/)"
+                  >
+                    <span
+                      style="font-size: 14px; font-weight: 400"
+                      @click="
+                        () => {
+                          handleItemClick_artist(artist)
+                        }
+                      "
+                    >
+                      {{ artist + '&nbsp' }}
+                    </span>
+                  </template>
+                  <span
+                    v-else
                     style="font-size: 14px; font-weight: 400"
                     @click="
                       () => {
-                        handleItemClick_artist(artist)
+                        handleItemClick_artist(item.artist)
                       }
                     "
                   >
-                    {{ artist + '&nbsp' }}
+                    {{ item.artist }}
                   </span>
-                </template>
-                <span
-                  v-else
-                  style="font-size: 14px; font-weight: 400"
-                  @click="
-                    () => {
-                      handleItemClick_artist(item.artist)
-                    }
+                </div>
+                <div class="songlist_cue_album">
+                  <span
+                    style="font-size: 14px; font-weight: 600"
+                    @click="
+                      () => {
+                        handleItemClick_album(item.title)
+                      }
+                    "
+                    >{{ item.title }}</span
+                  >
+                </div>
+                <div
+                  style="
+                    margin-left: auto;
+                    margin-right: 0;
+                    width: 40px;
+                    display: flex;
+                    flex-direction: row;
                   "
                 >
-                  {{ item.artist }}
+                  <button
+                    @click="
+                      () => {
+                        handleItemClick_Favorite(item.id, item.favorite)
+                        item.favorite = !item.favorite
+                      }
+                    "
+                    style="
+                      border: 0;
+                      background-color: transparent;
+                      width: 28px;
+                      height: 28px;
+                      margin-top: 2px;
+                      margin-right: 10px;
+                      cursor: pointer;
+                    "
+                  >
+                    <template v-if="item.favorite">
+                      <icon :size="20" color="red" style="margin-left: -2px; margin-top: 3px"
+                        ><Heart28Filled
+                      /></icon>
+                    </template>
+                    <template v-else-if="!store_app_configs_info.update_theme">
+                      <icon color="#101014" :size="20" style="margin-left: -2px; margin-top: 3px"
+                        ><Heart24Regular
+                      /></icon>
+                    </template>
+                    <template v-else-if="store_app_configs_info.update_theme">
+                      <icon color="#FAFAFC" :size="20" style="margin-left: -2px; margin-top: 3px"
+                        ><Heart24Regular
+                      /></icon>
+                    </template>
+                  </button>
+                </div>
+                <span
+                  class="duration_cue_txt"
+                  style="
+                    margin-left: auto;
+                    margin-top: 4px;
+                    margin-right: 0;
+                    text-align: left;
+                    font-size: 14px;
+                    font-weight: 600;
+                  "
+                  @click="click_count = 0"
+                >
+                  {{ track.INDEXES[0].TIME }}
+                </span>
+                <span
+                  class="index"
+                  style="
+                    margin-left: auto;
+                    text-align: left;
+                    margin-top: 4px;
+                    font-size: 14px;
+                    font-weight: 600;
+                  "
+                  @click="click_count = 0"
+                >
+                  {{ item.absoluteIndex + '-' + track.TRACK }}
                 </span>
               </div>
-              <div class="songlist_album">
-                <span
-                  style="font-size: 14px; font-weight: 600"
-                  @click="
-                    () => {
-                      handleItemClick_album(item.title)
-                    }
-                  "
-                  >{{ item.title }}</span
-                >
-              </div>
-              <div
-                style="
-                  margin-left: auto;
-                  margin-right: 0;
-                  width: 40px;
-                  display: flex;
-                  flex-direction: row;
-                "
-              >
-                <button
-                  @click="
-                    () => {
-                      handleItemClick_Favorite(item.id, item.favorite)
-                      item.favorite = !item.favorite
-                    }
-                  "
-                  style="
-                    border: 0;
-                    background-color: transparent;
-                    width: 28px;
-                    height: 28px;
-                    margin-top: 2px;
-                    margin-right: 10px;
-                    cursor: pointer;
-                  "
-                >
-                  <template v-if="item.favorite">
-                    <icon :size="20" color="red" style="margin-left: -2px; margin-top: 3px"
-                      ><Heart28Filled
-                    /></icon>
-                  </template>
-                  <template v-else-if="!store_app_configs_info.update_theme">
-                    <icon color="#101014" :size="20" style="margin-left: -2px; margin-top: 3px"
-                      ><Heart24Regular
-                    /></icon>
-                  </template>
-                  <template v-else-if="store_app_configs_info.update_theme">
-                    <icon color="#FAFAFC" :size="20" style="margin-left: -2px; margin-top: 3px"
-                      ><Heart24Regular
-                    /></icon>
-                  </template>
-                </button>
-              </div>
-              <span
-                class="duration_txt"
-                style="
-                  margin-left: auto;
-                  margin-top: 4px;
-                  margin-right: 0;
-                  text-align: left;
-                  font-size: 14px;
-                  font-weight: 600;
-                "
-                @click="click_count = 0"
-              >
-                {{ item.duration_txt }}
-              </span>
-              <span
-                class="index"
-                style="
-                  margin-left: auto;
-                  text-align: left;
-                  margin-top: 4px;
-                  font-size: 14px;
-                  font-weight: 600;
-                "
-                @click="click_count = 0"
-              >
-                {{ item.absoluteIndex + '-' + track.TRACK }}
-              </span>
             </div>
           </DynamicScrollerItem>
         </template>
@@ -2766,7 +2771,7 @@ onBeforeUnmount(() => {
         <n-space>
           <n-button
             key="song_love"
-            class="songlist_more"
+            class="songlist_cue_more"
             style="
               width: 100px;
               height: 24px;
@@ -2781,7 +2786,7 @@ onBeforeUnmount(() => {
           <n-button
             v-for="n in store_playlist_list_info.playlist_names_ALLLists"
             :key="n.value"
-            class="songlist_more"
+            class="songlist_cue_more"
             style="
               width: 100px;
               height: 24px;
@@ -2799,7 +2804,7 @@ onBeforeUnmount(() => {
   </n-modal>
 </template>
 
-<style scoped>
+<style>
 .n-base-selection .n-base-selection-label .n-base-selection-input .n-base-selection-input__content {
   font-size: 15px;
   font-weight: 600;
@@ -2813,12 +2818,18 @@ onBeforeUnmount(() => {
   font-weight: 600;
 }
 
-.media_info .hover-overlay {
+.media_cue_info .hover-overlay {
   border-radius: 4px;
   opacity: 0;
 }
-.media_info:hover .hover-overlay {
+.media_cue_info:hover .hover-overlay {
   opacity: 1;
+}
+.media_cue_info img {
+  filter: blur(0px);
+}
+.media_cue_info:hover img {
+  filter: blur(0.5px);
 }
 
 .dynamic-scroller-demo {
@@ -2839,29 +2850,42 @@ onBeforeUnmount(() => {
   --scrollbar-color: v-bind('themeVars.scrollbarColor');
   --scrollbar-color-hover: v-bind('themeVars.scrollbarColorHover');
 }
-.table {
+.table_media_cue {
   width: calc(100vw - 200px);
 }
-.message {
+.message_media_cue {
   width: calc(100vw - 230px);
+  height: 77px;
 }
-.media_info {
+.media_cue_info {
   width: calc(100vw - 230px);
   height: 70px;
   display: flex;
   align-items: center;
   transition: all 0.2s ease-in-out; /* Smooth transition for all properties */
-  margin: 12px 0; /* Add margin for shadow visibility */
   border-radius: 8px; /* iOS-style rounded corners */
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.05); /* Subtle initial shadow */
 }
-.media_info:hover {
+.media_cue_info:nth-child(1){
+  margin-top: 8px;
+}
+.media_cue_info:hover {
   transform: scale(1.01) translateX(14px); /* Slight zoom on hover */
-  box-shadow: 0 0 5px 0 var(--card-color);
+  box-shadow: 0 0 10px 0 var(--scrollbar-color);
   z-index: 10;
   position: relative;
   background-color: var(--card-color); /* Use a variable for background */
 }
+.media_cue_info:hover .songlist_cue_title {
+  margin: 0;
+  color: var(--primary-color-hover);
+}
+/*
+.media_cue_info:hover .songlist_artist {
+  color: var(--primary-color-hover);
+}
+*/
+
 .checkbox {
   width: 20px;
   transform: scale(1.3);
@@ -2871,7 +2895,7 @@ onBeforeUnmount(() => {
   width: calc(6vw);
   margin-left: 12px;
 }
-.songlist_title {
+.songlist_cue_name {
   margin-left: 10px;
   text-align: left;
   width: 34vw;
@@ -2880,12 +2904,15 @@ onBeforeUnmount(() => {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.songlist_title :hover {
+.songlist_cue_name :hover {
   text-decoration: underline;
   cursor: pointer;
   color: var(--primary-color-hover);
 }
-.songlist_album {
+.songlist_cue_title {
+  margin: 0;
+}
+.songlist_cue_album {
   margin-left: 10px;
   text-align: left;
   width: 22vw;
@@ -2893,17 +2920,17 @@ onBeforeUnmount(() => {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.songlist_album :hover {
+.songlist_cue_album :hover {
   text-decoration: underline;
   cursor: pointer;
   color: var(--primary-color-hover);
 }
-.duration_txt {
+.duration_cue_txt {
   margin-left: 10px;
   text-align: left;
   width: 40px;
 }
-.songlist_more:hover {
+.songlist_cue_more:hover {
   color: var(--primary-color-hover);
 }
 
@@ -2930,6 +2957,22 @@ onBeforeUnmount(() => {
 }
 .Rate.viaSlot .Rate__star:nth-child(8).hover {
   color: red;
+}
+
+.play-this-home-album-button,
+.open-this-home-artist-button,
+.love-this-home-album-button {
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.play-this-home-album-button:hover,
+.open-this-home-artist-button:hover,
+.love-this-home-album-button:hover {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
 }
 
 .v-contextmenu-item {

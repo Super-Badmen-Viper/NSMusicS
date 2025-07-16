@@ -20,7 +20,7 @@ onMounted(async () => {
 .view_show {
   width: 100vw;
   height: calc(100vh - 200px);
-  overflow: auto;
+  overflow: scroll;
 }
 
 ::-webkit-scrollbar {

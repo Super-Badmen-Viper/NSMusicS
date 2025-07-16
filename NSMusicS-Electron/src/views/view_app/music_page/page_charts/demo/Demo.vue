@@ -407,13 +407,16 @@ onMounted(async () => {
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
+import { useThemeVars } from 'naive-ui'
 const { t } = useI18n({
   inheritLocale: true,
 })
+
+const themeVars = useThemeVars()
 </script>
 
 <template>
-  <div style="margin-left: -20px">
+  <div class="home-wall-container">
     <!--    <logo-chart />-->
     <div style="text-align: center; font-weight: bold; font-size: 32px; margin-bottom: 10px">
       Vue-ECharts
@@ -449,4 +452,23 @@ const { t } = useI18n({
   </div>
 </template>
 
-<style scoped></style>
+<style>
+.home-wall-container {
+  width: 100%;
+  height: 100%;
+  padding-right: 20px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+
+  --card-color: v-bind('themeVars.cardColor');
+  --border-color: v-bind('themeVars.borderColor');
+  --primary-color-hover: v-bind('themeVars.primaryColorHover');
+  --primary-color-suppl: v-bind('themeVars.primaryColorSuppl');
+  --text-color-1: v-bind('themeVars.textColor1');
+  --text-color-2: v-bind('themeVars.textColor2');
+  --text-color-3: v-bind('themeVars.textColor3');
+  --hover-color: v-bind('themeVars.hoverColor');
+  --scrollbar-color: v-bind('themeVars.scrollbarColor');
+  --scrollbar-color-hover: v-bind('themeVars.scrollbarColorHover');
+}
+</style>
