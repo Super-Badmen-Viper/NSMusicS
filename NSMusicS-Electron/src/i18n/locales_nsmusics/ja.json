@@ -84,7 +84,8 @@
       "list_view": "リストビュー",
       "row_level_view": "行レベルビュー",
       "intra_row_block_level_view": "インラインブロックビュー",
-      "recommend": "おすすめ"
+      "recommend": "おすすめ",
+      "pinyin": "ピンイン（中国語ローマ字）"
     },
     "view_player": {
       "view_seting": {

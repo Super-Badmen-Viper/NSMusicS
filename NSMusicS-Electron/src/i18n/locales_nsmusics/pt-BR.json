@@ -84,7 +84,8 @@
       "list_view": "Visualização em Lista",
       "row_level_view": "Visualização por Linha",
       "intra_row_block_level_view": "Visualização de Bloco Em-linha",
-      "recommend": "Recomendar"
+      "recommend": "Recomendar",
+      "pinyin": "Pinyin (Romanização Chinesa)"
     },
     "view_player": {
       "view_seting": {

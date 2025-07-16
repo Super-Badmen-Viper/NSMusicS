@@ -84,7 +84,8 @@
       "list_view": "列表視圖",
       "row_level_view": "行級視圖",
       "intra_row_block_level_view": "行內區塊級視圖",
-      "recommend": "推薦"
+      "recommend": "推薦",
+      "pinyin": "中文拼音"
     },
     "view_player": {
       "view_seting": {

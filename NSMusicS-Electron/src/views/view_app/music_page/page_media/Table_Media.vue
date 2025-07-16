@@ -1559,7 +1559,14 @@ onBeforeUnmount(() => {
                 />
               </n-input-group>
             </template>
-            {{ $t('setting.hotkey_localSearch') }}
+            {{
+              $t('setting.hotkey_localSearch') + ' : (' +
+              $t('LabelTitle') + ' / ' +
+              $t('LabelAlbum') + ' / ' +
+              $t('LabelArtists') + ')->' +
+              $t('nsmusics.view_page.pinyin') + ' | ' +
+              $t('Lyrics')
+            }}
           </n-tooltip>
 
           <n-dropdown

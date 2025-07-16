@@ -84,7 +84,8 @@
       "list_view": "Просмотр списка",
       "row_level_view": "Просмотр на уровне строки",
       "intra_row_block_level_view": "Встроенный блочный просмотр",
-      "recommend": "Рекомендовать"
+      "recommend": "Рекомендовать",
+      "pinyin": "Пиньинь (Китайская романизация)"
     },
     "view_player": {
       "view_seting": {

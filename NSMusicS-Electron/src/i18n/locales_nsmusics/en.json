@@ -84,7 +84,8 @@
       "list_view": "List View",
       "row_level_view": "Row-level View",
       "intra_row_block_level_view": "Inline-block View",
-      "recommend": "Recommend"
+      "recommend": "Recommend",
+      "pinyin": "Pinyin (Chinese Romanization)"
     },
     "view_player": {
       "view_seting": {

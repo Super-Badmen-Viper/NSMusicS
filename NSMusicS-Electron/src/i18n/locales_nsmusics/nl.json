@@ -84,7 +84,8 @@
       "list_view": "Lijstweergave",
       "row_level_view": "Weergave op rijniveau",
       "intra_row_block_level_view": "Inline-blokweergave",
-      "recommend": "Aanbevelen"
+      "recommend": "Aanbevelen",
+      "pinyin": "Pinyin (Chinese romanisatie)"
     },
     "view_player": {
       "view_seting": {
