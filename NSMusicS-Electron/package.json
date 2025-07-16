@@ -51,7 +51,7 @@
     "v-contextmenu": "^3.2.0",
     "vue-draggable-plus": "^0.5.3",
     "vue-echarts": "^7.0.3",
-    "vue-i18n": "11.1.2",
+    "vue-i18n": "11.1.10",
     "vue-rate": "next",
     "vue-virtual-scroller": "next"
   },
