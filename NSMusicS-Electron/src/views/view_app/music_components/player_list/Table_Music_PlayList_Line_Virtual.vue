@@ -509,6 +509,7 @@ onMounted(() => {
 }
 .table {
   height: calc(100vh - 212px);
+  margin-top: 5px;
 }
 .message_playlist {
   display: flex;

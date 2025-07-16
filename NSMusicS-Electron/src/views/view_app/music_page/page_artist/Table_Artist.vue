@@ -1213,10 +1213,10 @@ onBeforeUnmount(() => {
                   alt=""
                 />
                 <div
-                  class="hover-overlay"
+                  class="hover-overlay-artist"
                   @dblclick="Open_this_artist_all_artist_list_click(item.id)"
                 >
-                  <div class="hover-content">
+                  <div class="hover-content-artist">
                     <button
                       class="play-this-artist-button"
                       @click="Play_this_artist_all_media_list_click(item.id)"
@@ -1224,7 +1224,7 @@ onBeforeUnmount(() => {
                       <icon :size="42" color="#FFFFFF"><PlayCircle24Regular /></icon>
                     </button>
                     <div
-                      class="hover-buttons-top"
+                      class="hover-buttons-top-artist"
                       v-if="
                         (store_server_users.server_select_kind != 'jellyfin' &&
                           store_server_users.server_select_kind != 'emby') ||
@@ -1252,7 +1252,7 @@ onBeforeUnmount(() => {
                         "
                       />
                     </div>
-                    <div class="hover-buttons-bottom">
+                    <div class="hover-buttons-bottom-artist">
                       <button
                         v-if="
                           store_server_user_model.model_server_type_of_local ||
@@ -1479,7 +1479,7 @@ onBeforeUnmount(() => {
   border-radius: 10px;
 }
 
-.hover-overlay {
+.hover-overlay-artist {
   position: absolute;
   top: 0;
   left: 0;
@@ -1491,11 +1491,11 @@ onBeforeUnmount(() => {
   transition: opacity 0.3s ease;
 }
 
-.artist:hover .hover-overlay {
+.artist:hover .hover-overlay-artist {
   opacity: 1;
 }
 
-.hover-content {
+.hover-content-artist {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1528,14 +1528,14 @@ onBeforeUnmount(() => {
   margin-top: 3px;
 }
 
-.hover-buttons-top {
+.hover-buttons-top-artist {
   position: absolute;
   top: 4px;
   left: 4px;
   width: auto;
 }
 
-.hover-buttons-bottom {
+.hover-buttons-bottom-artist {
   position: absolute;
   bottom: 8px;
   right: 14px;

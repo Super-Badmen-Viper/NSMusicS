@@ -581,20 +581,42 @@ const handleItemDbClick = async (media_file: any, index: any) => {
   if (bool_start_play.value == true) {
     if (click_count >= 2) {
       click_count = 0
-      if (store_server_user_model.model_server_type_of_web) {
-        /// Data synchronization
-        store_general_fetch_media_list.fetchData_Media_of_data_synchronization_to_playlist()
-        store_server_user_model.random_play_model = false
+      if (media_file.path != store_player_audio_info.this_audio_file_path) {
+        if (store_server_user_model.model_server_type_of_web) {
+          /// Data synchronization
+          store_general_fetch_media_cue_list.fetchData_Media_of_data_synchronization_to_playlist()
+          store_server_user_model.random_play_model = false
+        }
+        //
+        await store_player_audio_logic.update_current_media_info(media_file, index)
+        store_playlist_list_logic.media_page_handleItemDbClick = true
+        store_player_appearance.player_mode_of_lock_playlist = false
+        store_player_audio_info.this_audio_restart_play = true
+
+        store_general_fetch_player_list.fetchData_PlayList(true)
+
+        store_playlist_list_info.reset_carousel()
+      }else{
+        const index_num = typeof index === 'number' ? index : index.split('-')[1]
+        // cue
+        if(media_file.cue_tracks === undefined){
+          store_player_audio_info.this_audio_cue_track_current_no = 0;
+          store_player_audio_info.this_audio_cue_track_current_indexes = [];
+          store_player_audio_info.this_audio_cue_tracks = [];
+          store_player_audio_logic.player_model_cue = false;
+        }else{
+          store_player_audio_info.this_audio_cue_track_current_no = index_num;
+          store_player_audio_info.this_audio_cue_track_current_indexes = media_file.cue_tracks[index_num - 1].INDEXES;
+          store_player_audio_logic.player_model_cue = true;
+        }
+        if (store_player_audio_info.this_audio_cue_track_current_indexes.length > 0) {
+          const track_str = store_player_audio_info.this_audio_cue_track_current_indexes[0].TIME
+          if (track_str.length > 0) {
+            const track_time = store_player_audio_logic.formatStrTime(track_str)
+            store_player_audio_logic.player.setCurrentTime(track_time / 1000)
+          }
+        }
       }
-      //
-      await store_player_audio_logic.update_current_media_info(media_file, index)
-      store_playlist_list_logic.media_page_handleItemDbClick = true
-      store_player_appearance.player_mode_of_lock_playlist = false
-      store_player_audio_info.this_audio_restart_play = true
-
-      store_general_fetch_player_list.fetchData_PlayList()
-
-      store_playlist_list_info.reset_carousel()
     }
   }
 }
@@ -1501,7 +1523,7 @@ onBeforeUnmount(() => {
 
 <template>
   <n-space vertical :size="12">
-    <div class="dynamic-scroller-demo">
+    <div class="dynamic-scroller-demo-media-cue">
       <n-space vertical @wheel.prevent style="overflow: hidden">
         <n-space align="center" style="margin-top: 3px;">
           <n-space>
@@ -2819,8 +2841,15 @@ onBeforeUnmount(() => {
 }
 
 .media_cue_info .hover-overlay {
-  border-radius: 4px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.3);
   opacity: 0;
+  transition: opacity 0.3s ease;
 }
 .media_cue_info:hover .hover-overlay {
   opacity: 1;
@@ -2832,7 +2861,7 @@ onBeforeUnmount(() => {
   filter: blur(0.5px);
 }
 
-.dynamic-scroller-demo {
+.dynamic-scroller-demo-media-cue {
   height: 100%;
   overflow: auto;
   overflow-x: hidden;

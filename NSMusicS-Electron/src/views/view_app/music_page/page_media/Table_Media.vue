@@ -590,7 +590,7 @@ const handleItemDbClick = async (media_file: any, index: number) => {
       store_player_appearance.player_mode_of_lock_playlist = false
       store_player_audio_info.this_audio_restart_play = true
 
-      store_general_fetch_player_list.fetchData_PlayList()
+      store_general_fetch_player_list.fetchData_PlayList(false)
 
       store_playlist_list_info.reset_carousel()
     }
@@ -1495,7 +1495,7 @@ onBeforeUnmount(() => {
 
 <template>
   <n-space vertical :size="12">
-    <div class="dynamic-scroller-demo">
+    <div class="dynamic-scroller-demo-media">
       <n-space vertical @wheel.prevent style="overflow: hidden;">
         <n-space align="center" style="margin-top: 3px;">
           <n-space>
@@ -2020,7 +2020,7 @@ onBeforeUnmount(() => {
         </n-space>
       </n-space>
       <DynamicScroller
-        class="table"
+        class="table-media"
         ref="dynamicScroller"
         :style="{
           width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)',
@@ -2206,7 +2206,7 @@ onBeforeUnmount(() => {
                 store_playlist_list_info.playlist_Menu_Item = item
               }
             "
-            class="message"
+            class="message-media"
             :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)' }"
             @click="handleItemClick"
             @dblclick="handleItemDbClick(item, index)"
@@ -2249,7 +2249,7 @@ onBeforeUnmount(() => {
                   alt=""
                 />
                 <icon
-                  class="hover-overlay"
+                  class="hover-overlay-media"
                   color="#FFFFFF"
                   :size="28"
                   style="
@@ -2783,11 +2783,18 @@ onBeforeUnmount(() => {
   font-weight: 600;
 }
 
-.media_info .hover-overlay {
-  border-radius: 4px;
+.media_info .hover-overlay-media {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.3);
   opacity: 0;
+  transition: opacity 0.3s ease;
 }
-.media_info:hover .hover-overlay {
+.media_info:hover .hover-overlay-media {
   opacity: 1;
 }
 .media_info img {
@@ -2797,7 +2804,7 @@ onBeforeUnmount(() => {
   filter: blur(0.5px);
 }
 
-.dynamic-scroller-demo {
+.dynamic-scroller-demo-media {
   height: 100%;
   overflow: auto;
   overflow-x: hidden;
@@ -2815,11 +2822,11 @@ onBeforeUnmount(() => {
   --scrollbar-color: v-bind('themeVars.scrollbarColor');
   --scrollbar-color-hover: v-bind('themeVars.scrollbarColorHover');
 }
-.table {
+.table-media {
   width: calc(100vw - 200px);
   margin-top: -10px;
 }
-.message {
+.message-media {
   width: calc(100vw - 230px);
   height: 77px;
 }

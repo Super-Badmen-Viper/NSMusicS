@@ -244,7 +244,7 @@ watch(
             if (!store_playlist_appearance.playlist_show) {
               if (store_playlist_list_logic.media_page_handleItemDbClick) {
                 if (!store_server_user_model.random_play_model) {
-                  store_general_fetch_player_list.fetchData_PlayList()
+                  store_general_fetch_player_list.fetchData_PlayList(false)
                 }
               }
             }
