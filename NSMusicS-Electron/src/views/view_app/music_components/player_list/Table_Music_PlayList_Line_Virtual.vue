@@ -60,8 +60,9 @@ const { t } = useI18n({
 //////
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local/local_data_synchronization/store_local_data_set_mediaInfo'
 import { store_playlist_list_logic } from '@/views/view_app/music_components/player_list/store/store_playlist_list_logic'
-import { NIcon, useMessage } from 'naive-ui'
+import { NIcon, useMessage, useThemeVars } from 'naive-ui'
 const message = useMessage()
+const themeVars = useThemeVars()
 
 ////// right menu
 import { store_general_fetch_media_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'
@@ -280,7 +281,7 @@ onMounted(() => {
             :active="active"
             :data-index="index"
             :data-active="active"
-            class="message"
+            class="message_playlist"
             v-contextmenu:contextmenu
             @contextmenu.prevent="store_playlist_list_info.playlist_Menu_Item_Id = item.id"
             @dblclick="store_playlist_list_logic.handleItemDbClick(item, index)"
@@ -291,7 +292,7 @@ onMounted(() => {
                 width: store_app_configs_info.window_state_miniplayer_playlist ? '280px' : '488px',
                 height: store_app_configs_info.window_state_miniplayer_playlist ? '46px' : '70px',
               }"
-              class="media_info"
+              class="message_playlist_media_info"
             >
               <div
                 class="lottie_pkay_inlist"
@@ -324,7 +325,7 @@ onMounted(() => {
                     ? '13px'
                     : '15px',
                 }"
-                class="title_playlist"
+                class="message_playlist_title_playlist"
               >
                 <span
                   :style="{
@@ -406,14 +407,14 @@ onMounted(() => {
               item, index
             ) in store_playlist_list_info.playlist_MediaFiles_temporary_Sort_Items"
             :key="item.id"
-            class="message"
+            class="message_playlist"
           >
             <div
               :style="{
                 width: store_app_configs_info.window_state_miniplayer_playlist ? '280px' : '488px',
                 height: store_app_configs_info.window_state_miniplayer_playlist ? '46px' : '70px',
               }"
-              class="media_info"
+              class="message_playlist_media_info"
             >
               <div
                 :style="{
@@ -441,7 +442,7 @@ onMounted(() => {
                     ? '13px'
                     : '15px',
                 }"
-                class="title_playlist"
+                class="message_playlist_title_playlist"
               >
                 <span @click="handleItemClick_title(item.title)">
                   {{ item.title }}
@@ -494,24 +495,39 @@ onMounted(() => {
   overflow: auto;
   display: flex;
   flex-direction: column;
+
+  --card-color: v-bind('themeVars.cardColor');
+  --border-color: v-bind('themeVars.borderColor');
+  --primary-color-hover: v-bind('themeVars.primaryColorHover');
+  --primary-color-suppl: v-bind('themeVars.primaryColorSuppl');
+  --text-color-1: v-bind('themeVars.textColor1');
+  --text-color-2: v-bind('themeVars.textColor2');
+  --text-color-3: v-bind('themeVars.textColor3');
+  --hover-color: v-bind('themeVars.hoverColor');
+  --scrollbar-color: v-bind('themeVars.scrollbarColor');
+  --scrollbar-color-hover: v-bind('themeVars.scrollbarColorHover');
 }
 .table {
   height: calc(100vh - 212px);
 }
-.message {
+.message_playlist {
   display: flex;
   align-items: left;
 }
-.media_info {
+.message_playlist_media_info {
   display: flex;
   align-items: center;
   border-radius: 4px;
 
   transition: background-color 0.3s;
 }
-.media_info:hover {
+.message_playlist_media_info:hover {
   background-color: #ffffff24;
 }
+.message_playlist_media_info:hover .message_playlist_title_playlist{
+  color: var(--primary-color-hover);
+}
+
 .checkbox {
   width: 20px;
   margin-left: 12px;
@@ -520,17 +536,16 @@ onMounted(() => {
   width: 50px;
   margin-left: 12px;
 }
-.title_playlist {
+.message_playlist_title_playlist {
   margin-left: 10px;
   text-align: left;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.title_playlist :hover {
-  text-decoration: underline;
+.message_playlist_title_playlist :hover {
   cursor: pointer;
-  color: #3dc3ff;
+  color: var(--primary-color-hover);
 }
 .love {
   margin-left: 10px;
@@ -538,9 +553,8 @@ onMounted(() => {
   width: 30px;
 }
 .love :hover {
-  text-decoration: underline;
   cursor: pointer;
-  color: #3dc3ff;
+  color: var(--primary-color-hover);
 }
 .duration_txt {
   margin-left: 20px;
@@ -553,7 +567,7 @@ onMounted(() => {
   margin-bottom: 5px;
 }
 .v-contextmenu-item--hover {
-  color: #3dc3ff;
+  color: var(--primary-color-hover);
   background-color: transparent;
 }
 

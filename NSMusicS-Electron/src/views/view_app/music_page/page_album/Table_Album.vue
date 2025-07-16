@@ -20,7 +20,7 @@ import { Icon } from '@vicons/utils'
 
 ////// this_view views_components of navie ui
 import { computed, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { type InputInst, NButton, NIcon, useMessage } from 'naive-ui'
+import { type InputInst, NButton, NIcon, useMessage, useThemeVars } from 'naive-ui'
 import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
 import { store_player_audio_info } from '@/views/view_app/music_page/page_player/store/store_player_audio_info'
 import { store_view_album_page_info } from '@/views/view_app/music_page/page_album/store/store_view_album_page_info'
@@ -799,6 +799,8 @@ onMounted(() => {
 const contextmenu = ref(null)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'))
 const message = useMessage()
+const themeVars = useThemeVars()
+
 async function update_playlist_addAlbum(id: any, playlist_id: any) {
   try {
     await store_general_fetch_media_list.fetchData_Media_Find_This_Album(id)
@@ -1320,7 +1322,7 @@ onBeforeUnmount(() => {
                 width: calc(100vw - 220px);
                 height: 300px;
                 border-radius: 10px;
-                margin-left: 10px;
+                margin-left: 4px;
                 margin-bottom: 20px;
               "
             >
@@ -1680,6 +1682,17 @@ onBeforeUnmount(() => {
   padding-right: 20px;
   overflow-x: hidden;
   overflow-y: scroll;
+
+  --card-color: v-bind('themeVars.cardColor');
+  --border-color: v-bind('themeVars.borderColor');
+  --primary-color-hover: v-bind('themeVars.primaryColorHover');
+  --primary-color-suppl: v-bind('themeVars.primaryColorSuppl');
+  --text-color-1: v-bind('themeVars.textColor1');
+  --text-color-2: v-bind('themeVars.textColor2');
+  --text-color-3: v-bind('themeVars.textColor3');
+  --hover-color: v-bind('themeVars.hoverColor');
+  --scrollbar-color: v-bind('themeVars.scrollbarColor');
+  --scrollbar-color-hover: v-bind('themeVars.scrollbarColorHover');
 }
 
 .album-wall {
@@ -1689,6 +1702,7 @@ onBeforeUnmount(() => {
   flex-direction: column;
   overflow-x: hidden;
   scroll-behavior: smooth;
+  margin-left: 8px;
 }
 
 .album {
@@ -1700,6 +1714,9 @@ onBeforeUnmount(() => {
 
 .album:hover {
   transform: translateY(-10px);
+}
+.album:hover .album-name{
+  color: var(--primary-color-hover);
 }
 
 .album-cover-container {
@@ -1822,11 +1839,11 @@ onBeforeUnmount(() => {
 
 .album-name:hover {
   text-decoration: underline;
-  color: #3dc3ff;
+  color: var(--primary-color-hover);
 }
 .artist-name:hover {
   text-decoration: underline;
-  color: #3dc3ff;
+  color: var(--primary-color-hover);
 }
 
 .RateCustom.viaSlot .icon {
@@ -1851,7 +1868,7 @@ onBeforeUnmount(() => {
 }
 
 .v-contextmenu-item--hover {
-  color: #3dc3ff;
+  color: var(--primary-color-hover);
   background-color: transparent;
 }
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { NButton, NIcon, NImage, useMessage } from 'naive-ui'
+import { NButton, NIcon, NImage, useMessage, useThemeVars } from 'naive-ui'
 import { Icon } from '@vicons/utils'
 import {
   PlayCircle24Regular,
@@ -39,6 +39,7 @@ import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 
 const { t } = useI18n({ inheritLocale: true })
 const message = useMessage()
+const themeVars = useThemeVars()
 
 const item_album = ref(160)
 const item_album_image = ref(item_album.value - 20)
@@ -385,8 +386,11 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="home-wall-container">
-    <n-space vertical class="category-section"
-             v-if="store_view_home_page_info.home_Files_temporary_maximum_playback.length !== 0">
+    <n-space
+      vertical
+      class="category-section"
+      v-if="store_view_home_page_info.home_Files_temporary_maximum_playback.length !== 0"
+    >
       <n-space
         justify="space-between"
         align="center"
@@ -576,8 +580,11 @@ onBeforeUnmount(() => {
       </DynamicScroller>
     </n-space>
 
-    <n-space vertical class="category-section"
-             v-if="store_view_home_page_info.home_Files_temporary_random_search.length !== 0">
+    <n-space
+      vertical
+      class="category-section"
+      v-if="store_view_home_page_info.home_Files_temporary_random_search.length !== 0"
+    >
       <n-space
         justify="space-between"
         align="center"
@@ -767,8 +774,11 @@ onBeforeUnmount(() => {
       </DynamicScroller>
     </n-space>
 
-    <n-space vertical class="category-section"
-             v-if="store_view_home_page_info.home_Files_temporary_recently_added.length !== 0">
+    <n-space
+      vertical
+      class="category-section"
+      v-if="store_view_home_page_info.home_Files_temporary_recently_added.length !== 0"
+    >
       <n-space
         justify="space-between"
         align="center"
@@ -957,8 +967,11 @@ onBeforeUnmount(() => {
       </DynamicScroller>
     </n-space>
 
-    <n-space vertical class="category-section"
-             v-if="store_view_home_page_info.home_Files_temporary_recently_played.length !== 0">
+    <n-space
+      vertical
+      class="category-section"
+      v-if="store_view_home_page_info.home_Files_temporary_recently_played.length !== 0"
+    >
       <n-space
         justify="space-between"
         align="center"
@@ -1176,6 +1189,17 @@ onBeforeUnmount(() => {
   padding-right: 20px;
   overflow-x: hidden;
   overflow-y: scroll;
+
+  --card-color: v-bind('themeVars.cardColor');
+  --border-color: v-bind('themeVars.borderColor');
+  --primary-color-hover: v-bind('themeVars.primaryColorHover');
+  --primary-color-suppl: v-bind('themeVars.primaryColorSuppl');
+  --text-color-1: v-bind('themeVars.textColor1');
+  --text-color-2: v-bind('themeVars.textColor2');
+  --text-color-3: v-bind('themeVars.textColor3');
+  --hover-color: v-bind('themeVars.hoverColor');
+  --scrollbar-color: v-bind('themeVars.scrollbarColor');
+  --scrollbar-color-hover: v-bind('themeVars.scrollbarColorHover');
 }
 
 .category-section {
@@ -1213,6 +1237,9 @@ onBeforeUnmount(() => {
 
 .home-album:hover {
   transform: translateY(-10px);
+}
+.home-album:hover .home-album-name{
+  color: var(--primary-color-hover);
 }
 
 .home-album-cover-container {
@@ -1358,7 +1385,7 @@ onBeforeUnmount(() => {
 }
 
 .v-contextmenu-item--hover {
-  color: #3dc3ff;
+  color: var(--primary-color-hover);
   background-color: transparent;
 }
 

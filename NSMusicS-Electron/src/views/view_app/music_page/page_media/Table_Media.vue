@@ -27,7 +27,7 @@ import { MultipleStopOutlined } from '@vicons/material'
 
 ////// this_view views_components of navie ui
 import { ref, onMounted, h, computed, watch, onBeforeUnmount } from 'vue'
-import { NIcon, type InputInst, NButton } from 'naive-ui'
+import { NIcon, type InputInst, NButton, useThemeVars } from 'naive-ui'
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
@@ -771,6 +771,7 @@ const handleItemClick_Rating = (id_rating: any) => {
 ////// playlist
 import { useMessage } from 'naive-ui'
 const message = useMessage()
+const themeVars = useThemeVars()
 /// add playlist
 import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
 import { store_player_audio_info } from '@/views/view_app/music_page/page_player/store/store_player_audio_info'
@@ -2076,7 +2077,7 @@ onBeforeUnmount(() => {
                 width: calc(100vw - 220px);
                 height: 300px;
                 border-radius: 10px;
-                margin-left: 10px;
+                margin-left: 8px;
                 margin-bottom: 20px;
               "
             >
@@ -2212,7 +2213,7 @@ onBeforeUnmount(() => {
           >
             <div
               class="media_info"
-              :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)' }"
+              :style="{ width: 'calc(100vw - ' + (collapsed_width - 10) + 'px)' }"
             >
               <input
                 type="checkbox"
@@ -2228,7 +2229,7 @@ onBeforeUnmount(() => {
               />
               <div
                 style="
-                  margin-left: 8px;
+                  margin-left: 5px;
                   width: 60px;
                   height: 60px;
                   border-radius: 10px;
@@ -2247,17 +2248,6 @@ onBeforeUnmount(() => {
                   style="width: 100%; height: 100%; object-fit: cover; position: absolute;"
                   alt=""
                 />
-                <div
-                  class="hover-overlay"
-                  style="
-                    width: 100%;
-                    height: 100%;
-                    position: absolute;
-                    top: 0;
-                    filter: blur(3px);
-                    cursor: pointer;
-                  "
-                ></div>
                 <icon
                   class="hover-overlay"
                   color="#FFFFFF"
@@ -2277,8 +2267,9 @@ onBeforeUnmount(() => {
                   <Play style="margin-left: 25%;margin-top: 25%;"/>
                 </icon>
               </div>
-              <div class="songlist_title">
+              <div class="songlist_name">
                 <span
+                  class="songlist_title"
                   style="font-size: 16px; font-weight: 550"
                   @click="handleItemClick_title(item.title)"
                 >
@@ -2290,6 +2281,7 @@ onBeforeUnmount(() => {
                   v-for="artist in item.artist.split(/[\/|｜、]/)"
                 >
                   <span
+                    class="songlist_artist"
                     style="font-size: 14px; font-weight: 400"
                     @click="
                       () => {
@@ -2302,6 +2294,7 @@ onBeforeUnmount(() => {
                 </template>
                 <template v-else v-for="artist in item.all_artist_ids">
                   <span
+                    class="songlist_artist"
                     style="font-size: 14px; font-weight: 400"
                     @click="
                       () => {
@@ -2776,7 +2769,7 @@ onBeforeUnmount(() => {
   </n-modal>
 </template>
 
-<style scoped>
+<style>
 .n-base-selection .n-base-selection-label .n-base-selection-input .n-base-selection-input__content {
   font-size: 15px;
   font-weight: 600;
@@ -2797,6 +2790,12 @@ onBeforeUnmount(() => {
 .media_info:hover .hover-overlay {
   opacity: 1;
 }
+.media_info img {
+  filter: blur(0px);
+}
+.media_info:hover img {
+  filter: blur(0.5px);
+}
 
 .dynamic-scroller-demo {
   height: 100%;
@@ -2804,25 +2803,54 @@ onBeforeUnmount(() => {
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
+
+  --card-color: v-bind('themeVars.cardColor');
+  --border-color: v-bind('themeVars.borderColor');
+  --primary-color-hover: v-bind('themeVars.primaryColorHover');
+  --primary-color-suppl: v-bind('themeVars.primaryColorSuppl');
+  --text-color-1: v-bind('themeVars.textColor1');
+  --text-color-2: v-bind('themeVars.textColor2');
+  --text-color-3: v-bind('themeVars.textColor3');
+  --hover-color: v-bind('themeVars.hoverColor');
+  --scrollbar-color: v-bind('themeVars.scrollbarColor');
+  --scrollbar-color-hover: v-bind('themeVars.scrollbarColorHover');
 }
 .table {
   width: calc(100vw - 200px);
+  margin-left: 3px;
 }
 .message {
   width: calc(100vw - 230px);
+  height: 77px;
 }
 .media_info {
   width: calc(100vw - 230px);
   height: 70px;
   display: flex;
   align-items: center;
-  border-radius: 4px;
-
-  transition: background-color 0.3s;
+  transition: all 0.2s ease-in-out; /* Smooth transition for all properties */
+  border-radius: 8px; /* iOS-style rounded corners */
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.05); /* Subtle initial shadow */
+}
+.media_info:nth-child(1){
+  margin-top: 8px;
 }
 .media_info:hover {
-  background-color: #f0f0f090;
+  transform: scale(1.01) translateX(14px); /* Slight zoom on hover */
+  box-shadow: 0 0 10px 0 var(--scrollbar-color);
+  z-index: 10;
+  position: relative;
+  background-color: var(--card-color); /* Use a variable for background */
 }
+.media_info:hover .songlist_title {
+  color: var(--primary-color-hover);
+}
+/*
+.media_info:hover .songlist_artist {
+  color: var(--primary-color-hover);
+}
+*/
+
 .checkbox {
   width: 20px;
   transform: scale(1.3);
@@ -2832,7 +2860,7 @@ onBeforeUnmount(() => {
   width: calc(6vw);
   margin-left: 12px;
 }
-.songlist_title {
+.songlist_name {
   margin-left: 10px;
   text-align: left;
   width: 34vw;
@@ -2841,11 +2869,12 @@ onBeforeUnmount(() => {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.songlist_title :hover {
+.songlist_name :hover {
   text-decoration: underline;
   cursor: pointer;
-  color: #3dc3ff;
+  color: var(--primary-color-hover);
 }
+
 .songlist_album {
   margin-left: 10px;
   text-align: left;
@@ -2857,7 +2886,7 @@ onBeforeUnmount(() => {
 .songlist_album :hover {
   text-decoration: underline;
   cursor: pointer;
-  color: #3dc3ff;
+  color: var(--primary-color-hover);
 }
 .duration_txt {
   margin-left: 10px;
@@ -2865,7 +2894,7 @@ onBeforeUnmount(() => {
   width: 40px;
 }
 .songlist_more:hover {
-  color: #3dc3ff;
+  color: var(--primary-color-hover);
 }
 
 .scorller_to_SortAZ {
@@ -2898,7 +2927,7 @@ onBeforeUnmount(() => {
   margin-bottom: 5px;
 }
 .v-contextmenu-item--hover {
-  color: #3dc3ff;
+  color: var(--primary-color-hover);
   background-color: transparent;
 }
 

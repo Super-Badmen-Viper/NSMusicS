@@ -374,19 +374,19 @@ onMounted(async () => {
     },
   ]
   ///
-  await store_general_fetch_charts_list.fetchData_Charts();
+  await store_general_fetch_charts_list.fetchData_Charts()
   ///
-  store_view_charts_page_info.charts_data_temporary[1].items = [];
+  store_view_charts_page_info.charts_data_temporary[1].items = []
   store_view_charts_page_info.charts_album_metadata =
-      store_view_home_page_info.home_Files_temporary_maximum_playback;
+    store_view_home_page_info.home_Files_temporary_maximum_playback
   // 使用 Set 记录已添加的 ID 实现去重[6,7,8](@ref)
-  const addedIds = new Set();
-  const loopLength = Math.min(store_view_charts_page_info.charts_album_metadata.length, 8);
+  const addedIds = new Set()
+  const loopLength = Math.min(store_view_charts_page_info.charts_album_metadata.length, 8)
   for (let i = 0; i < loopLength; i++) {
-    const row = store_view_charts_page_info.charts_album_metadata[i];
+    const row = store_view_charts_page_info.charts_album_metadata[i]
     // 跳过重复 ID[6,8](@ref)
-    if (addedIds.has(row.id)) continue;
-    addedIds.add(row.id); // 记录新 ID
+    if (addedIds.has(row.id)) continue
+    addedIds.add(row.id) // 记录新 ID
     store_view_charts_page_info.charts_data_temporary[1].items.push({
       id: row.id,
       name: row.name,
@@ -395,13 +395,13 @@ onMounted(async () => {
       starred: row.favorite,
       play_complete_count: row.play_complete_count,
       play_date: row.play_date,
-    });
+    })
   }
   // 排序 + 切片（保留前10条）[6](@ref)
   store_view_charts_page_info.charts_data_temporary[1].items =
-      store_view_charts_page_info.charts_data_temporary[1].items
-          .sort((a, b) => a.play_count - b.play_count)
-          .slice(0, 10);
+    store_view_charts_page_info.charts_data_temporary[1].items
+      .sort((a, b) => a.play_count - b.play_count)
+      .slice(0, 10)
   ///
 })
 

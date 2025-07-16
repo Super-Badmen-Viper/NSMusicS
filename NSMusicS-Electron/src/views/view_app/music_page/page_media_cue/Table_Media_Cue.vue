@@ -26,7 +26,7 @@ import { Add, Close, Menu } from '@vicons/carbon'
 
 ////// this_view views_components of navie ui
 import { ref, onMounted, h, computed, watch, onBeforeUnmount } from 'vue'
-import { NIcon, type InputInst, NButton } from 'naive-ui'
+import { NIcon, type InputInst, NButton, useThemeVars } from 'naive-ui'
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
@@ -774,6 +774,7 @@ const handleItemClick_Rating = (id_rating: any) => {
 ////// playlist
 import { useMessage } from 'naive-ui'
 const message = useMessage()
+const themeVars = useThemeVars()
 /// add playlist
 import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
 import { store_player_audio_info } from '@/views/view_app/music_page/page_player/store/store_player_audio_info'
@@ -2798,7 +2799,7 @@ onBeforeUnmount(() => {
   </n-modal>
 </template>
 
-<style>
+<style scoped>
 .n-base-selection .n-base-selection-label .n-base-selection-input .n-base-selection-input__content {
   font-size: 15px;
   font-weight: 600;
@@ -2826,6 +2827,17 @@ onBeforeUnmount(() => {
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
+
+  --card-color: v-bind('themeVars.cardColor');
+  --border-color: v-bind('themeVars.borderColor');
+  --primary-color-hover: v-bind('themeVars.primaryColorHover');
+  --primary-color-suppl: v-bind('themeVars.primaryColorSuppl');
+  --text-color-1: v-bind('themeVars.textColor1');
+  --text-color-2: v-bind('themeVars.textColor2');
+  --text-color-3: v-bind('themeVars.textColor3');
+  --hover-color: v-bind('themeVars.hoverColor');
+  --scrollbar-color: v-bind('themeVars.scrollbarColor');
+  --scrollbar-color-hover: v-bind('themeVars.scrollbarColorHover');
 }
 .table {
   width: calc(100vw - 200px);
@@ -2838,12 +2850,17 @@ onBeforeUnmount(() => {
   height: 70px;
   display: flex;
   align-items: center;
-  border-radius: 4px;
-
-  transition: background-color 0.3s;
+  transition: all 0.2s ease-in-out; /* Smooth transition for all properties */
+  margin: 12px 0; /* Add margin for shadow visibility */
+  border-radius: 8px; /* iOS-style rounded corners */
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.05); /* Subtle initial shadow */
 }
 .media_info:hover {
-  background-color: #f0f0f090;
+  transform: scale(1.01) translateX(14px); /* Slight zoom on hover */
+  box-shadow: 0 0 5px 0 var(--card-color);
+  z-index: 10;
+  position: relative;
+  background-color: var(--card-color); /* Use a variable for background */
 }
 .checkbox {
   width: 20px;
@@ -2866,7 +2883,7 @@ onBeforeUnmount(() => {
 .songlist_title :hover {
   text-decoration: underline;
   cursor: pointer;
-  color: #3dc3ff;
+  color: var(--primary-color-hover);
 }
 .songlist_album {
   margin-left: 10px;
@@ -2879,7 +2896,7 @@ onBeforeUnmount(() => {
 .songlist_album :hover {
   text-decoration: underline;
   cursor: pointer;
-  color: #3dc3ff;
+  color: var(--primary-color-hover);
 }
 .duration_txt {
   margin-left: 10px;
@@ -2887,7 +2904,7 @@ onBeforeUnmount(() => {
   width: 40px;
 }
 .songlist_more:hover {
-  color: #3dc3ff;
+  color: var(--primary-color-hover);
 }
 
 .scorller_to_SortAZ {
@@ -2920,7 +2937,7 @@ onBeforeUnmount(() => {
   margin-bottom: 5px;
 }
 .v-contextmenu-item--hover {
-  color: #3dc3ff;
+  color: var(--primary-color-hover);
   background-color: transparent;
 }
 

@@ -671,6 +671,7 @@ const { t } = useI18n({
                     style="
                       width: 58px;
                       height: 58px;
+                      margin-left: 5px;
                       border-radius: 4px;
                       overflow: hidden;
                       flex-shrink: 0;
@@ -815,6 +816,7 @@ const { t } = useI18n({
 
 .message {
   width: 100%;
+  height: 80px;
   display: flex;
   align-items: center;
   padding: 0.5rem 0;
@@ -827,14 +829,21 @@ const { t } = useI18n({
 }
 
 .media_info {
+  width: calc(100% - 13px);
+  height: 70px;
   display: flex;
   align-items: center;
-  width: 100%;
+  transition: all 0.2s ease-in-out; /* Smooth transition for all properties */
+  margin: 12px 0; /* Add margin for shadow visibility */
+  border-radius: 8px; /* iOS-style rounded corners */
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.05); /* Subtle initial shadow */
 }
-
-.media_info img {
-  border-radius: 4px;
-  border: 1.5px solid var(--border-color);
+.media_info:hover {
+  transform: scale(1.01) translateX(6px); /* Slight zoom on hover */
+  box-shadow: 0 0 10px 0 var(--scrollbar-color);
+  z-index: 10;
+  position: relative;
+  background-color: var(--card-color); /* Use a variable for background */
 }
 
 .title_playlist {
