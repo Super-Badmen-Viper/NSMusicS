@@ -1322,7 +1322,7 @@ onBeforeUnmount(() => {
                 width: calc(100vw - 220px);
                 height: 300px;
                 border-radius: 10px;
-                margin-left: 4px;
+                margin-left: 12px;
                 margin-bottom: 20px;
               "
             >
@@ -1702,7 +1702,6 @@ onBeforeUnmount(() => {
   flex-direction: column;
   overflow-x: hidden;
   scroll-behavior: smooth;
-  margin-left: 8px;
 }
 
 .album {
@@ -1717,6 +1716,9 @@ onBeforeUnmount(() => {
 }
 .album:hover .album-name{
   color: var(--primary-color-hover);
+}
+.album:nth-child(1) {
+  margin-left: 8px;
 }
 
 .album-cover-container {

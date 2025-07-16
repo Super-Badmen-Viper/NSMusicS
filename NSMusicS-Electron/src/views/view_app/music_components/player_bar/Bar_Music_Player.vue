@@ -14,7 +14,7 @@ import {
 import { RepeatOneRound, QueueMusicRound } from '@vicons/material'
 import { Play, Pause, PlayBack, PlayForward, VolumeMedium } from '@vicons/ionicons5'
 import { Random } from '@vicons/fa'
-import { NButton, NIcon, NSlider, NSpace, NText } from 'naive-ui'
+import { NButton, NIcon, NSlider, NSpace, NText, useThemeVars } from 'naive-ui'
 
 ////// this_view views_components of navie_ui
 import { onMounted, ref, watch, inject, provide } from 'vue'
@@ -33,6 +33,7 @@ const { t } = useI18n({
 
 import { useMessage } from 'naive-ui'
 const message = useMessage()
+const themeVars = useThemeVars()
 
 //////
 function getAssetImage(firstImage: string) {
@@ -1179,6 +1180,7 @@ watch(
                 :offset="[-8, 14]"
               >
                 <n-button
+
                   quaternary
                   round
                   size="small"
@@ -1216,6 +1218,7 @@ watch(
               </n-badge>
               <n-button
                 v-else
+
                 quaternary
                 round
                 size="small"
@@ -1262,6 +1265,7 @@ watch(
             :offset="[-8, 14]"
           >
             <n-button
+
               quaternary
               round
               size="small"
@@ -1292,6 +1296,7 @@ watch(
             v-if="
               !store_player_audio_logic.orderToolShow && !store_server_user_model.random_play_model
             "
+
             quaternary
             round
             size="small"
@@ -1319,7 +1324,7 @@ watch(
           </n-button>
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
-              <n-button quaternary round size="small" @click="play_skip_back_click">
+              <n-button  quaternary round size="small" @click="play_skip_back_click">
                 <template #icon>
                   <n-icon :size="26"><PlayBack /></n-icon>
                 </template>
@@ -1329,7 +1334,7 @@ watch(
           </n-tooltip>
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
-              <n-button quaternary round @click="Init_Audio_Player">
+              <n-button  quaternary round @click="Init_Audio_Player">
                 <template #icon>
                   <n-icon v-if="store_player_audio_logic.player.isPlaying" :size="36"
                     ><Pause
@@ -1342,7 +1347,7 @@ watch(
           </n-tooltip>
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
-              <n-button quaternary round size="small" @click="play_skip_forward_click">
+              <n-button  quaternary round size="small" @click="play_skip_forward_click">
                 <template #icon>
                   <n-icon :size="26"><PlayForward /></n-icon>
                 </template>
@@ -1353,6 +1358,7 @@ watch(
           <n-tooltip v-if="store_player_audio_logic.voiceToolShow" trigger="hover" placement="top">
             <template #trigger>
               <n-button
+
                 quaternary
                 round
                 size="small"
@@ -1372,6 +1378,7 @@ watch(
           </n-tooltip>
           <n-button
             v-if="!store_player_audio_logic.voiceToolShow"
+
             quaternary
             round
             size="small"
@@ -1407,7 +1414,7 @@ watch(
             {{ store_player_audio_logic.current_play_time }}
           </n-space>
           <n-slider
-            style="width: 320px; color: #3dc3ff; border-radius: 10px; transition: margin 0.4s"
+            style="width: 320px; color: var(--primary-color-hover); border-radius: 10px; transition: margin 0.4s"
             v-model:value="store_player_audio_logic.slider_singleValue"
             :min="0"
             :max="100"
@@ -1469,6 +1476,7 @@ watch(
             <n-drawer-content>
               <n-space vertical align="flex-start" style="height: 100px">
                 <n-button
+
                   quaternary
                   @click="
                     () => {
@@ -1492,6 +1500,7 @@ watch(
                   {{ $t('nsmusics.siderbar_player.playback_1') }}
                 </n-button>
                 <n-button
+
                   quaternary
                   @click="
                     () => {
@@ -1515,6 +1524,7 @@ watch(
                   {{ $t('nsmusics.siderbar_player.playback_2') }}
                 </n-button>
                 <n-button
+
                   quaternary
                   @click="
                     () => {
@@ -1538,6 +1548,7 @@ watch(
                   {{ $t('nsmusics.siderbar_player.playback_3') }}
                 </n-button>
                 <n-button
+
                   quaternary
                   @click="
                     () => {
@@ -1577,6 +1588,7 @@ watch(
                     store_server_users.server_select_kind != 'jellyfin' &&
                     store_server_users.server_select_kind != 'emby'
                   "
+
                   quaternary
                   @click="
                     async () => {
@@ -1659,11 +1671,11 @@ watch(
                 <n-button
                   strong
                   secondary
-                  class="gird_Right_current_playlist_button_area_of_button"
+                  id="gird_Right_current_playlist_button_area_of_button"
                   @click="Set_Playlist_Show"
                 >
                   <template #icon>
-                    <n-icon :size="42"><QueueMusicRound /></n-icon>
+                    <n-icon  :size="42"><QueueMusicRound /></n-icon>
                   </template>
                 </n-button>
               </n-badge>
@@ -1715,6 +1727,7 @@ watch(
             <n-tooltip trigger="hover" placement="top" v-if="store_player_appearance.player_show">
               <template #trigger>
                 <n-button
+
                   size="tiny"
                   text
                   @click="
@@ -1750,6 +1763,7 @@ watch(
             >
               <template #trigger>
                 <n-button
+
                   size="tiny"
                   text
                   @click="
@@ -1780,6 +1794,7 @@ watch(
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
                 <n-button
+
                   size="tiny"
                   text
                   @click="
@@ -1822,7 +1837,7 @@ watch(
             </n-tooltip>
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
-                <n-button size="tiny" text @click="Set_Player_Show_Sound_effects">
+                <n-button  size="tiny" text @click="Set_Player_Show_Sound_effects">
                   <template #icon>
                     <n-icon
                       :size="
@@ -1842,7 +1857,7 @@ watch(
             </n-tooltip>
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
-                <n-button size="tiny" text @click="Set_Player_Show_Sound_speed">
+                <n-button  size="tiny" text @click="Set_Player_Show_Sound_speed">
                   <template #icon>
                     <n-icon
                       :size="
@@ -1862,7 +1877,7 @@ watch(
             </n-tooltip>
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
-                <n-button size="tiny" text @click="Set_Player_Show_Sound_more">
+                <n-button  size="tiny" text @click="Set_Player_Show_Sound_more">
                   <template #icon>
                     <n-icon
                       :size="
@@ -1886,7 +1901,7 @@ watch(
     </div>
   </n-space>
 </template>
-<style>
+<style scoped>
 .this_Bar_Music_Player {
   position: fixed;
   bottom: 0;
@@ -1895,6 +1910,17 @@ watch(
   height: 80px;
   z-index: 100;
   border-radius: 12px 12px 0 0;
+
+  --card-color: v-bind('themeVars.cardColor');
+  --border-color: v-bind('themeVars.borderColor');
+  --primary-color-hover: v-bind('themeVars.primaryColorHover');
+  --primary-color-suppl: v-bind('themeVars.primaryColorSuppl');
+  --text-color-1: v-bind('themeVars.textColor1');
+  --text-color-2: v-bind('themeVars.textColor2');
+  --text-color-3: v-bind('themeVars.textColor3');
+  --hover-color: v-bind('themeVars.hoverColor');
+  --scrollbar-color: v-bind('themeVars.scrollbarColor');
+  --scrollbar-color-hover: v-bind('themeVars.scrollbarColorHover');
 }
 
 .layout_distribution_3 {
@@ -1958,7 +1984,7 @@ watch(
 }
 .gird_Left .bar_left_text_song_info #bar_song_name:hover {
   text-decoration: underline;
-  color: #3dc3ff;
+  color: var(--primary-color-hover);
 }
 .gird_Left .bar_left_text_song_info #bar_artist_name_part {
   font-size: 15px;
@@ -1966,7 +1992,7 @@ watch(
 }
 .gird_Left .bar_left_text_song_info #bar_artist_name_part:hover {
   text-decoration: underline;
-  color: #3dc3ff;
+  color: var(--primary-color-hover);
 }
 .gird_Left .bar_left_text_song_info #bar_album_name {
   font-size: 15px;
@@ -1974,7 +2000,7 @@ watch(
 }
 .gird_Left .bar_left_text_song_info #bar_album_name:hover {
   text-decoration: underline;
-  color: #3dc3ff;
+  color: var(--primary-color-hover);
 }
 
 .gird_Middle {
@@ -2028,12 +2054,23 @@ watch(
   margin-right: 20px;
   border-radius: 10px;
 }
-.gird_Right .gird_Right_current_playlist_button_area_of_button {
+.gird_Right #gird_Right_current_playlist_button_area_of_button {
   width: 60px;
   height: 60px;
   border-radius: 10px;
 }
-.gird_Right .gird_Right_current_playlist_button_area_of_button :hover {
-  color: #3dc3ff;
+.gird_Right #gird_Right_current_playlist_button_area_of_button :hover {
+  color: var(--primary-color-hover);
+}
+
+.n-button {
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.n-button:hover {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
 }
 </style>

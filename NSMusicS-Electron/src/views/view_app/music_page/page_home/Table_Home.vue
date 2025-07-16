@@ -1208,6 +1208,7 @@ onBeforeUnmount(() => {
 
 .category-header {
   width: calc(100vw - 200px);
+  margin-left: 9px;
 }
 
 .category-title {
@@ -1240,6 +1241,9 @@ onBeforeUnmount(() => {
 }
 .home-album:hover .home-album-name{
   color: var(--primary-color-hover);
+}
+.home-album:nth-child(1){
+  margin-left: 7px;
 }
 
 .home-album-cover-container {

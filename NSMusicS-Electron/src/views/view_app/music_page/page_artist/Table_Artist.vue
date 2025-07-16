@@ -1095,7 +1095,7 @@ onBeforeUnmount(() => {
                 width: calc(100vw - 220px);
                 height: 300px;
                 border-radius: 10px;
-                margin-left: 5px;
+                margin-left: 12px;
                 margin-bottom: 20px;
               "
             >
@@ -1445,7 +1445,6 @@ onBeforeUnmount(() => {
   flex-direction: column;
   overflow-x: hidden;
   scroll-behavior: smooth;
-  margin-left: 8px;
 }
 
 .artist {
@@ -1460,6 +1459,9 @@ onBeforeUnmount(() => {
 }
 .artist:hover .artist-name{
   color: var(--primary-color-hover);
+}
+.artist:nth-child(1){
+  margin-left: 8px;
 }
 
 .artist-cover-container {

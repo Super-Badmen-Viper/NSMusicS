@@ -2077,7 +2077,7 @@ onBeforeUnmount(() => {
                 width: calc(100vw - 220px);
                 height: 300px;
                 border-radius: 10px;
-                margin-left: 8px;
+                margin-left: 12px;
                 margin-bottom: 20px;
               "
             >
@@ -2229,7 +2229,7 @@ onBeforeUnmount(() => {
               />
               <div
                 style="
-                  margin-left: 5px;
+                  margin-left: 8px;
                   width: 60px;
                   height: 60px;
                   border-radius: 10px;
@@ -2339,6 +2339,7 @@ onBeforeUnmount(() => {
                 "
               >
                 <button
+                  class="love-this-home-album-button"
                   @click="
                     () => {
                       handleItemClick_Favorite(item.id, item.favorite)
@@ -2350,7 +2351,6 @@ onBeforeUnmount(() => {
                     background-color: transparent;
                     width: 28px;
                     height: 28px;
-                    margin-top: 2px;
                     margin-right: 10px;
                     cursor: pointer;
                   "
@@ -2817,7 +2817,6 @@ onBeforeUnmount(() => {
 }
 .table {
   width: calc(100vw - 200px);
-  margin-left: 3px;
 }
 .message {
   width: calc(100vw - 230px);
@@ -2920,6 +2919,22 @@ onBeforeUnmount(() => {
 }
 .Rate.viaSlot .Rate__star:nth-child(8).hover {
   color: red;
+}
+
+.play-this-home-album-button,
+.open-this-home-artist-button,
+.love-this-home-album-button {
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.play-this-home-album-button:hover,
+.open-this-home-artist-button:hover,
+.love-this-home-album-button:hover {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
 }
 
 .v-contextmenu-item {

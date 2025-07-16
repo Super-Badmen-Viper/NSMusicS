@@ -1599,4 +1599,15 @@ body {
 ::-webkit-scrollbar {
   display: none;
 }
+
+.n-button {
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.n-button:hover {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
+}
 </style>
