@@ -7,7 +7,7 @@ import { store_view_media_cue_page_info } from '@/views/view_app/music_page/page
 
 export const store_general_fetch_player_list = reactive({
   async fetchData_PlayList(cue_model: boolean) {
-    if(!cue_model) {
+    if (!cue_model) {
       store_playlist_list_info.playlist_MediaFiles_temporary =
         store_view_media_page_info.media_Files_temporary.map((row: any) => {
           row.play_id = row.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
@@ -22,7 +22,7 @@ export const store_general_fetch_player_list = reactive({
       store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
         store_view_media_page_info.media_Files_temporary.map((item: any) => item.id)
       store_app_configs_logic_save.save_system_playlist_item_id_config()
-    }else{
+    } else {
       store_playlist_list_info.playlist_MediaFiles_temporary =
         store_view_media_cue_page_info.media_Files_temporary.map((row: any) => {
           row.play_id = row.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000

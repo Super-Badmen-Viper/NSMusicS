@@ -1496,8 +1496,8 @@ onBeforeUnmount(() => {
 <template>
   <n-space vertical :size="12">
     <div class="dynamic-scroller-demo-media">
-      <n-space vertical @wheel.prevent style="overflow: hidden;">
-        <n-space align="center" style="margin-top: 3px;">
+      <n-space vertical @wheel.prevent style="overflow: hidden">
+        <n-space align="center" style="margin-top: 3px">
           <n-space>
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
@@ -2245,18 +2245,14 @@ onBeforeUnmount(() => {
                   :key="item.id"
                   :src="item.medium_image_url"
                   @error="handleImageError(item)"
-                  style="width: 100%; height: 100%; object-fit: cover; position: absolute;"
+                  style="width: 100%; height: 100%; object-fit: cover; position: absolute"
                   alt=""
                 />
                 <icon
                   class="hover-overlay-media"
                   color="#FFFFFF"
                   :size="28"
-                  style="
-                    position: relative;
-                    z-index: 1;
-                    cursor: pointer;
-                  "
+                  style="position: relative; z-index: 1; cursor: pointer"
                   @click="
                     () => {
                       click_count = 2
@@ -2264,7 +2260,7 @@ onBeforeUnmount(() => {
                     }
                   "
                 >
-                  <Play style="margin-left: 25%;margin-top: 25%;"/>
+                  <Play style="margin-left: 25%; margin-top: 25%" />
                 </icon>
               </div>
               <div class="songlist_name">
@@ -2839,7 +2835,7 @@ onBeforeUnmount(() => {
   border-radius: 8px; /* iOS-style rounded corners */
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.05); /* Subtle initial shadow */
 }
-.media_info:nth-child(1){
+.media_info:nth-child(1) {
   margin-top: 8px;
 }
 .media_info:hover {

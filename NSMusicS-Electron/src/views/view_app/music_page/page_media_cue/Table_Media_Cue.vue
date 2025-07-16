@@ -596,18 +596,19 @@ const handleItemDbClick = async (media_file: any, index: any) => {
         store_general_fetch_player_list.fetchData_PlayList(true)
 
         store_playlist_list_info.reset_carousel()
-      }else{
+      } else {
         const index_num = typeof index === 'number' ? index : index.split('-')[1]
         // cue
-        if(media_file.cue_tracks === undefined){
-          store_player_audio_info.this_audio_cue_track_current_no = 0;
-          store_player_audio_info.this_audio_cue_track_current_indexes = [];
-          store_player_audio_info.this_audio_cue_tracks = [];
-          store_player_audio_logic.player_model_cue = false;
-        }else{
-          store_player_audio_info.this_audio_cue_track_current_no = index_num;
-          store_player_audio_info.this_audio_cue_track_current_indexes = media_file.cue_tracks[index_num - 1].INDEXES;
-          store_player_audio_logic.player_model_cue = true;
+        if (media_file.cue_tracks === undefined) {
+          store_player_audio_info.this_audio_cue_track_current_no = 0
+          store_player_audio_info.this_audio_cue_track_current_indexes = []
+          store_player_audio_info.this_audio_cue_tracks = []
+          store_player_audio_logic.player_model_cue = false
+        } else {
+          store_player_audio_info.this_audio_cue_track_current_no = index_num
+          store_player_audio_info.this_audio_cue_track_current_indexes =
+            media_file.cue_tracks[index_num - 1].INDEXES
+          store_player_audio_logic.player_model_cue = true
         }
         if (store_player_audio_info.this_audio_cue_track_current_indexes.length > 0) {
           const track_str = store_player_audio_info.this_audio_cue_track_current_indexes[0].TIME
@@ -1525,7 +1526,7 @@ onBeforeUnmount(() => {
   <n-space vertical :size="12">
     <div class="dynamic-scroller-demo-media-cue">
       <n-space vertical @wheel.prevent style="overflow: hidden">
-        <n-space align="center" style="margin-top: 3px;">
+        <n-space align="center" style="margin-top: 3px">
           <n-space>
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
@@ -2263,19 +2264,21 @@ onBeforeUnmount(() => {
               width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)',
               height: item.cue_track_count > 0 ? 80 * item.cue_track_count + 'px' : '70px',
             }"
-            @click="handleItemClick">
-            <div
-              v-for="track in item.cue_tracks"
-              :key="track.TRACK">
+            @click="handleItemClick"
+          >
+            <div v-for="track in item.cue_tracks" :key="track.TRACK">
               <div
                 class="media_cue_info"
                 :style="{
                   width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)',
                 }"
-                @dblclick="()=>{
-                  store_player_audio_info.this_audio_cue_tracks = item.cue_tracks;
-                  handleItemDbClick(item, item.absoluteIndex + '-' + track.TRACK);
-                }">
+                @dblclick="
+                  () => {
+                    store_player_audio_info.this_audio_cue_tracks = item.cue_tracks
+                    handleItemDbClick(item, item.absoluteIndex + '-' + track.TRACK)
+                  }
+                "
+              >
                 <input
                   type="checkbox"
                   class="checkbox"
@@ -2306,27 +2309,23 @@ onBeforeUnmount(() => {
                     :key="item.id"
                     :src="item.medium_image_url"
                     @error="handleImageError(item)"
-                    style="width: 100%; height: 100%; object-fit: cover; position: absolute;"
+                    style="width: 100%; height: 100%; object-fit: cover; position: absolute"
                     alt=""
                   />
                   <icon
                     class="hover-overlay"
                     color="#FFFFFF"
                     :size="28"
-                    style="
-                      position: relative;
-                      z-index: 1;
-                      cursor: pointer;
-                    "
+                    style="position: relative; z-index: 1; cursor: pointer"
                     @click="
                       () => {
-                        click_count = 2;
-                        store_player_audio_info.this_audio_cue_tracks = item.cue_tracks;
-                        handleItemDbClick(item, item.absoluteIndex + '-' + track.TRACK);
+                        click_count = 2
+                        store_player_audio_info.this_audio_cue_tracks = item.cue_tracks
+                        handleItemDbClick(item, item.absoluteIndex + '-' + track.TRACK)
                       }
                     "
                   >
-                    <Play style="margin-left: 25%;margin-top: 25%;"/>
+                    <Play style="margin-left: 25%; margin-top: 25%" />
                   </icon>
                 </div>
                 <div class="songlist_cue_name">
@@ -2896,7 +2895,7 @@ onBeforeUnmount(() => {
   border-radius: 8px; /* iOS-style rounded corners */
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.05); /* Subtle initial shadow */
 }
-.media_cue_info:nth-child(1){
+.media_cue_info:nth-child(1) {
   margin-top: 8px;
 }
 .media_cue_info:hover {

@@ -525,7 +525,7 @@ onMounted(() => {
 .message_playlist_media_info:hover {
   background-color: #ffffff24;
 }
-.message_playlist_media_info:hover .message_playlist_title_playlist{
+.message_playlist_media_info:hover .message_playlist_title_playlist {
   color: var(--primary-color-hover);
 }
 

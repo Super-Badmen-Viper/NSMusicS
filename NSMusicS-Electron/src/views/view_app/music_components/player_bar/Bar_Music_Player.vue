@@ -1190,7 +1190,6 @@ watch(
                 :offset="[-8, 14]"
               >
                 <n-button
-
                   quaternary
                   round
                   size="small"
@@ -1228,7 +1227,6 @@ watch(
               </n-badge>
               <n-button
                 v-else
-
                 quaternary
                 round
                 size="small"
@@ -1275,7 +1273,6 @@ watch(
             :offset="[-8, 14]"
           >
             <n-button
-
               quaternary
               round
               size="small"
@@ -1306,7 +1303,6 @@ watch(
             v-if="
               !store_player_audio_logic.orderToolShow && !store_server_user_model.random_play_model
             "
-
             quaternary
             round
             size="small"
@@ -1334,7 +1330,7 @@ watch(
           </n-button>
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
-              <n-button  quaternary round size="small" @click="play_skip_back_click">
+              <n-button quaternary round size="small" @click="play_skip_back_click">
                 <template #icon>
                   <n-icon :size="26"><PlayBack /></n-icon>
                 </template>
@@ -1344,7 +1340,7 @@ watch(
           </n-tooltip>
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
-              <n-button  quaternary round @click="Init_Audio_Player">
+              <n-button quaternary round @click="Init_Audio_Player">
                 <template #icon>
                   <n-icon v-if="store_player_audio_logic.player.isPlaying" :size="36"
                     ><Pause
@@ -1357,7 +1353,7 @@ watch(
           </n-tooltip>
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
-              <n-button  quaternary round size="small" @click="play_skip_forward_click">
+              <n-button quaternary round size="small" @click="play_skip_forward_click">
                 <template #icon>
                   <n-icon :size="26"><PlayForward /></n-icon>
                 </template>
@@ -1368,7 +1364,6 @@ watch(
           <n-tooltip v-if="store_player_audio_logic.voiceToolShow" trigger="hover" placement="top">
             <template #trigger>
               <n-button
-
                 quaternary
                 round
                 size="small"
@@ -1388,7 +1383,6 @@ watch(
           </n-tooltip>
           <n-button
             v-if="!store_player_audio_logic.voiceToolShow"
-
             quaternary
             round
             size="small"
@@ -1424,7 +1418,12 @@ watch(
             {{ store_player_audio_logic.current_play_time }}
           </n-space>
           <n-slider
-            style="width: 320px; color: var(--primary-color-hover); border-radius: 10px; transition: margin 0.4s"
+            style="
+              width: 320px;
+              color: var(--primary-color-hover);
+              border-radius: 10px;
+              transition: margin 0.4s;
+            "
             v-model:value="store_player_audio_logic.slider_singleValue"
             :min="0"
             :max="100"
@@ -1486,7 +1485,6 @@ watch(
             <n-drawer-content>
               <n-space vertical align="flex-start" style="height: 100px">
                 <n-button
-
                   quaternary
                   @click="
                     () => {
@@ -1510,7 +1508,6 @@ watch(
                   {{ $t('nsmusics.siderbar_player.playback_1') }}
                 </n-button>
                 <n-button
-
                   quaternary
                   @click="
                     () => {
@@ -1534,7 +1531,6 @@ watch(
                   {{ $t('nsmusics.siderbar_player.playback_2') }}
                 </n-button>
                 <n-button
-
                   quaternary
                   @click="
                     () => {
@@ -1558,7 +1554,6 @@ watch(
                   {{ $t('nsmusics.siderbar_player.playback_3') }}
                 </n-button>
                 <n-button
-
                   quaternary
                   @click="
                     () => {
@@ -1598,7 +1593,6 @@ watch(
                     store_server_users.server_select_kind != 'jellyfin' &&
                     store_server_users.server_select_kind != 'emby'
                   "
-
                   quaternary
                   @click="
                     async () => {
@@ -1737,7 +1731,6 @@ watch(
             <n-tooltip trigger="hover" placement="top" v-if="store_player_appearance.player_show">
               <template #trigger>
                 <n-button
-
                   size="tiny"
                   text
                   @click="
@@ -1773,7 +1766,6 @@ watch(
             >
               <template #trigger>
                 <n-button
-
                   size="tiny"
                   text
                   @click="
@@ -1804,7 +1796,6 @@ watch(
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
                 <n-button
-
                   size="tiny"
                   text
                   @click="
@@ -1847,7 +1838,7 @@ watch(
             </n-tooltip>
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
-                <n-button  size="tiny" text @click="Set_Player_Show_Sound_effects">
+                <n-button size="tiny" text @click="Set_Player_Show_Sound_effects">
                   <template #icon>
                     <n-icon
                       :size="
@@ -1867,7 +1858,7 @@ watch(
             </n-tooltip>
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
-                <n-button  size="tiny" text @click="Set_Player_Show_Sound_speed">
+                <n-button size="tiny" text @click="Set_Player_Show_Sound_speed">
                   <template #icon>
                     <n-icon
                       :size="
@@ -1887,7 +1878,7 @@ watch(
             </n-tooltip>
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
-                <n-button  size="tiny" text @click="Set_Player_Show_Sound_more">
+                <n-button size="tiny" text @click="Set_Player_Show_Sound_more">
                   <template #icon>
                     <n-icon
                       :size="
@@ -2071,14 +2062,5 @@ watch(
 }
 .gird_Right .gird_Right_current_playlist_button_area_of_button :hover {
   color: var(--primary-color-hover);
-}
-
-.n-button {
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.n-button:hover {
-  transform: scale(1.1);
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
 }
 </style>

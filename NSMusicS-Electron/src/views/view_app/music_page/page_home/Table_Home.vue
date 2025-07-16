@@ -1242,10 +1242,10 @@ onBeforeUnmount(() => {
 .home-album:hover {
   transform: translateY(-10px);
 }
-.home-album:hover .home-album-name{
+.home-album:hover .home-album-name {
   color: var(--primary-color-hover);
 }
-.home-album:nth-child(1){
+.home-album:nth-child(1) {
   margin-left: 7px;
 }
 
@@ -1414,12 +1414,23 @@ onBeforeUnmount(() => {
   background-color: #88888880;
 }
 
+/*
+ 由于启动默认加载此Home页面，此处用以加载组件动画样式
+ */
 .n-button {
   cursor: pointer;
   transition: all 0.2s ease;
 }
 .n-button:hover {
   transform: scale(1.2);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
+}
+.n-select {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.n-select:hover {
+  transform: scale(1.1);
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
 }
 </style>

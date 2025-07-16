@@ -1600,25 +1600,22 @@ body {
   display: none;
 }
 
-.n-button {
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.n-button:hover {
-  transform: scale(1.2);
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
-}
-
 .n-base-selection .n-base-selection-label .n-base-selection-input .n-base-selection-input__content {
   font-size: 15px;
   font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 .n-statistic .n-statistic__label {
   font-size: 15px;
   font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 .n-statistic .n-statistic-value .n-statistic-value__content {
   font-size: 24px;
   font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 </style>

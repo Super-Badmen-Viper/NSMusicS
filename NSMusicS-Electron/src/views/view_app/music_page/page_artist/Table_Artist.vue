@@ -825,7 +825,7 @@ onBeforeUnmount(() => {
   <n-space vertical :size="12">
     <div class="artist-wall-container">
       <n-space vertical @wheel.prevent style="overflow: hidden; margin-left: 4px">
-        <n-space align="center" style="margin-top: 3px;">
+        <n-space align="center" style="margin-top: 3px">
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle @click="onRefreshSharp">
@@ -1458,10 +1458,10 @@ onBeforeUnmount(() => {
 .artist:hover {
   transform: translateY(-10px);
 }
-.artist:hover .artist-name{
+.artist:hover .artist-name {
   color: var(--primary-color-hover);
 }
-.artist:nth-child(1){
+.artist:nth-child(1) {
   margin-left: 8px;
 }
 

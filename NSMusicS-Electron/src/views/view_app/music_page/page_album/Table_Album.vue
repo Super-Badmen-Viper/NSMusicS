@@ -983,7 +983,7 @@ onBeforeUnmount(() => {
   <n-space vertical :size="12">
     <div class="album-wall-container">
       <n-space vertical @wheel.prevent style="overflow: hidden">
-        <n-space align="center" style="margin-top: 3px;">
+        <n-space align="center" style="margin-top: 3px">
           <n-space>
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
@@ -1450,7 +1450,10 @@ onBeforeUnmount(() => {
                   }"
                   alt=""
                 />
-                <div class="hover-overlay-album" @dblclick="Open_this_album_MediaList_click(item.id)">
+                <div
+                  class="hover-overlay-album"
+                  @dblclick="Open_this_album_MediaList_click(item.id)"
+                >
                   <div class="hover-content-album">
                     <button
                       class="play-this-album-button"
@@ -1715,7 +1718,7 @@ onBeforeUnmount(() => {
 .album:hover {
   transform: translateY(-10px);
 }
-.album:hover .album-name{
+.album:hover .album-name {
   color: var(--primary-color-hover);
 }
 .album:nth-child(1) {
