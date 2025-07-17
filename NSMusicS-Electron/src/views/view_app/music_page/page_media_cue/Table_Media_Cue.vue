@@ -2880,7 +2880,6 @@ onBeforeUnmount(() => {
 }
 .table_media_cue {
   width: calc(100vw - 200px);
-  margin-top: -10px;
 }
 .message_media_cue {
   width: calc(100vw - 230px);

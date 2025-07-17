@@ -2,16 +2,13 @@
     width: 6px;
     height: 8px;
 }
-
 ::-webkit-scrollbar-thumb {
     background-color: #88888850;
     border-radius: 4px;
 }
-
 ::-webkit-scrollbar-track {
     background-color: transparent;
 }
-
 ::-webkit-scrollbar-thumb:hover {
     background-color: #88888880;
 }
@@ -50,12 +47,14 @@
     width: 25px;
     height: 25px;
 }
-
 .Rate.viaSlot {
     cursor: pointer;
     transition: all 0.2s ease;
 }
 .Rate.viaSlot:hover {
-    transform: scale(1.1);
     filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
+}
+
+.vue-recycle-scroller__slot{
+    margin-top: -10px;
 }

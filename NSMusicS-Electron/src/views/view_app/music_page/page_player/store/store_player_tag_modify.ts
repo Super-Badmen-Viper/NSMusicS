@@ -196,33 +196,50 @@ watch(
           if (store_player_tag_modify.player_show_tag_kind === 'media') {
             if (
               store_view_media_page_info.media_File_metadata != undefined &&
-              store_view_media_page_info.media_File_metadata.length > 0
+              store_view_media_page_info.media_File_metadata.length > 0 &&
+              store_player_tag_modify.player_current_media_id.length > 0
             ) {
-              const item: Media_File | undefined =
-                store_view_media_page_info.media_File_metadata.find(
-                  (mediaFile: any) =>
-                    mediaFile.id === store_player_tag_modify.player_current_media_id
-                )
-              const albumArtistsStr = Array.isArray(item.albumArtist)
-                ? item.albumArtists.join('、')
-                : item.albumArtists || ''
-              const artistStr = Array.isArray(item.artist)
-                ? item.artist.join('、')
-                : item.artist || ''
-              const genresStr = Array.isArray(item.genres)
-                ? item.genres.map((genre) => genre.name).join('、')
-                : item.genres || ''
-              store_player_tag_modify.player_current_media_tag = {
-                title: item?.title,
-                albumArtists: albumArtistsStr,
-                artist: artistStr,
-                album: item?.album,
-                year: item?.year,
-                genres: genresStr,
-                duration: store_player_tag_modify.formatTime(item?.duration),
-                isCompilation: item?.compilation,
-
-                songCount: item?.songCount,
+              if (store_server_users.server_select_kind === 'ninesong') {
+                const item: Media_File | undefined =
+                  store_view_media_page_info.media_File_metadata.find(
+                    (mediaFile: any) =>
+                      mediaFile.ID === store_player_tag_modify.player_current_media_id
+                  )
+                store_player_tag_modify.player_current_media_tag = {
+                  title: item?.Title,
+                  albumArtists: item?.AlbumArtist,
+                  artist: item?.Artist,
+                  album: item?.Album,
+                  year: item?.Year,
+                  genres: item?.Genre,
+                  duration: store_player_tag_modify.formatTime(item?.Duration),
+                  isCompilation: item?.Compilation,
+                }
+              } else {
+                const item: Media_File | undefined =
+                  store_view_media_page_info.media_File_metadata.find(
+                    (mediaFile: any) =>
+                      mediaFile.id === store_player_tag_modify.player_current_media_id
+                  )
+                const albumArtistsStr = Array.isArray(item.albumArtist)
+                  ? item.albumArtists.join('、')
+                  : item.albumArtists || ''
+                const artistStr = Array.isArray(item.artist)
+                  ? item.artist.join('、')
+                  : item.artist || ''
+                const genresStr = Array.isArray(item.genres)
+                  ? item.genres.map((genre) => genre.name).join('、')
+                  : item.genres || ''
+                store_player_tag_modify.player_current_media_tag = {
+                  title: item?.title,
+                  albumArtists: albumArtistsStr,
+                  artist: artistStr,
+                  album: item?.album,
+                  year: item?.year,
+                  genres: genresStr,
+                  duration: store_player_tag_modify.formatTime(item?.duration),
+                  isCompilation: item?.compilation,
+                }
               }
               //
               store_player_tag_modify.player_current_media_path = item.path

@@ -2376,7 +2376,7 @@ onBeforeUnmount(() => {
                 </button>
               </div>
               <span
-                class="duration_txt"
+                class="duration_txt_media"
                 style="
                   margin-left: auto;
                   margin-top: 4px;
@@ -2827,7 +2827,6 @@ onBeforeUnmount(() => {
 }
 .table-media {
   width: calc(100vw - 200px);
-  margin-top: -10px;
 }
 .message-media {
   width: calc(100vw - 230px);
@@ -2888,7 +2887,7 @@ onBeforeUnmount(() => {
 .songlist_album {
   margin-left: 10px;
   text-align: left;
-  width: 22vw;
+  width: 20vw;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -2898,8 +2897,7 @@ onBeforeUnmount(() => {
   cursor: pointer;
   color: var(--primary-color-hover);
 }
-.duration_txt {
-  margin-left: 10px;
+.duration_txt_media {
   text-align: left;
   width: 40px;
 }

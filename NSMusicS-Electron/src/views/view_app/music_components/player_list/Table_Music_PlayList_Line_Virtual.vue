@@ -229,7 +229,7 @@ onMounted(() => {
 </script>
 <template>
   <n-space vertical :size="12">
-    <div class="dynamic-scroller-demo">
+    <div class="dynamic-scroller-demo-playlist">
       <v-contextmenu
         v-if="!store_playlist_list_info.playlist_DragSort_Model"
         ref="contextmenu"
@@ -265,7 +265,7 @@ onMounted(() => {
       </v-contextmenu>
       <DynamicScroller
         v-if="!store_playlist_list_info.playlist_DragSort_Model"
-        class="table"
+        class="table-playlist"
         ref="scrollbar"
         :style="{
           width: store_app_configs_info.window_state_miniplayer_playlist ? '280px' : '488px',
@@ -393,7 +393,7 @@ onMounted(() => {
           <div></div>
         </n-space>
         <VueDraggable
-          class="table"
+          class="table-playlist"
           :animation="150"
           :style="{
             width: store_app_configs_info.window_state_miniplayer_playlist ? '250px' : '460px',
@@ -491,7 +491,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.dynamic-scroller-demo {
+.dynamic-scroller-demo-playlist {
   overflow: auto;
   display: flex;
   flex-direction: column;
@@ -507,13 +507,16 @@ onMounted(() => {
   --scrollbar-color: v-bind('themeVars.scrollbarColor');
   --scrollbar-color-hover: v-bind('themeVars.scrollbarColorHover');
 }
-.table {
+.table-playlist {
   height: calc(100vh - 212px);
-  margin-top: 5px;
 }
 .message_playlist {
   display: flex;
   align-items: left;
+  height: 73px;
+}
+.message_playlist:nth-child(1) {
+  margin-top: 10px;
 }
 .message_playlist_media_info {
   display: flex;

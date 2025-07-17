@@ -1701,7 +1701,6 @@ onBeforeUnmount(() => {
 .album-wall {
   overflow-y: auto;
   width: calc(100vw - 200px);
-  margin-top: -10px;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
