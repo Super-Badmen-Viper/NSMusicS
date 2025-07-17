@@ -501,7 +501,7 @@ onMounted(() => {
     </n-modal>
   </div>
 </template>
-<style scoped>
+<style>
 .view {
   height: calc(100vh - 160px);
   overflow-y: auto;

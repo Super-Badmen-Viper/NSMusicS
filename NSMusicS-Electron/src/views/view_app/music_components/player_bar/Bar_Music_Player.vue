@@ -1094,7 +1094,6 @@ watch(
               <img
                 class="back_svg"
                 :src="getAssetImage(store_player_audio_logic.player_back_ChevronDouble)"
-                :style="{ display: back_display }"
                 @click="click_back_svg"
                 @mouseover="hover_back_img"
                 @mouseout="leave_back_svg"
@@ -1954,13 +1953,20 @@ watch(
   float: left;
 }
 .gird_Left .button_open_player_view .back_svg {
-  width: 45px;
-  height: 45px;
+  width: 60px;
+  height: 60px;
+  padding: 10px;
   border-radius: 10px;
-  margin-left: 7.5px;
-  margin-top: 7.5px;
   position: absolute;
   z-index: 1;
+  opacity: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.gird_Left .button_open_player_view .back_svg:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
 }
 .gird_Left .button_open_player_view .back_img {
   width: 60px;

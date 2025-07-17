@@ -2972,22 +2972,6 @@ onBeforeUnmount(() => {
   border-radius: 4px;
 }
 
-.RateCustom.viaSlot .icon {
-  width: 25px;
-  height: 25px;
-  margin: 0;
-}
-.Rate.viaSlot .Rate__star {
-  width: 25px;
-  height: 25px;
-}
-.Rate.viaSlot .Rate__star:nth-child(8).filled {
-  color: red;
-}
-.Rate.viaSlot .Rate__star:nth-child(8).hover {
-  color: red;
-}
-
 .play-this-home-album-button,
 .open-this-home-artist-button,
 .love-this-home-album-button {

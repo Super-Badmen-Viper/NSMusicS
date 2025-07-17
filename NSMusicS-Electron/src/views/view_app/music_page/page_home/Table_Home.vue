@@ -1366,22 +1366,6 @@ onBeforeUnmount(() => {
   font-weight: 600;
 }
 
-.RateCustom.viaSlot .icon {
-  width: 15px;
-  height: 25px;
-  margin: 0;
-}
-
-.Rate.viaSlot .Rate__star {
-  width: 25px;
-  height: 25px;
-}
-
-.Rate.viaSlot .Rate__star:nth-child(8).filled,
-.Rate.viaSlot .Rate__star:nth-child(8).hover {
-  color: red;
-}
-
 .context-menu {
   z-index: 999;
 }
@@ -1396,41 +1380,4 @@ onBeforeUnmount(() => {
   background-color: transparent;
 }
 
-::-webkit-scrollbar {
-  width: 6px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #88888850;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-track {
-  background-color: transparent;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: #88888880;
-}
-
-/*
- 由于启动默认加载此Home页面，此处用以加载组件动画样式
- */
-.n-button {
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.n-button:hover {
-  transform: scale(1.2);
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
-}
-.n-select {
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.n-select:hover {
-  transform: scale(1.1);
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
-}
 </style>

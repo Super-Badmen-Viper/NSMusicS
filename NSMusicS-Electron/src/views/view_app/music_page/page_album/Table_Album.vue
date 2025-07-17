@@ -1852,22 +1852,6 @@ onBeforeUnmount(() => {
   color: var(--primary-color-hover);
 }
 
-.RateCustom.viaSlot .icon {
-  width: 15px;
-  height: 25px;
-  margin: 0;
-}
-
-.Rate.viaSlot .Rate__star {
-  width: 25px;
-  height: 25px;
-}
-
-.Rate.viaSlot .Rate__star:nth-child(8).filled,
-.Rate.viaSlot .Rate__star:nth-child(8).hover {
-  color: red;
-}
-
 .v-contextmenu-item {
   margin-top: 5px;
   margin-bottom: 5px;
