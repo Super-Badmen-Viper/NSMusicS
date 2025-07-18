@@ -314,9 +314,14 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     year: string,
     playlist_id: string,
     _album_id: string,
-    _artist_id: string
+    _artist_id: string,
+    suffix: string,
+    min_bitrate: int,
+    max_bitrate: int,
+    folder_path: string
   ) {
     url = url.includes('api') ? url : url + '/api'
+    folder_path = folder_path.replace(/\//g, '\\')
     let song_list = []
     let totalCount = 0
     if (playlist_id === '') {
@@ -330,7 +335,11 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
           _search,
           year,
           _album_id,
-          _artist_id
+          _artist_id,
+          suffix,
+          min_bitrate.toString(),
+          max_bitrate.toString(),
+          folder_path
         )
         song_list = data['ninesong-response']['mediaFiles']
         totalCount = data['ninesong-response']['count']
@@ -343,7 +352,11 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
           _search,
           year,
           _album_id,
-          _artist_id
+          _artist_id,
+          suffix,
+          min_bitrate.toString(),
+          max_bitrate.toString(),
+          folder_path
         )
         song_list = data['ninesong-response']['mediaFiles']
         totalCount = data['ninesong-response']['count']
@@ -360,7 +373,11 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
           _search,
           year,
           _album_id,
-          _artist_id
+          _artist_id,
+          suffix,
+          min_bitrate.toString(),
+          max_bitrate.toString(),
+          folder_path
         )
         song_list = data['ninesong-response']['mediaFiles']
         totalCount = data['ninesong-response']['count']
@@ -374,7 +391,11 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
           _search,
           year,
           _album_id,
-          _artist_id
+          _artist_id,
+          suffix,
+          min_bitrate.toString(),
+          max_bitrate.toString(),
+          folder_path
         )
         song_list = data['ninesong-response']['mediaFiles']
         totalCount = data['ninesong-response']['count']

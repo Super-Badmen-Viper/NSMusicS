@@ -1539,6 +1539,7 @@ async function Set_ReadLocalMusicInfo_Add_LocalSqlite(directoryPath: any[]) {
         const disc_subtitle = taglibFile.tag.subtitle || ''
         const lyrics = taglibFile.tag.lyrics || ''
         const channels = taglibFile.properties.audioChannels || ''
+        const suffix = taglibFile.tag.suffix || ''
         /// import
         try {
           /// artist
@@ -1624,7 +1625,7 @@ async function Set_ReadLocalMusicInfo_Add_LocalSqlite(directoryPath: any[]) {
             disc_number: disc_number,
             year: year,
             size: size,
-            suffix: '',
+            suffix: suffix,
             duration: duration,
             bit_rate: bit_rate,
             genre: genre,

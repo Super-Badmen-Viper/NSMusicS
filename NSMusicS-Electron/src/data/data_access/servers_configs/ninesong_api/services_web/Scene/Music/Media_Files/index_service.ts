@@ -10,7 +10,11 @@ export class Medias_ApiService_of_NineSong extends NineSong_Api_Services_Web {
     search: string,
     year: string,
     album_id: string,
-    artist_id: string
+    artist_id: string,
+    suffix: string,
+    min_bitrate: string,
+    max_bitrate: string,
+    folder_path: string
   ): Promise<any> {
     return this.sendRequest('GET', 'medias', {
       start,
@@ -22,6 +26,10 @@ export class Medias_ApiService_of_NineSong extends NineSong_Api_Services_Web {
       year,
       album_id,
       artist_id,
+      suffix,
+      min_bitrate,
+      max_bitrate,
+      folder_path,
     })
   }
   public async getMedia_Ids(ids: string): Promise<any> {
@@ -37,7 +45,11 @@ export class Medias_ApiService_of_NineSong extends NineSong_Api_Services_Web {
     search: string,
     year: string,
     album_id: string,
-    artist_id: string
+    artist_id: string,
+    suffix: string,
+    min_bitrate: string,
+    max_bitrate: string,
+    folder_path: string
   ): Promise<any> {
     const params: Record<string, string | string[]> = {
       start,
@@ -47,6 +59,10 @@ export class Medias_ApiService_of_NineSong extends NineSong_Api_Services_Web {
       year,
       album_id,
       artist_id,
+      suffix,
+      min_bitrate,
+      max_bitrate,
+      folder_path,
     }
     return this.sendRequest('GET', 'medias/sort', params, undefined, multi_sorts)
   }
@@ -75,7 +91,11 @@ export class Medias_ApiService_of_NineSong extends NineSong_Api_Services_Web {
     search: string,
     year: string,
     album_id: string,
-    artist_id: string
+    artist_id: string,
+    suffix: string,
+    min_bitrate: string,
+    max_bitrate: string,
+    folder_path: string
   ): Promise<any> {
     return this.sendRequest('GET', 'playlists/tracks', {
       playlistId,
@@ -88,6 +108,10 @@ export class Medias_ApiService_of_NineSong extends NineSong_Api_Services_Web {
       year,
       album_id,
       artist_id,
+      suffix,
+      min_bitrate,
+      max_bitrate,
+      folder_path,
     })
   }
   public async getMedias_PlaylistSort(
@@ -99,7 +123,11 @@ export class Medias_ApiService_of_NineSong extends NineSong_Api_Services_Web {
     search: string,
     year: string,
     album_id: string,
-    artist_id: string
+    artist_id: string,
+    suffix: string,
+    min_bitrate: string,
+    max_bitrate: string,
+    folder_path: string
   ): Promise<any> {
     const params: Record<string, string | string[]> = {
       playlistId,
@@ -111,6 +139,10 @@ export class Medias_ApiService_of_NineSong extends NineSong_Api_Services_Web {
       year,
       album_id,
       artist_id,
+      suffix,
+      min_bitrate,
+      max_bitrate,
+      folder_path,
     }
     return this.sendRequest('GET', 'playlists/tracks/sort', params, undefined, multi_sorts)
   }

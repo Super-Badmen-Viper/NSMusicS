@@ -1371,4 +1371,8 @@ import { store_view_media_page_logic } from '@/views/view_app/music_page/page_me
   </n-space>
 </template>
 
-<style scoped></style>
+<style scoped>
+.server_item_info:nth-child(1) {
+  margin-top: 10px;
+}
+</style>

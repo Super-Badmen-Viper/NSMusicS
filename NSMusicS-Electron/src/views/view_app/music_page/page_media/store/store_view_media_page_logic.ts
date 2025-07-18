@@ -30,6 +30,9 @@ export const store_view_media_page_logic = reactive({
   page_songlists_get_keyword_model_num: 0,
   page_songlists_options_Sort_key: [],
   page_songlists_multi_sort: '',
+  page_songlists_library_path: '',
+  page_songlists_suffix: '',
+  page_songlists_bitrate_range: [0, 0],
 
   page_songlists_filter_model: false,
   page_songlists_filter_year: 0,

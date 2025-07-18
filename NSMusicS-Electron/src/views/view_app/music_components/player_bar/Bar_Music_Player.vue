@@ -1690,9 +1690,13 @@ watch(
           class="gird_Right_button_area"
           style="margin-top: 16px"
           :style="{
-            width: store_player_appearance.player_show ?
-              store_server_users.server_select_kind === 'ninesong' ? '132px' : '160px' :
-              store_server_users.server_select_kind === 'ninesong' ? '100px' : '132px',
+            width: store_player_appearance.player_show
+              ? store_server_users.server_select_kind === 'ninesong'
+                ? '132px'
+                : '160px'
+              : store_server_users.server_select_kind === 'ninesong'
+                ? '100px'
+                : '132px',
           }"
         >
           <n-space

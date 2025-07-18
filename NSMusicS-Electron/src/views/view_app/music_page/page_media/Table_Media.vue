@@ -801,6 +801,7 @@ import { store_general_model_player_list } from '@/data/data_stores/server/serve
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_access/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 import { debounce } from 'lodash'
+import { Folder_Entity_ApiService_of_NineSong } from '@/data/data_access/servers_configs/ninesong_api/services_web/Folder_Entity/index_service'
 
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
@@ -1481,6 +1482,77 @@ const stopWatching_boolHandleItemClick_Played = watch(
   { immediate: true }
 )
 
+///
+const browseFolderOptions = ref([])
+const audioSuffixOptions = ref([
+  {
+    label: 'mp3',
+    value: 'mp3',
+  },
+  {
+    label: 'wav',
+    value: 'wav',
+  },
+  {
+    label: 'flac',
+    value: 'flac',
+  },
+  {
+    label: 'aac',
+    value: 'aac',
+  },
+  {
+    label: 'ogg',
+    value: 'ogg',
+  },
+  {
+    label: 'm4a',
+    value: 'm4a',
+  },
+  {
+    label: 'wma',
+    value: 'wma',
+  },
+  {
+    label: 'ape',
+    value: 'ape',
+  },
+  {
+    label: 'opus',
+    value: 'opus',
+  },
+  {
+    label: 'dsd',
+    value: 'dsd',
+  },
+  {
+    label: 'dff',
+    value: 'dff',
+  },
+  {
+    label: 'aiff',
+    value: 'aiff',
+  },
+])
+let folder_Entity_ApiService_of_NineSong = new Folder_Entity_ApiService_of_NineSong(
+  store_server_login_info.server_url
+)
+onMounted(async () => {
+  if (store_server_users.server_select_kind === 'ninesong') {
+    store_server_users.server_all_library =
+      await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
+    browseFolderOptions.value = store_server_users.server_all_library.map((item: any) => ({
+      label: item.name,
+      value: item.folderPath,
+    }))
+    ///
+    store_view_media_page_logic.page_songlists_bitrate_range = [0, 0]
+  }
+})
+async function filter_media_folder_path() {
+  await store_general_fetch_media_list.fetchData_Media()
+}
+
 ////// view songlist_view Remove data
 onBeforeUnmount(() => {
   stopWatching_boolHandleItemClick_Favorite()
@@ -1560,11 +1632,16 @@ onBeforeUnmount(() => {
               </n-input-group>
             </template>
             {{
-              $t('setting.hotkey_localSearch') + ' : (' +
-              $t('LabelTitle') + ' / ' +
-              $t('LabelAlbum') + ' / ' +
-              $t('LabelArtists') + ')->' +
-              $t('nsmusics.view_page.pinyin') + ' | ' +
+              $t('setting.hotkey_localSearch') +
+              ' : (' +
+              $t('LabelTitle') +
+              ' / ' +
+              $t('LabelAlbum') +
+              ' / ' +
+              $t('LabelArtists') +
+              ')->' +
+              $t('nsmusics.view_page.pinyin') +
+              ' | ' +
               $t('Lyrics')
             }}
           </n-tooltip>
@@ -1740,37 +1817,137 @@ onBeforeUnmount(() => {
                       </n-button>
                     </n-space>
                   </n-space>
-                  <n-space vertical>
-                    <span style="font-size: 14px; font-weight: 600">{{
-                      $t('entity.genre_other')
-                    }}</span>
-                    <n-input
-                      disabled
-                      clearable
-                      placeholder="Not open || 未开放"
-                      style="width: 200px"
-                      v-model:value="playlist_set_of_addPlaylist_of_playlistname"
-                    />
-                  </n-space>
-                  <n-space vertical v-if="!store_server_user_model.model_server_type_of_web">
+                  <n-space
+                    vertical
+                    v-if="
+                      !store_server_user_model.model_server_type_of_web ||
+                      (store_server_user_model.model_server_type_of_web &&
+                        store_server_users.server_select_kind === 'ninesong')
+                    "
+                  >
                     <span style="font-size: 14px; font-weight: 600">{{
                       $t('HeaderLibraries')
                     }}</span>
                     <n-space vertical>
                       <n-select
-                        :value="store_view_media_page_logic.page_songlists_filter_path_folder"
-                        :options="store_local_db_info.local_config_of_all_user_of_select"
+                        v-model:value="store_view_media_page_logic.page_songlists_library_path"
+                        :options="browseFolderOptions"
+                        placement="bottom"
                         style="width: 200px"
-                        @update:value="
-                          (value: any) => {
-                            store_view_media_page_logic.page_songlists_filter_path_folder = value
-                          }
-                        "
+                        @update:value="filter_media_folder_path"
                       />
                       <n-button
                         strong
                         secondary
-                        @click="store_view_media_page_logic.page_songlists_filter_path_folder = ''"
+                        @click="
+                          () => {
+                            store_view_media_page_logic.page_songlists_library_path = ''
+                            filter_media_folder_path()
+                          }
+                        "
+                      >
+                        {{ $t('common.clear') }}
+                      </n-button>
+                    </n-space>
+                  </n-space>
+                  <n-space
+                    vertical
+                    v-if="
+                      !store_server_user_model.model_server_type_of_web ||
+                      (store_server_user_model.model_server_type_of_web &&
+                        store_server_users.server_select_kind === 'ninesong')
+                    "
+                  >
+                    <span style="font-size: 14px; font-weight: 600">{{
+                      $t('Audio') + $t('LabelFormat')
+                    }}</span>
+                    <n-space vertical>
+                      <n-select
+                        v-model:value="store_view_media_page_logic.page_songlists_suffix"
+                        :options="audioSuffixOptions"
+                        placement="bottom"
+                        style="width: 200px"
+                        @update:value="filter_media_folder_path"
+                      />
+                      <n-button
+                        strong
+                        secondary
+                        @click="
+                          () => {
+                            store_view_media_page_logic.page_songlists_suffix = ''
+                            filter_media_folder_path()
+                          }
+                        "
+                      >
+                        {{ $t('common.clear') }}
+                      </n-button>
+                    </n-space>
+                  </n-space>
+                </n-space>
+                <n-space justify="space-between">
+                  <n-space
+                    vertical
+                    v-if="
+                      !store_server_user_model.model_server_type_of_web ||
+                      (store_server_user_model.model_server_type_of_web &&
+                        store_server_users.server_select_kind === 'ninesong')
+                    "
+                  >
+                    <span style="font-size: 14px; font-weight: 600">{{
+                      $t('nsmusics.view_page.option_min') + $t('common.bitrate')
+                    }}</span>
+                    <n-space vertical>
+                      <n-input-number
+                        v-model:value="store_view_media_page_logic.page_songlists_bitrate_range[0]"
+                        :step="100"
+                        clearable
+                        placeholder=""
+                        style="width: 200px"
+                        @update:value="filter_media_folder_path"
+                      />
+                      <n-button
+                        strong
+                        secondary
+                        @click="
+                          () => {
+                            store_view_media_page_logic.page_songlists_bitrate_range[0] = 0
+                            filter_media_folder_path()
+                          }
+                        "
+                      >
+                        {{ $t('common.clear') }}
+                      </n-button>
+                    </n-space>
+                  </n-space>
+                  <n-space
+                    vertical
+                    v-if="
+                      !store_server_user_model.model_server_type_of_web ||
+                      (store_server_user_model.model_server_type_of_web &&
+                        store_server_users.server_select_kind === 'ninesong')
+                    "
+                  >
+                    <span style="font-size: 14px; font-weight: 600">{{
+                      $t('OptionMax') + $t('common.bitrate')
+                    }}</span>
+                    <n-space vertical>
+                      <n-input-number
+                        v-model:value="store_view_media_page_logic.page_songlists_bitrate_range[1]"
+                        :step="1000"
+                        clearable
+                        placeholder=""
+                        style="width: 200px"
+                        @update:value="filter_media_folder_path"
+                      />
+                      <n-button
+                        strong
+                        secondary
+                        @click="
+                          () => {
+                            store_view_media_page_logic.page_songlists_bitrate_range[1] = 0
+                            filter_media_folder_path()
+                          }
+                        "
                       >
                         {{ $t('common.clear') }}
                       </n-button>
@@ -2376,14 +2553,37 @@ onBeforeUnmount(() => {
                 </button>
               </div>
               <span
-                class="duration_txt_media"
+                v-if="
+                  store_server_user_model.model_server_type_of_web &&
+                  (store_server_users.server_select_kind === 'ninesong' ||
+                    store_server_users.server_select_kind === 'navidrome')
+                "
                 style="
+                  width: 100px;
                   margin-left: auto;
                   margin-top: 4px;
                   margin-right: 0;
                   text-align: left;
                   font-size: 14px;
                   font-weight: 600;
+                  overflow: hidden;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
+                "
+                @click="click_count = 0"
+              >
+                {{ item.suffix + ':' + item.bit_rate }}
+              </span>
+              <span
+                style="
+                  width: 50px;
+                  margin-left: auto;
+                  margin-top: 4px;
+                  font-size: 14px;
+                  font-weight: 600;
+                  overflow: hidden;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
                 "
                 @click="click_count = 0"
               >
@@ -2872,7 +3072,7 @@ onBeforeUnmount(() => {
 .songlist_name {
   margin-left: 10px;
   text-align: left;
-  width: 34vw;
+  width: 26vw;
   font-size: 15px;
   overflow: hidden;
   white-space: nowrap;
@@ -2887,7 +3087,7 @@ onBeforeUnmount(() => {
 .songlist_album {
   margin-left: 10px;
   text-align: left;
-  width: 20vw;
+  width: 16vw;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -2896,10 +3096,6 @@ onBeforeUnmount(() => {
   text-decoration: underline;
   cursor: pointer;
   color: var(--primary-color-hover);
-}
-.duration_txt_media {
-  text-align: left;
-  width: 40px;
 }
 .songlist_more:hover {
   color: var(--primary-color-hover);

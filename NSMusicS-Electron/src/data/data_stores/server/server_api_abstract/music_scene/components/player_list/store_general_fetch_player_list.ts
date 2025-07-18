@@ -7,7 +7,7 @@ import { store_view_media_cue_page_info } from '@/views/view_app/music_page/page
 
 export const store_general_fetch_player_list = reactive({
   async fetchData_PlayList(cue_model: boolean) {
-    store_playlist_list_info.playlist_MediaFiles_temporary = [];
+    store_playlist_list_info.playlist_MediaFiles_temporary = []
     if (!cue_model) {
       store_playlist_list_info.playlist_MediaFiles_temporary =
         store_view_media_page_info.media_Files_temporary.map((row: any) => {

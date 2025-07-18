@@ -1379,5 +1379,4 @@ onBeforeUnmount(() => {
   color: var(--primary-color-hover);
   background-color: transparent;
 }
-
 </style>

@@ -754,7 +754,11 @@ export const store_general_fetch_media_list = reactive({
               : '',
             playlist_id,
             _album_id,
-            _artist_id
+            _artist_id,
+            store_view_media_page_logic.page_songlists_suffix,
+            store_view_media_page_logic.page_songlists_bitrate_range[0],
+            store_view_media_page_logic.page_songlists_bitrate_range[1],
+            store_view_media_page_logic.page_songlists_library_path
           )
         }
       }

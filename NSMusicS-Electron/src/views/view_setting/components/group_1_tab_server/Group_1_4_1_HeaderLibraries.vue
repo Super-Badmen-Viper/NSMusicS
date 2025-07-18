@@ -461,7 +461,7 @@ const refreshModeOptions = ref([
         </n-slider>
       </n-space>
       <DynamicScroller
-        class="table"
+        class="table-library"
         ref="scrollbar"
         :style="{
           width: 'calc(100vw - ' + (collapsed_width + 320) + 'px)',
@@ -691,9 +691,6 @@ const refreshModeOptions = ref([
                 <template #default>
                   <n-list-item
                     style="height: 40px"
-                    :style="{
-                      textAlign: store_player_appearance.player_collapsed_album ? 'center' : 'left',
-                    }"
                     v-for="(item, index) in browseFolderOptions"
                     @click="find_server_folder_path(item.value)"
                   >
@@ -719,10 +716,19 @@ const refreshModeOptions = ref([
   </n-space>
 </template>
 <style scoped>
+.table-library {
+  height: calc(100vh - 160px);
+  overflow: auto;
+}
+
 .library_info {
   font-size: 14px;
 }
 .library_info:hover {
   background-color: #f0f0f090;
+}
+
+.server_item_info:nth-child(1) {
+  margin-top: 10px;
 }
 </style>

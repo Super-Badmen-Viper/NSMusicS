@@ -234,7 +234,8 @@ export const store_player_audio_logic = reactive({
       await store_player_audio_info.set_lyric(media_file.lyrics)
     }
     //
-    const index_num = typeof index === 'number' ? index : index != undefined ? index.split('-')[1] : 0
+    const index_num =
+      typeof index === 'number' ? index : index != undefined ? index.split('-')[1] : 0
     // cue
     if (index_num === undefined || media_file.cue_tracks === undefined) {
       store_player_audio_info.this_audio_cue_track_current_no = 0
@@ -252,7 +253,8 @@ export const store_player_audio_logic = reactive({
     store_player_audio_info.this_audio_file_path = media_file.path ?? ''
     store_player_audio_info.this_audio_song_encoding_format = media_file.encoding_format ?? ''
     store_player_audio_info.this_audio_song_suffix = media_file.suffix ?? ''
-    store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url ?? error_album
+    store_player_audio_info.this_audio_file_medium_image_url =
+      media_file.medium_image_url ?? error_album
     store_player_audio_info.this_audio_artist_name = media_file.artist ?? ''
     store_player_audio_info.this_audio_artist_id = media_file.artist_id ?? ''
     store_player_audio_info.this_audio_song_name = media_file.title ?? ''

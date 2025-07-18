@@ -85,7 +85,9 @@
       "row_level_view": "行级视图",
       "intra_row_block_level_view": "行内块级视图",
       "recommend": "推荐",
-      "pinyin": "中文拼音"
+      "pinyin": "中文拼音",
+      "option_min": "最小",
+      "range": "范围"
     },
     "view_player": {
       "view_seting": {
