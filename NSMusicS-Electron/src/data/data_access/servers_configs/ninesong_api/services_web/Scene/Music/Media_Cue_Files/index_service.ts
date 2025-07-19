@@ -41,18 +41,8 @@ export class MediaCues_ApiService_of_NineSong extends NineSong_Api_Services_Web 
     }
     return this.sendRequest('GET', 'cues/sort', params, undefined, multi_sorts)
   }
-  public async getMediaCuesCounts(
-    starred: string,
-    search: string,
-    year: string,
-    artist_id: string
-  ): Promise<any> {
-    return this.sendRequest('GET', 'cues/filter_counts', {
-      starred,
-      search,
-      year,
-      artist_id,
-    })
+  public async getMediaCuesCounts(): Promise<any> {
+    return this.sendRequest('GET', 'cues/filter_counts')
   }
   public async getMediaCues_Playlist(
     playlistId: string,

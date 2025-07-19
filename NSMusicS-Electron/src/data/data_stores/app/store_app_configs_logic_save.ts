@@ -356,6 +356,9 @@ export const store_app_configs_logic_save = reactive({
         'cue_count',
         'guest_cue_count',
         'encoding_format',
+        'cue_tracks',
+        'cue_track_count',
+        'cue_track_show',
       ])
       const data = store_playlist_list_info.playlist_MediaFiles_temporary
         .filter((item) => item.id && !excludedFields.has('id'))

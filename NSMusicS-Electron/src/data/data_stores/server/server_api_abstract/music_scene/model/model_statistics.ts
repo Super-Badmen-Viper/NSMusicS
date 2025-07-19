@@ -190,9 +190,10 @@ export const store_server_model_statistics = reactive({
       } else if (store_server_user_model.model_server_type_of_web) {
         if (store_server_users.server_select_kind === 'ninesong') {
           const get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
-          await get_NineSong_Temp_Data_To_LocalSqlite.get_count_of_media_file('', '', '', '', '')
-          await get_NineSong_Temp_Data_To_LocalSqlite.get_count_of_album('', '', '', '', '')
-          await get_NineSong_Temp_Data_To_LocalSqlite.get_count_of_artist('', '')
+          await get_NineSong_Temp_Data_To_LocalSqlite.get_count_of_media_file()
+          await get_NineSong_Temp_Data_To_LocalSqlite.get_count_of_album()
+          await get_NineSong_Temp_Data_To_LocalSqlite.get_count_of_artist()
+          await get_NineSong_Temp_Data_To_LocalSqlite.get_count_of_media_cue_file()
           await get_NineSong_Temp_Data_To_LocalSqlite.get_count_of_playlist()
         } else if (store_server_users.server_select_kind === 'navidrome') {
           const get_Navidrome_Temp_Data_To_LocalSqlite =

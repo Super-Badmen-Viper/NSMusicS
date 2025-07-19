@@ -387,10 +387,10 @@ const refreshModeOptions = ref([
     label: computed(() => t('SearchForMissingMetadata')),
     value: 1,
   },
-  {
-    label: computed(() => t('ReplaceAllMetadata')),
-    value: 2,
-  },
+  // {
+  //   label: computed(() => t('ReplaceAllMetadata')),
+  //   value: 2,
+  // },
 ])
 </script>
 <template>
@@ -399,7 +399,7 @@ const refreshModeOptions = ref([
       {{ $t('HeaderLibraries') }} >
     </div>
     <n-space vertical>
-      <n-space justify="start" align="center">
+      <n-space vertical justify="start">
         <n-button
           icon-placement="left"
           secondary
@@ -446,12 +446,12 @@ const refreshModeOptions = ref([
               <ArrowReset24Filled />
             </NIcon>
           </template>
-          {{ $t('ButtonScanAllLibraries') }}
+          {{ $t('ButtonScanAllLibraries') + ' : ' + $t('ReplaceAllMetadata') }}
         </n-button>
         <!--  -->
         <n-slider
           v-if="progressBarShow"
-          style="width: 200px; --n-rail-height: 16px"
+          style="width: 200px; --n-rail-height: 16px;margin-left: 1px;"
           :value="progressBar"
           :format-tooltip="formatTooltip"
         >

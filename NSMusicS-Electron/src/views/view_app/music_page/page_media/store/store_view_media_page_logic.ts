@@ -250,16 +250,6 @@ watch(
   }
 )
 watch(
-  () => store_view_media_page_logic.page_songlists_filter_year,
-  async (newValue) => {
-    store_view_media_page_logic.page_songlists_filter_model = newValue !== 0
-    await store_app_configs_logic_save.save_system_config_of_App_Configs()
-    store_view_media_page_logic.page_songlists_keywordFilter = ''
-    store_view_media_page_logic.list_selected_Hand_click = false
-    await store_general_fetch_media_list.fetchData_Media()
-  }
-)
-watch(
   () => store_view_media_page_logic.page_songlists_filter_path_folder,
   async (newValue) => {
     store_view_media_page_logic.page_songlists_filter_model = newValue !== ''

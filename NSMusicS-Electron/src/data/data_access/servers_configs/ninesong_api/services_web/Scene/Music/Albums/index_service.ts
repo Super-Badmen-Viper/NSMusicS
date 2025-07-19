@@ -45,19 +45,7 @@ export class Albums_ApiService_of_NineSong extends NineSong_Api_Services_Web {
     }
     return this.sendRequest('GET', 'albums/sort', params, undefined, multi_sorts)
   }
-  public async getAlbumCounts(
-    starred: string,
-    search: string,
-    min_year: string,
-    max_year: string,
-    artist_id: string
-  ): Promise<any> {
-    return this.sendRequest('GET', 'albums/filter_counts', {
-      starred,
-      search,
-      min_year,
-      max_year,
-      artist_id,
-    })
+  public async getAlbumCounts(): Promise<any> {
+    return this.sendRequest('GET', 'albums/filter_counts')
   }
 }

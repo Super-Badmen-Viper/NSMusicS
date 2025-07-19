@@ -26,6 +26,9 @@ export const store_player_audio_info = reactive({
 
   this_audio_cue_track_current_no: 0,
   this_audio_cue_track_current_indexes: [],
+  this_audio_cue_track_current_title: '',
+  this_audio_cue_track_current_album: '',
+  this_audio_cue_track_current_artist: '',
   this_audio_cue_tracks: [],
 
   this_audio_artist_name: '',

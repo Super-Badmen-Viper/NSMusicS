@@ -1545,11 +1545,25 @@ onMounted(async () => {
       label: item.name,
       value: item.folderPath,
     }))
-    ///
-    store_view_media_page_logic.page_songlists_bitrate_range = [0, 0]
   }
+  ///
+  store_view_media_page_logic.page_songlists_filter_year = 0;
+  store_view_media_page_logic.page_songlists_bitrate_range = [0, 0]
+  store_view_media_page_logic.page_songlists_library_path = ''
+  store_view_media_page_logic.page_songlists_suffix = ''
+  store_view_media_page_logic.page_songlists_filter_model = false;
 })
 async function filter_media_folder_path() {
+  store_view_media_page_logic.page_songlists_keywordFilter = ''
+  store_view_media_page_logic.list_selected_Hand_click = false
+  //
+  store_view_media_page_logic.page_songlists_filter_model =
+    store_view_media_page_logic.page_songlists_filter_year != 0 ||
+    store_view_media_page_logic.page_songlists_bitrate_range[0] != 0 ||
+    store_view_media_page_logic.page_songlists_bitrate_range[1] != 0 ||
+    store_view_media_page_logic.page_songlists_library_path.length > 0 ||
+    store_view_media_page_logic.page_songlists_suffix.length > 0;
+  //
   await store_general_fetch_media_list.fetchData_Media()
 }
 
@@ -1685,9 +1699,10 @@ onBeforeUnmount(() => {
                 v-if="store_view_media_page_logic.page_songlists_multi_sort.length > 0"
                 dot
                 value="1"
-                :offset="[-18, 5]"
+                :offset="[-18, 3]"
               >
-                <n-button quaternary circle style="rotate: 90deg" @click="Type_Multi_Sort = true">
+                <n-button quaternary circle style="rotate: 90deg"
+                          @click="Type_Multi_Sort = true">
                   <template #icon>
                     <n-icon :size="20" :depth="2"><MultipleStopOutlined /></n-icon>
                   </template>
@@ -1775,11 +1790,12 @@ onBeforeUnmount(() => {
             </n-card>
           </n-modal>
 
-          <n-tooltip trigger="hover" placement="top">
+          <n-tooltip trigger="hover" placement="top" >
             <template #trigger>
               <n-badge
-                :value="store_view_media_page_logic.page_songlists_filter_year"
-                :offset="[22, 17]"
+                v-if="store_view_media_page_logic.page_songlists_filter_model"
+                :offset="[-17, 3]" dot
+                style="margin-left: -10px;margin-right: -10px;"
               >
                 <n-button quaternary circle @click="Type_Filter_Show = true">
                   <template #icon>
@@ -1787,6 +1803,13 @@ onBeforeUnmount(() => {
                   </template>
                 </n-button>
               </n-badge>
+              <n-button v-else quaternary circle
+                        style="margin-left: -10px;margin-right: -10px;"
+                        @click="Type_Filter_Show = true">
+                <template #icon>
+                  <n-icon :size="20"><Filter20Filled /></n-icon>
+                </template>
+              </n-button>
             </template>
             {{ $t('Filters') }}
           </n-tooltip>
@@ -1807,11 +1830,15 @@ onBeforeUnmount(() => {
                         placeholder=""
                         style="width: 200px"
                         v-model:value="store_view_media_page_logic.page_songlists_filter_year"
+                        @update:value="filter_media_folder_path"
                       />
                       <n-button
                         strong
                         secondary
-                        @click="store_view_media_page_logic.page_songlists_filter_year = 0"
+                        @click="()=>{
+                          store_view_media_page_logic.page_songlists_filter_year = 0;
+                          filter_media_folder_path();
+                        }"
                       >
                         {{ $t('common.clear') }}
                       </n-button>
@@ -2227,7 +2254,7 @@ onBeforeUnmount(() => {
               style="
                 position: absolute;
                 z-index: 0;
-                height: 298px;
+                height: 283px;
                 border-radius: 10px;
                 overflow: hidden;
                 background-size: cover;
@@ -2262,7 +2289,6 @@ onBeforeUnmount(() => {
                 height: 300px;
                 border-radius: 10px;
                 margin-left: 12px;
-                margin-bottom: 20px;
               "
             >
               <template #title>

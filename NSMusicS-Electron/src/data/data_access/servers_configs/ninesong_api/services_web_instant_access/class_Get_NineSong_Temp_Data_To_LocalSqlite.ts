@@ -1017,70 +1017,36 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
   }
 
   /// file count
-  public async get_count_of_media_file(
-    starred: string,
-    search: string,
-    year: string,
-    album_id: string,
-    artist_id: string
-  ) {
+  public async get_count_of_media_file() {
     try {
-      const counts = await this.medias_ApiService_of_NineSong.getMediaCounts(
-        starred,
-        search,
-        year,
-        album_id,
-        artist_id
-      )
+      const counts = await this.medias_ApiService_of_NineSong.getMediaCounts()
       const response = counts['ninesong-response']['mediaFiles']
       store_view_media_page_info.media_item_count = response.total
       store_view_media_page_info.media_starred_count = response.starred
       store_view_media_page_info.media_recently_count = response.recent_play
     } catch {}
   }
-  public async get_count_of_media_cue_file(
-    starred: string,
-    search: string,
-    year: string,
-    artist_id: string
-  ) {
+  public async get_count_of_media_cue_file() {
     try {
-      const counts = await this.mediaCues_ApiService_of_NineSong.getMediaCuesCounts(
-        starred,
-        search,
-        year,
-        artist_id
-      )
-      const response = counts['ninesong-response']['mediaFiles']
-      store_view_media_cue_page_info.media_item_count = response.total
-      store_view_media_cue_page_info.media_starred_count = response.starred
-      store_view_media_cue_page_info.media_recently_count = response.recent_play
+      const counts = await this.mediaCues_ApiService_of_NineSong.getMediaCuesCounts()
+      const response = counts['ninesong-response']['cueFiles']
+      store_view_media_cue_page_info.media_item_count = response.Total
+      store_view_media_cue_page_info.media_starred_count = response.Starred
+      store_view_media_cue_page_info.media_recently_count = response.RecentPlay
     } catch {}
   }
-  public async get_count_of_album(
-    starred: string,
-    search: string,
-    min_year: string,
-    max_year: string,
-    artist_id: string
-  ) {
+  public async get_count_of_album() {
     try {
-      const counts = await this.albums_ApiService_of_NineSong.getAlbumCounts(
-        starred,
-        search,
-        min_year,
-        max_year,
-        artist_id
-      )
+      const counts = await this.albums_ApiService_of_NineSong.getAlbumCounts()
       const response = counts['ninesong-response']['albums']
       store_view_album_page_info.album_item_count = response.total
       store_view_album_page_info.album_starred_count = response.starred
       store_view_album_page_info.album_recently_count = response.recent_play
     } catch {}
   }
-  public async get_count_of_artist(starred: string, search: string) {
+  public async get_count_of_artist() {
     try {
-      const counts = await this.artists_ApiService_of_NineSong.getArtistCounts(starred, search)
+      const counts = await this.artists_ApiService_of_NineSong.getArtistCounts()
       const response = counts['ninesong-response']['artists']
       store_view_artist_page_info.artist_item_count = response.total
       store_view_artist_page_info.artist_starred_count = response.starred

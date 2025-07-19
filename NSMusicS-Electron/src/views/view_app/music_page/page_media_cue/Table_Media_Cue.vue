@@ -80,223 +80,60 @@ type SortItem = {
   key: string
   state_Sort: state_Sort
 }
-const options_Sort_key = ref<SortItem[]>()
-if (
-  store_server_user_model.model_server_type_of_local ||
-  (store_server_users.server_select_kind === 'navidrome' &&
-    store_server_user_model.model_server_type_of_web)
-) {
-  options_Sort_key.value = [
-    { label: computed(() => t('filter.title')), key: 'title', state_Sort: state_Sort.Default },
-    {
-      label: computed(() => t('entity.artist_other')),
-      key: 'artist',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('entity.album_other')),
-      key: 'album',
-      state_Sort: state_Sort.Default,
-    },
-    { label: computed(() => t('filter.releaseYear')), key: 'year', state_Sort: state_Sort.Default },
-    {
-      label: computed(() => t('filter.duration')),
-      key: 'duration',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('filter.dateAdded')),
-      key: 'created_at',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('filter.recentlyUpdated')),
-      key: 'updated_at',
-      state_Sort: state_Sort.Default,
-    },
-  ]
-} else if (
-  store_server_user_model.model_server_type_of_web &&
-  store_server_users.server_select_kind === 'ninesong'
-) {
-  options_Sort_key.value = [
-    { label: computed(() => t('filter.title')), key: 'title', state_Sort: state_Sort.Default },
-    {
-      label: computed(() => t('entity.album_other')),
-      key: 'album',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('entity.artist_other')),
-      key: 'artist',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('table.column.albumArtist')),
-      key: 'album_artist',
-      state_Sort: state_Sort.Default,
-    },
-    { label: computed(() => t('filter.releaseYear')), key: 'year', state_Sort: state_Sort.Default },
-    {
-      label: computed(() => t('filter.duration')),
-      key: 'duration',
-      state_Sort: state_Sort.Default,
-    },
-    { label: computed(() => t('common.bitrate')), key: 'bit_rate', state_Sort: state_Sort.Default },
-    { label: computed(() => t('LabelSize')), key: 'size', state_Sort: state_Sort.Default },
-    {
-      label: computed(() => t('filter.playCount')),
-      key: 'play_count',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('common.favorite') + t('LabelLevel')),
-      key: 'rating',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('common.favorite') + t('LabelDate')),
-      key: 'starred_at',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('filter.dateAdded')),
-      key: 'created_at',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('filter.recentlyUpdated')),
-      key: 'updated_at',
-      state_Sort: state_Sort.Default,
-    },
-  ]
-} else if (
-  store_server_user_model.model_server_type_of_web &&
-  store_server_users.server_select_kind === 'jellyfin'
-) {
-  options_Sort_key.value = [
-    {
-      label: computed(() => t('OptionTrackName')),
-      key: 'Album,SortName',
-      state_Sort: state_Sort.Default,
-    },
-    { label: computed(() => t('Album')), key: 'Album,SortName', state_Sort: state_Sort.Default },
-    {
-      label: computed(() => t('AlbumArtist')),
-      key: 'AlbumArtist,Album,SortName',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('Artist')),
-      key: 'Artist,Album,SortName',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('DateAdded')),
-      key: 'DateCreated,SortName',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('DatePlayed')),
-      key: 'DatePlayed,SortName',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('PlayCount')),
-      key: 'PlayCount,SortName',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('ReleaseDate')),
-      key: 'PremiereDate,AlbumArtist,Album,SortName',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('Runtime')),
-      key: 'Runtime,AlbumArtist,Album,SortName',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('OptionRandom')),
-      key: 'Random,SortName',
-      state_Sort: state_Sort.Default,
-    },
-  ]
-} else if (store_server_users.server_select_kind === 'emby') {
-  options_Sort_key.value = [
-    {
-      label: computed(() => t('Album')),
-      key: 'Album,ParentIndexNumber,IndexNumber',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('AlbumArtist')),
-      key: 'AlbumArtist,Album,ParentIndexNumber,IndexNumber,SortName',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('Composer')),
-      key: 'Composer,Album,ParentIndexNumber,IndexNumber,SortName',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('LabelCommunityRating')),
-      key: 'CommunityRating,SortName',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('LabelDateAdded')),
-      key: 'DateCreated,SortName',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('LabelReleaseDate')),
-      key: 'ProductionYear,PremiereDate,SortName',
-      state_Sort: state_Sort.Default,
-    },
-    { label: computed(() => t('LabelSize')), key: 'Size,SortName', state_Sort: state_Sort.Default },
-    {
-      label: computed(() => t('HeaderMedia') + t('MediaInfoContainer')),
-      key: 'Container,SortName',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('LabelParentalRating')),
-      key: 'OfficialRating,SortName',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('LabelYear')),
-      key: 'ProductionYear,SortName',
-      state_Sort: state_Sort.Default,
-    },
-    { label: computed(() => t('Play')), key: 'PlayCount,SortName', state_Sort: state_Sort.Default },
-    // {label:computed(() => t('DatePlayed')), key: 'DatePlayed,SortName', state_Sort: state_Sort.Default },
-    {
-      label: computed(() => t('Runtime')),
-      key: 'Runtime,SortName',
-      state_Sort: state_Sort.Default,
-    },
-    { label: computed(() => t('File')), key: 'IsFolder,Filename', state_Sort: state_Sort.Default },
-    // {label:computed(() => t('LabelTitle')), key: 'SortName', state_Sort: state_Sort.Default },
-    {
-      label: computed(() => t('LabelAudioBitrate')),
-      key: 'TotalBitrate,SortName',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('LabelNumber')),
-      key: 'ParentIndexNumber,IndexNumber,SortName',
-      state_Sort: state_Sort.Default,
-    },
-    {
-      label: computed(() => t('Artist')),
-      key: 'Artist,Album,ParentIndexNumber,IndexNumber,SortName',
-      state_Sort: state_Sort.Default,
-    },
-    { label: computed(() => t('OptionRandom')), key: 'Random', state_Sort: state_Sort.Default },
-  ]
-}
+const options_Sort_key = ref([
+  { label: computed(() => t('filter.title')), key: 'title', state_Sort: state_Sort.Default },
+  {
+    label: computed(() => t('entity.artist_other')),
+    key: 'performer', // 修复：artist → performer
+    state_Sort: state_Sort.Default
+  },
+  {
+    label: computed(() => t('filter.releaseYear')),
+    key: 'rem.date', // 修复：year → rem.date
+    state_Sort: state_Sort.Default
+  },
+  {
+    label: computed(() => t('filter.duration')),
+    key: 'cue_duration', // 修复：duration → cue_duration
+    state_Sort: state_Sort.Default
+  },
+  {
+    label: computed(() => t('common.bitrate')),
+    key: 'cue_bit_rate', // 修复：bit_rate → cue_bit_rate
+    state_Sort: state_Sort.Default
+  },
+  { label: computed(() => t('LabelSize')), key: 'size', state_Sort: state_Sort.Default },
+  {
+    label: computed(() => t('filter.playCount')),
+    key: 'play_count',
+    state_Sort: state_Sort.Default
+  },
+  {
+    label: computed(() => t('common.favorite') + t('LabelLevel')),
+    key: 'rating',
+    state_Sort: state_Sort.Default
+  },
+  {
+    label: computed(() => t('common.favorite') + t('LabelDate')),
+    key: 'starred_at',
+    state_Sort: state_Sort.Default
+  },
+  {
+    label: computed(() => t('filter.dateAdded')),
+    key: 'created_at',
+    state_Sort: state_Sort.Default
+  },
+  {
+    label: computed(() => t('filter.recentlyUpdated')),
+    key: 'updated_at',
+    state_Sort: state_Sort.Default
+  },
+  {
+    label: computed(() => t('Track') + t('nsmusics.view_page.count')),
+    key: 'cue_track_count', // 新增：音轨数排序
+    state_Sort: state_Sort.Default
+  },
+])
 let Select_Sort_Model = false
 let options_Sort = computed(() => {
   if (
@@ -597,7 +434,7 @@ const handleItemDbClick = async (media_file: any, index: any) => {
 
         store_playlist_list_info.reset_carousel()
       } else {
-        const index_num = typeof index === 'number' ? index : index.split('-')[1]
+        const index_num = typeof index === 'number' ? Number(index) : Number(index.split('-')[1])
         // cue
         if (media_file.cue_tracks === undefined) {
           store_player_audio_info.this_audio_cue_track_current_no = 0
@@ -608,6 +445,14 @@ const handleItemDbClick = async (media_file: any, index: any) => {
           store_player_audio_info.this_audio_cue_track_current_no = index_num
           store_player_audio_info.this_audio_cue_track_current_indexes =
             media_file.cue_tracks[index_num - 1].INDEXES
+          ///
+          store_player_audio_info.this_audio_song_name = media_file.cue_tracks[index_num - 1].Title
+          if(store_player_audio_info.this_audio_song_name.length === 0){
+            store_player_audio_info.this_audio_song_name = index_num + ':' + media_file.title
+          }
+          store_player_audio_info.this_audio_artist_name = media_file.cue_tracks[index_num - 1].Performer
+          store_player_audio_info.this_audio_album_name = media_file.title
+          ///
           store_player_audio_logic.player_model_cue = true
         }
         if (store_player_audio_info.this_audio_cue_track_current_indexes.length > 0) {
@@ -1221,18 +1066,19 @@ interface SortCondition {
 }
 const allSortKeys = computed(() => [
   { label: t('filter.title'), value: 'title' },
-  { label: t('entity.album_other'), value: 'album' },
-  { label: t('entity.artist_other'), value: 'artist' },
-  { label: t('table.column.albumArtist'), value: 'album_artist' },
-  { label: t('filter.releaseYear'), value: 'year' },
-  { label: t('filter.duration'), value: 'duration' },
-  { label: t('common.bitrate'), value: 'bit_rate' },
+  // { label: t('entity.album_other'), value: 'album' }, // 移除（后端无直接映射）
+  { label: t('entity.artist_other'), value: 'performer' }, // 修复：artist → performer [1](@ref)
+  // { label: t('table.column.albumArtist'), value: 'album_artist' }, // 移除（后端无映射）
+  { label: t('filter.releaseYear'), value: 'rem.date' }, // 修复：year → rem.date [1](@ref)
+  { label: t('filter.duration'), value: 'cue_duration' }, // 修复：duration → cue_duration [1](@ref)
+  { label: t('common.bitrate'), value: 'cue_bit_rate' }, // 修复：bit_rate → cue_bit_rate [1](@ref)
   { label: t('LabelSize'), value: 'size' },
   { label: t('filter.playCount'), value: 'play_count' },
   { label: t('common.favorite') + t('LabelLevel'), value: 'rating' },
   { label: t('common.favorite') + t('LabelDate'), value: 'starred_at' },
   { label: t('filter.dateAdded'), value: 'created_at' },
   { label: t('filter.recentlyUpdated'), value: 'updated_at' },
+  { label: t('Track') + t('nsmusics.view_page.count'), value: 'cue_track_count' }, // 新增：支持按音轨数排序 [1](@ref)
 ])
 const allSortOrders = computed(() => [
   { label: t('Ascending'), value: 'asc' },
@@ -2071,7 +1917,7 @@ onBeforeUnmount(() => {
               style="
                 position: absolute;
                 z-index: 0;
-                height: 298px;
+                height: 283px;
                 border-radius: 10px;
                 overflow: hidden;
                 background-size: cover;
@@ -2105,8 +1951,7 @@ onBeforeUnmount(() => {
                 width: calc(100vw - 220px);
                 height: 300px;
                 border-radius: 10px;
-                margin-left: 10px;
-                margin-bottom: 20px;
+                margin-left: 12px;
               "
             >
               <template #title>
@@ -2270,7 +2115,7 @@ onBeforeUnmount(() => {
               <div
                 class="media_cue_info"
                 :style="{
-                  width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)',
+                  width: 'calc(100vw - ' + (collapsed_width - 10) + 'px)',
                 }"
                 @dblclick="
                   () => {
@@ -2926,7 +2771,7 @@ onBeforeUnmount(() => {
 .songlist_cue_name {
   margin-left: 10px;
   text-align: left;
-  width: 34vw;
+  width: 30vw;
   font-size: 15px;
   overflow: hidden;
   white-space: nowrap;

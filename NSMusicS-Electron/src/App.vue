@@ -539,7 +539,7 @@ const Init_page_songlists_statistic_Data = () => {
     store_view_media_page_logic.page_songlists.push(temp_playlist)
   })
 }
-///// view of media
+///// view of media_cue
 const Init_page_cuelists_statistic_Data = () => {
   store_view_media_cue_page_logic.page_songlists_options = []
   store_view_media_cue_page_logic.page_songlists_statistic = []

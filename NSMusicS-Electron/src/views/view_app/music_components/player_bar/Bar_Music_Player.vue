@@ -12,7 +12,7 @@ import {
   Settings24Regular,
 } from '@vicons/fluent'
 import { RepeatOneRound, QueueMusicRound } from '@vicons/material'
-import { Play, Pause, PlayBack, PlayForward, VolumeMedium } from '@vicons/ionicons5'
+import { Play, Pause, PlayBack, PlayForward, VolumeMedium, PlaySkipBack, PlaySkipForward} from '@vicons/ionicons5'
 import { Random } from '@vicons/fa'
 import { NButton, NIcon, NSlider, NSpace, NText, useThemeVars } from 'naive-ui'
 
@@ -502,6 +502,16 @@ watch(
     })
   }
 )
+watch(
+  () => store_player_audio_logic.player_model_cue,
+  (newValue) => {
+    if (newValue) {
+      message.success(t('ButtonStart') + t('nsmusics.view_page.disk') + t('Play'))
+    } else {
+      message.success(t('ButtonClose') + t('nsmusics.view_page.disk') + t('Play'))
+    }
+  }
+)
 ////// Naive UI n-carousel 无法执行 prev与next触发事件，用以下代码修复业务逻辑
 const cooldownDebounce = (fn, delay) => {
   let isCooling = false
@@ -716,6 +726,12 @@ async function begin_random_play_model() {
 
 ////// player_configs player_button middle area
 const play_skip_back_click = async () => {
+  if(store_player_audio_logic.player_model_cue){
+    if(play_skip_cue_order(-1, false, undefined, undefined)){
+      return
+    }
+  }
+  ///
   store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(
     await store_player_audio_logic.player.getDuration()
   )
@@ -731,6 +747,12 @@ const play_skip_back_click = async () => {
   store_player_appearance.player_mode_of_lock_playlist = true
 }
 const play_skip_forward_click = async () => {
+  if(store_player_audio_logic.player_model_cue){
+    if(play_skip_cue_order(1, false, undefined, undefined)){
+      return
+    }
+  }
+  ///
   store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(
     await store_player_audio_logic.player.getDuration()
   )
@@ -745,6 +767,90 @@ const play_skip_forward_click = async () => {
 
   store_player_appearance.player_mode_of_lock_playlist = true
 }
+function play_skip_cue_order (
+  increased: number, find_model: boolean, currentTime: any, duration: any
+) {
+  let media_file = undefined;
+  let index_num = 0;
+  const index = store_player_audio_info.this_audio_cue_track_current_no + increased;
+  if(index <= 0){
+    store_player_audio_info.this_audio_cue_track_current_no = 0
+    store_player_audio_info.this_audio_cue_track_current_indexes = []
+    store_player_audio_info.this_audio_cue_tracks = []
+    return false
+  }
+  for (let i = 0; i < store_view_media_cue_page_info.media_Files_temporary.length; i++) {
+    const media_cue = store_view_media_cue_page_info.media_Files_temporary[i]
+    if(
+      media_cue != undefined &&
+      media_cue.path === store_player_audio_info.this_audio_file_path &&
+      media_cue.cue_tracks != undefined
+    ){
+      if(index <= media_cue.cue_tracks.length){
+        media_file = media_cue;
+        index_num = index;
+        break;
+      }
+    }
+  }
+  if (media_file === undefined) {
+    store_player_audio_info.this_audio_cue_track_current_no = 0
+    store_player_audio_info.this_audio_cue_track_current_indexes = []
+    store_player_audio_info.this_audio_cue_tracks = []
+    return false
+  }
+  if(find_model) {
+    if(media_file.cue_tracks != undefined && media_file.cue_tracks.length > 0){
+      /// 尾部遍历寻找
+      for (let i = media_file.cue_tracks.length - 1; i >= 0; i--) {
+        const track = media_file.cue_tracks[i];
+        const current_cue_time = store_player_audio_logic.formatStrTime(track.INDEXES[0].TIME) / 1000
+        if(currentTime > current_cue_time){
+          store_player_audio_info.this_audio_song_name = track.Title
+          if (store_player_audio_info.this_audio_song_name.length === 0) {
+            store_player_audio_info.this_audio_song_name = index_num + ':' + media_file.title
+          }
+          store_player_audio_info.this_audio_artist_name = track.Performer
+          store_player_audio_info.this_audio_album_name = media_file.title
+          break;
+        }
+      }
+    }
+  }else{
+    ///
+    if (media_file.cue_tracks === undefined) {
+      store_player_audio_info.this_audio_cue_track_current_no = 0
+      store_player_audio_info.this_audio_cue_track_current_indexes = []
+      store_player_audio_info.this_audio_cue_tracks = []
+      store_player_audio_logic.player_model_cue = false
+    } else {
+      store_player_audio_info.this_audio_cue_track_current_no = index_num
+      store_player_audio_info.this_audio_cue_track_current_indexes =
+        media_file.cue_tracks[index_num - 1].INDEXES
+      ///
+      store_player_audio_info.this_audio_song_name = media_file.cue_tracks[index_num - 1].Title
+      if (store_player_audio_info.this_audio_song_name.length === 0) {
+        store_player_audio_info.this_audio_song_name = index_num + ':' + media_file.title
+      }
+      store_player_audio_info.this_audio_artist_name = media_file.cue_tracks[index_num - 1].Performer
+      store_player_audio_info.this_audio_album_name = media_file.title
+      ///
+      store_player_audio_logic.player_model_cue = true
+    }
+    if (store_player_audio_info.this_audio_cue_track_current_indexes.length > 0) {
+      const track_str = store_player_audio_info.this_audio_cue_track_current_indexes[0].TIME
+      if (track_str.length > 0) {
+        const track_time = store_player_audio_logic.formatStrTime(track_str)
+        store_player_audio_logic.player.setCurrentTime(track_time / 1000)
+        ///
+
+      }
+    }
+  }
+  ///
+  return true
+}
+///
 if (isElectron) {
   ipcRenderer.on(
     'tray-music-prev',
@@ -797,6 +903,9 @@ const set_slider_singleValue = async () => {
       ((currentTime + store_player_audio_logic.player_slider_currentTime_added_value) / duration) *
       100
     store_player_audio_logic.slider_singleValue = Number(calculatedValue.toFixed(2))
+    if(store_player_audio_logic.player_model_cue) {
+      play_skip_cue_order(0, true, currentTime, duration)
+    }
   }
 }
 const get_current_play_time = async () => {
@@ -886,6 +995,12 @@ import { store_server_users } from '@/data/data_stores/server/store_server_users
 import { store_general_fetch_media_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_access/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
+import {
+  store_general_fetch_media_cue_list
+} from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list'
+import {
+  store_view_media_cue_page_info
+} from '@/views/view_app/music_page/page_media_cue/store/store_view_media_cue_page_info'
 
 const handleItemClick_Favorite = (id, favorite) => {
   if (id != null && id.length > 0 && id != 'undefined') {
@@ -928,69 +1043,75 @@ const handleItemClick_Rating = (id, rating) => {
 
 /////// emits audio_info of songlist_view_list
 const handleItemClick_title = (title) => {
-  store_router_data_info.router_click = false
-  store_view_media_page_logic.page_songlists_bool_show_search_area = true
-  store_view_media_page_logic.page_songlists_input_search_Value = title
-  store_view_media_page_logic.get_page_songlists_keyword(title)
-  player_show_hight_animation_value.value = 670
-  get_playerbar_to_switch_playerview(player_show_hight_animation_value.value)
-  store_player_audio_logic.player_back_ChevronDouble =
-    player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow
-}
-const handleItemClick_artist = (artist) => {
-  store_router_data_info.router_click = false
-  if (
-    store_server_user_model.model_server_type_of_local ||
-    (store_server_users.server_select_kind === 'navidrome' &&
-      store_server_user_model.model_server_type_of_web) ||
-    (store_server_users.server_select_kind === 'ninesong' &&
-      store_server_user_model.model_server_type_of_web)
-  ) {
+  if(!store_player_audio_logic.player_model_cue) {
+    store_router_data_info.router_click = false
     store_view_media_page_logic.page_songlists_bool_show_search_area = true
-    store_view_media_page_logic.page_songlists_input_search_Value = artist
-    if (store_server_user_model.model_server_type_of_local) {
-      store_view_media_page_logic.get_page_songlists_keyword(
-        artist + 'accurate_search' + '__artist__'
-      )
-    } else if (store_server_user_model.model_server_type_of_web) {
-      store_view_media_page_logic.get_page_songlists_keyword(artist)
-    }
+    store_view_media_page_logic.page_songlists_input_search_Value = title
+    store_view_media_page_logic.get_page_songlists_keyword(title)
     player_show_hight_animation_value.value = 670
     get_playerbar_to_switch_playerview(player_show_hight_animation_value.value)
     store_player_audio_logic.player_back_ChevronDouble =
       player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow
-  } else {
-    message.warning(
-      'Jellyfin / Emby ' + t('ContainerNotSupported') + ' ' + t('setting.hotkey_localSearch')
-    )
+  }
+}
+const handleItemClick_artist = (artist) => {
+  if(!store_player_audio_logic.player_model_cue) {
+    store_router_data_info.router_click = false
+    if (
+      store_server_user_model.model_server_type_of_local ||
+      (store_server_users.server_select_kind === 'navidrome' &&
+        store_server_user_model.model_server_type_of_web) ||
+      (store_server_users.server_select_kind === 'ninesong' &&
+        store_server_user_model.model_server_type_of_web)
+    ) {
+      store_view_media_page_logic.page_songlists_bool_show_search_area = true
+      store_view_media_page_logic.page_songlists_input_search_Value = artist
+      if (store_server_user_model.model_server_type_of_local) {
+        store_view_media_page_logic.get_page_songlists_keyword(
+          artist + 'accurate_search' + '__artist__'
+        )
+      } else if (store_server_user_model.model_server_type_of_web) {
+        store_view_media_page_logic.get_page_songlists_keyword(artist)
+      }
+      player_show_hight_animation_value.value = 670
+      get_playerbar_to_switch_playerview(player_show_hight_animation_value.value)
+      store_player_audio_logic.player_back_ChevronDouble =
+        player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow
+    } else {
+      message.warning(
+        'Jellyfin / Emby ' + t('ContainerNotSupported') + ' ' + t('setting.hotkey_localSearch')
+      )
+    }
   }
 }
 const handleItemClick_album = (album) => {
-  store_router_data_info.router_click = false
-  if (
-    store_server_user_model.model_server_type_of_local ||
-    (store_server_users.server_select_kind === 'navidrome' &&
-      store_server_user_model.model_server_type_of_web) ||
-    (store_server_users.server_select_kind === 'ninesong' &&
-      store_server_user_model.model_server_type_of_web)
-  ) {
-    store_view_media_page_logic.page_songlists_bool_show_search_area = true
-    store_view_media_page_logic.page_songlists_input_search_Value = album
-    if (store_server_user_model.model_server_type_of_local) {
-      store_view_media_page_logic.get_page_songlists_keyword(
-        album + 'accurate_search' + '__album__'
+  if(!store_player_audio_logic.player_model_cue) {
+    store_router_data_info.router_click = false
+    if (
+      store_server_user_model.model_server_type_of_local ||
+      (store_server_users.server_select_kind === 'navidrome' &&
+        store_server_user_model.model_server_type_of_web) ||
+      (store_server_users.server_select_kind === 'ninesong' &&
+        store_server_user_model.model_server_type_of_web)
+    ) {
+      store_view_media_page_logic.page_songlists_bool_show_search_area = true
+      store_view_media_page_logic.page_songlists_input_search_Value = album
+      if (store_server_user_model.model_server_type_of_local) {
+        store_view_media_page_logic.get_page_songlists_keyword(
+          album + 'accurate_search' + '__album__'
+        )
+      } else if (store_server_user_model.model_server_type_of_web) {
+        store_view_media_page_logic.get_page_songlists_keyword(album)
+      }
+      player_show_hight_animation_value.value = 670
+      get_playerbar_to_switch_playerview(player_show_hight_animation_value.value)
+      store_player_audio_logic.player_back_ChevronDouble =
+        player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow
+    } else {
+      message.warning(
+        'Jellyfin / Emby ' + t('ContainerNotSupported') + ' ' + t('setting.hotkey_localSearch')
       )
-    } else if (store_server_user_model.model_server_type_of_web) {
-      store_view_media_page_logic.get_page_songlists_keyword(album)
     }
-    player_show_hight_animation_value.value = 670
-    get_playerbar_to_switch_playerview(player_show_hight_animation_value.value)
-    store_player_audio_logic.player_back_ChevronDouble =
-      player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow
-  } else {
-    message.warning(
-      'Jellyfin / Emby ' + t('ContainerNotSupported') + ' ' + t('setting.hotkey_localSearch')
-    )
   }
 }
 

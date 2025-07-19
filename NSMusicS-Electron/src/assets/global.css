@@ -58,3 +58,6 @@
 .vue-recycle-scroller__slot {
   margin-top: -10px;
 }
+.vue-recycle-scroller__item-wrapper {
+  height: 100%;
+}

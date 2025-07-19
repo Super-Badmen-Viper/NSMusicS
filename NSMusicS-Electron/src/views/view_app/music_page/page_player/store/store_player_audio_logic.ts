@@ -234,35 +234,62 @@ export const store_player_audio_logic = reactive({
       await store_player_audio_info.set_lyric(media_file.lyrics)
     }
     //
-    const index_num =
-      typeof index === 'number' ? index : index != undefined ? index.split('-')[1] : 0
+    const cue_page_play = typeof index != 'number';
+    let index_num = !cue_page_play ? index : index != undefined ? Number(index.split('-')[1]) : 0
     // cue
-    if (index_num === undefined || media_file.cue_tracks === undefined) {
+    if(cue_page_play) {
+      if (index_num === undefined || media_file.cue_tracks === undefined) {
+        store_player_audio_info.this_audio_cue_track_current_no = 0
+        store_player_audio_info.this_audio_cue_track_current_indexes = []
+        store_player_audio_info.this_audio_cue_tracks = []
+        store_player_audio_logic.player_model_cue = false
+      } else {
+        index_num = index_num <= 0 ? 1 : index_num
+        store_player_audio_info.this_audio_cue_track_current_no = index_num
+        store_player_audio_info.this_audio_cue_track_current_indexes =
+          media_file.cue_tracks[index_num - 1].INDEXES
+        ///
+        store_player_audio_logic.player_model_cue = true
+      }
+    }
+    // normally
+    if(!store_player_audio_logic.player_model_cue){
+      /// load : normally play info
+      store_player_audio_info.this_audio_song_name = media_file.title ?? ''
+      store_player_audio_info.this_audio_album_name = media_file.album ?? ''
+      store_player_audio_info.this_audio_artist_name = media_file.artist ?? ''
+      /// clean : cue play info
       store_player_audio_info.this_audio_cue_track_current_no = 0
       store_player_audio_info.this_audio_cue_track_current_indexes = []
       store_player_audio_info.this_audio_cue_tracks = []
       store_player_audio_logic.player_model_cue = false
-    } else {
+    }else{
+      index_num = index_num <= 0 ? 1 : index_num
+      /// load : cue play info
+      store_player_audio_info.this_audio_song_name = media_file.cue_tracks[index_num - 1].Title
+      if (store_player_audio_info.this_audio_song_name.length === 0) {
+        store_player_audio_info.this_audio_song_name = index_num + ':' + media_file.title
+      }
+      store_player_audio_info.this_audio_artist_name = media_file.cue_tracks[index_num - 1].Performer
+      store_player_audio_info.this_audio_album_name = media_file.title
+      /// load : cue play init
       store_player_audio_info.this_audio_cue_track_current_no = index_num
       store_player_audio_info.this_audio_cue_track_current_indexes =
         media_file.cue_tracks[index_num - 1].INDEXES
+      ///
       store_player_audio_logic.player_model_cue = true
     }
-    // normally
     store_player_audio_info.this_audio_play_id = media_file.play_id ?? ''
     store_player_audio_info.this_audio_file_path = media_file.path ?? ''
     store_player_audio_info.this_audio_song_encoding_format = media_file.encoding_format ?? ''
     store_player_audio_info.this_audio_song_suffix = media_file.suffix ?? ''
     store_player_audio_info.this_audio_file_medium_image_url =
       media_file.medium_image_url ?? error_album
-    store_player_audio_info.this_audio_artist_name = media_file.artist ?? ''
     store_player_audio_info.this_audio_artist_id = media_file.artist_id ?? ''
-    store_player_audio_info.this_audio_song_name = media_file.title ?? ''
     store_player_audio_info.this_audio_song_id = media_file.id ?? ''
     store_player_audio_info.this_audio_song_rating = media_file.rating ?? 0
     store_player_audio_info.this_audio_song_favorite = media_file.favorite ?? false
     store_player_audio_info.this_audio_album_id = media_file.album_id ?? ''
-    store_player_audio_info.this_audio_album_name = media_file.album ?? ''
     store_player_audio_info.this_audio_Index_of_play_list = index_num != undefined ? index_num : 0
     //
     store_player_tag_modify.player_current_media_starred = media_file.favorite ?? false

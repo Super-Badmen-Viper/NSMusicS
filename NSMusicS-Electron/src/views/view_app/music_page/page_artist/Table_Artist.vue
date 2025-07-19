@@ -1061,7 +1061,7 @@ onBeforeUnmount(() => {
               style="
                 position: absolute;
                 z-index: 0;
-                height: 298px;
+                height: 283px;
                 border-radius: 10px;
                 overflow: hidden;
                 background-size: cover;
@@ -1096,7 +1096,6 @@ onBeforeUnmount(() => {
                 height: 300px;
                 border-radius: 10px;
                 margin-left: 12px;
-                margin-bottom: 20px;
               "
             >
               <template #title>

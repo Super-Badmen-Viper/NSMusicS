@@ -118,6 +118,9 @@ export class Class_Set_System_Configs_Write {
       'cue_count',
       'guest_cue_count',
       'encoding_format',
+      'cue_tracks',
+      'cue_track_count',
+      'cue_track_show',
     ])
     const filteredData = media_file_of_list.map((item) => {
       return Object.keys(item)
