@@ -132,9 +132,6 @@ export const store_player_audio_info = reactive({
         store_player_audio_info.this_audio_lyrics_string = '[00:01.00]未找到可用歌词\n'
       }
     }
-    if (newValue === undefined || newValue === 'undefined' || newValue.length === 0) {
-      return
-    }
     ////// split lyrics
     store_player_audio_info.this_audio_lyrics_info_line_font = []
     for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_line_num; i++) {

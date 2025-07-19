@@ -216,7 +216,7 @@ export const store_player_audio_logic = reactive({
                 : ''
             } else if (store_server_users.server_select_kind === 'emby') {
               const getAudio_lyrics_id_of_Em =
-                await audio_ApiService_of_Je.getAudio_lyrics_id_of_Em(media_file.id)
+                await audio_ApiService_of_Je.getAudio_lyrics_id_of_Em(media_file.id, media_file.lyrics)
               lyrics = getAudio_lyrics_id_of_Em?.Lyrics || ''
             }
           } catch (error) {
