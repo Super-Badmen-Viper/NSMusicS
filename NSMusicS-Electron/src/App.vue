@@ -139,7 +139,7 @@ function create_menuOptions_appBar() {
     },
     { key: 'divider-1', type: 'divider', props: { style: { marginLeft: '22px' } } },
     {
-      label: computed(() => renderRouterLink('tag', t('Identify'))),
+      label: computed(() => renderRouterLink('tag', t('Metadata') + t('HeaderAdmin'))),
       key: 'tag',
       icon: renderIcon(TagMultiple24Regular),
     }

@@ -628,17 +628,18 @@ const handleItemClick_artist = (artist_id: string) => {
     store_view_album_page_logic.page_albumlists_input_search_Value = artist_id
     store_view_media_page_logic.page_songlists_input_search_Value = artist_id
   } else if (store_server_user_model.model_server_type_of_web) {
-    if (
-      store_server_users.server_select_kind === 'jellyfin' ||
-      store_server_users.server_select_kind === 'emby'
-    ) {
+    if (store_server_users.server_select_kind === 'ninesong') {
       store_general_fetch_album_list.set_artist_id(artist_id)
+      store_general_fetch_album_list.fetchData_Album()
+    } else if(store_server_users.server_select_kind === 'jellyfin' ||
+      store_server_users.server_select_kind === 'emby'){
+      store_general_fetch_album_list.set_artist_id(artist_id)
+      store_view_album_page_logic.page_albumlists_input_search_Value = artist_id
+      store_general_fetch_album_list.fetchData_Album()
+    } else {
       store_view_album_page_logic.page_albumlists_keyword = artist_id
       store_view_album_page_logic.page_albumlists_input_search_Value = artist_id
       store_view_media_page_logic.page_songlists_input_search_Value = artist_id
-    } else if (store_server_users.server_select_kind === 'ninesong') {
-      store_general_fetch_album_list.set_artist_id(artist_id)
-      store_general_fetch_album_list.fetchData_Album()
     }
   }
   bool_show_search_area.value = true
@@ -1647,11 +1648,6 @@ onBeforeUnmount(() => {
           {{ $t('Search') + $t('LabelTitle') }}
         </v-contextmenu-item>
         <v-contextmenu-item
-          v-if="
-            (store_server_users.server_select_kind != 'jellyfin' &&
-              store_server_users.server_select_kind != 'emby') ||
-            store_server_user_model.model_server_type_of_local
-          "
           @click="
             () => {
               if (store_server_user_model.model_server_type_of_local) {
