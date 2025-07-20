@@ -444,13 +444,36 @@ const stopWatching_router_history_model_of_Artist_scroll = watch(
   }
 )
 const scrollTo = (value: number) => {
-  if (dynamicScroller !== null) {
+  try {
+    // 1. 增加空值检查（null和undefined）
+    if (!dynamicScroller.value) {
+      console.warn("dynamicScroller未初始化");
+      return;
+    }
+
     setTimeout(() => {
-      const index = value - (20 + Math.floor((window.innerHeight - 765) / 220))
-      dynamicScroller.value.scrollToItem(index) // 220
-    }, 100)
-  }
-}
+      // 2. 再次检查防止异步期间组件卸载[3](@ref)
+      if (!dynamicScroller.value) return;
+
+      // 3. 安全计算滚动位置（添加边界保护）
+      const windowHeight = window.innerHeight;
+      const baseOffset = 20;
+      const referenceHeight = 765;
+      const itemHeight = 220;
+
+      const skipItems = Math.max(0,
+        Math.floor((windowHeight - referenceHeight) / itemHeight)
+      );
+
+      const index = Math.max(0, value - (baseOffset + skipItems));
+
+      // 4. 添加方法存在性检查[1](@ref)
+      if (dynamicScroller.value.scrollToItem) {
+        dynamicScroller.value.scrollToItem(index);
+      }
+    }, 100);
+  } catch {}
+};
 onMounted(() => {
   if (store_server_user_model.model_server_type_of_local) {
     scrollTo(store_router_history_data_of_artist.router_history_model_of_Artist_scroller_value)

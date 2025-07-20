@@ -531,13 +531,36 @@ const stopWatching_router_history_model_of_Album_scroll = watch(
   }
 )
 const scrollTo = (value: number) => {
-  if (dynamicScroller !== null) {
+  try {
+    // 1. 增加空值检查（null和undefined）
+    if (!dynamicScroller.value) {
+      console.warn("dynamicScroller未初始化");
+      return;
+    }
+
     setTimeout(() => {
-      const index = value - (20 + Math.floor((window.innerHeight - 765) / 220))
-      dynamicScroller.value.scrollToItem(index) // 220
-    }, 100)
-  }
-}
+      // 2. 再次检查防止异步期间组件卸载[3](@ref)
+      if (!dynamicScroller.value) return;
+
+      // 3. 安全计算滚动位置（添加边界保护）
+      const windowHeight = window.innerHeight;
+      const baseOffset = 20;
+      const referenceHeight = 765;
+      const itemHeight = 220;
+
+      const skipItems = Math.max(0,
+        Math.floor((windowHeight - referenceHeight) / itemHeight)
+      );
+
+      const index = Math.max(0, value - (baseOffset + skipItems));
+
+      // 4. 添加方法存在性检查[1](@ref)
+      if (dynamicScroller.value.scrollToItem) {
+        dynamicScroller.value.scrollToItem(index);
+      }
+    }, 100);
+  } catch {}
+};
 onMounted(() => {
   if (store_server_user_model.model_server_type_of_local) {
     scrollTo(store_router_history_data_of_album.router_history_model_of_Album_scroller_value)
@@ -950,9 +973,13 @@ function Refresh_page_albumlists_statistic() {
 onMounted(() => {
   Refresh_page_albumlists_statistic()
   if (store_router_data_info.router_click) {
-    input_search_InstRef.value?.clear()
-    bool_show_search_area.value = false
-    store_view_album_page_logic.page_albumlists_keyword = ''
+    if (store_server_user_model.model_server_type_of_web) {
+      input_search_InstRef.value?.clear()
+      bool_show_search_area.value = false
+      store_view_album_page_logic.page_albumlists_keyword = ''
+    }else{
+      bool_show_search_area.value = true
+    }
   }
   if (store_general_fetch_album_list._artist_id.length > 0) {
     bool_show_search_area.value = true
@@ -1500,9 +1527,16 @@ onBeforeUnmount(() => {
                         "
                       />
                     </div>
-                    <div class="hover-buttons-bottom-album">
+                    <div
+                      class="hover-buttons-bottom-album"
+                    >
                       <button
                         class="open-this-artist-button"
+                        v-if="
+                          (store_server_users.server_select_kind != 'jellyfin' &&
+                            store_server_users.server_select_kind != 'emby') ||
+                          store_server_user_model.model_server_type_of_local
+                        "
                         @click="Open_this_album_MediaList_click(item.id)"
                       >
                         <icon :size="20" color="#FFFFFF"><Open28Filled /></icon>
