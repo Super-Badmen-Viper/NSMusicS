@@ -21,12 +21,12 @@ export class Users_ApiService_of_Je extends Jellyfin_Api_Services_Web {
       const endpoint = 'Users/AuthenticateByName'
       const url = `${baseUrl}/${endpoint}`
       const AccessToken = ''
-      const Version = '1.8.0'
+      const Version = '1.8.1'
       const Client = isElectron ? 'Electron Desktop' : 'Web'
       const Device = isElectron ? 'NSMusicS' : 'NineSong'
       const DeviceId = isElectron ? 'NSMusicS ' + Version : 'NineSong ' + Version
       const headers = {
-        Authorization: `MediaBrowser Token="${AccessToken}", Client="${Client}", Device="${Device}", DeviceId="${DeviceId}-GO", Version="1.8.0"`,
+        Authorization: `MediaBrowser Token="${AccessToken}", Client="${Client}", Device="${Device}", DeviceId="${DeviceId}-GO", Version="1.8.1"`,
       }
       const data = {
         Username: username,

@@ -1351,8 +1351,6 @@ onMounted(() => {
       store_view_media_cue_page_logic.page_songlists_keyword = ''
       input_search_InstRef.value?.clear()
       store_view_media_cue_page_logic.page_songlists_keywordFilter = ''
-    }else{
-      bool_show_search_area.value = true
     }
   }
   if (
