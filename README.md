@@ -2,7 +2,8 @@
 <img src="https://github.com/user-attachments/assets/7534a7e7-c45a-4813-9210-2fc66c686164" width="49%">
 
 ## NSMusicS | Nine Song Music : 九歌音乐
-NSMusicS is a client project that aims to support all platforms. The backend functionality of its Docker web version is implemented by another open-source project of mine: the [NineSong](https://github.com/Super-Badmen-Viper/NineSong) server written in Golang.  
+NSMusicS is a music(streaming/local) client project designed to support all platforms.  
+The corresponding digital center server [NineSong](https://github.com/Super-Badmen-Viper/NineSong) is a server that is bound and paired with NSMusicS, providing high-quality cloud music services for NSMusicS. Of course, [NineSong](https://github.com/Super-Badmen-Viper/NineSong) will also provide cloud service scenarios for other application scenarios in the future (film and television videos, photo albums, novels, documents, notes).  
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Super-Badmen-Viper/NSMusicS)
 
@@ -13,13 +14,53 @@ At the same time, NSMusicS is also compatible with various mainstream open-sourc
 In addition, NSMusicS also supports local mode to use local music libraries. And plan to support various types of network cloud drives，such as webdev，onedriver....
 
 ## [NineSong](https://github.com/Super-Badmen-Viper/NineSong) Server New Function
-The NineSong 0.5.0 Beta version has been released on June 15, 2025, and the official version 1.0.0 will be released in early July 2025. If you want to try using a hybrid version of NSMusicS and NineSong's Docker, you can deploy it in the NineSong project:   
+the NineSong official version 1.0.0 will be released At the end of July 2025. If you want to try using a hybrid version of NSMusicS and NineSong's Docker, you can deploy it in the NineSong project:   
 
-[NSMusicS-Docker-0.5.0-Beta Download](https://github.com/Super-Badmen-Viper/NineSong):
+[NSMusicS-Docker-0.8.0 Download](https://github.com/Super-Badmen-Viper/NineSong):
 https://github.com/Super-Badmen-Viper/NineSong
-
 Compared to other music servers (such as Navidrome, Jellyfin, Emby, Plex, Subsonic, Gonic), it offers the following [enhanced features](https://github.com/Super-Badmen-Viper/NineSong):   
-For details of the new features, please visit the [NineSong](https://github.com/Super-Badmen-Viper/NineSong) to learn more  
+- [ ] More comprehensive music library management:
+- - [x] Rich single-level sorting options, supporting multi-level mixed sorting and multi-level mixed filtering;
+- - [x] deeper processing of composite tags to make the relevance between musics more comprehensive;
+- - [x] search jump optimization
+- - - [x] support for Chinese pinyin fuzzy search;
+- - - [x] support searching based on lyrics;
+- - - [x] support for quick initial letter jumping;
+- - - [x] recommended similar search results;
+- - [ ] support for dual-page browsing mode (unlimited virtual list, paged list);
+- - [ ] support uploading, downloading, and synchronizing music files between the server and client;
+- [ ] More comprehensive music playback experience:
+- - [x] various elegant playback styles[cover Square、cover Rotate、cover Beaut、cover Base、cover AlbumList];
+- - [x] exclusive playback modes for various music files[normal model、cue-music model];
+- [ ] CUE exclusive playback (CUE: wav、ape、flac) and CUE file management:
+- - [x] Exclusive management page for music disc image (mirror) auxiliary files. 
+- - [ ] CUE playback styles suitable for music disc image features
+- - [ ] Visualized virtual track playback of CUE
+- More complete TAG import and management:
+- - [x] support for importing complete TAGs from more types of music files (including m4a、cue(wav、ape、flac));
+- - [ ] support for user-visualized TAG management, allowing remote uploads, auto-associating, manual merging of artist-album-single TAGs;
+- - [ ] support for richer TAG fields: artist profile pictures, artist photos (multiple selection), album covers, song quality versions (multiple selection), and lyrics versions (single selection);
+- [x] Integrated free public welfare music TAG API, allowing users to obtain online TAGs for songs and choose whether to synchronize TAG data.
+- [ ] Support for multi-channel audio effects; support for Advanced/Standard/Simple EQ; (October)
+- [ ] Personalized music recommendations based on user usage data.
+- - [x] Phase 1 (June): Add tag cloud and recommend music based on user interests.
+- - [ ] Phase 2 (August): Use lightweight recommendation algorithms based on usage data.
+- - [ ] Phase 3 (October): Build a music knowledge graph by analyzing music metadata to achieve smarter recommendations.
+- - [ ] Phase 4 (December): Combine the knowledge graph with LLM (DeepSeek) for advanced music recommendations.
+
+## How to Deploy Docker: https://github.com/Super-Badmen-Viper/NineSong
+You first need to download the compressed file from the [ninesong releases](https://github.com/Super-Badmen-Viper/NineSong/releases/)  
+
+You need to put the. env and docker-compose.yaml files [in the same folder](https://github.com/Super-Badmen-Viper/NineSong/releases/). You can customize the parameter configuration of. env and docker-compose.yaml, such as mapping the media library folder to the Volumes of the NineSong container.  
+
+Note that if you update the mirrored version of NineSong, temporary resources in the media library (such as album covers) will also be deleted. You need to rescan the media library in the settings to regenerate temporary resources
+```sh
+run: docker compose up -d
+login mail: admin@gmail.com
+login password: admin123
+```
+How to Thoroughly Reinstall NineSong: Need to Clear Data Together with Volumes in Docker.  
+Because considering that the image upgrade cannot affect the database data, if you delete the containers of NineSong, the data in their databases will not disappear unless you clear it together with the data in Volumes in Docker.
 
 ## NSMusicS-Electron | NineSong Music(Desktop-client) : 九歌音乐
 - [x] supporting the Windows10+、MacOS(arm、x64)、Linux platform (which will soon support Docker)
