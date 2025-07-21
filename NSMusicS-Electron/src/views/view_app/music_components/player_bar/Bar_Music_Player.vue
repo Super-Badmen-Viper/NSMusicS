@@ -1811,13 +1811,12 @@ watch(
           class="gird_Right_button_area"
           style="margin-top: 16px"
           :style="{
-            width: store_player_appearance.player_show
-              ? store_server_users.server_select_kind === 'ninesong'
-                ? '132px'
-                : '160px'
-              : store_server_users.server_select_kind === 'ninesong'
-                ? '100px'
-                : '132px',
+            width:!store_player_appearance.player_show ?
+              (store_server_user_model.model_server_type_of_web ?
+                (store_server_users.server_select_kind === 'ninesong' ? '102px' : '132px') : '132px')
+              :
+              (store_server_user_model.model_server_type_of_web ?
+                (store_server_users.server_select_kind === 'ninesong' ? '132px' : '160px') : '160px'),
           }"
         >
           <n-space
