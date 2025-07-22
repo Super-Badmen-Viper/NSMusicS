@@ -45,6 +45,7 @@ const computed_i18n_Label_ViewSetConfig_Cover_6 = computed(() =>
 // audio_class & player_bar & player_view
 import { store_player_view } from '@/views/view_app/music_page/page_player/store/store_player_view'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
+import { store_player_audio_logic } from '@/views/view_app/music_page/page_player/store/store_player_audio_logic'
 
 ////// lyircs load
 let unwatch = watch(
@@ -97,6 +98,16 @@ function begin_lyrics_animation() {
             (await store_player_audio_logic.player.getCurrentTime()) !== null
           ) {
             let currentTime = (await store_player_audio_logic.player.getCurrentTime()) * 1000
+            ///
+            if (store_player_audio_logic.player_model_cue) {
+              if (store_player_audio_info.this_audio_cue_track_current_indexes.length > 0) {
+                const track_str = store_player_audio_info.this_audio_cue_track_current_indexes[0].TIME
+                if (track_str.length > 0) {
+                  currentTime = currentTime - store_player_audio_logic.formatStrTime(track_str)
+                }
+              }
+            }
+            ///
             if (currentTime <= store_player_audio_info.this_audio_lyrics_info_line_time[0]) {
               if (
                 !lyrics_list_whell.value &&
@@ -191,7 +202,18 @@ const handleItemDbClick = async (index: any) => {
     ]
   if (time >= (await store_player_audio_logic.player.getDuration()) * 1000) return
   if (time < 0) return
-  store_player_audio_logic.player_go_lyric_line_index_of_audio_play_progress = time
+  if (!store_player_audio_logic.player_model_cue) {
+    store_player_audio_logic.player_go_lyric_line_index_of_audio_play_progress = time
+  }else{
+    if (store_player_audio_info.this_audio_cue_track_current_indexes.length > 0) {
+      const track_str = store_player_audio_info.this_audio_cue_track_current_indexes[0].TIME
+      if (track_str.length > 0) {
+        let track_time = store_player_audio_logic.formatStrTime(track_str)
+        track_time = time + track_time
+        store_player_audio_logic.player.setCurrentTime(track_time / 1000)
+      }
+    }
+  }
   store_player_view.currentScrollIndex = index
 
   handleLeave_Refresh_Lyric_Color()
@@ -1438,6 +1460,14 @@ onBeforeUnmount(() => {
                           --n-fill-color-hover: #ffffff;
                           --n-rail-height: 4px;
                           --n-handle-size: 20px;
+                          --n-dot-border: 0px;
+                          --n-dot-border-active: 0px;
+                          --n-dot-border-radius: 4px;
+                          --n-dot-color: #ffffff;
+                          --n-dot-color-modal: #ffffff;
+                          --n-dot-color-popover: #ffffff;
+                          --n-dot-height: 8px;
+                          --n-dot-width: 8px;
                           border-radius: 10px;
                         "
                         v-model:value="store_player_audio_logic.slider_singleValue"

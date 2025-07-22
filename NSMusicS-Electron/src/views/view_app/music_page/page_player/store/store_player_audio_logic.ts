@@ -172,15 +172,14 @@ export const store_player_audio_logic = reactive({
     if (store_player_audio_logic.player.isPlaying) {
       // 注意，此时currentTime将从0开始，需要计算附加值
       if (silder_path) {
-        const newTime =
-          (Number(slider_value) / 100) * (await store_player_audio_logic.player.getDuration())
+        let newTime = (Number(slider_value) / 100) * (await store_player_audio_logic.player.getDuration())
         if (Number(slider_value) !== 0 && Number(slider_value) !== 100) {
           store_player_audio_logic.player.setCurrentTime(newTime)
         } else {
           store_player_audio_logic.player.setCurrentTime(0)
         }
       } else {
-        const newTime = Number(slider_value) / 1000
+        let newTime = Number(slider_value) / 1000
         if (Number(slider_value) !== 0 && Number(slider_value) !== 100) {
           store_player_audio_logic.player.setCurrentTime(newTime)
         } else {
@@ -190,51 +189,6 @@ export const store_player_audio_logic = reactive({
     }
   },
   async update_current_media_info(media_file: any, index: any) {
-    if (store_server_user_model.model_server_type_of_web) {
-      if (store_server_users.server_select_kind === 'ninesong') {
-        const retrieval = new Retrieval_ApiService_of_NineSong(store_server_login_info.server_url)
-        const lyrics = await retrieval.getLyrics_id(media_file.id)
-        if (lyrics != undefined) {
-          await store_player_audio_info.set_lyric(lyrics)
-        } else {
-          await store_player_audio_info.set_lyric('')
-        }
-      } else if (
-        store_server_users.server_select_kind === 'jellyfin' ||
-        store_server_users.server_select_kind === 'emby'
-      ) {
-        try {
-          const audio_ApiService_of_Je = new Audio_ApiService_of_Je(
-            store_server_users.server_config_of_current_user_of_sqlite?.url
-          )
-          let lyrics = []
-          try {
-            if (store_server_users.server_select_kind === 'jellyfin') {
-              const getAudio_lyrics_id_of_Je =
-                await audio_ApiService_of_Je.getAudio_lyrics_id_of_Je(media_file.id)
-              lyrics = getAudio_lyrics_id_of_Je?.Lyrics
-                ? this.convertToLRC_Array_of_Je(getAudio_lyrics_id_of_Je.Lyrics)
-                : ''
-            } else if (store_server_users.server_select_kind === 'emby') {
-              const getAudio_lyrics_id_of_Em =
-                await audio_ApiService_of_Je.getAudio_lyrics_id_of_Em(media_file.id, media_file.lyrics)
-              lyrics = getAudio_lyrics_id_of_Em?.Lyrics || ''
-            }
-          } catch (error) {
-            console.error('Failed to fetch lyrics:', error)
-            lyrics = ''
-          }
-          await store_player_audio_info.set_lyric(lyrics.length > 0 ? lyrics : '')
-        } catch {
-          await store_player_audio_info.set_lyric(media_file.lyrics)
-        }
-      } else if (store_server_users.server_select_kind === 'navidrome') {
-        await store_player_audio_info.set_lyric(media_file.lyrics)
-      }
-    } else if (store_server_user_model.model_server_type_of_local) {
-      await store_player_audio_info.set_lyric(media_file.lyrics)
-    }
-    //
     const cue_page_play = typeof index != 'number';
     let index_num = !cue_page_play ? index : index != undefined ? Number(index.split('-')[1]) : 0
     // cue
@@ -301,6 +255,71 @@ export const store_player_audio_logic = reactive({
     store_player_tag_modify.player_current_media_starred = media_file.favorite ?? false
     store_player_tag_modify.player_current_media_playCount = media_file.play_count ?? 0
     store_player_tag_modify.player_current_media_playDate = media_file.play_date ?? ''
+    ///
+    await this.update_current_lyrics(media_file)
+  },
+  async update_current_lyrics(media_file: any){
+    ///
+    if (store_server_user_model.model_server_type_of_web) {
+      if (store_server_users.server_select_kind === 'ninesong') {
+        const retrieval = new Retrieval_ApiService_of_NineSong(store_server_login_info.server_url)
+        if(!store_player_audio_logic.player_model_cue) {
+          const lyrics = await retrieval.getLyrics_id(media_file.id)
+          if (lyrics != undefined) {
+            await store_player_audio_info.set_lyric(lyrics)
+          } else {
+            const lyrics_search = await retrieval.getLyrics_filter(media_file.artist, media_file.title, '')
+            if (lyrics_search != undefined) {
+              await store_player_audio_info.set_lyric(lyrics_search)
+            } else {
+              await store_player_audio_info.set_lyric('')
+            }
+          }
+        }else{
+          const lyrics_search = await retrieval.getLyrics_filter(
+            store_player_audio_info.this_audio_artist_name, store_player_audio_info.this_audio_song_name, ''
+          )
+          if (lyrics_search != undefined) {
+            await store_player_audio_info.set_lyric(lyrics_search)
+          } else {
+            await store_player_audio_info.set_lyric('')
+          }
+        }
+      } else if (
+        store_server_users.server_select_kind === 'jellyfin' ||
+        store_server_users.server_select_kind === 'emby'
+      ) {
+        try {
+          const audio_ApiService_of_Je = new Audio_ApiService_of_Je(
+            store_server_users.server_config_of_current_user_of_sqlite?.url
+          )
+          let lyrics = []
+          try {
+            if (store_server_users.server_select_kind === 'jellyfin') {
+              const getAudio_lyrics_id_of_Je =
+                await audio_ApiService_of_Je.getAudio_lyrics_id_of_Je(media_file.id)
+              lyrics = getAudio_lyrics_id_of_Je?.Lyrics
+                ? this.convertToLRC_Array_of_Je(getAudio_lyrics_id_of_Je.Lyrics)
+                : ''
+            } else if (store_server_users.server_select_kind === 'emby') {
+              const getAudio_lyrics_id_of_Em =
+                await audio_ApiService_of_Je.getAudio_lyrics_id_of_Em(media_file.id, media_file.lyrics)
+              lyrics = getAudio_lyrics_id_of_Em?.Lyrics || ''
+            }
+          } catch (error) {
+            console.error('Failed to fetch lyrics:', error)
+            lyrics = ''
+          }
+          await store_player_audio_info.set_lyric(lyrics.length > 0 ? lyrics : '')
+        } catch {
+          await store_player_audio_info.set_lyric(media_file.lyrics)
+        }
+      } else if (store_server_users.server_select_kind === 'navidrome') {
+        await store_player_audio_info.set_lyric(media_file.lyrics)
+      }
+    } else if (store_server_user_model.model_server_type_of_local) {
+      await store_player_audio_info.set_lyric(media_file.lyrics)
+    }
   },
   convertToLRC_Array_of_Je(
     lyrics: {

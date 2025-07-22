@@ -87,7 +87,6 @@ export class Audio_ApiService_of_Je extends Jellyfin_Api_Services_Web {
     itemId: string,
     PresentationUniqueKey: string
   ): Promise<{ Lyrics: string | null }> {
-
     // 公共配置提取
     const baseUrl = store_server_users.server_config_of_current_user_of_sqlite?.url;
     const token = store_server_user_model.authorization_of_Je;
@@ -117,6 +116,7 @@ export class Audio_ApiService_of_Je extends Jellyfin_Api_Services_Web {
       return { Lyrics: result };
     }
 
+    let songResponse = undefined;
     // 请求2：后备歌词请求
     try {
       // 修复1：动态获取PresentationUniqueKey
@@ -129,7 +129,7 @@ export class Audio_ApiService_of_Je extends Jellyfin_Api_Services_Web {
         };
 
         // 请求歌曲元数据
-        const songResponse = await axios.get(songUrl, { params });
+        songResponse = await axios.get(songUrl, { params });
         PresentationUniqueKey = songResponse.data.PresentationUniqueKey; // ✅ 提取关键字段
 
         // 修复2：验证值有效性
@@ -148,12 +148,35 @@ export class Audio_ApiService_of_Je extends Jellyfin_Api_Services_Web {
         responseType: 'json'
       });
 
-      const lrcLyrics = this.convertTrackEventsToLRC(response2.data.TrackEvents);
-      return { Lyrics: lrcLyrics };
+      if(response2.data.TrackEvents != undefined) {
+        return { Lyrics: this.convertTrackEventsToLRC(response2.data.TrackEvents) };
+      }
     } catch (error) {
-      console.error("歌词请求失败:", error);
-      return { Lyrics: null };
+
     }
+
+    // 请求3：后备歌词请求，Emby一个歌词三种api请求方式，6666，而且官方api文档就是纯一坨答辩还是一坨缺这缺那的答辩
+    try {
+      if(songResponse != undefined){
+        const MediaSourcesID = songResponse.data.MediaSources[0].Id;
+
+        const lyricUrl = `${baseUrl}/emby/Items/${itemId}/${MediaSourcesID}/Subtitles/2/Stream.js`;
+        const response2 = await axios.get(lyricUrl, {
+          headers: {
+            Authorization: `MediaBrowser Token="${token}", Client="NSMusicS", Device="Desktop Client", DeviceId="NineSong", Version="1.8.1"`
+          },
+          timeout: 8000,
+          responseType: 'json'
+        });
+
+        if(response2.data.TrackEvents != undefined) {
+          return { Lyrics: this.convertTrackEventsToLRC(response2.data.TrackEvents) };
+        }
+      }
+    }catch{
+
+    }
+    return { Lyrics: null };
   }
 
   private getFirstLyricsExtradata(data: any): string | null {

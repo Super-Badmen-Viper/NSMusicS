@@ -99,8 +99,8 @@ function begin_lyrics_animation() {
       for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_line_time.length; i++) {
         if (
           store_player_audio_logic.player !== null &&
-          (await store_player_audio_logic.player.getCurrentTime()) !== undefined &&
-          (await store_player_audio_logic.player.getCurrentTime()) !== null
+          (await store_player_audio_logic.player.getCurrentTimeLyrics()) !== undefined &&
+          (await store_player_audio_logic.player.getCurrentTimeLyrics()) !== null
         ) {
           let currentTime = (await store_player_audio_logic.player.getCurrentTime()) * 1000
           if (currentTime <= store_player_audio_info.this_audio_lyrics_info_line_time[0]) {

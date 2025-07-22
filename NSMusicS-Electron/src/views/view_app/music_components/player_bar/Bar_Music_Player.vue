@@ -787,7 +787,7 @@ function play_skip_cue_order (
   let media_file = undefined;
   let index_num = 0;
   const index = store_player_audio_info.this_audio_cue_track_current_no + increased;
-  if(index <= 0){
+  if(index < 0){
     store_player_audio_info.this_audio_cue_track_current_no = 0
     store_player_audio_info.this_audio_cue_track_current_indexes = []
     store_player_audio_info.this_audio_cue_tracks = []
@@ -834,11 +834,13 @@ function play_skip_cue_order (
           store_player_audio_info.this_audio_cue_track_current_indexes = track.INDEXES
           //
           find_result = true;
+          //
+          store_player_audio_logic.update_current_lyrics(media_file)
         }
         //
         const mark_time = current_cue_time / duration * 100;
         if (!isNaN(mark_time) && mark_time >= 0 && mark_time <= 100) {
-          newMarks[mark_time] = track.Title;
+          newMarks[mark_time] = undefined// track.Title;
         }
       }
       // 批量更新标记
@@ -870,8 +872,6 @@ function play_skip_cue_order (
       if (track_str.length > 0) {
         const track_time = store_player_audio_logic.formatStrTime(track_str)
         store_player_audio_logic.player.setCurrentTime(track_time / 1000)
-        ///
-
       }
     }
   }
@@ -1565,8 +1565,7 @@ watch(
           <n-space style="width: 46px" justify="end">
             {{ store_player_audio_logic.current_play_time }}
           </n-space>
-          <n-config-provider :theme="null">
-            <n-slider
+          <n-slider
             style="
               width: 320px;
               color: var(--primary-color-hover);
@@ -1612,7 +1611,6 @@ watch(
             @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
             @mouseup="store_player_audio_logic.player_range_duration_isDragging = false"
           />
-          </n-config-provider>
           <n-space style="width: 46px">
             {{ store_player_audio_logic.total_play_time }}
           </n-space>
