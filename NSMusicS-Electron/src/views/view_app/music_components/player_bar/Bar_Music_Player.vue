@@ -502,16 +502,6 @@ watch(
     })
   }
 )
-watch(
-  () => store_player_audio_logic.player_model_cue,
-  (newValue) => {
-    if (newValue) {
-      message.success(t('ButtonStart') + t('nsmusics.view_page.disk') + t('Play'))
-    } else {
-      message.success(t('ButtonClose') + t('nsmusics.view_page.disk') + t('Play'))
-    }
-  }
-)
 ////// Naive UI n-carousel 无法执行 prev与next触发事件，用以下代码修复业务逻辑
 const cooldownDebounce = (fn, delay) => {
   let isCooling = false
@@ -767,6 +757,30 @@ const play_skip_forward_click = async () => {
 
   store_player_appearance.player_mode_of_lock_playlist = true
 }
+//
+watch(
+  () => store_player_audio_logic.player_model_cue,
+  (newValue) => {
+    if (newValue) {
+      message.success(t('ButtonStart') + t('nsmusics.view_page.disk') + t('Play'));
+    } else {
+      message.success(t('ButtonClose') + t('nsmusics.view_page.disk') + t('Play'))
+      clearMarks()
+    }
+  }
+)
+//
+const updateMarks = (newMarks: Record<number, string>) => {
+  store_player_audio_logic.marks_slider_singleValue = { ...store_player_audio_logic.marks_slider_singleValue, ...newMarks };
+};
+const deleteMark = (position: number) => {
+  const newMarks = { ...store_player_audio_logic.marks_slider_singleValue };
+  delete newMarks[position];
+  store_player_audio_logic.marks_slider_singleValue = newMarks;
+};
+const clearMarks = () => {
+  store_player_audio_logic.marks_slider_singleValue = {};
+};
 function play_skip_cue_order (
   increased: number, find_model: boolean, currentTime: any, duration: any
 ) {
@@ -788,7 +802,7 @@ function play_skip_cue_order (
     ){
       if(index <= media_cue.cue_tracks.length){
         media_file = media_cue;
-        index_num = index;
+        index_num = index + 1;
         break;
       }
     }
@@ -801,20 +815,34 @@ function play_skip_cue_order (
   }
   if(find_model) {
     if(media_file.cue_tracks != undefined && media_file.cue_tracks.length > 0){
+      const newMarks: Record<number, string> = {};
+      clearMarks()
       /// 尾部遍历寻找
+      let find_result = false
       for (let i = media_file.cue_tracks.length - 1; i >= 0; i--) {
         const track = media_file.cue_tracks[i];
-        const current_cue_time = store_player_audio_logic.formatStrTime(track.INDEXES[0].TIME) / 1000
-        if(currentTime > current_cue_time){
+        const current_cue_time = store_player_audio_logic.formatStrTime(track.INDEXES[0].TIME) / 1000;
+        if(currentTime > current_cue_time && !find_result){
           store_player_audio_info.this_audio_song_name = track.Title
           if (store_player_audio_info.this_audio_song_name.length === 0) {
             store_player_audio_info.this_audio_song_name = index_num + ':' + media_file.title
           }
           store_player_audio_info.this_audio_artist_name = track.Performer
           store_player_audio_info.this_audio_album_name = media_file.title
-          break;
+          //
+          store_player_audio_info.this_audio_cue_track_current_no = i
+          store_player_audio_info.this_audio_cue_track_current_indexes = track.INDEXES
+          //
+          find_result = true;
+        }
+        //
+        const mark_time = current_cue_time / duration * 100;
+        if (!isNaN(mark_time) && mark_time >= 0 && mark_time <= 100) {
+          newMarks[mark_time] = track.Title;
         }
       }
+      // 批量更新标记
+      updateMarks(newMarks);
     }
   }else{
     ///
@@ -1531,20 +1559,23 @@ watch(
                 ? '-2px'
                 : '30px',
           }"
-          align="center"
+          align="start"
           justify="center"
         >
           <n-space style="width: 46px" justify="end">
             {{ store_player_audio_logic.current_play_time }}
           </n-space>
-          <n-slider
+          <n-config-provider :theme="null">
+            <n-slider
             style="
               width: 320px;
               color: var(--primary-color-hover);
               border-radius: 10px;
               transition: margin 0.4s;
+              margin-top: 2px;
             "
             v-model:value="store_player_audio_logic.slider_singleValue"
+            :marks="store_player_audio_logic.marks_slider_singleValue"
             :min="0"
             :max="100"
             :keyboard="true"
@@ -1581,6 +1612,7 @@ watch(
             @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
             @mouseup="store_player_audio_logic.player_range_duration_isDragging = false"
           />
+          </n-config-provider>
           <n-space style="width: 46px">
             {{ store_player_audio_logic.total_play_time }}
           </n-space>

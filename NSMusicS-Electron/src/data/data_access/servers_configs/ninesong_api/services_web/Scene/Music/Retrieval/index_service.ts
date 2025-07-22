@@ -21,4 +21,10 @@ export class Retrieval_ApiService_of_NineSong extends NineSong_Api_Services_Web 
       media_file_id,
     })
   }
+  public async getLyrics_filter(artist: string, title: string) {
+    return this.sendRequest('GET', 'media/lyrics', {
+      artist,
+      title,
+    })
+  }
 }

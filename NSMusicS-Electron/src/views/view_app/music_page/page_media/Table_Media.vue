@@ -2259,7 +2259,7 @@ onBeforeUnmount(() => {
         class="table-media"
         ref="dynamicScroller"
         :style="{
-          width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)',
+          width: 'calc(100vw - ' + (collapsed_width - 35) + 'px)',
           height: show_top_selectedlist ? 'calc(100vh - 236px)' : 'calc(100vh - 194px)',
         }"
         :items="store_view_media_page_info.media_Files_temporary"

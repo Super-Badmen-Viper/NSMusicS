@@ -1062,7 +1062,7 @@ onBeforeUnmount(() => {
         class="artist-wall"
         ref="dynamicScroller"
         :style="{
-          width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)',
+          width: 'calc(100vw - ' + (collapsed_width - 35) + 'px)',
           height: show_top_selectedlist ? 'calc(100vh - 236px)' : 'calc(100vh - 194px)',
         }"
         :items="store_view_artist_page_info.artist_Files_temporary"

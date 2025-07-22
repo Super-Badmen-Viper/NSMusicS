@@ -58,6 +58,7 @@ export const store_player_audio_logic = reactive({
   current_play_time: '01:36',
   slider_init_singleValue: 0,
   slider_singleValue: 0,
+  marks_slider_singleValue: {},
   player_no_progress_jump: true,
 
   player_back_ChevronDouble: '',
@@ -251,6 +252,11 @@ export const store_player_audio_logic = reactive({
         ///
         store_player_audio_logic.player_model_cue = true
       }
+    }else{
+      store_player_audio_info.this_audio_cue_track_current_no = 0
+      store_player_audio_info.this_audio_cue_track_current_indexes = []
+      store_player_audio_info.this_audio_cue_tracks = []
+      store_player_audio_logic.player_model_cue = false
     }
     // normally
     if(!store_player_audio_logic.player_model_cue){
