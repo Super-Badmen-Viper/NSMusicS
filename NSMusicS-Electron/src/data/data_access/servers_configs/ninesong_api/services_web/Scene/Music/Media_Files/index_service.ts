@@ -121,7 +121,6 @@ export class Medias_ApiService_of_NineSong extends NineSong_Api_Services_Web {
       playlistId,
       start,
       end,
-      sort,
       starred,
       search,
       year,

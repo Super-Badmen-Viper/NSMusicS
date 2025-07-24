@@ -28,33 +28,13 @@ import { Recommend_ApiService_of_NineSong } from '../services_web/Scene/Music/Re
 import { store_view_recommend_page_info } from '../../../../../views/view_app/music_page/page_recommend/store/store_view_recommend_page_info'
 
 export class Get_NineSong_Temp_Data_To_LocalSqlite {
-  private artists_ApiService_of_NineSong = new Artists_ApiService_of_NineSong(
-    store_server_login_info.server_url
-  )
-  private albums_ApiService_of_NineSong = new Albums_ApiService_of_NineSong(
-    store_server_login_info.server_url
-  )
-  private medias_ApiService_of_NineSong = new Medias_ApiService_of_NineSong(
-    store_server_login_info.server_url
-  )
-  private mediaCues_ApiService_of_NineSong = new MediaCues_ApiService_of_NineSong(
-    store_server_login_info.server_url
-  )
-  private annotation_ApiService_of_NineSong = new Annotation_ApiService_of_NineSong(
-    store_server_login_info.server_url
-  )
-  private home_ApiService_of_NineSong = new Home_ApiService_of_NineSong(
-    store_server_login_info.server_url
-  )
-  private playlist_ApiService_of_NineSong = new Playlist_ApiService_of_NineSong(
-    store_server_login_info.server_url
-  )
-  private retrieval_ApiService_of_NineSong = new Retrieval_ApiService_of_NineSong(
-    store_server_login_info.server_url
-  )
-  private recommend_ApiService_of_NineSong = new Recommend_ApiService_of_NineSong(
-    store_server_login_info.server_url
-  )
+  private artistsApi = new Artists_ApiService_of_NineSong(store_server_login_info.server_url);
+  private albumsApi = new Albums_ApiService_of_NineSong(store_server_login_info.server_url);
+  private mediasApi = new Medias_ApiService_of_NineSong(store_server_login_info.server_url);
+  private mediaCuesApi = new MediaCues_ApiService_of_NineSong(store_server_login_info.server_url);
+  private homeApi = new Home_ApiService_of_NineSong(store_server_login_info.server_url);
+  private playlistApi = new Playlist_ApiService_of_NineSong(store_server_login_info.server_url);
+  private recommendApi = new Recommend_ApiService_of_NineSong(store_server_login_info.server_url);
 
   public async get_home_list(url: string) {
     await this.get_home_list_of_maximum_playback(url)
@@ -64,241 +44,45 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
   }
   public async get_home_list_of_maximum_playback(url: string) {
     url = url.includes('api') ? url : url + '/api'
-    const maximum_playback = await this.home_ApiService_of_NineSong.getAlbumList_Play_Count()
+    const maximum_playback = await this.homeApi.getAlbumList_Play_Count()
     if (maximum_playback != undefined && Array.isArray(maximum_playback)) {
       maximum_playback.map(async (album: any) => {
-        store_view_home_page_info.home_Files_temporary_maximum_playback.push({
-          favorite: album.Starred,
-          play_count: album.PlayCount,
-          play_date: album.PlayDate,
-          play_complete_count: album.PlayCompleteCount,
-          rating: album.Rating,
-          id: album.ID,
-          name: album.Name,
-          artist_id: album.ArtistID,
-          embed_art_path: '',
-          artist: album.Artist,
-          album_artist: album.AlbumArtist,
-          min_year: album.MinYear,
-          max_year: album.MaxYear,
-          compilation: album.Compilation ? 1 : 0,
-          song_count: album.SongCount,
-          duration: album.Duration,
-          genre: album.Genre,
-          has_cover_art: album.HasCoverArt ? 1 : 0,
-          created_at: album.CreatedAt,
-          updated_at: album.UpdatedAt,
-          all_artist_ids: album.AllArtistIDs,
-          all_album_artist_ids: album.AllAlbumArtistIDs,
-          full_text: '',
-          album_artist_id: album.AlbumArtistID,
-          order_album_name: '',
-          order_album_artist_name: '',
-          sort_album_name: '',
-          sort_artist_name: '',
-          sort_album_artist_name: '',
-          size: album.Size,
-          mbz_album_id: '',
-          mbz_album_artist_id: '',
-          mbz_album_type: '',
-          mbz_album_comment: '',
-          catalog_num: '',
-          comment: '',
-          image_files: '',
-          paths: '',
-          description: '',
-          small_image_url: '',
-          medium_image_url: album.HasCoverArt
-            ? url +
-              '/media/cover?access_token=' +
-              store_server_login_info.server_accessToken +
-              '&type=album&target_id=' +
-              album.ID
-            : error_album,
-          large_image_url: '',
-          external_url: '',
-          external_info_updated_at: '',
-        })
+        store_view_home_page_info.home_Files_temporary_maximum_playback.push(
+          this.mapAlbum_Home(album, url)
+        )
       })
     }
   }
   public async get_home_list_of_random_search(url: string) {
     url = url.includes('api') ? url : url + '/api'
-    const random_search = await this.home_ApiService_of_NineSong.getRandomAlbums('0', '18')
+    const random_search = await this.homeApi.getRandomAlbums('0', '18')
     if (random_search != undefined && Array.isArray(random_search)) {
       random_search.map(async (album: any) => {
-        store_view_home_page_info.home_Files_temporary_random_search.push({
-          favorite: album.Starred,
-          play_count: album.PlayCount,
-          play_date: album.PlayDate,
-          play_complete_count: album.PlayCompleteCount,
-          rating: album.Rating,
-          id: album.ID,
-          name: album.Name,
-          artist_id: album.ArtistID,
-          embed_art_path: '',
-          artist: album.Artist,
-          album_artist: album.AlbumArtist,
-          min_year: album.MinYear,
-          max_year: album.MaxYear,
-          compilation: album.Compilation ? 1 : 0,
-          song_count: album.SongCount,
-          duration: album.Duration,
-          genre: album.Genre,
-          has_cover_art: album.HasCoverArt ? 1 : 0,
-          created_at: album.CreatedAt,
-          updated_at: album.UpdatedAt,
-          all_artist_ids: album.AllArtistIDs,
-          all_album_artist_ids: album.AllAlbumArtistIDs,
-          full_text: '',
-          album_artist_id: album.AlbumArtistID,
-          order_album_name: '',
-          order_album_artist_name: '',
-          sort_album_name: '',
-          sort_artist_name: '',
-          sort_album_artist_name: '',
-          size: album.Size,
-          mbz_album_id: '',
-          mbz_album_artist_id: '',
-          mbz_album_type: '',
-          mbz_album_comment: '',
-          catalog_num: '',
-          comment: '',
-          image_files: '',
-          paths: '',
-          description: '',
-          small_image_url: '',
-          medium_image_url: album.HasCoverArt
-            ? url +
-              '/media/cover?access_token=' +
-              store_server_login_info.server_accessToken +
-              '&type=album&target_id=' +
-              album.ID
-            : error_album,
-          large_image_url: '',
-          external_url: '',
-          external_info_updated_at: '',
-        })
+        store_view_home_page_info.home_Files_temporary_random_search.push(
+          this.mapAlbum_Home(album, url)
+        )
       })
     }
   }
   public async get_home_list_of_recently_added(url: string) {
     url = url.includes('api') ? url : url + '/api'
-    const recently_added = await this.home_ApiService_of_NineSong.getAlbumList_Recently_Added()
+    const recently_added = await this.homeApi.getAlbumList_Recently_Added()
     if (recently_added != undefined && Array.isArray(recently_added)) {
       recently_added.map(async (album: any) => {
-        store_view_home_page_info.home_Files_temporary_recently_added.push({
-          favorite: album.Starred,
-          play_count: album.PlayCount,
-          play_date: album.PlayDate,
-          play_complete_count: album.PlayCompleteCount,
-          rating: album.Rating,
-          id: album.ID,
-          name: album.Name,
-          artist_id: album.ArtistID,
-          embed_art_path: '',
-          artist: album.Artist,
-          album_artist: album.AlbumArtist,
-          min_year: album.MinYear,
-          max_year: album.MaxYear,
-          compilation: album.Compilation ? 1 : 0,
-          song_count: album.SongCount,
-          duration: album.Duration,
-          genre: album.Genre,
-          has_cover_art: album.HasCoverArt ? 1 : 0,
-          created_at: album.CreatedAt,
-          updated_at: album.UpdatedAt,
-          all_artist_ids: album.AllArtistIDs,
-          all_album_artist_ids: album.AllAlbumArtistIDs,
-          full_text: '',
-          album_artist_id: album.AlbumArtistID,
-          order_album_name: '',
-          order_album_artist_name: '',
-          sort_album_name: '',
-          sort_artist_name: '',
-          sort_album_artist_name: '',
-          size: album.Size,
-          mbz_album_id: '',
-          mbz_album_artist_id: '',
-          mbz_album_type: '',
-          mbz_album_comment: '',
-          catalog_num: '',
-          comment: '',
-          image_files: '',
-          paths: '',
-          description: '',
-          small_image_url: '',
-          medium_image_url: album.HasCoverArt
-            ? url +
-              '/media/cover?access_token=' +
-              store_server_login_info.server_accessToken +
-              '&type=album&target_id=' +
-              album.ID
-            : error_album,
-          large_image_url: '',
-          external_url: '',
-          external_info_updated_at: '',
-        })
+        store_view_home_page_info.home_Files_temporary_recently_added.push(
+          this.mapAlbum_Home(album, url)
+        )
       })
     }
   }
   public async get_home_list_of_recently_played(url: string) {
     url = url.includes('api') ? url : url + '/api'
-    const recently_played = await this.home_ApiService_of_NineSong.getAlbumList_Play_Date()
+    const recently_played = await this.homeApi.getAlbumList_Play_Date()
     if (recently_played != undefined && Array.isArray(recently_played)) {
       recently_played.map(async (album: any) => {
-        store_view_home_page_info.home_Files_temporary_recently_played.push({
-          favorite: album.Starred,
-          play_count: album.PlayCount,
-          play_date: album.PlayDate,
-          play_complete_count: album.PlayCompleteCount,
-          rating: album.Rating,
-          id: album.ID,
-          name: album.Name,
-          artist_id: album.ArtistID,
-          embed_art_path: '',
-          artist: album.Artist,
-          album_artist: album.AlbumArtist,
-          min_year: album.MinYear,
-          max_year: album.MaxYear,
-          compilation: album.Compilation ? 1 : 0,
-          song_count: album.SongCount,
-          duration: album.Duration,
-          genre: album.Genre,
-          has_cover_art: album.HasCoverArt ? 1 : 0,
-          created_at: album.CreatedAt,
-          updated_at: album.UpdatedAt,
-          all_artist_ids: album.AllArtistIDs,
-          all_album_artist_ids: album.AllAlbumArtistIDs,
-          full_text: '',
-          album_artist_id: album.AlbumArtistID,
-          order_album_name: '',
-          order_album_artist_name: '',
-          sort_album_name: '',
-          sort_artist_name: '',
-          sort_album_artist_name: '',
-          size: album.Size,
-          mbz_album_id: '',
-          mbz_album_artist_id: '',
-          mbz_album_type: '',
-          mbz_album_comment: '',
-          catalog_num: '',
-          comment: '',
-          image_files: '',
-          paths: '',
-          description: '',
-          small_image_url: '',
-          medium_image_url: album.HasCoverArt
-            ? url +
-              '/media/cover?access_token=' +
-              store_server_login_info.server_accessToken +
-              '&type=album&target_id=' +
-              album.ID
-            : error_album,
-          large_image_url: '',
-          external_url: '',
-          external_info_updated_at: '',
-        })
+        store_view_home_page_info.home_Files_temporary_recently_played.push(
+          this.mapAlbum_Home(album, url)
+        )
       })
     }
   }
@@ -316,8 +100,8 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     _album_id: string,
     _artist_id: string,
     suffix: string,
-    min_bitrate: int,
-    max_bitrate: int,
+    min_bitrate: number,
+    max_bitrate: number,
     folder_path: string
   ) {
     url = url.includes('api') ? url : url + '/api'
@@ -326,7 +110,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     let totalCount = 0
     if (playlist_id === '') {
       if (multi_sorts.length === 0) {
-        const data = await this.medias_ApiService_of_NineSong.getMedias(
+        const data = await this.mediasApi.getMedias(
           _start,
           _end,
           _sort,
@@ -344,7 +128,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
         song_list = data['ninesong-response']['mediaFiles']
         totalCount = data['ninesong-response']['count']
       } else {
-        const data = await this.medias_ApiService_of_NineSong.getMediasSort(
+        const data = await this.mediasApi.getMediasSort(
           _start,
           _end,
           multi_sorts,
@@ -363,7 +147,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       }
     } else {
       if (multi_sorts.length === 0) {
-        const data = await this.medias_ApiService_of_NineSong.getMedias_Playlist(
+        const data = await this.mediasApi.getMedias_Playlist(
           playlist_id,
           _start,
           _end,
@@ -382,7 +166,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
         song_list = data['ninesong-response']['mediaFiles']
         totalCount = data['ninesong-response']['count']
       } else {
-        const data = await this.medias_ApiService_of_NineSong.getMedias_PlaylistSort(
+        const data = await this.mediasApi.getMedias_PlaylistSort(
           playlist_id,
           _start,
           _end,
@@ -403,20 +187,18 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     }
     ///
     if (Array.isArray(song_list) && song_list.length > 0) {
-      if (store_general_fetch_media_list._load_model === 'search') {
-        const existing = store_view_media_page_info.media_Files_temporary.find(
-          (item) => item.id === song_list[0].ID
-        )
-        if (existing) {
-          console.error('警告，获取的Media项存在重复，服务端的查询业务存在问题')
-        }
-      } else {
-        const existing = store_playlist_list_info.playlist_MediaFiles_temporary.find(
-          (item) => item.id === song_list[0].ID
-        )
-        if (existing) {
-          console.error('警告，获取的Media项存在重复，服务端的查询业务存在问题')
-        }
+      if (song_list.length > 0) {
+        const targetArray = store_general_fetch_media_list._load_model === 'search'
+          ? store_view_media_page_info.media_Files_temporary
+          : store_playlist_list_info.playlist_MediaFiles_temporary;
+        const existingIds = new Set(targetArray.map(item => item.id));
+        song_list = song_list.filter(song => {
+          if (existingIds.has(song.ID)) {
+            return false;
+          }
+          existingIds.add(song.ID);
+          return true;
+        });
       }
     } else {
       return
@@ -433,84 +215,14 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
           : store_playlist_list_info.playlist_MediaFiles_temporary.length
       store_view_media_page_info.media_File_metadata = []
       song_list.map(async (song: any, index: number) => {
-        const newsong = {
-          absoluteIndex: index + 1 + last_index,
-          favorite: song.Starred,
-          play_count: song.PlayCount,
-          play_date: song.PlayDate,
-          play_complete_count: song.PlayCompleteCount,
-          rating: song.Rating,
-          duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.Duration),
-          id: song.ID,
-          title: song.Title,
-          path:
-            url +
-            '/media/stream?access_token=' +
-            store_server_login_info.server_accessToken +
-            '&media_file_id=' +
-            song.ID,
-          artist: song.Artist,
-          album: song.Album,
-          artist_id: song.ArtistID,
-          album_id: song.AlbumID,
-          album_artist: song.AlbumArtist,
-          has_cover_art: song.HasCoverArt ? 1 : 0,
-          track_number: 0,
-          disc_number: 0,
-          year: song.Year,
-          size: song.Size,
-          suffix: song.Suffix,
-          duration: song.Duration,
-          bit_rate: song.BitRate,
-          encoding_format: song.EncodingFormat,
-          genre: song.Genre,
-          compilation: song.Compilation ? 1 : 0,
-          created_at: song.CreatedAt,
-          updated_at: song.UpdatedAt,
-          all_artist_ids: song.AllArtistIDs,
-          all_album_artist_ids: song.AllAlbumArtistIDs,
-          full_text: '',
-          album_artist_id: song.AlbumArtistID,
-          order_album_name: '',
-          order_album_artist_name: '',
-          order_artist_name: '',
-          sort_album_name: '',
-          sort_artist_name: '',
-          sort_album_artist_name: '',
-          sort_title: '',
-          disc_subtitle: '',
-          mbz_track_id: '',
-          mbz_album_id: '',
-          mbz_artist_id: '',
-          mbz_album_artist_id: '',
-          mbz_album_type: '',
-          mbz_album_comment: '',
-          catalog_num: '',
-          comment: '',
-          lyrics: '',
-          bpm: 0,
-          channels: 0,
-          order_title: '',
-          mbz_release_track_id: '',
-          rg_album_gain: 0,
-          rg_album_peak: 0,
-          rg_track_gain: 0,
-          rg_track_peak: 0,
-          medium_image_url: song.HasCoverArt
-            ? url +
-              '/media/cover?access_token=' +
-              store_server_login_info.server_accessToken +
-              '&type=media&target_id=' +
-              song.ID
-            : error_album,
-        }
+        const new_song = this.mapMedia(song, url, index, last_index)
         if (store_general_fetch_media_list._load_model === 'search') {
           store_view_media_page_info.media_File_metadata.push(song)
-          store_view_media_page_info.media_Files_temporary.push(newsong)
+          store_view_media_page_info.media_Files_temporary.push(new_song)
         } else {
           store_playlist_list_info.playlist_MediaFiles_temporary.push({
-            ...newsong,
-            play_id: newsong.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
+            ...new_song,
+            play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
           })
         }
       })
@@ -539,7 +251,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     let totalCount = 0
     if (playlist_id === '') {
       if (multi_sorts.length === 0) {
-        const data = await this.mediaCues_ApiService_of_NineSong.getMediaCues(
+        const data = await this.mediaCuesApi.getMediaCues(
           _start,
           _end,
           _sort,
@@ -552,7 +264,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
         song_list = data['ninesong-response']['cueFiles']
         totalCount = data['ninesong-response']['count']
       } else {
-        const data = await this.mediaCues_ApiService_of_NineSong.getMediaCuesSort(
+        const data = await this.mediaCuesApi.getMediaCuesSort(
           _start,
           _end,
           multi_sorts,
@@ -566,7 +278,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       }
     } else {
       if (multi_sorts.length === 0) {
-        const data = await this.mediaCues_ApiService_of_NineSong.getMediaCues_Playlist(
+        const data = await this.mediaCuesApi.getMediaCues_Playlist(
           playlist_id,
           _start,
           _end,
@@ -584,20 +296,18 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     }
     ///
     if (Array.isArray(song_list) && song_list.length > 0) {
-      if (store_general_fetch_media_list._load_model === 'search') {
-        const existing = store_view_media_page_info.media_Files_temporary.find(
-          (item) => item.id === song_list[0].ID
-        )
-        if (existing) {
-          console.error('警告，获取的Media项存在重复，服务端的查询业务存在问题')
-        }
-      } else {
-        const existing = store_playlist_list_info.playlist_MediaFiles_temporary.find(
-          (item) => item.id === song_list[0].ID
-        )
-        if (existing) {
-          console.error('警告，获取的Media项存在重复，服务端的查询业务存在问题')
-        }
+      if (song_list.length > 0) {
+        const targetArray = store_general_fetch_media_list._load_model === 'search'
+          ? store_view_media_page_info.media_Files_temporary
+          : store_playlist_list_info.playlist_MediaFiles_temporary;
+        const existingIds = new Set(targetArray.map(item => item.id));
+        song_list = song_list.filter(song => {
+          if (existingIds.has(song.ID)) {
+            return false;
+          }
+          existingIds.add(song.ID);
+          return true;
+        });
       }
     } else {
       return
@@ -614,83 +324,14 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
           : store_playlist_list_info.playlist_MediaFiles_temporary.length
       store_view_media_page_info.media_File_metadata = []
       song_list.map(async (song: any, index: number) => {
-        const newsong = {
-          absoluteIndex: index + 1 + last_index,
-          favorite: song.Starred,
-          play_count: song.PlayCount,
-          play_date: song.PlayDate,
-          play_complete_count: song.PlayCompleteCount,
-          rating: song.Rating,
-          duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.CueDuration),
-          id: song.ID,
-          title: song.Title,
-          path:
-            url +
-            '/media/stream?access_token=' +
-            store_server_login_info.server_accessToken +
-            '&cue_model=true&media_file_id=' +
-            song.ID,
-          artist: song.Performer,
-          artist_id: song.PerformerID,
-          album: song.FileName,
-          has_cover_art: song.HasCoverArt ? 1 : 0,
-          track_number: 0,
-          disc_number: 0,
-          year: song.Rem.DATE,
-          size: song.Size,
-          suffix: song.Suffix,
-          duration: song.CueDuration,
-          bit_rate: song.CueBitRate,
-          encoding_format: song.EncodingFormat,
-          genre: song.Rem.GENRE,
-          compilation: song.Compilation ? 1 : 0,
-          created_at: song.CreatedAt,
-          updated_at: song.UpdatedAt,
-          all_artist_ids: song.AllArtistIDs,
-          full_text: '',
-          order_album_name: '',
-          order_album_artist_name: '',
-          order_artist_name: '',
-          sort_album_name: '',
-          sort_artist_name: '',
-          sort_album_artist_name: '',
-          sort_title: '',
-          disc_subtitle: '',
-          mbz_track_id: '',
-          mbz_album_id: '',
-          mbz_artist_id: '',
-          mbz_album_artist_id: '',
-          mbz_album_type: '',
-          mbz_album_comment: '',
-          catalog_num: '',
-          comment: '',
-          lyrics: '',
-          bpm: 0,
-          channels: 0,
-          order_title: '',
-          mbz_release_track_id: '',
-          rg_album_gain: 0,
-          rg_album_peak: 0,
-          rg_track_gain: 0,
-          rg_track_peak: 0,
-          medium_image_url: song.HasCoverArt
-            ? url +
-              '/media/cover/path?access_token=' +
-              store_server_login_info.server_accessToken +
-              '&type=cover&target_id=' +
-              song.ID
-            : error_album,
-          cue_tracks: song.CueTracks,
-          cue_track_count: song.CueTrackCount,
-          cue_track_show: false,
-        }
+        const new_song = this.mapMedia_Cue(song, url, index, last_index)
         if (store_general_fetch_media_list._load_model === 'search') {
           store_view_media_cue_page_info.media_File_metadata.push(song)
-          store_view_media_cue_page_info.media_Files_temporary.push(newsong)
+          store_view_media_cue_page_info.media_Files_temporary.push(new_song)
         } else {
           store_playlist_list_info.playlist_MediaFiles_temporary.push({
-            ...newsong,
-            play_id: newsong.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
+            ...new_song,
+            play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
           })
         }
       })
@@ -716,7 +357,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     url = url.includes('api') ? url : url + '/api'
     let album_list = []
     if (multi_sorts.length === 0) {
-      const data = await this.albums_ApiService_of_NineSong.getAlbums(
+      const data = await this.albumsApi.getAlbums(
         _start,
         _end,
         _sort,
@@ -729,7 +370,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       )
       album_list = data['ninesong-response']['albums']
     } else {
-      const data = await this.albums_ApiService_of_NineSong.getAlbumsSort(
+      const data = await this.albumsApi.getAlbumsSort(
         _start,
         _end,
         multi_sorts,
@@ -742,11 +383,18 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       album_list = data['ninesong-response']['albums']
     }
     if (Array.isArray(album_list) && album_list.length > 0) {
-      const existing = store_view_album_page_info.album_Files_temporary.find(
-        (item) => item.id === album_list[0].ID
-      )
-      if (existing) {
-        console.error('警告，获取的Album项存在重复，服务端的查询业务存在问题')
+      if (album_list.length > 0) {
+        const targetArray = store_general_fetch_media_list._load_model === 'search'
+          ? store_view_media_page_info.media_Files_temporary
+          : store_playlist_list_info.playlist_MediaFiles_temporary;
+        const existingIds = new Set(targetArray.map(item => item.id));
+        album_list = album_list.filter(album => {
+          if (existingIds.has(album.ID)) {
+            return false;
+          }
+          existingIds.add(album.ID);
+          return true;
+        });
       }
     }
     if (Array.isArray(album_list) && album_list.length > 0) {
@@ -757,59 +405,9 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       store_view_album_page_info.album_File_metadata = []
       album_list.map(async (album: any, index: number) => {
         store_view_album_page_info.album_File_metadata.push(album)
-        store_view_album_page_info.album_Files_temporary.push({
-          absoluteIndex: index + 1 + last_index,
-          favorite: album.Starred,
-          play_count: album.PlayCount,
-          play_date: album.PlayDate,
-          play_complete_count: album.PlayCompleteCount,
-          rating: album.Rating,
-          id: album.ID,
-          name: album.Name,
-          artist_id: album.ArtistID,
-          embed_art_path: '',
-          artist: album.Artist,
-          album_artist: album.AlbumArtist,
-          min_year: album.MinYear,
-          max_year: album.Year,
-          compilation: album.Compilation ? 1 : 0,
-          song_count: album.SongCount,
-          duration: album.Duration,
-          genre: '',
-          has_cover_art: album.HasCoverArt ? 1 : 0,
-          created_at: album.CreatedAt,
-          updated_at: album.UpdatedAt,
-          all_artist_ids: album.AllArtistIDs,
-          all_album_artist_ids: album.AllAlbumArtistIDs,
-          full_text: '',
-          album_artist_id: album.AlbumArtistID,
-          order_album_name: '',
-          order_album_artist_name: '',
-          sort_album_name: '',
-          sort_artist_name: '',
-          sort_album_artist_name: '',
-          size: album.Size,
-          mbz_album_id: '',
-          mbz_album_artist_id: '',
-          mbz_album_type: '',
-          mbz_album_comment: '',
-          catalog_num: '',
-          comment: '',
-          image_files: '',
-          paths: '',
-          description: '',
-          small_image_url: '',
-          medium_image_url: album.HasCoverArt
-            ? url +
-              '/media/cover?access_token=' +
-              store_server_login_info.server_accessToken +
-              '&type=album&target_id=' +
-              album.ID
-            : error_album,
-          large_image_url: '',
-          external_url: '',
-          external_info_updated_at: '',
-        })
+        store_view_album_page_info.album_Files_temporary.push(
+          this.mapAlbum(album, url, index, last_index)
+        )
       })
     }
   }
@@ -826,7 +424,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     url = url.includes('api') ? url : url + '/api'
     let artist_list = []
     if (multi_sorts.length === 0) {
-      const data = await this.artists_ApiService_of_NineSong.getArtists(
+      const data = await this.artistsApi.getArtists(
         _start,
         _end,
         _sort,
@@ -836,7 +434,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       )
       artist_list = data['ninesong-response']['artists']
     } else {
-      const data = await this.artists_ApiService_of_NineSong.getArtistsSort(
+      const data = await this.artistsApi.getArtistsSort(
         _start,
         _end,
         multi_sorts,
@@ -846,11 +444,18 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       artist_list = data['ninesong-response']['artists']
     }
     if (Array.isArray(artist_list) && artist_list.length > 0) {
-      const existing = store_view_artist_page_info.artist_Files_temporary.find(
-        (item) => item.id === artist_list[0].ID
-      )
-      if (existing) {
-        console.error('警告，获取的Artist项存在重复，服务端的查询业务存在问题')
+      if (artist_list.length > 0) {
+        const targetArray = store_general_fetch_media_list._load_model === 'search'
+          ? store_view_media_page_info.media_Files_temporary
+          : store_playlist_list_info.playlist_MediaFiles_temporary;
+        const existingIds = new Set(targetArray.map(item => item.id));
+        artist_list = artist_list.filter(artist => {
+          if (existingIds.has(artist.ID)) {
+            return false;
+          }
+          existingIds.add(artist.ID);
+          return true;
+        });
       }
     }
     if (Array.isArray(artist_list) && artist_list.length > 0) {
@@ -861,123 +466,19 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       store_view_artist_page_info.artist_File_metadata = []
       artist_list.map(async (artist: any, index: number) => {
         store_view_artist_page_info.artist_File_metadata.push(artist)
-        store_view_artist_page_info.artist_Files_temporary.push({
-          absoluteIndex: index + 1 + last_index,
-          favorite: artist.Starred,
-          play_count: artist.PlayCount,
-          play_date: artist.PlayDate,
-          play_complete_count: artist.PlayCompleteCount,
-          rating: artist.Rating,
-          id: artist.ID,
-          name: artist.Name,
-          album_count: artist.AlbumCount,
-          guest_album_count: artist.GuestAlbumCount,
-          full_text: '',
-          order_artist_name: '',
-          sort_artist_name: '',
-          song_count: artist.SongCount,
-          guest_song_count: artist.GuestSongCount,
-          cue_count: artist.CueCount,
-          guest_cue_count: artist.GuestCueCount,
-          compilation: artist.Compilation ? 1 : 0,
-          has_cover_art: artist.HasCoverArt ? 1 : 0,
-          size: artist.Size,
-          all_artist_ids: artist.AllArtistIDs,
-          mbz_artist_id: '',
-          biography: '',
-          small_image_url: '',
-          medium_image_url: artist.HasCoverArt
-            ? url +
-              '/media/cover?access_token=' +
-              store_server_login_info.server_accessToken +
-              '&type=artist&target_id=' +
-              artist.ID
-            : error_artist,
-          large_image_url: '',
-          similar_artists: '',
-          external_url: '',
-          external_info_updated_at: '',
-        })
+        store_view_artist_page_info.artist_Files_temporary.push(
+          this.mapArtist(artist, url, index, last_index)
+        )
       })
     }
   }
   public async get_random_song_list(url: string, _start: string, _end: string) {
     url = url.includes('api') ? url : url + '/api'
-    const song_list = await this.home_ApiService_of_NineSong.getRandomMedias(_start, _end)
+    const song_list = await this.homeApi.getRandomMedias(_start, _end)
     if (Array.isArray(song_list) && song_list.length > 0) {
       const last_index = 0
       song_list.map(async (song: any, index: number) => {
-        const new_song = {
-          absoluteIndex: index + 1 + last_index,
-          favorite: song.Starred,
-          play_count: song.PlayCount,
-          play_date: song.PlayDate,
-          play_complete_count: song.PlayCompleteCount,
-          rating: song.Rating,
-          duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.Duration),
-          id: song.ID,
-          title: song.Title,
-          path:
-            url +
-            '/media/stream?access_token=' +
-            store_server_login_info.server_accessToken +
-            '&media_file_id=' +
-            song.ID,
-          artist: song.Artist,
-          album: song.Album,
-          artist_id: song.ArtistID,
-          album_id: song.AlbumID,
-          album_artist: song.AlbumArtist,
-          has_cover_art: song.HasCoverArt ? 1 : 0,
-          track_number: 0,
-          disc_number: 0,
-          year: song.Year,
-          size: song.Size,
-          suffix: song.Suffix,
-          duration: song.Duration,
-          bit_rate: song.BitRate,
-          encoding_format: song.EncodingFormat,
-          genre: '',
-          compilation: song.Compilation ? 1 : 0,
-          created_at: song.CreatedAt,
-          updated_at: song.UpdatedAt,
-          all_artist_ids: song.AllArtistIDs,
-          all_album_artist_ids: song.AllAlbumArtistIDs,
-          full_text: '',
-          album_artist_id: song.AlbumArtistID,
-          order_album_name: '',
-          order_album_artist_name: '',
-          order_artist_name: '',
-          sort_album_name: '',
-          sort_artist_name: '',
-          sort_album_artist_name: '',
-          sort_title: '',
-          disc_subtitle: '',
-          mbz_track_id: '',
-          mbz_album_id: '',
-          mbz_artist_id: '',
-          mbz_album_artist_id: '',
-          mbz_album_type: '',
-          mbz_album_comment: '',
-          catalog_num: '',
-          comment: '',
-          lyrics: '',
-          bpm: 0,
-          channels: 0,
-          order_title: '',
-          mbz_release_track_id: '',
-          rg_album_gain: 0,
-          rg_album_peak: 0,
-          rg_track_gain: 0,
-          rg_track_peak: 0,
-          medium_image_url: song.HasCoverArt
-            ? url +
-              '/media/cover?access_token=' +
-              store_server_login_info.server_accessToken +
-              '&type=media&target_id=' +
-              song.ID
-            : error_album,
-        }
+        const new_song = this.mapMedia_Random(song, url, index, last_index)
         store_playlist_list_info.playlist_MediaFiles_temporary.push({
           ...new_song,
           play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
@@ -1002,24 +503,10 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     }
   }
 
-  private formatTime(currentTime: number): string {
-    const minutes = Math.floor(currentTime / 60)
-    const seconds = Math.floor(currentTime % 60)
-
-    let formattedMinutes = String(minutes)
-    let formattedSeconds = String(seconds)
-
-    if (formattedMinutes.length == 1) formattedMinutes = '0' + formattedMinutes
-
-    if (formattedSeconds.length == 1) formattedSeconds = '0' + formattedSeconds
-
-    return `${formattedMinutes}:${formattedSeconds}`
-  }
-
   /// file count
   public async get_count_of_media_file() {
     try {
-      const counts = await this.medias_ApiService_of_NineSong.getMediaCounts()
+      const counts = await this.mediasApi.getMediaCounts()
       const response = counts['ninesong-response']['mediaFiles']
       store_view_media_page_info.media_item_count = response.total
       store_view_media_page_info.media_starred_count = response.starred
@@ -1028,7 +515,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
   }
   public async get_count_of_media_cue_file() {
     try {
-      const counts = await this.mediaCues_ApiService_of_NineSong.getMediaCuesCounts()
+      const counts = await this.mediaCuesApi.getMediaCuesCounts()
       const response = counts['ninesong-response']['cueFiles']
       store_view_media_cue_page_info.media_item_count = response.Total
       store_view_media_cue_page_info.media_starred_count = response.Starred
@@ -1037,7 +524,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
   }
   public async get_count_of_album() {
     try {
-      const counts = await this.albums_ApiService_of_NineSong.getAlbumCounts()
+      const counts = await this.albumsApi.getAlbumCounts()
       const response = counts['ninesong-response']['albums']
       store_view_album_page_info.album_item_count = response.total
       store_view_album_page_info.album_starred_count = response.starred
@@ -1046,7 +533,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
   }
   public async get_count_of_artist() {
     try {
-      const counts = await this.artists_ApiService_of_NineSong.getArtistCounts()
+      const counts = await this.artistsApi.getArtistCounts()
       const response = counts['ninesong-response']['artists']
       store_view_artist_page_info.artist_item_count = response.total
       store_view_artist_page_info.artist_starred_count = response.starred
@@ -1056,7 +543,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
   /// playlist count
   public async get_count_of_playlist() {
     try {
-      const getPlaylists_all = await this.playlist_ApiService_of_NineSong.getPlaylists()
+      const getPlaylists_all = await this.playlistApi.getPlaylists()
       const playlists = getPlaylists_all['ninesong-response']['playlists']
       if (playlists != undefined)
         store_view_media_page_info.media_playlist_count = playlists.length || 0
@@ -1065,7 +552,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
 
   public async get_playlist_ninesong() {
     let playlists = []
-    const getPlaylists_all = await this.playlist_ApiService_of_NineSong.getPlaylists()
+    const getPlaylists_all = await this.playlistApi.getPlaylists()
     if (getPlaylists_all != undefined) {
       playlists = getPlaylists_all['ninesong-response']['playlists']
       store_playlist_list_info.playlist_names_ALLLists = []
@@ -1129,7 +616,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
 
   public async get_recommend_word_cloud() {
     let all_word_clouds = []
-    const result = await this.recommend_ApiService_of_NineSong.getWordCloudTag()
+    const result = await this.recommendApi.getWordCloudTag()
     if (result != undefined) {
       all_word_clouds = result['ninesong-response']['wordClouds']
     }
@@ -1151,7 +638,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
 
   public async get_recommend_word_cloud_genre() {
     let all_word_clouds = []
-    const result = await this.recommend_ApiService_of_NineSong.getWordCloudGenre()
+    const result = await this.recommendApi.getWordCloudGenre()
     if (result != undefined) {
       all_word_clouds = result['ninesong-response']['wordClouds']
     }
@@ -1171,7 +658,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
 
   public async get_recommend_high_frequency() {
     let all_word_clouds = []
-    const result = await this.recommend_ApiService_of_NineSong.getHighFrequency(100)
+    const result = await this.recommendApi.getHighFrequency(100)
     if (result != undefined) {
       all_word_clouds = result['ninesong-response']['wordClouds']
     }
@@ -1191,7 +678,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
 
   public async get_recommend_result(keywords: string) {
     let all_medias = []
-    const result = await this.recommend_ApiService_of_NineSong.getRecommended(keywords)
+    const result = await this.recommendApi.getRecommended(keywords)
     if (result != undefined) {
       all_medias = result['ninesong-response']['wordClouds']
     }
@@ -1212,7 +699,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     let url = store_server_login_info.server_url
     url = url.includes('api') ? url : url + '/api'
     let song_list = []
-    const result = await this.medias_ApiService_of_NineSong.getMedia_Ids(ids)
+    const result = await this.mediasApi.getMedia_Ids(ids)
     if (result != undefined) {
       song_list = result['ninesong-response']['mediaFiles']
     }
@@ -1220,83 +707,459 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       store_view_recommend_page_info.recommend_MediaFiles_metadata = []
       store_view_recommend_page_info.recommend_MediaFiles_temporary = []
       song_list.map(async (song: any, index: number) => {
-        const newsong = {
-          absoluteIndex: index + 1,
-          favorite: song.Starred,
-          play_count: song.PlayCount,
-          play_date: song.PlayDate,
-          play_complete_count: song.PlayCompleteCount,
-          rating: song.Rating,
-          duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.Duration),
-          id: song.ID,
-          title: song.Title,
-          path:
-            url +
-            '/media/stream?access_token=' +
-            store_server_login_info.server_accessToken +
-            '&media_file_id=' +
-            song.ID,
-          artist: song.Artist,
-          album: song.Album,
-          artist_id: song.ArtistID,
-          album_id: song.AlbumID,
-          album_artist: song.AlbumArtist,
-          has_cover_art: song.HasCoverArt ? 1 : 0,
-          track_number: 0,
-          disc_number: 0,
-          year: song.Year,
-          size: song.Size,
-          suffix: song.Suffix,
-          duration: song.Duration,
-          bit_rate: song.BitRate,
-          encoding_format: song.EncodingFormat,
-          genre: song.Genre,
-          compilation: song.Compilation ? 1 : 0,
-          created_at: song.CreatedAt,
-          updated_at: song.UpdatedAt,
-          all_artist_ids: song.AllArtistIDs,
-          all_album_artist_ids: song.AllAlbumArtistIDs,
-          full_text: '',
-          album_artist_id: song.AlbumArtistID,
-          order_album_name: '',
-          order_album_artist_name: '',
-          order_artist_name: '',
-          sort_album_name: '',
-          sort_artist_name: '',
-          sort_album_artist_name: '',
-          sort_title: '',
-          disc_subtitle: '',
-          mbz_track_id: '',
-          mbz_album_id: '',
-          mbz_artist_id: '',
-          mbz_album_artist_id: '',
-          mbz_album_type: '',
-          mbz_album_comment: '',
-          catalog_num: '',
-          comment: '',
-          lyrics: '',
-          bpm: 0,
-          channels: 0,
-          order_title: '',
-          mbz_release_track_id: '',
-          rg_album_gain: 0,
-          rg_album_peak: 0,
-          rg_track_gain: 0,
-          rg_track_peak: 0,
-          medium_image_url: song.HasCoverArt
-            ? url +
-              '/media/cover?access_token=' +
-              store_server_login_info.server_accessToken +
-              '&type=media&target_id=' +
-              song.ID
-            : error_album,
-        }
+        const new_song = this.mapMedia_Recommend(song, url, index)
         store_view_recommend_page_info.recommend_MediaFiles_metadata.push(song)
         store_view_recommend_page_info.recommend_MediaFiles_temporary.push({
-          ...newsong,
-          play_id: newsong.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
+          ...new_song,
+          play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
         })
       })
+    }
+  }
+
+  private mapMedia(song: any, url: string, index: number, last_index: number) {
+    return {
+      absoluteIndex: index + 1 + last_index,
+      favorite: song.Starred,
+      play_count: song.PlayCount,
+      play_date: song.PlayDate,
+      play_complete_count: song.PlayCompleteCount,
+      rating: song.Rating,
+      duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.Duration),
+      id: song.ID,
+      title: song.Title,
+      path:
+        url +
+        '/media/stream?access_token=' +
+        store_server_login_info.server_accessToken +
+        '&media_file_id=' +
+        song.ID,
+      artist: song.Artist,
+      album: song.Album,
+      artist_id: song.ArtistID,
+      album_id: song.AlbumID,
+      album_artist: song.AlbumArtist,
+      has_cover_art: song.HasCoverArt ? 1 : 0,
+      track_number: 0,
+      disc_number: 0,
+      year: song.Year,
+      size: song.Size,
+      suffix: song.Suffix,
+      duration: song.Duration,
+      bit_rate: song.BitRate,
+      encoding_format: song.EncodingFormat,
+      genre: song.Genre,
+      compilation: song.Compilation ? 1 : 0,
+      created_at: song.CreatedAt,
+      updated_at: song.UpdatedAt,
+      all_artist_ids: song.AllArtistIDs,
+      all_album_artist_ids: song.AllAlbumArtistIDs,
+      full_text: '',
+      album_artist_id: song.AlbumArtistID,
+      order_album_name: '',
+      order_album_artist_name: '',
+      order_artist_name: '',
+      sort_album_name: '',
+      sort_artist_name: '',
+      sort_album_artist_name: '',
+      sort_title: '',
+      disc_subtitle: '',
+      mbz_track_id: '',
+      mbz_album_id: '',
+      mbz_artist_id: '',
+      mbz_album_artist_id: '',
+      mbz_album_type: '',
+      mbz_album_comment: '',
+      catalog_num: '',
+      comment: '',
+      lyrics: '',
+      bpm: 0,
+      channels: 0,
+      order_title: '',
+      mbz_release_track_id: '',
+      rg_album_gain: 0,
+      rg_album_peak: 0,
+      rg_track_gain: 0,
+      rg_track_peak: 0,
+      medium_image_url: song.HasCoverArt
+        ? url +
+        '/media/cover?access_token=' +
+        store_server_login_info.server_accessToken +
+        '&type=media&target_id=' +
+        song.ID
+        : error_album,
+    }
+  }
+
+  private mapMedia_Random(song: any, url: string, index: number, last_index: number) {
+    return {
+      absoluteIndex: index + 1 + last_index,
+      favorite: song.Starred,
+      play_count: song.PlayCount,
+      play_date: song.PlayDate,
+      play_complete_count: song.PlayCompleteCount,
+      rating: song.Rating,
+      duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.Duration),
+      id: song.ID,
+      title: song.Title,
+      path:
+        url +
+        '/media/stream?access_token=' +
+        store_server_login_info.server_accessToken +
+        '&media_file_id=' +
+        song.ID,
+      artist: song.Artist,
+      album: song.Album,
+      artist_id: song.ArtistID,
+      album_id: song.AlbumID,
+      album_artist: song.AlbumArtist,
+      has_cover_art: song.HasCoverArt ? 1 : 0,
+      track_number: 0,
+      disc_number: 0,
+      year: song.Year,
+      size: song.Size,
+      suffix: song.Suffix,
+      duration: song.Duration,
+      bit_rate: song.BitRate,
+      encoding_format: song.EncodingFormat,
+      genre: '',
+      compilation: song.Compilation ? 1 : 0,
+      created_at: song.CreatedAt,
+      updated_at: song.UpdatedAt,
+      all_artist_ids: song.AllArtistIDs,
+      all_album_artist_ids: song.AllAlbumArtistIDs,
+      full_text: '',
+      album_artist_id: song.AlbumArtistID,
+      order_album_name: '',
+      order_album_artist_name: '',
+      order_artist_name: '',
+      sort_album_name: '',
+      sort_artist_name: '',
+      sort_album_artist_name: '',
+      sort_title: '',
+      disc_subtitle: '',
+      mbz_track_id: '',
+      mbz_album_id: '',
+      mbz_artist_id: '',
+      mbz_album_artist_id: '',
+      mbz_album_type: '',
+      mbz_album_comment: '',
+      catalog_num: '',
+      comment: '',
+      lyrics: '',
+      bpm: 0,
+      channels: 0,
+      order_title: '',
+      mbz_release_track_id: '',
+      rg_album_gain: 0,
+      rg_album_peak: 0,
+      rg_track_gain: 0,
+      rg_track_peak: 0,
+      medium_image_url: song.HasCoverArt
+        ? url +
+        '/media/cover?access_token=' +
+        store_server_login_info.server_accessToken +
+        '&type=media&target_id=' +
+        song.ID
+        : error_album,
+    }
+  }
+
+  private mapMedia_Cue(song: any, url: string, index: number, last_index: number) {
+    return {
+      absoluteIndex: index + 1 + last_index,
+      favorite: song.Starred,
+      play_count: song.PlayCount,
+      play_date: song.PlayDate,
+      play_complete_count: song.PlayCompleteCount,
+      rating: song.Rating,
+      duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.CueDuration),
+      id: song.ID,
+      title: song.Title,
+      path:
+        url +
+        '/media/stream?access_token=' +
+        store_server_login_info.server_accessToken +
+        '&cue_model=true&media_file_id=' +
+        song.ID,
+      artist: song.Performer,
+      artist_id: song.PerformerID,
+      album: song.FileName,
+      has_cover_art: song.HasCoverArt ? 1 : 0,
+      track_number: 0,
+      disc_number: 0,
+      year: song.Rem.DATE,
+      size: song.Size,
+      suffix: song.Suffix,
+      duration: song.CueDuration,
+      bit_rate: song.CueBitRate,
+      encoding_format: song.EncodingFormat,
+      genre: song.Rem.GENRE,
+      compilation: song.Compilation ? 1 : 0,
+      created_at: song.CreatedAt,
+      updated_at: song.UpdatedAt,
+      all_artist_ids: song.AllArtistIDs,
+      full_text: '',
+      order_album_name: '',
+      order_album_artist_name: '',
+      order_artist_name: '',
+      sort_album_name: '',
+      sort_artist_name: '',
+      sort_album_artist_name: '',
+      sort_title: '',
+      disc_subtitle: '',
+      mbz_track_id: '',
+      mbz_album_id: '',
+      mbz_artist_id: '',
+      mbz_album_artist_id: '',
+      mbz_album_type: '',
+      mbz_album_comment: '',
+      catalog_num: '',
+      comment: '',
+      lyrics: '',
+      bpm: 0,
+      channels: 0,
+      order_title: '',
+      mbz_release_track_id: '',
+      rg_album_gain: 0,
+      rg_album_peak: 0,
+      rg_track_gain: 0,
+      rg_track_peak: 0,
+      medium_image_url: song.HasCoverArt
+        ? url +
+        '/media/cover/path?access_token=' +
+        store_server_login_info.server_accessToken +
+        '&type=cover&target_id=' +
+        song.ID
+        : error_album,
+      cue_tracks: song.CueTracks,
+      cue_track_count: song.CueTrackCount,
+      cue_track_show: false,
+    }
+  }
+
+  private mapMedia_Recommend(song: any, url: string, index: number) {
+    return {
+      absoluteIndex: index + 1,
+      favorite: song.Starred,
+      play_count: song.PlayCount,
+      play_date: song.PlayDate,
+      play_complete_count: song.PlayCompleteCount,
+      rating: song.Rating,
+      duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.Duration),
+      id: song.ID,
+      title: song.Title,
+      path:
+        url +
+        '/media/stream?access_token=' +
+        store_server_login_info.server_accessToken +
+        '&media_file_id=' +
+        song.ID,
+      artist: song.Artist,
+      album: song.Album,
+      artist_id: song.ArtistID,
+      album_id: song.AlbumID,
+      album_artist: song.AlbumArtist,
+      has_cover_art: song.HasCoverArt ? 1 : 0,
+      track_number: 0,
+      disc_number: 0,
+      year: song.Year,
+      size: song.Size,
+      suffix: song.Suffix,
+      duration: song.Duration,
+      bit_rate: song.BitRate,
+      encoding_format: song.EncodingFormat,
+      genre: song.Genre,
+      compilation: song.Compilation ? 1 : 0,
+      created_at: song.CreatedAt,
+      updated_at: song.UpdatedAt,
+      all_artist_ids: song.AllArtistIDs,
+      all_album_artist_ids: song.AllAlbumArtistIDs,
+      full_text: '',
+      album_artist_id: song.AlbumArtistID,
+      order_album_name: '',
+      order_album_artist_name: '',
+      order_artist_name: '',
+      sort_album_name: '',
+      sort_artist_name: '',
+      sort_album_artist_name: '',
+      sort_title: '',
+      disc_subtitle: '',
+      mbz_track_id: '',
+      mbz_album_id: '',
+      mbz_artist_id: '',
+      mbz_album_artist_id: '',
+      mbz_album_type: '',
+      mbz_album_comment: '',
+      catalog_num: '',
+      comment: '',
+      lyrics: '',
+      bpm: 0,
+      channels: 0,
+      order_title: '',
+      mbz_release_track_id: '',
+      rg_album_gain: 0,
+      rg_album_peak: 0,
+      rg_track_gain: 0,
+      rg_track_peak: 0,
+      medium_image_url: song.HasCoverArt
+        ? url +
+        '/media/cover?access_token=' +
+        store_server_login_info.server_accessToken +
+        '&type=media&target_id=' +
+        song.ID
+        : error_album,
+    }
+  }
+
+  private mapAlbum_Home(album: any, url: string) {
+    return {
+      favorite: album.Starred,
+      play_count: album.PlayCount,
+      play_date: album.PlayDate,
+      play_complete_count: album.PlayCompleteCount,
+      rating: album.Rating,
+      id: album.ID,
+      name: album.Name,
+      artist_id: album.ArtistID,
+      embed_art_path: '',
+      artist: album.Artist,
+      album_artist: album.AlbumArtist,
+      min_year: album.MinYear,
+      max_year: album.MaxYear,
+      compilation: album.Compilation ? 1 : 0,
+      song_count: album.SongCount,
+      duration: album.Duration,
+      genre: album.Genre,
+      has_cover_art: album.HasCoverArt ? 1 : 0,
+      created_at: album.CreatedAt,
+      updated_at: album.UpdatedAt,
+      all_artist_ids: album.AllArtistIDs,
+      all_album_artist_ids: album.AllAlbumArtistIDs,
+      full_text: '',
+      album_artist_id: album.AlbumArtistID,
+      order_album_name: '',
+      order_album_artist_name: '',
+      sort_album_name: '',
+      sort_artist_name: '',
+      sort_album_artist_name: '',
+      size: album.Size,
+      mbz_album_id: '',
+      mbz_album_artist_id: '',
+      mbz_album_type: '',
+      mbz_album_comment: '',
+      catalog_num: '',
+      comment: '',
+      image_files: '',
+      paths: '',
+      description: '',
+      small_image_url: '',
+      medium_image_url: album.HasCoverArt
+        ? url +
+        '/media/cover?access_token=' +
+        store_server_login_info.server_accessToken +
+        '&type=album&target_id=' +
+        album.ID
+        : error_album,
+      large_image_url: '',
+      external_url: '',
+      external_info_updated_at: '',
+    }
+  }
+
+  private mapAlbum(album: any, url: string, index: number, last_index: number) {
+    return {
+      absoluteIndex: index + 1 + last_index,
+      favorite: album.Starred,
+      play_count: album.PlayCount,
+      play_date: album.PlayDate,
+      play_complete_count: album.PlayCompleteCount,
+      rating: album.Rating,
+      id: album.ID,
+      name: album.Name,
+      artist_id: album.ArtistID,
+      embed_art_path: '',
+      artist: album.Artist,
+      album_artist: album.AlbumArtist,
+      min_year: album.MinYear,
+      max_year: album.Year,
+      compilation: album.Compilation ? 1 : 0,
+      song_count: album.SongCount,
+      duration: album.Duration,
+      genre: '',
+      has_cover_art: album.HasCoverArt ? 1 : 0,
+      created_at: album.CreatedAt,
+      updated_at: album.UpdatedAt,
+      all_artist_ids: album.AllArtistIDs,
+      all_album_artist_ids: album.AllAlbumArtistIDs,
+      full_text: '',
+      album_artist_id: album.AlbumArtistID,
+      order_album_name: '',
+      order_album_artist_name: '',
+      sort_album_name: '',
+      sort_artist_name: '',
+      sort_album_artist_name: '',
+      size: album.Size,
+      mbz_album_id: '',
+      mbz_album_artist_id: '',
+      mbz_album_type: '',
+      mbz_album_comment: '',
+      catalog_num: '',
+      comment: '',
+      image_files: '',
+      paths: '',
+      description: '',
+      small_image_url: '',
+      medium_image_url: album.HasCoverArt
+        ? url +
+        '/media/cover?access_token=' +
+        store_server_login_info.server_accessToken +
+        '&type=album&target_id=' +
+        album.ID
+        : error_album,
+      large_image_url: '',
+      external_url: '',
+      external_info_updated_at: '',
+    }
+  }
+  
+  private mapArtist(artist: any, url: string, index: number, last_index: number) {
+    return {
+      absoluteIndex: index + 1 + last_index,
+      favorite: artist.Starred,
+      play_count: artist.PlayCount,
+      play_date: artist.PlayDate,
+      play_complete_count: artist.PlayCompleteCount,
+      rating: artist.Rating,
+      id: artist.ID,
+      name: artist.Name,
+      album_count: artist.AlbumCount,
+      guest_album_count: artist.GuestAlbumCount,
+      full_text: '',
+      order_artist_name: '',
+      sort_artist_name: '',
+      song_count: artist.SongCount,
+      guest_song_count: artist.GuestSongCount,
+      cue_count: artist.CueCount,
+      guest_cue_count: artist.GuestCueCount,
+      compilation: artist.Compilation ? 1 : 0,
+      has_cover_art: artist.HasCoverArt ? 1 : 0,
+      size: artist.Size,
+      all_artist_ids: artist.AllArtistIDs,
+      mbz_artist_id: '',
+      biography: '',
+      small_image_url: '',
+      medium_image_url: artist.HasCoverArt
+        ? url +
+        '/media/cover?access_token=' +
+        store_server_login_info.server_accessToken +
+        '&type=artist&target_id=' +
+        artist.ID
+        : error_artist,
+      large_image_url: '',
+      similar_artists: '',
+      external_url: '',
+      external_info_updated_at: '',
     }
   }
 }

@@ -382,10 +382,45 @@ onBeforeUnmount(() => {
   dynamicScroller_recently_added.value = null
   dynamicScroller_recently_played.value = null
 })
+
+const home_Files_temporary_type_options = ref([
+  {
+    label: computed(() => t('entity.track_other')),
+    value: 'media',
+  },
+  {
+    label: computed(() => t('entity.album_other')),
+    value: 'album',
+  },
+  {
+    label: computed(() => t('entity.artist_other')),
+    value: 'artist',
+  },
+  {
+    label: computed(() => t('nsmusics.view_page.disk')),
+    value: 'media_cue',
+  },
+])
+function change_home_Files_temporary_type(){
+
+}
 </script>
 
 <template>
   <div class="home-wall-container">
+    <n-space v-if="store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong'"
+             style="margin-top: 6px;" align="center">
+      <div style="margin-left: 9px;font-size: 20px;font-weight: 600;">
+        {{ $t('common.home') + ' : '}}
+      </div>
+      <n-select
+        style="width: 150px"
+        size="small"
+        :options="home_Files_temporary_type_options"
+        v-model:value="store_view_home_page_info.home_Files_temporary_type_select"
+        @update:value="change_home_Files_temporary_type"
+      />
+    </n-space>
     <n-space
       vertical
       class="category-section"
@@ -395,7 +430,13 @@ onBeforeUnmount(() => {
         justify="space-between"
         align="center"
         class="category-header"
-        :style="{ width: `calc(100vw - ${collapsed_width - 18}px)` }"
+        :style="{
+          width: `calc(100vw - ${collapsed_width - 18}px)`,
+          marginTop: `${
+            store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong' ?
+            12 : 18
+          }px`,
+        }"
       >
         <n-space align="center">
           <span class="category-title">
@@ -1209,9 +1250,6 @@ onBeforeUnmount(() => {
 .category-header {
   width: calc(100vw - 200px);
   margin-left: 9px;
-}
-.category-header:nth-child(1) {
-  margin-top: 18px;
 }
 
 .category-title {

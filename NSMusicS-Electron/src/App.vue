@@ -897,6 +897,24 @@ onMounted(async () => {
       await store_server_login_logic.checkLoginStatus()
     } else {
       await store_app_configs_info.load_app()
+      /// init tray
+      try {
+        await ipcRenderer.invoke('i18n-tray-label-menu', [
+          t('player.play'),
+          t('player.pause'),
+          t('player.previous'),
+          t('player.next'),
+          t('nsmusics.view_page.desktop_lyrics'),
+          t('common.quit'),
+          t('nsmusics.siderbar_player.playback_1'),
+          t('nsmusics.siderbar_player.playback_2'),
+          t('nsmusics.siderbar_player.playback_3'),
+          t('nsmusics.siderbar_player.playback_4'),
+        ])
+        await ipcRenderer.invoke('i18n-tray-music-order', store_player_audio_logic.play_order)
+      } catch (e) {
+        console.log(e)
+      }
     }
   } catch (e) {
     console.error(e)
