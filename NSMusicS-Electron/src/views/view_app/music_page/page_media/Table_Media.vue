@@ -1510,54 +1510,32 @@ const stopWatching_boolHandleItemClick_Played = watch(
 ///
 const browseFolderOptions = ref([])
 const audioSuffixOptions = ref([
-  {
-    label: 'mp3',
-    value: 'mp3',
-  },
-  {
-    label: 'wav',
-    value: 'wav',
-  },
-  {
-    label: 'flac',
-    value: 'flac',
-  },
-  {
-    label: 'aac',
-    value: 'aac',
-  },
-  {
-    label: 'ogg',
-    value: 'ogg',
-  },
-  {
-    label: 'm4a',
-    value: 'm4a',
-  },
-  {
-    label: 'wma',
-    value: 'wma',
-  },
-  {
-    label: 'ape',
-    value: 'ape',
-  },
-  {
-    label: 'opus',
-    value: 'opus',
-  },
-  {
-    label: 'dsd',
-    value: 'dsd',
-  },
-  {
-    label: 'dff',
-    value: 'dff',
-  },
-  {
-    label: 'aiff',
-    value: 'aiff',
-  },
+  // 第一梯队：绝对主流
+  { label: 'mp3', value: 'mp3' },
+  { label: 'wav', value: 'wav' },
+  { label: 'aac', value: 'aac' },
+  { label: 'flac', value: 'flac' },
+  // 第二梯队：常见有条件支持
+  { label: 'm4a', value: 'm4a' },
+  { label: 'wma', value: 'wma' },
+  { label: 'ogg', value: 'ogg' },
+  { label: 'opus', value: 'opus' },
+  // 第二梯队：专业/生态限定
+  { label: 'aiff', value: 'aiff' },
+  { label: 'alac', value: 'alac' },
+  { label: 'ape', value: 'ape' },
+  // 第三梯队：DSD专业格式
+  { label: 'dsd', value: 'dsd' },
+  { label: 'dff', value: 'dff' },
+  { label: 'dsdiff', value: 'dsdiff' },
+  { label: 'dsf', value: 'dsf' },
+  // 第三梯队：语音编码
+  { label: 'amr', value: 'amr' },
+  { label: 'spx', value: 'spx' },
+  // 第三梯队：冷门无损
+  { label: 'wv', value: 'wv' },
+  { label: 'tta', value: 'tta' },
+  { label: 'tak', value: 'tak' }
 ])
 let folder_Entity_ApiService_of_NineSong = new Folder_Entity_ApiService_of_NineSong(
   store_server_login_info.server_url

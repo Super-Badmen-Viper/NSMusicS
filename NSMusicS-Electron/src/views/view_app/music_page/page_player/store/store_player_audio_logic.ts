@@ -265,11 +265,11 @@ export const store_player_audio_logic = reactive({
         const retrieval = new Retrieval_ApiService_of_NineSong(store_server_login_info.server_url)
         if(!store_player_audio_logic.player_model_cue) {
           const lyrics = await retrieval.getLyrics_id(media_file.id)
-          if (lyrics != undefined) {
+          if (lyrics != undefined && lyrics.length > 0) {
             await store_player_audio_info.set_lyric(lyrics)
           } else {
             const lyrics_search = await retrieval.getLyrics_filter(media_file.artist, media_file.title, '')
-            if (lyrics_search != undefined) {
+            if (lyrics_search != undefined && lyrics_search.length > 0) {
               await store_player_audio_info.set_lyric(lyrics_search)
             } else {
               await store_player_audio_info.set_lyric('')
@@ -279,7 +279,7 @@ export const store_player_audio_logic = reactive({
           const lyrics_search = await retrieval.getLyrics_filter(
             store_player_audio_info.this_audio_artist_name, store_player_audio_info.this_audio_song_name, ''
           )
-          if (lyrics_search != undefined) {
+          if (lyrics_search != undefined && lyrics_search.length > 0) {
             await store_player_audio_info.set_lyric(lyrics_search)
           } else {
             await store_player_audio_info.set_lyric('')
