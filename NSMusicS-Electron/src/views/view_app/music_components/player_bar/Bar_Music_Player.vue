@@ -832,7 +832,6 @@ function play_skip_cue_order (
           store_player_audio_info.this_audio_album_name = media_file.title
           //
           store_player_audio_info.this_audio_cue_track_current_no = i
-          store_player_audio_info.this_audio_cue_track_current_indexes = track.INDEXES
           //
           find_result = true;
           //
