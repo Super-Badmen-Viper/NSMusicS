@@ -485,10 +485,19 @@ function change_home_Files_temporary_type(){
             {{
               $t('page.home.mostPlayed') +
               ' : ' +
-              (store_server_users.server_select_kind === 'jellyfin' ||
-              store_server_users.server_select_kind === 'emby'
+              (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby'
                 ? $t('entity.track_other')
-                : $t('entity.album_other'))
+                :
+                store_server_users.server_select_kind === 'ninesong' ?
+                  (store_view_home_page_info.home_Files_temporary_type_select === 'media' ?
+                    $t('entity.track_other') :
+                    store_view_home_page_info.home_Files_temporary_type_select === 'album' ?
+                      $t('entity.album_other') :
+                      store_view_home_page_info.home_Files_temporary_type_select === 'artist' ?
+                        $t('entity.artist_other') :
+                        store_view_home_page_info.home_Files_temporary_type_select === 'media_cue' ?
+                          $t('nsmusics.view_page.disk') : $t('entity.album_other'))
+                  : $t('entity.album_other'))
             }}
           </span>
           <n-tooltip trigger="hover" placement="top">
@@ -683,10 +692,19 @@ function change_home_Files_temporary_type(){
             {{
               $t('page.home.explore') +
               ' : ' +
-              (store_server_users.server_select_kind === 'jellyfin' ||
-              store_server_users.server_select_kind === 'emby'
+              (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby'
                 ? $t('entity.track_other')
-                : $t('entity.album_other'))
+                :
+                store_server_users.server_select_kind === 'ninesong' ?
+                  (store_view_home_page_info.home_Files_temporary_type_select === 'media' ?
+                    $t('entity.track_other') :
+                    store_view_home_page_info.home_Files_temporary_type_select === 'album' ?
+                      $t('entity.album_other') :
+                      store_view_home_page_info.home_Files_temporary_type_select === 'artist' ?
+                        $t('entity.artist_other') :
+                        store_view_home_page_info.home_Files_temporary_type_select === 'media_cue' ?
+                          $t('nsmusics.view_page.disk') : $t('entity.album_other'))
+                  : $t('entity.album_other'))
             }}
           </span>
           <n-tooltip trigger="hover" placement="top">
@@ -881,9 +899,19 @@ function change_home_Files_temporary_type(){
             {{
               $t('page.home.newlyAdded') +
               ' : ' +
-              (store_server_users.server_select_kind === 'jellyfin'
+              (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby'
                 ? $t('entity.track_other')
-                : $t('entity.album_other'))
+                :
+                store_server_users.server_select_kind === 'ninesong' ?
+                  (store_view_home_page_info.home_Files_temporary_type_select === 'media' ?
+                    $t('entity.track_other') :
+                    store_view_home_page_info.home_Files_temporary_type_select === 'album' ?
+                      $t('entity.album_other') :
+                      store_view_home_page_info.home_Files_temporary_type_select === 'artist' ?
+                        $t('entity.artist_other') :
+                        store_view_home_page_info.home_Files_temporary_type_select === 'media_cue' ?
+                          $t('nsmusics.view_page.disk') : $t('entity.album_other'))
+                  : $t('entity.album_other'))
             }}
           </span>
           <n-tooltip trigger="hover" placement="top">
@@ -1078,10 +1106,19 @@ function change_home_Files_temporary_type(){
             {{
               $t('page.home.recentlyPlayed') +
               ' : ' +
-              (store_server_users.server_select_kind === 'jellyfin' ||
-              store_server_users.server_select_kind === 'emby'
+              (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby'
                 ? $t('entity.track_other')
-                : $t('entity.album_other'))
+                :
+                store_server_users.server_select_kind === 'ninesong' ?
+                  (store_view_home_page_info.home_Files_temporary_type_select === 'media' ?
+                    $t('entity.track_other') :
+                    store_view_home_page_info.home_Files_temporary_type_select === 'album' ?
+                      $t('entity.album_other') :
+                      store_view_home_page_info.home_Files_temporary_type_select === 'artist' ?
+                        $t('entity.artist_other') :
+                        store_view_home_page_info.home_Files_temporary_type_select === 'media_cue' ?
+                          $t('nsmusics.view_page.disk') : $t('entity.album_other'))
+                  : $t('entity.album_other'))
             }}
           </span>
           <n-tooltip trigger="hover" placement="top">
