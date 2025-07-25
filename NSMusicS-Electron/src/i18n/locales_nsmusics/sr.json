@@ -72,7 +72,7 @@
       "mediaLibrary_media_tag_modify_local": "Тренутно, подржава се само локални режим претраживања|измена информација о ознакама",
       "hideHalfLyric": "Сакриј текст песме пре текућег пратећег текста",
       "guest": "Гост",
-      "disk": "Диск",
+      "disk": "CUE Диск",
       "warning_web_play_alac": "Detektovano da korisnik koristi web komponentu za reprodukciju za reprodukciju m4a fajlova kodiranih kao alac. Aktiviran ffmpeg komponent na NineSong serveru za prekodiranje alac u aac kao privremenu muzičku resursu.",
       "warning_mpv_play_alac": "Molimo sačekajte odgovor servera. Treba pričekati nekoliko sekundi da bi se prekodiranje i reprodukcija završila, ili možete koristiti mpv komponentu za reprodukciju kako biste preskokali korak prekodiranja alac u aac.",
       "virtual_orbit_division": "Виртуелна Деловање Трага",

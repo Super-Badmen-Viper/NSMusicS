@@ -72,7 +72,7 @@
       "mediaLibrary_media_tag_modify_local": "Actuellement, seul le mode local de navigation|modification des informations des balises est pris en charge",
       "hideHalfLyric": "Masquer les paroles avant les paroles actuellement suivies",
       "guest": "Participation",
-      "disk": "Disque",
+      "disk": "CUE Disque",
       "warning_web_play_alac": "Utilisation du composant de lecture Web par l'utilisateur détectée pour lire un fichier m4a encodé en alac. Activation du composant ffmpeg du serveur NineSong pour transcoder l'alac en aac en tant que ressource musicale temporaire",
       "warning_mpv_play_alac": "Veuillez patienter pendant la réponse du serveur. Il faut attendre quelques secondes que la transcoding soit terminée et que la lecture commence, ou vous pouvez utiliser le composant de lecture mpv pour sauter l'étape de transcoding de l'alac à l'aac",
       "virtual_orbit_division": "Division de Voie Virtuelle",
