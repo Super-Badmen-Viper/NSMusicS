@@ -667,18 +667,7 @@ import { debounce } from 'lodash'
 import { store_view_media_page_logic } from '@/views/view_app/music_page/page_media/store/store_view_media_page_logic'
 import { MultipleStopOutlined } from '@vicons/material'
 import { store_general_fetch_media_cue_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list'
-/// update selected media_file
-const Type_Selected_Media_File_To_Playlist = ref(false)
 
-////// bulk_operation and select_line
-const click_open_bulk_operation = () => {
-  if (bool_start_play.value == true) {
-    bool_start_play.value = false
-    store_view_media_cue_page_logic.set_media_Files_selected_all(false)
-  } else {
-    bool_start_play.value = true
-  }
-}
 ////// Right_click_on_songline show menu
 let click_count = 0
 const bool_start_play = ref<boolean>(true)

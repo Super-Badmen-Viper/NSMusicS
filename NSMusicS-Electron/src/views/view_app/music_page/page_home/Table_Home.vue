@@ -44,6 +44,9 @@ import { store_player_audio_logic } from '@/views/view_app/music_page/page_playe
 import {
   store_playlist_list_logic
 } from '@/views/view_app/music_components/player_list/store/store_playlist_list_logic'
+import {
+  store_general_fetch_media_cue_list
+} from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list'
 
 const { t } = useI18n({ inheritLocale: true })
 const message = useMessage()
@@ -249,7 +252,16 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
       })
       store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.push(item.id)
     }else if(store_view_home_page_info.home_Files_temporary_type_select === 'media_cue') {
-
+      if (store_server_user_model.model_server_type_of_web) {
+        store_general_fetch_media_cue_list.fetchData_Media_of_data_synchronization_to_playlist()
+        store_server_user_model.random_play_model = false
+      }
+      await store_player_audio_logic.update_current_media_info(item, '1-1')
+      store_playlist_list_logic.media_page_handleItemDbClick = true
+      store_player_appearance.player_mode_of_lock_playlist = false
+      store_player_audio_info.this_audio_restart_play = true
+      //
+      store_general_fetch_player_list.fetchData_PlayList(true)
     }
     store_playlist_list_info.reset_carousel()
     return
@@ -453,15 +465,20 @@ function change_home_Files_temporary_type(){
 
 <template>
   <div class="home-wall-container">
-    <n-space v-if="store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong'"
-             style="margin-top: 6px;margin-left: 8px;" align="center">
+    <n-space style="margin-top: 6px;margin-left: 8px;" align="center">
       <n-select
-        style="width: 150px"
         size="small"
+        style="min-width: 156px;"
+        :disabled="!(store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong')"
         :options="home_Files_temporary_type_options"
         v-model:value="store_view_home_page_info.home_Files_temporary_type_select"
         @update:value="change_home_Files_temporary_type"
       />
+      <div v-if="!(store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong')"
+           style="font-size: 15px; font-weight: bold;">
+        {{ '→ ' + $t('Alternate') + $t('Data') + $t('LabelSource') + ', ' + $t('error.serverRequired') + ': NineSong' }}
+        <br />
+      </div>
     </n-space>
     <n-space
       vertical
@@ -472,12 +489,9 @@ function change_home_Files_temporary_type(){
         justify="space-between"
         align="center"
         class="category-header"
+        style="margin-top: 12px;"
         :style="{
           width: `calc(100vw - ${collapsed_width - 18}px)`,
-          marginTop: `${
-            store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong' ?
-            12 : 18
-          }px`,
         }"
       >
         <n-space align="center">
