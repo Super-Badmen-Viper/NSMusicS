@@ -781,6 +781,7 @@ const deleteMark = (position: number) => {
 const clearMarks = () => {
   store_player_audio_logic.marks_slider_singleValue = {};
 };
+let media_cue_temp = undefined
 function play_skip_cue_order (
   increased: number, find_model: boolean, currentTime: any, duration: any
 ) {
@@ -835,7 +836,7 @@ function play_skip_cue_order (
           //
           find_result = true;
           //
-          store_player_audio_logic.update_current_lyrics(media_file)
+          media_cue_temp = track
         }
         //
         const mark_time = current_cue_time / duration * 100;
@@ -878,6 +879,27 @@ function play_skip_cue_order (
   ///
   return true
 }
+import { Retrieval_ApiService_of_NineSong } from '@/data/data_access/servers_configs/ninesong_api/services_web/Scene/Music/Retrieval/index_service'
+watch(
+  () => store_player_audio_info.this_audio_cue_track_current_no,
+  async (newValue) => {
+    const retrieval = new Retrieval_ApiService_of_NineSong(store_server_login_info.server_url)
+    if(
+      store_server_user_model.model_server_type_of_web &&
+      store_server_users.server_select_kind === 'ninesong' &&
+      store_player_audio_logic.player_model_cue
+    ) {
+      if(media_cue_temp != undefined) {
+        const lyrics_search = await retrieval.getLyrics_filter(media_cue_temp.Performer, media_cue_temp.Title, '')
+        if (lyrics_search != undefined && lyrics_search.length > 0) {
+          await store_player_audio_info.set_lyric(lyrics_search)
+        } else {
+          await store_player_audio_info.set_lyric('')
+        }
+      }
+    }
+  }
+)
 ///
 if (isElectron) {
   ipcRenderer.on(
@@ -1565,7 +1587,8 @@ watch(
           <n-space style="width: 46px" justify="end">
             {{ store_player_audio_logic.current_play_time }}
           </n-space>
-          <n-slider
+          <n-config-provider :theme="null">
+            <n-slider
             style="
               width: 320px;
               color: var(--primary-color-hover);
@@ -1611,6 +1634,7 @@ watch(
             @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
             @mouseup="store_player_audio_logic.player_range_duration_isDragging = false"
           />
+          </n-config-provider>
           <n-space style="width: 46px">
             {{ store_player_audio_logic.total_play_time }}
           </n-space>

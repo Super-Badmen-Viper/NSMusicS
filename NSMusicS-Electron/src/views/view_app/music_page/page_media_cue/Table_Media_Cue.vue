@@ -425,14 +425,6 @@ const page_songlists_handleselected_updatevalue = async (value: any) => {
   store_view_media_cue_page_logic.set_media_Files_selected_all(false)
 }
 
-////// router_music history
-const get_router_history_model_pervious = () => {
-  store_router_history_data_of_media.get_router_history_model_of_Media(-1)
-}
-const get_router_history_model_next = () => {
-  store_router_history_data_of_media.get_router_history_model_of_Media(1)
-}
-
 /////// emits audio_info of songlist_view_list
 const handleItemClick = () => {
   click_count++
@@ -443,18 +435,16 @@ const handleItemDbClick = async (media_file: any, index: any) => {
       click_count = 0
       if (media_file.path != store_player_audio_info.this_audio_file_path) {
         if (store_server_user_model.model_server_type_of_web) {
-          /// Data synchronization
           store_general_fetch_media_cue_list.fetchData_Media_of_data_synchronization_to_playlist()
           store_server_user_model.random_play_model = false
         }
-        //
         await store_player_audio_logic.update_current_media_info(media_file, index)
         store_playlist_list_logic.media_page_handleItemDbClick = true
         store_player_appearance.player_mode_of_lock_playlist = false
         store_player_audio_info.this_audio_restart_play = true
-
+        //
         store_general_fetch_player_list.fetchData_PlayList(true)
-
+        //
         store_playlist_list_info.reset_carousel()
       } else {
         const index_num = typeof index === 'number' ? Number(index) : Number(index.split('-')[1])
@@ -578,32 +568,11 @@ const handleItemClick_album = async (album_id: string) => {
     )
   }
 }
-const Open_this_artist_all_artist_list_click = (artist_id: string) => {
-  if (store_server_user_model.model_server_type_of_web) {
-    store_general_fetch_media_list.set_artist_id(artist_id)
-    store_view_media_cue_page_logic.page_songlists_selected = 'song_list_all'
-    store_general_fetch_album_list.set_artist_id(artist_id)
-    store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
-  }
-  if (
-    (store_server_users.server_select_kind != 'jellyfin' &&
-      store_server_users.server_select_kind != 'emby') ||
-    store_server_user_model.model_server_type_of_local
-  ) {
-    console.log('artist_list_of_artist_id_artist_click：' + artist_id)
-    store_router_data_logic.get_album_list_of_artist_id_by_artist_info(artist_id)
-  } else {
-    // Jellyfin 有相当一部分flac媒体无法识别为专辑
-    store_player_appearance.player_mode_of_medialist_from_external_import = false
-    store_view_media_cue_page_logic.page_songlists_keyword = artist_id
-    store_router_data_info.router.push('song')
-  }
-}
 
 ////// changed_data write to sqlite
-const handleItemClick_Favorite = (id: any, favorite: Boolean) => {
+const handleItemClick_Favorite = (id: any, favorite: boolean) => {
   click_count = 0
-  store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id, favorite)
+  store_server_data_set_media_cueInfo.Set_MediaInfo_To_Favorite_Server(id, favorite)
   page_songlists_statistic.value.forEach((item: any) => {
     if (item.id === 'song_list_love') {
       store_view_media_cue_page_info.media_starred_count += !favorite ? 1 : -1
@@ -633,7 +602,7 @@ const handleItemClick_Rating = (id_rating: any) => {
   if (rating_item != undefined) {
     const [id, rating] = id_rating.split('-')
     if (after_rating) {
-      store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, 0)
+      store_server_data_set_media_cueInfo.Set_MediaInfo_To_Rating_Server(id, 0)
       if (id === store_player_audio_info.this_audio_song_id) {
         store_player_audio_info.this_audio_song_rating = 0
         //
@@ -646,7 +615,7 @@ const handleItemClick_Rating = (id_rating: any) => {
       rating_item.rating = 0
       store_playlist_list_info.playlist_Menu_Item_Rating = 0
     } else {
-      store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, rating)
+      store_server_data_set_media_cueInfo.Set_MediaInfo_To_Rating_Server(id, rating)
       if (id === store_player_audio_info.this_audio_song_id) {
         store_player_audio_info.this_audio_song_rating = rating
         //
@@ -675,7 +644,7 @@ import { store_view_media_cue_page_info } from '@/views/view_app/music_page/page
 import { store_view_media_cue_page_logic } from '@/views/view_app/music_page/page_media_cue/store/store_view_media_cue_page_logic'
 import { store_player_appearance } from '@/views/view_app/music_page/page_player/store/store_player_appearance'
 import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
-import { store_local_data_set_mediaInfo } from '@/data/data_stores/local/local_data_synchronization/store_local_data_set_mediaInfo'
+import { store_server_data_set_media_cueInfo } from '@/data/data_stores/server/server_api_synchronization/store_server_data_set_media_cueInfo'
 import type { SelectBaseOption } from 'naive-ui/es/select/src/interface'
 import { store_local_db_info } from '@/data/data_stores/local/store_local_db_info'
 import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
@@ -698,241 +667,10 @@ import { debounce } from 'lodash'
 import { store_view_media_page_logic } from '@/views/view_app/music_page/page_media/store/store_view_media_page_logic'
 import { MultipleStopOutlined } from '@vicons/material'
 import { store_general_fetch_media_cue_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list'
-const Type_Add_Playlist = ref(false)
-const playlist_set_of_addPlaylist_of_playlistname = ref('')
-const playlist_set_of_addPlaylist_of_comment = ref('')
-const playlist_set_of_addPlaylist_of_public = ref(false)
-async function update_playlist_addPlaylist() {
-  try {
-    Type_Add_Playlist.value = false
-    if (store_server_user_model.model_select === 'server') {
-      // send json to server
-      let getCreatePlaylist_set_id =
-        await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_CreatePlaylist_Server(
-          playlist_set_of_addPlaylist_of_playlistname.value,
-          playlist_set_of_addPlaylist_of_public.value
-        )
-      if (getCreatePlaylist_set_id !== undefined && getCreatePlaylist_set_id !== '') {
-        console.log(
-          'CreatePlaylist_of_ND: ' +
-            store_server_user_model.username +
-            ': ' +
-            getCreatePlaylist_set_id
-        )
-        await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_SetPlaylist(
-          getCreatePlaylist_set_id,
-          playlist_set_of_addPlaylist_of_playlistname.value,
-          playlist_set_of_addPlaylist_of_comment.value,
-          playlist_set_of_addPlaylist_of_public.value
-        )
-        console.log(
-          'SetPlaylist_of_ND: ' + store_server_user_model.username + ': ' + getCreatePlaylist_set_id
-        )
-        // get server all playlist
-        await store_general_model_player_list.get_playlists_info()
-        //
-        console.log(
-          'SetPlaylist_of_Local: ' +
-            getCreatePlaylist_set_id +
-            ': ' +
-            playlist_set_of_addPlaylist_of_playlistname.value +
-            ': ' +
-            playlist_set_of_addPlaylist_of_comment.value +
-            ': ' +
-            playlist_set_of_addPlaylist_of_public.value
-        )
-        //
-        store_view_media_cue_page_info.media_playlist_count++
-      }
-    } else {
-      store_general_model_player_list.get_playlist_tracks_temporary_add(
-        playlist_set_of_addPlaylist_of_playlistname.value
-      )
-    }
-
-    page_songlists_statistic.value.forEach((item: any) => {
-      if (item.id === 'song_list_all_PlayList') {
-        item.song_count = store_view_media_cue_page_info.media_playlist_count + ' *'
-      }
-    })
-  } catch (e) {
-    console.error(e)
-  }
-}
-/// update playlist
-const Type_Update_Playlist = ref(false)
-const playlist_update_emit_id = ref<string>('')
-const playlist_set_of_updatePlaylist_of_playlistcomment = ref('')
-const playlist_set_of_updatePlaylist_of_comment = ref('')
-const playlist_set_of_updatePlaylist_of_public = ref(false)
-function update_playlist_set_of_updatePlaylist_of_playlistname(
-  value: Array | string | number | null,
-  option: SelectBaseOption | null | SelectBaseOption[]
-) {
-  playlist_update_emit_id.value = value
-  playlist_set_of_updatePlaylist_of_playlistcomment.value = option.label
-  // if(store_server_user_model.model_select === 'server'){
-  //   playlist_set_of_updatePlaylist_of_comment.value =
-  //   playlist_set_of_updatePlaylist_of_public.value =
-  // }
-}
-async function update_playlist_updatePlaylist() {
-  try {
-    Type_Update_Playlist.value = false
-    playlist_set_of_updatePlaylist_of_playlistcomment.value = ''
-
-    const playlist = {
-      id: playlist_update_emit_id.value,
-      name: playlist_set_of_updatePlaylist_of_playlistcomment.value,
-    }
-
-    if (store_server_user_model.model_select === 'server') {
-      await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_SetPlaylist(
-        playlist_update_emit_id.value,
-        playlist_set_of_updatePlaylist_of_playlistcomment.value,
-        playlist_set_of_updatePlaylist_of_comment.value,
-        playlist_set_of_updatePlaylist_of_public.value
-      )
-    } else {
-      store_general_model_player_list.get_playlist_tracks_temporary_update(playlist)
-    }
-  } catch (e) {
-    console.error(e)
-  }
-}
-async function update_playlist_deletePlaylist() {
-  try {
-    Type_Update_Playlist.value = false
-    playlist_set_of_updatePlaylist_of_playlistcomment.value = ''
-    if (playlist_update_emit_id.value.length > 0) {
-      store_general_model_player_list.get_playlist_tracks_temporary_delete(
-        playlist_update_emit_id.value
-      )
-      if (store_server_user_model.model_select === 'server') {
-        const result =
-          await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_DeletePlaylist(
-            playlist_update_emit_id.value
-          )
-        if (result !== undefined) {
-          store_view_media_cue_page_info.media_playlist_count--
-        }
-      }
-      page_songlists_statistic.value.forEach((item: any) => {
-        if (item.id === 'song_list_all_PlayList') {
-          item.song_count = store_view_media_cue_page_info.media_playlist_count + ' *'
-        }
-      })
-    }
-  } catch (e) {
-    console.error(e)
-  }
-}
-/// update media_file
-async function update_playlist_addMediaFile(id: any, playlist_id: any) {
-  try {
-    await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(id, playlist_id)
-    message.success(t('common.add'))
-    store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
-  } catch (e) {
-    console.error(e)
-  }
-}
-async function update_playlist_deleteMediaFile(id: any) {
-  try {
-    if (store_view_media_cue_page_logic.page_songlists_selected === 'song_list_all') {
-    } else if (store_view_media_cue_page_logic.page_songlists_selected === 'song_list_love') {
-      await store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id, true)
-    } else if (store_view_media_cue_page_logic.page_songlists_selected === 'song_list_recently') {
-    } else {
-      if (
-        store_server_users.server_select_kind === 'jellyfin' ||
-        store_server_users.server_select_kind === 'emby'
-      ) {
-        await store_local_data_set_mediaInfo.Set_MediaInfo_Delete_Selected_Playlist(
-          store_playlist_list_info.playlist_Menu_Item_IndexId,
-          store_view_media_cue_page_logic.page_songlists_selected
-        )
-      } else {
-        await store_local_data_set_mediaInfo.Set_MediaInfo_Delete_Selected_Playlist(
-          id,
-          store_view_media_cue_page_logic.page_songlists_selected
-        )
-      }
-    }
-    store_view_media_cue_page_info.media_Files_temporary =
-      store_view_media_cue_page_info.media_Files_temporary.filter((media: any) => media.id !== id)
-    message.success(t('common.delete'))
-    store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
-  } catch (e) {
-    console.error(e)
-  }
-}
 /// update selected media_file
 const Type_Selected_Media_File_To_Playlist = ref(false)
-async function update_playlist_addMediaFile_selected(playlist_id: any) {
-  await store_view_media_cue_page_logic.get_selected_playlist_add_MediaFile(playlist_id)
-  message.success(t('common.add'))
-  Type_Selected_Media_File_To_Playlist.value = false
-  click_open_bulk_operation()
-}
-async function update_lovelist_addMediaFile_selected() {
-  store_view_media_cue_page_logic.get_selected_lovelist_add_MediaFile(true)
-  message.success(t('common.add'))
-  Type_Selected_Media_File_To_Playlist.value = false
-  click_open_bulk_operation()
-}
-async function update_button_deleteMediaFile_selected() {
-  if (store_view_media_cue_page_logic.page_songlists_selected === 'song_list_all') {
-    await update_locallist_deleteMediaFile_selected(
-      store_view_media_cue_page_logic.page_songlists_selected
-    )
-  } else if (store_view_media_cue_page_logic.page_songlists_selected === 'song_list_love') {
-    await update_lovelist_deleteMediaFile_selected(
-      store_view_media_cue_page_logic.page_songlists_selected
-    )
-  } else if (store_view_media_cue_page_logic.page_songlists_selected !== 'song_list_all') {
-    await update_playlist_deleteMediaFile_selected(
-      store_view_media_cue_page_logic.page_songlists_selected
-    )
-  }
-  store_view_media_cue_page_info.media_Files_temporary =
-    store_view_media_cue_page_info.media_Files_temporary.filter(
-      (file) =>
-        !store_view_media_cue_page_info.media_Files_selected.some(
-          (selected) => selected.id === file.id
-        )
-    )
-  message.success(t('common.delete'))
-}
-async function update_playlist_deleteMediaFile_selected(playlist_id: any) {
-  await store_view_media_cue_page_logic.get_selected_playlist_delete_MediaFile(playlist_id)
-  Type_Selected_Media_File_To_Playlist.value = false
-  click_open_bulk_operation()
-}
-async function update_locallist_deleteMediaFile_selected(playlist_id: any) {
-  store_view_media_cue_page_logic.get_selected_locallist_delete_MediaFile(playlist_id)
-  Type_Selected_Media_File_To_Playlist.value = false
-  click_open_bulk_operation()
-}
-async function update_lovelist_deleteMediaFile_selected(playlist_id: any) {
-  store_view_media_cue_page_logic.get_selected_lovelist_delete_MediaFile(playlist_id)
-  Type_Selected_Media_File_To_Playlist.value = false
-  click_open_bulk_operation()
-}
-async function update_recentlist_deletetMediaFile_selected(playlist_id: any) {
-  store_view_media_cue_page_logic.get_selected_recentlist_deletet_MediaFile(playlist_id)
-  Type_Selected_Media_File_To_Playlist.value = false
-  click_open_bulk_operation()
-}
 
 ////// bulk_operation and select_line
-const click_select_MediaList_ALL_Line = () => {
-  if (store_view_media_cue_page_info.media_Files_selected.length == 0) {
-    store_view_media_cue_page_logic.set_media_Files_selected_all(true)
-  } else {
-    store_view_media_cue_page_logic.set_media_Files_selected_all(false)
-  }
-}
 const click_open_bulk_operation = () => {
   if (bool_start_play.value == true) {
     bool_start_play.value = false
@@ -944,143 +682,6 @@ const click_open_bulk_operation = () => {
 ////// Right_click_on_songline show menu
 let click_count = 0
 const bool_start_play = ref<boolean>(true)
-const options_dropdown_play_mode = ref<any[]>([
-  {
-    label: computed(() => t('nsmusics.siderbar_player.playback_1')),
-    key: 'options_dropdown_play_mode_1',
-    icon() {
-      return h(
-        NIcon,
-        { size: 20 },
-        {
-          default: () => h(ArrowAutofitDown24Regular),
-        }
-      )
-    },
-  },
-  {
-    label: computed(() => t('nsmusics.siderbar_player.playback_2')),
-    key: 'options_dropdown_play_mode_2',
-    icon() {
-      return h(
-        NIcon,
-        { size: 20 },
-        {
-          default: () => h(ArrowRepeatAll16Regular),
-        }
-      )
-    },
-  },
-  {
-    label: computed(() => t('nsmusics.siderbar_player.playback_4')),
-    key: 'options_dropdown_play_mode_3',
-    icon() {
-      return h(
-        NIcon,
-        { size: 14 },
-        {
-          default: () => h(Random),
-        }
-      )
-    },
-  },
-])
-const begin_select_MediaList_ALL_Line_of_playback = (key: string | number) => {
-  click_count = 2
-  if (key === 'options_dropdown_play_mode_1') {
-    store_player_audio_logic.play_order = 'playback-1'
-  } else if (key === 'options_dropdown_play_mode_2') {
-    store_player_audio_logic.play_order = 'playback-2'
-  } else {
-    store_player_audio_logic.play_order = 'playback-4'
-  }
-  const mediaFiles = store_view_media_cue_page_info.media_Files_temporary
-  if (mediaFiles.length > 0) {
-    let index
-    if (key === 'options_dropdown_play_mode_1' || key === 'options_dropdown_play_mode_2') {
-      index = 0
-    } else {
-      index = Math.floor(Math.random() * mediaFiles.length)
-    }
-    handleItemDbClick(mediaFiles[index], index)
-  }
-}
-async function begin_random_play_model() {
-  if (!store_server_user_model.random_play_model) {
-    click_count = 2
-    store_playlist_list_info.playlist_MediaFiles_temporary = []
-    store_player_audio_logic.play_order = 'playback-4'
-    if (store_server_users.server_select_kind === 'ninesong') {
-      let get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
-      await get_NineSong_Temp_Data_To_LocalSqlite.get_random_song_list(
-        store_server_login_info.server_url,
-        '0',
-        '30'
-      )
-    } else if (store_server_users.server_select_kind === 'navidrome') {
-      let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
-      await get_Navidrome_Temp_Data_To_LocalSqlite.get_random_song_list(
-        store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-        store_server_user_model.username,
-        store_server_user_model.token,
-        store_server_user_model.salt,
-        '30',
-        '',
-        ''
-      )
-    } else {
-      store_view_media_cue_page_logic.list_options_Hand_Sort = false
-      if (store_server_users.server_select_kind === 'jellyfin') {
-        store_view_media_cue_page_logic.page_songlists_options_Sort_key = [
-          {
-            columnKey: String('Random,SortName'),
-            order: state_Sort.Ascend,
-          },
-        ]
-      } else if (store_server_users.server_select_kind === 'emby') {
-        store_view_media_cue_page_logic.page_songlists_options_Sort_key = [
-          {
-            columnKey: String('Random'),
-            order: state_Sort.Ascend,
-          },
-        ]
-      }
-      await page_songlists_handleselected_updatevalue('song_list_all')
-      // await store_general_fetch_media_list.fetchData_Media()
-      scrollTo(0)
-      if (store_view_media_cue_page_info.media_Files_temporary.length > 0) {
-        click_count = 2
-        bool_start_play.value = true
-        await handleItemDbClick(store_view_media_cue_page_info.media_Files_temporary[0], 0)
-      }
-    }
-    store_server_user_model.random_play_model = true
-  } else {
-    store_server_user_model.random_play_model = false
-    store_view_media_cue_page_logic.list_options_Hand_Sort = true
-    if (store_server_users.server_select_kind === 'ninesong') {
-      store_view_media_cue_page_logic.page_songlists_options_Sort_key = [
-        {
-          columnKey: String('_id'),
-          order: state_Sort.Ascend,
-        },
-      ]
-    } else if (store_server_users.server_select_kind === 'navidrome') {
-      store_view_media_cue_page_logic.page_songlists_options_Sort_key = [
-        {
-          columnKey: String('id'),
-          order: state_Sort.Ascend,
-        },
-      ]
-    } else {
-      if (store_server_users.server_select_kind === 'jellyfin') {
-        handleSelect_Sort('Random,SortName')
-      } else if (store_server_users.server_select_kind === 'emby') {
-        handleSelect_Sort('Random')
-      }
-    }
-  }
-}
 
 /// multi_level_sort
 interface SortCondition {
@@ -1222,7 +823,6 @@ onMounted(() => {
 
 ////// right menu
 const contextmenu = ref(null)
-const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'))
 function menu_item_add_to_playlist_end() {
   const item: Media_File | undefined = store_view_media_cue_page_info.media_Files_temporary.find(
     (mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id
@@ -1270,18 +870,6 @@ function menu_item_add_to_playlist_next() {
     contextmenu.value.hide()
   }
 }
-function menu_item_edit_selected_media_tags() {
-  store_player_tag_modify.player_show_tag_kind = 'media'
-  const item: Media_File | undefined = store_view_media_cue_page_info.media_Files_temporary.find(
-    (mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id
-  )
-  if (item != undefined && item != 'undefined') {
-    store_player_tag_modify.player_current_media_path = item.path
-    store_player_tag_modify.player_current_media_id = item.id
-    store_player_tag_modify.player_show_tag_modify = true
-    contextmenu.value.hide()
-  }
-}
 
 //////
 const isScrolling = ref(false)
@@ -1303,12 +891,7 @@ const onScroll = async () => {
 /////
 const onRefreshSharp = debounce(async (event, args) => {
   if (store_server_user_model.model_server_type_of_web) {
-    if (
-      store_server_users.server_select_kind === 'jellyfin' ||
-      store_server_users.server_select_kind === 'emby'
-    ) {
-      store_player_appearance.player_mode_of_medialist_from_external_import = false
-    } else if (store_server_users.server_select_kind === 'ninesong') {
+    if (store_server_users.server_select_kind === 'ninesong') {
       store_general_fetch_media_list.set_album_id('')
       store_general_fetch_media_list.set_artist_id('')
     }
@@ -1318,12 +901,6 @@ const onRefreshSharp = debounce(async (event, args) => {
     store_view_media_cue_page_logic.page_songlists_keywordFilter = ''
     store_view_media_cue_page_logic.page_songlists_bool_show_search_area = false
     store_general_fetch_media_list.fetchData_Media_of_server_web_start()
-  } else if (store_server_user_model.model_server_type_of_local) {
-    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true
-    show_search_area()
-    store_view_media_cue_page_logic.page_songlists_keywordFilter = ''
-    store_view_media_cue_page_logic.list_selected_Hand_click = false
-    // store_general_fetch_media_list.fetchData_Media()
   }
 }, 500)
 
@@ -1628,18 +1205,6 @@ onBeforeUnmount(() => {
                       </n-button>
                     </n-space>
                   </n-space>
-                  <n-space vertical>
-                    <span style="font-size: 14px; font-weight: 600">{{
-                      $t('entity.genre_other')
-                    }}</span>
-                    <n-input
-                      disabled
-                      clearable
-                      placeholder="Not open || 未开放"
-                      style="width: 200px"
-                      v-model:value="playlist_set_of_addPlaylist_of_playlistname"
-                    />
-                  </n-space>
                   <n-space vertical v-if="!store_server_user_model.model_server_type_of_web">
                     <span style="font-size: 14px; font-weight: 600">{{
                       $t('HeaderLibraries')
@@ -1672,160 +1237,7 @@ onBeforeUnmount(() => {
             </n-card>
           </n-modal>
 
-          <n-divider
-            v-if="store_view_media_cue_page_logic.page_songlists_selected !== 'song_list_recently'"
-            vertical
-            style="width: 2px; height: 20px; margin-top: -4px"
-          />
-          <n-tooltip
-            v-if="store_view_media_cue_page_logic.page_songlists_selected !== 'song_list_recently'"
-            trigger="hover"
-            placement="top"
-          >
-            <template #trigger>
-              <n-button quaternary circle @click="click_open_bulk_operation">
-                <template #icon>
-                  <n-icon :size="20" :depth="2"><MultiselectLtr20Filled /></n-icon>
-                </template>
-              </n-button>
-            </template>
-            {{ $t('Select') }}
-          </n-tooltip>
-          <n-space v-if="!bool_start_play">
-            <n-tooltip trigger="hover" placement="top">
-              <template #trigger>
-                <n-button quaternary circle @click="click_select_MediaList_ALL_Line">
-                  <template #icon>
-                    <n-icon :size="20" :depth="2"><SelectAllOn24Regular /></n-icon>
-                  </template>
-                </n-button>
-              </template>
-              {{ $t('SelectAll') }}
-            </n-tooltip>
-            <n-tooltip trigger="hover" placement="top">
-              <template #trigger>
-                <n-button
-                  quaternary
-                  circle
-                  @click="
-                    Type_Selected_Media_File_To_Playlist = !Type_Selected_Media_File_To_Playlist
-                  "
-                >
-                  <template #icon>
-                    <n-icon :size="20" :depth="2"><AddCircle32Regular /></n-icon>
-                  </template>
-                </n-button>
-              </template>
-              {{ $t('action.addToPlaylist') }}
-            </n-tooltip>
-            <n-tooltip
-              trigger="hover"
-              placement="top"
-              v-if="
-                store_server_user_model.model_select !== 'server' ||
-                (store_server_user_model.model_select === 'server' &&
-                  store_view_media_cue_page_logic.page_songlists_selected !== 'song_list_all') ||
-                (store_server_user_model.model_select === 'server' &&
-                  store_view_media_cue_page_logic.page_songlists_selected !== 'song_list_all' &&
-                  !store_server_user_model.model_server_type_of_web)
-              "
-            >
-              <template #trigger>
-                <n-button quaternary circle @click="update_button_deleteMediaFile_selected">
-                  <template #icon>
-                    <n-icon :size="20" :depth="2"><Delete20Regular /></n-icon>
-                  </template>
-                </n-button>
-              </template>
-              {{ $t('Delete') }}
-            </n-tooltip>
-            <n-p style="margin-top: 6px">
-              {{
-                $t('nsmusics.view_page.selectedMedia') +
-                ' ' +
-                store_view_media_cue_page_info.media_Files_selected.length
-              }}
-              *
-            </n-p>
-          </n-space>
-
           <n-divider vertical style="width: 2px; height: 20px; margin-top: -4px" />
-          <n-dropdown
-            v-if="
-              store_server_users.server_select_kind != 'jellyfin' &&
-              store_server_users.server_select_kind != 'emby' &&
-              store_server_user_model.model_server_type_of_local
-            "
-            trigger="click"
-            :show-arrow="true"
-            :options="options_dropdown_play_mode"
-            @select="begin_select_MediaList_ALL_Line_of_playback"
-          >
-            <n-tooltip trigger="hover" placement="top">
-              <template #trigger>
-                <n-button quaternary circle style="margin-left: 4px">
-                  <template #icon>
-                    <n-icon :size="20" :depth="2"><Play /></n-icon>
-                  </template>
-                </n-button>
-              </template>
-              {{ $t('Play') }}
-            </n-tooltip>
-          </n-dropdown>
-          <n-tooltip
-            v-if="
-              store_server_user_model.model_server_type_of_web &&
-              (store_server_users.server_select_kind === 'jellyfin' ||
-                store_server_users.server_select_kind === 'emby')
-            "
-            trigger="hover"
-            placement="top"
-          >
-            <template #trigger>
-              <div>
-                <n-badge
-                  v-if="store_server_user_model.random_play_model"
-                  dot
-                  :value="store_server_user_model.random_play_model"
-                  :offset="[-18, 6]"
-                >
-                  <n-button
-                    quaternary
-                    circle
-                    @click="begin_random_play_model"
-                    style="margin-left: 4px"
-                  >
-                    <template #icon>
-                      <n-icon :size="18" :depth="2"><Random /></n-icon>
-                    </template>
-                  </n-button>
-                </n-badge>
-                <n-button
-                  v-else
-                  quaternary
-                  circle
-                  @click="begin_random_play_model"
-                  style="margin-left: 4px"
-                >
-                  <template #icon>
-                    <n-icon :size="18" :depth="2"><Random /></n-icon>
-                  </template>
-                </n-button>
-              </div>
-            </template>
-            {{
-              $t('Shuffle') + ' ' + $t('HeaderLibraries') + ' ' + $t('nsmusics.view_page.allMedia')
-            }}
-          </n-tooltip>
-          <n-divider
-            v-if="
-              store_server_user_model.model_server_type_of_web &&
-              (store_server_users.server_select_kind === 'jellyfin' ||
-                store_server_users.server_select_kind === 'emby')
-            "
-            vertical
-            style="width: 2px; height: 20px; margin-top: -4px"
-          />
 
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
@@ -1877,42 +1289,6 @@ onBeforeUnmount(() => {
                 />
               </template>
               {{ $t('Select') + $t('LabelPlaylist') }}
-            </n-tooltip>
-            <n-tooltip trigger="hover" placement="top">
-              <template #trigger>
-                <n-button
-                  size="small"
-                  style="margin-left: 12px"
-                  secondary
-                  strong
-                  @click="Type_Update_Playlist = !Type_Update_Playlist"
-                >
-                  <template #icon>
-                    <n-icon>
-                      <Menu />
-                    </n-icon>
-                  </template>
-                </n-button>
-              </template>
-              {{ $t('HeaderAdmin') + $t('LabelPlaylist') }}
-            </n-tooltip>
-            <n-tooltip trigger="hover" placement="top">
-              <template #trigger>
-                <n-button
-                  size="small"
-                  style="margin-left: 2px"
-                  secondary
-                  strong
-                  @click="Type_Add_Playlist = !Type_Add_Playlist"
-                >
-                  <template #icon>
-                    <n-icon>
-                      <Add />
-                    </n-icon>
-                  </template>
-                </n-button>
-              </template>
-              {{ $t('Add') + $t('LabelPlaylist') }}
             </n-tooltip>
           </n-space>
         </n-space>
@@ -2025,34 +1401,6 @@ onBeforeUnmount(() => {
                       </template>
                       {{ $t('Select') + $t('LabelPlaylist') }}
                     </n-tooltip>
-                    <n-tooltip trigger="hover" placement="top">
-                      <template #trigger>
-                        <n-button
-                          secondary
-                          strong
-                          @click="Type_Update_Playlist = !Type_Update_Playlist"
-                        >
-                          <template #icon>
-                            <n-icon>
-                              <Menu />
-                            </n-icon>
-                          </template>
-                        </n-button>
-                      </template>
-                      {{ $t('HeaderAdmin') + $t('LabelPlaylist') }}
-                    </n-tooltip>
-                    <n-tooltip trigger="hover" placement="top">
-                      <template #trigger>
-                        <n-button secondary strong @click="Type_Add_Playlist = !Type_Add_Playlist">
-                          <template #icon>
-                            <n-icon>
-                              <Add />
-                            </n-icon>
-                          </template>
-                        </n-button>
-                      </template>
-                      {{ $t('Add') + $t('LabelPlaylist') }}
-                    </n-tooltip>
                   </n-space>
                   <n-space vertical style="margin-top: 10px; margin-left: 7px">
                     <n-grid
@@ -2149,18 +1497,6 @@ onBeforeUnmount(() => {
                   }
                 "
               >
-                <input
-                  type="checkbox"
-                  class="checkbox"
-                  v-if="!bool_start_play"
-                  v-model="track.selected"
-                  @change="
-                    (event) => {
-                      track.selected = event.target.checked
-                      store_view_media_cue_page_logic.set_media_Files_selected(track)
-                    }
-                  "
-                />
                 <div
                   style="
                     margin-left: 8px;
@@ -2334,54 +1670,6 @@ onBeforeUnmount(() => {
         class="v-contextmenu-item v-contextmenu-item--hover"
         style="z-index: 999"
       >
-        <v-contextmenu-submenu :title="menu_item_add_to_songlist">
-          <v-contextmenu-item
-            v-for="n in store_playlist_list_info.playlist_names_ALLLists"
-            :key="n.value"
-            @click="
-              update_playlist_addMediaFile(store_playlist_list_info.playlist_Menu_Item_Id, n.value)
-            "
-          >
-            {{ n.label }}
-          </v-contextmenu-item>
-        </v-contextmenu-submenu>
-        <v-contextmenu-divider />
-        <v-contextmenu-item
-          v-if="
-            (store_server_users.server_select_kind != 'jellyfin' &&
-              store_server_users.server_select_kind != 'emby') ||
-            store_server_user_model.model_server_type_of_local
-          "
-          @click="
-            () => {
-              handleItemClick_title(store_playlist_list_info.playlist_Menu_Item.title)
-            }
-          "
-        >
-          {{ $t('Search') + $t('LabelTitle') }}
-        </v-contextmenu-item>
-        <v-contextmenu-item
-          v-if="
-            (store_server_users.server_select_kind != 'jellyfin' &&
-              store_server_users.server_select_kind != 'emby') ||
-            store_server_user_model.model_server_type_of_local
-          "
-          @click="
-            () => {
-              if (store_server_user_model.model_server_type_of_local) {
-                handleItemClick_album(store_playlist_list_info.playlist_Menu_Item.album_id)
-              } else if (store_server_user_model.model_server_type_of_web) {
-                if (store_server_users.server_select_kind === 'ninesong') {
-                  handleItemClick_album(store_playlist_list_info.playlist_Menu_Item.album_id)
-                } else {
-                  handleItemClick_album(store_playlist_list_info.playlist_Menu_Item.album)
-                }
-              }
-            }
-          "
-        >
-          {{ $t('ViewAlbum') }}
-        </v-contextmenu-item>
         <template
           v-if="
             store_server_users.server_select_kind === 'navidrome' ||
@@ -2402,53 +1690,11 @@ onBeforeUnmount(() => {
             </span>
           </v-contextmenu-item>
         </template>
-        <v-contextmenu-item
-          v-if="
-            (store_server_users.server_select_kind != 'jellyfin' &&
-              store_server_users.server_select_kind != 'emby') ||
-            store_server_user_model.model_server_type_of_local
-          "
-          @click="
-            () => {
-              Open_this_artist_all_artist_list_click(
-                store_playlist_list_info.playlist_Menu_Item.artist_id
-              )
-            }
-          "
-        >
-          {{ $t('ViewAlbumArtist') + ' | ' + $t('nsmusics.view_page.allAlbum') }}
-        </v-contextmenu-item>
-        <v-contextmenu-divider
-          v-if="
-            (store_server_users.server_select_kind != 'jellyfin' &&
-              store_server_users.server_select_kind != 'emby') ||
-            store_server_user_model.model_server_type_of_local
-          "
-        />
-        <v-contextmenu-item
-          v-if="
-            store_view_media_cue_page_logic.page_songlists_selected !== 'song_list_all' &&
-            store_view_media_cue_page_logic.page_songlists_selected !== 'song_list_love' &&
-            store_view_media_cue_page_logic.page_songlists_selected !== 'song_list_recently'
-          "
-          @click="update_playlist_deleteMediaFile(store_playlist_list_info.playlist_Menu_Item_Id)"
-        >
-          {{ $t('common.delete') }}
-        </v-contextmenu-item>
         <v-contextmenu-item @click="menu_item_add_to_playlist_end">
           {{ $t('player.addLast') }}
         </v-contextmenu-item>
         <v-contextmenu-item @click="menu_item_add_to_playlist_next">
           {{ $t('player.addNext') }}
-        </v-contextmenu-item>
-        <v-contextmenu-item
-          v-if="
-            store_server_users.server_select_kind === 'navidrome' ||
-            store_server_user_model.model_server_type_of_local
-          "
-          @click="menu_item_edit_selected_media_tags"
-        >
-          {{ $t('page.contextMenu.showDetails') }}
         </v-contextmenu-item>
         <v-contextmenu-divider
           v-if="
@@ -2503,196 +1749,6 @@ onBeforeUnmount(() => {
       </v-contextmenu>
     </div>
   </n-space>
-  <!-- 管理播放列表 -->
-  <n-modal v-model:show="Type_Update_Playlist">
-    <n-card style="width: 450px; border-radius: 4px">
-      <n-space vertical size="large" style="width: 400px">
-        <n-space justify="space-between">
-          <span style="font-size: 20px; font-weight: 600">{{
-            $t('common.manage') + $t('entity.playlist_other')
-          }}</span>
-          <n-button
-            tertiary
-            size="small"
-            @click="
-              () => {
-                Type_Update_Playlist = !Type_Update_Playlist
-                playlist_set_of_updatePlaylist_of_playlistcomment = ''
-              }
-            "
-          >
-            <template #icon>
-              <n-icon>
-                <Close />
-              </n-icon>
-            </template>
-          </n-button>
-        </n-space>
-        <n-select
-          :options="store_playlist_list_info.playlist_names_ALLLists"
-          style="width: 166px"
-          @update:value="update_playlist_set_of_updatePlaylist_of_playlistname"
-        />
-        <n-form>
-          <n-space
-            v-if="
-              (store_server_users.server_select_kind != 'jellyfin' &&
-                store_server_users.server_select_kind != 'emby') ||
-              store_server_user_model.model_server_type_of_local
-            "
-            vertical
-            style="margin-bottom: 10px"
-          >
-            <span>{{ $t('common.name') }}</span>
-            <n-input
-              clearable
-              placeholder=""
-              v-model:value="playlist_set_of_updatePlaylist_of_playlistcomment"
-            />
-          </n-space>
-          <!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server'">-->
-          <!--            <span>{{ $t('filter.comment') }}</span>-->
-          <!--            <n-input clearable placeholder="" v-model:value="playlist_set_of_updatePlaylist_of_comment"/>-->
-          <!--          </n-space>-->
-          <!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server'">-->
-          <!--            <span>{{ $t('form.createPlaylist.input_public') }}</span>-->
-          <!--            <n-switch v-model:value="playlist_set_of_updatePlaylist_of_public"/>-->
-          <!--          </n-space>-->
-        </n-form>
-        <n-space justify="end">
-          <n-button
-            strong
-            secondary
-            type="error"
-            @click="
-              () => {
-                update_playlist_deletePlaylist()
-              }
-            "
-          >
-            {{ $t('common.delete') }}
-          </n-button>
-          <n-button
-            strong
-            secondary
-            type="info"
-            v-if="
-              (store_server_users.server_select_kind != 'jellyfin' &&
-                store_server_users.server_select_kind != 'emby') ||
-              store_server_user_model.model_server_type_of_local
-            "
-            @click="
-              () => {
-                update_playlist_updatePlaylist()
-              }
-            "
-          >
-            {{ $t('common.save') }}
-          </n-button>
-        </n-space>
-      </n-space>
-    </n-card>
-  </n-modal>
-  <!-- 添加播放列表 -->
-  <n-modal v-model:show="Type_Add_Playlist">
-    <n-card style="width: 450px; border-radius: 4px">
-      <n-space vertical size="large" style="width: 400px">
-        <n-space justify="space-between">
-          <span style="font-size: 20px; font-weight: 600">{{
-            $t('common.add') + $t('entity.playlist_other')
-          }}</span>
-          <n-button tertiary size="small" @click="Type_Add_Playlist = !Type_Add_Playlist">
-            <template #icon>
-              <n-icon>
-                <Close />
-              </n-icon>
-            </template>
-          </n-button>
-        </n-space>
-        <n-form>
-          <n-space vertical style="margin-bottom: 10px">
-            <span>{{ $t('common.name') }}</span>
-            <n-input
-              clearable
-              placeholder=""
-              v-model:value="playlist_set_of_addPlaylist_of_playlistname"
-            />
-          </n-space>
-          <!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server'">-->
-          <!--            <span>{{ $t('filter.comment') }}</span>-->
-          <!--            <n-input clearable placeholder="" v-model:value="playlist_set_of_addPlaylist_of_comment"/>-->
-          <!--          </n-space>-->
-          <!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server'">-->
-          <!--            <span>{{ $t('form.createPlaylist.input_public') }}</span>-->
-          <!--            <n-switch v-model:value="playlist_set_of_addPlaylist_of_public" />-->
-          <!--          </n-space>-->
-        </n-form>
-        <n-space justify="end">
-          <n-button strong secondary type="info" @click="update_playlist_addPlaylist()">
-            {{ $t('common.save') }}
-          </n-button>
-        </n-space>
-      </n-space>
-    </n-card>
-  </n-modal>
-  <!-- 选中歌曲添加 -->
-  <n-modal v-model:show="Type_Selected_Media_File_To_Playlist">
-    <n-card style="width: 450px; border-radius: 4px">
-      <n-space vertical size="large" style="width: 400px">
-        <n-space justify="space-between">
-          <span style="font-size: 20px; font-weight: 600">{{
-            $t('nsmusics.view_page.selectedMedia') +
-            ' ' +
-            store_view_media_cue_page_info.media_Files_selected.length +
-            ' * ' +
-            $t('form.addToPlaylist.title')
-          }}</span>
-          <n-button
-            tertiary
-            size="small"
-            @click="Type_Selected_Media_File_To_Playlist = !Type_Selected_Media_File_To_Playlist"
-          >
-            <template #icon>
-              <n-icon>
-                <Close />
-              </n-icon>
-            </template>
-          </n-button>
-        </n-space>
-        <n-space>
-          <n-button
-            key="song_love"
-            class="songlist_cue_more"
-            style="
-              width: 100px;
-              height: 24px;
-              border: 0;
-              background-color: transparent;
-              display: block;
-            "
-            @click="update_lovelist_addMediaFile_selected"
-          >
-            {{ $t('nsmusics.view_page.loveMedia') }}
-          </n-button>
-          <n-button
-            v-for="n in store_playlist_list_info.playlist_names_ALLLists"
-            :key="n.value"
-            class="songlist_cue_more"
-            style="
-              width: 100px;
-              height: 24px;
-              border: 0;
-              background-color: transparent;
-              display: block;
-            "
-            @click="update_playlist_addMediaFile_selected(n.value)"
-          >
-            {{ n.label }}
-          </n-button>
-        </n-space>
-      </n-space>
-    </n-card>
-  </n-modal>
 </template>
 
 <style>

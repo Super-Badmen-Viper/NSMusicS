@@ -36,6 +36,14 @@ import { store_general_model_player_list } from '@/data/data_stores/server/serve
 
 import error_album from '@/assets/img/error_album.jpg'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
+import {
+  store_general_fetch_artist_list
+} from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_artist/store_general_fetch_artist_list'
+import { store_view_album_page_logic } from '@/views/view_app/music_page/page_album/store/store_view_album_page_logic'
+import { store_player_audio_logic } from '@/views/view_app/music_page/page_player/store/store_player_audio_logic'
+import {
+  store_playlist_list_logic
+} from '@/views/view_app/music_components/player_list/store/store_playlist_list_logic'
 
 const { t } = useI18n({ inheritLocale: true })
 const message = useMessage()
@@ -210,13 +218,50 @@ const Open_this_album_MediaList_click = (item: any, list_name: string) => {
 }
 
 const Play_this_album_MediaList_click = async (item: any, list_name: string) => {
+  // 兼容性代码，需要优化
+  if (store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong') {
+    if(store_view_home_page_info.home_Files_temporary_type_select === 'artist') {
+      if (store_server_user_model.model_server_type_of_web) {
+        store_general_fetch_media_list.set_artist_id(item.id)
+        store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+        store_general_fetch_album_list.set_artist_id(item.id)
+        store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
+        store_server_user_model.random_play_model = false
+      }
+      console.log('play_this_artist_song_list：' + item.id)
+      await store_general_fetch_artist_list.fetchData_This_Artist_MediaList(item.id)
+    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'media') {
+      if (store_server_user_model.model_server_type_of_web) {
+        store_general_fetch_media_list.fetchData_Media_of_data_synchronization_to_playlist()
+        store_server_user_model.random_play_model = false
+      }
+      await store_player_audio_logic.update_current_media_info(item, 0)
+      store_playlist_list_logic.media_page_handleItemDbClick = true
+      store_player_appearance.player_mode_of_lock_playlist = false
+      store_player_audio_info.this_audio_restart_play = true
+      //
+      store_general_fetch_player_list.fetchData_PlayList(false)
+      ////
+      store_playlist_list_info.playlist_MediaFiles_temporary = []
+      store_playlist_list_info.playlist_MediaFiles_temporary.push({
+        ...item,
+        play_id: item.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
+      })
+      store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.push(item.id)
+    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'media_cue') {
+
+    }
+    store_playlist_list_info.reset_carousel()
+    return
+  }
+  ///
   const temp_id = Get_this_album_info(item, list_name)
   if (store_server_user_model.model_server_type_of_web) {
     store_general_fetch_media_list.set_album_id(item.id)
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
     store_server_user_model.random_play_model = false
   }
-  console.log('play_this_album_click：' + temp_id)
+  console.log('play_this_item_click：' + temp_id)
   await store_general_fetch_album_list.fetchData_This_Album_MediaList(temp_id)
   store_playlist_list_info.reset_carousel()
 }
@@ -234,7 +279,7 @@ const Play_Next_album_MediaList_click = (value: number) => {
   }
 }
 
-const handleItemClick_Favorite = (id: any, favorite: Boolean) => {
+const handleItemClick_Favorite = (id: any, favorite: boolean) => {
   store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(id, favorite)
 }
 
@@ -385,34 +430,31 @@ onBeforeUnmount(() => {
 
 const home_Files_temporary_type_options = ref([
   {
-    label: computed(() => t('entity.track_other')),
+    label: computed(() => t('common.home') + ' : ' + t('entity.track_other')),
     value: 'media',
   },
   {
-    label: computed(() => t('entity.album_other')),
+    label: computed(() => t('common.home') + ' : ' + t('entity.album_other')),
     value: 'album',
   },
   {
-    label: computed(() => t('entity.artist_other')),
+    label: computed(() => t('common.home') + ' : ' + t('entity.artist_other')),
     value: 'artist',
   },
   {
-    label: computed(() => t('nsmusics.view_page.disk')),
+    label: computed(() => t('common.home') + ' : ' + t('nsmusics.view_page.disk')),
     value: 'media_cue',
   },
 ])
 function change_home_Files_temporary_type(){
-
+  store_general_fetch_home_list.fetchData_Home()
 }
 </script>
 
 <template>
   <div class="home-wall-container">
     <n-space v-if="store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong'"
-             style="margin-top: 6px;" align="center">
-      <div style="margin-left: 9px;font-size: 20px;font-weight: 600;">
-        {{ $t('common.home') + ' : '}}
-      </div>
+             style="margin-top: 6px;margin-left: 8px;" align="center">
       <n-select
         style="width: 150px"
         size="small"
@@ -608,7 +650,11 @@ function change_home_Files_temporary_type(){
               <div class="home-album-info" :style="{ width: `${item_album_image}px` }">
                 <div class="home-album-text" :style="{ width: `${item_album_txt}px` }">
                   <div class="home-album-name" :style="{ maxWidth: `${item_album_txt}px` }">
-                    {{ item.name }}
+                    {{
+                      store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong' ?
+                        store_view_home_page_info.home_Files_temporary_type_select === 'media' ? item.title : item.name :
+                        item.name
+                    }}
                   </div>
                   <div class="home-artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
                     {{ item.artist }}
@@ -802,7 +848,11 @@ function change_home_Files_temporary_type(){
               <div class="home-album-info" :style="{ width: `${item_album_image}px` }">
                 <div class="home-album-text" :style="{ width: `${item_album_txt}px` }">
                   <div class="home-album-name" :style="{ maxWidth: `${item_album_txt}px` }">
-                    {{ item.name }}
+                    {{
+                      store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong' ?
+                        store_view_home_page_info.home_Files_temporary_type_select === 'media' ? item.title : item.name :
+                        item.name
+                    }}
                   </div>
                   <div class="home-artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
                     {{ item.artist }}
@@ -995,7 +1045,11 @@ function change_home_Files_temporary_type(){
               <div class="home-album-info" :style="{ width: `${item_album_image}px` }">
                 <div class="home-album-text" :style="{ width: `${item_album_txt}px` }">
                   <div class="home-album-name" :style="{ maxWidth: `${item_album_txt}px` }">
-                    {{ item.name }}
+                    {{
+                      store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong' ?
+                        store_view_home_page_info.home_Files_temporary_type_select === 'media' ? item.title : item.name :
+                        item.name
+                    }}
                   </div>
                   <div class="home-artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
                     {{ item.artist }}
@@ -1189,7 +1243,11 @@ function change_home_Files_temporary_type(){
               <div class="home-album-info" :style="{ width: `${item_album_image}px` }">
                 <div class="home-album-text" :style="{ width: `${item_album_txt}px` }">
                   <div class="home-album-name" :style="{ maxWidth: `${item_album_txt}px` }">
-                    {{ item.name }}
+                    {{
+                      store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong' ?
+                        store_view_home_page_info.home_Files_temporary_type_select === 'media' ? item.title : item.name :
+                        item.name
+                    }}
                   </div>
                   <div class="home-artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
                     {{ item.artist }}

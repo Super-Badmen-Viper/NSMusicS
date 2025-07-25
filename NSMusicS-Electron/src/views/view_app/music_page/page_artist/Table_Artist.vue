@@ -534,7 +534,7 @@ const Play_this_artist_all_media_list_click = async (artist_id: string) => {
   store_playlist_list_info.reset_carousel()
 }
 
-const handleItemClick_Favorite = (id: any, favorite: Boolean) => {
+const handleItemClick_Favorite = (id: any, favorite: boolean) => {
   store_local_data_set_artistInfo.Set_ArtistInfo_To_Favorite(id, favorite)
   page_artistlists_statistic.value.forEach((item: any) => {
     if (item.id === 'artist_list_love') {

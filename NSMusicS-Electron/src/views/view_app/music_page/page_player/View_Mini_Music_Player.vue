@@ -521,7 +521,7 @@ const leave_back_svg = () => {
 }
 ///
 const show_more_options = ref(false)
-const handleItemClick_Favorite = (id: any, favorite: Boolean) => {
+const handleItemClick_Favorite = (id: any, favorite: boolean) => {
   if (id != null && id.length > 0 && id != 'undefined') {
     store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id, favorite)
     store_player_audio_info.this_audio_song_favorite = !favorite

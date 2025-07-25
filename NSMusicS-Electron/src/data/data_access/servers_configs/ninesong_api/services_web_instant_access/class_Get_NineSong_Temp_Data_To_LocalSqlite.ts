@@ -31,7 +31,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
   private artistsApi = new Artists_ApiService_of_NineSong(store_server_login_info.server_url);
   private albumsApi = new Albums_ApiService_of_NineSong(store_server_login_info.server_url);
   private mediasApi = new Medias_ApiService_of_NineSong(store_server_login_info.server_url);
-  private mediaCuesApi = new MediaCues_ApiService_of_NineSong(store_server_login_info.server_url);
+  private cueFilesApi = new MediaCues_ApiService_of_NineSong(store_server_login_info.server_url);
   private homeApi = new Home_ApiService_of_NineSong(store_server_login_info.server_url);
   private playlistApi = new Playlist_ApiService_of_NineSong(store_server_login_info.server_url);
   private recommendApi = new Recommend_ApiService_of_NineSong(store_server_login_info.server_url);
@@ -44,46 +44,166 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
   }
   public async get_home_list_of_maximum_playback(url: string) {
     url = url.includes('api') ? url : url + '/api'
-    const maximum_playback = await this.homeApi.getAlbumList_Play_Count()
-    if (maximum_playback != undefined && Array.isArray(maximum_playback)) {
-      maximum_playback.map(async (album: any) => {
-        store_view_home_page_info.home_Files_temporary_maximum_playback.push(
-          this.mapAlbum_Home(album, url)
-        )
-      })
+    let maximum_playback = undefined
+    if(store_view_home_page_info.home_Files_temporary_type_select === 'album') {
+      maximum_playback = await this.homeApi.getAlbumList_Play_Count()
+      if (maximum_playback != undefined && Array.isArray(maximum_playback)) {
+        maximum_playback.map(async (item: any, index: number) => {
+          store_view_home_page_info.home_Files_temporary_maximum_playback.push(
+            this.mapAlbum_Home(item, url)
+          )
+        })
+      }
+    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'artist') {
+      maximum_playback = await this.homeApi.getArtistList_Play_Count()
+      if (maximum_playback != undefined && Array.isArray(maximum_playback)) {
+        maximum_playback.map(async (item: any, index: number) => {
+          store_view_home_page_info.home_Files_temporary_maximum_playback.push(
+            this.mapArtist(item, url, index, 0)
+          )
+        })
+      }
+    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'media') {
+      maximum_playback = await this.homeApi.getMediaList_Play_Count()
+      if (maximum_playback != undefined && Array.isArray(maximum_playback)) {
+        maximum_playback.map(async (item: any, index: number) => {
+          store_view_home_page_info.home_Files_temporary_maximum_playback.push(
+            this.mapMedia(item, url, index, 0)
+          )
+        })
+      }
+    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'media_cue') {
+      maximum_playback = await this.homeApi.getMediaCue_Play_Count()
+      if (maximum_playback != undefined && Array.isArray(maximum_playback)) {
+        maximum_playback.map(async (item: any, index: number) => {
+          store_view_home_page_info.home_Files_temporary_maximum_playback.push(
+            this.mapMedia_Cue(item, url, index, 0)
+          )
+        })
+      }
     }
   }
   public async get_home_list_of_random_search(url: string) {
     url = url.includes('api') ? url : url + '/api'
-    const random_search = await this.homeApi.getRandomAlbums('0', '18')
-    if (random_search != undefined && Array.isArray(random_search)) {
-      random_search.map(async (album: any) => {
-        store_view_home_page_info.home_Files_temporary_random_search.push(
-          this.mapAlbum_Home(album, url)
-        )
-      })
+    let random_search = undefined
+    if(store_view_home_page_info.home_Files_temporary_type_select === 'album') {
+      random_search = await this.homeApi.getRandomAlbums('0', '18')
+      if (random_search != undefined && Array.isArray(random_search)) {
+        random_search.map(async (item: any, index: number) => {
+          store_view_home_page_info.home_Files_temporary_random_search.push(
+            this.mapAlbum_Home(item, url)
+          )
+        })
+      }
+    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'artist') {
+      random_search = await this.homeApi.getRandomArtists('0', '18')
+      if (random_search != undefined && Array.isArray(random_search)) {
+        random_search.map(async (item: any, index: number) => {
+          store_view_home_page_info.home_Files_temporary_random_search.push(
+            this.mapArtist(item, url, index, 0)
+          )
+        })
+      }
+    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'media') {
+      random_search = await this.homeApi.getRandomMedias('0', '18')
+      if (random_search != undefined && Array.isArray(random_search)) {
+        random_search.map(async (item: any, index: number) => {
+          store_view_home_page_info.home_Files_temporary_random_search.push(
+            this.mapMedia(item, url, index, 0)
+          )
+        })
+      }
+    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'media_cue') {
+      random_search = await this.homeApi.getRandomMediaCues('0', '18')
+      if (random_search != undefined && Array.isArray(random_search)) {
+        random_search.map(async (item: any, index: number) => {
+          store_view_home_page_info.home_Files_temporary_random_search.push(
+            this.mapMedia_Cue(item, url, index, 0)
+          )
+        })
+      }
     }
   }
   public async get_home_list_of_recently_added(url: string) {
     url = url.includes('api') ? url : url + '/api'
-    const recently_added = await this.homeApi.getAlbumList_Recently_Added()
-    if (recently_added != undefined && Array.isArray(recently_added)) {
-      recently_added.map(async (album: any) => {
-        store_view_home_page_info.home_Files_temporary_recently_added.push(
-          this.mapAlbum_Home(album, url)
-        )
-      })
+    let recently_added = undefined
+    if(store_view_home_page_info.home_Files_temporary_type_select === 'album') {
+      recently_added = await this.homeApi.getAlbumList_Recently_Added()
+      if (recently_added != undefined && Array.isArray(recently_added)) {
+        recently_added.map(async (item: any, index: number) => {
+          store_view_home_page_info.home_Files_temporary_recently_added.push(
+            this.mapAlbum_Home(item, url)
+          )
+        })
+      }
+    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'artist') {
+      recently_added = await this.homeApi.getArtistList_Recently_Added()
+      if (recently_added != undefined && Array.isArray(recently_added)) {
+        recently_added.map(async (item: any, index: number) => {
+          store_view_home_page_info.home_Files_temporary_recently_added.push(
+            this.mapArtist(item, url, index, 0)
+          )
+        })
+      }
+    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'media') {
+      recently_added = await this.homeApi.getMediaList_Recently_Added()
+      if (recently_added != undefined && Array.isArray(recently_added)) {
+        recently_added.map(async (item: any, index: number) => {
+          store_view_home_page_info.home_Files_temporary_recently_added.push(
+            this.mapMedia(item, url, index, 0)
+          )
+        })
+      }
+    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'media_cue') {
+      recently_added = await this.homeApi.getMediaCue_Recently_Added()
+      if (recently_added != undefined && Array.isArray(recently_added)) {
+        recently_added.map(async (item: any, index: number) => {
+          store_view_home_page_info.home_Files_temporary_recently_added.push(
+            this.mapMedia_Cue(item, url, index, 0)
+          )
+        })
+      }
     }
   }
   public async get_home_list_of_recently_played(url: string) {
     url = url.includes('api') ? url : url + '/api'
-    const recently_played = await this.homeApi.getAlbumList_Play_Date()
-    if (recently_played != undefined && Array.isArray(recently_played)) {
-      recently_played.map(async (album: any) => {
-        store_view_home_page_info.home_Files_temporary_recently_played.push(
-          this.mapAlbum_Home(album, url)
-        )
-      })
+    let recently_played = undefined
+    if(store_view_home_page_info.home_Files_temporary_type_select === 'album') {
+      recently_played = await this.homeApi.getAlbumList_Play_Date()
+      if (recently_played != undefined && Array.isArray(recently_played)) {
+        recently_played.map(async (item: any, index: number) => {
+          store_view_home_page_info.home_Files_temporary_recently_played.push(
+            this.mapAlbum_Home(item, url)
+          )
+        })
+      }
+    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'artist') {
+      recently_played = await this.homeApi.getArtistList_Play_Date()
+      if (recently_played != undefined && Array.isArray(recently_played)) {
+        recently_played.map(async (item: any, index: number) => {
+          store_view_home_page_info.home_Files_temporary_recently_played.push(
+            this.mapArtist(item, url, index, 0)
+          )
+        })
+      }
+    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'media') {
+      recently_played = await this.homeApi.getMediaList_Play_Date()
+      if (recently_played != undefined && Array.isArray(recently_played)) {
+        recently_played.map(async (item: any, index: number) => {
+          store_view_home_page_info.home_Files_temporary_recently_played.push(
+            this.mapMedia(item, url, index, 0)
+          )
+        })
+      }
+    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'media_cue') {
+      recently_played = await this.homeApi.getMediaCue_Play_Date()
+      if (recently_played != undefined && Array.isArray(recently_played)) {
+        recently_played.map(async (item: any, index: number) => {
+          store_view_home_page_info.home_Files_temporary_recently_played.push(
+            this.mapMedia_Cue(item, url, index, 0)
+          )
+        })
+      }
     }
   }
   public async get_media_list(
@@ -251,7 +371,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     let totalCount = 0
     if (playlist_id === '') {
       if (multi_sorts.length === 0) {
-        const data = await this.mediaCuesApi.getMediaCues(
+        const data = await this.cueFilesApi.getMediaCues(
           _start,
           _end,
           _sort,
@@ -264,7 +384,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
         song_list = data['ninesong-response']['cueFiles']
         totalCount = data['ninesong-response']['count']
       } else {
-        const data = await this.mediaCuesApi.getMediaCuesSort(
+        const data = await this.cueFilesApi.getMediaCuesSort(
           _start,
           _end,
           multi_sorts,
@@ -278,7 +398,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       }
     } else {
       if (multi_sorts.length === 0) {
-        const data = await this.mediaCuesApi.getMediaCues_Playlist(
+        const data = await this.cueFilesApi.getMediaCues_Playlist(
           playlist_id,
           _start,
           _end,
@@ -515,7 +635,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
   }
   public async get_count_of_media_cue_file() {
     try {
-      const counts = await this.mediaCuesApi.getMediaCuesCounts()
+      const counts = await this.cueFilesApi.getMediaCuesCounts()
       const response = counts['ninesong-response']['cueFiles']
       store_view_media_cue_page_info.media_item_count = response.Total
       store_view_media_cue_page_info.media_starred_count = response.Starred

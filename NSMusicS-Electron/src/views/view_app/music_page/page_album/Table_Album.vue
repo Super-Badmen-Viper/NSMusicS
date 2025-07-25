@@ -664,7 +664,7 @@ const Play_this_album_MediaList_click = async (album_id: string) => {
   store_playlist_list_info.reset_carousel()
 }
 
-const handleItemClick_Favorite = (id: any, favorite: Boolean) => {
+const handleItemClick_Favorite = (id: any, favorite: boolean) => {
   store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(id, favorite)
   page_albumlists_statistic.value.forEach((item: any) => {
     if (item.id === 'album_list_love') {

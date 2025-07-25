@@ -629,35 +629,6 @@ const Init_page_cuelists_statistic_Data = () => {
     id: temp_Play_List_Recently.id,
   })
   store_view_media_cue_page_logic.page_songlists.push(temp_Play_List_Recently)
-  //////
-  store_view_media_cue_page_logic.page_songlists_statistic.push({
-    label: computed(() => t('entity.playlist_other')),
-    song_count: store_view_media_cue_page_info.media_playlist_count + ' *',
-    id: 'song_list_all_PlayList',
-  })
-  //////
-  store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.forEach((item: any) => {
-    const temp_playlist: Play_List = {
-      label: item.playlist.name,
-      value: item.playlist.id,
-      id: item.playlist.id,
-      name: item.playlist.name,
-      comment: item.playlist.comment,
-      duration: item.playlist.duration,
-      song_count: item.playlist.song_count + ' *',
-      public: item.playlist.public,
-      created_at: item.playlist.created_at,
-      updated_at: item.playlist.updated_at,
-      path: item.playlist.path,
-      sync: item.playlist.sync,
-      size: item.playlist.size,
-      rules: item.playlist.rules,
-      evaluated_at: item.playlist.evaluated_at,
-      owner_id: item.playlist.owner_id,
-    }
-    store_view_media_cue_page_logic.page_songlists_options.push(temp_playlist)
-    store_view_media_cue_page_logic.page_songlists.push(temp_playlist)
-  })
 }
 ////// view of album
 const Init_page_albumlists_statistic_Data = () => {

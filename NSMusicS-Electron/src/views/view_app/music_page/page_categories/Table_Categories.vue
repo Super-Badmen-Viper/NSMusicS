@@ -291,7 +291,7 @@ watch(
 
 ////// changed_data write to sqlite
 import { store_local_data_set_albumInfo } from '@/data/data_stores/local/local_data_synchronization/store_local_data_set_albumInfo'
-const handleItemClick_Favorite = (id: any, favorite: Boolean) => {
+const handleItemClick_Favorite = (id: any, favorite: boolean) => {
   store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(id, favorite)
 }
 let before_rating = false

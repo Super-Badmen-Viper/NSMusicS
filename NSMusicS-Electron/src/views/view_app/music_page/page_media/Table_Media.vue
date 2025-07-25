@@ -603,18 +603,16 @@ const handleItemDbClick = async (media_file: any, index: number) => {
     if (click_count >= 2) {
       click_count = 0
       if (store_server_user_model.model_server_type_of_web) {
-        /// Data synchronization
         store_general_fetch_media_list.fetchData_Media_of_data_synchronization_to_playlist()
         store_server_user_model.random_play_model = false
       }
-      //
       await store_player_audio_logic.update_current_media_info(media_file, index)
       store_playlist_list_logic.media_page_handleItemDbClick = true
       store_player_appearance.player_mode_of_lock_playlist = false
       store_player_audio_info.this_audio_restart_play = true
-
+      //
       store_general_fetch_player_list.fetchData_PlayList(false)
-
+      //
       store_playlist_list_info.reset_carousel()
     }
   }
@@ -731,7 +729,7 @@ const Open_this_artist_all_artist_list_click = (artist_id: string) => {
 }
 
 ////// changed_data write to sqlite
-const handleItemClick_Favorite = (id: any, favorite: Boolean) => {
+const handleItemClick_Favorite = (id: any, favorite: boolean) => {
   click_count = 0
   store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id, favorite)
   page_songlists_statistic.value.forEach((item: any) => {

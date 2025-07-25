@@ -113,8 +113,6 @@ export const store_player_audio_info = reactive({
     }
   },
   async set_lyric(newValue: string) {
-    store_player_audio_info.this_audio_lyrics_string = newValue
-    store_player_audio_info.this_audio_lyrics_loaded_complete = false
     if (newValue === undefined || newValue === 'undefined' || newValue.length === 0) {
       if (isElectron && store_server_user_model.model_server_type_of_local) {
         store_player_audio_info.this_audio_lyrics_string = await ipcRenderer.invoke(
@@ -131,7 +129,10 @@ export const store_player_audio_info = reactive({
         store_player_audio_info.this_audio_lyrics_null = true
         store_player_audio_info.this_audio_lyrics_string = '[00:01.00]未找到可用歌词\n'
       }
+    }else{
+      store_player_audio_info.this_audio_lyrics_string = newValue
     }
+    store_player_audio_info.this_audio_lyrics_loaded_complete = false
     ////// split lyrics
     store_player_audio_info.this_audio_lyrics_info_line_font = []
     for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_line_num; i++) {

@@ -37,6 +37,18 @@ export class Home_ApiService_of_NineSong extends NineSong_Api_Services_Web {
     }
     return []
   }
+  public async getRandomMediaCues(start: string, end: string): Promise<any> {
+    try {
+      const result = await this.sendRequest('GET', '/homes/cues/random', {
+        start,
+        end,
+      })
+      return result['ninesong-response']['cueFiles']
+    } catch (error) {
+      console.error('Error fetching album list by play count:', error)
+    }
+    return []
+  }
 
   public async getMediaList_Play_Count(): Promise<any> {
     try {
@@ -46,7 +58,7 @@ export class Home_ApiService_of_NineSong extends NineSong_Api_Services_Web {
         sort: 'play_count',
         order: 'desc',
       })
-      return result['ninesong-response']['medias']
+      return result['ninesong-response']['mediaFiles']
     } catch (error) {
       console.error('Error fetching album list by play count:', error)
     }
@@ -60,7 +72,7 @@ export class Home_ApiService_of_NineSong extends NineSong_Api_Services_Web {
         sort: 'recently_added',
         order: 'desc',
       })
-      return result['ninesong-response']['medias']
+      return result['ninesong-response']['mediaFiles']
     } catch (error) {
       console.error('Error fetching album list by play count:', error)
     }
@@ -74,7 +86,50 @@ export class Home_ApiService_of_NineSong extends NineSong_Api_Services_Web {
         sort: 'play_date',
         order: 'desc',
       })
-      return result['ninesong-response']['medias']
+      return result['ninesong-response']['mediaFiles']
+    } catch (error) {
+      console.error('Error fetching album list by play count:', error)
+    }
+    return []
+  }
+
+  public async getMediaCue_Play_Count(): Promise<any> {
+    try {
+      const result = await this.sendRequest('GET', 'cues', {
+        start: '0',
+        end: '15',
+        sort: 'play_count',
+        order: 'desc',
+      })
+      return result['ninesong-response']['cueFiles']
+    } catch (error) {
+      console.error('Error fetching album list by play count:', error)
+    }
+    return []
+  }
+  public async getMediaCue_Recently_Added(): Promise<any> {
+    try {
+      const result = await this.sendRequest('GET', 'cues', {
+        start: '0',
+        end: '15',
+        sort: 'recently_added',
+        order: 'desc',
+      })
+      return result['ninesong-response']['cueFiles']
+    } catch (error) {
+      console.error('Error fetching album list by play count:', error)
+    }
+    return []
+  }
+  public async getMediaCue_Play_Date(): Promise<any> {
+    try {
+      const result = await this.sendRequest('GET', 'cues', {
+        start: '0',
+        end: '15',
+        sort: 'play_date',
+        order: 'desc',
+      })
+      return result['ninesong-response']['cueFiles']
     } catch (error) {
       console.error('Error fetching album list by play count:', error)
     }

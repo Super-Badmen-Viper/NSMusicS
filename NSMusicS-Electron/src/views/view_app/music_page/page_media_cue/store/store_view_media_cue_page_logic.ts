@@ -9,7 +9,7 @@ import { store_local_data_set_annotionInfo } from '@/data/data_stores/local/loca
 import { store_local_data_set_playlistInfo } from '@/data/data_stores/local/local_data_synchronization/store_local_data_set_playlistInfo'
 import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
 import { store_server_data_set_playlistInfo } from '@/data/data_stores/server/server_api_synchronization/store_server_data_set_playlistInfo'
-import { store_server_data_set_mediaInfo } from '@/data/data_stores/server/server_api_synchronization/store_server_data_set_mediaInfo'
+import { store_server_data_set_media_cueInfo } from '@/data/data_stores/server/server_api_synchronization/store_server_data_set_media_cueInfo'
 import { store_player_appearance } from '@/views/view_app/music_page/page_player/store/store_player_appearance'
 import { store_server_users } from '@/data/data_stores/server/store_server_users'
 import { store_general_model_player_list } from '@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list'
@@ -132,7 +132,7 @@ export const store_view_media_cue_page_logic = reactive({
 
     if (store_server_user_model.model_select === 'server') {
       store_view_media_cue_page_info.media_Files_selected.forEach((media: any) => {
-        store_server_data_set_mediaInfo.Set_MediaInfo_To_Favorite(media.id, false)
+        store_server_data_set_media_cueInfo.Set_MediaInfo_To_Favorite_Server(media.id, false)
       })
     }
   },
@@ -146,7 +146,7 @@ export const store_view_media_cue_page_logic = reactive({
 
     if (store_server_user_model.model_select === 'server') {
       store_view_media_cue_page_info.media_Files_selected.forEach((media: any) => {
-        store_server_data_set_mediaInfo.Set_MediaInfo_To_Favorite(media.id, true)
+        store_server_data_set_media_cueInfo.Set_MediaInfo_To_Favorite_Server(media.id, true)
       })
     }
   },
