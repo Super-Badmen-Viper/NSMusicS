@@ -483,7 +483,6 @@ function change_home_Files_temporary_type(){
     <n-space
       vertical
       class="category-section"
-      v-if="store_view_home_page_info.home_Files_temporary_maximum_playback.length !== 0"
     >
       <n-space
         justify="space-between"
@@ -533,12 +532,6 @@ function change_home_Files_temporary_type(){
             </template>
             {{ $t('common.refresh') }}
           </n-tooltip>
-          <n-space
-            v-if="store_view_home_page_info.home_Files_temporary_maximum_playback.length === 0"
-            class="no-data-placeholder"
-          >
-            {{ $t('None') + $t('Play') + $t('Data') }}
-          </n-space>
         </n-space>
         <n-space>
           <n-tooltip trigger="hover" placement="top">
@@ -693,7 +686,6 @@ function change_home_Files_temporary_type(){
     <n-space
       vertical
       class="category-section"
-      v-if="store_view_home_page_info.home_Files_temporary_random_search.length !== 0"
     >
       <n-space
         justify="space-between"
@@ -740,12 +732,6 @@ function change_home_Files_temporary_type(){
             </template>
             {{ $t('common.refresh') }}
           </n-tooltip>
-          <n-space
-            v-if="store_view_home_page_info.home_Files_temporary_random_search.length === 0"
-            class="no-data-placeholder"
-          >
-            {{ $t('None') + $t('Play') + $t('Data') }}
-          </n-space>
         </n-space>
         <n-space>
           <n-tooltip trigger="hover" placement="top">
@@ -900,7 +886,6 @@ function change_home_Files_temporary_type(){
     <n-space
       vertical
       class="category-section"
-      v-if="store_view_home_page_info.home_Files_temporary_recently_added.length !== 0"
     >
       <n-space
         justify="space-between"
@@ -947,12 +932,6 @@ function change_home_Files_temporary_type(){
             </template>
             {{ $t('common.refresh') }}
           </n-tooltip>
-          <n-space
-            v-if="store_view_home_page_info.home_Files_temporary_recently_added.length === 0"
-            class="no-data-placeholder"
-          >
-            {{ $t('None') + $t('Play') + $t('Data') }}
-          </n-space>
         </n-space>
         <n-space>
           <n-tooltip trigger="hover" placement="top">
@@ -1107,7 +1086,6 @@ function change_home_Files_temporary_type(){
     <n-space
       vertical
       class="category-section"
-      v-if="store_view_home_page_info.home_Files_temporary_recently_played.length !== 0"
     >
       <n-space
         justify="space-between"
@@ -1154,12 +1132,6 @@ function change_home_Files_temporary_type(){
             </template>
             {{ $t('common.refresh') }}
           </n-tooltip>
-          <n-space
-            v-if="store_view_home_page_info.home_Files_temporary_recently_played.length === 0"
-            class="no-data-placeholder"
-          >
-            {{ $t('None') + $t('Play') + $t('Data') }}
-          </n-space>
         </n-space>
         <n-space>
           <n-tooltip trigger="hover" placement="top">
