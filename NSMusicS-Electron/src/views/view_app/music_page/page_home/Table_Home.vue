@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { NButton, NIcon, NImage, useMessage, useThemeVars } from 'naive-ui'
 import { Icon } from '@vicons/utils'
 import {
@@ -48,6 +47,7 @@ import {
   store_general_fetch_media_cue_list
 } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list'
 
+import { useI18n } from 'vue-i18n'
 const { t } = useI18n({ inheritLocale: true })
 const message = useMessage()
 const themeVars = useThemeVars()

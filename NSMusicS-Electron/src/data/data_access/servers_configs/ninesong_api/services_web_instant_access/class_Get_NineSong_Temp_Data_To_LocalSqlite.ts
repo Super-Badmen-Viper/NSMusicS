@@ -37,175 +37,211 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
   private recommendApi = new Recommend_ApiService_of_NineSong(store_server_login_info.server_url);
 
   public async get_home_list(url: string) {
-    await this.get_home_list_of_maximum_playback(url)
+    await this.get_home_list_of_maximum_playback(url, false)
     await this.get_home_list_of_random_search(url)
     await this.get_home_list_of_recently_added(url)
     await this.get_home_list_of_recently_played(url)
   }
-  public async get_home_list_of_maximum_playback(url: string) {
-    url = url.includes('api') ? url : url + '/api'
-    let maximum_playback = undefined
-    if(store_view_home_page_info.home_Files_temporary_type_select === 'album') {
-      maximum_playback = await this.homeApi.getAlbumList_Play_Count()
-      if (maximum_playback != undefined && Array.isArray(maximum_playback)) {
-        maximum_playback.map(async (item: any, index: number) => {
-          store_view_home_page_info.home_Files_temporary_maximum_playback.push(
-            this.mapAlbum_Home(item, url)
-          )
-        })
+
+  ///
+  private mappingStrategies = {
+    album: {
+      fetch: () => this.homeApi.getAlbumList_Play_Count(),
+      map: (item: any, url: string, index: number) =>
+        this.mapAlbum_Home(item, url)
+    },
+    artist: {
+      fetch: () => this.homeApi.getArtistList_Play_Count(),
+      map: (item: any, url: string, index: number) =>
+        this.mapArtist(item, url, index, 0)
+    },
+    media: {
+      fetch: () => this.homeApi.getMediaList_Play_Count(),
+      map: (item: any, url: string, index: number) =>
+        this.mapMedia(item, url, index, 0)
+    },
+    media_cue: {
+      fetch: () => this.homeApi.getMediaCue_Play_Count(),
+      map: (item: any, url: string, index: number) =>
+        this.mapMedia_Cue(item, url, index, 0)
+    }
+  };
+  private processData = async (
+    data: any[],
+    mapper: (item: any, index: number) => Promise<any>,
+    targetArray: any[]
+  ) => {
+    if (!data || !Array.isArray(data)) return [];
+    const mappedData = await Promise.all(data.map(mapper));
+    targetArray.push(...mappedData);
+    return mappedData;
+  };
+  public async get_home_list_of_maximum_playback(
+    url: string,
+    find_model: boolean
+  ): Promise<any[]> {
+    try {
+      // 确保URL格式正确
+      url = url.includes('api') ? url : `${url}/api`;
+
+      if (!find_model) {
+        const type = store_view_home_page_info.home_Files_temporary_type_select;
+        const strategy = this.mappingStrategies[type as keyof typeof this.mappingStrategies];
+
+        if (strategy) {
+          const data = await strategy.fetch();
+          return this.processData(
+            data,
+            (item, index) => strategy.map(item, url, index),
+            store_view_home_page_info.home_Files_temporary_maximum_playback
+          );
+        }
+        return [];
       }
-    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'artist') {
-      maximum_playback = await this.homeApi.getArtistList_Play_Count()
-      if (maximum_playback != undefined && Array.isArray(maximum_playback)) {
-        maximum_playback.map(async (item: any, index: number) => {
-          store_view_home_page_info.home_Files_temporary_maximum_playback.push(
-            this.mapArtist(item, url, index, 0)
-          )
-        })
+
+      // 并行执行所有请求 [6](@ref)
+      const [albumData, artistData, mediaData, mediaCueData] = await Promise.all([
+        this.homeApi.getAlbumList_Play_Count(),
+        this.homeApi.getArtistList_Play_Count(),
+        this.homeApi.getMediaList_Play_Count(),
+        this.homeApi.getMediaCue_Play_Count()
+      ]);
+
+      // 并行处理映射 [6](@ref)
+      const [mappedAlbums, mappedArtists, mappedMedia, mappedMediaCue] =
+        await Promise.all([
+          this.processData(albumData,
+            (item, index) => this.mapAlbum_Home(item, url), []),
+          this.processData(artistData,
+            (item, index) => this.mapArtist(item, url, index, 0), []),
+          this.processData(mediaData,
+            (item, index) => this.mapMedia(item, url, index, 0), []),
+          this.processData(mediaCueData,
+            (item, index) => this.mapMedia_Cue(item, url, index, 0), [])
+        ]);
+
+      return [mappedMedia, mappedAlbums, mappedArtists, mappedMediaCue];
+    } catch (error) {
+      console.error('Data processing failed:', error);
+      return [];
+    }
+  }
+  ///
+
+  private STRATEGY_CONFIG = {
+    random_search: {
+      album: {
+        fetch: () => this.homeApi.getRandomAlbums('0', '18'),
+        mapper: (item, url) => this.mapAlbum_Home(item, url)
+      },
+      artist: {
+        fetch: () => this.homeApi.getRandomArtists('0', '18'),
+        mapper: (item, url, index) => this.mapArtist(item, url, index, 0)
+      },
+      media: {
+        fetch: () => this.homeApi.getRandomMedias('0', '18'),
+        mapper: (item, url, index) => this.mapMedia(item, url, index, 0)
+      },
+      media_cue: {
+        fetch: () => this.homeApi.getRandomMediaCues('0', '18'),
+        mapper: (item, url, index) => this.mapMedia_Cue(item, url, index, 0)
       }
-    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'media') {
-      maximum_playback = await this.homeApi.getMediaList_Play_Count()
-      if (maximum_playback != undefined && Array.isArray(maximum_playback)) {
-        maximum_playback.map(async (item: any, index: number) => {
-          store_view_home_page_info.home_Files_temporary_maximum_playback.push(
-            this.mapMedia(item, url, index, 0)
-          )
-        })
+    },
+    recently_added: {
+      album: {
+        fetch: () => this.homeApi.getAlbumList_Recently_Added(),
+        mapper: (item, url) => this.mapAlbum_Home(item, url)
+      },
+      artist: {
+        fetch: () => this.homeApi.getArtistList_Recently_Added(),
+        mapper: (item, url, index) => this.mapArtist(item, url, index, 0)
+      },
+      media: {
+        fetch: () => this.homeApi.getMediaList_Recently_Added(),
+        mapper: (item, url, index) => this.mapMedia(item, url, index, 0)
+      },
+      media_cue: {
+        fetch: () => this.homeApi.getMediaCue_Recently_Added(),
+        mapper: (item, url, index) => this.mapMedia_Cue(item, url, index, 0)
       }
-    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'media_cue') {
-      maximum_playback = await this.homeApi.getMediaCue_Play_Count()
-      if (maximum_playback != undefined && Array.isArray(maximum_playback)) {
-        maximum_playback.map(async (item: any, index: number) => {
-          store_view_home_page_info.home_Files_temporary_maximum_playback.push(
-            this.mapMedia_Cue(item, url, index, 0)
-          )
-        })
+    },
+    recently_played: {
+      album: {
+        fetch: () => this.homeApi.getAlbumList_Play_Date(),
+        mapper: (item, url) => this.mapAlbum_Home(item, url)
+      },
+      artist: {
+        fetch: () => this.homeApi.getArtistList_Play_Date(),
+        mapper: (item, url, index) => this.mapArtist(item, url, index, 0)
+      },
+      media: {
+        fetch: () => this.homeApi.getMediaList_Play_Date(),
+        mapper: (item, url, index) => this.mapMedia(item, url, index, 0)
+      },
+      media_cue: {
+        fetch: () => this.homeApi.getMediaCue_Play_Date(),
+        mapper: (item, url, index) => this.mapMedia_Cue(item, url, index, 0)
       }
+    }
+  };
+  private async processHomeList(
+    strategyKey: keyof typeof this.STRATEGY_CONFIG,
+    targetArray: any[],
+    url: string
+  ) {
+    // 规范URL格式
+    const apiUrl = url.includes('api') ? url : `${url}/api`;
+
+    // 获取当前选择类型
+    const type = store_view_home_page_info.home_Files_temporary_type_select;
+
+    type DataStrategy = {
+      fetch: () => Promise<any[]>;
+      mapper: (item: any, url: string, index: number) => any;
+    };
+    // 获取对应策略
+    const strategy = this.STRATEGY_CONFIG[strategyKey][type as keyof DataStrategy];
+    if (!strategy) return;
+
+    try {
+      // 并行获取数据
+      const rawData = await strategy.fetch();
+      if (!rawData || !Array.isArray(rawData)) return;
+
+      // 并行处理数据映射
+      const mappedData = await Promise.all(
+        rawData.map((item, index) => strategy.mapper(item, apiUrl, index))
+      );
+
+      // 批量更新目标数组
+      targetArray.push(...mappedData);
+    } catch (error) {
+      console.error(`处理${strategyKey}数据失败:`, error);
     }
   }
   public async get_home_list_of_random_search(url: string) {
-    url = url.includes('api') ? url : url + '/api'
-    let random_search = undefined
-    if(store_view_home_page_info.home_Files_temporary_type_select === 'album') {
-      random_search = await this.homeApi.getRandomAlbums('0', '18')
-      if (random_search != undefined && Array.isArray(random_search)) {
-        random_search.map(async (item: any, index: number) => {
-          store_view_home_page_info.home_Files_temporary_random_search.push(
-            this.mapAlbum_Home(item, url)
-          )
-        })
-      }
-    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'artist') {
-      random_search = await this.homeApi.getRandomArtists('0', '18')
-      if (random_search != undefined && Array.isArray(random_search)) {
-        random_search.map(async (item: any, index: number) => {
-          store_view_home_page_info.home_Files_temporary_random_search.push(
-            this.mapArtist(item, url, index, 0)
-          )
-        })
-      }
-    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'media') {
-      random_search = await this.homeApi.getRandomMedias('0', '18')
-      if (random_search != undefined && Array.isArray(random_search)) {
-        random_search.map(async (item: any, index: number) => {
-          store_view_home_page_info.home_Files_temporary_random_search.push(
-            this.mapMedia(item, url, index, 0)
-          )
-        })
-      }
-    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'media_cue') {
-      random_search = await this.homeApi.getRandomMediaCues('0', '18')
-      if (random_search != undefined && Array.isArray(random_search)) {
-        random_search.map(async (item: any, index: number) => {
-          store_view_home_page_info.home_Files_temporary_random_search.push(
-            this.mapMedia_Cue(item, url, index, 0)
-          )
-        })
-      }
-    }
+    await this.processHomeList(
+      'random_search',
+      store_view_home_page_info.home_Files_temporary_random_search,
+      url
+    );
   }
   public async get_home_list_of_recently_added(url: string) {
-    url = url.includes('api') ? url : url + '/api'
-    let recently_added = undefined
-    if(store_view_home_page_info.home_Files_temporary_type_select === 'album') {
-      recently_added = await this.homeApi.getAlbumList_Recently_Added()
-      if (recently_added != undefined && Array.isArray(recently_added)) {
-        recently_added.map(async (item: any, index: number) => {
-          store_view_home_page_info.home_Files_temporary_recently_added.push(
-            this.mapAlbum_Home(item, url)
-          )
-        })
-      }
-    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'artist') {
-      recently_added = await this.homeApi.getArtistList_Recently_Added()
-      if (recently_added != undefined && Array.isArray(recently_added)) {
-        recently_added.map(async (item: any, index: number) => {
-          store_view_home_page_info.home_Files_temporary_recently_added.push(
-            this.mapArtist(item, url, index, 0)
-          )
-        })
-      }
-    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'media') {
-      recently_added = await this.homeApi.getMediaList_Recently_Added()
-      if (recently_added != undefined && Array.isArray(recently_added)) {
-        recently_added.map(async (item: any, index: number) => {
-          store_view_home_page_info.home_Files_temporary_recently_added.push(
-            this.mapMedia(item, url, index, 0)
-          )
-        })
-      }
-    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'media_cue') {
-      recently_added = await this.homeApi.getMediaCue_Recently_Added()
-      if (recently_added != undefined && Array.isArray(recently_added)) {
-        recently_added.map(async (item: any, index: number) => {
-          store_view_home_page_info.home_Files_temporary_recently_added.push(
-            this.mapMedia_Cue(item, url, index, 0)
-          )
-        })
-      }
-    }
+    await this.processHomeList(
+      'recently_added',
+      store_view_home_page_info.home_Files_temporary_recently_added,
+      url
+    );
   }
   public async get_home_list_of_recently_played(url: string) {
-    url = url.includes('api') ? url : url + '/api'
-    let recently_played = undefined
-    if(store_view_home_page_info.home_Files_temporary_type_select === 'album') {
-      recently_played = await this.homeApi.getAlbumList_Play_Date()
-      if (recently_played != undefined && Array.isArray(recently_played)) {
-        recently_played.map(async (item: any, index: number) => {
-          store_view_home_page_info.home_Files_temporary_recently_played.push(
-            this.mapAlbum_Home(item, url)
-          )
-        })
-      }
-    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'artist') {
-      recently_played = await this.homeApi.getArtistList_Play_Date()
-      if (recently_played != undefined && Array.isArray(recently_played)) {
-        recently_played.map(async (item: any, index: number) => {
-          store_view_home_page_info.home_Files_temporary_recently_played.push(
-            this.mapArtist(item, url, index, 0)
-          )
-        })
-      }
-    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'media') {
-      recently_played = await this.homeApi.getMediaList_Play_Date()
-      if (recently_played != undefined && Array.isArray(recently_played)) {
-        recently_played.map(async (item: any, index: number) => {
-          store_view_home_page_info.home_Files_temporary_recently_played.push(
-            this.mapMedia(item, url, index, 0)
-          )
-        })
-      }
-    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'media_cue') {
-      recently_played = await this.homeApi.getMediaCue_Play_Date()
-      if (recently_played != undefined && Array.isArray(recently_played)) {
-        recently_played.map(async (item: any, index: number) => {
-          store_view_home_page_info.home_Files_temporary_recently_played.push(
-            this.mapMedia_Cue(item, url, index, 0)
-          )
-        })
-      }
-    }
+    await this.processHomeList(
+      'recently_played',
+      store_view_home_page_info.home_Files_temporary_recently_played,
+      url
+    );
   }
+
+  ///
   public async get_media_list(
     url: string,
     _start: string,

@@ -147,6 +147,7 @@ const this_audio_buffer_file = ref()
 const timer_this_audio_player = ref() // 延迟触发：接收大量数据时，仅触发最后一个值
 import { Howl } from '@/utils/howler/howlerLoader'
 import { clearCache } from '@/utils/electron/webFrame'
+import { store_playlist_list_info } from '@/views/view_app/music_components/player_list/store/store_playlist_list_info'
 watch(
   () => this_audio_buffer_file.value,
   (newValue, oldValue) => {
@@ -363,9 +364,44 @@ const init_player_howler = async () => {
 }
 
 const Set_MediaInfo_To_PlayCount = debounce(async (event, args) => {
+  /// media、media_cue
   store_local_data_set_mediaInfo.Set_MediaInfo_To_PlayCount_of_Media_File(
     store_player_audio_info.this_audio_song_id
   )
+  /// album、artist
+  if(store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong') {
+    if (
+      store_general_fetch_media_list._album_id != undefined &&
+      store_general_fetch_media_list._album_id.length > 0 &&
+      store_general_fetch_media_list._album_id === store_player_audio_info.this_audio_album_id
+    ) {
+      if (
+        store_player_audio_info.this_audio_song_id ===
+        store_playlist_list_info.playlist_MediaFiles_temporary[
+        store_playlist_list_info.playlist_MediaFiles_temporary.length - 1]
+      ) {
+        store_server_data_set_albumInfo.Set_AlbumInfo_To_PlayCompleteCount_of_Album_Server(
+          store_player_audio_info.this_audio_album_id
+        )
+      }
+    }
+    if (
+      store_general_fetch_media_list._artist_id != undefined &&
+      store_general_fetch_media_list._artist_id.length > 0 &&
+      store_general_fetch_media_list._artist_id === store_player_audio_info.this_audio_artist_id
+    ) {
+      if (
+        store_player_audio_info.this_audio_song_id ===
+        store_playlist_list_info.playlist_MediaFiles_temporary[
+        store_playlist_list_info.playlist_MediaFiles_temporary.length - 1]
+      ) {
+        store_server_data_set_artistInfo.Set_ArtistInfo_To_PlayCompleteCount_of_Artist_Server(
+          store_player_audio_info.this_audio_artist_id
+        )
+      }
+    }
+  }
+  ///
   if (store_server_user_model.model_server_type_of_local) {
     let get_AnnotationInfo_To_LocalSqlite = new Get_AnnotationInfo_To_LocalSqlite()
     store_view_media_page_info.media_recently_count =
@@ -1050,6 +1086,9 @@ import {
 import {
   store_view_media_cue_page_info
 } from '@/views/view_app/music_page/page_media_cue/store/store_view_media_cue_page_info'
+import {
+  store_local_data_set_albumInfo
+} from '@/data/data_stores/local/local_data_synchronization/store_local_data_set_albumInfo'
 
 const handleItemClick_Favorite = (id, favorite) => {
   if (id != null && id.length > 0 && id != 'undefined') {

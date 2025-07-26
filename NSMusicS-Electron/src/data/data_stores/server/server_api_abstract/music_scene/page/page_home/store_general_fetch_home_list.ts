@@ -72,7 +72,7 @@ export const store_general_fetch_home_list = reactive({
         if (store_server_users.server_select_kind === 'ninesong') {
           const get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
           await get_NineSong_Temp_Data_To_LocalSqlite.get_home_list_of_maximum_playback(
-            store_server_login_info.server_url
+            store_server_login_info.server_url, false
           )
         } else if (store_server_users.server_select_kind === 'navidrome') {
           const get_Navidrome_Temp_Data_To_LocalSqlite =
