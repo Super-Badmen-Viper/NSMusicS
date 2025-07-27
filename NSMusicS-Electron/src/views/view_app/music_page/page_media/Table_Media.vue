@@ -525,33 +525,31 @@ const scrollTo = (value: number) => {
   try {
     // 1. 增加空值检查（null和undefined）
     if (!dynamicScroller.value) {
-      console.warn("dynamicScroller未初始化");
-      return;
+      console.warn('dynamicScroller未初始化')
+      return
     }
 
     setTimeout(() => {
       // 2. 再次检查防止异步期间组件卸载[3](@ref)
-      if (!dynamicScroller.value) return;
+      if (!dynamicScroller.value) return
 
       // 3. 安全计算滚动位置（添加边界保护）
-      const windowHeight = window.innerHeight;
-      const baseOffset = 20;
-      const referenceHeight = 765;
-      const itemHeight = 220;
+      const windowHeight = window.innerHeight
+      const baseOffset = 20
+      const referenceHeight = 765
+      const itemHeight = 220
 
-      const skipItems = Math.max(0,
-        Math.floor((windowHeight - referenceHeight) / itemHeight)
-      );
+      const skipItems = Math.max(0, Math.floor((windowHeight - referenceHeight) / itemHeight))
 
-      const index = Math.max(0, value - (baseOffset + skipItems));
+      const index = Math.max(0, value - (baseOffset + skipItems))
 
       // 4. 添加方法存在性检查[1](@ref)
       if (dynamicScroller.value.scrollToItem) {
-        dynamicScroller.value.scrollToItem(index);
+        dynamicScroller.value.scrollToItem(index)
       }
-    }, 100);
+    }, 100)
   } catch {}
-};
+}
 onMounted(() => {
   if (store_server_user_model.model_server_type_of_local) {
     scrollTo(store_router_history_data_of_media.router_history_model_of_Media_scroller_value)
@@ -1533,7 +1531,7 @@ const audioSuffixOptions = ref([
   // 第三梯队：冷门无损
   { label: 'wv', value: 'wv' },
   { label: 'tta', value: 'tta' },
-  { label: 'tak', value: 'tak' }
+  { label: 'tak', value: 'tak' },
 ])
 let folder_Entity_ApiService_of_NineSong = new Folder_Entity_ApiService_of_NineSong(
   store_server_login_info.server_url
@@ -1548,11 +1546,11 @@ onMounted(async () => {
     }))
   }
   ///
-  store_view_media_page_logic.page_songlists_filter_year = 0;
+  store_view_media_page_logic.page_songlists_filter_year = 0
   store_view_media_page_logic.page_songlists_bitrate_range = [0, 0]
   store_view_media_page_logic.page_songlists_library_path = ''
   store_view_media_page_logic.page_songlists_suffix = ''
-  store_view_media_page_logic.page_songlists_filter_model = false;
+  store_view_media_page_logic.page_songlists_filter_model = false
 })
 async function filter_media_folder_path() {
   store_view_media_page_logic.page_songlists_keywordFilter = ''
@@ -1563,7 +1561,7 @@ async function filter_media_folder_path() {
     store_view_media_page_logic.page_songlists_bitrate_range[0] != 0 ||
     store_view_media_page_logic.page_songlists_bitrate_range[1] != 0 ||
     store_view_media_page_logic.page_songlists_library_path.length > 0 ||
-    store_view_media_page_logic.page_songlists_suffix.length > 0;
+    store_view_media_page_logic.page_songlists_suffix.length > 0
   //
   await store_general_fetch_media_list.fetchData_Media()
 }
@@ -1702,8 +1700,7 @@ onBeforeUnmount(() => {
                 value="1"
                 :offset="[-18, 3]"
               >
-                <n-button quaternary circle style="rotate: 90deg"
-                          @click="Type_Multi_Sort = true">
+                <n-button quaternary circle style="rotate: 90deg" @click="Type_Multi_Sort = true">
                   <template #icon>
                     <n-icon :size="20" :depth="2"><MultipleStopOutlined /></n-icon>
                   </template>
@@ -1791,12 +1788,13 @@ onBeforeUnmount(() => {
             </n-card>
           </n-modal>
 
-          <n-tooltip trigger="hover" placement="top" >
+          <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-badge
                 v-if="store_view_media_page_logic.page_songlists_filter_model"
-                :offset="[-17, 3]" dot
-                style="margin-left: -10px;margin-right: -10px;"
+                :offset="[-17, 3]"
+                dot
+                style="margin-left: -10px; margin-right: -10px"
               >
                 <n-button quaternary circle @click="Type_Filter_Show = true">
                   <template #icon>
@@ -1804,9 +1802,13 @@ onBeforeUnmount(() => {
                   </template>
                 </n-button>
               </n-badge>
-              <n-button v-else quaternary circle
-                        style="margin-left: -10px;margin-right: -10px;"
-                        @click="Type_Filter_Show = true">
+              <n-button
+                v-else
+                quaternary
+                circle
+                style="margin-left: -10px; margin-right: -10px"
+                @click="Type_Filter_Show = true"
+              >
                 <template #icon>
                   <n-icon :size="20"><Filter20Filled /></n-icon>
                 </template>
@@ -1836,10 +1838,12 @@ onBeforeUnmount(() => {
                       <n-button
                         strong
                         secondary
-                        @click="()=>{
-                          store_view_media_page_logic.page_songlists_filter_year = 0;
-                          filter_media_folder_path();
-                        }"
+                        @click="
+                          () => {
+                            store_view_media_page_logic.page_songlists_filter_year = 0
+                            filter_media_folder_path()
+                          }
+                        "
                       >
                         {{ $t('common.clear') }}
                       </n-button>

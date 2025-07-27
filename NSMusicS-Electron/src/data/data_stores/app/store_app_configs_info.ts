@@ -122,6 +122,9 @@ watch(
 watch(
   () => store_app_configs_info.app_view_left_menu_select_activeKey,
   (newValue) => {
+    if(newValue != undefined && newValue.length > 0){
+      store_app_configs_info.app_view_left_menu_select_activeKey = 'home'
+    }
     store_app_configs_logic_save.save_system_config_of_App_Configs()
   }
 )

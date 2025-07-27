@@ -35,17 +35,11 @@ import { store_general_model_player_list } from '@/data/data_stores/server/serve
 
 import error_album from '@/assets/img/error_album.jpg'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
-import {
-  store_general_fetch_artist_list
-} from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_artist/store_general_fetch_artist_list'
+import { store_general_fetch_artist_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_artist/store_general_fetch_artist_list'
 import { store_view_album_page_logic } from '@/views/view_app/music_page/page_album/store/store_view_album_page_logic'
 import { store_player_audio_logic } from '@/views/view_app/music_page/page_player/store/store_player_audio_logic'
-import {
-  store_playlist_list_logic
-} from '@/views/view_app/music_components/player_list/store/store_playlist_list_logic'
-import {
-  store_general_fetch_media_cue_list
-} from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list'
+import { store_playlist_list_logic } from '@/views/view_app/music_components/player_list/store/store_playlist_list_logic'
+import { store_general_fetch_media_cue_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list'
 
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n({ inheritLocale: true })
@@ -222,8 +216,11 @@ const Open_this_album_MediaList_click = (item: any, list_name: string) => {
 
 const Play_this_album_MediaList_click = async (item: any, list_name: string) => {
   // 兼容性代码，需要优化
-  if (store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong') {
-    if(store_view_home_page_info.home_Files_temporary_type_select === 'artist') {
+  if (
+    store_server_user_model.model_server_type_of_web &&
+    store_server_users.server_select_kind === 'ninesong'
+  ) {
+    if (store_view_home_page_info.home_Files_temporary_type_select === 'artist') {
       if (store_server_user_model.model_server_type_of_web) {
         store_general_fetch_media_list.set_artist_id(item.id)
         store_view_media_page_logic.page_songlists_selected = 'song_list_all'
@@ -233,7 +230,7 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
       }
       console.log('play_this_artist_song_list：' + item.id)
       await store_general_fetch_artist_list.fetchData_This_Artist_MediaList(item.id)
-    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'media') {
+    } else if (store_view_home_page_info.home_Files_temporary_type_select === 'media') {
       if (store_server_user_model.model_server_type_of_web) {
         store_general_fetch_media_list.fetchData_Media_of_data_synchronization_to_playlist()
         store_server_user_model.random_play_model = false
@@ -251,7 +248,7 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
         play_id: item.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
       })
       store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.push(item.id)
-    }else if(store_view_home_page_info.home_Files_temporary_type_select === 'media_cue') {
+    } else if (store_view_home_page_info.home_Files_temporary_type_select === 'media_cue') {
       if (store_server_user_model.model_server_type_of_web) {
         store_general_fetch_media_cue_list.fetchData_Media_of_data_synchronization_to_playlist()
         store_server_user_model.random_play_model = false
@@ -458,37 +455,54 @@ const home_Files_temporary_type_options = ref([
     value: 'media_cue',
   },
 ])
-function change_home_Files_temporary_type(){
+function change_home_Files_temporary_type() {
   store_general_fetch_home_list.fetchData_Home()
 }
 </script>
 
 <template>
   <div class="home-wall-container">
-    <n-space style="margin-top: 6px;margin-left: 8px;" align="center">
+    <n-space style="margin-top: 6px; margin-left: 8px" align="center">
       <n-select
         size="small"
-        style="min-width: 156px;"
-        :disabled="!(store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong')"
+        style="min-width: 156px"
+        :disabled="
+          !(
+            store_server_user_model.model_server_type_of_web &&
+            store_server_users.server_select_kind === 'ninesong'
+          )
+        "
         :options="home_Files_temporary_type_options"
         v-model:value="store_view_home_page_info.home_Files_temporary_type_select"
         @update:value="change_home_Files_temporary_type"
       />
-      <div v-if="!(store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong')"
-           style="font-size: 15px; font-weight: bold;">
-        {{ '→ ' + $t('Alternate') + $t('Data') + $t('LabelSource') + ', ' + $t('error.serverRequired') + ': NineSong' }}
+      <div
+        v-if="
+          !(
+            store_server_user_model.model_server_type_of_web &&
+            store_server_users.server_select_kind === 'ninesong'
+          )
+        "
+        style="font-size: 15px; font-weight: bold"
+      >
+        {{
+          '-> ' +
+          $t('Alternate') +
+          $t('Data') +
+          $t('LabelSource') +
+          ', ' +
+          $t('error.serverRequired') +
+          ': NineSong'
+        }}
         <br />
       </div>
     </n-space>
-    <n-space
-      vertical
-      class="category-section"
-    >
+    <n-space vertical class="category-section">
       <n-space
         justify="space-between"
         align="center"
         class="category-header"
-        style="margin-top: 12px;"
+        style="margin-top: 12px"
         :style="{
           width: `calc(100vw - ${collapsed_width - 18}px)`,
         }"
@@ -498,18 +512,19 @@ function change_home_Files_temporary_type(){
             {{
               $t('page.home.mostPlayed') +
               ' : ' +
-              (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby'
+              (store_server_users.server_select_kind === 'jellyfin' ||
+              store_server_users.server_select_kind === 'emby'
                 ? $t('entity.track_other')
-                :
-                store_server_users.server_select_kind === 'ninesong' ?
-                  (store_view_home_page_info.home_Files_temporary_type_select === 'media' ?
-                    $t('entity.track_other') :
-                    store_view_home_page_info.home_Files_temporary_type_select === 'album' ?
-                      $t('entity.album_other') :
-                      store_view_home_page_info.home_Files_temporary_type_select === 'artist' ?
-                        $t('entity.artist_other') :
-                        store_view_home_page_info.home_Files_temporary_type_select === 'media_cue' ?
-                          $t('nsmusics.view_page.disk') : $t('entity.album_other'))
+                : store_server_users.server_select_kind === 'ninesong'
+                  ? store_view_home_page_info.home_Files_temporary_type_select === 'media'
+                    ? $t('entity.track_other')
+                    : store_view_home_page_info.home_Files_temporary_type_select === 'album'
+                      ? $t('entity.album_other')
+                      : store_view_home_page_info.home_Files_temporary_type_select === 'artist'
+                        ? $t('entity.artist_other')
+                        : store_view_home_page_info.home_Files_temporary_type_select === 'media_cue'
+                          ? $t('nsmusics.view_page.disk')
+                          : $t('entity.album_other')
                   : $t('entity.album_other'))
             }}
           </span>
@@ -639,8 +654,9 @@ function change_home_Files_temporary_type(){
                       <button
                         v-if="
                           store_server_user_model.model_server_type_of_local ||
-                          (store_server_users.server_select_kind !== 'jellyfin' &&
-                            store_server_users.server_select_kind !== 'emby')
+                          store_server_users.server_select_kind === 'navidrome' ||
+                          (store_server_users.server_select_kind === 'ninesong' &&
+                            store_view_home_page_info.home_Files_temporary_type_select === 'album')
                         "
                         class="open-this-home-artist-button"
                         @click="Open_this_album_MediaList_click(item, 'maximum')"
@@ -667,9 +683,12 @@ function change_home_Files_temporary_type(){
                 <div class="home-album-text" :style="{ width: `${item_album_txt}px` }">
                   <div class="home-album-name" :style="{ maxWidth: `${item_album_txt}px` }">
                     {{
-                      store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong' ?
-                        store_view_home_page_info.home_Files_temporary_type_select === 'media' ? item.title : item.name :
-                        item.name
+                      store_server_user_model.model_server_type_of_web &&
+                      store_server_users.server_select_kind === 'ninesong'
+                        ? store_view_home_page_info.home_Files_temporary_type_select === 'media'
+                          ? item.title
+                          : item.name
+                        : item.name
                     }}
                   </div>
                   <div class="home-artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
@@ -683,10 +702,7 @@ function change_home_Files_temporary_type(){
       </DynamicScroller>
     </n-space>
 
-    <n-space
-      vertical
-      class="category-section"
-    >
+    <n-space vertical class="category-section">
       <n-space
         justify="space-between"
         align="center"
@@ -698,18 +714,19 @@ function change_home_Files_temporary_type(){
             {{
               $t('page.home.explore') +
               ' : ' +
-              (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby'
+              (store_server_users.server_select_kind === 'jellyfin' ||
+              store_server_users.server_select_kind === 'emby'
                 ? $t('entity.track_other')
-                :
-                store_server_users.server_select_kind === 'ninesong' ?
-                  (store_view_home_page_info.home_Files_temporary_type_select === 'media' ?
-                    $t('entity.track_other') :
-                    store_view_home_page_info.home_Files_temporary_type_select === 'album' ?
-                      $t('entity.album_other') :
-                      store_view_home_page_info.home_Files_temporary_type_select === 'artist' ?
-                        $t('entity.artist_other') :
-                        store_view_home_page_info.home_Files_temporary_type_select === 'media_cue' ?
-                          $t('nsmusics.view_page.disk') : $t('entity.album_other'))
+                : store_server_users.server_select_kind === 'ninesong'
+                  ? store_view_home_page_info.home_Files_temporary_type_select === 'media'
+                    ? $t('entity.track_other')
+                    : store_view_home_page_info.home_Files_temporary_type_select === 'album'
+                      ? $t('entity.album_other')
+                      : store_view_home_page_info.home_Files_temporary_type_select === 'artist'
+                        ? $t('entity.artist_other')
+                        : store_view_home_page_info.home_Files_temporary_type_select === 'media_cue'
+                          ? $t('nsmusics.view_page.disk')
+                          : $t('entity.album_other')
                   : $t('entity.album_other'))
             }}
           </span>
@@ -839,8 +856,9 @@ function change_home_Files_temporary_type(){
                       <button
                         v-if="
                           store_server_user_model.model_server_type_of_local ||
-                          (store_server_users.server_select_kind !== 'jellyfin' &&
-                            store_server_users.server_select_kind !== 'emby')
+                          store_server_users.server_select_kind === 'navidrome' ||
+                          (store_server_users.server_select_kind === 'ninesong' &&
+                            store_view_home_page_info.home_Files_temporary_type_select === 'album')
                         "
                         class="open-this-home-artist-button"
                         @click="Open_this_album_MediaList_click(item, 'random')"
@@ -867,9 +885,12 @@ function change_home_Files_temporary_type(){
                 <div class="home-album-text" :style="{ width: `${item_album_txt}px` }">
                   <div class="home-album-name" :style="{ maxWidth: `${item_album_txt}px` }">
                     {{
-                      store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong' ?
-                        store_view_home_page_info.home_Files_temporary_type_select === 'media' ? item.title : item.name :
-                        item.name
+                      store_server_user_model.model_server_type_of_web &&
+                      store_server_users.server_select_kind === 'ninesong'
+                        ? store_view_home_page_info.home_Files_temporary_type_select === 'media'
+                          ? item.title
+                          : item.name
+                        : item.name
                     }}
                   </div>
                   <div class="home-artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
@@ -883,10 +904,7 @@ function change_home_Files_temporary_type(){
       </DynamicScroller>
     </n-space>
 
-    <n-space
-      vertical
-      class="category-section"
-    >
+    <n-space vertical class="category-section">
       <n-space
         justify="space-between"
         align="center"
@@ -898,18 +916,19 @@ function change_home_Files_temporary_type(){
             {{
               $t('page.home.newlyAdded') +
               ' : ' +
-              (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby'
+              (store_server_users.server_select_kind === 'jellyfin' ||
+              store_server_users.server_select_kind === 'emby'
                 ? $t('entity.track_other')
-                :
-                store_server_users.server_select_kind === 'ninesong' ?
-                  (store_view_home_page_info.home_Files_temporary_type_select === 'media' ?
-                    $t('entity.track_other') :
-                    store_view_home_page_info.home_Files_temporary_type_select === 'album' ?
-                      $t('entity.album_other') :
-                      store_view_home_page_info.home_Files_temporary_type_select === 'artist' ?
-                        $t('entity.artist_other') :
-                        store_view_home_page_info.home_Files_temporary_type_select === 'media_cue' ?
-                          $t('nsmusics.view_page.disk') : $t('entity.album_other'))
+                : store_server_users.server_select_kind === 'ninesong'
+                  ? store_view_home_page_info.home_Files_temporary_type_select === 'media'
+                    ? $t('entity.track_other')
+                    : store_view_home_page_info.home_Files_temporary_type_select === 'album'
+                      ? $t('entity.album_other')
+                      : store_view_home_page_info.home_Files_temporary_type_select === 'artist'
+                        ? $t('entity.artist_other')
+                        : store_view_home_page_info.home_Files_temporary_type_select === 'media_cue'
+                          ? $t('nsmusics.view_page.disk')
+                          : $t('entity.album_other')
                   : $t('entity.album_other'))
             }}
           </span>
@@ -1040,7 +1059,9 @@ function change_home_Files_temporary_type(){
                       <button
                         v-if="
                           store_server_user_model.model_server_type_of_local ||
-                          store_server_users.server_select_kind !== 'jellyfin'
+                          store_server_users.server_select_kind === 'navidrome' ||
+                          (store_server_users.server_select_kind === 'ninesong' &&
+                            store_view_home_page_info.home_Files_temporary_type_select === 'album')
                         "
                         class="open-this-home-artist-button"
                         @click="Open_this_album_MediaList_click(item, 'recently_added')"
@@ -1067,9 +1088,12 @@ function change_home_Files_temporary_type(){
                 <div class="home-album-text" :style="{ width: `${item_album_txt}px` }">
                   <div class="home-album-name" :style="{ maxWidth: `${item_album_txt}px` }">
                     {{
-                      store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong' ?
-                        store_view_home_page_info.home_Files_temporary_type_select === 'media' ? item.title : item.name :
-                        item.name
+                      store_server_user_model.model_server_type_of_web &&
+                      store_server_users.server_select_kind === 'ninesong'
+                        ? store_view_home_page_info.home_Files_temporary_type_select === 'media'
+                          ? item.title
+                          : item.name
+                        : item.name
                     }}
                   </div>
                   <div class="home-artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
@@ -1083,10 +1107,7 @@ function change_home_Files_temporary_type(){
       </DynamicScroller>
     </n-space>
 
-    <n-space
-      vertical
-      class="category-section"
-    >
+    <n-space vertical class="category-section">
       <n-space
         justify="space-between"
         align="center"
@@ -1098,18 +1119,19 @@ function change_home_Files_temporary_type(){
             {{
               $t('page.home.recentlyPlayed') +
               ' : ' +
-              (store_server_users.server_select_kind === 'jellyfin' || store_server_users.server_select_kind === 'emby'
+              (store_server_users.server_select_kind === 'jellyfin' ||
+              store_server_users.server_select_kind === 'emby'
                 ? $t('entity.track_other')
-                :
-                store_server_users.server_select_kind === 'ninesong' ?
-                  (store_view_home_page_info.home_Files_temporary_type_select === 'media' ?
-                    $t('entity.track_other') :
-                    store_view_home_page_info.home_Files_temporary_type_select === 'album' ?
-                      $t('entity.album_other') :
-                      store_view_home_page_info.home_Files_temporary_type_select === 'artist' ?
-                        $t('entity.artist_other') :
-                        store_view_home_page_info.home_Files_temporary_type_select === 'media_cue' ?
-                          $t('nsmusics.view_page.disk') : $t('entity.album_other'))
+                : store_server_users.server_select_kind === 'ninesong'
+                  ? store_view_home_page_info.home_Files_temporary_type_select === 'media'
+                    ? $t('entity.track_other')
+                    : store_view_home_page_info.home_Files_temporary_type_select === 'album'
+                      ? $t('entity.album_other')
+                      : store_view_home_page_info.home_Files_temporary_type_select === 'artist'
+                        ? $t('entity.artist_other')
+                        : store_view_home_page_info.home_Files_temporary_type_select === 'media_cue'
+                          ? $t('nsmusics.view_page.disk')
+                          : $t('entity.album_other')
                   : $t('entity.album_other'))
             }}
           </span>
@@ -1239,8 +1261,9 @@ function change_home_Files_temporary_type(){
                       <button
                         v-if="
                           store_server_user_model.model_server_type_of_local ||
-                          (store_server_users.server_select_kind !== 'jellyfin' &&
-                            store_server_users.server_select_kind !== 'emby')
+                          store_server_users.server_select_kind === 'navidrome' ||
+                          (store_server_users.server_select_kind === 'ninesong' &&
+                            store_view_home_page_info.home_Files_temporary_type_select === 'album')
                         "
                         class="open-this-home-artist-button"
                         @click="Open_this_album_MediaList_click(item, 'recently_played')"
@@ -1267,9 +1290,12 @@ function change_home_Files_temporary_type(){
                 <div class="home-album-text" :style="{ width: `${item_album_txt}px` }">
                   <div class="home-album-name" :style="{ maxWidth: `${item_album_txt}px` }">
                     {{
-                      store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong' ?
-                        store_view_home_page_info.home_Files_temporary_type_select === 'media' ? item.title : item.name :
-                        item.name
+                      store_server_user_model.model_server_type_of_web &&
+                      store_server_users.server_select_kind === 'ninesong'
+                        ? store_view_home_page_info.home_Files_temporary_type_select === 'media'
+                          ? item.title
+                          : item.name
+                        : item.name
                     }}
                   </div>
                   <div class="home-artist-name" :style="{ maxWidth: `${item_album_txt}px` }">

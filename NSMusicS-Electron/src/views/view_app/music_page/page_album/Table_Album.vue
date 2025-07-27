@@ -534,33 +534,31 @@ const scrollTo = (value: number) => {
   try {
     // 1. 增加空值检查（null和undefined）
     if (!dynamicScroller.value) {
-      console.warn("dynamicScroller未初始化");
-      return;
+      console.warn('dynamicScroller未初始化')
+      return
     }
 
     setTimeout(() => {
       // 2. 再次检查防止异步期间组件卸载[3](@ref)
-      if (!dynamicScroller.value) return;
+      if (!dynamicScroller.value) return
 
       // 3. 安全计算滚动位置（添加边界保护）
-      const windowHeight = window.innerHeight;
-      const baseOffset = 20;
-      const referenceHeight = 765;
-      const itemHeight = 220;
+      const windowHeight = window.innerHeight
+      const baseOffset = 20
+      const referenceHeight = 765
+      const itemHeight = 220
 
-      const skipItems = Math.max(0,
-        Math.floor((windowHeight - referenceHeight) / itemHeight)
-      );
+      const skipItems = Math.max(0, Math.floor((windowHeight - referenceHeight) / itemHeight))
 
-      const index = Math.max(0, value - (baseOffset + skipItems));
+      const index = Math.max(0, value - (baseOffset + skipItems))
 
       // 4. 添加方法存在性检查[1](@ref)
       if (dynamicScroller.value.scrollToItem) {
-        dynamicScroller.value.scrollToItem(index);
+        dynamicScroller.value.scrollToItem(index)
       }
-    }, 100);
+    }, 100)
   } catch {}
-};
+}
 onMounted(() => {
   if (store_server_user_model.model_server_type_of_local) {
     scrollTo(store_router_history_data_of_album.router_history_model_of_Album_scroller_value)
@@ -631,8 +629,10 @@ const handleItemClick_artist = (artist_id: string) => {
     if (store_server_users.server_select_kind === 'ninesong') {
       store_general_fetch_album_list.set_artist_id(artist_id)
       store_general_fetch_album_list.fetchData_Album()
-    } else if(store_server_users.server_select_kind === 'jellyfin' ||
-      store_server_users.server_select_kind === 'emby'){
+    } else if (
+      store_server_users.server_select_kind === 'jellyfin' ||
+      store_server_users.server_select_kind === 'emby'
+    ) {
       store_general_fetch_album_list.set_artist_id(artist_id)
       store_view_album_page_logic.page_albumlists_input_search_Value = artist_id
       store_general_fetch_album_list.fetchData_Album()
@@ -978,7 +978,7 @@ onMounted(() => {
       input_search_InstRef.value?.clear()
       bool_show_search_area.value = false
       store_view_album_page_logic.page_albumlists_keyword = ''
-    }else{
+    } else {
       bool_show_search_area.value = true
     }
   }
@@ -1194,7 +1194,7 @@ onBeforeUnmount(() => {
               <n-badge
                 :value="store_view_album_page_logic.page_albumlists_filter_year"
                 :offset="[22, 17]"
-                style="margin-left: -10px;margin-right: -10px;"
+                style="margin-left: -10px; margin-right: -10px"
               >
                 <n-button quaternary circle @click="Type_Filter_Show = true">
                   <template #icon>
@@ -1528,9 +1528,7 @@ onBeforeUnmount(() => {
                         "
                       />
                     </div>
-                    <div
-                      class="hover-buttons-bottom-album"
-                    >
+                    <div class="hover-buttons-bottom-album">
                       <button
                         class="open-this-artist-button"
                         v-if="

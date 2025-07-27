@@ -89,7 +89,7 @@ function getData(
       color: textColor, // 动态文本颜色
     },
     title: {
-      text: `${category.name}播放排名`,
+      text: `${category.name}` + t('Play') + t('Sort'),
       top: '5%',
       left: 'center',
       textStyle: {
@@ -305,8 +305,9 @@ function handleCategoryChange(newCategory: string) {
 }
 
 // 刷新数据
-function refresh() {
+async function refresh() {
   loading.value = true
+  await store_view_charts_page_logic.fetchData_Charts()
   option.value = getData(selectedCategory.value, store_app_configs_info.theme_name)
   loading.value = false
 }
@@ -319,6 +320,7 @@ onBeforeUnmount(() => {
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
+import { store_view_charts_page_logic } from '@/views/view_app/music_page/page_charts/store/store_view_charts_page_logic'
 const { t } = useI18n({
   inheritLocale: true,
 })

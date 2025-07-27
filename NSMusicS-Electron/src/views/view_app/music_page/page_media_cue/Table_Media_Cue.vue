@@ -85,53 +85,53 @@ const options_Sort_key = ref([
   {
     label: computed(() => t('entity.artist_other')),
     key: 'performer', // 修复：artist → performer
-    state_Sort: state_Sort.Default
+    state_Sort: state_Sort.Default,
   },
   {
     label: computed(() => t('filter.releaseYear')),
     key: 'rem.date', // 修复：year → rem.date
-    state_Sort: state_Sort.Default
+    state_Sort: state_Sort.Default,
   },
   {
     label: computed(() => t('filter.duration')),
     key: 'cue_duration', // 修复：duration → cue_duration
-    state_Sort: state_Sort.Default
+    state_Sort: state_Sort.Default,
   },
   {
     label: computed(() => t('common.bitrate')),
     key: 'cue_bit_rate', // 修复：bit_rate → cue_bit_rate
-    state_Sort: state_Sort.Default
+    state_Sort: state_Sort.Default,
   },
   { label: computed(() => t('LabelSize')), key: 'size', state_Sort: state_Sort.Default },
   {
     label: computed(() => t('filter.playCount')),
     key: 'play_count',
-    state_Sort: state_Sort.Default
+    state_Sort: state_Sort.Default,
   },
   {
     label: computed(() => t('common.favorite') + t('LabelLevel')),
     key: 'rating',
-    state_Sort: state_Sort.Default
+    state_Sort: state_Sort.Default,
   },
   {
     label: computed(() => t('common.favorite') + t('LabelDate')),
     key: 'starred_at',
-    state_Sort: state_Sort.Default
+    state_Sort: state_Sort.Default,
   },
   {
     label: computed(() => t('filter.dateAdded')),
     key: 'created_at',
-    state_Sort: state_Sort.Default
+    state_Sort: state_Sort.Default,
   },
   {
     label: computed(() => t('filter.recentlyUpdated')),
     key: 'updated_at',
-    state_Sort: state_Sort.Default
+    state_Sort: state_Sort.Default,
   },
   {
     label: computed(() => t('Track') + t('nsmusics.view_page.count')),
     key: 'cue_track_count', // 新增：音轨数排序
-    state_Sort: state_Sort.Default
+    state_Sort: state_Sort.Default,
   },
 ])
 let Select_Sort_Model = false
@@ -364,33 +364,31 @@ const scrollTo = (value: number) => {
   try {
     // 1. 增加空值检查（null和undefined）
     if (!dynamicScroller.value) {
-      console.warn("dynamicScroller未初始化");
-      return;
+      console.warn('dynamicScroller未初始化')
+      return
     }
 
     setTimeout(() => {
       // 2. 再次检查防止异步期间组件卸载[3](@ref)
-      if (!dynamicScroller.value) return;
+      if (!dynamicScroller.value) return
 
       // 3. 安全计算滚动位置（添加边界保护）
-      const windowHeight = window.innerHeight;
-      const baseOffset = 20;
-      const referenceHeight = 765;
-      const itemHeight = 220;
+      const windowHeight = window.innerHeight
+      const baseOffset = 20
+      const referenceHeight = 765
+      const itemHeight = 220
 
-      const skipItems = Math.max(0,
-        Math.floor((windowHeight - referenceHeight) / itemHeight)
-      );
+      const skipItems = Math.max(0, Math.floor((windowHeight - referenceHeight) / itemHeight))
 
-      const index = Math.max(0, value - (baseOffset + skipItems));
+      const index = Math.max(0, value - (baseOffset + skipItems))
 
       // 4. 添加方法存在性检查[1](@ref)
       if (dynamicScroller.value.scrollToItem) {
-        dynamicScroller.value.scrollToItem(index);
+        dynamicScroller.value.scrollToItem(index)
       }
-    }, 100);
+    }, 100)
   } catch {}
-};
+}
 onMounted(() => {
   if (store_server_user_model.model_server_type_of_local) {
     scrollTo(store_router_history_data_of_media.router_history_model_of_Media_scroller_value)
@@ -460,10 +458,11 @@ const handleItemDbClick = async (media_file: any, index: any) => {
             media_file.cue_tracks[index_num - 1].INDEXES
           ///
           store_player_audio_info.this_audio_song_name = media_file.cue_tracks[index_num - 1].Title
-          if(store_player_audio_info.this_audio_song_name.length === 0){
+          if (store_player_audio_info.this_audio_song_name.length === 0) {
             store_player_audio_info.this_audio_song_name = index_num + ':' + media_file.title
           }
-          store_player_audio_info.this_audio_artist_name = media_file.cue_tracks[index_num - 1].Performer
+          store_player_audio_info.this_audio_artist_name =
+            media_file.cue_tracks[index_num - 1].Performer
           store_player_audio_info.this_audio_album_name = media_file.title
           ///
           store_player_audio_logic.player_model_cue = true

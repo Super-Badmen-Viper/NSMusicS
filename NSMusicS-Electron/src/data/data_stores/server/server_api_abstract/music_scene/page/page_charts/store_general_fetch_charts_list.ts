@@ -16,25 +16,27 @@ export const store_general_fetch_charts_list = reactive({
       store_view_charts_page_info.charts_artist_metadata = []
       store_view_charts_page_info.charts_media_cue_metadata = []
 
-      if (store_server_user_model.model_server_type_of_web &&
-        store_server_users.server_select_kind === 'ninesong') {
-        const dataLoader = new Get_NineSong_Temp_Data_To_LocalSqlite();
+      if (
+        store_server_user_model.model_server_type_of_web &&
+        store_server_users.server_select_kind === 'ninesong'
+      ) {
+        const dataLoader = new Get_NineSong_Temp_Data_To_LocalSqlite()
         const [
           charts_media_file_metadata,
           charts_album_metadata,
           charts_artist_metadata,
-          charts_media_cue_metadata
+          charts_media_cue_metadata,
         ] = await dataLoader.get_home_list_of_maximum_playback(
           store_server_login_info.server_url,
           true
-        );
+        )
 
         Object.assign(store_view_charts_page_info, {
           charts_media_file_metadata,
           charts_album_metadata,
           charts_artist_metadata,
-          charts_media_cue_metadata
-        });
+          charts_media_cue_metadata,
+        })
       }
     } catch (error) {
       console.error('Failed to fetch home data:', error)

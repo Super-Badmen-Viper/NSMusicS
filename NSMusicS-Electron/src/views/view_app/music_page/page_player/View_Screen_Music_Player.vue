@@ -101,7 +101,8 @@ function begin_lyrics_animation() {
             ///
             if (store_player_audio_logic.player_model_cue) {
               if (store_player_audio_info.this_audio_cue_track_current_indexes.length > 0) {
-                const track_str = store_player_audio_info.this_audio_cue_track_current_indexes[0].TIME
+                const track_str =
+                  store_player_audio_info.this_audio_cue_track_current_indexes[0].TIME
                 if (track_str.length > 0) {
                   currentTime = currentTime - store_player_audio_logic.formatStrTime(track_str)
                 }
@@ -204,7 +205,7 @@ const handleItemDbClick = async (index: any) => {
   if (time < 0) return
   if (!store_player_audio_logic.player_model_cue) {
     store_player_audio_logic.player_go_lyric_line_index_of_audio_play_progress = time
-  }else{
+  } else {
     if (store_player_audio_info.this_audio_cue_track_current_indexes.length > 0) {
       const track_str = store_player_audio_info.this_audio_cue_track_current_indexes[0].TIME
       if (track_str.length > 0) {

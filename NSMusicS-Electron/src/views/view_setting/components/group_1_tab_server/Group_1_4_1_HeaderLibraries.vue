@@ -451,7 +451,7 @@ const refreshModeOptions = ref([
         <!--  -->
         <n-slider
           v-if="progressBarShow"
-          style="width: 200px; --n-rail-height: 16px;margin-left: 1px;"
+          style="width: 200px; --n-rail-height: 16px; margin-left: 1px"
           :value="progressBar"
           :format-tooltip="formatTooltip"
         >

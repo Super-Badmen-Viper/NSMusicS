@@ -25,7 +25,7 @@ export class Retrieval_ApiService_of_NineSong extends NineSong_Api_Services_Web 
     return this.sendRequest('GET', 'media/lyrics', {
       artist,
       title,
-      file_type
+      file_type,
     })
   }
 }

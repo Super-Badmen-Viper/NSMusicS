@@ -28,13 +28,13 @@ import { Recommend_ApiService_of_NineSong } from '../services_web/Scene/Music/Re
 import { store_view_recommend_page_info } from '../../../../../views/view_app/music_page/page_recommend/store/store_view_recommend_page_info'
 
 export class Get_NineSong_Temp_Data_To_LocalSqlite {
-  private artistsApi = new Artists_ApiService_of_NineSong(store_server_login_info.server_url);
-  private albumsApi = new Albums_ApiService_of_NineSong(store_server_login_info.server_url);
-  private mediasApi = new Medias_ApiService_of_NineSong(store_server_login_info.server_url);
-  private cueFilesApi = new MediaCues_ApiService_of_NineSong(store_server_login_info.server_url);
-  private homeApi = new Home_ApiService_of_NineSong(store_server_login_info.server_url);
-  private playlistApi = new Playlist_ApiService_of_NineSong(store_server_login_info.server_url);
-  private recommendApi = new Recommend_ApiService_of_NineSong(store_server_login_info.server_url);
+  private artistsApi = new Artists_ApiService_of_NineSong(store_server_login_info.server_url)
+  private albumsApi = new Albums_ApiService_of_NineSong(store_server_login_info.server_url)
+  private mediasApi = new Medias_ApiService_of_NineSong(store_server_login_info.server_url)
+  private cueFilesApi = new MediaCues_ApiService_of_NineSong(store_server_login_info.server_url)
+  private homeApi = new Home_ApiService_of_NineSong(store_server_login_info.server_url)
+  private playlistApi = new Playlist_ApiService_of_NineSong(store_server_login_info.server_url)
+  private recommendApi = new Recommend_ApiService_of_NineSong(store_server_login_info.server_url)
 
   public async get_home_list(url: string) {
     await this.get_home_list_of_maximum_playback(url, false)
@@ -47,56 +47,49 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
   private mappingStrategies = {
     album: {
       fetch: () => this.homeApi.getAlbumList_Play_Count(),
-      map: (item: any, url: string, index: number) =>
-        this.mapAlbum_Home(item, url)
+      map: (item: any, url: string, index: number) => this.mapAlbum_Home(item, url),
     },
     artist: {
       fetch: () => this.homeApi.getArtistList_Play_Count(),
-      map: (item: any, url: string, index: number) =>
-        this.mapArtist(item, url, index, 0)
+      map: (item: any, url: string, index: number) => this.mapArtist(item, url, index, 0),
     },
     media: {
       fetch: () => this.homeApi.getMediaList_Play_Count(),
-      map: (item: any, url: string, index: number) =>
-        this.mapMedia(item, url, index, 0)
+      map: (item: any, url: string, index: number) => this.mapMedia(item, url, index, 0),
     },
     media_cue: {
       fetch: () => this.homeApi.getMediaCue_Play_Count(),
-      map: (item: any, url: string, index: number) =>
-        this.mapMedia_Cue(item, url, index, 0)
-    }
-  };
+      map: (item: any, url: string, index: number) => this.mapMedia_Cue(item, url, index, 0),
+    },
+  }
   private processData = async (
     data: any[],
     mapper: (item: any, index: number) => Promise<any>,
     targetArray: any[]
   ) => {
-    if (!data || !Array.isArray(data)) return [];
-    const mappedData = await Promise.all(data.map(mapper));
-    targetArray.push(...mappedData);
-    return mappedData;
-  };
-  public async get_home_list_of_maximum_playback(
-    url: string,
-    find_model: boolean
-  ): Promise<any[]> {
+    if (!data || !Array.isArray(data)) return []
+    const mappedData = await Promise.all(data.map(mapper))
+    targetArray.push(...mappedData)
+    return mappedData
+  }
+  public async get_home_list_of_maximum_playback(url: string, find_model: boolean): Promise<any[]> {
     try {
       // 确保URL格式正确
-      url = url.includes('api') ? url : `${url}/api`;
+      url = url.includes('api') ? url : `${url}/api`
 
       if (!find_model) {
-        const type = store_view_home_page_info.home_Files_temporary_type_select;
-        const strategy = this.mappingStrategies[type as keyof typeof this.mappingStrategies];
+        const type = store_view_home_page_info.home_Files_temporary_type_select
+        const strategy = this.mappingStrategies[type as keyof typeof this.mappingStrategies]
 
         if (strategy) {
-          const data = await strategy.fetch();
+          const data = await strategy.fetch()
           return this.processData(
             data,
             (item, index) => strategy.map(item, url, index),
             store_view_home_page_info.home_Files_temporary_maximum_playback
-          );
+          )
         }
-        return [];
+        return []
       }
 
       // 并行执行所有请求 [6](@ref)
@@ -104,26 +97,21 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
         this.homeApi.getAlbumList_Play_Count(),
         this.homeApi.getArtistList_Play_Count(),
         this.homeApi.getMediaList_Play_Count(),
-        this.homeApi.getMediaCue_Play_Count()
-      ]);
+        this.homeApi.getMediaCue_Play_Count(),
+      ])
 
       // 并行处理映射 [6](@ref)
-      const [mappedAlbums, mappedArtists, mappedMedia, mappedMediaCue] =
-        await Promise.all([
-          this.processData(albumData,
-            (item, index) => this.mapAlbum_Home(item, url), []),
-          this.processData(artistData,
-            (item, index) => this.mapArtist(item, url, index, 0), []),
-          this.processData(mediaData,
-            (item, index) => this.mapMedia(item, url, index, 0), []),
-          this.processData(mediaCueData,
-            (item, index) => this.mapMedia_Cue(item, url, index, 0), [])
-        ]);
+      const [mappedAlbums, mappedArtists, mappedMedia, mappedMediaCue] = await Promise.all([
+        this.processData(albumData, (item, index) => this.mapAlbum_Home(item, url), []),
+        this.processData(artistData, (item, index) => this.mapArtist(item, url, index, 0), []),
+        this.processData(mediaData, (item, index) => this.mapMedia(item, url, index, 0), []),
+        this.processData(mediaCueData, (item, index) => this.mapMedia_Cue(item, url, index, 0), []),
+      ])
 
-      return [mappedMedia, mappedAlbums, mappedArtists, mappedMediaCue];
+      return [mappedMedia, mappedAlbums, mappedArtists, mappedMediaCue]
     } catch (error) {
-      console.error('Data processing failed:', error);
-      return [];
+      console.error('Data processing failed:', error)
+      return []
     }
   }
   ///
@@ -132,91 +120,91 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     random_search: {
       album: {
         fetch: () => this.homeApi.getRandomAlbums('0', '18'),
-        mapper: (item, url) => this.mapAlbum_Home(item, url)
+        mapper: (item, url) => this.mapAlbum_Home(item, url),
       },
       artist: {
         fetch: () => this.homeApi.getRandomArtists('0', '18'),
-        mapper: (item, url, index) => this.mapArtist(item, url, index, 0)
+        mapper: (item, url, index) => this.mapArtist(item, url, index, 0),
       },
       media: {
         fetch: () => this.homeApi.getRandomMedias('0', '18'),
-        mapper: (item, url, index) => this.mapMedia(item, url, index, 0)
+        mapper: (item, url, index) => this.mapMedia(item, url, index, 0),
       },
       media_cue: {
         fetch: () => this.homeApi.getRandomMediaCues('0', '18'),
-        mapper: (item, url, index) => this.mapMedia_Cue(item, url, index, 0)
-      }
+        mapper: (item, url, index) => this.mapMedia_Cue(item, url, index, 0),
+      },
     },
     recently_added: {
       album: {
         fetch: () => this.homeApi.getAlbumList_Recently_Added(),
-        mapper: (item, url) => this.mapAlbum_Home(item, url)
+        mapper: (item, url) => this.mapAlbum_Home(item, url),
       },
       artist: {
         fetch: () => this.homeApi.getArtistList_Recently_Added(),
-        mapper: (item, url, index) => this.mapArtist(item, url, index, 0)
+        mapper: (item, url, index) => this.mapArtist(item, url, index, 0),
       },
       media: {
         fetch: () => this.homeApi.getMediaList_Recently_Added(),
-        mapper: (item, url, index) => this.mapMedia(item, url, index, 0)
+        mapper: (item, url, index) => this.mapMedia(item, url, index, 0),
       },
       media_cue: {
         fetch: () => this.homeApi.getMediaCue_Recently_Added(),
-        mapper: (item, url, index) => this.mapMedia_Cue(item, url, index, 0)
-      }
+        mapper: (item, url, index) => this.mapMedia_Cue(item, url, index, 0),
+      },
     },
     recently_played: {
       album: {
         fetch: () => this.homeApi.getAlbumList_Play_Date(),
-        mapper: (item, url) => this.mapAlbum_Home(item, url)
+        mapper: (item, url) => this.mapAlbum_Home(item, url),
       },
       artist: {
         fetch: () => this.homeApi.getArtistList_Play_Date(),
-        mapper: (item, url, index) => this.mapArtist(item, url, index, 0)
+        mapper: (item, url, index) => this.mapArtist(item, url, index, 0),
       },
       media: {
         fetch: () => this.homeApi.getMediaList_Play_Date(),
-        mapper: (item, url, index) => this.mapMedia(item, url, index, 0)
+        mapper: (item, url, index) => this.mapMedia(item, url, index, 0),
       },
       media_cue: {
         fetch: () => this.homeApi.getMediaCue_Play_Date(),
-        mapper: (item, url, index) => this.mapMedia_Cue(item, url, index, 0)
-      }
-    }
-  };
+        mapper: (item, url, index) => this.mapMedia_Cue(item, url, index, 0),
+      },
+    },
+  }
   private async processHomeList(
     strategyKey: keyof typeof this.STRATEGY_CONFIG,
     targetArray: any[],
     url: string
   ) {
     // 规范URL格式
-    const apiUrl = url.includes('api') ? url : `${url}/api`;
+    const apiUrl = url.includes('api') ? url : `${url}/api`
 
     // 获取当前选择类型
-    const type = store_view_home_page_info.home_Files_temporary_type_select;
+    const type = store_view_home_page_info.home_Files_temporary_type_select
 
     type DataStrategy = {
-      fetch: () => Promise<any[]>;
-      mapper: (item: any, url: string, index: number) => any;
-    };
+      fetch: () => Promise<any[]>
+      mapper: (item: any, url: string, index: number) => any
+    }
     // 获取对应策略
-    const strategy = this.STRATEGY_CONFIG[strategyKey][type as keyof DataStrategy];
-    if (!strategy) return;
+    const strategy = this.STRATEGY_CONFIG[strategyKey][type as keyof DataStrategy]
+    if (!strategy) return
 
     try {
       // 并行获取数据
-      const rawData = await strategy.fetch();
-      if (!rawData || !Array.isArray(rawData)) return;
+      const rawData = await strategy.fetch()
+      if (!rawData || !Array.isArray(rawData)) return
 
       // 并行处理数据映射
       const mappedData = await Promise.all(
         rawData.map((item, index) => strategy.mapper(item, apiUrl, index))
-      );
+      )
 
       // 批量更新目标数组
-      targetArray.push(...mappedData);
+      targetArray.push(...mappedData)
     } catch (error) {
-      console.error(`处理${strategyKey}数据失败:`, error);
+      console.error(`处理${strategyKey}数据失败:`, error)
     }
   }
   public async get_home_list_of_random_search(url: string) {
@@ -224,21 +212,21 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       'random_search',
       store_view_home_page_info.home_Files_temporary_random_search,
       url
-    );
+    )
   }
   public async get_home_list_of_recently_added(url: string) {
     await this.processHomeList(
       'recently_added',
       store_view_home_page_info.home_Files_temporary_recently_added,
       url
-    );
+    )
   }
   public async get_home_list_of_recently_played(url: string) {
     await this.processHomeList(
       'recently_played',
       store_view_home_page_info.home_Files_temporary_recently_played,
       url
-    );
+    )
   }
 
   ///
@@ -344,17 +332,18 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     ///
     if (Array.isArray(song_list) && song_list.length > 0) {
       if (song_list.length > 0) {
-        const targetArray = store_general_fetch_media_list._load_model === 'search'
-          ? store_view_media_page_info.media_Files_temporary
-          : store_playlist_list_info.playlist_MediaFiles_temporary;
-        const existingIds = new Set(targetArray.map(item => item.id));
-        song_list = song_list.filter(song => {
+        const targetArray =
+          store_general_fetch_media_list._load_model === 'search'
+            ? store_view_media_page_info.media_Files_temporary
+            : store_playlist_list_info.playlist_MediaFiles_temporary
+        const existingIds = new Set(targetArray.map((item) => item.id))
+        song_list = song_list.filter((song) => {
           if (existingIds.has(song.ID)) {
-            return false;
+            return false
           }
-          existingIds.add(song.ID);
-          return true;
-        });
+          existingIds.add(song.ID)
+          return true
+        })
       }
     } else {
       return
@@ -453,17 +442,18 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     ///
     if (Array.isArray(song_list) && song_list.length > 0) {
       if (song_list.length > 0) {
-        const targetArray = store_general_fetch_media_list._load_model === 'search'
-          ? store_view_media_page_info.media_Files_temporary
-          : store_playlist_list_info.playlist_MediaFiles_temporary;
-        const existingIds = new Set(targetArray.map(item => item.id));
-        song_list = song_list.filter(song => {
+        const targetArray =
+          store_general_fetch_media_list._load_model === 'search'
+            ? store_view_media_page_info.media_Files_temporary
+            : store_playlist_list_info.playlist_MediaFiles_temporary
+        const existingIds = new Set(targetArray.map((item) => item.id))
+        song_list = song_list.filter((song) => {
           if (existingIds.has(song.ID)) {
-            return false;
+            return false
           }
-          existingIds.add(song.ID);
-          return true;
-        });
+          existingIds.add(song.ID)
+          return true
+        })
       }
     } else {
       return
@@ -540,17 +530,18 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     }
     if (Array.isArray(album_list) && album_list.length > 0) {
       if (album_list.length > 0) {
-        const targetArray = store_general_fetch_media_list._load_model === 'search'
-          ? store_view_media_page_info.media_Files_temporary
-          : store_playlist_list_info.playlist_MediaFiles_temporary;
-        const existingIds = new Set(targetArray.map(item => item.id));
-        album_list = album_list.filter(album => {
+        const targetArray =
+          store_general_fetch_media_list._load_model === 'search'
+            ? store_view_media_page_info.media_Files_temporary
+            : store_playlist_list_info.playlist_MediaFiles_temporary
+        const existingIds = new Set(targetArray.map((item) => item.id))
+        album_list = album_list.filter((album) => {
           if (existingIds.has(album.ID)) {
-            return false;
+            return false
           }
-          existingIds.add(album.ID);
-          return true;
-        });
+          existingIds.add(album.ID)
+          return true
+        })
       }
     }
     if (Array.isArray(album_list) && album_list.length > 0) {
@@ -580,14 +571,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     url = url.includes('api') ? url : url + '/api'
     let artist_list = []
     if (multi_sorts.length === 0) {
-      const data = await this.artistsApi.getArtists(
-        _start,
-        _end,
-        _sort,
-        _order,
-        _starred,
-        _search
-      )
+      const data = await this.artistsApi.getArtists(_start, _end, _sort, _order, _starred, _search)
       artist_list = data['ninesong-response']['artists']
     } else {
       const data = await this.artistsApi.getArtistsSort(
@@ -601,17 +585,18 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     }
     if (Array.isArray(artist_list) && artist_list.length > 0) {
       if (artist_list.length > 0) {
-        const targetArray = store_general_fetch_media_list._load_model === 'search'
-          ? store_view_media_page_info.media_Files_temporary
-          : store_playlist_list_info.playlist_MediaFiles_temporary;
-        const existingIds = new Set(targetArray.map(item => item.id));
-        artist_list = artist_list.filter(artist => {
+        const targetArray =
+          store_general_fetch_media_list._load_model === 'search'
+            ? store_view_media_page_info.media_Files_temporary
+            : store_playlist_list_info.playlist_MediaFiles_temporary
+        const existingIds = new Set(targetArray.map((item) => item.id))
+        artist_list = artist_list.filter((artist) => {
           if (existingIds.has(artist.ID)) {
-            return false;
+            return false
           }
-          existingIds.add(artist.ID);
-          return true;
-        });
+          existingIds.add(artist.ID)
+          return true
+        })
       }
     }
     if (Array.isArray(artist_list) && artist_list.length > 0) {
@@ -939,10 +924,10 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       rg_track_peak: 0,
       medium_image_url: song.HasCoverArt
         ? url +
-        '/media/cover?access_token=' +
-        store_server_login_info.server_accessToken +
-        '&type=media&target_id=' +
-        song.ID
+          '/media/cover?access_token=' +
+          store_server_login_info.server_accessToken +
+          '&type=media&target_id=' +
+          song.ID
         : error_album,
     }
   }
@@ -1013,10 +998,10 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       rg_track_peak: 0,
       medium_image_url: song.HasCoverArt
         ? url +
-        '/media/cover?access_token=' +
-        store_server_login_info.server_accessToken +
-        '&type=media&target_id=' +
-        song.ID
+          '/media/cover?access_token=' +
+          store_server_login_info.server_accessToken +
+          '&type=media&target_id=' +
+          song.ID
         : error_album,
     }
   }
@@ -1083,10 +1068,10 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       rg_track_peak: 0,
       medium_image_url: song.HasCoverArt
         ? url +
-        '/media/cover/path?access_token=' +
-        store_server_login_info.server_accessToken +
-        '&type=cover&target_id=' +
-        song.ID
+          '/media/cover/path?access_token=' +
+          store_server_login_info.server_accessToken +
+          '&type=cover&target_id=' +
+          song.ID
         : error_album,
       cue_tracks: song.CueTracks,
       cue_track_count: song.CueTrackCount,
@@ -1160,10 +1145,10 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       rg_track_peak: 0,
       medium_image_url: song.HasCoverArt
         ? url +
-        '/media/cover?access_token=' +
-        store_server_login_info.server_accessToken +
-        '&type=media&target_id=' +
-        song.ID
+          '/media/cover?access_token=' +
+          store_server_login_info.server_accessToken +
+          '&type=media&target_id=' +
+          song.ID
         : error_album,
     }
   }
@@ -1212,10 +1197,10 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       small_image_url: '',
       medium_image_url: album.HasCoverArt
         ? url +
-        '/media/cover?access_token=' +
-        store_server_login_info.server_accessToken +
-        '&type=album&target_id=' +
-        album.ID
+          '/media/cover?access_token=' +
+          store_server_login_info.server_accessToken +
+          '&type=album&target_id=' +
+          album.ID
         : error_album,
       large_image_url: '',
       external_url: '',
@@ -1268,17 +1253,17 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       small_image_url: '',
       medium_image_url: album.HasCoverArt
         ? url +
-        '/media/cover?access_token=' +
-        store_server_login_info.server_accessToken +
-        '&type=album&target_id=' +
-        album.ID
+          '/media/cover?access_token=' +
+          store_server_login_info.server_accessToken +
+          '&type=album&target_id=' +
+          album.ID
         : error_album,
       large_image_url: '',
       external_url: '',
       external_info_updated_at: '',
     }
   }
-  
+
   private mapArtist(artist: any, url: string, index: number, last_index: number) {
     return {
       absoluteIndex: index + 1 + last_index,
@@ -1307,10 +1292,10 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       small_image_url: '',
       medium_image_url: artist.HasCoverArt
         ? url +
-        '/media/cover?access_token=' +
-        store_server_login_info.server_accessToken +
-        '&type=artist&target_id=' +
-        artist.ID
+          '/media/cover?access_token=' +
+          store_server_login_info.server_accessToken +
+          '&type=artist&target_id=' +
+          artist.ID
         : error_artist,
       large_image_url: '',
       similar_artists: '',
