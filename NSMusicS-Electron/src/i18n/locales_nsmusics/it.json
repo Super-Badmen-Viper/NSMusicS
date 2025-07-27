@@ -85,7 +85,10 @@
       "row_level_view": "Vista a Livello di Riga",
       "intra_row_block_level_view": "Vista Blocco In-linea",
       "recommend": "Consiglia",
-      "pinyin": "Pinyin (Romanizzazione Cinese)"
+      "pinyin": "Pinyin (Romanizzazione Cinese)",
+      "hybrid_search": "Ricerca Ibrida",
+      "simplified_chinese": "Cinese Semplificato",
+      "traditional_chinese": "Cinese Tradizionale"
     },
     "view_player": {
       "view_seting": {

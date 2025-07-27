@@ -85,7 +85,10 @@
       "row_level_view": "Приказ на нивоу реда",
       "intra_row_block_level_view": "Уграђени блок приказ",
       "recommend": "Препоручи",
-      "pinyin": "Pinjin (Kineska romanizacija)"
+      "pinyin": "Pinjin (Kineska romanizacija)",
+      "hybrid_search": "Хибридно Тражење",
+      "simplified_chinese": "Поједnostављени Кинески",
+      "traditional_chinese": "Традиционални Кинески"
     },
     "view_player": {
       "view_seting": {

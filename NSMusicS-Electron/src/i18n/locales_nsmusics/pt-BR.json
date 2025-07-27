@@ -85,7 +85,10 @@
       "row_level_view": "Visualização por Linha",
       "intra_row_block_level_view": "Visualização de Bloco Em-linha",
       "recommend": "Recomendar",
-      "pinyin": "Pinyin (Romanização Chinesa)"
+      "pinyin": "Pinyin (Romanização Chinesa)",
+      "hybrid_search": "Pesquisa Híbrida",
+      "simplified_chinese": "Chinês Simplificado",
+      "traditional_chinese": "Chinês Tradicional"
     },
     "view_player": {
       "view_seting": {

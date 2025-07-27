@@ -87,7 +87,10 @@
       "recommend": "推荐",
       "pinyin": "中文拼音",
       "option_min": "最小",
-      "range": "范围"
+      "range": "范围",
+      "hybrid_search": "混合搜索",
+      "simplified_chinese": "简体中文",
+      "traditional_chinese": "繁体中文"
     },
     "view_player": {
       "view_seting": {

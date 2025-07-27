@@ -1655,6 +1655,8 @@ onBeforeUnmount(() => {
               ')->' +
               $t('nsmusics.view_page.pinyin') +
               ' | ' +
+              $t('nsmusics.view_page.hybrid_search') + ': ' + $t('nsmusics.view_page.simplified_chinese') + '-' + $t('nsmusics.view_page.traditional_chinese') +
+              ' | ' +
               $t('Lyrics')
             }}
           </n-tooltip>
