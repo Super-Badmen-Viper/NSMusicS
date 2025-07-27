@@ -43,7 +43,7 @@ const nextSlideStyle = computed(() => {
       effect="card"
       :show-dots="false"
       show-arrow
-      v-model:current-index="store_player_audio_info.this_audio_Index_of_play_list_carousel"
+      :current-index="store_player_audio_info.this_audio_Index_of_play_list_carousel"
       :direction="directionRef"
       :dot-placement="placementRef"
       centered-slides

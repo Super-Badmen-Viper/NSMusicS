@@ -74,8 +74,8 @@ const nextSlideStyle = computed(() => {
     <n-carousel
       effect="card"
       :show-dots="false"
-      show-arrow
-      v-model:current-index="store_player_audio_info.this_audio_Index_of_play_list_carousel"
+      :show-arrow="false"
+      :current-index="store_player_audio_info.this_audio_Index_of_play_list_carousel"
       :direction="directionRef"
       :dot-placement="placementRef"
       centered-slides
