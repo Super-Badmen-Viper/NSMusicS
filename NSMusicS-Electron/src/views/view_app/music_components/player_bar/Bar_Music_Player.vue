@@ -923,7 +923,7 @@ function play_skip_cue_order(
   ///
   return true
 }
-import { Retrieval_ApiService_of_NineSong } from '@/data/data_access/servers_configs/ninesong_api/services_web/Scene/Music/Retrieval/index_service'
+import { Retrieval_ApiService_of_NineSong } from '@/data/data_configs/servers_configs/ninesong_api/services_web/Scene/Music/Retrieval/index_service'
 watch(
   () => store_player_audio_info.this_audio_cue_track_current_no,
   async (newValue) => {
@@ -1086,12 +1086,12 @@ import { store_general_fetch_player_list } from '@/data/data_stores/server/serve
 import { Audio_howler } from '@/data/data_models/app_models/song_Audio_Out/Audio_howler'
 import { Audio_node_mpv } from '@/data/data_models/app_models/song_Audio_Out/Audio_node_mpv'
 import { store_player_tag_modify } from '@/views/view_app/music_page/page_player/store/store_player_tag_modify'
-import { Get_AnnotationInfo_To_LocalSqlite } from '@/data/data_access/local_configs/class_Get_AnnotationInfo_To_LocalSqlite'
+import { Get_AnnotationInfo_To_LocalSqlite } from '@/data/data_configs/local_configs/class_Get_AnnotationInfo_To_LocalSqlite'
 import { store_local_data_set_artistInfo } from '@/data/data_stores/local/local_data_synchronization/store_local_data_set_artistInfo'
-import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
+import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_configs/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
 import { store_server_users } from '@/data/data_stores/server/store_server_users'
 import { store_general_fetch_media_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'
-import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_access/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
+import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_general_fetch_media_cue_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list'
 import { store_view_media_cue_page_info } from '@/views/view_app/music_page/page_media_cue/store/store_view_media_cue_page_info'

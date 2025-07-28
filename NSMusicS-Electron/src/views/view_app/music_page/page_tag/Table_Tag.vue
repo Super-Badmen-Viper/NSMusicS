@@ -1,47 +1,466 @@
 <script setup lang="ts">
-////// this_view resource of vicons_svg
 import {
-  PlayCircle24Regular,
-  Heart24Regular,
-  Heart28Filled,
-  ChevronLeft16Filled,
-  ChevronRight16Filled,
-  Open28Filled,
-  ArrowReset24Filled,
-} from '@vicons/fluent'
-import { Play, RefreshSharp } from '@vicons/ionicons5'
-
-////// this_view views_components of navie ui
-import { onBeforeUnmount, onMounted, ref, watch, computed } from 'vue'
-import { NButton, NIcon, NImage } from 'naive-ui'
-import { Icon } from '@vicons/utils'
+  ref,
+  computed,
+  reactive,
+  watch,
+  nextTick,
+  onMounted,
+  onBeforeUnmount,
+  onUnmounted,
+} from 'vue'
+import {
+  NMessageProvider,
+  NSpace,
+  NCard,
+  NButton,
+  NTag,
+  NDataTable,
+  NH3,
+  NH4,
+  NDivider,
+  NEmpty,
+  NSelect,
+  NInput,
+  useMessage,
+  useThemeVars,
+} from 'naive-ui'
+import * as echarts from 'echarts/core'
+import { TooltipComponent, VisualMapComponent } from 'echarts/components'
+import { CanvasRenderer } from 'echarts/renderers'
+import 'echarts-wordcloud'
+import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
+import { store_view_recommend_page_info } from '@/views/view_app/music_page/page_recommend/store/store_view_recommend_page_info'
+import { store_playlist_list_info } from '@/views/view_app/music_components/player_list/store/store_playlist_list_info'
 import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
-import { store_view_home_page_logic } from '@/views/view_app/music_page/page_home/store/store_view_home_page_logic'
-import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
-import { store_general_fetch_album_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list'
+import { store_playlist_list_logic } from '@/views/view_app/music_components/player_list/store/store_playlist_list_logic'
 
-////// i18n auto lang
-import { useI18n } from 'vue-i18n'
-const { t } = useI18n({
-  inheritLocale: true,
+echarts.use([TooltipComponent, VisualMapComponent, CanvasRenderer])
+
+const get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
+const message = useMessage()
+const themeVars = useThemeVars()
+
+// --- Reactive State ---
+const loading = reactive({ tags: false, genres: false, recs: false, details: false })
+const selectedWords = ref<any[]>([])
+const displayMode = ref('chart')
+const displayModeOptions = [
+  { label: '词云视图', value: 'chart' },
+  { label: '标签视图', value: 'tags' },
+]
+let recommendationDebounceTimer: any = null
+
+// --- ECharts State ---
+const wordCloudChartRef = ref<HTMLElement | null>(null)
+let chartInstance: echarts.ECharts | null = null
+
+// --- Proportional Scaling Logic ---
+// Reactive property for word size range based on window width
+const proportionalSizeRange = computed(() => {
+  const width = store_app_configs_info.window_innerWidth
+  // Normalize width to a 0-1 range based on typical screen sizes
+  const t = Math.max(0, Math.min(1, (width - 500) / 1100))
+  const minFontSize = lerp(10, 14, t)
+  const maxFontSize = lerp(25, 45, t)
+  return [minFontSize, maxFontSize]
 })
 
-////// passed as argument
-import { store_view_home_page_info } from '@/views/view_app/music_page/page_home/store/store_view_home_page_info'
-import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
-import { store_server_users } from '@/data/data_stores/server/store_server_users'
+// Reactive property for word grid size based on window width
+const proportionalGridSize = computed(() => {
+  const width = store_app_configs_info.window_innerWidth
+  const t = Math.max(0, Math.min(1, (width - 500) / 1100))
+  // Inverse scaling: larger screen -> smaller grid size for denser packing
+  return Math.round(lerp(8, 3, t))
+})
 
-////// albumlist_view page_layout gridItems
-const item_album = ref<number>(160)
-const item_album_image = ref<number>(item_album.value - 20)
-const item_album_txt = ref<number>(item_album.value - 20)
-const itemSize = ref(180)
-const collapsed_width = ref<number>(1090)
+// --- Computed EChart Properties for Proportional Scaling ---
+const lerp = (start: number, end: number, t: number) => {
+  return start * (1 - t) + end * t
+}
+
+// --- Computed Properties ---
+const wordCloudTags = computed(() => store_view_recommend_page_info.recommend_WordCloudTag_metadata)
+const wordCloudGenres = computed(
+  () => store_view_recommend_page_info.recommend_WordCloudGenre_metadata
+)
+const finalSongList = computed(() => store_view_recommend_page_info.recommend_MediaFiles_temporary)
+
+const combinedWordCloudData = computed(() => {
+  const tags = wordCloudTags.value.map((tag) => ({ ...tag, type: 'tag' }))
+  const genres = wordCloudGenres.value.map((genre) => ({ ...genre, type: 'genre' }))
+  return [...tags, ...genres].sort((a, b) => b.count - a.count)
+})
+
+// --- Data Table Columns ---
+const columns = [
+  { title: '标题', key: 'title', resizable: true },
+  { title: '歌手', key: 'artist', resizable: true },
+  { title: '专辑', key: 'album', resizable: true },
+]
+
+// --- Methods ---
+const isSelectedWord = (word: any) => selectedWords.value.some((sw) => sw.id === word.id)
+
+const clearSelections = () => {
+  selectedWords.value = []
+  if (displayMode.value === 'chart') {
+    syncChartSelectionState()
+  }
+  message.info('已清空所有选择')
+  store_view_recommend_page_info.recommend_MediaSearch_metadata = []
+  store_view_recommend_page_info.recommend_MediaFiles_metadata = []
+  store_view_recommend_page_info.recommend_MediaFiles_temporary = []
+}
+
+const removeWordSelection = (word: any) => {
+  const index = selectedWords.value.findIndex((w) => w.id === word.id)
+  if (index > -1) {
+    selectedWords.value.splice(index, 1)
+    if (displayMode.value === 'chart') {
+      syncChartSelectionState()
+    }
+  }
+}
+
+const toggleWordSelection = (word: any) => {
+  const index = selectedWords.value.findIndex((w) => w.id === word.id)
+  if (index > -1) {
+    selectedWords.value.splice(index, 1)
+  } else {
+    selectedWords.value.push(word)
+  }
+  if (displayMode.value === 'chart') {
+    syncChartSelectionState()
+  }
+}
+
+const newTagInput = ref('')
+
+const handleManualAddTag = () => {
+  const label = newTagInput.value.trim()
+  if (!label) {
+    newTagInput.value = ''
+    return
+  }
+
+  if (selectedWords.value.some((w) => w.name.toLowerCase() === label.toLowerCase())) {
+    message.warning(`标签 '${label}' 已选择`)
+    newTagInput.value = ''
+    return
+  }
+
+  const existingWord = combinedWordCloudData.value.find(
+    (w) => w.name.toLowerCase() === label.toLowerCase()
+  )
+  if (existingWord) {
+    toggleWordSelection(existingWord)
+  } else {
+    const newWord = {
+      id: `custom-${Date.now()}-${label}`,
+      name: label,
+      type: 'custom',
+      count: 1,
+    }
+    toggleWordSelection(newWord)
+  }
+  newTagInput.value = ''
+}
+
+// --- API Fetching Methods ---
+const fetchWordCloudTags = async () => {
+  loading.tags = true
+  try {
+    await get_NineSong_Temp_Data_To_LocalSqlite.get_recommend_word_cloud()
+  } catch (e) {
+    message.error('获取高频标签失败')
+  } finally {
+    loading.tags = false
+  }
+}
+
+const fetchWordCloudGenres = async () => {
+  loading.genres = true
+  try {
+    await get_NineSong_Temp_Data_To_LocalSqlite.get_recommend_word_cloud_genre()
+  } catch (e) {
+    message.error('获取高频流派失败')
+  } finally {
+    loading.genres = false
+  }
+}
+
+const fetchRecommendationsAndDetails = async () => {
+  if (selectedWords.value.length === 0) {
+    store_view_recommend_page_info.recommend_MediaFiles_temporary = []
+    return
+  }
+
+  loading.recs = true
+  loading.details = true
+  store_view_recommend_page_info.recommend_MediaSearch_metadata = []
+  store_view_recommend_page_info.recommend_MediaFiles_temporary = []
+
+  try {
+    const keywords = selectedWords.value.map((w) => w.name).join(',')
+    await get_NineSong_Temp_Data_To_LocalSqlite.get_recommend_result(keywords)
+
+    const recommendedSongs = store_view_recommend_page_info.recommend_MediaSearch_metadata
+    if (recommendedSongs.length > 0) {
+      const ids = recommendedSongs.map((s: any) => s.id).join(',')
+      await get_NineSong_Temp_Data_To_LocalSqlite.get_recommend_medias(ids)
+      message.success(`成功获取 ${finalSongList.value.length} 首推荐歌曲`)
+    } else {
+      message.info('没有找到匹配的歌曲')
+    }
+  } catch (e) {
+    message.error('获取推荐歌曲失败')
+  } finally {
+    loading.recs = false
+    loading.details = false
+  }
+}
+
+// --- ECharts Logic ---
+let resizeObserver: ResizeObserver | null = null
+
+let resizeDebounceTimer: any = null
+const resizeCharts = () => {
+  clearTimeout(resizeDebounceTimer)
+  resizeDebounceTimer = setTimeout(() => {
+    // Re-run the init/update logic to recalculate dynamic parameters
+    initOrUpdateChart()
+  }, 150) // 150ms debounce
+}
+
+onMounted(async () => {
+  // 1. 先加载数据
+  await Promise.all([fetchWordCloudTags(), fetchWordCloudGenres()])
+
+  // 2. 延迟初始化图表（等待DOM更新）
+  nextTick(() => {
+    if (displayMode.value === 'chart') {
+      initOrUpdateChart()
+    }
+
+    // Setup ResizeObserver to handle chart resizing
+    if (wordCloudChartRef.value) {
+      resizeObserver = new ResizeObserver(resizeCharts)
+      resizeObserver.observe(wordCloudChartRef.value)
+    }
+  })
+})
+
+onBeforeUnmount(() => {
+  // Stop watching for window width changes
+  stopWatching_window_innerWidth()
+  stopWatching_displayMode()
+  stopWatching_combinedWordCloudData()
+  stopWatching_selectedWords()
+
+  // Clean up timers
+  clearTimeout(resizeDebounceTimer)
+  clearTimeout(recommendationDebounceTimer)
+
+  // Disconnect the resize observer
+  if (resizeObserver) {
+    resizeObserver.disconnect()
+  }
+
+  // Dispose of the chart instance
+  chartInstance?.dispose()
+
+  // Clear temporary data
+  store_view_recommend_page_info.recommend_MediaFiles_temporary = []
+})
+
+onUnmounted(() => {
+  if (store_view_recommend_page_info.recommend_MediaFiles_temporary.length > 0) {
+    store_view_recommend_page_info.recommend_MediaFiles_temporary = []
+    console.log('Table_Recommend unmounted, temporary data cleared')
+  }
+})
+
+const initOrUpdateChart = () => {
+  if (!wordCloudChartRef.value) return
+
+  const container = wordCloudChartRef.value
+
+  // Initialize chart only if it doesn't exist
+  if (!chartInstance || chartInstance.isDisposed()) {
+    chartInstance = echarts.init(container)
+
+    // Add event listeners only once
+    chartInstance.on('click', (params: any) => {
+      toggleWordSelection(params.data.originalData)
+    })
+  }
+
+  const words = combinedWordCloudData.value
+
+  if (words.length === 0) {
+    chartInstance.clear()
+    return
+  }
+
+  const counts = words.map((w) => w.count).filter((c) => c > 0)
+  const maxCount = counts.length > 0 ? Math.max(...counts) : 100
+
+  const chartData = words.map((word) => ({
+    name: word.name,
+    value: Number(word.count) || 0,
+    originalData: word,
+  }))
+
+  const vibrantColors = [
+    '#FF6B6B',
+    '#FFD166',
+    '#06D6A0',
+    '#118AB2',
+    '#073B4C',
+    '#EF476F',
+    '#FFD166',
+    '#06D6A0',
+    '#118AB2',
+    '#073B4C',
+    '#9C89B8',
+    '#F0A6CA',
+    '#B8E0D2',
+    '#95B8D1',
+    '#EAC435',
+  ]
+
+  const option = {
+    tooltip: {
+      show: true,
+      formatter: (params: any) => {
+        const data = params.data
+        const type = data.originalData.type
+        return `
+          <div style="font-weight:bold">${data.name}</div>
+          <div>出现次数: ${data.value}</div>
+          <div>类型: ${type === 'tag' ? '标签' : '流派'}</div>
+        `
+      },
+    },
+    visualMap: {
+      show: true,
+      min: 1,
+      max: maxCount,
+      orient: 'vertical',
+      left: 0,
+      top: 'center',
+      inRange: {
+        color: vibrantColors,
+      },
+      calculable: true,
+    },
+    series: [
+      {
+        type: 'wordCloud',
+        shape: 'circle',
+        sizeRange: proportionalSizeRange.value, // Use reactive computed value
+        rotationRange: [-45, 45],
+        gridSize: proportionalGridSize.value, // Use reactive computed value
+        drawOutOfBound: false,
+        data: chartData,
+        selectedMode: 'multiple',
+        textStyle: {
+          fontFamily: 'sans-serif',
+          fontWeight: 'bold',
+          color: function (params: any) {
+            const hue = Math.floor(params.data.value % 360)
+            return `hsl(${hue}, 70%, 60%)`
+          },
+        },
+        emphasis: {
+          scale: 1.2,
+          itemStyle: {
+            shadowBlur: 10,
+            shadowColor: 'rgba(0,0,0,0.3)',
+            borderColor: '#FFD700',
+            borderWidth: 2,
+          },
+        },
+        select: {
+          itemStyle: {
+            color: '#FFD700',
+            shadowBlur: 15,
+            shadowColor: 'rgba(255,215,0,0.8)',
+          },
+        },
+      },
+    ],
+  }
+
+  chartInstance.setOption(option, true)
+  syncChartSelectionState()
+
+  // The initial resize call can be made here or in onMounted
+  chartInstance.resize()
+}
+
+const syncChartSelectionState = () => {
+  if (chartInstance && wordCloudChartRef.value) {
+    const selectedIndices = combinedWordCloudData.value
+      .map((word, index) => (isSelectedWord(word) ? index : -1))
+      .filter((index) => index !== -1)
+
+    chartInstance.dispatchAction({ type: 'unselect', seriesIndex: 0 })
+    if (selectedIndices.length > 0) {
+      chartInstance.dispatchAction({ type: 'select', seriesIndex: 0, dataIndex: selectedIndices })
+    }
+  }
+}
+
+// --- Watchers ---
+const stopWatching_window_innerWidth = watch(
+  () => store_app_configs_info.window_innerWidth,
+  () => {
+    // Debounce the chart update when window width changes, which triggers a full recalculation
+    resizeCharts()
+    initOrUpdateChart()
+  }
+)
+
+const stopWatching_displayMode = watch(displayMode, (newMode) => {
+  if (newMode === 'chart') {
+    nextTick(() => {
+      initOrUpdateChart()
+      syncChartSelectionState()
+    })
+  }
+})
+
+const stopWatching_combinedWordCloudData = watch(
+  combinedWordCloudData,
+  () => {
+    if (displayMode.value === 'chart') {
+      nextTick(() => {
+        initOrUpdateChart()
+        syncChartSelectionState()
+      })
+    }
+  },
+  { deep: true }
+)
+
+const stopWatching_selectedWords = watch(
+  selectedWords,
+  () => {
+    clearTimeout(recommendationDebounceTimer)
+    recommendationDebounceTimer = setTimeout(() => {
+      fetchRecommendationsAndDetails()
+    }, 500) // 500ms debounce
+  },
+  { deep: true }
+)
+
+////// changed_data write to sqlite
 import error_album from '@/assets/img/error_album.jpg'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 const errorHandled = ref(new Map())
 const handleImageError = async (item: any) => {
-  if (item == undefined) return
   let result_src = error_album
   if (errorHandled.value.has(item.id)) {
     item.medium_image_url = result_src
@@ -66,1751 +485,430 @@ const handleImageError = async (item: any) => {
     item.medium_image_url = error_album
   }
 }
-function getAssetImage(firstImage: string) {
-  return new URL(firstImage, import.meta.url).href
-}
-// gridItems Re render
-let bool_watch = false
-const timer = ref<NodeJS.Timeout | null>(null)
-const startTimer = () => {
-  timer.value = setInterval(() => {
-    bool_watch = true
-  }, 1000)
-}
-const stopWatching_collapsed_width = watch(
-  () => store_app_configs_info.app_view_left_menu_collapsed,
-  (newValue, oldValue) => {
-    updateGridItems()
-  }
-)
-const stopWatching_window_innerWidth = watch(
-  () => store_app_configs_info.window_innerWidth,
-  (newValue, oldValue) => {
-    bool_watch = false
-    updateGridItems()
-    if (bool_watch) {
-      startTimer()
-    }
-  }
-)
-const updateGridItems = () => {
-  collapsed_width.value = 155
-  if (window.innerWidth > 2460) {
-    const num = window.innerWidth / 7.53
-    itemSize.value = Math.floor(num) + 40
-    item_album.value = Math.floor(num)
-    item_album_image.value = item_album.value - 20
-    item_album_txt.value = item_album.value - 20
-  } else if (window.innerWidth > 1660) {
-    const num = window.innerWidth / 6.53
-    itemSize.value = Math.floor(num) + 20
-    item_album.value = Math.floor(num)
-    item_album_image.value = item_album.value - 20
-    item_album_txt.value = item_album.value - 20
-  } else {
-    const num = window.innerWidth / 5.53
-    itemSize.value = Math.floor(num) + 10
-    item_album.value = Math.floor(num)
-    item_album_image.value = item_album.value - 20
-    item_album_txt.value = item_album.value - 20
-  }
-}
-onMounted(() => {
-  startTimer()
-  updateGridItems()
-})
 
-////// dynamicScroller of albumlist_view
-import { store_general_fetch_home_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_home/store_general_fetch_home_list'
-const dynamicScroller_maximum_playback = ref(null as any)
-let offset_maximum_playback = 0
-const scrollTo_maximum_playback = (value: number) => {
-  if (dynamicScroller_maximum_playback !== null) {
-    if (value === -1) {
-      offset_maximum_playback - 220 * 2 > 0
-        ? (offset_maximum_playback -= 220 * 2)
-        : (offset_maximum_playback = 0)
-      dynamicScroller_maximum_playback.value.$el.scrollLeft = offset_maximum_playback
-    } else if (value === 1) {
-      if (
-        offset_maximum_playback + 220 * 2 <=
-        store_view_home_page_info.home_Files_temporary_maximum_playback.length * 224
-      ) {
-        offset_maximum_playback += 220 * 2
-        dynamicScroller_maximum_playback.value.$el.scrollLeft = offset_maximum_playback
-      } else {
-        offset_maximum_playback = 0
-      }
-    }
-  }
-}
-const dynamicScroller_random_search = ref(null as any)
-let offset_random_search = 0
-const scrollTo_random_search = (value: number) => {
-  if (dynamicScroller_random_search !== null) {
-    if (value === -1) {
-      offset_random_search - 220 * 2 > 0
-        ? (offset_random_search -= 220 * 2)
-        : (offset_random_search = 0)
-      dynamicScroller_random_search.value.$el.scrollLeft = offset_random_search
-    } else if (value === 1) {
-      if (
-        offset_random_search + 220 * 2 <=
-        store_view_home_page_info.home_Files_temporary_random_search.length * 224
-      ) {
-        offset_random_search += 220 * 2
-        dynamicScroller_random_search.value.$el.scrollLeft = offset_random_search
-      } else {
-        offset_random_search = 0
-      }
-    }
-  }
-}
-const dynamicScroller_recently_added = ref(null as any)
-let offset_recently_added = 0
-const scrollTo_recently_added = (value: number) => {
-  if (dynamicScroller_recently_added !== null) {
-    if (value === -1) {
-      offset_recently_added - 220 * 2 > 0
-        ? (offset_recently_added -= 220 * 2)
-        : (offset_recently_added = 0)
-      dynamicScroller_recently_added.value.$el.scrollLeft = offset_recently_added
-    } else if (value === 1) {
-      if (
-        offset_recently_added + 220 * 2 <=
-        store_view_home_page_info.home_Files_temporary_recently_added.length * 224
-      ) {
-        offset_recently_added += 220 * 2
-        dynamicScroller_recently_added.value.$el.scrollLeft = offset_recently_added
-      } else {
-        offset_recently_added = 0
-      }
-    }
-  }
-}
-const dynamicScroller_recently_played = ref(null as any)
-let offset_recently_played = 0
-const scrollTo_recently_played = (value: number) => {
-  if (dynamicScroller_recently_played !== null) {
-    if (value === -1) {
-      offset_recently_played - 220 * 2 > 0
-        ? (offset_recently_played -= 220 * 2)
-        : (offset_recently_played = 0)
-      dynamicScroller_recently_played.value.$el.scrollLeft = offset_recently_played
-    } else if (value === 1) {
-      if (
-        offset_recently_played + 220 * 2 <=
-        store_view_home_page_info.home_Files_temporary_recently_played.length * 224
-      ) {
-        offset_recently_played += 220 * 2
-        dynamicScroller_recently_played.value.$el.scrollLeft = offset_recently_played
-      } else {
-        offset_recently_played = 0
-      }
-    }
-  }
-}
-
-////// go to media_view
-const Open_this_album_MediaList_click = (item: any, list_name: string) => {
-  if (store_server_user_model.model_server_type_of_web) {
-    store_player_appearance.player_mode_of_medialist_from_external_import = false
-    if (store_server_users.server_select_kind === 'emby') {
-      if (list_name != 'recently_added') {
-        return
-      }
-    }
-  }
-  const temp_id = Get_this_album_info(item, list_name)
-  console.log('media_list_of_album_id：' + temp_id)
-  store_router_data_logic.get_media_list_of_album_id_by_album_info(temp_id)
-}
-const Play_this_album_MediaList_click = async (item: any, list_name: string) => {
-  const temp_id = Get_this_album_info(item, list_name)
-  if (store_server_user_model.model_server_type_of_web) {
-    store_general_fetch_media_list.set_album_id(item.id)
-    store_view_media_page_logic.page_songlists_selected = 'song_list_all'
-    store_server_user_model.random_play_model = false
-  }
-  console.log('play_this_album_click：' + temp_id)
-  await store_general_fetch_album_list.fetchData_This_Album_MediaList(temp_id)
-  store_playlist_list_info.reset_carousel()
-}
-const Get_this_album_info = (item: any, list_name: string): string => {
-  let temp_id = item.id
-  if (store_server_user_model.model_server_type_of_web) {
-    if (store_server_users.server_select_kind === 'jellyfin') {
-      // Jellyfin 使用 media_id
-      store_general_fetch_media_list._media_id = item.id
-    } else if (store_server_users.server_select_kind === 'emby') {
-      // Emby 根据列表类型设置 album_artist_id
-      store_general_fetch_media_list.set_album_artist_id(
-        list_name === 'recently_added' ? item.id : item.album_artist_id
-      )
-      if (list_name === 'recently_added') {
-        store_general_fetch_player_list._album_artist_id = item.album_artist_id
-        temp_id = item.album_artist_id
-      } else {
-        store_general_fetch_media_list._media_id = item.id
-        temp_id = item.id
-      }
-    } else {
-      // 其他服务器使用 album_id
-      store_general_fetch_media_list._album_id = item.id
-    }
-  }
-  return temp_id
-}
-const Play_Next_album_MediaList_click = (value: number) => {
-  if (value === 1) {
-    if (store_view_home_page_info.home_selected_top_album_subscript >= 17) {
-      store_view_home_page_info.home_selected_top_album_subscript = 0
-      store_view_home_page_logic.list_data_StartUpdate = true
-    } else {
-      store_view_home_page_info.home_selected_top_album_subscript += 1
-    }
-  } else {
-    if (store_view_home_page_info.home_selected_top_album_subscript === 0) {
-      store_view_home_page_info.home_selected_top_album_subscript = 0
-      store_view_home_page_logic.list_data_StartUpdate = true
-    } else {
-      store_view_home_page_info.home_selected_top_album_subscript -= 1
-    }
-  }
-}
-watch(
-  () => store_view_home_page_info.home_selected_top_album_subscript,
-  (newValue) => {
-    store_view_home_page_info.home_selected_top_album =
-      store_view_home_page_info.home_Files_temporary_random_search &&
-      store_view_home_page_info.home_Files_temporary_random_search.length > 0
-        ? store_view_home_page_info.home_Files_temporary_random_search[newValue]
-        : undefined
-  }
-)
-
-////// changed_data write to sqlite
-import { store_local_data_set_albumInfo } from '@/data/data_stores/local/local_data_synchronization/store_local_data_set_albumInfo'
-const handleItemClick_Favorite = (id: any, favorite: boolean) => {
-  store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(id, favorite)
-}
-let before_rating = false
-let after_rating = false
-const handleItemClick_Rating = (id_rating: any) => {
-  const [id, rating] = id_rating.split('-')
-  if (after_rating) {
-    store_local_data_set_albumInfo.Set_AlbumInfo_To_Rating(id, 0)
-  } else {
-    store_local_data_set_albumInfo.Set_AlbumInfo_To_Rating(id, rating)
-  }
-}
-
-////// right menu
-import { store_app_configs_logic_save } from '@/data/data_stores/app/store_app_configs_logic_save'
-import { useMessage } from 'naive-ui'
-import { store_playlist_list_info } from '@/views/view_app/music_components/player_list/store/store_playlist_list_info'
-import { store_general_fetch_media_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'
-import { store_view_media_page_info } from '@/views/view_app/music_page/page_media/store/store_view_media_page_info'
-import { store_local_data_set_mediaInfo } from '@/data/data_stores/local/local_data_synchronization/store_local_data_set_mediaInfo'
-import { store_player_audio_info } from '@/views/view_app/music_page/page_player/store/store_player_audio_info'
-import { store_player_appearance } from '@/views/view_app/music_page/page_player/store/store_player_appearance'
+////// i18n auto lang
+import { useI18n } from 'vue-i18n'
+import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
+import { store_server_users } from '@/data/data_stores/server/store_server_users'
 import { store_view_media_page_logic } from '@/views/view_app/music_page/page_media/store/store_view_media_page_logic'
-import { store_general_fetch_player_list } from '@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list'
-import { store_general_model_player_list } from '@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list'
-const contextmenu = ref(null as any)
-const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'))
-const message = useMessage()
-const recently_added_contextmenu_of_emby = ref(false)
-async function update_playlist_addAlbum(id: any, playlist_id: any) {
-  try {
-    let result_album = false
-    if (
-      (store_server_users.server_select_kind != 'jellyfin' &&
-        store_server_users.server_select_kind != 'emby') ||
-      store_server_user_model.model_server_type_of_local
-    ) {
-      result_album = true
-    } else {
-      if (store_server_users.server_select_kind === 'jellyfin') {
-        result_album = false
-      } else if (store_server_users.server_select_kind === 'emby') {
-        result_album = recently_added_contextmenu_of_emby.value
-      }
-    }
-    recently_added_contextmenu_of_emby.value = false
-    if (result_album) {
-      await store_general_fetch_media_list.fetchData_Media_Find_This_Album(id)
-      const matchingIds: string[] = []
-      store_view_media_page_info.media_Files_temporary.forEach((item: Media_File) => {
-        if (item.album_id === id) {
-          matchingIds.push(item.id)
-        }
-      })
-      store_view_media_page_info.media_Files_temporary = []
-      for (let item_id of matchingIds) {
-        ////
-        await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(
-          item_id,
-          playlist_id
-        )
-      }
-    } else {
-      await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(id, playlist_id)
-    }
-    ////
-    message.success(t('common.add'))
-    store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
-  } catch (e) {
-    console.error(e)
-  }
-}
-async function menu_item_add_to_playlist_end() {
-  let result_album = false
-  if (
-    (store_server_users.server_select_kind != 'jellyfin' &&
-      store_server_users.server_select_kind != 'emby') ||
-    store_server_user_model.model_server_type_of_local
-  ) {
-    result_album = true
-  } else {
-    if (store_server_users.server_select_kind === 'jellyfin') {
-      result_album = false
-    } else if (store_server_users.server_select_kind === 'emby') {
-      result_album = recently_added_contextmenu_of_emby.value
-    }
-  }
-  recently_added_contextmenu_of_emby.value = false
-  let matchingItems = []
-  if (result_album) {
-    await store_general_fetch_media_list.fetchData_Media_Find_This_Album(
-      store_playlist_list_info.playlist_Menu_Item_Id
-    )
-    matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-      (item: Media_File) => item.album_id === store_playlist_list_info.playlist_Menu_Item_Id
-    )
-  } else {
-    store_general_fetch_media_list._media_id = store_playlist_list_info.playlist_Menu_Item_Id
-    await store_general_fetch_media_list.fetchData_Media()
-    matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-      (item: Media_File) => item.id === store_playlist_list_info.playlist_Menu_Item_Id
-    )
-  }
-  ///
-  store_view_media_page_info.media_Files_temporary = []
-  for (let item of matchingItems) {
-    const newItem: any = JSON.parse(JSON.stringify(item))
-    newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
-    store_playlist_list_info.playlist_MediaFiles_temporary.push(newItem)
-    store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id)
-  }
-  ///
-  store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
-    item.absoluteIndex = index
-  })
-  store_app_configs_logic_save.save_system_playlist_item_id_config()
-  contextmenu.value.hide()
-}
-async function menu_item_add_to_playlist_next() {
-  let result_album = false
-  if (
-    (store_server_users.server_select_kind != 'jellyfin' &&
-      store_server_users.server_select_kind != 'emby') ||
-    store_server_user_model.model_server_type_of_local
-  ) {
-    result_album = true
-  } else {
-    if (store_server_users.server_select_kind === 'jellyfin') {
-      result_album = false
-    } else if (store_server_users.server_select_kind === 'emby') {
-      result_album = recently_added_contextmenu_of_emby.value
-    }
-  }
-  recently_added_contextmenu_of_emby.value = false
-  let matchingItems = []
-  if (result_album) {
-    await store_general_fetch_media_list.fetchData_Media_Find_This_Album(
-      store_playlist_list_info.playlist_Menu_Item_Id
-    )
-    matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-      (item: Media_File) => item.album_id === store_playlist_list_info.playlist_Menu_Item_Id
-    )
-  } else {
-    store_general_fetch_media_list._media_id = store_playlist_list_info.playlist_Menu_Item_Id
-    await store_general_fetch_media_list.fetchData_Media()
-    matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-      (item: Media_File) => item.id === store_playlist_list_info.playlist_Menu_Item_Id
-    )
-  }
-  store_view_media_page_info.media_Files_temporary = []
-  const index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
-    (item: any) => item.id === store_player_audio_info.this_audio_song_id
-  )
-  if (index !== -1) {
-    matchingItems.forEach((item: Media_File, i: number) => {
-      const newItem = JSON.parse(JSON.stringify(item))
-      newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
-      store_playlist_list_info.playlist_MediaFiles_temporary.splice(index + 1 + i, 0, newItem)
-      store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.splice(
-        index + 1 + i,
-        0,
-        newItem.id
-      )
-    })
-  } else {
-    console.error('Current audio song not found in playlist')
-  }
-  store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
-    item.absoluteIndex = index
-  })
-  store_app_configs_logic_save.save_system_playlist_item_id_config()
-  contextmenu.value.hide()
-}
-
-////// view albumlist_view Remove data
-onBeforeUnmount(() => {
-  stopWatching_collapsed_width()
-  stopWatching_window_innerWidth()
-  if (timer.value) {
-    clearInterval(timer.value)
-    timer.value = null
-  }
-  dynamicScroller_maximum_playback.value = null
-  dynamicScroller_random_search.value = null
-  dynamicScroller_recently_added.value = null
-  dynamicScroller_recently_played.value = null
+import {
+  Folder_Entity_ApiService_of_NineSong
+} from '@/data/data_configs/servers_configs/ninesong_api/services_web/Folder_Entity/index_service'
+import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
+import {
+  store_general_fetch_media_list
+} from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'
+const { t } = useI18n({
+  inheritLocale: true,
 })
+
+///
+const browseFolderOptions = ref([])
+const browseFolderPathOptions = ref([])
+const page_songlists_library_path = ref('')
+const page_songlists_library_folder_path = ref('')
+let folder_Entity_ApiService_of_NineSong = new Folder_Entity_ApiService_of_NineSong(
+  store_server_login_info.server_url
+)
+onMounted(async () => {
+  if (store_server_users.server_select_kind === 'ninesong') {
+    store_server_users.server_all_library =
+      await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
+    browseFolderOptions.value = store_server_users.server_all_library.map((item: any) => ({
+      label: item.name,
+      value: item.folderPath,
+    }))
+  }
+  ///
+  page_songlists_library_path.value = ''
+  page_songlists_library_folder_path.value = ''
+})
+async function filter_media_folder_path() {
+  await store_general_fetch_media_list.fetchData_Media()
+}
+async function find_server_folder_path(path: string) {
+  if(path === undefined || path === '') {
+    path = page_songlists_library_path.value
+  }
+  const result = await folder_Entity_ApiService_of_NineSong.browseFolder_Entity(path)
+  if (result) {
+    browseFolderPathOptions.value = result.map((item: any) => ({
+      label: item.name,
+      value: item.path,
+    }))
+    browseFolderPathOptions.value.unshift({
+      label: '...',
+      value: page_songlists_library_path.value,
+    })
+  }
+}
+
 </script>
+
 <template>
-  <div class="home-wall-container">
-    <n-space vertical style="margin-top: 20px; margin-left: 8px">
-      <div
-        v-contextmenu:contextmenu
-        @contextmenu.prevent="
-          () => {
-            store_playlist_list_info.playlist_Menu_Item =
-              store_view_home_page_info.home_selected_top_album
-            store_playlist_list_info.playlist_Menu_Item_Id =
-              store_view_home_page_info.home_selected_top_album?.id
-          }
-        "
-      >
-        <div
-          :style="{
-            width: 'calc(100vw - ' + (collapsed_width - 20) + 'px)',
-          }"
-          style="
-            height: calc(41vh);
-            border-radius: 7px;
-            overflow: hidden;
-            background-size: cover;
-            background-position: center;
-            background-color: transparent;
+  <n-message-provider>
+    <div style="position: absolute; top: 0">
+      <div style="font-size: 20px; font-weight: 600; margin-left: 11px">
+        {{ $t('Metadata') + $t('HeaderAdmin')}}
+        <span
+          v-if="
+            (store_server_user_model.model_server_type_of_web &&
+              store_server_users.server_select_kind != 'ninesong') ||
+            store_server_user_model.model_server_type_of_local
           "
+          style="color: crimson; font-weight: 600"
         >
-          <div style="filter: blur(0px)">
-            <img
-              :style="{
-                width: 'calc(100vw - ' + (collapsed_width - 20) + 'px)',
-                height: 'calc(100vw - ' + (collapsed_width - 20) + 'px)',
-                WebkitMaskImage:
-                  'linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)',
-              }"
-              style="
-                position: absolute;
-                transform: translateY(-25%);
-                object-fit: cover;
-                object-position: center;
-                border: 1.5px solid #ffffff20;
-              "
-              :src="
-                getAssetImage(store_view_home_page_info.home_selected_top_album_medium_image_url)
-              "
-              @error="handleImageError(store_view_home_page_info.home_selected_top_album)"
-              alt=""
-            />
-          </div>
-        </div>
+          {{ ' | ' + $t('error.serverRequired') + ': NineSong' }}
+          <br />
+        </span>
       </div>
-      <n-space
-        :style="{
-          transform: `scale(${store_app_configs_info.window_innerHeight / 760})`,
-          transformOrigin: 'left bottom',
-          marginTop: `calc(-20vh - 50px)`,
-        }"
-        style="margin-left: calc(3.5vh); margin-top: -202px"
-      >
-        <img
-          :src="getAssetImage(store_view_home_page_info.home_selected_top_album_medium_image_url)"
-          @error="handleImageError(store_view_home_page_info.home_selected_top_album)"
-          style="
-            object-fit: cover;
-            object-position: center;
-            box-shadow:
-              0 0 32px rgba(0, 0, 0, 0.2),
-              0 0 32px rgba(0, 0, 0, 0.2);
-            width: 170px;
-            height: 170px;
-            border-radius: 6px;
-            border: 1.5px solid #ffffff20;
-          "
-          alt=""
-        />
-        <n-space
-          vertical
-          style="margin-top: -2px; margin-left: 12px"
-          :style="{
-            width:
-              'calc(' +
-              (store_app_configs_info.window_innerWidth - (collapsed_width + 300)) /
-                (store_app_configs_info.window_innerHeight / 500) +
-              'px)',
-          }"
-        >
-          <div style="font-size: 16px; font-weight: 600">
-            {{
-              $t('page.home.explore') +
-              ' : ' +
-              (store_server_users.server_select_kind === 'jellyfin' ||
-              store_server_users.server_select_kind === 'emby'
-                ? $t('entity.track_other')
-                : $t('entity.album_other'))
-            }}
-          </div>
-          <div
-            style="
-              margin-top: -3px;
-              font-weight: 900;
-              font-size: 44px;
-              overflow: hidden;
-              white-space: nowrap;
-              text-overflow: ellipsis;
-            "
-          >
-            {{
-              store_view_home_page_info.home_selected_top_album?.name ??
-              $t('None') + $t('Play') + $t('Data')
-            }}
-          </div>
-          <div
-            style="
-              margin-top: -2px;
-              font-weight: 550;
-              font-size: 18px;
-              overflow: hidden;
-              white-space: nowrap;
-              text-overflow: ellipsis;
-            "
-          >
-            {{
-              store_view_home_page_info.home_selected_top_album?.artist ??
-              $t('None') + $t('Play') + $t('Data')
-            }}
-          </div>
-          <n-space style="margin-top: 6px">
-            <n-tooltip trigger="hover" placement="top">
-              <template #trigger>
-                <n-button
-                  quaternary
-                  @click="Play_Next_album_MediaList_click(-1)"
-                  style="margin-right: -6px"
-                >
-                  <n-icon size="20" :depth="2">
-                    <ChevronLeft16Filled />
-                  </n-icon>
-                </n-button>
-              </template>
-              {{ $t('player.previous') }}
-            </n-tooltip>
-            <n-tooltip trigger="hover" placement="top">
-              <template #trigger>
-                <n-button
-                  quaternary
-                  @click="
-                    async () => {
-                      await Play_this_album_MediaList_click(
-                        store_view_home_page_info.home_selected_top_album,
-                        'random'
-                      )
-                    }
-                  "
-                  style="margin-right: -6px"
-                >
-                  <template #icon>
-                    <n-icon :size="20" :depth="2"><Play /></n-icon>
-                  </template>
-                </n-button>
-              </template>
-              {{ $t('Play') }}
-            </n-tooltip>
-            <n-tooltip trigger="hover" placement="top">
-              <template #trigger>
-                <n-button
-                  quaternary
-                  @click="Play_Next_album_MediaList_click(1)"
-                  style="margin-right: -6px"
-                >
-                  <n-icon size="20" :depth="2">
-                    <ChevronRight16Filled />
-                  </n-icon>
-                </n-button>
-              </template>
-              {{ $t('player.next') }}
-            </n-tooltip>
-          </n-space>
-        </n-space>
-      </n-space>
-    </n-space>
+    </div>
 
-    <n-space vertical style="margin-left: 8px">
-      <n-space
-        justify="space-between"
-        align="center"
-        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)' }"
-      >
-        <n-space align="center">
-          <span style="font-size: 16px; font-weight: 600">
-            {{
-              $t('page.home.mostPlayed') +
-              ' : ' +
-              (store_server_users.server_select_kind === 'jellyfin' ||
-              store_server_users.server_select_kind === 'emby'
-                ? $t('entity.track_other')
-                : $t('entity.album_other'))
-            }}
-          </span>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button
-                quaternary
-                @click="
+    <div class="tag-container">
+      <!-- Left Panel: Tag Selection -->
+      <div class="left-panel">
+        <n-card class="selection-card" :bordered="false">
+          <template #header>
+            <n-space justify="start">
+              <n-space
+                vertical
+                v-if="
+                      !store_server_user_model.model_server_type_of_web ||
+                      (store_server_user_model.model_server_type_of_web &&
+                        store_server_users.server_select_kind === 'ninesong')
+                    "
+              >
+                    <span style="font-size: 14px; font-weight: 600">{{
+                        $t('HeaderLibraries')
+                      }}</span>
+                <n-space vertical>
+                  <n-select
+                    v-model:value="page_songlists_library_path"
+                    :options="browseFolderOptions"
+                    placement="bottom"
+                    style="width: 170px"
+                    @update:value="filter_media_folder_path"
+                  />
+                  <n-button
+                    strong
+                    secondary
+                    @click="
+                          () => {
+                            page_songlists_library_path = ''
+                            page_songlists_library_folder_path = ''
+                            filter_media_folder_path()
+                          }
+                        "
+                  >
+                    {{ $t('common.clear') }}
+                  </n-button>
+                </n-space>
+              </n-space>
+              <n-space
+                vertical
+                v-if="
+                      !store_server_user_model.model_server_type_of_web ||
+                      (store_server_user_model.model_server_type_of_web &&
+                        store_server_users.server_select_kind === 'ninesong')
+                    "
+              >
+                    <span style="font-size: 14px; font-weight: 600">{{
+                        $t('Folders') + $t('Filters')
+                      }}</span>
+                <n-space vertical>
+                  <n-select
+                    :disabled="page_songlists_library_path.length === 0"
+                    v-model:value="page_songlists_library_folder_path"
+                    :options="browseFolderPathOptions"
+                    placement="bottom"
+                    style="width: 170px"
+                    @click="find_server_folder_path(page_songlists_library_folder_path)"
+                    @update:value="filter_media_folder_path"
+                  />
+                  <n-button
+                    strong
+                    secondary
+                    @click="
+                          () => {
+                            page_songlists_library_folder_path = ''
+                            filter_media_folder_path()
+                          }
+                        "
+                  >
+                    {{ $t('common.clear') }}
+                  </n-button>
+                </n-space>
+              </n-space>
+            </n-space>
+          </template>
+          <DynamicScroller
+            class="table"
+            :items="store_view_recommend_page_info.recommend_MediaFiles_temporary"
+            key-field="play_id"
+            :minItemSize="50"
+          >
+            <template #default="{ item, index, active }">
+              <DynamicScrollerItem
+                :item="item"
+                :active="active"
+                :data-index="index"
+                :data-active="active"
+                class="message"
+                @dblclick="
                   () => {
-                    store_general_fetch_home_list.fetchData_Home_of_maximum_playback()
-                    dynamicScroller_maximum_playback.$el.scrollLeft = 0
-                    offset_maximum_playback = 0
+                    store_playlist_list_logic.handleItemDbClick(item, index)
+                    store_playlist_list_info.playlist_MediaFiles_temporary =
+                      store_view_recommend_page_info.recommend_MediaFiles_temporary
                   }
                 "
               >
-                <template #icon>
-                  <n-icon :size="20"><ArrowReset24Filled /></n-icon>
-                </template>
-              </n-button>
-            </template>
-            {{ $t('common.refresh') }}
-          </n-tooltip>
-          <n-space
-            v-if="store_view_home_page_info.home_Files_temporary_maximum_playback.length === 0"
-            style="margin-top: 2px"
-          >
-            {{ $t('None') + $t('Play') + $t('Data') }}
-          </n-space>
-        </n-space>
-        <n-space>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button quaternary @click="scrollTo_maximum_playback(-1)">
-                <n-icon size="20" :depth="2">
-                  <ChevronLeft16Filled />
-                </n-icon>
-              </n-button>
-            </template>
-            {{ $t('common.backward') }}
-          </n-tooltip>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button quaternary @click="scrollTo_maximum_playback(1)">
-                <n-icon size="20" :depth="2">
-                  <ChevronRight16Filled />
-                </n-icon>
-              </n-button>
-            </template>
-            {{ $t('common.forward') }}
-          </n-tooltip>
-        </n-space>
-      </n-space>
-      <DynamicScroller
-        class="home-wall"
-        ref="dynamicScroller_maximum_playback"
-        v-if="store_view_home_page_info.home_Files_temporary_maximum_playback.length != 0"
-        :style="{
-          width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)',
-          height: item_album_image + 60 + 'px',
-        }"
-        :items="store_view_home_page_info.home_Files_temporary_maximum_playback"
-        :itemSize="itemSize"
-        :minItemSize="itemSize"
-        :emit-update="true"
-        direction="horizontal"
-      >
-        <template #default="{ item, index, active }">
-          <DynamicScrollerItem
-            :item="item"
-            :active="active"
-            :data-index="index"
-            :data-active="active"
-            v-contextmenu:contextmenu
-            @contextmenu.prevent="
-              () => {
-                store_playlist_list_info.playlist_Menu_Item = item
-                store_playlist_list_info.playlist_Menu_Item_Id = item.id
-              }
-            "
-          >
-            <div :key="item.id" class="album">
-              <div
-                :style="{
-                  width: item_album_image + 'px',
-                  height: item_album_image + 'px',
-                  position: 'relative',
-                }"
-              >
-                <img
-                  :src="item.medium_image_url"
-                  @error="handleImageError(item)"
-                  style="objectfit: cover; objectposition: center; border: 1.5px solid #ffffff20"
-                  :style="{
-                    width: item_album_image + 'px',
-                    height: item_album_image + 'px',
-                    borderRadius: '6px',
-                  }"
-                  alt=""
-                />
-                <div
-                  class="hover-overlay"
-                  @dblclick="Open_this_album_MediaList_click(item, 'maximum')"
-                >
-                  <div class="hover-content">
-                    <button
-                      class="play_this_album"
-                      @click="
-                        async () => {
-                          await Play_this_album_MediaList_click(item, 'maximum')
-                        }
-                      "
-                      style="
-                        border: 0;
-                        background-color: transparent;
-                        width: 50px;
-                        height: 50px;
-                        cursor: pointer;
-                      "
-                    >
-                      <icon :size="42" color="#FFFFFF" style="margin-left: -2px; margin-top: 3px"
-                        ><PlayCircle24Regular
-                      /></icon>
-                    </button>
-                    <div
-                      class="hover_buttons_top"
-                      v-if="
-                        (store_server_users.server_select_kind != 'jellyfin' &&
-                          store_server_users.server_select_kind != 'emby') ||
-                        store_server_user_model.model_server_type_of_local
-                      "
-                    >
-                      <rate
-                        class="viaSlot"
-                        style="margin-right: 8px"
-                        :length="5"
-                        v-model="item.rating"
-                        @before-rate="
-                          (value) => {
-                            if (item.rating == 1) {
-                              before_rating = true
-                            }
-                          }
-                        "
-                        @after-rate="
-                          (value) => {
-                            if (item.rating == 1 && before_rating == true) {
-                              after_rating = true
-                              before_rating = false
-                            }
-                            handleItemClick_Rating(item.id + '-' + value)
-                            if (after_rating) {
-                              item.rating = 0
-                              after_rating = false
-                            }
-                          }
-                        "
-                      />
-                    </div>
-                    <div class="hover_buttons_bottom">
-                      <button
-                        v-if="
-                          store_server_user_model.model_server_type_of_local ||
-                          (store_server_users.server_select_kind != 'jellyfin' &&
-                            store_server_users.server_select_kind != 'emby')
-                        "
-                        class="open_this_artist"
-                        @click="Open_this_album_MediaList_click(item, 'maximum')"
-                        style="
-                          border: 0;
-                          background-color: transparent;
-                          width: 28px;
-                          height: 28px;
-                          cursor: pointer;
-                        "
-                      >
-                        <icon :size="20" color="#FFFFFF" style="margin-left: -2px; margin-top: 3px"
-                          ><Open28Filled
-                        /></icon>
-                      </button>
-                      <button
-                        class="love_this_album"
-                        @click="
-                          () => {
-                            handleItemClick_Favorite(item.id, item.favorite)
-                            item.favorite = !item.favorite
-                          }
-                        "
-                        style="
-                          border: 0;
-                          background-color: transparent;
-                          width: 28px;
-                          height: 28px;
-                          cursor: pointer;
-                        "
-                      >
-                        <icon
-                          v-if="item.favorite"
-                          :size="20"
-                          color="red"
-                          style="margin-left: -2px; margin-top: 3px"
-                          ><Heart28Filled
-                        /></icon>
-                        <icon
-                          v-else
-                          :size="20"
-                          color="#FFFFFF"
-                          style="margin-left: -2px; margin-top: 3px"
-                          ><Heart24Regular
-                        /></icon>
-                      </button>
-                    </div>
+                <!--            v-hammer:doubletap="() => handleDoubleTap(item, index)"-->
+                <div class="media_info">
+                  <!-- Album Art -->
+                  <div
+                    style="
+                      width: 58px;
+                      height: 58px;
+                      margin-left: 5px;
+                      border-radius: 4px;
+                      overflow: hidden;
+                      flex-shrink: 0;
+                    "
+                  >
+                    <img
+                      :key="item.absoluteIndex"
+                      :src="item.medium_image_url"
+                      @error="handleImageError(item)"
+                      style="width: 100%; height: 100%; object-fit: cover"
+                    />
                   </div>
-                </div>
-              </div>
-              <div :style="{ width: item_album_image + 'px' }">
-                <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
-                  <div>
-                    <span
-                      id="home_item_img_album_name"
-                      :style="{ maxWidth: item_album_txt + 'px' }"
-                      style="font-weight: 600"
-                    >
-                      {{ item.name }}
+                  <!-- Title and Artist (Flexible) -->
+                  <div class="title_playlist" style="flex: 1; min-width: 0">
+                    <span style="font-size: 16px; font-weight: 600">
+                      {{ item.title }}
                     </span>
+                    <br />
+                    <template v-for="artist in item.artist.split(/[\/|｜、]/)">
+                      <span>
+                        {{ artist + '&nbsp;' }}
+                      </span>
+                    </template>
                   </div>
-                  <div>
-                    <span
-                      id="home_item_img_artist_name"
-                      :style="{ maxWidth: item_album_txt + 'px' }"
-                    >
-                      {{ item.artist }}
-                    </span>
-                  </div>
+                  <!-- Index -->
+                  <span class="index">
+                    {{ index + 1 }}
+                  </span>
                 </div>
-              </div>
-            </div>
-          </DynamicScrollerItem>
-        </template>
-      </DynamicScroller>
-    </n-space>
+              </DynamicScrollerItem>
+            </template>
+          </DynamicScroller>
+        </n-card>
+      </div>
 
-    <n-space vertical style="margin-left: 8px">
-      <n-space
-        justify="space-between"
-        align="center"
-        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)' }"
-      >
-        <n-space align="center">
-          <span style="font-size: 16px; font-weight: 600">
-            {{
-              $t('page.home.explore') +
-              ' : ' +
-              (store_server_users.server_select_kind === 'jellyfin' ||
-              store_server_users.server_select_kind === 'emby'
-                ? $t('entity.track_other')
-                : $t('entity.album_other'))
-            }}
-          </span>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button
-                quaternary
-                @click="
-                  () => {
-                    store_general_fetch_home_list.fetchData_Home_of_random_search()
-                    dynamicScroller_random_search.$el.scrollLeft = 0
-                    offset_random_search = 0
-                  }
-                "
-              >
-                <template #icon>
-                  <n-icon :size="20"><ArrowReset24Filled /></n-icon>
-                </template>
-              </n-button>
-            </template>
-            {{ $t('common.refresh') }}
-          </n-tooltip>
-          <n-space
-            v-if="store_view_home_page_info.home_Files_temporary_random_search.length === 0"
-            style="margin-top: 2px"
-          >
-            {{ $t('None') + $t('Play') + $t('Data') }}
-          </n-space>
-        </n-space>
-        <n-space>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button quaternary @click="scrollTo_random_search(-1)">
-                <n-icon size="20" :depth="2">
-                  <ChevronLeft16Filled />
-                </n-icon>
-              </n-button>
-            </template>
-            {{ $t('common.backward') }}
-          </n-tooltip>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button quaternary @click="scrollTo_random_search(1)">
-                <n-icon size="20" :depth="2">
-                  <ChevronRight16Filled />
-                </n-icon>
-              </n-button>
-            </template>
-            {{ $t('common.forward') }}
-          </n-tooltip>
-        </n-space>
-      </n-space>
-      <DynamicScroller
-        class="home-wall"
-        ref="dynamicScroller_random_search"
-        v-if="store_view_home_page_info.home_Files_temporary_random_search.length != 0"
-        :style="{
-          width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)',
-          height: item_album_image + 60 + 'px',
-        }"
-        :items="store_view_home_page_info.home_Files_temporary_random_search"
-        :itemSize="itemSize"
-        :minItemSize="itemSize"
-        :emit-update="true"
-        direction="horizontal"
-      >
-        <template #default="{ item, index, active }">
-          <DynamicScrollerItem
-            :item="item"
-            :active="active"
-            :data-index="index"
-            :data-active="active"
-            v-contextmenu:contextmenu
-            @contextmenu.prevent="
-              () => {
-                store_playlist_list_info.playlist_Menu_Item = item
-                store_playlist_list_info.playlist_Menu_Item_Id = item.id
-              }
-            "
-          >
-            <div :key="item.id" class="album">
-              <div
-                :style="{
-                  width: item_album_image + 'px',
-                  height: item_album_image + 'px',
-                  position: 'relative',
-                }"
-              >
-                <img
-                  :src="item.medium_image_url"
-                  @error="handleImageError(item)"
-                  style="objectfit: cover; objectposition: center; border: 1.5px solid #ffffff20"
-                  :style="{
-                    width: item_album_image + 'px',
-                    height: item_album_image + 'px',
-                    borderRadius: '6px',
-                  }"
-                  alt=""
-                />
-                <div
-                  class="hover-overlay"
-                  @dblclick="Open_this_album_MediaList_click(item, 'random')"
-                >
-                  <div class="hover-content">
-                    <button
-                      class="play_this_album"
-                      @click="
-                        async () => {
-                          await Play_this_album_MediaList_click(item, 'random')
-                        }
-                      "
-                      style="
-                        border: 0;
-                        background-color: transparent;
-                        width: 50px;
-                        height: 50px;
-                        cursor: pointer;
-                      "
-                    >
-                      <icon :size="42" color="#FFFFFF" style="margin-left: -2px; margin-top: 3px"
-                        ><PlayCircle24Regular
-                      /></icon>
-                    </button>
-                    <div
-                      class="hover_buttons_top"
-                      v-if="
-                        (store_server_users.server_select_kind != 'jellyfin' &&
-                          store_server_users.server_select_kind != 'emby') ||
-                        store_server_user_model.model_server_type_of_local
-                      "
-                    >
-                      <rate
-                        class="viaSlot"
-                        style="margin-right: 8px"
-                        :length="5"
-                        v-model="item.rating"
-                        @before-rate="
-                          (value) => {
-                            if (item.rating == 1) {
-                              before_rating = true
-                            }
-                          }
-                        "
-                        @after-rate="
-                          (value) => {
-                            if (item.rating == 1 && before_rating == true) {
-                              after_rating = true
-                              before_rating = false
-                            }
-                            handleItemClick_Rating(item.id + '-' + value)
-                            if (after_rating) {
-                              item.rating = 0
-                              after_rating = false
-                            }
-                          }
-                        "
-                      />
-                    </div>
-                    <div class="hover_buttons_bottom">
-                      <button
-                        v-if="
-                          store_server_user_model.model_server_type_of_local ||
-                          (store_server_users.server_select_kind != 'jellyfin' &&
-                            store_server_users.server_select_kind != 'emby')
-                        "
-                        class="open_this_artist"
-                        @click="Open_this_album_MediaList_click(item, 'random')"
-                        style="
-                          border: 0;
-                          background-color: transparent;
-                          width: 28px;
-                          height: 28px;
-                          cursor: pointer;
-                        "
-                      >
-                        <icon :size="20" color="#FFFFFF" style="margin-left: -2px; margin-top: 3px"
-                          ><Open28Filled
-                        /></icon>
-                      </button>
-                      <button
-                        class="love_this_album"
-                        @click="
-                          () => {
-                            handleItemClick_Favorite(item.id, item.favorite)
-                            item.favorite = !item.favorite
-                          }
-                        "
-                        style="
-                          border: 0;
-                          background-color: transparent;
-                          width: 28px;
-                          height: 28px;
-                          cursor: pointer;
-                        "
-                      >
-                        <icon
-                          v-if="item.favorite"
-                          :size="20"
-                          color="red"
-                          style="margin-left: -2px; margin-top: 3px"
-                          ><Heart28Filled
-                        /></icon>
-                        <icon
-                          v-else
-                          :size="20"
-                          color="#FFFFFF"
-                          style="margin-left: -2px; margin-top: 3px"
-                          ><Heart24Regular
-                        /></icon>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div :style="{ width: item_album_image + 'px' }">
-                <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
-                  <div>
-                    <span
-                      id="home_item_img_album_name"
-                      :style="{ maxWidth: item_album_txt + 'px' }"
-                      style="font-weight: 600"
-                    >
-                      {{ item.name }}
-                    </span>
-                  </div>
-                  <div>
-                    <span
-                      id="home_item_img_artist_name"
-                      :style="{ maxWidth: item_album_txt + 'px' }"
-                    >
-                      {{ item.artist }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </DynamicScrollerItem>
-        </template>
-      </DynamicScroller>
-    </n-space>
+      <!-- Right Panel: Recommended Songs -->
+      <div class="right-panel">
+        <n-card class="results-card" :bordered="false">
+          <template #header>
+            <n-h3 style="margin: 0">
+              {{ $t('nsmusics.view_page.recommend') + $t('Songs') }}
+            </n-h3>
+          </template>
 
-    <n-space vertical style="margin-left: 8px">
-      <n-space
-        justify="space-between"
-        align="center"
-        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)' }"
-      >
-        <n-space align="center">
-          <span style="font-size: 16px; font-weight: 600">
-            {{
-              $t('page.home.newlyAdded') +
-              ' : ' +
-              (store_server_users.server_select_kind === 'jellyfin'
-                ? $t('entity.track_other')
-                : $t('entity.album_other'))
-            }}
-          </span>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button
-                quaternary
-                @click="
-                  () => {
-                    store_general_fetch_home_list.fetchData_Home_of_recently_added()
-                    dynamicScroller_recently_added.$el.scrollLeft = 0
-                    offset_recently_added = 0
-                  }
-                "
-              >
-                <template #icon>
-                  <n-icon :size="20"><ArrowReset24Filled /></n-icon>
-                </template>
-              </n-button>
-            </template>
-            {{ $t('common.refresh') }}
-          </n-tooltip>
-          <n-space
-            v-if="store_view_home_page_info.home_Files_temporary_recently_added.length === 0"
-            style="margin-top: 2px"
-          >
-            {{ $t('None') + $t('Play') + $t('Data') }}
-          </n-space>
-        </n-space>
-        <n-space>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button quaternary @click="scrollTo_recently_added(-1)">
-                <n-icon size="20" :depth="2">
-                  <ChevronLeft16Filled />
-                </n-icon>
-              </n-button>
-            </template>
-            {{ $t('common.backward') }}
-          </n-tooltip>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button quaternary @click="scrollTo_recently_added(1)">
-                <n-icon size="20" :depth="2">
-                  <ChevronRight16Filled />
-                </n-icon>
-              </n-button>
-            </template>
-            {{ $t('common.forward') }}
-          </n-tooltip>
-        </n-space>
-      </n-space>
-      <DynamicScroller
-        class="home-wall"
-        ref="dynamicScroller_recently_added"
-        v-if="store_view_home_page_info.home_Files_temporary_recently_added.length != 0"
-        :style="{
-          width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)',
-          height: item_album_image + 60 + 'px',
-        }"
-        :items="store_view_home_page_info.home_Files_temporary_recently_added"
-        :itemSize="itemSize"
-        :minItemSize="itemSize"
-        :emit-update="true"
-        direction="horizontal"
-      >
-        <template #default="{ item, index, active }">
-          <DynamicScrollerItem
-            :item="item"
-            :active="active"
-            :data-index="index"
-            :data-active="active"
-            v-contextmenu:contextmenu
-            @contextmenu.prevent="
-              () => {
-                store_playlist_list_info.playlist_Menu_Item = item
-                store_playlist_list_info.playlist_Menu_Item_Id = item.id
-                recently_added_contextmenu_of_emby = true
-              }
-            "
-          >
-            <div :key="item.id" class="album">
-              <div
-                :style="{
-                  width: item_album_image + 'px',
-                  height: item_album_image + 'px',
-                  position: 'relative',
-                }"
-              >
-                <img
-                  :src="item.medium_image_url"
-                  @error="handleImageError(item)"
-                  style="objectfit: cover; objectposition: center; border: 1.5px solid #ffffff20"
-                  :style="{
-                    width: item_album_image + 'px',
-                    height: item_album_image + 'px',
-                    borderRadius: '6px',
-                  }"
-                  alt=""
-                />
-                <div
-                  class="hover-overlay"
-                  @dblclick="Open_this_album_MediaList_click(item, 'recently_added')"
-                >
-                  <div class="hover-content">
-                    <button
-                      class="play_this_album"
-                      @click="
-                        async () => {
-                          await Play_this_album_MediaList_click(item, 'recently_added')
-                        }
-                      "
-                      style="
-                        border: 0;
-                        background-color: transparent;
-                        width: 50px;
-                        height: 50px;
-                        cursor: pointer;
-                      "
-                    >
-                      <icon :size="42" color="#FFFFFF" style="margin-left: -2px; margin-top: 3px"
-                        ><PlayCircle24Regular
-                      /></icon>
-                    </button>
-                    <div
-                      class="hover_buttons_top"
-                      v-if="
-                        (store_server_users.server_select_kind != 'jellyfin' &&
-                          store_server_users.server_select_kind != 'emby') ||
-                        store_server_user_model.model_server_type_of_local
-                      "
-                    >
-                      <rate
-                        class="viaSlot"
-                        style="margin-right: 8px"
-                        :length="5"
-                        v-model="item.rating"
-                        @before-rate="
-                          (value) => {
-                            if (item.rating == 1) {
-                              before_rating = true
-                            }
-                          }
-                        "
-                        @after-rate="
-                          (value) => {
-                            if (item.rating == 1 && before_rating == true) {
-                              after_rating = true
-                              before_rating = false
-                            }
-                            handleItemClick_Rating(item.id + '-' + value)
-                            if (after_rating) {
-                              item.rating = 0
-                              after_rating = false
-                            }
-                          }
-                        "
-                      />
-                    </div>
-                    <div class="hover_buttons_bottom">
-                      <button
-                        v-if="
-                          store_server_user_model.model_server_type_of_local ||
-                          store_server_users.server_select_kind != 'jellyfin'
-                        "
-                        class="open_this_artist"
-                        @click="Open_this_album_MediaList_click(item, 'recently_added')"
-                        style="
-                          border: 0;
-                          background-color: transparent;
-                          width: 28px;
-                          height: 28px;
-                          cursor: pointer;
-                        "
-                      >
-                        <icon :size="20" color="#FFFFFF" style="margin-left: -2px; margin-top: 3px"
-                          ><Open28Filled
-                        /></icon>
-                      </button>
-                      <button
-                        class="love_this_album"
-                        @click="
-                          () => {
-                            handleItemClick_Favorite(item.id, item.favorite)
-                            item.favorite = !item.favorite
-                          }
-                        "
-                        style="
-                          border: 0;
-                          background-color: transparent;
-                          width: 28px;
-                          height: 28px;
-                          cursor: pointer;
-                        "
-                      >
-                        <icon
-                          v-if="item.favorite"
-                          :size="20"
-                          color="red"
-                          style="margin-left: -2px; margin-top: 3px"
-                          ><Heart28Filled
-                        /></icon>
-                        <icon
-                          v-else
-                          :size="20"
-                          color="#FFFFFF"
-                          style="margin-left: -2px; margin-top: 3px"
-                          ><Heart24Regular
-                        /></icon>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div :style="{ width: item_album_image + 'px' }">
-                <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
-                  <div>
-                    <span
-                      id="home_item_img_album_name"
-                      :style="{ maxWidth: item_album_txt + 'px' }"
-                      style="font-weight: 600"
-                    >
-                      {{ item.name }}
-                    </span>
-                  </div>
-                  <div>
-                    <span
-                      id="home_item_img_artist_name"
-                      :style="{ maxWidth: item_album_txt + 'px' }"
-                    >
-                      {{ item.artist }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </DynamicScrollerItem>
-        </template>
-      </DynamicScroller>
-    </n-space>
-
-    <n-space vertical style="margin-left: 8px">
-      <n-space
-        justify="space-between"
-        align="center"
-        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)' }"
-      >
-        <n-space align="center">
-          <span style="font-size: 16px; font-weight: 600">
-            {{
-              $t('page.home.recentlyPlayed') +
-              ' : ' +
-              (store_server_users.server_select_kind === 'jellyfin' ||
-              store_server_users.server_select_kind === 'emby'
-                ? $t('entity.track_other')
-                : $t('entity.album_other'))
-            }}
-          </span>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button
-                quaternary
-                @click="
-                  () => {
-                    store_general_fetch_home_list.fetchData_Home_of_recently_played()
-                    dynamicScroller_recently_played.$el.scrollLeft = 0
-                    offset_recently_played = 0
-                  }
-                "
-              >
-                <template #icon>
-                  <n-icon :size="20"><ArrowReset24Filled /></n-icon>
-                </template>
-              </n-button>
-            </template>
-            {{ $t('common.refresh') }}
-          </n-tooltip>
-          <n-space
-            v-if="store_view_home_page_info.home_Files_temporary_recently_played.length === 0"
-            style="margin-top: 2px"
-          >
-            {{ $t('None') + $t('Play') + $t('Data') }}
-          </n-space>
-        </n-space>
-        <n-space>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button quaternary @click="scrollTo_recently_played(-1)">
-                <n-icon size="20" :depth="2">
-                  <ChevronLeft16Filled />
-                </n-icon>
-              </n-button>
-            </template>
-            {{ $t('common.backward') }}
-          </n-tooltip>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button quaternary @click="scrollTo_recently_played(1)">
-                <n-icon size="20" :depth="2">
-                  <ChevronRight16Filled />
-                </n-icon>
-              </n-button>
-            </template>
-            {{ $t('common.forward') }}
-          </n-tooltip>
-        </n-space>
-      </n-space>
-      <DynamicScroller
-        class="home-wall"
-        ref="dynamicScroller_recently_played"
-        v-if="store_view_home_page_info.home_Files_temporary_recently_played.length != 0"
-        :style="{
-          width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)',
-          height: item_album_image + 60 + 'px',
-        }"
-        :items="store_view_home_page_info.home_Files_temporary_recently_played"
-        :itemSize="itemSize"
-        :minItemSize="itemSize"
-        :emit-update="true"
-        direction="horizontal"
-      >
-        <template #default="{ item, index, active }">
-          <DynamicScrollerItem
-            :item="item"
-            :active="active"
-            :data-index="index"
-            :data-active="active"
-            v-contextmenu:contextmenu
-            @contextmenu.prevent="
-              () => {
-                store_playlist_list_info.playlist_Menu_Item = item
-                store_playlist_list_info.playlist_Menu_Item_Id = item.id
-              }
-            "
-          >
-            <div :key="item.id" class="album">
-              <div
-                :style="{
-                  width: item_album_image + 'px',
-                  height: item_album_image + 'px',
-                  position: 'relative',
-                }"
-              >
-                <img
-                  :src="item.medium_image_url"
-                  @error="handleImageError(item)"
-                  style="objectfit: cover; objectposition: center; border: 1.5px solid #ffffff20"
-                  :style="{
-                    width: item_album_image + 'px',
-                    height: item_album_image + 'px',
-                    borderRadius: '6px',
-                  }"
-                  alt=""
-                />
-                <div
-                  class="hover-overlay"
-                  @dblclick="Open_this_album_MediaList_click(item, 'recently_played')"
-                >
-                  <div class="hover-content">
-                    <button
-                      class="play_this_album"
-                      @click="
-                        async () => {
-                          await Play_this_album_MediaList_click(item, 'recently_played')
-                        }
-                      "
-                      style="
-                        border: 0;
-                        background-color: transparent;
-                        width: 50px;
-                        height: 50px;
-                        cursor: pointer;
-                      "
-                    >
-                      <icon :size="42" color="#FFFFFF" style="margin-left: -2px; margin-top: 3px"
-                        ><PlayCircle24Regular
-                      /></icon>
-                    </button>
-                    <div
-                      class="hover_buttons_top"
-                      v-if="
-                        (store_server_users.server_select_kind != 'jellyfin' &&
-                          store_server_users.server_select_kind != 'emby') ||
-                        store_server_user_model.model_server_type_of_local
-                      "
-                    >
-                      <rate
-                        class="viaSlot"
-                        style="margin-right: 8px"
-                        :length="5"
-                        v-model="item.rating"
-                        @before-rate="
-                          (value) => {
-                            if (item.rating == 1) {
-                              before_rating = true
-                            }
-                          }
-                        "
-                        @after-rate="
-                          (value) => {
-                            if (item.rating == 1 && before_rating == true) {
-                              after_rating = true
-                              before_rating = false
-                            }
-                            handleItemClick_Rating(item.id + '-' + value)
-                            if (after_rating) {
-                              item.rating = 0
-                              after_rating = false
-                            }
-                          }
-                        "
-                      />
-                    </div>
-                    <div class="hover_buttons_bottom">
-                      <button
-                        v-if="
-                          store_server_user_model.model_server_type_of_local ||
-                          (store_server_users.server_select_kind != 'jellyfin' &&
-                            store_server_users.server_select_kind != 'emby')
-                        "
-                        class="open_this_artist"
-                        @click="Open_this_album_MediaList_click(item, 'recently_played')"
-                        style="
-                          border: 0;
-                          background-color: transparent;
-                          width: 28px;
-                          height: 28px;
-                          cursor: pointer;
-                        "
-                      >
-                        <icon :size="20" color="#FFFFFF" style="margin-left: -2px; margin-top: 3px"
-                          ><Open28Filled
-                        /></icon>
-                      </button>
-                      <button
-                        class="love_this_album"
-                        @click="
-                          () => {
-                            handleItemClick_Favorite(item.id, item.favorite)
-                            item.favorite = !item.favorite
-                          }
-                        "
-                        style="
-                          border: 0;
-                          background-color: transparent;
-                          width: 28px;
-                          height: 28px;
-                          cursor: pointer;
-                        "
-                      >
-                        <icon
-                          v-if="item.favorite"
-                          :size="20"
-                          color="red"
-                          style="margin-left: -2px; margin-top: 3px"
-                          ><Heart28Filled
-                        /></icon>
-                        <icon
-                          v-else
-                          :size="20"
-                          color="#FFFFFF"
-                          style="margin-left: -2px; margin-top: 3px"
-                          ><Heart24Regular
-                        /></icon>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div :style="{ width: item_album_image + 'px' }">
-                <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
-                  <div>
-                    <span
-                      id="home_item_img_album_name"
-                      :style="{ maxWidth: item_album_txt + 'px' }"
-                      style="font-weight: 600"
-                    >
-                      {{ item.name }}
-                    </span>
-                  </div>
-                  <div>
-                    <span
-                      id="home_item_img_artist_name"
-                      :style="{ maxWidth: item_album_txt + 'px' }"
-                    >
-                      {{ item.artist }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </DynamicScrollerItem>
-        </template>
-      </DynamicScroller>
-    </n-space>
-
-    <v-contextmenu
-      ref="contextmenu"
-      class="v-contextmenu-item v-contextmenu-item--hover"
-      style="z-index: 999"
-    >
-      <v-contextmenu-submenu :title="menu_item_add_to_songlist">
-        <v-contextmenu-item
-          v-for="n in store_playlist_list_info.playlist_names_ALLLists"
-          :key="n.value"
-          @click="update_playlist_addAlbum(store_playlist_list_info.playlist_Menu_Item_Id, n.value)"
-        >
-          {{ n.label }}
-        </v-contextmenu-item>
-      </v-contextmenu-submenu>
-      <v-contextmenu-divider />
-      <v-contextmenu-item @click="menu_item_add_to_playlist_end">
-        {{ $t('player.addLast') }}
-      </v-contextmenu-item>
-      <v-contextmenu-item @click="menu_item_add_to_playlist_next">
-        {{ $t('player.addNext') }}
-      </v-contextmenu-item>
-    </v-contextmenu>
-  </div>
+        </n-card>
+      </div>
+    </div>
+  </n-message-provider>
 </template>
-<style>
-.home-wall-container {
-  width: 100%;
-  height: 100%;
-  padding-right: 20px;
-  overflow-x: hidden;
-  overflow-y: scroll;
+
+<style scoped>
+.tag-container {
+  --card-color: v-bind('themeVars.cardColor');
+  --border-color: v-bind('themeVars.borderColor');
+  --primary-color-hover: v-bind('themeVars.primaryColorHover');
+  --primary-color-suppl: v-bind('themeVars.primaryColorSuppl');
+  --text-color-1: v-bind('themeVars.textColor1');
+  --text-color-2: v-bind('themeVars.textColor2');
+  --text-color-3: v-bind('themeVars.textColor3');
+  --hover-color: v-bind('themeVars.hoverColor');
+  --scrollbar-color: v-bind('themeVars.scrollbarColor');
+  --scrollbar-color-hover: v-bind('themeVars.scrollbarColorHover');
+
+  display: flex;
+  padding: 10px;
+  gap: 1.5rem;
+  height: calc(100vh - 174px);
+  margin-top: 30px;
+  box-sizing: border-box;
 }
-.home-wall {
-  width: calc(100vw - 200px);
+
+.left-panel,
+.right-panel {
   display: flex;
   flex-direction: column;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-  overflow-x: hidden;
+  min-height: 0;
+  flex-shrink: 0;
+  width: 41%;
 }
-.album {
-  float: left;
-  flex-direction: column;
+
+.right-panel {
+  width: 60%;
 }
-.album .hover-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 4px;
-  background: #00000090;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.album:hover .hover-overlay {
-  opacity: 1;
-}
-.album .hover-content {
+
+.selection-card,
+.results-card {
+  background-color: var(--card-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  transition:
+    box-shadow 0.3s ease-in-out,
+    border-color 0.3s ease-in-out;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  flex: 1;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.selection-card:hover,
+.results-card:hover {
+  border-color: var(--primary-color-hover);
+  box-shadow: 0 0 7px 0 var(--primary-color-suppl);
+}
+
+.selection-card :deep(.n-card__content),
+.results-card :deep(.n-card__content) {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding: 0 1.5rem; /* Add padding back to content */
+}
+
+:deep(.n-card-header) {
+  padding: 1rem 1.5rem;
+}
+
+.n-h3,
+.n-h4 {
+  color: var(--text-color-1);
+}
+
+.tag-view-container {
+  padding: 1rem 0; /* Adjust padding */
+}
+
+.custom-tag {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.custom-tag:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px var(--primary-color-suppl);
+}
+
+.chart-view-container {
+  flex: 1;
+  display: flex;
   align-items: center;
+  justify-content: center;
   height: 100%;
 }
-.album .hover_buttons_top {
-  position: absolute;
-  top: 2px;
-  left: 0;
-  width: 140px;
-}
-.album .hover_buttons_bottom {
-  position: absolute;
-  bottom: 3px;
-  right: 3px;
+
+.word-cloud-wrapper {
+  width: 100%;
+  height: 100%;
 }
 
-.album_left_text_album_info {
-  float: left;
+.table {
+  width: 100%;
+  height: 100%;
+}
+
+.message {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.message:hover {
+  background-color: var(--hover-color);
+}
+
+.media_info {
+  width: calc(100% - 13px);
+  height: 70px;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease-in-out; /* Smooth transition for all properties */
+  margin: 12px 0; /* Add margin for shadow visibility */
+  border-radius: 8px; /* iOS-style rounded corners */
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.05); /* Subtle initial shadow */
+}
+.media_info:hover {
+  transform: scale(1.01) translateX(6px); /* Slight zoom on hover */
+  box-shadow: 0 0 10px 0 var(--scrollbar-color);
+  z-index: 10;
+  position: relative;
+  background-color: var(--card-color); /* Use a variable for background */
+}
+
+.title_playlist {
+  margin-left: 1rem;
   text-align: left;
-}
-#home_item_img_album_name {
-  margin-top: 2px;
-  font-size: 13px;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
   overflow: hidden;
+  white-space: nowrap;
   text-overflow: ellipsis;
-}
-#home_item_img_artist_name {
-  font-size: 13px;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  color: var(--text-color-1);
 }
 
-.play_this_album:hover {
-  color: #3dc3ff;
-}
-.open_this_artist:hover {
-  color: #3dc3ff;
-}
-.love_this_album:hover {
-  color: #3dc3ff;
+.title_playlist span:first-child {
+  font-weight: 600;
+  font-size: 1rem;
 }
 
-.v-contextmenu-item {
-  margin-top: 5px;
-  margin-bottom: 5px;
+.title_playlist span:not(:first-child) {
+  font-size: 0.875rem;
+  color: var(--text-color-2);
 }
-.v-contextmenu-item--hover {
-  color: #3dc3ff;
-  background-color: transparent;
+
+.title_playlist:hover {
+  color: var(--primary-color-hover);
+}
+
+.index {
+  width: 50px;
+  margin-left: 12px;
+  color: var(--text-color-3);
+  text-align: center;
+}
+
+.n-empty {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 12px;
+  width: 8px;
 }
-::-webkit-scrollbar-thumb {
-  background-color: #88888850;
-  border-radius: 4px;
-}
+
 ::-webkit-scrollbar-track {
-  background-color: #f1f1f105;
-  border-radius: 4px;
+  background: transparent;
 }
-::-webkit-scrollbar-thumb:hover {
-  background-color: #88888850;
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-color);
   border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-color-hover);
 }
 </style>

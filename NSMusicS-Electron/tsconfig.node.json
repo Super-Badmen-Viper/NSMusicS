@@ -24,7 +24,7 @@
     "types": ["naive-ui/volar"],
     "baseUrl": "./",
     "paths": {
-      "@/data_access/*": ["src/data_access/*"],
+      "@/data_configs/*": ["src/data_configs/*"],
       "@/data_models/*": ["src/data_models/*"],
       "@/router/*": ["src/router/*"],
       "@/views_components/*": ["src/views_components/*"],

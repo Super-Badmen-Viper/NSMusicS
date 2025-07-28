@@ -1,5 +1,5 @@
 import { reactive, watch } from 'vue'
-import { Set_LibraryInfo_To_LocalSqlite } from '@/data/data_access/local_configs/class_Set_LibraryInfo_To_LocalSqlite'
+import { Set_LibraryInfo_To_LocalSqlite } from '@/data/data_configs/local_configs/class_Set_LibraryInfo_To_LocalSqlite'
 import { store_view_media_page_info } from './store_view_media_page_info'
 import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
 import { store_general_fetch_media_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'

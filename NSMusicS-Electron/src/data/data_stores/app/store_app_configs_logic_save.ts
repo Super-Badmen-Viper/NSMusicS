@@ -3,7 +3,7 @@ import { App_Configs } from '@/data/data_models/app_models/app_Configs/class_App
 import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
 import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
 import { store_player_audio_logic } from '@/views/view_app/music_page/page_player/store/store_player_audio_logic'
-import { Class_Set_System_Configs_Write } from '@/data/data_access/system_configs/class_Set_System_Configs_Write'
+import { Class_Set_System_Configs_Write } from '@/data/data_configs/system_configs/class_Set_System_Configs_Write'
 import { Player_Configs_of_UI } from '@/data/data_models/app_models/app_Configs/class_Player_Configs_of_UI'
 import { store_player_appearance } from '@/views/view_app/music_page/page_player/store/store_player_appearance'
 import { Player_Configs_of_Audio_Info } from '@/data/data_models/app_models/app_Configs/class_Player_Configs_of_Audio_Info'

@@ -1,6 +1,6 @@
 import { reactive } from 'vue'
 import { store_server_navidrome_userdata_logic } from '@/data/data_stores/server/server_data_select/server_navidrome_user_data/store_server_navidrome_userdata_logic'
-import { Set_ServerInfo_To_LocalSqlite } from '@/data/data_access/local_configs/class_Set_ServerInfo_To_LocalSqlite'
+import { Set_ServerInfo_To_LocalSqlite } from '@/data/data_configs/local_configs/class_Set_ServerInfo_To_LocalSqlite'
 import { store_server_users } from '@/data/data_stores/server/store_server_users'
 import { store_server_jellyfin_userdata_logic } from './server_jellyfin_user_data/store_server_jellyfin_userdata_logic'
 import { isElectron } from '@/utils/electron/isElectron'
