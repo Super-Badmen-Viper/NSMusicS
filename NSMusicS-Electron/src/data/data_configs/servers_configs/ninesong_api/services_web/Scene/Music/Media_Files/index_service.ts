@@ -15,7 +15,7 @@ export class Medias_ApiService_of_NineSong extends NineSong_Api_Services_Web {
     min_bitrate: string,
     max_bitrate: string,
     folder_path: string,
-    folder_path_sub_filter: string,
+    folder_path_sub_filter: string
   ): Promise<any> {
     return this.sendRequest('GET', 'medias', {
       start,
@@ -52,7 +52,7 @@ export class Medias_ApiService_of_NineSong extends NineSong_Api_Services_Web {
     min_bitrate: string,
     max_bitrate: string,
     folder_path: string,
-    folder_path_sub_filter: string,
+    folder_path_sub_filter: string
   ): Promise<any> {
     const params: Record<string, string | string[]> = {
       start,
@@ -88,7 +88,7 @@ export class Medias_ApiService_of_NineSong extends NineSong_Api_Services_Web {
     min_bitrate: string,
     max_bitrate: string,
     folder_path: string,
-    folder_path_sub_filter: string,
+    folder_path_sub_filter: string
   ): Promise<any> {
     return this.sendRequest('GET', 'playlists/tracks', {
       playlistId,
@@ -122,7 +122,7 @@ export class Medias_ApiService_of_NineSong extends NineSong_Api_Services_Web {
     min_bitrate: string,
     max_bitrate: string,
     folder_path: string,
-    folder_path_sub_filter: string,
+    folder_path_sub_filter: string
   ): Promise<any> {
     const params: Record<string, string | string[]> = {
       playlistId,

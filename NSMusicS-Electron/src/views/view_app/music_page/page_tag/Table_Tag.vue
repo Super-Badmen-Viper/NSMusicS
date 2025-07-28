@@ -491,13 +491,9 @@ import { useI18n } from 'vue-i18n'
 import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
 import { store_server_users } from '@/data/data_stores/server/store_server_users'
 import { store_view_media_page_logic } from '@/views/view_app/music_page/page_media/store/store_view_media_page_logic'
-import {
-  Folder_Entity_ApiService_of_NineSong
-} from '@/data/data_configs/servers_configs/ninesong_api/services_web/Folder_Entity/index_service'
+import { Folder_Entity_ApiService_of_NineSong } from '@/data/data_configs/servers_configs/ninesong_api/services_web/Folder_Entity/index_service'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
-import {
-  store_general_fetch_media_list
-} from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'
+import { store_general_fetch_media_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'
 const { t } = useI18n({
   inheritLocale: true,
 })
@@ -527,7 +523,7 @@ async function filter_media_folder_path() {
   await store_general_fetch_media_list.fetchData_Media()
 }
 async function find_server_folder_path(path: string) {
-  if(path === undefined || path === '') {
+  if (path === undefined || path === '') {
     path = page_songlists_library_path.value
   }
   const result = await folder_Entity_ApiService_of_NineSong.browseFolder_Entity(path)
@@ -542,14 +538,13 @@ async function find_server_folder_path(path: string) {
     })
   }
 }
-
 </script>
 
 <template>
   <n-message-provider>
     <div style="position: absolute; top: 0">
       <div style="font-size: 20px; font-weight: 600; margin-left: 11px">
-        {{ $t('Metadata') + $t('HeaderAdmin')}}
+        {{ $t('Metadata') + $t('HeaderAdmin') }}
         <span
           v-if="
             (store_server_user_model.model_server_type_of_web &&
@@ -573,14 +568,12 @@ async function find_server_folder_path(path: string) {
               <n-space
                 vertical
                 v-if="
-                      !store_server_user_model.model_server_type_of_web ||
-                      (store_server_user_model.model_server_type_of_web &&
-                        store_server_users.server_select_kind === 'ninesong')
-                    "
+                  !store_server_user_model.model_server_type_of_web ||
+                  (store_server_user_model.model_server_type_of_web &&
+                    store_server_users.server_select_kind === 'ninesong')
+                "
               >
-                    <span style="font-size: 14px; font-weight: 600">{{
-                        $t('HeaderLibraries')
-                      }}</span>
+                <span style="font-size: 14px; font-weight: 600">{{ $t('HeaderLibraries') }}</span>
                 <n-space vertical>
                   <n-select
                     v-model:value="page_songlists_library_path"
@@ -593,12 +586,12 @@ async function find_server_folder_path(path: string) {
                     strong
                     secondary
                     @click="
-                          () => {
-                            page_songlists_library_path = ''
-                            page_songlists_library_folder_path = ''
-                            filter_media_folder_path()
-                          }
-                        "
+                      () => {
+                        page_songlists_library_path = ''
+                        page_songlists_library_folder_path = ''
+                        filter_media_folder_path()
+                      }
+                    "
                   >
                     {{ $t('common.clear') }}
                   </n-button>
@@ -607,14 +600,14 @@ async function find_server_folder_path(path: string) {
               <n-space
                 vertical
                 v-if="
-                      !store_server_user_model.model_server_type_of_web ||
-                      (store_server_user_model.model_server_type_of_web &&
-                        store_server_users.server_select_kind === 'ninesong')
-                    "
+                  !store_server_user_model.model_server_type_of_web ||
+                  (store_server_user_model.model_server_type_of_web &&
+                    store_server_users.server_select_kind === 'ninesong')
+                "
               >
-                    <span style="font-size: 14px; font-weight: 600">{{
-                        $t('Folders') + $t('Filters')
-                      }}</span>
+                <span style="font-size: 14px; font-weight: 600">{{
+                  $t('Folders') + $t('Filters')
+                }}</span>
                 <n-space vertical>
                   <n-select
                     :disabled="page_songlists_library_path.length === 0"
@@ -629,11 +622,11 @@ async function find_server_folder_path(path: string) {
                     strong
                     secondary
                     @click="
-                          () => {
-                            page_songlists_library_folder_path = ''
-                            filter_media_folder_path()
-                          }
-                        "
+                      () => {
+                        page_songlists_library_folder_path = ''
+                        filter_media_folder_path()
+                      }
+                    "
                   >
                     {{ $t('common.clear') }}
                   </n-button>
@@ -713,7 +706,6 @@ async function find_server_folder_path(path: string) {
               {{ $t('nsmusics.view_page.recommend') + $t('Songs') }}
             </n-h3>
           </template>
-
         </n-card>
       </div>
     </div>
@@ -747,7 +739,7 @@ async function find_server_folder_path(path: string) {
   flex-direction: column;
   min-height: 0;
   flex-shrink: 0;
-  width: 41%;
+  width: 42%;
 }
 
 .right-panel {

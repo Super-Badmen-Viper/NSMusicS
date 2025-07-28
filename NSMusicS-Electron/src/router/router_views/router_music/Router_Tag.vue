@@ -16,7 +16,7 @@ onMounted(async () => {
 
 <template>
   <div class="view_show">
-    <Table_Tag/>
+    <Table_Tag />
   </div>
 </template>
 

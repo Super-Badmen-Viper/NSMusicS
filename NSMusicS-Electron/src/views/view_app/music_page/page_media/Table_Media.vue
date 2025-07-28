@@ -1568,7 +1568,7 @@ async function filter_media_folder_path() {
   await store_general_fetch_media_list.fetchData_Media()
 }
 async function find_server_folder_path(path: string) {
-  if(path === undefined || path === '') {
+  if (path === undefined || path === '') {
     path = store_view_media_page_logic.page_songlists_library_path
   }
   const result = await folder_Entity_ApiService_of_NineSong.browseFolder_Entity(path)
@@ -1673,7 +1673,11 @@ onBeforeUnmount(() => {
               ')->' +
               $t('nsmusics.view_page.pinyin') +
               ' | ' +
-              $t('nsmusics.view_page.hybrid_search') + ': ' + $t('nsmusics.view_page.simplified_chinese') + '-' + $t('nsmusics.view_page.traditional_chinese') +
+              $t('nsmusics.view_page.hybrid_search') +
+              ': ' +
+              $t('nsmusics.view_page.simplified_chinese') +
+              '-' +
+              $t('nsmusics.view_page.traditional_chinese') +
               ' | ' +
               $t('Lyrics')
             }}
@@ -1878,8 +1882,8 @@ onBeforeUnmount(() => {
                     "
                   >
                     <span style="font-size: 14px; font-weight: 600">{{
-                        $t('Audio') + $t('LabelFormat')
-                      }}</span>
+                      $t('Audio') + $t('LabelFormat')
+                    }}</span>
                     <n-space vertical>
                       <n-select
                         v-model:value="store_view_media_page_logic.page_songlists_suffix"
@@ -1947,16 +1951,24 @@ onBeforeUnmount(() => {
                     "
                   >
                     <span style="font-size: 14px; font-weight: 600">{{
-                        $t('Folders') + $t('Filters')
-                      }}</span>
+                      $t('Folders') + $t('Filters')
+                    }}</span>
                     <n-space vertical>
                       <n-select
-                        :disabled="store_view_media_page_logic.page_songlists_library_path.length === 0"
-                        v-model:value="store_view_media_page_logic.page_songlists_library_folder_path"
+                        :disabled="
+                          store_view_media_page_logic.page_songlists_library_path.length === 0
+                        "
+                        v-model:value="
+                          store_view_media_page_logic.page_songlists_library_folder_path
+                        "
                         :options="browseFolderPathOptions"
                         placement="bottom"
                         style="width: 200px"
-                        @click="find_server_folder_path(store_view_media_page_logic.page_songlists_library_folder_path)"
+                        @click="
+                          find_server_folder_path(
+                            store_view_media_page_logic.page_songlists_library_folder_path
+                          )
+                        "
                         @update:value="filter_media_folder_path"
                       />
                       <n-button

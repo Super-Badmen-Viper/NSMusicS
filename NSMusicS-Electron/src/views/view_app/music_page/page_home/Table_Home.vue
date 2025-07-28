@@ -451,7 +451,7 @@ const home_Files_temporary_type_options = ref([
     value: 'artist',
   },
   {
-    label: computed(() => t('common.home') + ' : ' + t('nsmusics.view_page.disk')),
+    label: computed(() => t('common.home') + ' : ' + 'CUE ' + t('nsmusics.view_page.disk')),
     value: 'media_cue',
   },
 ])
@@ -523,7 +523,7 @@ function change_home_Files_temporary_type() {
                       : store_view_home_page_info.home_Files_temporary_type_select === 'artist'
                         ? $t('entity.artist_other')
                         : store_view_home_page_info.home_Files_temporary_type_select === 'media_cue'
-                          ? $t('nsmusics.view_page.disk')
+                          ? 'CUE ' + $t('nsmusics.view_page.disk')
                           : $t('entity.album_other')
                   : $t('entity.album_other'))
             }}
@@ -725,7 +725,7 @@ function change_home_Files_temporary_type() {
                       : store_view_home_page_info.home_Files_temporary_type_select === 'artist'
                         ? $t('entity.artist_other')
                         : store_view_home_page_info.home_Files_temporary_type_select === 'media_cue'
-                          ? $t('nsmusics.view_page.disk')
+                          ? 'CUE ' + $t('nsmusics.view_page.disk')
                           : $t('entity.album_other')
                   : $t('entity.album_other'))
             }}
@@ -927,7 +927,7 @@ function change_home_Files_temporary_type() {
                       : store_view_home_page_info.home_Files_temporary_type_select === 'artist'
                         ? $t('entity.artist_other')
                         : store_view_home_page_info.home_Files_temporary_type_select === 'media_cue'
-                          ? $t('nsmusics.view_page.disk')
+                          ? 'CUE ' + $t('nsmusics.view_page.disk')
                           : $t('entity.album_other')
                   : $t('entity.album_other'))
             }}
@@ -1130,7 +1130,7 @@ function change_home_Files_temporary_type() {
                       : store_view_home_page_info.home_Files_temporary_type_select === 'artist'
                         ? $t('entity.artist_other')
                         : store_view_home_page_info.home_Files_temporary_type_select === 'media_cue'
-                          ? $t('nsmusics.view_page.disk')
+                          ? 'CUE ' + $t('nsmusics.view_page.disk')
                           : $t('entity.album_other')
                   : $t('entity.album_other'))
             }}
@@ -1537,5 +1537,4 @@ function change_home_Files_temporary_type() {
   font-size: 24px;
   font-weight: 600;
 }
-
 </style>

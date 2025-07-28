@@ -133,7 +133,7 @@ function create_menuOptions_appBar() {
       icon: renderIcon(UserAvatarFilledAlt),
     },
     {
-      label: computed(() => renderRouterLink('media_cue', t('nsmusics.view_page.disk'))),
+      label: computed(() => renderRouterLink('media_cue', 'CUE ' + t('nsmusics.view_page.disk'))),
       key: 'media_cue',
       icon: renderIcon(LibraryMusicOutlined),
     },

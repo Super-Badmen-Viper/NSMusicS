@@ -72,7 +72,7 @@
       "mediaLibrary_media_tag_modify_local": "Atualmente, apenas o modo local de navegação|edição de informações de tags é suportado",
       "hideHalfLyric": "Ocultar as letras antes das letras que estão sendo seguidas no momento",
       "guest": "Participação",
-      "disk": "CUE Disco",
+      "disk": "Disco",
       "warning_web_play_alac": "Detected that the user is using the web playback component to play m4a files encoded as alac. Enabling NineSong server's ffmpeg component to transcode alac to aac temporary music resource.",
       "warning_mpv_play_alac": "Please wait for the server response. It will take several seconds to complete transcoding and playback, or you can use the mpv playback component to skip the alac to aac transcoding step.",
       "virtual_orbit_division": "Divisão de Trilha Virtual",

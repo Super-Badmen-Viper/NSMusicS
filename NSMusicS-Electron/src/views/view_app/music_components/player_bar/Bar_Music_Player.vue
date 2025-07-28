@@ -799,9 +799,9 @@ watch(
   () => store_player_audio_logic.player_model_cue,
   (newValue) => {
     if (newValue) {
-      message.success(t('ButtonStart') + t('nsmusics.view_page.disk') + t('Play'))
+      message.success(t('ButtonStart') + 'CUE ' + t('nsmusics.view_page.disk') + t('Play'))
     } else {
-      message.success(t('ButtonClose') + t('nsmusics.view_page.disk') + t('Play'))
+      message.success(t('ButtonClose') + 'CUE ' + t('nsmusics.view_page.disk') + t('Play'))
       clearMarks()
     }
   }

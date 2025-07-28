@@ -1347,7 +1347,7 @@ onBeforeUnmount(() => {
                 <n-space vertical align="start" style="height: 280px; margin-left: 12px">
                   <n-space style="margin-top: 26px; margin-left: 11px">
                     <div style="font-size: 32px; font-weight: 600">
-                      {{ $t('nsmusics.view_page.disk') }}
+                      {{ 'CUE ' + $t('nsmusics.view_page.disk') }}
                     </div>
                     <div
                       v-if="store_player_audio_info.this_audio_song_name.length > 0"

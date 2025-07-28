@@ -29,7 +29,7 @@ onMounted(async () => {
     { type: 'media', name: computed(() => t('entity.track_other')), items: [] },
     { type: 'album', name: computed(() => t('entity.album_other')), items: [] },
     { type: 'artist', name: computed(() => t('entity.artist_other')), items: [] },
-    { type: 'media_cue', name: computed(() => t('nsmusics.view_page.disk')), items: [] },
+    { type: 'media_cue', name: computed(() => 'CUE ' + t('nsmusics.view_page.disk')), items: [] },
   ]
   //
   await store_view_charts_page_logic.fetchData_Charts()

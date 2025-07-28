@@ -72,7 +72,7 @@
       "mediaLibrary_media_tag_modify_local": "目前只能在本地模式浏览|修改标签信息",
       "hideHalfLyric": "隱藏當前跟隨的歌詞之前的歌詞",
       "guest": "客串",
-      "disk": "CUE 光碟",
+      "disk": "光碟",
       "warning_web_play_alac": "檢測到用戶使用web播放組件播放編碼為alac的m4a文件，正在啟用NineSong服务端的ffmpeg組件將alac轉碼為aac臨時音樂資源",
       "warning_mpv_play_alac": "請等待服務端響應, 需要等待數秒鐘轉碼完成並播放, 或者使用mpv播放組件即可跳過alac轉碼aac步驟",
       "virtual_orbit_division": "虛擬分軌",

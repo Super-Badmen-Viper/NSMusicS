@@ -1878,9 +1878,7 @@ onBeforeUnmount(() => {
                 effect="card"
                 :show-arrow="false"
                 :show-dots="false"
-                :current-index="
-                  store_player_audio_info.this_audio_Index_of_play_list_carousel
-                "
+                :current-index="store_player_audio_info.this_audio_Index_of_play_list_carousel"
                 direction="horizontal"
                 dot-placement="bottom"
                 :prev-slide-style="{
