@@ -31,6 +31,7 @@ export const store_view_media_page_logic = reactive({
   page_songlists_options_Sort_key: [],
   page_songlists_multi_sort: '',
   page_songlists_library_path: '',
+  page_songlists_library_folder_path: '',
   page_songlists_suffix: '',
   page_songlists_bitrate_range: [0, 0],
 

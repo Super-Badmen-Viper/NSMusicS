@@ -1524,4 +1524,18 @@ function change_home_Files_temporary_type() {
   color: var(--primary-color-hover);
   background-color: transparent;
 }
+
+.n-base-selection .n-base-selection-label .n-base-selection-input .n-base-selection-input__content {
+  font-size: 15px;
+  font-weight: 600;
+}
+.n-statistic .n-statistic__label {
+  font-size: 15px;
+  font-weight: 600;
+}
+.n-statistic .n-statistic-value .n-statistic-value__content {
+  font-size: 24px;
+  font-weight: 600;
+}
+
 </style>

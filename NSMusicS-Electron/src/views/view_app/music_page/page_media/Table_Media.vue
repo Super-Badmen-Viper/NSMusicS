@@ -1505,6 +1505,7 @@ const stopWatching_boolHandleItemClick_Played = watch(
 
 ///
 const browseFolderOptions = ref([])
+const browseFolderPathOptions = ref([])
 const audioSuffixOptions = ref([
   // 第一梯队：绝对主流
   { label: 'mp3', value: 'mp3' },
@@ -1564,6 +1565,22 @@ async function filter_media_folder_path() {
     store_view_media_page_logic.page_songlists_suffix.length > 0
   //
   await store_general_fetch_media_list.fetchData_Media()
+}
+async function find_server_folder_path(path: string) {
+  if(path === undefined || path === '') {
+    path = store_view_media_page_logic.page_songlists_library_path
+  }
+  const result = await folder_Entity_ApiService_of_NineSong.browseFolder_Entity(path)
+  if (result) {
+    browseFolderPathOptions.value = result.map((item: any) => ({
+      label: item.name,
+      value: item.path,
+    }))
+    browseFolderPathOptions.value.unshift({
+      label: '...',
+      value: store_view_media_page_logic.page_songlists_library_path,
+    })
+  }
 }
 
 ////// view songlist_view Remove data
@@ -1860,6 +1877,41 @@ onBeforeUnmount(() => {
                     "
                   >
                     <span style="font-size: 14px; font-weight: 600">{{
+                        $t('Audio') + $t('LabelFormat')
+                      }}</span>
+                    <n-space vertical>
+                      <n-select
+                        v-model:value="store_view_media_page_logic.page_songlists_suffix"
+                        :options="audioSuffixOptions"
+                        placement="bottom"
+                        style="width: 200px"
+                        @update:value="filter_media_folder_path"
+                      />
+                      <n-button
+                        strong
+                        secondary
+                        @click="
+                          () => {
+                            store_view_media_page_logic.page_songlists_suffix = ''
+                            filter_media_folder_path()
+                          }
+                        "
+                      >
+                        {{ $t('common.clear') }}
+                      </n-button>
+                    </n-space>
+                  </n-space>
+                </n-space>
+                <n-space justify="space-between">
+                  <n-space
+                    vertical
+                    v-if="
+                      !store_server_user_model.model_server_type_of_web ||
+                      (store_server_user_model.model_server_type_of_web &&
+                        store_server_users.server_select_kind === 'ninesong')
+                    "
+                  >
+                    <span style="font-size: 14px; font-weight: 600">{{
                       $t('HeaderLibraries')
                     }}</span>
                     <n-space vertical>
@@ -1893,14 +1945,16 @@ onBeforeUnmount(() => {
                     "
                   >
                     <span style="font-size: 14px; font-weight: 600">{{
-                      $t('Audio') + $t('LabelFormat')
-                    }}</span>
+                        $t('Folders') + $t('Filters')
+                      }}</span>
                     <n-space vertical>
                       <n-select
-                        v-model:value="store_view_media_page_logic.page_songlists_suffix"
-                        :options="audioSuffixOptions"
+                        :disabled="store_view_media_page_logic.page_songlists_library_path.length === 0"
+                        v-model:value="store_view_media_page_logic.page_songlists_library_folder_path"
+                        :options="browseFolderPathOptions"
                         placement="bottom"
                         style="width: 200px"
+                        @click="find_server_folder_path(store_view_media_page_logic.page_songlists_library_folder_path)"
                         @update:value="filter_media_folder_path"
                       />
                       <n-button
@@ -1908,7 +1962,7 @@ onBeforeUnmount(() => {
                         secondary
                         @click="
                           () => {
-                            store_view_media_page_logic.page_songlists_suffix = ''
+                            store_view_media_page_logic.page_songlists_library_folder_path = ''
                             filter_media_folder_path()
                           }
                         "

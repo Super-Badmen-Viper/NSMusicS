@@ -250,6 +250,11 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
   ) {
     url = url.includes('api') ? url : url + '/api'
     folder_path = folder_path.replace(/\//g, '\\')
+    if(folder_path.length > 0){
+      store_view_media_page_logic.page_songlists_library_folder_path =
+        store_view_media_page_logic.page_songlists_library_folder_path.replace(/\//g, '\\')
+    }
+    const folder_path_sub_filter = store_view_media_page_logic.page_songlists_library_folder_path
     let song_list = []
     let totalCount = 0
     if (playlist_id === '') {
@@ -267,7 +272,8 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
           suffix,
           min_bitrate.toString(),
           max_bitrate.toString(),
-          folder_path
+          folder_path,
+          folder_path_sub_filter
         )
         song_list = data['ninesong-response']['mediaFiles']
         totalCount = data['ninesong-response']['count']
@@ -284,7 +290,8 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
           suffix,
           min_bitrate.toString(),
           max_bitrate.toString(),
-          folder_path
+          folder_path,
+          folder_path_sub_filter
         )
         song_list = data['ninesong-response']['mediaFiles']
         totalCount = data['ninesong-response']['count']
@@ -305,7 +312,8 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
           suffix,
           min_bitrate.toString(),
           max_bitrate.toString(),
-          folder_path
+          folder_path,
+          folder_path_sub_filter
         )
         song_list = data['ninesong-response']['mediaFiles']
         totalCount = data['ninesong-response']['count']
@@ -323,7 +331,8 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
           suffix,
           min_bitrate.toString(),
           max_bitrate.toString(),
-          folder_path
+          folder_path,
+          folder_path_sub_filter
         )
         song_list = data['ninesong-response']['mediaFiles']
         totalCount = data['ninesong-response']['count']
