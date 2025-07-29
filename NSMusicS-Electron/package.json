@@ -39,6 +39,7 @@
     "file-uri-to-path": "^2.0.0",
     "hammerjs": "^2.0.8",
     "howler": "^2.2.4",
+    "json-editor-vue": "^0.18.1",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
     "node-cache": "^5.1.2",

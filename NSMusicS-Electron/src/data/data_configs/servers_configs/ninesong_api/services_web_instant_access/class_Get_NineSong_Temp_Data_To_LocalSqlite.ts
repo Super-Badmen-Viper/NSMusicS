@@ -26,6 +26,9 @@ import { MediaCues_ApiService_of_NineSong } from '../services_web/Scene/Music/Me
 import { store_view_media_cue_page_info } from '@/views/view_app/music_page/page_media_cue/store/store_view_media_cue_page_info'
 import { Recommend_ApiService_of_NineSong } from '../services_web/Scene/Music/Recommend/index_service'
 import { store_view_recommend_page_info } from '../../../../../views/view_app/music_page/page_recommend/store/store_view_recommend_page_info'
+import {
+  store_view_tag_page_info
+} from '../../../../../views/view_app/music_page/page_tag/store/store_view_tag_page_info'
 
 export class Get_NineSong_Temp_Data_To_LocalSqlite {
   private artistsApi = new Artists_ApiService_of_NineSong(store_server_login_info.server_url)
@@ -246,7 +249,8 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     suffix: string,
     min_bitrate: number,
     max_bitrate: number,
-    folder_path: string
+    folder_path: string,
+    metadata_model: boolean,
   ) {
     url = url.includes('api') ? url : url + '/api'
     folder_path = folder_path.replace(/\//g, '\\')
@@ -257,86 +261,107 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     const folder_path_sub_filter = store_view_media_page_logic.page_songlists_library_folder_path
     let song_list = []
     let totalCount = 0
-    if (playlist_id === '') {
-      if (multi_sorts.length === 0) {
-        const data = await this.mediasApi.getMedias(
-          _start,
-          _end,
-          _sort,
-          _order,
-          _starred,
-          _search,
-          year,
-          _album_id,
-          _artist_id,
-          suffix,
-          min_bitrate.toString(),
-          max_bitrate.toString(),
-          folder_path,
-          folder_path_sub_filter
-        )
-        song_list = data['ninesong-response']['mediaFiles']
-        totalCount = data['ninesong-response']['count']
+    if(!metadata_model) {
+      if (playlist_id === '') {
+        if (multi_sorts.length === 0) {
+          const data = await this.mediasApi.getMedias(
+            _start,
+            _end,
+            _sort,
+            _order,
+            _starred,
+            _search,
+            year,
+            _album_id,
+            _artist_id,
+            suffix,
+            min_bitrate.toString(),
+            max_bitrate.toString(),
+            folder_path,
+            folder_path_sub_filter
+          )
+          song_list = data['ninesong-response']['mediaFiles']
+          totalCount = data['ninesong-response']['count']
+        } else {
+          const data = await this.mediasApi.getMediasSort(
+            _start,
+            _end,
+            multi_sorts,
+            _starred,
+            _search,
+            year,
+            _album_id,
+            _artist_id,
+            suffix,
+            min_bitrate.toString(),
+            max_bitrate.toString(),
+            folder_path,
+            folder_path_sub_filter
+          )
+          song_list = data['ninesong-response']['mediaFiles']
+          totalCount = data['ninesong-response']['count']
+        }
       } else {
-        const data = await this.mediasApi.getMediasSort(
-          _start,
-          _end,
-          multi_sorts,
-          _starred,
-          _search,
-          year,
-          _album_id,
-          _artist_id,
-          suffix,
-          min_bitrate.toString(),
-          max_bitrate.toString(),
-          folder_path,
-          folder_path_sub_filter
-        )
-        song_list = data['ninesong-response']['mediaFiles']
-        totalCount = data['ninesong-response']['count']
+        if (multi_sorts.length === 0) {
+          const data = await this.mediasApi.getMedias_Playlist(
+            playlist_id,
+            _start,
+            _end,
+            _sort,
+            _order,
+            _starred,
+            _search,
+            year,
+            _album_id,
+            _artist_id,
+            suffix,
+            min_bitrate.toString(),
+            max_bitrate.toString(),
+            folder_path,
+            folder_path_sub_filter
+          )
+          song_list = data['ninesong-response']['mediaFiles']
+          totalCount = data['ninesong-response']['count']
+        } else {
+          const data = await this.mediasApi.getMedias_PlaylistSort(
+            playlist_id,
+            _start,
+            _end,
+            multi_sorts,
+            _starred,
+            _search,
+            year,
+            _album_id,
+            _artist_id,
+            suffix,
+            min_bitrate.toString(),
+            max_bitrate.toString(),
+            folder_path,
+            folder_path_sub_filter
+          )
+          song_list = data['ninesong-response']['mediaFiles']
+          totalCount = data['ninesong-response']['count']
+        }
       }
-    } else {
-      if (multi_sorts.length === 0) {
-        const data = await this.mediasApi.getMedias_Playlist(
-          playlist_id,
-          _start,
-          _end,
-          _sort,
-          _order,
-          _starred,
-          _search,
-          year,
-          _album_id,
-          _artist_id,
-          suffix,
-          min_bitrate.toString(),
-          max_bitrate.toString(),
-          folder_path,
-          folder_path_sub_filter
-        )
-        song_list = data['ninesong-response']['mediaFiles']
-        totalCount = data['ninesong-response']['count']
-      } else {
-        const data = await this.mediasApi.getMedias_PlaylistSort(
-          playlist_id,
-          _start,
-          _end,
-          multi_sorts,
-          _starred,
-          _search,
-          year,
-          _album_id,
-          _artist_id,
-          suffix,
-          min_bitrate.toString(),
-          max_bitrate.toString(),
-          folder_path,
-          folder_path_sub_filter
-        )
-        song_list = data['ninesong-response']['mediaFiles']
-        totalCount = data['ninesong-response']['count']
-      }
+    }else{
+      const data = await this.mediasApi.getMediaMetadatas(
+        _start,
+        _end,
+        _sort,
+        _order,
+        _starred,
+        _search,
+        year,
+        _album_id,
+        _artist_id,
+        suffix,
+        min_bitrate.toString(),
+        max_bitrate.toString(),
+        folder_path,
+        folder_path_sub_filter
+      )
+      song_list = data['ninesong-response']['mediaFiles']
+      totalCount = data['ninesong-response']['count']
     }
     ///
     if (Array.isArray(song_list) && song_list.length > 0) {
@@ -364,26 +389,41 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       }
       store_general_fetch_player_list._totalCount = totalCount
       const last_index =
-        store_general_fetch_media_list._load_model === 'search'
-          ? store_view_media_page_info.media_Files_temporary.length
-          : store_playlist_list_info.playlist_MediaFiles_temporary.length
+        !metadata_model ?
+          store_general_fetch_media_list._load_model === 'search'
+            ? store_view_media_page_info.media_Files_temporary.length
+            : store_playlist_list_info.playlist_MediaFiles_temporary.length
+          :
+          store_view_tag_page_info.tag_MediaFiles_temporary.length
       store_view_media_page_info.media_File_metadata = []
       song_list.map(async (song: any, index: number) => {
         const new_song = this.mapMedia(song, url, index, last_index)
-        if (store_general_fetch_media_list._load_model === 'search') {
-          store_view_media_page_info.media_File_metadata.push(song)
-          store_view_media_page_info.media_Files_temporary.push(new_song)
-        } else {
-          store_playlist_list_info.playlist_MediaFiles_temporary.push({
-            ...new_song,
-            play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
+        if(!metadata_model) {
+          if (store_general_fetch_media_list._load_model === 'search') {
+            store_view_media_page_info.media_File_metadata.push(song)
+            store_view_media_page_info.media_Files_temporary.push(new_song)
+          } else {
+            store_playlist_list_info.playlist_MediaFiles_temporary.push({
+              ...new_song,
+              play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
+            })
+          }
+        }else{
+          store_view_tag_page_info.tag_MediaFiles_metadata.push(song)
+          store_view_tag_page_info.tag_MediaFiles_temporary.push({
+            id: song.ID,
+            file_name: song.FileName,
+            path: song.Path,
+            absoluteIndex: index + 1 + last_index,
           })
         }
       })
-      if (store_general_fetch_media_list._load_model === 'play') {
-        store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
-          store_view_media_page_info.media_Files_temporary.map((item) => item.id)
-        store_app_configs_logic_save.save_system_playlist_item_id_config()
+      if(!metadata_model) {
+        if (store_general_fetch_media_list._load_model === 'play') {
+          store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
+            store_view_media_page_info.media_Files_temporary.map((item) => item.id)
+          store_app_configs_logic_save.save_system_playlist_item_id_config()
+        }
       }
     }
   }

@@ -19,6 +19,9 @@ import { Get_Jellyfin_Temp_Data_To_LocalSqlite } from '@/data/data_configs/serve
 import { store_playlist_appearance } from '@/views/view_app/music_components/player_list/store/store_playlist_appearance'
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
+import {
+  store_view_tag_page_info
+} from '../../../../../../../views/view_app/music_page/page_tag/store/store_view_tag_page_info'
 
 /**
  * -> 歌单加载: LoadList、歌曲列表: PlayList -> 合并联合查询
@@ -758,7 +761,8 @@ export const store_general_fetch_media_list = reactive({
             store_view_media_page_logic.page_songlists_suffix,
             store_view_media_page_logic.page_songlists_bitrate_range[0],
             store_view_media_page_logic.page_songlists_bitrate_range[1],
-            store_view_media_page_logic.page_songlists_library_path
+            store_view_media_page_logic.page_songlists_library_path,
+            store_view_tag_page_info.tag_metadata_find_model
           )
         }
       }

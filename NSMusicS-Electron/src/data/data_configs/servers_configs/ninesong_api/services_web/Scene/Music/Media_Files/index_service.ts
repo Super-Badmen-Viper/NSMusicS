@@ -34,6 +34,39 @@ export class Medias_ApiService_of_NineSong extends NineSong_Api_Services_Web {
       folder_path_sub_filter,
     })
   }
+  public async getMediaMetadatas(
+    start: string,
+    end: string,
+    sort: string,
+    order: string,
+    starred: string,
+    search: string,
+    year: string,
+    album_id: string,
+    artist_id: string,
+    suffix: string,
+    min_bitrate: string,
+    max_bitrate: string,
+    folder_path: string,
+    folder_path_sub_filter: string
+  ): Promise<any> {
+    return this.sendRequest('GET', 'medias/metadatas', {
+      start,
+      end,
+      sort,
+      order,
+      starred,
+      search,
+      year,
+      album_id,
+      artist_id,
+      suffix,
+      min_bitrate,
+      max_bitrate,
+      folder_path,
+      folder_path_sub_filter,
+    })
+  }
   public async getMedia_Ids(ids: string): Promise<any> {
     return this.sendRequest('GET', 'medias/ids', {
       ids,
