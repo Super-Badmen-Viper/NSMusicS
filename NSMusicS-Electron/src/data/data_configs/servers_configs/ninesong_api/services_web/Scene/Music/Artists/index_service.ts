@@ -18,6 +18,23 @@ export class Artists_ApiService_of_NineSong extends NineSong_Api_Services_Web {
       search,
     })
   }
+  public async getArtistMetadatas(
+    start: string,
+    end: string,
+    sort: string,
+    order: string,
+    starred: string,
+    search: string
+  ): Promise<any> {
+    return this.sendRequest('GET', 'artists/metadatas', {
+      start,
+      end,
+      sort,
+      order,
+      starred,
+      search,
+    })
+  }
   public async getArtistsSort(
     start: string,
     end: string,

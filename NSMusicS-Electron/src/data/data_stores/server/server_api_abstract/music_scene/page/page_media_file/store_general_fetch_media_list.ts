@@ -761,8 +761,7 @@ export const store_general_fetch_media_list = reactive({
             store_view_media_page_logic.page_songlists_suffix,
             store_view_media_page_logic.page_songlists_bitrate_range[0],
             store_view_media_page_logic.page_songlists_bitrate_range[1],
-            store_view_media_page_logic.page_songlists_library_path,
-            store_view_tag_page_info.tag_metadata_find_model
+            store_view_media_page_logic.page_songlists_library_path
           )
         }
       }

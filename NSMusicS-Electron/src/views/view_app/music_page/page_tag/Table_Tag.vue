@@ -2,7 +2,7 @@
 import {
   ref,
   onMounted,
-  onBeforeUnmount,
+  onBeforeUnmount, computed,
 } from 'vue'
 import {
   NMessageProvider,
@@ -54,8 +54,8 @@ onMounted(async () => {
   ///
   store_view_tag_page_info.tag_metadata_find_model = true;
   ///
-  store_view_tag_page_info.tag_MediaFiles_metadata = []
-  store_view_tag_page_info.tag_MediaFiles_temporary = []
+  store_view_tag_page_info.tag_LibraryItems_metadata = []
+  store_view_tag_page_info.tag_LibraryItems_temporary = []
   ///
 })
 onBeforeUnmount(() => {
@@ -63,16 +63,24 @@ onBeforeUnmount(() => {
   store_view_media_page_logic.page_songlists_library_path = ''
   store_view_media_page_logic.page_songlists_library_folder_path = ''
   ///
-  store_view_tag_page_info.tag_MediaFiles_metadata = []
-  store_view_tag_page_info.tag_MediaFiles_temporary = []
+  store_view_tag_page_info.tag_LibraryItems_metadata = []
+  store_view_tag_page_info.tag_LibraryItems_temporary = []
   ///
 })
 async function filter_media_folder_path() {
   ///
-  store_view_tag_page_info.tag_MediaFiles_metadata = []
-  store_view_tag_page_info.tag_MediaFiles_temporary = []
+  store_view_tag_page_info.tag_LibraryItems_metadata = []
+  store_view_tag_page_info.tag_LibraryItems_temporary = []
   ///
-  await store_general_fetch_media_list.fetchData_Media()
+  if (store_view_tag_page_info.tag_type_select === 'media') {
+    await store_general_fetch_media_list.fetchData_Media()
+  }else if (store_view_tag_page_info.tag_type_select === 'album') {
+    await store_general_fetch_album_list.fetchData_Album()
+  }else if (store_view_tag_page_info.tag_type_select === 'artist') {
+    await store_general_fetch_artist_list.fetchData_Artist()
+  }else if (store_view_tag_page_info.tag_type_select === 'media_cue') {
+    await store_general_fetch_media_cue_list.fetchData_Media()
+  }
 }
 async function find_server_folder_path(path: string) {
   if (path === undefined || path === '') {
@@ -91,11 +99,19 @@ async function find_server_folder_path(path: string) {
   }
 }
 
-import JsonEditorVue from 'json-editor-vue'
+import {
+  store_general_fetch_album_list
+} from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list'
+import {
+  store_general_fetch_artist_list
+} from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_artist/store_general_fetch_artist_list'
+import {
+  store_general_fetch_media_cue_list
+} from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list'
 const jsonValue = ref()
 function find_json_value(id: string){
   try{
-    jsonValue.value = store_view_tag_page_info.tag_MediaFiles_metadata.find(
+    jsonValue.value = store_view_tag_page_info.tag_LibraryItems_metadata.find(
       (item) => item.ID === id
     )
   }catch{
@@ -109,29 +125,94 @@ const onScrollEnd = async () => {
   if (isScrolling.value) return
   isScrolling.value = true
   if (store_server_user_model.model_server_type_of_web) {
-    await store_general_fetch_media_list.fetchData_Media_of_server_web_end()
+    if (store_view_tag_page_info.tag_type_select === 'media') {
+      await store_general_fetch_media_list.fetchData_Media_of_server_web_end()
+    }else if (store_view_tag_page_info.tag_type_select === 'album') {
+      await store_general_fetch_album_list.fetchData_Album_of_server_web_end()
+    }else if (store_view_tag_page_info.tag_type_select === 'artist') {
+      await store_general_fetch_artist_list.fetchData_Artist_of_server_web_end()
+    }else if (store_view_tag_page_info.tag_type_select === 'media_cue') {
+      await store_general_fetch_media_cue_list.fetchData_Media_of_server_web_end()
+    }
   }
   isScrolling.value = false
 }
+
+//////
+const tag_type_options = ref([
+  {
+    label: computed(() => t('entity.track_other')),
+    value: 'media',
+  },
+  {
+    label: computed(() => t('entity.album_other')),
+    value: 'album',
+  },
+  {
+    label: computed(() => t('entity.artist_other')),
+    value: 'artist',
+  },
+  {
+    label: computed(() => 'CUE ' + t('nsmusics.view_page.disk')),
+    value: 'media_cue',
+  },
+])
 </script>
 
 <template>
   <n-message-provider>
     <div style="position: absolute; top: 0">
-      <div style="font-size: 20px; font-weight: 600; margin-left: 11px">
-        {{ $t('Metadata') + $t('HeaderAdmin') }}
-        <span
-          v-if="
+      <n-space align="center">
+        <div style="font-size: 20px; font-weight: 600; margin-left: 11px">
+          {{ $t('Metadata') + $t('HeaderAdmin') + ': ' }}
+          <span
+            v-if="
             (store_server_user_model.model_server_type_of_web &&
               store_server_users.server_select_kind != 'ninesong') ||
             store_server_user_model.model_server_type_of_local
           "
-          style="color: crimson; font-weight: 600"
-        >
+            style="color: crimson; font-weight: 600"
+          >
           {{ ' | ' + $t('error.serverRequired') + ': NineSong' }}
           <br />
         </span>
-      </div>
+        </div>
+        <n-space align="center">
+          <n-select
+            size="small"
+            style="min-width: 136px"
+            :disabled="
+          !(
+            store_server_user_model.model_server_type_of_web &&
+            store_server_users.server_select_kind === 'ninesong'
+          )
+        "
+            :options="tag_type_options"
+            v-model:value="store_view_tag_page_info.tag_type_select"
+            @update:value="filter_media_folder_path"
+          />
+          <div
+            v-if="
+          !(
+            store_server_user_model.model_server_type_of_web &&
+            store_server_users.server_select_kind === 'ninesong'
+          )
+        "
+            style="font-size: 15px; font-weight: bold"
+          >
+            {{
+              '-> ' +
+              $t('Alternate') +
+              $t('Data') +
+              $t('LabelSource') +
+              ', ' +
+              $t('error.serverRequired') +
+              ': NineSong'
+            }}
+            <br />
+          </div>
+        </n-space>
+      </n-space>
     </div>
 
     <div class="tag-container">
@@ -139,13 +220,12 @@ const onScrollEnd = async () => {
       <div class="left-tag-panel">
         <n-card class="selection-tag-card" :bordered="false">
           <template #header>
-            <n-space justify="start">
+            <n-space justify="start" v-if="store_view_tag_page_info.tag_type_select === 'media'">
               <n-space
                 vertical
                 v-if="
-                  !store_server_user_model.model_server_type_of_web ||
-                  (store_server_user_model.model_server_type_of_web &&
-                    store_server_users.server_select_kind === 'ninesong')
+                  store_server_user_model.model_server_type_of_web &&
+                  store_server_users.server_select_kind === 'ninesong'
                 "
               >
                 <span style="font-size: 14px; font-weight: 600">{{ $t('HeaderLibraries') }}</span>
@@ -211,7 +291,12 @@ const onScrollEnd = async () => {
           </template>
           <DynamicScroller
             class="table_tag"
-            :items="store_view_tag_page_info.tag_MediaFiles_temporary"
+            :style="{
+              marginTop: store_view_tag_page_info.tag_type_select === 'media'
+                ? '0px'
+                : '20px',
+            }"
+            :items="store_view_tag_page_info.tag_LibraryItems_temporary"
             key-field="absoluteIndex"
             :minItemSize="50"
             @scroll-end="onScrollEnd"
@@ -233,13 +318,16 @@ const onScrollEnd = async () => {
                     </span>
                   </div>
                   <!-- Index -->
-                  <span class="index" style="margin-left: auto">
+                  <span class="index">
                     {{ item.absoluteIndex }}
                   </span>
                 </div>
               </DynamicScrollerItem>
             </template>
           </DynamicScroller>
+          <template #footer>
+            ...
+          </template>
         </n-card>
       </div>
 
@@ -251,16 +339,14 @@ const onScrollEnd = async () => {
               {{ $t('Browse') + $t('Metadata') + ' | ' + $t('EditMetadata') + $t('common.comingSoon') }}
             </n-h3>
           </template>
-          <div style="height: 100%;">
-            <JsonEditorVue
-              v-model="jsonValue"
-              v-bind="{/* local props & attrs */}"
-            />
+          <div style="height: 100%;overflow-y: auto;">
+            <json-viewer
+              style="margin-left: -20px;margin-top: -20px;"
+              :value="jsonValue">
+            </json-viewer>
           </div>
           <template #footer>
-<!--            <n-button type="primary">-->
-<!--              {{ $t('Save') }}-->
-<!--            </n-button>-->
+            ...
           </template>
         </n-card>
       </div>
@@ -357,7 +443,7 @@ const onScrollEnd = async () => {
 }
 
 .tag_info {
-  width: calc(100% - 13px);
+  width: calc(100% - 20px);
   height: 50px;
   display: flex;
   align-items: center;
@@ -371,6 +457,8 @@ const onScrollEnd = async () => {
   text-align: left;
   overflow: hidden;
   color: var(--text-color-1);
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .tag_file_name span:first-child {
@@ -388,8 +476,8 @@ const onScrollEnd = async () => {
 }
 
 .index {
-  width: 50px;
-  margin-left: 12px;
+  width: calc(10%);
+  margin-left: auto;
   color: var(--text-color-3);
   text-align: center;
 }

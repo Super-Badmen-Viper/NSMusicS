@@ -250,7 +250,6 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     min_bitrate: number,
     max_bitrate: number,
     folder_path: string,
-    metadata_model: boolean,
   ) {
     url = url.includes('api') ? url : url + '/api'
     folder_path = folder_path.replace(/\//g, '\\')
@@ -261,6 +260,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     const folder_path_sub_filter = store_view_media_page_logic.page_songlists_library_folder_path
     let song_list = []
     let totalCount = 0
+    const metadata_model = store_view_tag_page_info.tag_metadata_find_model
     if(!metadata_model) {
       if (playlist_id === '') {
         if (multi_sorts.length === 0) {
@@ -394,7 +394,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
             ? store_view_media_page_info.media_Files_temporary.length
             : store_playlist_list_info.playlist_MediaFiles_temporary.length
           :
-          store_view_tag_page_info.tag_MediaFiles_temporary.length
+          store_view_tag_page_info.tag_LibraryItems_temporary.length
       store_view_media_page_info.media_File_metadata = []
       song_list.map(async (song: any, index: number) => {
         const new_song = this.mapMedia(song, url, index, last_index)
@@ -409,11 +409,10 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
             })
           }
         }else{
-          store_view_tag_page_info.tag_MediaFiles_metadata.push(song)
-          store_view_tag_page_info.tag_MediaFiles_temporary.push({
+          store_view_tag_page_info.tag_LibraryItems_metadata.push(song)
+          store_view_tag_page_info.tag_LibraryItems_temporary.push({
             id: song.ID,
             file_name: song.FileName,
-            path: song.Path,
             absoluteIndex: index + 1 + last_index,
           })
         }
@@ -438,55 +437,71 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     _search: string,
     year: string,
     playlist_id: string,
-    _artist_id: string
+    _artist_id: string,
   ) {
     url = url.includes('api') ? url : url + '/api'
     let song_list = []
     let totalCount = 0
-    if (playlist_id === '') {
-      if (multi_sorts.length === 0) {
-        const data = await this.cueFilesApi.getMediaCues(
-          _start,
-          _end,
-          _sort,
-          _order,
-          _starred,
-          _search,
-          year,
-          _artist_id
-        )
-        song_list = data['ninesong-response']['cueFiles']
-        totalCount = data['ninesong-response']['count']
+    const metadata_model = store_view_tag_page_info.tag_metadata_find_model
+    if(!metadata_model) {
+      if (playlist_id === '') {
+        if (multi_sorts.length === 0) {
+          const data = await this.cueFilesApi.getMediaCues(
+            _start,
+            _end,
+            _sort,
+            _order,
+            _starred,
+            _search,
+            year,
+            _artist_id
+          )
+          song_list = data['ninesong-response']['cueFiles']
+          totalCount = data['ninesong-response']['count']
+        } else {
+          const data = await this.cueFilesApi.getMediaCuesSort(
+            _start,
+            _end,
+            multi_sorts,
+            _starred,
+            _search,
+            year,
+            _artist_id
+          )
+          song_list = data['ninesong-response']['cueFiles']
+          totalCount = data['ninesong-response']['count']
+        }
       } else {
-        const data = await this.cueFilesApi.getMediaCuesSort(
-          _start,
-          _end,
-          multi_sorts,
-          _starred,
-          _search,
-          year,
-          _artist_id
-        )
-        song_list = data['ninesong-response']['cueFiles']
-        totalCount = data['ninesong-response']['count']
+        if (multi_sorts.length === 0) {
+          const data = await this.cueFilesApi.getMediaCues_Playlist(
+            playlist_id,
+            _start,
+            _end,
+            _sort,
+            _order,
+            _starred,
+            _search,
+            year,
+            _artist_id
+          )
+          song_list = data['ninesong-response']['cueFiles']
+          totalCount = data['ninesong-response']['count']
+        } else {
+        }
       }
-    } else {
-      if (multi_sorts.length === 0) {
-        const data = await this.cueFilesApi.getMediaCues_Playlist(
-          playlist_id,
-          _start,
-          _end,
-          _sort,
-          _order,
-          _starred,
-          _search,
-          year,
-          _artist_id
-        )
-        song_list = data['ninesong-response']['cueFiles']
-        totalCount = data['ninesong-response']['count']
-      } else {
-      }
+    }else{
+      const data = await this.cueFilesApi.getMediaCueMetadatas(
+        _start,
+        _end,
+        _sort,
+        _order,
+        _starred,
+        _search,
+        year,
+        _artist_id
+      )
+      song_list = data['ninesong-response']['cueFiles']
+      totalCount = data['ninesong-response']['count']
     }
     ///
     if (Array.isArray(song_list) && song_list.length > 0) {
@@ -514,25 +529,39 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       }
       store_general_fetch_player_list._totalCount = totalCount
       const last_index =
-        store_general_fetch_media_list._load_model === 'search'
-          ? store_view_media_page_info.media_Files_temporary.length
-          : store_playlist_list_info.playlist_MediaFiles_temporary.length
+        !metadata_model ?
+          store_general_fetch_media_list._load_model === 'search'
+            ? store_view_media_page_info.media_Files_temporary.length
+            : store_playlist_list_info.playlist_MediaFiles_temporary.length
+          :
+          store_view_tag_page_info.tag_LibraryItems_temporary.length
       store_view_media_page_info.media_File_metadata = []
       song_list.map(async (song: any, index: number) => {
         const new_song = this.mapMedia_Cue(song, url, index, last_index)
-        if (store_general_fetch_media_list._load_model === 'search') {
-          store_view_media_cue_page_info.media_File_metadata.push(song)
-          store_view_media_cue_page_info.media_Files_temporary.push(new_song)
-        } else {
-          store_playlist_list_info.playlist_MediaFiles_temporary.push({
-            ...new_song,
-            play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
+        if(!metadata_model) {
+          if (store_general_fetch_media_list._load_model === 'search') {
+            store_view_media_cue_page_info.media_File_metadata.push(song)
+            store_view_media_cue_page_info.media_Files_temporary.push(new_song)
+          } else {
+            store_playlist_list_info.playlist_MediaFiles_temporary.push({
+              ...new_song,
+              play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
+            })
+          }
+        }else{
+          store_view_tag_page_info.tag_LibraryItems_metadata.push(song)
+          store_view_tag_page_info.tag_LibraryItems_temporary.push({
+            id: song.ID,
+            file_name: song.FileName,
+            absoluteIndex: index + 1 + last_index,
           })
         }
       })
-      if (store_general_fetch_media_list._load_model === 'play') {
-        store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
-          store_view_media_cue_page_info.media_Files_temporary.map((item) => item.id)
+      if(!metadata_model) {
+        if (store_general_fetch_media_list._load_model === 'play') {
+          store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
+            store_view_media_cue_page_info.media_Files_temporary.map((item) => item.id)
+        }
       }
     }
   }
@@ -547,28 +576,44 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     _search: string,
     min_year: string,
     max_year: string,
-    _artist_id: string
+    _artist_id: string,
   ) {
     url = url.includes('api') ? url : url + '/api'
     let album_list = []
-    if (multi_sorts.length === 0) {
-      const data = await this.albumsApi.getAlbums(
+    const metadata_model = store_view_tag_page_info.tag_metadata_find_model
+    if(!metadata_model) {
+      if (multi_sorts.length === 0) {
+        const data = await this.albumsApi.getAlbums(
+          _start,
+          _end,
+          _sort,
+          _order,
+          _starred,
+          _search,
+          min_year,
+          max_year,
+          _artist_id
+        )
+        album_list = data['ninesong-response']['albums']
+      } else {
+        const data = await this.albumsApi.getAlbumsSort(
+          _start,
+          _end,
+          multi_sorts,
+          _starred,
+          _search,
+          min_year,
+          max_year,
+          _artist_id
+        )
+        album_list = data['ninesong-response']['albums']
+      }
+    }else{
+      const data = await this.albumsApi.getAlbumMetadatas(
         _start,
         _end,
         _sort,
         _order,
-        _starred,
-        _search,
-        min_year,
-        max_year,
-        _artist_id
-      )
-      album_list = data['ninesong-response']['albums']
-    } else {
-      const data = await this.albumsApi.getAlbumsSort(
-        _start,
-        _end,
-        multi_sorts,
         _starred,
         _search,
         min_year,
@@ -597,13 +642,26 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       if (_sort === 'play_date') {
         album_list = album_list.filter((album) => album.PlayCount > 0)
       }
-      const last_index = store_view_album_page_info.album_Files_temporary.length
+      const last_index =
+        !metadata_model ?
+          store_view_album_page_info.album_Files_temporary.length
+          :
+          store_view_tag_page_info.tag_LibraryItems_temporary.length
       store_view_album_page_info.album_File_metadata = []
       album_list.map(async (album: any, index: number) => {
-        store_view_album_page_info.album_File_metadata.push(album)
-        store_view_album_page_info.album_Files_temporary.push(
-          this.mapAlbum(album, url, index, last_index)
-        )
+        if(!metadata_model) {
+          store_view_album_page_info.album_File_metadata.push(album)
+          store_view_album_page_info.album_Files_temporary.push(
+            this.mapAlbum(album, url, index, last_index)
+          )
+        }else{
+          store_view_tag_page_info.tag_LibraryItems_metadata.push(album)
+          store_view_tag_page_info.tag_LibraryItems_temporary.push({
+            id: album.ID,
+            file_name: album.Name + ' - ' + album.Artist,
+            absoluteIndex: index + 1 + last_index,
+          })
+        }
       })
     }
   }
@@ -615,21 +673,27 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     _order: string,
     multi_sorts: string,
     _starred: string,
-    _search: string
+    _search: string,
   ) {
     url = url.includes('api') ? url : url + '/api'
     let artist_list = []
-    if (multi_sorts.length === 0) {
-      const data = await this.artistsApi.getArtists(_start, _end, _sort, _order, _starred, _search)
-      artist_list = data['ninesong-response']['artists']
-    } else {
-      const data = await this.artistsApi.getArtistsSort(
-        _start,
-        _end,
-        multi_sorts,
-        _starred,
-        _search
-      )
+    const metadata_model = store_view_tag_page_info.tag_metadata_find_model
+    if(!metadata_model) {
+      if (multi_sorts.length === 0) {
+        const data = await this.artistsApi.getArtists(_start, _end, _sort, _order, _starred, _search)
+        artist_list = data['ninesong-response']['artists']
+      } else {
+        const data = await this.artistsApi.getArtistsSort(
+          _start,
+          _end,
+          multi_sorts,
+          _starred,
+          _search
+        )
+        artist_list = data['ninesong-response']['artists']
+      }
+    }else{
+      const data = await this.artistsApi.getArtistMetadatas(_start, _end, _sort, _order, _starred, _search)
       artist_list = data['ninesong-response']['artists']
     }
     if (Array.isArray(artist_list) && artist_list.length > 0) {
@@ -652,13 +716,26 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       if (_sort === 'play_date') {
         artist_list = artist_list.filter((artist) => artist.PlayCount > 0)
       }
-      const last_index = store_view_artist_page_info.artist_Files_temporary.length
+      const last_index =
+        !metadata_model ?
+          store_view_artist_page_info.artist_Files_temporary.length
+          :
+          store_view_tag_page_info.tag_LibraryItems_temporary.length
       store_view_artist_page_info.artist_File_metadata = []
       artist_list.map(async (artist: any, index: number) => {
-        store_view_artist_page_info.artist_File_metadata.push(artist)
-        store_view_artist_page_info.artist_Files_temporary.push(
-          this.mapArtist(artist, url, index, last_index)
-        )
+        if(!metadata_model) {
+          store_view_artist_page_info.artist_File_metadata.push(artist)
+          store_view_artist_page_info.artist_Files_temporary.push(
+            this.mapArtist(artist, url, index, last_index)
+          )
+        }else{
+          store_view_tag_page_info.tag_LibraryItems_metadata.push(artist)
+          store_view_tag_page_info.tag_LibraryItems_temporary.push({
+            id: artist.ID,
+            file_name: artist.Name,
+            absoluteIndex: index + 1 + last_index,
+          })
+        }
       })
     }
   }

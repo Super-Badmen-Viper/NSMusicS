@@ -22,6 +22,27 @@ export class MediaCues_ApiService_of_NineSong extends NineSong_Api_Services_Web 
       artist_id,
     })
   }
+  public async getMediaCueMetadatas(
+    start: string,
+    end: string,
+    sort: string,
+    order: string,
+    starred: string,
+    search: string,
+    year: string,
+    artist_id: string
+  ): Promise<any> {
+    return this.sendRequest('GET', 'cues/metadatas', {
+      start,
+      end,
+      sort,
+      order,
+      starred,
+      search,
+      year,
+      artist_id,
+    })
+  }
   public async getMediaCuesSort(
     start: string,
     end: string,

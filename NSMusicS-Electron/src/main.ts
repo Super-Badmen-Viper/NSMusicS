@@ -12,6 +12,9 @@ import rate from 'vue-rate'
 import 'vue-rate/dist/vue-rate.css'
 app.use(rate)
 
+import JsonViewer from 'vue-json-viewer'
+app.use(JsonViewer)
+
 import contextmenu from 'v-contextmenu'
 import 'v-contextmenu/dist/themes/default.css'
 app.use(contextmenu)
