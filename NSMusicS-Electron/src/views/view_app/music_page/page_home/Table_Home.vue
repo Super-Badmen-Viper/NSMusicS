@@ -260,8 +260,10 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
       //
       store_general_fetch_player_list.fetchData_PlayList(true)
     }
-    store_playlist_list_info.reset_carousel()
-    return
+    if (store_view_home_page_info.home_Files_temporary_type_select != 'album') {
+      store_playlist_list_info.reset_carousel()
+      return
+    }
   }
   ///
   const temp_id = Get_this_album_info(item, list_name)
