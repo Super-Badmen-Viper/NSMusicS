@@ -19,34 +19,44 @@ the NineSong official version 1.0.0 will be released At the end of July 2025. If
 [NSMusicS-Docker-0.8.0 Download](https://github.com/Super-Badmen-Viper/NineSong):
 https://github.com/Super-Badmen-Viper/NineSong
 Compared to other music servers (such as Navidrome, Jellyfin, Emby, Plex, Subsonic, Gonic), it offers the following [enhanced features](https://github.com/Super-Badmen-Viper/NineSong):   
-- [ ] More comprehensive music library management:
+- More comprehensive music library management:
 - - [x] Rich single-level sorting options, supporting multi-level mixed sorting and multi-level mixed filtering;
 - - [x] deeper processing of composite tags to make the relevance between musics more comprehensive;
 - - [x] search jump optimization
-- - - [x] support for Chinese pinyin fuzzy search;
-- - - [x] support searching based on lyrics;
-- - - [x] support for quick initial letter jumping;
+- - - [x] Support fuzzy search based on title, album, artist, and lyrics (multiple mixed matching of Chinese Pinyin and simplified traditional Chinese characters);
 - - - [x] recommended similar search results;
-- - [ ] support for dual-page browsing mode (unlimited virtual list, paged list);
-- - [ ] support uploading, downloading, and synchronizing music files between the server and client;
-- [ ] More comprehensive music playback experience:
+- More comprehensive music playback experience:
 - - [x] various elegant playback styles[cover Square、cover Rotate、cover Beaut、cover Base、cover AlbumList];
 - - [x] exclusive playback modes for various music files[normal model、cue-music model];
-- [ ] CUE exclusive playback (CUE: wav、ape、flac) and CUE file management:
+- CUE exclusive playback (CUE: wav、ape、flac) and CUE file management:
 - - [x] Exclusive management page for music disc image (mirror) auxiliary files. 
-- - [ ] CUE playback styles suitable for music disc image features
-- - [ ] Visualized virtual track playback of CUE
+- - [x] CUE playback styles suitable for music disc image features
+- - [x] Visualized virtual track playback of CUE
 - More complete TAG import and management:
 - - [x] support for importing complete TAGs from more types of music files (including m4a、cue(wav、ape、flac));
+- Personalized music recommendations based on user usage data: 
+- - [x] Phase 1 (June): Add tag cloud and recommend music based on user interests.
+## Subsequent updates (Music Scene):
+- More comprehensive music library management:
+- - [ ] support for dual-page browsing mode (unlimited virtual list, paged list);
+- - [ ] support uploading, downloading, and synchronizing music files between the server and client;
+- More complete TAG import and management:
 - - [ ] support for user-visualized TAG management, allowing remote uploads, auto-associating, manual merging of artist-album-single TAGs;
 - - [ ] support for richer TAG fields: artist profile pictures, artist photos (multiple selection), album covers, song quality versions (multiple selection), and lyrics versions (single selection);
-- [x] Integrated free public welfare music TAG API, allowing users to obtain online TAGs for songs and choose whether to synchronize TAG data.
-- [ ] Support for multi-channel audio effects; support for Advanced/Standard/Simple EQ; (October)
-- [ ] Personalized music recommendations based on user usage data.
-- - [x] Phase 1 (June): Add tag cloud and recommend music based on user interests.
+- ISO exclusive playback and ISO file management:
+- - [ ] Exclusive management page for music disc image (mirror) auxiliary files.
+- - [ ] ISO playback styles suitable for music disc image features
+- - [ ] Visualized virtual track playback of ISO
+- Support more sound effects settings: 
+- - [ ] support for multi-channel audio effects 
+- - [ ] support for Advanced/Standard/Simple EQ 
+- Integrated free public welfare music TAG API: 
+- - [ ] allowing users to obtain online TAGs for songs and choose whether to synchronize TAG data.
+- Personalized music recommendations based on user usage data: 
 - - [ ] Phase 2 (August): Use lightweight recommendation algorithms based on usage data.
 - - [ ] Phase 3 (October): Build a music knowledge graph by analyzing music metadata to achieve smarter recommendations.
 - - [ ] Phase 4 (December): Combine the knowledge graph with LLM (DeepSeek) for advanced music recommendations.
+
 
 ## How to Deploy Docker: https://github.com/Super-Badmen-Viper/NineSong
 You first need to download the compressed file from the [ninesong releases](https://github.com/Super-Badmen-Viper/NineSong/releases/)  
