@@ -139,7 +139,7 @@ export class Audio_ApiService_of_Je extends Jellyfin_Api_Services_Web {
       const lyricUrl = `${baseUrl}/emby/Items/${itemId}/${PresentationUniqueKey}/Subtitles/2/Stream.js`
       const response2 = await axios.get(lyricUrl, {
         headers: {
-          Authorization: `MediaBrowser Token="${token}", Client="NSMusicS", Device="Desktop Client", DeviceId="NineSong", Version="1.9.7"`,
+          Authorization: `MediaBrowser Token="${token}", Client="NSMusicS", Device="Desktop Client", DeviceId="NineSong", Version="2.0.0"`,
         },
         timeout: 8000,
         responseType: 'json',
@@ -158,7 +158,7 @@ export class Audio_ApiService_of_Je extends Jellyfin_Api_Services_Web {
         const lyricUrl = `${baseUrl}/emby/Items/${itemId}/${MediaSourcesID}/Subtitles/2/Stream.js`
         const response2 = await axios.get(lyricUrl, {
           headers: {
-            Authorization: `MediaBrowser Token="${token}", Client="NSMusicS", Device="Desktop Client", DeviceId="NineSong", Version="1.9.7"`,
+            Authorization: `MediaBrowser Token="${token}", Client="NSMusicS", Device="Desktop Client", DeviceId="NineSong", Version="2.0.0"`,
           },
           timeout: 8000,
           responseType: 'json',
