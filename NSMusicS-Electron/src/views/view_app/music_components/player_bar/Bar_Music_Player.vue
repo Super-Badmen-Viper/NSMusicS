@@ -205,7 +205,6 @@ const Play_This_Audio_Path = () => {
       //
       clearInterval(timer)
       timer = setInterval(synchronize_playback_time, 200)
-      await store_player_audio_logic.player.setVolume(Number(store_player_audio_logic.play_volume))
       await store_player_audio_logic.player.play()
       if (!store_player_audio_logic.player_model_cue) {
         if (
@@ -1025,6 +1024,7 @@ const synchronize_playback_time = () => {
   try {
     set_slider_singleValue()
     get_current_play_time()
+    store_player_audio_logic.player.setVolume(Number(store_player_audio_logic.play_volume))
   } catch {}
 }
 let timer: string | number | NodeJS.Timeout | undefined

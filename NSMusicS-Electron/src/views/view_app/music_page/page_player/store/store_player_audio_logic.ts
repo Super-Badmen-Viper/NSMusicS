@@ -487,14 +487,6 @@ watch(
   }
 )
 watch(
-  () => store_player_audio_logic.play_volume,
-  async (newValue) => {
-    if (newValue && newValue >= 0) {
-      await store_player_audio_logic.player.setVolume(Number(store_player_audio_logic.play_volume))
-    }
-  }
-)
-watch(
   () => store_player_audio_logic.player_save_new_data,
   (newValue) => {
     store_app_configs_logic_save.save_system_config_of_Player_Configs_of_Audio_Info()
