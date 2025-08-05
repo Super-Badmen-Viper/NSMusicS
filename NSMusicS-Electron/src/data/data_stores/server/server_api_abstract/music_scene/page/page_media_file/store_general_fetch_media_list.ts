@@ -19,9 +19,7 @@ import { Get_Jellyfin_Temp_Data_To_LocalSqlite } from '@/data/data_configs/serve
 import { store_playlist_appearance } from '@/views/view_app/music_components/player_list/store/store_playlist_appearance'
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
-import {
-  store_view_tag_page_info
-} from '../../../../../../../views/view_app/music_page/page_tag/store/store_view_tag_page_info'
+import { store_view_tag_page_info } from '../../../../../../../views/view_app/music_page/page_tag/store/store_view_tag_page_info'
 
 /**
  * -> 歌单加载: LoadList、歌曲列表: PlayList -> 合并联合查询
@@ -733,36 +731,40 @@ export const store_general_fetch_media_list = reactive({
             )
           }
         } else if (store_server_users.server_select_kind === 'ninesong') {
-          const limit =
-            this._load_model === 'search'
-              ? String(this._end)
-              : String(store_general_fetch_player_list._end)
-          const startIndex =
-            this._load_model === 'search'
-              ? String(this._start)
-              : String(store_general_fetch_player_list._start)
-
           const get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
-          await get_NineSong_Temp_Data_To_LocalSqlite.get_media_list(
-            store_server_login_info.server_url,
-            startIndex,
-            limit,
-            _sort,
-            _order,
-            store_view_media_page_logic.page_songlists_multi_sort,
-            _starred,
-            _search,
-            store_view_media_page_logic.page_songlists_filter_year > 0
-              ? store_view_media_page_logic.page_songlists_filter_year
-              : '',
-            playlist_id,
-            _album_id,
-            _artist_id,
-            store_view_media_page_logic.page_songlists_suffix,
-            store_view_media_page_logic.page_songlists_bitrate_range[0],
-            store_view_media_page_logic.page_songlists_bitrate_range[1],
-            store_view_media_page_logic.page_songlists_library_path
-          )
+          if (this._media_id.length === 0) {
+            const limit =
+              this._load_model === 'search'
+                ? String(this._end)
+                : String(store_general_fetch_player_list._end)
+            const startIndex =
+              this._load_model === 'search'
+                ? String(this._start)
+                : String(store_general_fetch_player_list._start)
+
+            await get_NineSong_Temp_Data_To_LocalSqlite.get_media_list(
+              store_server_login_info.server_url,
+              startIndex,
+              limit,
+              _sort,
+              _order,
+              store_view_media_page_logic.page_songlists_multi_sort,
+              _starred,
+              _search,
+              store_view_media_page_logic.page_songlists_filter_year > 0
+                ? store_view_media_page_logic.page_songlists_filter_year
+                : '',
+              playlist_id,
+              _album_id,
+              _artist_id,
+              store_view_media_page_logic.page_songlists_suffix,
+              store_view_media_page_logic.page_songlists_bitrate_range[0],
+              store_view_media_page_logic.page_songlists_bitrate_range[1],
+              store_view_media_page_logic.page_songlists_library_path
+            )
+          } else {
+            await get_NineSong_Temp_Data_To_LocalSqlite.get_recommend_medias([this._media_id])
+          }
         }
       }
     } catch (error) {

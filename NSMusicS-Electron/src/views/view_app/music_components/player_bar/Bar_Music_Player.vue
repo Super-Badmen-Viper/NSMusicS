@@ -614,6 +614,11 @@ async function Play_Media_Order(model_num: string, increased: number) {
     let index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
       (item: any) => item.play_id === store_player_audio_info.this_audio_play_id
     )
+    if (index === -1) {
+      index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
+        (item: any) => item.id === store_player_audio_info.this_audio_song_id
+      )
+    }
 
     let stop_play = false
 

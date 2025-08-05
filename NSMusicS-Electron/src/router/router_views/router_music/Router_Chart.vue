@@ -11,7 +11,7 @@ onMounted(async () => {
 
 <template>
   <div class="view_show">
-    <Table_Charts/>
+    <Table_Charts />
   </div>
 </template>
 

@@ -42,6 +42,7 @@ import { store_playlist_list_logic } from '@/views/view_app/music_components/pla
 import { store_general_fetch_media_cue_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list'
 
 import { useI18n } from 'vue-i18n'
+import { store_view_recommend_page_info } from '@/views/view_app/music_page/page_recommend/store/store_view_recommend_page_info'
 const { t } = useI18n({ inheritLocale: true })
 const message = useMessage()
 const themeVars = useThemeVars()
@@ -333,28 +334,49 @@ async function update_playlist_addAlbum(id: any, playlist_id: any) {
 }
 
 async function add_to_playlist(next: boolean) {
-  const is_web_local =
-    (store_server_users.server_select_kind != 'jellyfin' &&
-      store_server_users.server_select_kind != 'emby') ||
-    store_server_user_model.model_server_type_of_local
-  const is_emby_recently_added =
-    store_server_users.server_select_kind === 'emby' && recently_added_contextmenu_of_emby.value
-
-  recently_added_contextmenu_of_emby.value = false
   let matchingItems = []
   const itemId = store_playlist_list_info.playlist_Menu_Item_Id
-
-  if (is_web_local || is_emby_recently_added) {
-    await store_general_fetch_media_list.fetchData_Media_Find_This_Album(itemId)
-    matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-      (item: Media_File) => item.album_id === itemId
-    )
+  // 兼容性代码，需要优化
+  if (
+    store_server_user_model.model_server_type_of_web &&
+    store_server_users.server_select_kind === 'ninesong' &&
+    store_view_home_page_info.home_Files_temporary_type_select != 'album'
+  ) {
+    if (store_view_home_page_info.home_Files_temporary_type_select === 'artist') {
+      await store_general_fetch_media_list.fetchData_Media_Find_This_Artist(itemId)
+      matchingItems = store_view_media_page_info.media_Files_temporary.filter(
+        (item: Media_File) => item.artist_id === itemId
+      )
+    } else if (store_view_home_page_info.home_Files_temporary_type_select === 'media') {
+      store_general_fetch_media_list._media_id = itemId
+      await store_general_fetch_media_list.fetchData_Media()
+      matchingItems = store_view_recommend_page_info.recommend_MediaFiles_temporary.filter(
+        (item: Media_File) => item.id === itemId
+      )
+    }
   } else {
-    store_general_fetch_media_list._media_id = itemId
-    await store_general_fetch_media_list.fetchData_Media()
-    matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-      (item: Media_File) => item.id === itemId
-    )
+    ///
+    const is_web_local =
+      (store_server_users.server_select_kind != 'jellyfin' &&
+        store_server_users.server_select_kind != 'emby') ||
+      store_server_user_model.model_server_type_of_local
+    const is_emby_recently_added =
+      store_server_users.server_select_kind === 'emby' && recently_added_contextmenu_of_emby.value
+
+    recently_added_contextmenu_of_emby.value = false
+
+    if (is_web_local || is_emby_recently_added) {
+      await store_general_fetch_media_list.fetchData_Media_Find_This_Album(itemId)
+      matchingItems = store_view_media_page_info.media_Files_temporary.filter(
+        (item: Media_File) => item.album_id === itemId
+      )
+    } else {
+      store_general_fetch_media_list._media_id = itemId
+      await store_general_fetch_media_list.fetchData_Media()
+      matchingItems = store_view_media_page_info.media_Files_temporary.filter(
+        (item: Media_File) => item.id === itemId
+      )
+    }
   }
 
   store_view_media_page_info.media_Files_temporary = []
@@ -1311,7 +1333,17 @@ function change_home_Files_temporary_type() {
       </DynamicScroller>
     </n-space>
 
-    <v-contextmenu ref="contextmenu" class="context-menu">
+    <v-contextmenu
+      v-if="
+        !(
+          store_server_user_model.model_server_type_of_web &&
+          store_server_users.server_select_kind === 'ninesong' &&
+          store_view_home_page_info.home_Files_temporary_type_select === 'media_cue'
+        )
+      "
+      ref="contextmenu"
+      class="context-menu"
+    >
       <v-contextmenu-submenu :title="menu_item_add_to_songlist">
         <v-contextmenu-item
           v-for="n in store_playlist_list_info.playlist_names_ALLLists"

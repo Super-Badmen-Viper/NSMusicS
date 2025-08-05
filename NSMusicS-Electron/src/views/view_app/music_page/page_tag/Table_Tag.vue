@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import {
-  ref,
-  onMounted,
-  onBeforeUnmount, computed,
-} from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import {
   NMessageProvider,
   NSpace,
@@ -52,14 +48,14 @@ onMounted(async () => {
   store_view_media_page_logic.page_songlists_library_path = ''
   store_view_media_page_logic.page_songlists_library_folder_path = ''
   ///
-  store_view_tag_page_info.tag_metadata_find_model = true;
+  store_view_tag_page_info.tag_metadata_find_model = true
   ///
   store_view_tag_page_info.tag_LibraryItems_metadata = []
   store_view_tag_page_info.tag_LibraryItems_temporary = []
   ///
 })
 onBeforeUnmount(() => {
-  store_view_tag_page_info.tag_metadata_find_model = false;
+  store_view_tag_page_info.tag_metadata_find_model = false
   store_view_media_page_logic.page_songlists_library_path = ''
   store_view_media_page_logic.page_songlists_library_folder_path = ''
   ///
@@ -74,11 +70,11 @@ async function filter_media_folder_path() {
   ///
   if (store_view_tag_page_info.tag_type_select === 'media') {
     await store_general_fetch_media_list.fetchData_Media()
-  }else if (store_view_tag_page_info.tag_type_select === 'album') {
+  } else if (store_view_tag_page_info.tag_type_select === 'album') {
     await store_general_fetch_album_list.fetchData_Album()
-  }else if (store_view_tag_page_info.tag_type_select === 'artist') {
+  } else if (store_view_tag_page_info.tag_type_select === 'artist') {
     await store_general_fetch_artist_list.fetchData_Artist()
-  }else if (store_view_tag_page_info.tag_type_select === 'media_cue') {
+  } else if (store_view_tag_page_info.tag_type_select === 'media_cue') {
     await store_general_fetch_media_cue_list.fetchData_Media()
   }
 }
@@ -99,22 +95,16 @@ async function find_server_folder_path(path: string) {
   }
 }
 
-import {
-  store_general_fetch_album_list
-} from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list'
-import {
-  store_general_fetch_artist_list
-} from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_artist/store_general_fetch_artist_list'
-import {
-  store_general_fetch_media_cue_list
-} from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list'
+import { store_general_fetch_album_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list'
+import { store_general_fetch_artist_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_artist/store_general_fetch_artist_list'
+import { store_general_fetch_media_cue_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list'
 const jsonValue = ref()
-function find_json_value(id: string){
-  try{
+function find_json_value(id: string) {
+  try {
     jsonValue.value = store_view_tag_page_info.tag_LibraryItems_metadata.find(
       (item) => item.ID === id
     )
-  }catch{
+  } catch {
     jsonValue.value = ''
   }
 }
@@ -127,11 +117,11 @@ const onScrollEnd = async () => {
   if (store_server_user_model.model_server_type_of_web) {
     if (store_view_tag_page_info.tag_type_select === 'media') {
       await store_general_fetch_media_list.fetchData_Media_of_server_web_end()
-    }else if (store_view_tag_page_info.tag_type_select === 'album') {
+    } else if (store_view_tag_page_info.tag_type_select === 'album') {
       await store_general_fetch_album_list.fetchData_Album_of_server_web_end()
-    }else if (store_view_tag_page_info.tag_type_select === 'artist') {
+    } else if (store_view_tag_page_info.tag_type_select === 'artist') {
       await store_general_fetch_artist_list.fetchData_Artist_of_server_web_end()
-    }else if (store_view_tag_page_info.tag_type_select === 'media_cue') {
+    } else if (store_view_tag_page_info.tag_type_select === 'media_cue') {
       await store_general_fetch_media_cue_list.fetchData_Media_of_server_web_end()
     }
   }
@@ -167,37 +157,37 @@ const tag_type_options = ref([
           {{ $t('Metadata') + $t('HeaderAdmin') + ': ' }}
           <span
             v-if="
-            (store_server_user_model.model_server_type_of_web &&
-              store_server_users.server_select_kind != 'ninesong') ||
-            store_server_user_model.model_server_type_of_local
-          "
+              (store_server_user_model.model_server_type_of_web &&
+                store_server_users.server_select_kind != 'ninesong') ||
+              store_server_user_model.model_server_type_of_local
+            "
             style="color: crimson; font-weight: 600"
           >
-          {{ ' | ' + $t('error.serverRequired') + ': NineSong' }}
-          <br />
-        </span>
+            {{ ' | ' + $t('error.serverRequired') + ': NineSong' }}
+            <br />
+          </span>
         </div>
         <n-space align="center">
           <n-select
             size="small"
             style="min-width: 136px"
             :disabled="
-          !(
-            store_server_user_model.model_server_type_of_web &&
-            store_server_users.server_select_kind === 'ninesong'
-          )
-        "
+              !(
+                store_server_user_model.model_server_type_of_web &&
+                store_server_users.server_select_kind === 'ninesong'
+              )
+            "
             :options="tag_type_options"
             v-model:value="store_view_tag_page_info.tag_type_select"
             @update:value="filter_media_folder_path"
           />
           <div
             v-if="
-          !(
-            store_server_user_model.model_server_type_of_web &&
-            store_server_users.server_select_kind === 'ninesong'
-          )
-        "
+              !(
+                store_server_user_model.model_server_type_of_web &&
+                store_server_users.server_select_kind === 'ninesong'
+              )
+            "
             style="font-size: 15px; font-weight: bold"
           >
             {{
@@ -270,7 +260,11 @@ const tag_type_options = ref([
                     :options="browseFolderPathOptions"
                     placement="bottom"
                     style="width: 170px"
-                    @click="find_server_folder_path(store_view_media_page_logic.page_songlists_library_folder_path)"
+                    @click="
+                      find_server_folder_path(
+                        store_view_media_page_logic.page_songlists_library_folder_path
+                      )
+                    "
                     @update:value="filter_media_folder_path"
                   />
                   <n-button
@@ -292,9 +286,7 @@ const tag_type_options = ref([
           <DynamicScroller
             class="table_tag"
             :style="{
-              marginTop: store_view_tag_page_info.tag_type_select === 'media'
-                ? '0px'
-                : '20px',
+              marginTop: store_view_tag_page_info.tag_type_select === 'media' ? '0px' : '20px',
             }"
             :items="store_view_tag_page_info.tag_LibraryItems_temporary"
             key-field="absoluteIndex"
@@ -325,9 +317,7 @@ const tag_type_options = ref([
               </DynamicScrollerItem>
             </template>
           </DynamicScroller>
-          <template #footer>
-            ...
-          </template>
+          <template #footer> ... </template>
         </n-card>
       </div>
 
@@ -335,19 +325,17 @@ const tag_type_options = ref([
       <div class="right-tag-panel">
         <n-card class="results-tag-card" :bordered="false">
           <template #header>
-            <n-h3 style="margin: 0;font-weight: 600;">
-              {{ $t('Browse') + $t('Metadata') + ' | ' + $t('EditMetadata') + $t('common.comingSoon') }}
+            <n-h3 style="margin: 0; font-weight: 600">
+              {{
+                $t('Browse') + $t('Metadata') + ' | ' + $t('EditMetadata') + $t('common.comingSoon')
+              }}
             </n-h3>
           </template>
-          <div style="height: 100%;overflow-y: auto;">
-            <json-viewer
-              style="margin-left: -20px;margin-top: -20px;"
-              :value="jsonValue">
+          <div style="height: 100%; overflow-y: auto">
+            <json-viewer style="margin-left: -20px; margin-top: -20px" :value="jsonValue">
             </json-viewer>
           </div>
-          <template #footer>
-            ...
-          </template>
+          <template #footer> ... </template>
         </n-card>
       </div>
     </div>

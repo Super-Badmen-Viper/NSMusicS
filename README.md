@@ -124,7 +124,7 @@ Because considering that the image upgrade cannot affect the database data, if y
 
 ## Group Chat
 - QQ群聊
-  - NSMusicS交流群（1）：228440692（已满500人）
+  - NSMusicS交流群（1）：（已满500人，请入2群）
   - NSMusicS交流群（2）：610551734
 - Other | None
 - 请注意，所有聊天组仅用于日常沟通、功能请求、需求报告和错误报告，只要您态度端正并支持九歌，在我力所能及的情况下，您的需求我都将尽力满足，但是这需要功能需求排期开发，但是您也可以通过赞助等等开源贡献方式来加快你的需求实现。
