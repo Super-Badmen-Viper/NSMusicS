@@ -67,8 +67,8 @@ const router = createRouter({
       },
     },
     {
-      path: '/song',
-      name: 'song',
+      path: '/media',
+      name: 'media',
       component: () => import('@/router/router_views/router_music/Router_Media.vue'),
       meta: {
         cleanup: true,

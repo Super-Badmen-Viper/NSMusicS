@@ -207,7 +207,6 @@ export const store_view_media_cue_page_logic = reactive({
       console.log('page_songlists_selected：' + newValue)
       await store_general_fetch_media_cue_list.fetchData_Media()
       await store_app_configs_logic_save.save_system_config_of_Player_Configs_of_Audio_Info()
-      store_app_configs_logic_save.save_system_config_of_View_Router_History()
       store_view_media_cue_page_logic.page_songlists_keyword = ''
     }
   },

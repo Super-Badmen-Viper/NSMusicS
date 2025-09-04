@@ -32,8 +32,8 @@ export const store_router_history_data_of_media = reactive({
     store_router_data_logic.clear_Files_temporary()
 
     const selectedRouterName = this.router_select_history_date_of_Media.router_name
-    if (selectedRouterName === 'song') {
-      store_router_data_info.router_select_model_media = true
+    if (selectedRouterName === 'media') {
+      store_router_data_info.router_select = 'media'
       await store_general_fetch_media_list.fetchData_Media()
       this.router_history_model_of_Media_scroll = true
     }

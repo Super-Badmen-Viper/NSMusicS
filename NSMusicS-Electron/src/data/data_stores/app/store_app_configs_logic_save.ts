@@ -407,34 +407,4 @@ export const store_app_configs_logic_save = reactive({
       // NineSong app server config 仅支持get查询所有、put单项创建：新ID值、put单项更新：已有ID值
     }
   },
-  save_system_config_of_View_Router_History() {
-    if (isElectron) {
-      try {
-        let db: any = null
-        db = require('better-sqlite3')(store_app_configs_info.nsmusics_db)
-        db.pragma('journal_mode = WAL')
-        db.exec('PRAGMA foreign_keys = OFF')
-
-        const system_Configs_Write = new Class_Set_System_Configs_Write()
-        system_Configs_Write.system_view_history(
-          db,
-          store_router_history_data_of_media.router_select_history_date_of_Media,
-          [],
-          undefined,
-          // router_select_history_date_of_Album.value,
-          [],
-          undefined,
-          // router_select_history_date_of_Artist.value,
-          []
-        )
-        this.save_system_config_of_App_Configs()
-        db.close()
-        db = null
-      } catch (e) {
-        console.error(e)
-      }
-    } else {
-      // other
-    }
-  },
 })

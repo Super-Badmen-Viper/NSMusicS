@@ -40,7 +40,7 @@ export const store_general_fetch_media_list = reactive({
             // store_player_appearance.player_mode_of_medialist_from_external_import = false;
           } else {
             store_router_data_logic.clear_Files_temporary()
-            store_router_data_info.router_select_model_media = true
+            store_router_data_info.router_select = 'media'
           }
           try {
             db = require('better-sqlite3')(store_app_configs_info.navidrome_db)
@@ -121,11 +121,9 @@ export const store_general_fetch_media_list = reactive({
                 }
                 const routerDate: Interface_View_Router_Date = {
                   id: 0,
-                  menu_select_active_key: 'song',
-                  router_name: 'song',
-                  router_select_model_media: true,
-                  router_select_model_album: false,
-                  router_select_model_artist: false,
+                  menu_select_active_key: 'media',
+                  router_name: 'media',
+                  router_select: 'media',
                   page_lists_keyword: store_view_media_page_logic.page_songlists_keyword,
                   page_songlists_keywordFilter:
                     store_view_media_page_logic.page_songlists_keywordFilter,
@@ -156,8 +154,8 @@ export const store_general_fetch_media_list = reactive({
               //////
             } else {
               if (store_router_history_data_of_media.router_select_history_date_of_Media) {
-                store_router_data_info.router.push('song')
-                store_router_data_info.router_select_model_media = true
+                store_router_data_info.router.push('media')
+                store_router_data_info.router_select = 'media'
                 store_view_media_page_logic.page_songlists_keyword =
                   store_router_history_data_of_media.router_select_history_date_of_Media.page_lists_keyword
                 store_view_media_page_logic.page_songlists_keywordFilter =

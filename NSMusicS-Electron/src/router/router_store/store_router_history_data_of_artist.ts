@@ -29,7 +29,7 @@ export const store_router_history_data_of_artist = reactive({
           store_router_data_logic.clear_Files_temporary()
           const selectedRouterName = this.router_select_history_date_of_Artist.router_name
           if (selectedRouterName === 'artist') {
-            store_router_data_info.router_select_model_artist = true
+            store_router_data_info.router_select = 'artist'
             store_general_fetch_artist_list.fetchData_Artist()
             this.router_history_model_of_Artist_scroll = true
           }

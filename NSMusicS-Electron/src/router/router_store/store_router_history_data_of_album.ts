@@ -28,7 +28,7 @@ export const store_router_history_data_of_album = reactive({
           store_router_data_logic.clear_Files_temporary()
           const selectedRouterName = this.router_select_history_date_of_Album.router_name
           if (selectedRouterName === 'album') {
-            store_router_data_info.router_select_model_album = true
+            store_router_data_info.router_select = 'album'
             store_general_fetch_album_list.fetchData_Album()
             this.router_history_model_of_Album_scroll = true
           }

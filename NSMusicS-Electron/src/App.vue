@@ -123,8 +123,8 @@ function create_menuOptions_appBar() {
       icon: renderIcon(AlbumFilled),
     },
     {
-      label: computed(() => renderRouterLink('song', t('entity.track_other'))),
-      key: 'song',
+      label: computed(() => renderRouterLink('media', t('entity.track_other'))),
+      key: 'media',
       icon: renderIcon(MusicNoteRound),
     },
     {
@@ -191,52 +191,52 @@ async function handleMenuSelection() {
   const menuActions = {
     categories: () => {
       clearFilesIfNeeded('categories')
-      store_router_data_info.router_select_model_categories = true
+      store_router_data_info.router_select = 'categories'
       fetchDataIfNeeded('categories')
     },
     charts: () => {
       clearFilesIfNeeded('charts')
-      store_router_data_info.router_select_model_charts = true
+      store_router_data_info.router_select = 'charts'
       fetchDataIfNeeded('charts')
     },
     recommend: () => {
       clearFilesIfNeeded('recommend')
-      store_router_data_info.router_select_model_recommend = true
+      store_router_data_info.router_select = 'recommend'
       fetchDataIfNeeded('recommend')
     },
     tag: () => {
       clearFilesIfNeeded('tag')
-      store_router_data_info.router_select_model_tag = true
+      store_router_data_info.router_select = 'tag'
       fetchDataIfNeeded('tag')
     },
     home: () => {
       clearFilesIfNeeded('home')
-      store_router_data_info.router_select_model_home = true
+      store_router_data_info.router_select = 'home'
       fetchDataIfNeeded('home')
     },
     media_cue: () => {
       clearFilesIfNeeded('media_cue')
-      store_router_data_info.router_select_model_media_cue = true
+      store_router_data_info.router_select = 'media_cue'
       fetchDataIfNeeded('media_cue')
     },
     update: () => {
       clearFilesIfNeeded()
-      store_router_data_info.router_select_model_update = true
+      store_router_data_info.router_select = 'update'
     },
     album: () => {
       clearFilesIfNeeded('album')
       fetchDataIfNeeded('album')
-      store_router_data_info.router_select_model_album = true
+      store_router_data_info.router_select = 'album'
     },
-    song: async () => {
+    media: async () => {
       clearFilesIfNeeded('media')
       fetchDataIfNeeded('media')
-      store_router_data_info.router_select_model_media = true
+      store_router_data_info.router_select = 'media'
     },
     artist: () => {
       clearFilesIfNeeded('artist')
       fetchDataIfNeeded('artist')
-      store_router_data_info.router_select_model_artist = true
+      store_router_data_info.router_select = 'artist'
     },
     login: () => {
       clearFilesIfNeeded()
@@ -350,38 +350,29 @@ routers.afterEach(async (to, from) => {
       console.error('获取页面顶部信息失败:', error)
     }
     store_router_data_logic.clear_Files_temporary()
+    store_router_data_info.router_select = to.name
     if (to.name === 'home') {
-      store_router_data_info.router_select_model_home = true
       store_router_data_info.router_name = to.name
     } else if (to.name === 'categories') {
-      store_router_data_info.router_select_model_categories = true
       store_router_data_info.router_name = to.name
     } else if (to.name === 'charts') {
-      store_router_data_info.router_select_model_charts = true
       store_router_data_info.router_name = to.name
     } else if (to.name === 'recommend') {
-      store_router_data_info.router_select_model_recommend = true
       store_router_data_info.router_name = to.name
     } else if (to.name === 'tag') {
-      store_router_data_info.router_select_model_tag = true
       store_router_data_info.router_name = to.name
     } else if (to.name === 'media_cue') {
-      store_router_data_info.router_select_model_media_cue = true
       store_router_data_info.router_name = to.name
       Init_page_cuelists_statistic_Data()
     } else if (to.name === 'update') {
-      store_router_data_info.router_select_model_update = true
       store_router_data_info.router_name = to.name
-    } else if (to.name === 'song') {
-      store_router_data_info.router_select_model_media = true
+    } else if (to.name === 'media') {
       store_router_data_info.router_name = to.name
       Init_page_songlists_statistic_Data()
     } else if (to.name === 'album') {
-      store_router_data_info.router_select_model_album = true
       store_router_data_info.router_name = to.name
       Init_page_albumlists_statistic_Data()
     } else if (to.name === 'artist') {
-      store_router_data_info.router_select_model_artist = true
       store_router_data_info.router_name = to.name
       Init_page_artistlists_statistic_Data()
     } else if (to.name === 'login') {
@@ -398,10 +389,9 @@ routers.afterEach(async (to, from) => {
     }
     store_app_configs_info.app_view_left_menu_select_activeKey = to.name
     console.log(to.name)
-    store_app_configs_logic_save.save_system_config_of_View_Router_History()
     store_app_configs_info.app_view_left_menu_collapsed = true
     if (!store_router_data_logic.clear_UserExperience_Model) {
-      if (to.name !== 'song') {
+      if (to.name !== 'media') {
         try {
           if (isElectron) {
             const memoryUsage = await ipcRenderer.invoke('window-get-memory')
@@ -1023,62 +1013,62 @@ function fullScreen() {
             <!--Menu View -->
             <RouterView
               class="view_show_data"
-              v-if="store_router_data_info.router_select_model_menu"
+              v-if="store_router_data_info.router_select === 'setting'"
             ></RouterView>
             <!--Home View -->
             <RouterView
               class="view_show_data"
-              v-else-if="store_router_data_info.router_select_model_home"
+              v-else-if="store_router_data_info.router_select === 'home'"
             ></RouterView>
             <!--Categories View -->
             <RouterView
               class="view_show_data"
-              v-else-if="store_router_data_info.router_select_model_categories"
+              v-else-if="store_router_data_info.router_select === 'categories'"
             ></RouterView>
             <!--Charts View -->
             <RouterView
               class="view_show_data"
-              v-else-if="store_router_data_info.router_select_model_charts"
+              v-else-if="store_router_data_info.router_select === 'charts'"
             ></RouterView>
             <!--Recommend View -->
             <RouterView
               class="view_show_data"
-              v-else-if="store_router_data_info.router_select_model_recommend"
+              v-else-if="store_router_data_info.router_select === 'recommend'"
             ></RouterView>
             <!--Tag View -->
             <RouterView
               class="view_show_data"
-              v-else-if="store_router_data_info.router_select_model_tag"
+              v-else-if="store_router_data_info.router_select === 'tag'"
             ></RouterView>
             <!--MediaCue View -->
             <RouterView
               class="view_show_data"
-              v-else-if="store_router_data_info.router_select_model_media_cue"
+              v-else-if="store_router_data_info.router_select === 'media_cue'"
             ></RouterView>
             <!--Updateing View-->
             <RouterView
               class="view_show_data"
-              v-else-if="store_router_data_info.router_select_model_update"
+              v-else-if="store_router_data_info.router_select === 'update'"
             ></RouterView>
             <!--Media View-->
             <RouterView
               class="view_show_data"
-              v-else-if="store_router_data_info.router_select_model_media"
+              v-else-if="store_router_data_info.router_select === 'media'"
             ></RouterView>
             <!--Album View-->
             <RouterView
               class="view_show_data"
-              v-else-if="store_router_data_info.router_select_model_album"
+              v-else-if="store_router_data_info.router_select === 'album'"
             ></RouterView>
             <!--Artist View-->
             <RouterView
               class="view_show_data"
-              v-else-if="store_router_data_info.router_select_model_artist"
+              v-else-if="store_router_data_info.router_select === 'artist'"
             ></RouterView>
             <!--Genre View-->
             <RouterView
               class="view_show_data"
-              v-else-if="store_router_data_info.router_select_model_genre"
+              v-else-if="store_router_data_info.router_select === 'genre'"
             ></RouterView>
             <!--Server_setting View-->
             <RouterView

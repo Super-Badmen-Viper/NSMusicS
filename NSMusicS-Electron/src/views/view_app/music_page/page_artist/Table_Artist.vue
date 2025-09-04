@@ -516,7 +516,7 @@ const Open_this_artist_all_artist_list_click = (artist_id: string) => {
     // Jellyfin 有相当一部分flac媒体无法识别为专辑
     store_player_appearance.player_mode_of_medialist_from_external_import = false
     store_view_media_page_logic.page_songlists_keyword = artist_id
-    store_router_data_info.router.push('song')
+    store_router_data_info.router.push('media')
   }
 }
 const Play_this_artist_all_media_list_click = async (artist_id: string) => {

@@ -1,12 +1,12 @@
+import { store_router_data_info } from '@/router/router_store/store_router_data_info'
+
 interface Interface_View_Router_Date {
   id: number
 
   menu_select_active_key: string
   router_name: string
 
-  router_select_model_media: boolean
-  router_select_model_album: boolean
-  router_select_model_artist: boolean
+  router_select: string
 
   page_lists_keyword: string
   page_songlists_keywordFilter: string

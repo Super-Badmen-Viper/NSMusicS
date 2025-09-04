@@ -28,7 +28,7 @@ export const store_general_fetch_artist_list = reactive({
   async fetchData_Artist() {
     // clear RouterView of vue-virtual-scroller data
     store_router_data_logic.clear_Files_temporary()
-    store_router_data_info.router_select_model_artist = true
+    store_router_data_info.router_select = 'artist'
     if (store_server_user_model.model_server_type_of_local) {
       if (isElectron) {
         let db: any = null
@@ -78,9 +78,7 @@ export const store_general_fetch_artist_list = reactive({
               id: 0,
               menu_select_active_key: 'artist',
               router_name: 'artist',
-              router_select_model_media: false,
-              router_select_model_album: false,
-              router_select_model_artist: true,
+              router_select: 'artist',
               page_lists_keyword: store_view_artist_page_logic.page_artistlists_keyword,
               stmt_string: stmt_artist_string,
               page_lists_selected: store_view_artist_page_logic.page_artistlists_selected,

@@ -33,7 +33,7 @@ export const store_general_fetch_album_list = reactive({
           store_player_appearance.player_mode_of_medialist_from_external_import = false
         } else {
           store_router_data_logic.clear_Files_temporary()
-          store_router_data_info.router_select_model_album = true
+          store_router_data_info.router_select = 'album'
         }
 
         try {
@@ -112,9 +112,7 @@ export const store_general_fetch_album_list = reactive({
                 id: 0,
                 menu_select_active_key: 'album',
                 router_name: 'album',
-                router_select_model_media: false,
-                router_select_model_album: true,
-                router_select_model_artist: false,
+                router_select: 'album',
                 page_lists_keyword: store_view_album_page_logic.page_albumlists_keyword,
                 stmt_string: stmt_album_string,
                 page_lists_selected: store_view_album_page_logic.page_albumlists_selected,
@@ -142,7 +140,7 @@ export const store_general_fetch_album_list = reactive({
           } else {
             if (store_router_history_data_of_album.router_select_history_date_of_Album) {
               store_router_data_info.router.push('album')
-              store_router_data_info.router_select_model_album = true
+              store_router_data_info.router_select = 'album'
               store_view_album_page_logic.page_albumlists_keyword =
                 store_router_history_data_of_album.router_select_history_date_of_Album.page_lists_keyword
               store_view_album_page_logic.page_albumlists_selected =
@@ -311,7 +309,7 @@ export const store_general_fetch_album_list = reactive({
 
     store_general_fetch_player_list.fetchData_PlayList(false)
 
-    store_router_data_info.router_select_model_album = true
+    store_router_data_info.router_select = 'album'
 
     if (store_playlist_list_info.playlist_MediaFiles_temporary.length > 0) {
       store_player_appearance.player_mode_of_lock_playlist = false

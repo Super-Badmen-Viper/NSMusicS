@@ -4,7 +4,7 @@ import Table_Media_List from '@/views/view_app/music_page/page_media/Table_Media
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 
 onMounted(async () => {
-  store_router_data_info.router_select = 'song'
+  store_router_data_info.router_select = 'media'
 })
 </script>
 
