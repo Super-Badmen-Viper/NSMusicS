@@ -169,25 +169,26 @@ export const store_player_audio_logic = reactive({
     store_player_audio_logic.player_no_progress_jump = false
     store_player_audio_logic.player_slider_currentTime_added_value = 0
     store_player_view.currentScrollIndex = 0
-    if (store_player_audio_logic.player.isPlaying) {
-      // 注意，此时currentTime将从0开始，需要计算附加值
-      if (silder_path) {
-        let newTime =
-          (Number(slider_value) / 100) * (await store_player_audio_logic.player.getDuration())
-        if (Number(slider_value) !== 0 && Number(slider_value) !== 100) {
-          store_player_audio_logic.player.setCurrentTime(newTime)
-        } else {
-          store_player_audio_logic.player.setCurrentTime(0)
-        }
+
+    // 注意，此时currentTime将从0开始，需要计算附加值
+    if (silder_path) {
+      let newTime =
+        (Number(slider_value) / 100) * (await store_player_audio_logic.player.getDuration())
+      if (Number(slider_value) !== 0 && Number(slider_value) !== 100) {
+        store_player_audio_logic.player.setCurrentTime(newTime)
       } else {
-        let newTime = Number(slider_value) / 1000
-        if (Number(slider_value) !== 0 && Number(slider_value) !== 100) {
-          store_player_audio_logic.player.setCurrentTime(newTime)
-        } else {
-          store_player_audio_logic.player.setCurrentTime(0)
-        }
+        store_player_audio_logic.player.setCurrentTime(0)
+      }
+    } else {
+      let newTime = Number(slider_value) / 1000
+      if (Number(slider_value) !== 0 && Number(slider_value) !== 100) {
+        store_player_audio_logic.player.setCurrentTime(newTime)
+      } else {
+        store_player_audio_logic.player.setCurrentTime(0)
       }
     }
+
+    store_player_audio_logic.player.isPlaying = true
   },
   async update_current_media_info(media_file: any, index: any) {
     const cue_page_play = typeof index != 'number'

@@ -16,7 +16,9 @@ async function login() {
     store_server_login_info.server_input_email,
     store_server_login_info.server_input_password
   )
-  if (!result) {
+  if (result === undefined){
+    message.error(t('error.invalidServer') + ': ' + t('HeaderConnectionFailure'))
+  }else if (!result) {
     message.error(t('HeaderLoginFailure'))
   }
 }

@@ -74,13 +74,14 @@ export const store_server_login_logic = reactive({
     }
   },
   async server_login(email: string, password: string) {
+    let userData = null
     try {
       const url =
         store_app_configs_info.desktop_system_kind === 'docker'
           ? '/api'
           : store_server_login_info.server_url
       const response = new Auth_Token_ApiService_of_NineSong(url)
-      const userData = await response.getAuth_Token(email, password)
+      userData = await response.getAuth_Token(email, password)
       if (userData && userData.accessToken && userData.refreshToken) {
         store_server_login_info.server_accessToken = String(userData.accessToken)
         store_server_login_info.server_refreshToken = String(userData.refreshToken)
@@ -101,15 +102,17 @@ export const store_server_login_logic = reactive({
           await store_app_configs_info.load_app()
           ///
           const route = String(sessionStorage.getItem('jwt_route'))
-          const route_path = route && route != '/login' ? route : '/home'
+          const route_path = route && route != '/login' && route != '/null' ? route : '/home'
           store_router_data_info.router.push(route_path)
         }
         return true
       }
     } catch (error) {
-      console.error('登录失败:', error)
+      console.error('登录失败，邮箱或密码错误:', error)
+      return false
     }
-    return false
+    console.error('未连接到服务器，请检查服务是否部署成功')
+    return undefined
   },
   server_logout() {
     sessionStorage.removeItem('jwt_token')
