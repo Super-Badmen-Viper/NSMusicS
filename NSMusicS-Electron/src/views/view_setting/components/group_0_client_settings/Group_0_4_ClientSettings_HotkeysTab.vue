@@ -12,12 +12,7 @@ const { t } = useI18n({
       <div style="font-weight: 600; font-size: 16px; margin-bottom: 4px">
         {{ $t('page.setting.hotkeysTab') }} >
       </div>
-      <n-space vertical>
-        <span style="font-weight: bold; font-size: 24px">
-          {{ $t('common.comingSoon') }}
-        </span>
-      </n-space>
-      <br />
+
     </n-space>
   </n-scrollbar>
 </template>

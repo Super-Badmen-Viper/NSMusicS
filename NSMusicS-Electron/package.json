@@ -34,6 +34,7 @@
     "clone": "^2.1.2",
     "echarts": "^5.6.0",
     "echarts-wordcloud": "^2.1.0",
+    "electron-localshortcut": "^3.2.1",
     "electron-updater": "^6.3.0-alpha.6",
     "fast-xml-parser": "^4.5.0",
     "file-uri-to-path": "^2.0.0",
@@ -54,7 +55,8 @@
     "vue-i18n": "^11.1.11",
     "vue-json-viewer": "^3.0.4",
     "vue-rate": "next",
-    "vue-virtual-scroller": "next"
+    "vue-virtual-scroller": "next",
+    "vue3-shortkey": "^4.0.0"
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.2",
