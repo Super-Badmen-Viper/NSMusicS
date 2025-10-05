@@ -387,7 +387,14 @@ routers.afterEach(async (to, from) => {
       store_router_data_info.router_select_model_server_setting = true
       store_router_data_info.router_name = to.name
     }
+    if (!store_router_data_info.router_name || store_router_data_info.router_name === 'null') {
+      store_router_data_info.router_name = 'home'
+    }
     store_app_configs_info.app_view_left_menu_select_activeKey = to.name
+    if (!store_app_configs_info.app_view_left_menu_select_activeKey || 
+        store_app_configs_info.app_view_left_menu_select_activeKey === 'null') {
+      store_app_configs_info.app_view_left_menu_select_activeKey = 'home'
+    }
     console.log(to.name)
     store_app_configs_info.app_view_left_menu_collapsed = true
     if (!store_router_data_logic.clear_UserExperience_Model) {

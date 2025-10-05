@@ -15,7 +15,7 @@ app.use(rate)
 import JsonViewer from 'vue-json-viewer'
 app.use(JsonViewer)
 
-app.use(require('vue3-shortkey'))
+// app.use(require('vue3-shortkey'))
 
 import contextmenu from 'v-contextmenu'
 import 'v-contextmenu/dist/themes/default.css'
