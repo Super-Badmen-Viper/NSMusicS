@@ -355,30 +355,30 @@ export class Class_Get_System_Configs_Read {
           Authorization: `Bearer ${store_server_login_info.server_accessToken}`,
         },
       })
-      response_server_Configs.data.forEach((row: any) => {
-        this.server_Configs.value.push({
-          id: row.ID,
-          server_name: row.ServerName,
-          url: row.URL,
-          user_name: row.UserName,
-          password: row.Password,
-          last_login_at: row.LastLoginAt,
-          type: row.Type,
-        })
-      })
-      response_server_Configs.data.forEach((row) => {
-        if (row.ID === '' + this.app_Configs.value['server_select']) {
-          this.server_Configs_Current.value = {
-            id: row.ID,
-            server_name: row.ServerName,
-            url: row.URL,
-            user_name: row.UserName,
-            password: row.Password,
-            last_login_at: row.LastLoginAt,
-            type: row.Type,
-          }
-        }
-      })
+      if(response_server_Configs != undefined && response_server_Configs.data != undefined) {
+          response_server_Configs.data.forEach((row: any) => {
+              this.server_Configs.value.push({
+                  id: row.ID,
+                  server_name: row.ServerName,
+                  url: row.URL,
+                  user_name: row.UserName,
+                  password: row.Password,
+                  last_login_at: row.LastLoginAt,
+                  type: row.Type,
+              })
+              if (row.ID === '' + this.app_Configs.value['server_select']) {
+                  this.server_Configs_Current.value = {
+                      id: row.ID,
+                      server_name: row.ServerName,
+                      url: row.URL,
+                      user_name: row.UserName,
+                      password: row.Password,
+                      last_login_at: row.LastLoginAt,
+                      type: row.Type,
+                  }
+              }
+          })
+      }
       //
       const response_player_Configs_of_Audio_Info = await axios.get('/api/app/audio', {
         headers: {
