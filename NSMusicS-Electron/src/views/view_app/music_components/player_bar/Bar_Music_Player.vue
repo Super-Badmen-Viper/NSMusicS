@@ -1345,7 +1345,7 @@ watch(
               </span>
               <span style="font-size: 16px"> - </span>
               <template
-                v-for="artist in store_player_audio_info.this_audio_artist_name.split(/[\/|｜、]/)"
+                v-for="artist in (store_player_audio_info.this_audio_artist_name.split(/[\/|｜、]/) ?? store_player_audio_info.this_audio_artist_name)"
               >
                 <span id="bar_artist_name_part" @click="handleItemClick_artist(artist)">{{
                   artist + '&nbsp'
