@@ -1110,10 +1110,11 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
                   '/emby/Items/' +
                   (album.PrimaryImageItemId
                     ? album.PrimaryImageItemId
-                    : album.ParentBackdropItemId) +
+                    : album.Id ? album.Id : album.ParentBackdropItemId) +
                   (album.PrimaryImageItemId
                     ? '/Images/Primary?fillWidth=122&fillHeight=122&tag='
-                    : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
+                    : album.Id ? '/Images/Primary?fillWidth=122&fillHeight=122&tag='
+                          : '/Images/Backdrop?fillWidth=122&fillHeight=122&tag=') +
                   (album.PrimaryImageTag ?? album.ParentBackdropImageTags?.[0] ?? 'default') +
                   '&api_key=' +
                   store_server_user_model.authorization_of_Je
