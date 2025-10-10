@@ -93,7 +93,7 @@ export const store_app_configs_info = reactive({
     if (isElectron) {
       /// update_info
       try {
-        store_app_configs_info.version = '2.0.1'
+        store_app_configs_info.version = '2.0.2'
         console.log('Current Version:', store_app_configs_info.version)
         const xmlUrl =
           'https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-Update/NSMusicS.xml'
