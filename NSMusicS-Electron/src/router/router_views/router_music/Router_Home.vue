@@ -4,7 +4,8 @@ import Table_Home_List_ALL_Line from '@/views/view_app/music_page/page_home/Tabl
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 
 onMounted(async () => {
-  store_router_data_info.router_select = 'home'
+  if(store_router_data_info.router_select != 'home')
+    store_router_data_info.router_select = 'home'
 })
 </script>
 

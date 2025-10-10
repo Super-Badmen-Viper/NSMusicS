@@ -309,7 +309,10 @@ export const store_general_fetch_album_list = reactive({
 
     store_general_fetch_player_list.fetchData_PlayList(false)
 
-    store_router_data_info.router_select = 'album'
+    if(store_router_data_info.router_select != 'home') {
+      store_router_data_info.router_select = 'album'
+      // home-page-album 传入则不需要指定album模式
+    }
 
     if (store_playlist_list_info.playlist_MediaFiles_temporary.length > 0) {
       store_player_appearance.player_mode_of_lock_playlist = false

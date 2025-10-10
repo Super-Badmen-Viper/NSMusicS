@@ -308,13 +308,13 @@ function fetchDataIfNeeded(
     if (type === 'home') {
       store_general_fetch_home_list.fetchData_Home()
     } else if (type === 'categories') {
-      store_general_fetch_home_list.fetchData_Home()
+
     } else if (type === 'charts') {
-      store_general_fetch_home_list.fetchData_Home()
+
     } else if (type === 'recommend') {
-      store_general_fetch_home_list.fetchData_Home()
+
     } else if (type === 'tag') {
-      store_general_fetch_home_list.fetchData_Home()
+
     } else if (type === 'media_cue') {
       store_general_fetch_media_cue_list.fetchData_Media()
     } else if (type === 'album') {

@@ -34,15 +34,15 @@ watch(
     if (!store_playlist_appearance.playlist_show) {
       store_router_data_info.router_select = newValue
       if (newValue === 'home') {
-        store_general_fetch_home_list.fetchData_Home()
+        await store_general_fetch_home_list.fetchData_Home()
       } else if (newValue === 'categories') {
-        store_general_fetch_home_list.fetchData_Home()
+
       } else if (newValue === 'charts') {
-        store_general_fetch_home_list.fetchData_Home()
+
       } else if (newValue === 'recommend') {
-        store_general_fetch_home_list.fetchData_Home()
+
       } else if (newValue === 'tag') {
-        store_general_fetch_home_list.fetchData_Home()
+
       } else if (newValue === 'media_cue') {
         await store_general_fetch_media_cue_list.fetchData_Media()
       } else if (newValue === 'media') {
@@ -53,9 +53,9 @@ watch(
           await store_general_model_player_list.get_playlists_info()
         }
       } else if (newValue === 'album') {
-        store_general_fetch_album_list.fetchData_Album()
+        await store_general_fetch_album_list.fetchData_Album()
       } else if (newValue === 'artist') {
-        store_general_fetch_artist_list.fetchData_Artist()
+        await store_general_fetch_artist_list.fetchData_Artist()
       }
     }
   }
