@@ -1,5 +1,5 @@
 import { reactive } from 'vue'
-import { Set_LibraryInfo_To_LocalSqlite } from '@/data/data_configs/local_configs/class_Set_LibraryInfo_To_LocalSqlite'
+import { Set_LibraryInfo_To_LocalSqlite } from '@/data/data_app/repository_app/class_Set_LibraryInfo_To_LocalSqlite'
 
 export const store_local_data_select_logic = reactive({
   /// server update

@@ -22,9 +22,9 @@ import { Icon } from '@vicons/utils'
 import { computed, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { type InputInst, NButton, NIcon, useMessage, useThemeVars } from 'naive-ui'
 import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
-import { store_player_audio_info } from '@/views/view_app/music_page/page_player/store/store_player_audio_info'
-import { store_view_album_page_info } from '@/views/view_app/music_page/page_album/store/store_view_album_page_info'
-import { store_view_album_page_logic } from '@/views/view_app/music_page/page_album/store/store_view_album_page_logic'
+import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
+import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
+import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 import { store_router_history_data_of_album } from '@/router/router_store/store_router_history_data_of_album'
 import { store_general_fetch_album_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list'
@@ -35,15 +35,15 @@ import { store_server_user_model } from '@/data/data_stores/server/store_server_
 ////// changed_data write to sqlite
 import { store_local_data_set_albumInfo } from '@/data/data_stores/local/local_data_synchronization/store_local_data_set_albumInfo'
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local/local_data_synchronization/store_local_data_set_mediaInfo'
-import { store_view_media_page_info } from '@/views/view_app/music_page/page_media/store/store_view_media_page_info'
-import { store_playlist_list_info } from '@/views/view_app/music_components/player_list/store/store_playlist_list_info'
-import { store_view_media_page_logic } from '@/views/view_app/music_page/page_media/store/store_view_media_page_logic'
+import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
+import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
+import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_general_fetch_media_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'
-import { store_player_appearance } from '@/views/view_app/music_page/page_player/store/store_player_appearance'
+import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
 ////// right menu
 import { store_app_configs_logic_save } from '@/data/data_stores/app/store_app_configs_logic_save'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
-import { store_player_tag_modify } from '@/views/view_app/music_page/page_player/store/store_player_tag_modify'
+import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
 
 const { t } = useI18n({
   inheritLocale: true,
@@ -58,7 +58,7 @@ const gridItems = ref(5)
 const itemSecondarySize = ref(185)
 import error_album from '@/assets/img/error_album.jpg'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
-import { store_player_audio_logic } from '@/views/view_app/music_page/page_player/store/store_player_audio_logic'
+import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { store_server_users } from '@/data/data_stores/server/store_server_users'
 import { store_general_model_player_list } from '@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list'
 import { debounce } from 'lodash'

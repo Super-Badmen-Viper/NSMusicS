@@ -1,10 +1,10 @@
 import { reactive } from 'vue'
-import { store_playlist_list_info } from '@/views/view_app/music_components/player_list/store/store_playlist_list_info'
+import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
 import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
-import { store_view_media_page_info } from '@/views/view_app/music_page/page_media/store/store_view_media_page_info'
-import { store_player_audio_logic } from '@/views/view_app/music_page/page_player/store/store_player_audio_logic'
-import { store_player_audio_info } from '@/views/view_app/music_page/page_player/store/store_player_audio_info'
-import { Get_PlaylistInfo_From_LocalSqlite } from '@/data/data_configs/local_configs/class_Get_PlaylistInfo_From_LocalSqlite'
+import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
+import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
+import { Get_PlaylistInfo_From_LocalSqlite } from '@/data/data_app/repository_app/class_Get_PlaylistInfo_From_LocalSqlite'
 import { store_general_model_player_list } from '@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list'
 
 export const store_playlist_list_logic = reactive({

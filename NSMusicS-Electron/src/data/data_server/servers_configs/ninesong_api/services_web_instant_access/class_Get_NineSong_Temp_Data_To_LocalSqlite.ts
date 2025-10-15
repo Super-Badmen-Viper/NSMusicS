@@ -25,8 +25,8 @@ import error_album from '@/assets/img/error_album.jpg'
 import { MediaCues_ApiService_of_NineSong } from '../services_web/Scene/Music/Media_Cue_Files/index_service'
 import { store_view_media_cue_page_info } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_info'
 import { Recommend_ApiService_of_NineSong } from '../services_web/Scene/Music/Recommend/index_service'
-import { store_view_recommend_page_info } from '../../../../../views/view_app/page/page_recommend/store/store_view_recommend_page_info'
-import { store_view_tag_page_info } from '../../../../../views/view_app/page/page_tag/store/store_view_tag_page_info'
+import { store_view_recommend_page_info } from '@/views/view_app/page/page_recommend/store/store_view_recommend_page_info'
+import { store_view_tag_page_info } from '@/views/view_app/page/page_tag/store/store_view_tag_page_info'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 
 export class Get_NineSong_Temp_Data_To_LocalSqlite {

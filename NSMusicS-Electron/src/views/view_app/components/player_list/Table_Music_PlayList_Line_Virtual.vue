@@ -3,8 +3,8 @@ import { ChevronLeft16Filled, ChevronRight16Filled } from '@vicons/fluent'
 
 ////// this_view views_components of navie ui
 import { ref, onMounted, computed } from 'vue'
-import { store_player_audio_info } from '@/views/view_app/music_page/page_player/store/store_player_audio_info'
-import { store_playlist_list_info } from '@/views/view_app/music_components/player_list/store/store_playlist_list_info'
+import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
+import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
 import { store_app_configs_logic_save } from '@/data/data_stores/app/store_app_configs_logic_save'
 
 ////// scrollbar of playlist_view
@@ -59,7 +59,7 @@ const { t } = useI18n({
 
 //////
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local/local_data_synchronization/store_local_data_set_mediaInfo'
-import { store_playlist_list_logic } from '@/views/view_app/music_components/player_list/store/store_playlist_list_logic'
+import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
 import { NIcon, useMessage, useThemeVars } from 'naive-ui'
 const message = useMessage()
 const themeVars = useThemeVars()
@@ -69,9 +69,9 @@ import { store_general_fetch_media_list } from '@/data/data_stores/server/server
 import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
 import { store_general_model_player_list } from '@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list'
 import { store_server_users } from '@/data/data_stores/server/store_server_users'
-import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
+import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_server/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
-import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_configs/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
+import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_server/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
 const contextmenu = ref(null)
 async function update_playlist_addMediaFile(id: any, playlist_id: any) {
   try {

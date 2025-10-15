@@ -50,7 +50,7 @@ const computed_i18n_Label_ViewSetConfig_Cover_4 = computed(() =>
 const computed_i18n_Label_Lyric_Not_Find = computed(() => t('HeaderNoLyrics'))
 
 // audio_class & player_bar & player_view
-import { store_player_view } from '@/views/view_app/music_page/page_player/store/store_player_view'
+import { store_player_view } from '@/views/view_app/page/page_player/store/store_player_view'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 
 ////// lyircs load
@@ -496,20 +496,20 @@ const unwatch_player_collapsed = watchEffect(() => {
 })
 
 ////// Animation lottie Load // lottie-web will cause memory leaks，so replace lottie-player_configs
-import { store_player_appearance } from '@/views/view_app/music_page/page_player/store/store_player_appearance'
-import { store_player_audio_info } from '@/views/view_app/music_page/page_player/store/store_player_audio_info'
-import { store_player_audio_logic } from '@/views/view_app/music_page/page_player/store/store_player_audio_logic'
+import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
+import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
+import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { store_app_configs_logic_save } from '@/data/data_stores/app/store_app_configs_logic_save'
 import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
 import { Pause, Play, PlayBack, PlayForward, VolumeMedium } from '@vicons/ionicons5'
-import Bar_Music_PlayList from '@/views/view_app/music_drawer/View_Player_PlayList.vue'
+import Bar_Music_PlayList from '@/views/view_app/drawer/View_Player_PlayList.vue'
 import { store_server_users } from '@/data/data_stores/server/store_server_users'
 import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
-import { store_player_tag_modify } from '@/views/view_app/music_page/page_player/store/store_player_tag_modify'
+import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local/local_data_synchronization/store_local_data_set_mediaInfo'
-import { store_view_media_page_logic } from '@/views/view_app/music_page/page_media/store/store_view_media_page_logic'
-import { store_view_media_page_info } from '@/views/view_app/music_page/page_media/store/store_view_media_page_info'
-import { store_playlist_list_info } from '@/views/view_app/music_components/player_list/store/store_playlist_list_info'
+import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
+import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
+import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
 
 ///
 const show_mini_album_model = ref(false)
@@ -559,9 +559,9 @@ const handleItemClick_Rating = (id: any, rating: any) => {
   if (item_file !== undefined) item_file.rating = rating
   if (item_playlist !== undefined) item_playlist.rating = rating
 }
-import { store_player_sound_effects } from '@/views/view_app/music_page/page_player/store/store_player_sound_effects'
-import { store_player_sound_speed } from '@/views/view_app/music_page/page_player/store/store_player_sound_speed'
-import { store_player_sound_more } from '@/views/view_app/music_page/page_player/store/store_player_sound_more'
+import { store_player_sound_effects } from '@/views/view_app/page/page_player/store/store_player_sound_effects'
+import { store_player_sound_speed } from '@/views/view_app/page/page_player/store/store_player_sound_speed'
+import { store_player_sound_more } from '@/views/view_app/page/page_player/store/store_player_sound_more'
 ////// open sound effects
 const Set_Player_Show_Sound_effects = () => {
   store_player_sound_effects.player_show_sound_effects =

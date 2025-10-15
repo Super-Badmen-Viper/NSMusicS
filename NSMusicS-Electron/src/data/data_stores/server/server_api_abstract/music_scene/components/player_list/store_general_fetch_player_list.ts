@@ -1,9 +1,9 @@
 import { reactive } from 'vue'
-import { store_view_media_page_info } from '@/views/view_app/music_page/page_media/store/store_view_media_page_info'
-import { store_playlist_list_info } from '@/views/view_app/music_components/player_list/store/store_playlist_list_info'
+import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
+import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
 import { store_app_configs_logic_save } from '@/data/data_stores/app/store_app_configs_logic_save'
-import { store_player_audio_info } from '@/views/view_app/music_page/page_player/store/store_player_audio_info'
-import { store_view_media_cue_page_info } from '@/views/view_app/music_page/page_media_cue/store/store_view_media_cue_page_info'
+import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
+import { store_view_media_cue_page_info } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_info'
 
 export const store_general_fetch_player_list = reactive({
   async fetchData_PlayList(cue_model: boolean) {

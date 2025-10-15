@@ -1,6 +1,6 @@
 import { reactive, watch } from 'vue'
-import { Set_LibraryInfo_To_LocalSqlite } from '@/data/data_configs/local_configs/class_Set_LibraryInfo_To_LocalSqlite'
-import { store_view_media_cue_page_info } from '@/views/view_app/music_page/page_media_cue/store/store_view_media_cue_page_info'
+import { Set_LibraryInfo_To_LocalSqlite } from '@/data/data_app/repository_app/class_Set_LibraryInfo_To_LocalSqlite'
+import { store_view_media_cue_page_info } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_info'
 import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
 import { store_general_fetch_media_cue_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
@@ -10,7 +10,7 @@ import { store_local_data_set_playlistInfo } from '@/data/data_stores/local/loca
 import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
 import { store_server_data_set_playlistInfo } from '@/data/data_stores/server/server_api_synchronization/store_server_data_set_playlistInfo'
 import { store_server_data_set_media_cueInfo } from '@/data/data_stores/server/server_api_synchronization/store_server_data_set_media_cueInfo'
-import { store_player_appearance } from '@/views/view_app/music_page/page_player/store/store_player_appearance'
+import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
 import { store_server_users } from '@/data/data_stores/server/store_server_users'
 import { store_general_model_player_list } from '@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list'
 

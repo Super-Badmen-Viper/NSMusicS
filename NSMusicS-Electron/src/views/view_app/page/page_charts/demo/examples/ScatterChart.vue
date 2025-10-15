@@ -25,7 +25,7 @@ use([
 
 // 导入状态管理
 import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
-import { store_view_charts_page_info } from '@/views/view_app/music_page/page_charts/store/store_view_charts_page_info'
+import { store_view_charts_page_info } from '@/views/view_app/page/page_charts/store/store_view_charts_page_info'
 
 const selectedCategory = ref('media_file')
 
@@ -296,7 +296,7 @@ onBeforeUnmount(() => {
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
-import { store_view_charts_page_logic } from '@/views/view_app/music_page/page_charts/store/store_view_charts_page_logic'
+import { store_view_charts_page_logic } from '@/views/view_app/page/page_charts/store/store_view_charts_page_logic'
 const { t } = useI18n({
   inheritLocale: true,
 })

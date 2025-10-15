@@ -29,11 +29,11 @@ import * as echarts from 'echarts/core'
 import { TooltipComponent, VisualMapComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import 'echarts-wordcloud'
-import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
-import { store_view_recommend_page_info } from '@/views/view_app/music_page/page_recommend/store/store_view_recommend_page_info'
-import { store_playlist_list_info } from '@/views/view_app/music_components/player_list/store/store_playlist_list_info'
+import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_server/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
+import { store_view_recommend_page_info } from '@/views/view_app/page/page_recommend/store/store_view_recommend_page_info'
+import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
 import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
-import { store_playlist_list_logic } from '@/views/view_app/music_components/player_list/store/store_playlist_list_logic'
+import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
 
 echarts.use([TooltipComponent, VisualMapComponent, CanvasRenderer])
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
-import Table_Recommend from '@/views/view_app/music_page/page_recommend/Table_Recommend.vue'
+import Table_Recommend from '@/views/view_app/page/page_recommend/Table_Recommend.vue'
 
 onMounted(async () => {
   store_router_data_info.router_select = 'recommend'

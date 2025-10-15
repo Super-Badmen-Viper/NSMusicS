@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { store_player_audio_info } from '@/views/view_app/music_page/page_player/store/store_player_audio_info'
-import { store_player_appearance } from '@/views/view_app/music_page/page_player/store/store_player_appearance'
-import { store_player_audio_logic } from '@/views/view_app/music_page/page_player/store/store_player_audio_logic'
+import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
+import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
+import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { NSlider } from 'naive-ui'
-import { store_playlist_list_info } from '@/views/view_app/music_components/player_list/store/store_playlist_list_info'
-import { store_view_media_page_info } from '@/views/view_app/music_page/page_media/store/store_view_media_page_info'
+import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
+import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 function getAssetImage(firstImage: string) {
   return new URL(firstImage, import.meta.url).href
 }

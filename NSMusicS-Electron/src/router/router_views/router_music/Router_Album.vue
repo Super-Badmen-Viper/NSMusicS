@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import TableAlbum from '@/views/view_app/music_page/page_album/Table_Album.vue'
+import TableAlbum from '@/views/view_app/page/page_album/Table_Album.vue'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 
 onMounted(async () => {

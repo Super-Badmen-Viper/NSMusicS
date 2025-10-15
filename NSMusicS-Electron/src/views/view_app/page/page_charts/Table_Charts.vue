@@ -2,12 +2,12 @@
 import { use } from 'echarts/core'
 import { CanvasRenderer, SVGRenderer } from 'echarts/renderers'
 
-import BarChart from '@/views/view_app/music_page/page_charts/demo/examples/BarChart.vue'
-import PieChart from '@/views/view_app/music_page/page_charts/demo/examples/PieChart.vue'
-import PolarChart from '@/views/view_app/music_page/page_charts/demo/examples/PolarChart.vue'
-import ScatterChart from '@/views/view_app/music_page/page_charts/demo/examples/ScatterChart.vue'
+import BarChart from '@/views/view_app/page/page_charts/demo/examples/BarChart.vue'
+import PieChart from '@/views/view_app/page/page_charts/demo/examples/PieChart.vue'
+import PolarChart from '@/views/view_app/page/page_charts/demo/examples/PolarChart.vue'
+import ScatterChart from '@/views/view_app/page/page_charts/demo/examples/ScatterChart.vue'
 import { computed, onMounted } from 'vue'
-import { store_view_charts_page_info } from '@/views/view_app/music_page/page_charts/store/store_view_charts_page_info'
+import { store_view_charts_page_info } from '@/views/view_app/page/page_charts/store/store_view_charts_page_info'
 import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
 import { store_server_users } from '@/data/data_stores/server/store_server_users'
 
@@ -32,7 +32,7 @@ onMounted(async () => {
 
 ////// i18n auto lang
 import { useThemeVars } from 'naive-ui'
-import { store_view_charts_page_logic } from '@/views/view_app/music_page/page_charts/store/store_view_charts_page_logic'
+import { store_view_charts_page_logic } from '@/views/view_app/page/page_charts/store/store_view_charts_page_logic'
 const themeVars = useThemeVars()
 </script>
 

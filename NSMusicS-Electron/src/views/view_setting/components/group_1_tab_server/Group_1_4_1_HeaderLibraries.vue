@@ -8,8 +8,8 @@ import { NButton, NIcon } from 'naive-ui'
 
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 
-import { Folder_Entity_ApiService_of_NineSong } from '@/data/data_configs/servers_configs/ninesong_api/services_web/Folder_Entity/index_service'
-import { File_Entity_ApiService_of_NineSong } from '@/data/data_configs/servers_configs/ninesong_api/services_web/File_Entity/Scan Folders/index_service'
+import { Folder_Entity_ApiService_of_NineSong } from '@/data/data_server/servers_configs/ninesong_api/services_web/Folder_Entity/index_service'
+import { File_Entity_ApiService_of_NineSong } from '@/data/data_server/servers_configs/ninesong_api/services_web/File_Entity/Scan Folders/index_service'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n({
   inheritLocale: true,
@@ -337,9 +337,9 @@ onBeforeUnmount(() => {
 
 import error_album_old from '@/assets/img/error_album_old.jpg'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
-import { store_player_view } from '@/views/view_app/music_page/page_player/store/store_player_view'
-import { store_player_appearance } from '@/views/view_app/music_page/page_player/store/store_player_appearance'
-import { store_player_audio_info } from '@/views/view_app/music_page/page_player/store/store_player_audio_info'
+import { store_player_view } from '@/views/view_app/page/page_player/store/store_player_view'
+import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
+import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 
 const contentTypeValue = ref(1)
 const contentTypeOptions = ref([

@@ -5,9 +5,9 @@ import { store_general_fetch_album_list } from '@/data/data_stores/server/server
 import { store_general_fetch_artist_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_artist/store_general_fetch_artist_list'
 import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
 import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
-import { store_playlist_appearance } from '@/views/view_app/music_components/player_list/store/store_playlist_appearance'
+import { store_playlist_appearance } from '@/views/view_app/components/player_list/store/store_playlist_appearance'
 import { store_general_model_player_list } from '@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list'
-import { store_general_fetch_media_cue_list } from '../../data/data_stores/server/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list'
+import { store_general_fetch_media_cue_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list'
 
 export const store_router_data_info = reactive({
   router: null,

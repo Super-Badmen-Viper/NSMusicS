@@ -1,13 +1,13 @@
 import { reactive } from 'vue'
 import { store_server_navidrome_userdata_logic } from '@/data/data_stores/server/server_data_select/server_navidrome_user_data/store_server_navidrome_userdata_logic'
-import { Set_ServerInfo_To_LocalSqlite } from '@/data/data_configs/local_configs/class_Set_ServerInfo_To_LocalSqlite'
+import { Set_ServerInfo_To_LocalSqlite } from '@/data/data_app/repository_app/class_Set_ServerInfo_To_LocalSqlite'
 import { store_server_users } from '@/data/data_stores/server/store_server_users'
 import { store_server_jellyfin_userdata_logic } from './server_jellyfin_user_data/store_server_jellyfin_userdata_logic'
 import { isElectron } from '@/utils/electron/isElectron'
 import { store_server_ninesong_userdata_logic } from './server_ninesong_user_data/store_server_ninesong_userdata_logic'
-import { store_view_media_page_logic } from '@/views/view_app/music_page/page_media/store/store_view_media_page_logic'
-import { store_view_album_page_logic } from '@/views/view_app/music_page/page_album/store/store_view_album_page_logic'
-import { store_view_artist_page_logic } from '@/views/view_app/music_page/page_artist/store/store_view_artist_page_logic'
+import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
+import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
+import { store_view_artist_page_logic } from '@/views/view_app/page/page_artist/store/store_view_artist_page_logic'
 
 export const store_server_data_select_logic = reactive({
   /// server add
