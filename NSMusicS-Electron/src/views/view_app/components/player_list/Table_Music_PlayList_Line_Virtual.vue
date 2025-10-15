@@ -289,8 +289,12 @@ onMounted(() => {
             <!--            v-hammer:doubletap="() => handleDoubleTap(item, index)"-->
             <div
               :style="{
-                width: store_system_configs_info.window_state_miniplayer_playlist ? '280px' : '488px',
-                height: store_system_configs_info.window_state_miniplayer_playlist ? '46px' : '70px',
+                width: store_system_configs_info.window_state_miniplayer_playlist
+                  ? '280px'
+                  : '488px',
+                height: store_system_configs_info.window_state_miniplayer_playlist
+                  ? '46px'
+                  : '70px',
               }"
               class="message_playlist_media_info"
             >
@@ -301,8 +305,12 @@ onMounted(() => {
               ></div>
               <div
                 :style="{
-                  width: store_system_configs_info.window_state_miniplayer_playlist ? '40px' : '58px',
-                  height: store_system_configs_info.window_state_miniplayer_playlist ? '40px' : '58px',
+                  width: store_system_configs_info.window_state_miniplayer_playlist
+                    ? '40px'
+                    : '58px',
+                  height: store_system_configs_info.window_state_miniplayer_playlist
+                    ? '40px'
+                    : '58px',
                   marginLeft: store_system_configs_info.window_state_miniplayer_playlist
                     ? '4px'
                     : '10px',
@@ -411,15 +419,23 @@ onMounted(() => {
           >
             <div
               :style="{
-                width: store_system_configs_info.window_state_miniplayer_playlist ? '280px' : '488px',
-                height: store_system_configs_info.window_state_miniplayer_playlist ? '46px' : '70px',
+                width: store_system_configs_info.window_state_miniplayer_playlist
+                  ? '280px'
+                  : '488px',
+                height: store_system_configs_info.window_state_miniplayer_playlist
+                  ? '46px'
+                  : '70px',
               }"
               class="message_playlist_media_info"
             >
               <div
                 :style="{
-                  width: store_system_configs_info.window_state_miniplayer_playlist ? '40px' : '58px',
-                  height: store_system_configs_info.window_state_miniplayer_playlist ? '40px' : '58px',
+                  width: store_system_configs_info.window_state_miniplayer_playlist
+                    ? '40px'
+                    : '58px',
+                  height: store_system_configs_info.window_state_miniplayer_playlist
+                    ? '40px'
+                    : '58px',
                   marginLeft: store_system_configs_info.window_state_miniplayer_playlist
                     ? '4px'
                     : '10px',

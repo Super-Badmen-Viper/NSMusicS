@@ -280,7 +280,9 @@ onMounted(() => {
         >
           <n-layout-sider>
             <n-menu
-              v-model:value="store_system_configs_info.app_view_server_client_setting_select_tab_name"
+              v-model:value="
+                store_system_configs_info.app_view_server_client_setting_select_tab_name
+              "
               :icon-size="18"
               :options="menuOptions"
               :default-expanded-keys="defaultExpandedKeys"

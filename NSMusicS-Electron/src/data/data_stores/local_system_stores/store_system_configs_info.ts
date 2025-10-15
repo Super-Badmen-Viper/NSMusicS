@@ -75,7 +75,8 @@ export const store_system_configs_info = reactive({
         if (await ipcRenderer.invoke('window-init-db')) {
           store_system_configs_info.desktop_system_kind = process.platform
           //
-          store_system_configs_info.navidrome_db = await ipcRenderer.invoke('window-get-navidrome-db')
+          store_system_configs_info.navidrome_db =
+            await ipcRenderer.invoke('window-get-navidrome-db')
           store_system_configs_info.nsmusics_db = await ipcRenderer.invoke('window-get-nsmusics-db')
           console.log(store_system_configs_info.navidrome_db)
           console.log(store_system_configs_info.nsmusics_db)

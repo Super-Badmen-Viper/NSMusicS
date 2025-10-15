@@ -1110,7 +1110,8 @@ function fullScreen() {
                       quaternary
                       circle
                       @click="
-                        store_system_configs_info.update_show = !store_system_configs_info.update_show
+                        store_system_configs_info.update_show =
+                          !store_system_configs_info.update_show
                       "
                     >
                       <template #icon>
@@ -1187,7 +1188,9 @@ function fullScreen() {
                       circle
                       :style="{
                         marginRight:
-                          store_system_configs_info.desktop_system_kind != 'darwin' ? '4px' : '30px',
+                          store_system_configs_info.desktop_system_kind != 'darwin'
+                            ? '4px'
+                            : '30px',
                       }"
                       @click="
                         async () => {

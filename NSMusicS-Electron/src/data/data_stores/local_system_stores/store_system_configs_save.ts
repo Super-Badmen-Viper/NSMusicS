@@ -40,14 +40,24 @@ export const store_system_configs_save = reactive({
           theme: store_system_configs_info.theme_name,
           lang: store_system_configs_info.lang,
           router_name: String(store_router_data_info.router_name),
-          menuOptions_selectd_model_1: String(store_system_configs_info.menuOptions_selectd_model_1),
-          menuOptions_selectd_model_2: String(store_system_configs_info.menuOptions_selectd_model_2),
-          menuOptions_selectd_model_3: String(store_system_configs_info.menuOptions_selectd_model_3),
-          menuOptions_selectd_model_4: String(store_system_configs_info.menuOptions_selectd_model_4),
+          menuOptions_selectd_model_1: String(
+            store_system_configs_info.menuOptions_selectd_model_1
+          ),
+          menuOptions_selectd_model_2: String(
+            store_system_configs_info.menuOptions_selectd_model_2
+          ),
+          menuOptions_selectd_model_3: String(
+            store_system_configs_info.menuOptions_selectd_model_3
+          ),
+          menuOptions_selectd_model_4: String(
+            store_system_configs_info.menuOptions_selectd_model_4
+          ),
           app_view_left_menu_select_activeKey: String(
             store_system_configs_info.app_view_left_menu_select_activeKey
           ),
-          app_view_left_menu_collapsed: String(store_system_configs_info.app_view_left_menu_collapsed),
+          app_view_left_menu_collapsed: String(
+            store_system_configs_info.app_view_left_menu_collapsed
+          ),
           model_select: String(store_server_user_model.model_select),
           server_select: String(store_server_user_model.server_select),
           server_select_kind: String(store_server_users.server_select_kind),
