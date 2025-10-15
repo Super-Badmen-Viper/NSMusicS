@@ -1585,7 +1585,7 @@ onBeforeUnmount(() => {
                         {{ artist.ArtistName + '&nbsp' }}
                       </span>
                     </template>
-                    <template v-for="artist in (item.artist?.split(/[\/|｜、]/) ?? item.artist)">
+                    <template v-for="artist in item.artist?.split(/[\/|｜、]/) ?? item.artist">
                       <span
                         @click="
                           () => {

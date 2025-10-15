@@ -102,8 +102,9 @@ export const store_server_login_logic = reactive({
           await store_app_configs_info.load_app()
           ///
           const route = String(sessionStorage.getItem('jwt_route'))
-          let route_path = route && route != '/login' && route != '/null' && route !== 'null' ? route : '/home'
-          
+          let route_path =
+            route && route != '/login' && route != '/null' && route !== 'null' ? route : '/home'
+
           // 修复：检查 router 是否为 null，如果为 null 则设置为 '/home'
           if (store_router_data_info.router === null) {
             route_path = '/home'
@@ -132,7 +133,7 @@ export const store_server_login_logic = reactive({
     sessionStorage.removeItem('jwt_expire_time')
 
     store_server_login_info.server_accessToken = ''
-    
+
     store_router_data_info.router.push('/login')
 
     return false

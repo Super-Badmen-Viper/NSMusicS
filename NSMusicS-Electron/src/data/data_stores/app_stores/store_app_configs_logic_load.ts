@@ -136,7 +136,7 @@ export const store_app_configs_logic_load = reactive({
         store_app_configs_info.theme_auto_system =
           '' + system_Configs_Read.app_Configs.value['theme_auto_system'] === 'true'
         store_app_configs_info.lang = '' + system_Configs_Read.app_Configs.value['lang']
-        if(store_app_configs_info.lang === 'null'){
+        if (store_app_configs_info.lang === 'null') {
           store_app_configs_info.lang = 'en'
         }
         store_player_audio_logic.orderPanelWidath =
@@ -657,10 +657,11 @@ export const store_app_configs_logic_load = reactive({
         store_router_data_info.router.push(store_router_data_info.router_name)
       } else {
         const route = String(sessionStorage.getItem('jwt_route'))
-        const route_path = route && route != '/login' && route != '/null' && route !== 'null' ? route : '/home'
+        const route_path =
+          route && route != '/login' && route != '/null' && route !== 'null' ? route : '/home'
         store_app_configs_info.app_view_left_menu_select_activeKey = route_path
         store_router_data_info.router_name = route_path
-        
+
         // 修复：检查 router 是否为 null，如果为 null 则设置为 'home'
         if (store_router_data_info.router === null) {
           store_router_data_info.router_name = 'home'
@@ -670,12 +671,14 @@ export const store_app_configs_logic_load = reactive({
         if (!store_router_data_info.router_name || store_router_data_info.router_name === 'null') {
           store_router_data_info.router_name = 'home'
         }
-        if (!store_app_configs_info.app_view_left_menu_select_activeKey || 
-            store_app_configs_info.app_view_left_menu_select_activeKey === 'null') {
+        if (
+          !store_app_configs_info.app_view_left_menu_select_activeKey ||
+          store_app_configs_info.app_view_left_menu_select_activeKey === 'null'
+        ) {
           store_app_configs_info.app_view_left_menu_select_activeKey = 'home'
-        } 
+        }
         // 特别处理 route_path 为 '/null' 的情况
-        let final_route_path = route_path;
+        let final_route_path = route_path
         if (final_route_path === '/null' || final_route_path === 'null') {
           final_route_path = '/home'
         }

@@ -4,8 +4,7 @@ import Table_Home_List_ALL_Line from '@/views/view_app/page/page_home/Table_Home
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 
 onMounted(async () => {
-  if(store_router_data_info.router_select != 'home')
-    store_router_data_info.router_select = 'home'
+  if (store_router_data_info.router_select != 'home') store_router_data_info.router_select = 'home'
 })
 </script>
 

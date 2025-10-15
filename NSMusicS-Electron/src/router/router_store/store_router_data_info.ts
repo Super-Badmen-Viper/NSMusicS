@@ -36,13 +36,9 @@ watch(
       if (newValue === 'home') {
         await store_general_fetch_home_list.fetchData_Home()
       } else if (newValue === 'categories') {
-
       } else if (newValue === 'charts') {
-
       } else if (newValue === 'recommend') {
-
       } else if (newValue === 'tag') {
-
       } else if (newValue === 'media_cue') {
         await store_general_fetch_media_cue_list.fetchData_Media()
       } else if (newValue === 'media') {

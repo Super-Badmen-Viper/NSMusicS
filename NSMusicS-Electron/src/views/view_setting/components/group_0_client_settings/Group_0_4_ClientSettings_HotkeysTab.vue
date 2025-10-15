@@ -12,7 +12,6 @@ const { t } = useI18n({
       <div style="font-weight: 600; font-size: 16px; margin-bottom: 4px">
         {{ $t('page.setting.hotkeysTab') }} >
       </div>
-
     </n-space>
   </n-scrollbar>
 </template>

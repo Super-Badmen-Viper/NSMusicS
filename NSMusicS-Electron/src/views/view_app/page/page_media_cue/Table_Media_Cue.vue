@@ -1517,7 +1517,7 @@ onBeforeUnmount(() => {
                   <br />
                   <template
                     v-if="track.Performer !== undefined && track.Performer !== ''"
-                    v-for="artist in (track.Performer.split(/[\/|｜、]/) ?? track.Performer)"
+                    v-for="artist in track.Performer.split(/[\/|｜、]/) ?? track.Performer"
                   >
                     <span
                       style="font-size: 14px; font-weight: 400"
@@ -1638,7 +1638,8 @@ onBeforeUnmount(() => {
             store_server_users.server_select_kind === 'navidrome' ||
             store_server_user_model.model_server_type_of_local
           "
-          v-for="artist in (store_playlist_list_info.playlist_Menu_Item.artist.split(/[\/|｜、]/) ?? store_playlist_list_info.playlist_Menu_Item.artist)"
+          v-for="artist in store_playlist_list_info.playlist_Menu_Item.artist.split(/[\/|｜、]/) ??
+          store_playlist_list_info.playlist_Menu_Item.artist"
         >
           <v-contextmenu-item>
             <span

@@ -690,7 +690,7 @@ const { t } = useI18n({
                       {{ item.title }}
                     </span>
                     <br />
-                    <template v-for="artist in (item.artist.split(/[\/|｜、]/) ?? item.artist)">
+                    <template v-for="artist in item.artist.split(/[\/|｜、]/) ?? item.artist">
                       <span>
                         {{ artist + '&nbsp;' }}
                       </span>

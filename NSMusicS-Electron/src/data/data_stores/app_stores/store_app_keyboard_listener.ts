@@ -1,13 +1,13 @@
 // store_app_keyboard_listener.ts
-import { reactive, watch } from 'vue';
-import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'; // 您的保存逻辑
+import { reactive, watch } from 'vue'
+import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save' // 您的保存逻辑
 
 // 定义快捷键配置项的接口
 interface ShortcutConfig {
-  id: string; // 快捷键唯一标识，如 "save-file"
-  name: string; // 快捷键的可读名称，如 "保存文件"
-  description?: string; // 描述
-  keyCombo: string[]; // 按键组合，例如 ['ctrl', 's']
+  id: string // 快捷键唯一标识，如 "save-file"
+  name: string // 快捷键的可读名称，如 "保存文件"
+  description?: string // 描述
+  keyCombo: string[] // 按键组合，例如 ['ctrl', 's']
   // 其他您需要的元数据...
 }
 
@@ -36,14 +36,14 @@ export const store_app_keyboard_listener = reactive({
       { id: 'toggle-theme', name: '切换主题', keyCombo: ['ctrl', 'shift', 't'] },
       { id: 'show-help', name: '显示帮助', keyCombo: ['f1'] },
       // ... 更多快捷键
-    ];
+    ]
 
     // 初始化 activeShortcutMap，默认使用标准键位
-    this.allShortcutConfigs.forEach(config => {
-      this.activeShortcutMap.set(config.id, config.keyCombo);
-    });
+    this.allShortcutConfigs.forEach((config) => {
+      this.activeShortcutMap.set(config.id, config.keyCombo)
+    })
 
-    console.log('Keyboard shortcut store initialized.');
+    console.log('Keyboard shortcut store initialized.')
   },
 
   /**
@@ -53,15 +53,15 @@ export const store_app_keyboard_listener = reactive({
    */
   updateShortcutKey(shortcutId: string, newKeyCombo: string[]) {
     if (!this.activeShortcutMap.has(shortcutId)) {
-      console.warn(`Shortcut with ID ${shortcutId} not found.`);
-      return;
+      console.warn(`Shortcut with ID ${shortcutId} not found.`)
+      return
     }
     // 检查 newKeyCombo 是否与其他快捷键冲突...
     // checkForConflicts(shortcutId, newKeyCombo);
 
-    this.activeShortcutMap.set(shortcutId, newKeyCombo);
+    this.activeShortcutMap.set(shortcutId, newKeyCombo)
     // 保存更改到您的配置系统
-    this.saveShortcutConfig();
+    this.saveShortcutConfig()
   },
 
   /**
@@ -69,10 +69,10 @@ export const store_app_keyboard_listener = reactive({
    */
   async saveShortcutConfig() {
     // 将 Map 转换为普通对象以便存储
-    const configToSave = Object.fromEntries(this.activeShortcutMap);
+    const configToSave = Object.fromEntries(this.activeShortcutMap)
     // 调用您的保存逻辑，例如保存到 app config 或服务器
     // await store_app_configs_logic_save.save_system_config_of_App_Configs({ shortcuts: configToSave });
-    console.log('Shortcut configuration saved.', configToSave);
+    console.log('Shortcut configuration saved.', configToSave)
   },
 
   /**
@@ -81,7 +81,7 @@ export const store_app_keyboard_listener = reactive({
    * @returns 按键组合数组，例如 ['ctrl', 's']
    */
   getKeyCombo(shortcutId: string): string[] {
-    return this.activeShortcutMap.get(shortcutId) || [];
+    return this.activeShortcutMap.get(shortcutId) || []
   },
 
   /**
@@ -90,18 +90,18 @@ export const store_app_keyboard_listener = reactive({
    * @returns 找到的快捷键ID，否则为 undefined
    */
   getShortcutIdByCombo(keyCombo: string[]): string | undefined {
-    const comboStr = keyCombo.join('+').toLowerCase();
+    const comboStr = keyCombo.join('+').toLowerCase()
     for (const [id, combo] of this.activeShortcutMap.entries()) {
       if (combo.join('+').toLowerCase() === comboStr) {
-        return id;
+        return id
       }
     }
-    return undefined;
-  }
-});
+    return undefined
+  },
+})
 
 // 可选：初始化这个 store
-store_app_keyboard_listener.init();
+store_app_keyboard_listener.init()
 
 // 您可以监听其他需要重置快捷键配置的情况
 // watch(

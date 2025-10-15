@@ -308,13 +308,9 @@ function fetchDataIfNeeded(
     if (type === 'home') {
       store_general_fetch_home_list.fetchData_Home()
     } else if (type === 'categories') {
-
     } else if (type === 'charts') {
-
     } else if (type === 'recommend') {
-
     } else if (type === 'tag') {
-
     } else if (type === 'media_cue') {
       store_general_fetch_media_cue_list.fetchData_Media()
     } else if (type === 'album') {
@@ -391,8 +387,10 @@ routers.afterEach(async (to, from) => {
       store_router_data_info.router_name = 'home'
     }
     store_app_configs_info.app_view_left_menu_select_activeKey = to.name
-    if (!store_app_configs_info.app_view_left_menu_select_activeKey || 
-        store_app_configs_info.app_view_left_menu_select_activeKey === 'null') {
+    if (
+      !store_app_configs_info.app_view_left_menu_select_activeKey ||
+      store_app_configs_info.app_view_left_menu_select_activeKey === 'null'
+    ) {
       store_app_configs_info.app_view_left_menu_select_activeKey = 'home'
     }
     console.log(to.name)
