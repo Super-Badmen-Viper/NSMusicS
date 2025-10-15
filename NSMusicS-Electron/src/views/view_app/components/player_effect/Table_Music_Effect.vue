@@ -5,7 +5,7 @@ import { store_router_data_logic } from '@/router/router_store/store_router_data
 import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
 
 import { useI18n } from 'vue-i18n'
-import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 const { t } = useI18n({
   inheritLocale: true,
 })
@@ -152,8 +152,8 @@ import { openLink } from '@/utils/electron/openLink'
               v-model:value="store_player_audio_logic.player_select"
               :options="store_player_audio_logic.player_kind"
               :disabled="
-                store_app_configs_info.desktop_system_kind === 'linux' ||
-                store_app_configs_info.desktop_system_kind === 'docker'
+                store_system_configs_info.desktop_system_kind === 'linux' ||
+                store_system_configs_info.desktop_system_kind === 'docker'
               "
               @update:value="
                 () => {

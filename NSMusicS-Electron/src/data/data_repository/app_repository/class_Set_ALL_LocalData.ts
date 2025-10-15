@@ -1,12 +1,12 @@
-import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { isElectron } from '@/utils/electron/isElectron'
-import { store_local_db_info } from '@/data/data_stores/local_stores/store_local_db_info'
-import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
+import { store_local_db_info } from '@/data/data_stores/local_app_stores/store_local_db_info'
+import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 
 export class Set_ALL_LocalData {
   public Set_ALL_LocalData_To_Delete() {
     if (isElectron) {
-      const db_navidrome = require('better-sqlite3')(store_app_configs_info.navidrome_db)
+      const db_navidrome = require('better-sqlite3')(store_system_configs_info.navidrome_db)
       db_navidrome.pragma('journal_mode = WAL')
       db_navidrome.exec('PRAGMA foreign_keys = OFF')
       db_navidrome.exec('BEGIN TRANSACTION')
@@ -26,7 +26,7 @@ export class Set_ALL_LocalData {
         db_navidrome.close()
       }
 
-      const db_nsmusics = require('better-sqlite3')(store_app_configs_info.nsmusics_db)
+      const db_nsmusics = require('better-sqlite3')(store_system_configs_info.nsmusics_db)
       db_nsmusics.pragma('journal_mode = WAL')
       db_nsmusics.exec('PRAGMA foreign_keys = OFF')
       db_nsmusics.exec('BEGIN TRANSACTION')
@@ -44,7 +44,7 @@ export class Set_ALL_LocalData {
       store_local_db_info.local_config_of_all_user_of_sqlite = []
       store_local_db_info.local_config_of_all_user_of_select = []
 
-      store_app_configs_logic_save.save_system_library_config()
+      store_system_configs_save.save_system_library_config()
     } else {
       // other
     }

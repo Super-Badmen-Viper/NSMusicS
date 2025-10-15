@@ -5,7 +5,7 @@ import { ChevronLeft16Filled, ChevronRight16Filled } from '@vicons/fluent'
 import { ref, onMounted, computed } from 'vue'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
-import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
+import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 
 ////// scrollbar of playlist_view
 const scrollbar = ref(null)
@@ -52,26 +52,26 @@ const handleImageError = async (item: any) => {
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
 import { VueDraggable } from 'vue-draggable-plus'
-import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
+import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 const { t } = useI18n({
   inheritLocale: true,
 })
 
 //////
-import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_stores/local_data_synchronization/store_local_data_set_mediaInfo'
+import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
 import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
 import { NIcon, useMessage, useThemeVars } from 'naive-ui'
 const message = useMessage()
 const themeVars = useThemeVars()
 
 ////// right menu
-import { store_general_fetch_media_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'
-import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
-import { store_general_model_player_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/components/player_list/store_general_model_player_list'
-import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
-import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
+import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
+import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
+import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
+import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
-import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
+import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
 const contextmenu = ref(null)
 async function update_playlist_addMediaFile(id: any, playlist_id: any) {
   try {
@@ -98,7 +98,7 @@ function menu_item_remove_to_playlist_current() {
     item.absoluteIndex = index
   })
 
-  store_app_configs_logic_save.save_system_playlist_item_id_config()
+  store_system_configs_save.save_system_playlist_item_id_config()
 
   contextmenu.value.hide()
 }
@@ -128,7 +128,7 @@ function menu_item_move_to_playlist_start() {
       item.absoluteIndex = index
     })
 
-    store_app_configs_logic_save.save_system_playlist_item_id_config()
+    store_system_configs_save.save_system_playlist_item_id_config()
 
     contextmenu.value.hide()
   }
@@ -159,7 +159,7 @@ function menu_item_move_to_playlist_end() {
       item.absoluteIndex = index
     })
 
-    store_app_configs_logic_save.save_system_playlist_item_id_config()
+    store_system_configs_save.save_system_playlist_item_id_config()
 
     contextmenu.value.hide()
   }
@@ -268,7 +268,7 @@ onMounted(() => {
         class="table-playlist"
         ref="scrollbar"
         :style="{
-          width: store_app_configs_info.window_state_miniplayer_playlist ? '280px' : '488px',
+          width: store_system_configs_info.window_state_miniplayer_playlist ? '280px' : '488px',
         }"
         :items="store_playlist_list_info.playlist_MediaFiles_temporary"
         key-field="play_id"
@@ -289,8 +289,8 @@ onMounted(() => {
             <!--            v-hammer:doubletap="() => handleDoubleTap(item, index)"-->
             <div
               :style="{
-                width: store_app_configs_info.window_state_miniplayer_playlist ? '280px' : '488px',
-                height: store_app_configs_info.window_state_miniplayer_playlist ? '46px' : '70px',
+                width: store_system_configs_info.window_state_miniplayer_playlist ? '280px' : '488px',
+                height: store_system_configs_info.window_state_miniplayer_playlist ? '46px' : '70px',
               }"
               class="message_playlist_media_info"
             >
@@ -301,9 +301,9 @@ onMounted(() => {
               ></div>
               <div
                 :style="{
-                  width: store_app_configs_info.window_state_miniplayer_playlist ? '40px' : '58px',
-                  height: store_app_configs_info.window_state_miniplayer_playlist ? '40px' : '58px',
-                  marginLeft: store_app_configs_info.window_state_miniplayer_playlist
+                  width: store_system_configs_info.window_state_miniplayer_playlist ? '40px' : '58px',
+                  height: store_system_configs_info.window_state_miniplayer_playlist ? '40px' : '58px',
+                  marginLeft: store_system_configs_info.window_state_miniplayer_playlist
                     ? '4px'
                     : '10px',
                 }"
@@ -318,10 +318,10 @@ onMounted(() => {
               </div>
               <div
                 :style="{
-                  width: store_app_configs_info.window_state_miniplayer_playlist
+                  width: store_system_configs_info.window_state_miniplayer_playlist
                     ? '150px'
                     : '240px',
-                  fontSize: store_app_configs_info.window_state_miniplayer_playlist
+                  fontSize: store_system_configs_info.window_state_miniplayer_playlist
                     ? '13px'
                     : '15px',
                 }"
@@ -329,10 +329,10 @@ onMounted(() => {
               >
                 <span
                   :style="{
-                    fontSize: store_app_configs_info.window_state_miniplayer_playlist
+                    fontSize: store_system_configs_info.window_state_miniplayer_playlist
                       ? '13px'
                       : '16px',
-                    fontWeight: store_app_configs_info.window_state_miniplayer_playlist
+                    fontWeight: store_system_configs_info.window_state_miniplayer_playlist
                       ? '400'
                       : '600',
                   }"
@@ -344,7 +344,7 @@ onMounted(() => {
                 <template v-for="artist in item.artist?.split(/[\/|｜、]/) ?? item.artist">
                   <span
                     :style="{
-                      color: store_app_configs_info.window_state_miniplayer_playlist
+                      color: store_system_configs_info.window_state_miniplayer_playlist
                         ? '#A4A4A4'
                         : '#FFFFFF',
                     }"
@@ -357,10 +357,10 @@ onMounted(() => {
               <span
                 class="duration_txt"
                 :style="{
-                  fontSize: store_app_configs_info.window_state_miniplayer_playlist
+                  fontSize: store_system_configs_info.window_state_miniplayer_playlist
                     ? '13px'
                     : '15px',
-                  color: store_app_configs_info.window_state_miniplayer_playlist
+                  color: store_system_configs_info.window_state_miniplayer_playlist
                     ? '#A4A4A4'
                     : '#FFFFFF',
                 }"
@@ -370,7 +370,7 @@ onMounted(() => {
               </span>
               <span
                 class="index"
-                v-if="!store_app_configs_info.window_state_miniplayer_playlist"
+                v-if="!store_system_configs_info.window_state_miniplayer_playlist"
                 style="text-align: left; font-size: 15px"
               >
                 {{ index + 1 }}
@@ -396,7 +396,7 @@ onMounted(() => {
           class="table-playlist"
           :animation="150"
           :style="{
-            width: store_app_configs_info.window_state_miniplayer_playlist ? '250px' : '460px',
+            width: store_system_configs_info.window_state_miniplayer_playlist ? '250px' : '460px',
           }"
           style="position: absolute; overflow-y: auto; overflow-x: hidden"
           @update="onChange"
@@ -411,16 +411,16 @@ onMounted(() => {
           >
             <div
               :style="{
-                width: store_app_configs_info.window_state_miniplayer_playlist ? '280px' : '488px',
-                height: store_app_configs_info.window_state_miniplayer_playlist ? '46px' : '70px',
+                width: store_system_configs_info.window_state_miniplayer_playlist ? '280px' : '488px',
+                height: store_system_configs_info.window_state_miniplayer_playlist ? '46px' : '70px',
               }"
               class="message_playlist_media_info"
             >
               <div
                 :style="{
-                  width: store_app_configs_info.window_state_miniplayer_playlist ? '40px' : '58px',
-                  height: store_app_configs_info.window_state_miniplayer_playlist ? '40px' : '58px',
-                  marginLeft: store_app_configs_info.window_state_miniplayer_playlist
+                  width: store_system_configs_info.window_state_miniplayer_playlist ? '40px' : '58px',
+                  height: store_system_configs_info.window_state_miniplayer_playlist ? '40px' : '58px',
+                  marginLeft: store_system_configs_info.window_state_miniplayer_playlist
                     ? '4px'
                     : '10px',
                 }"
@@ -435,10 +435,10 @@ onMounted(() => {
               </div>
               <div
                 :style="{
-                  width: store_app_configs_info.window_state_miniplayer_playlist
+                  width: store_system_configs_info.window_state_miniplayer_playlist
                     ? '100px'
                     : '200px',
-                  fontSize: store_app_configs_info.window_state_miniplayer_playlist
+                  fontSize: store_system_configs_info.window_state_miniplayer_playlist
                     ? '13px'
                     : '15px',
                 }"
@@ -451,7 +451,7 @@ onMounted(() => {
                 <template v-for="artist in item.artist?.split(/[\/|｜、]/) ?? item.artist">
                   <span
                     :style="{
-                      color: store_app_configs_info.window_state_miniplayer_playlist
+                      color: store_system_configs_info.window_state_miniplayer_playlist
                         ? '#A4A4A4'
                         : '#FFFFFF',
                     }"
@@ -464,10 +464,10 @@ onMounted(() => {
               <span
                 class="duration_txt"
                 :style="{
-                  fontSize: store_app_configs_info.window_state_miniplayer_playlist
+                  fontSize: store_system_configs_info.window_state_miniplayer_playlist
                     ? '13px'
                     : '15px',
-                  color: store_app_configs_info.window_state_miniplayer_playlist
+                  color: store_system_configs_info.window_state_miniplayer_playlist
                     ? '#A4A4A4'
                     : '#FFFFFF',
                 }"
@@ -477,7 +477,7 @@ onMounted(() => {
               </span>
               <span
                 class="index"
-                v-if="!store_app_configs_info.window_state_miniplayer_playlist"
+                v-if="!store_system_configs_info.window_state_miniplayer_playlist"
                 style="text-align: left; font-size: 15px"
               >
                 {{ index + 1 }}

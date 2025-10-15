@@ -10,7 +10,7 @@ interface UpdateInfo {
   mandatory: boolean
 }
 
-export const store_app_configs_logic_update = reactive<UpdateInfo>({
+export const store_system_configs_update = reactive<UpdateInfo>({
   version: '',
   url: '',
   changelog: '',

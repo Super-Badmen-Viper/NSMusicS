@@ -2,20 +2,20 @@ import { reactive, watch } from 'vue'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_player_appearance } from './store_player_appearance'
 import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
-import { store_app_configs_logic_load } from '@/data/data_stores/app_stores/store_app_configs_logic_load'
-import { store_local_data_set_albumInfo } from '@/data/data_stores/local_stores/local_data_synchronization/store_local_data_set_albumInfo'
+import { store_system_configs_load } from '@/data/data_stores/local_system_stores/store_system_configs_load'
+import { store_local_data_set_albumInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_albumInfo'
 import { store_playlist_appearance } from '@/views/view_app/components/player_list/store/store_playlist_appearance'
 import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
-import { store_general_fetch_player_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list'
+import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 import { store_player_tag_modify } from './store_player_tag_modify'
 import error_album from '@/assets/img/error_album.jpg'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
-import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
+import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { Get_AnnotationInfo_To_LocalSqlite } from '@/data/data_repository/app_repository/class_Get_AnnotationInfo_To_LocalSqlite'
 import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
 import { store_player_audio_logic } from './store_player_audio_logic'
 import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
-import { store_local_data_set_artistInfo } from '@/data/data_stores/local_stores/local_data_synchronization/store_local_data_set_artistInfo'
+import { store_local_data_set_artistInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_artistInfo'
 import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
 import vinyl from '@/assets/img/vinyl.jpg'
 
@@ -72,7 +72,7 @@ export const store_player_audio_info = reactive({
   this_audio_lyrics_info_line_num: 28,
 
   async reset_data() {
-    if (!store_app_configs_logic_load.app_configs_loading) {
+    if (!store_system_configs_load.app_configs_loading) {
       this.this_audio_file_path = ''
       this.this_audio_file_medium_image_url = error_album
       this.page_top_album_image_url = error_album
@@ -237,11 +237,11 @@ watch(
         store_view_media_page_info.media_Files_temporary != undefined &&
         store_view_media_page_info.media_Files_temporary.length != 0
       ) {
-        if (!store_app_configs_logic_load.app_configs_loading) {
+        if (!store_system_configs_load.app_configs_loading) {
           store_player_audio_info.this_audio_restart_play = true
         }
         if (!store_player_appearance.player_mode_of_lock_playlist) {
-          if (!store_app_configs_logic_load.app_configs_loading) {
+          if (!store_system_configs_load.app_configs_loading) {
             if (!store_playlist_appearance.playlist_show) {
               if (store_playlist_list_logic.media_page_handleItemDbClick) {
                 if (!store_server_user_model.random_play_model) {
@@ -287,7 +287,7 @@ watch(
         const response = await fetch(newValue)
         const blob = await response.blob()
         store_player_audio_info.page_top_album_image_url = URL.createObjectURL(blob) // 使用 Object URL
-        if (!store_app_configs_logic_load.app_configs_loading) {
+        if (!store_system_configs_load.app_configs_loading) {
           store_player_audio_info.this_audio_restart_play = true
         }
       } catch (error) {

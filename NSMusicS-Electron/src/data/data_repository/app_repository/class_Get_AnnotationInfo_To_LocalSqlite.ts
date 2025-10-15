@@ -1,11 +1,11 @@
-import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { isElectron } from '@/utils/electron/isElectron'
 
 export class Get_AnnotationInfo_To_LocalSqlite {
   public Get_Annotation_ItemInfo_Play_Count(item_type: string): number {
     if (isElectron) {
       const tableName = item_type
-      const db = require('better-sqlite3')(store_app_configs_info.navidrome_db)
+      const db = require('better-sqlite3')(store_system_configs_info.navidrome_db)
       db.pragma('journal_mode = WAL')
       db.pragma('foreign_keys = OFF')
       try {

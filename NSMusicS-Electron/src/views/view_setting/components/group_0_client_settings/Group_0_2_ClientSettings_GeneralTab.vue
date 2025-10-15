@@ -26,11 +26,11 @@ const computed_i18n_Label_SidebarConfiguration_15 = computed(() =>
 )
 
 ////// this_view views_components
-import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { ref, onMounted, computed } from 'vue'
 import { NButton } from 'naive-ui'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
-import { store_app_configs_logic_theme } from '@/data/data_stores/app_stores/store_app_configs_logic_theme'
+import { store_system_configs_theme } from '@/data/data_stores/local_system_stores/store_system_configs_theme'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 const theme_value = ref('lightTheme')
 const theme_options = ref([
@@ -44,7 +44,7 @@ const theme_options = ref([
   },
 ])
 onMounted(() => {
-  if (store_app_configs_info.update_theme) theme_value.value = theme_options.value[1].value
+  if (store_system_configs_info.update_theme) theme_value.value = theme_options.value[1].value
   else theme_value.value = theme_options.value[0].value
 })
 
@@ -188,9 +188,9 @@ onMounted(() => {
           style="width: 207px; margin-top: -4px"
           @update:value="
             () => {
-              store_app_configs_info.lang = $i18n.locale
+              store_system_configs_info.lang = $i18n.locale
               store_player_audio_logic.orderPanelWidath =
-                store_player_audio_logic.langWidths[store_app_configs_info.lang.toString()]
+                store_player_audio_logic.langWidths[store_system_configs_info.lang.toString()]
               store_player_audio_logic.orderButonWidath =
                 store_player_audio_logic.orderPanelWidath - 14
               if (isElectron) {
@@ -222,7 +222,7 @@ onMounted(() => {
         <n-select
           v-model:value="theme_value"
           :options="theme_options"
-          @update:value="store_app_configs_logic_theme.update_theme(theme_value)"
+          @update:value="store_system_configs_theme.update_theme(theme_value)"
           placeholder=""
           :reset-menu-on-options-change="false"
           style="width: 207px; margin-top: -4px"
@@ -239,7 +239,7 @@ onMounted(() => {
             }}</span>
           </div>
         </n-space>
-        <n-switch v-model:value="store_app_configs_info.theme_auto_system"> </n-switch>
+        <n-switch v-model:value="store_system_configs_info.theme_auto_system"> </n-switch>
       </n-space>
       <n-divider style="margin: 0" />
       <n-space v-if="false" justify="space-between" align="center">
@@ -323,19 +323,19 @@ onMounted(() => {
         <n-grid :y-gap="8" :cols="4" style="margin-left: 2px">
           <n-gi v-if="false"
             ><n-checkbox
-              v-model:checked="store_app_configs_info.menuOptions_selectd_model_1"
+              v-model:checked="store_system_configs_info.menuOptions_selectd_model_1"
               :label="computed_i18n_Label_SidebarConfiguration_8"
           /></n-gi>
           <n-gi v-if="false"
             ><n-checkbox
-              v-model:checked="store_app_configs_info.menuOptions_selectd_model_1"
+              v-model:checked="store_system_configs_info.menuOptions_selectd_model_1"
               :label="computed_i18n_Label_SidebarConfiguration_9"
           /></n-gi>
           <n-gi v-if="false"></n-gi>
           <n-gi v-if="false"></n-gi>
           <n-gi
             ><n-checkbox
-              v-model:checked="store_app_configs_info.menuOptions_selectd_model_2"
+              v-model:checked="store_system_configs_info.menuOptions_selectd_model_2"
               :label="computed_i18n_Label_SidebarConfiguration_10"
           /></n-gi>
           <n-gi></n-gi>
@@ -343,27 +343,27 @@ onMounted(() => {
           <n-gi></n-gi>
           <n-gi
             ><n-checkbox
-              v-model:checked="store_app_configs_info.menuOptions_selectd_model_3"
+              v-model:checked="store_system_configs_info.menuOptions_selectd_model_3"
               :label="computed_i18n_Label_SidebarConfiguration_11"
           /></n-gi>
           <n-gi
             ><n-checkbox
-              v-model:checked="store_app_configs_info.menuOptions_selectd_model_3"
+              v-model:checked="store_system_configs_info.menuOptions_selectd_model_3"
               :label="computed_i18n_Label_SidebarConfiguration_12"
           /></n-gi>
           <n-gi
             ><n-checkbox
-              v-model:checked="store_app_configs_info.menuOptions_selectd_model_3"
+              v-model:checked="store_system_configs_info.menuOptions_selectd_model_3"
               :label="computed_i18n_Label_SidebarConfiguration_13"
           /></n-gi>
           <n-gi
             ><n-checkbox
-              v-model:checked="store_app_configs_info.menuOptions_selectd_model_3"
+              v-model:checked="store_system_configs_info.menuOptions_selectd_model_3"
               :label="computed_i18n_Label_SidebarConfiguration_14"
           /></n-gi>
           <n-gi
             ><n-checkbox
-              v-model:checked="store_app_configs_info.menuOptions_selectd_model_4"
+              v-model:checked="store_system_configs_info.menuOptions_selectd_model_4"
               :label="computed_i18n_Label_SidebarConfiguration_15"
           /></n-gi>
         </n-grid>

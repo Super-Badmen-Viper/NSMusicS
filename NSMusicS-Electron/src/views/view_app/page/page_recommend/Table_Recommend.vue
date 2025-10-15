@@ -29,10 +29,10 @@ import * as echarts from 'echarts/core'
 import { TooltipComponent, VisualMapComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import 'echarts-wordcloud'
-import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
+import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_view_recommend_page_info } from '@/views/view_app/page/page_recommend/store/store_view_recommend_page_info'
 import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
-import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
 
 echarts.use([TooltipComponent, VisualMapComponent, CanvasRenderer])
@@ -58,7 +58,7 @@ let chartInstance: echarts.ECharts | null = null
 // --- Proportional Scaling Logic ---
 // Reactive property for word size range based on window width
 const proportionalSizeRange = computed(() => {
-  const width = store_app_configs_info.window_innerWidth
+  const width = store_system_configs_info.window_innerWidth
   // Normalize width to a 0-1 range based on typical screen sizes
   const t = Math.max(0, Math.min(1, (width - 500) / 1100))
   const minFontSize = lerp(10, 14, t)
@@ -68,7 +68,7 @@ const proportionalSizeRange = computed(() => {
 
 // Reactive property for word grid size based on window width
 const proportionalGridSize = computed(() => {
-  const width = store_app_configs_info.window_innerWidth
+  const width = store_system_configs_info.window_innerWidth
   const t = Math.max(0, Math.min(1, (width - 500) / 1100))
   // Inverse scaling: larger screen -> smaller grid size for denser packing
   return Math.round(lerp(8, 3, t))
@@ -415,7 +415,7 @@ const syncChartSelectionState = () => {
 
 // --- Watchers ---
 const stopWatching_window_innerWidth = watch(
-  () => store_app_configs_info.window_innerWidth,
+  () => store_system_configs_info.window_innerWidth,
   () => {
     // Debounce the chart update when window width changes, which triggers a full recalculation
     resizeCharts()
@@ -488,8 +488,8 @@ const handleImageError = async (item: any) => {
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
-import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
-import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
+import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 const { t } = useI18n({
   inheritLocale: true,
 })

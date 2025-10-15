@@ -1,5 +1,5 @@
 import { reactive, watch } from 'vue'
-import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
+import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 
 export const store_playlist_list_info = reactive({
@@ -72,7 +72,7 @@ export const store_playlist_list_info = reactive({
     store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
       store_playlist_list_info.playlist_MediaFiles_temporary.map((item) => item.id)
 
-    store_app_configs_logic_save.save_system_playlist_item_id_config()
+    store_system_configs_save.save_system_playlist_item_id_config()
   },
 
   reset_carousel() {
@@ -113,12 +113,12 @@ watch(
   async (newValue) => {
     store_playlist_list_info.reset_carousel()
     ///
-    store_app_configs_logic_save.save_system_playlist_item_id_config()
+    store_system_configs_save.save_system_playlist_item_id_config()
   }
 )
 watch(
   () => store_playlist_list_info.playlist_MediaFiles_temporary_Sort_Items,
   async (newValue) => {
-    store_app_configs_logic_save.save_system_playlist_item_id_config()
+    store_system_configs_save.save_system_playlist_item_id_config()
   }
 )

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 ////// this_view resource of vicons_svg
-import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { NotificationsOutline } from '@vicons/ionicons5'
 import {
   BareMetalServer,
@@ -63,9 +63,9 @@ function renderIcon(icon) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
 import { useI18n } from 'vue-i18n'
-import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
-import { store_local_db_info } from '@/data/data_stores/local_stores/store_local_db_info'
-import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
+import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
+import { store_local_db_info } from '@/data/data_stores/local_app_stores/store_local_db_info'
+import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { isElectron } from '@/utils/electron/isElectron'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 const { t } = useI18n({
@@ -280,7 +280,7 @@ onMounted(() => {
         >
           <n-layout-sider>
             <n-menu
-              v-model:value="store_app_configs_info.app_view_server_client_setting_select_tab_name"
+              v-model:value="store_system_configs_info.app_view_server_client_setting_select_tab_name"
               :icon-size="18"
               :options="menuOptions"
               :default-expanded-keys="defaultExpandedKeys"
@@ -291,176 +291,176 @@ onMounted(() => {
               <!--客户端-->
               <Group02ClientSettingsGeneralTab
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-0-1'
                 "
               />
               <Group01ClientSettingsLibraries
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-0-2'
                 "
               />
               <Group03ClientSettingsPlaybackTab
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-0-3'
                 "
               />
               <Group04ClientSettingsHotkeysTab
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-0-4'
                 "
               />
               <Group05ClientSettingsWindowTab
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-0-5'
                 "
               />
               <!--服务器-->
               <Group11TabDashboard
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-1-1'
                 "
               />
               <Group12General
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-1-2'
                 "
               />
               <Group13HeaderUser
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-1-3'
                 "
               />
               <Group141HeaderLibraries
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-1-4-1'
                 "
               />
               <Group142Display
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-1-4-2'
                 "
               />
               <Group143LabelMetadata
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-1-4-3'
                 "
               />
               <Group144TabNfoSettings
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-1-4-4'
                 "
               />
               <Group151LabelTranscodes
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-1-5-1'
                 "
               />
               <Group152ButtonResume
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-1-5-2'
                 "
               />
               <Group153TabStreaming
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-1-5-3'
                 "
               />
               <Group_1_5_4
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-1-5-4'
                 "
               />
               <Group21HeaderDevices
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-2-1'
                 "
               />
               <Group22HeaderActivity
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-2-2'
                 "
               />
               <Group23Dlna
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-2-3'
                 "
               />
               <Group31LiveTv
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-3-1'
                 "
               />
               <Group32HeaderDvr
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-3-2'
                 "
               />
               <Group41TabNetworking
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-4-1'
                 "
               />
               <Group42HeaderApiKey
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-4-2'
                 "
               />
               <Group43TabLogs
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-4-3'
                 "
               />
               <Group44HeaderAlert
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-4-4'
                 "
               />
               <Group451TabMyPlugins
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-4-5-1'
                 "
               />
               <Group452TabCatalog
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-4-5-2'
                 "
               />
               <Group453TabRepositories
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-4-5-3'
                 "
               />
               <Group46TabScheduledTasks
                 v-if="
-                  store_app_configs_info.app_view_server_client_setting_select_tab_name ===
+                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-4-6'
                 "
               />

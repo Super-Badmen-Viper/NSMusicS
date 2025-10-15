@@ -2,7 +2,7 @@ import { reactive } from 'vue'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
 import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
-import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
@@ -15,7 +15,7 @@ export const store_server_model_statistics = reactive({
     try {
       if (store_server_user_model.model_server_type_of_local) {
         if (isElectron) {
-          const db = require('better-sqlite3')(store_app_configs_info.navidrome_db)
+          const db = require('better-sqlite3')(store_system_configs_info.navidrome_db)
           db.pragma('journal_mode = WAL')
           db.exec('PRAGMA foreign_keys = OFF')
           db.exec('BEGIN TRANSACTION') // 显式开始事务

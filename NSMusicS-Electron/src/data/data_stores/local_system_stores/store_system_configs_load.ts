@@ -19,7 +19,7 @@ import { store_router_data_logic } from '@/router/router_store/store_router_data
 import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
 import { store_router_history_data_of_album } from '@/router/router_store/store_router_history_data_of_album'
 import { store_router_history_data_of_artist } from '@/router/router_store/store_router_history_data_of_artist'
-import { store_app_configs_logic_save } from '@/data/data_stores/local_system_stores/store_app_configs_logic_save'
+import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 import shrink_up_arrow from '@/assets/svg/shrink_up_arrow.svg'
 import { store_local_db_info } from '@/data/data_stores/local_app_stores/store_local_db_info'
@@ -29,7 +29,7 @@ import { store_server_auth_token } from '@/data/data_stores/server_api_stores/se
 import { store_server_model_statistics } from '@/data/data_stores/server_api_stores/server_api_core/model/model_statistics'
 import { Audio_howler } from '@/data/data_models/app_models/song_Audio_Out/Audio_howler'
 
-export const store_system_configs_logic_load = reactive({
+export const store_system_configs_load = reactive({
   app_configs_loading: false,
   async load_app_config() {
     this.app_configs_loading = true
@@ -215,7 +215,7 @@ export const store_system_configs_logic_load = reactive({
                       value: rootPath,
                     })
                     console.log(`添加根目录路径: ${rootPath} (文件夹名: ${folderName})`)
-                    store_app_configs_logic_save.save_system_library_config()
+                    store_system_configs_save.save_system_library_config()
                   } else {
                     console.error('无法提取根目录路径或文件夹名称')
                   }
@@ -434,7 +434,7 @@ export const store_system_configs_logic_load = reactive({
           }
         }
         ///
-        store_app_configs_logic_save.save_system_config_of_Servers_Config()
+        store_system_configs_save.save_system_config_of_Servers_Config()
         /// app login
         if (store_server_user_model.model_server_type_of_web) {
           store_server_login_info.server_id =

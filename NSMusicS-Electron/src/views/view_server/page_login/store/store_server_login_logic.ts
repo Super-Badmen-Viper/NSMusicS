@@ -2,26 +2,26 @@ import { reactive } from 'vue'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import axios from 'axios'
 import { store_server_login_info } from './store_server_login_info'
-import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
-import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
-import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
-import { store_general_fetch_home_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_home/store_general_fetch_home_list'
-import { Auth_Token_ApiService_of_NineSong } from '@/data/servers_configs/ninesong_api/services_web/Auth/Auth_Token/index_service'
-import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
-import { Folder_Entity_ApiService_of_NineSong } from '@/data/servers_configs/ninesong_api/services_web/Folder_Entity/index_service'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
+import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
+import { store_general_fetch_home_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_home/store_general_fetch_home_list'
+import { Auth_Token_ApiService_of_NineSong } from '@/data/data_configs/ninesong_api/services_web/Auth/Auth_Token/index_service'
+import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
+import { Folder_Entity_ApiService_of_NineSong } from '@/data/data_configs/ninesong_api/services_web/Folder_Entity/index_service'
 
 export const store_server_login_logic = reactive({
   jwt_expire_time: 24 * 60 * 60 * 1000, // 24小时
   async checkLoginStatus() {
     store_router_data_info.store_router_history_data_of_local = false
     store_router_data_info.store_router_history_data_of_web = true
-    store_app_configs_info.desktop_system_kind = 'docker'
+    store_system_configs_info.desktop_system_kind = 'docker'
     if (store_server_users.server_select_kind === '') {
       store_server_users.server_select_kind = 'ninesong'
     }
 
     const lang = String(sessionStorage.getItem('jwt_lang'))
-    store_app_configs_info.lang = lang && lang != 'null' ? lang : 'en'
+    store_system_configs_info.lang = lang && lang != 'null' ? lang : 'en'
 
     const currentTime = new Date().getTime()
     store_server_login_info.server_accessToken = String(sessionStorage.getItem('jwt_token'))
@@ -41,7 +41,7 @@ export const store_server_login_logic = reactive({
               sessionStorage.setItem('jwt_expire_time', String(currentTime + this.jwt_expire_time)) // 1 小时
 
               store_router_data_info.router_select_model_server_login = false
-              await store_app_configs_info.load_app()
+              await store_system_configs_info.load_app()
               await store_general_fetch_home_list.fetchData_Home()
               console.log('已登录: ' + store_server_login_info.server_accessToken)
 
@@ -51,7 +51,7 @@ export const store_server_login_logic = reactive({
                 store_server_user_model.username = store_server_login_info.server_input_email
                 store_server_user_model.password = store_server_login_info.server_input_password
               }
-              await store_app_configs_logic_save.save_system_config_of_App_Configs()
+              await store_system_configs_save.save_system_config_of_App_Configs()
 
               await store_server_user_model.init_server_info()
 
@@ -77,7 +77,7 @@ export const store_server_login_logic = reactive({
     let userData = null
     try {
       const url =
-        store_app_configs_info.desktop_system_kind === 'docker'
+        store_system_configs_info.desktop_system_kind === 'docker'
           ? '/api'
           : store_server_login_info.server_url
       const response = new Auth_Token_ApiService_of_NineSong(url)
@@ -93,13 +93,13 @@ export const store_server_login_logic = reactive({
           await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
 
         // 由于Electron初始化调用此方法，检测是否为docker，防止调用load_app陷入无限循环
-        if (store_app_configs_info.desktop_system_kind === 'docker') {
+        if (store_system_configs_info.desktop_system_kind === 'docker') {
           store_router_data_info.router_select_model_server_login = false
           const expireTime = new Date().getTime() + this.jwt_expire_time
           sessionStorage.setItem('jwt_token', store_server_login_info.server_accessToken)
           sessionStorage.setItem('jwt_expire_time', expireTime.toString())
           sessionStorage.setItem('email', email)
-          await store_app_configs_info.load_app()
+          await store_system_configs_info.load_app()
           ///
           const route = String(sessionStorage.getItem('jwt_route'))
           let route_path =

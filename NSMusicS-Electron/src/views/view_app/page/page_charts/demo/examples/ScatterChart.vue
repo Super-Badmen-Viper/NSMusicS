@@ -24,7 +24,7 @@ use([
 ])
 
 // 导入状态管理
-import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { store_view_charts_page_info } from '@/views/view_app/page/page_charts/store/store_view_charts_page_info'
 
 const selectedCategory = ref('media_file')
@@ -233,7 +233,7 @@ const loadingOptions = {
   maskColor: 'rgba(255, 255, 255, 0.4)',
 }
 
-const option = shallowRef(getData(selectedCategory.value, store_app_configs_info.theme_name))
+const option = shallowRef(getData(selectedCategory.value, store_system_configs_info.theme_name))
 
 const dimensionOptions = computed(() => {
   return store_view_charts_page_info.charts_data_temporary.map((dim) => ({
@@ -244,7 +244,7 @@ const dimensionOptions = computed(() => {
 
 // 主题变化监听器
 let unwatch_theme_name = watch(
-  () => store_app_configs_info.theme_name,
+  () => store_system_configs_info.theme_name,
   (newTheme) => {
     loading.value = true
     option.value = getData(selectedCategory.value, newTheme)
@@ -267,7 +267,7 @@ let unwatch_charts_data = watch(
 
     // 更新图表
     loading.value = true
-    option.value = getData(selectedCategory.value, store_app_configs_info.theme_name)
+    option.value = getData(selectedCategory.value, store_system_configs_info.theme_name)
     loading.value = false
   },
   { deep: true } // 深度监听，确保数组内部变化也能触发更新
@@ -276,7 +276,7 @@ let unwatch_charts_data = watch(
 // 分类切换处理
 function handleCategoryChange(newCategory: string) {
   loading.value = true
-  option.value = getData(newCategory, store_app_configs_info.theme_name)
+  option.value = getData(newCategory, store_system_configs_info.theme_name)
   loading.value = false
 }
 
@@ -284,7 +284,7 @@ function handleCategoryChange(newCategory: string) {
 async function refresh() {
   loading.value = true
   await store_view_charts_page_logic.fetchData_Charts()
-  option.value = getData(selectedCategory.value, store_app_configs_info.theme_name)
+  option.value = getData(selectedCategory.value, store_system_configs_info.theme_name)
   loading.value = false
 }
 

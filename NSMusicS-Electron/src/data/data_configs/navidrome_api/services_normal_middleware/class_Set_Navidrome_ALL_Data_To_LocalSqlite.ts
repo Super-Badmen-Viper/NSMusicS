@@ -1,17 +1,17 @@
 import { Playlists_ApiService_of_ND } from '../services_normal/playlists/index_service'
 import { Browsing_ApiService_of_ND } from '../services_normal/browsing/index_service'
 import { Media_Retrieval_ApiService_of_ND } from '../services_normal/media_retrieval/index_service'
-import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
+import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { Album$Medias_Lists_ApiService_of_ND } from '../services_normal/album$songs_lists/index_service'
 import { Set_AlbumInfo_To_LocalSqlite } from '@/data/data_repository/app_repository/class_Set_AlbumInfo_To_LocalSqlite'
 import { Set_MediaInfo_To_LocalSqlite } from '@/data/data_repository/app_repository/class_Set_MediaInfo_To_LocalSqlite'
-import { store_local_data_set_albumInfo } from '@/data/data_stores/local_stores/local_data_synchronization/store_local_data_set_albumInfo'
-import { store_local_data_set_artistInfo } from '@/data/data_stores/local_stores/local_data_synchronization/store_local_data_set_artistInfo'
-import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_stores/local_data_synchronization/store_local_data_set_mediaInfo'
+import { store_local_data_set_albumInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_albumInfo'
+import { store_local_data_set_artistInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_artistInfo'
+import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
 import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
-import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
+import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
-import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { isElectron } from '@/utils/electron/isElectron'
 
 export class Set_Navidrome_ALL_Data_To_LocalSqlite {
@@ -81,7 +81,7 @@ export class Set_Navidrome_ALL_Data_To_LocalSqlite {
       const NodeCache = require('node-cache')
       const cache = new NodeCache()
 
-      const db = require('better-sqlite3')(store_app_configs_info.navidrome_db)
+      const db = require('better-sqlite3')(store_system_configs_info.navidrome_db)
       db.pragma('journal_mode = WAL')
       db.exec('PRAGMA foreign_keys = OFF')
 
@@ -556,7 +556,7 @@ export class Set_Navidrome_ALL_Data_To_LocalSqlite {
       const playlists = getPlaylists_all['subsonic-response']['playlists']['playlist']
       let playlMedias = []
 
-      const db = require('better-sqlite3')(store_app_configs_info.navidrome_db)
+      const db = require('better-sqlite3')(store_system_configs_info.navidrome_db)
       db.pragma('journal_mode = WAL')
       db.exec('PRAGMA foreign_keys = OFF')
 

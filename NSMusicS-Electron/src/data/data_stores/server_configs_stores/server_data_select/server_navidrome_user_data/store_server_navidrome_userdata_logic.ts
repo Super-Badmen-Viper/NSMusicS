@@ -1,10 +1,10 @@
 import { reactive } from 'vue'
-import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
-import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
-import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
-import { User_Authorization_ApiWebService_of_ND } from '@/data/servers_configs/navidrome_api/services_web/user_authorization/index_service'
-import { Set_Navidrome_ALL_Data_To_LocalSqlite } from '@/data/servers_configs/navidrome_api/services_normal_middleware/class_Set_Navidrome_ALL_Data_To_LocalSqlite'
-import { User_ApiService_of_ND } from '@/data/servers_configs/navidrome_api/services_normal/user_management/index_service'
+import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
+import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
+import { User_Authorization_ApiWebService_of_ND } from '@/data/data_configs/navidrome_api/services_web/user_authorization/index_service'
+import { Set_Navidrome_ALL_Data_To_LocalSqlite } from '@/data/data_configs/navidrome_api/services_normal_middleware/class_Set_Navidrome_ALL_Data_To_LocalSqlite'
+import { User_ApiService_of_ND } from '@/data/data_configs/navidrome_api/services_normal/user_management/index_service'
 import { Set_ServerInfo_To_LocalSqlite } from '@/data/data_repository/app_repository/class_Set_ServerInfo_To_LocalSqlite'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { hash } from 'spark-md5'
@@ -44,7 +44,7 @@ export const store_server_navidrome_userdata_logic = reactive({
         } else {
           // Golang
           data = await store_server_ninesong_userdata_logic.update_app_configs_server(
-            store_app_configs_logic_save.generateMockObjectId(),
+            store_system_configs_save.generateMockObjectId(),
             server_name,
             url,
             user_name,
@@ -140,8 +140,8 @@ export const store_server_navidrome_userdata_logic = reactive({
           store_server_users.server_config_of_current_user_of_sqlite?.url
         )
         await user_Authorization_ApiWebService_of_ND.get_token()
-        store_app_configs_logic_save.save_system_config_of_App_Configs()
-        store_app_configs_logic_save.save_system_config_of_Servers_Config()
+        store_system_configs_save.save_system_config_of_App_Configs()
+        store_system_configs_save.save_system_config_of_Servers_Config()
       }
       return true
     } catch {}
@@ -161,7 +161,7 @@ export const store_server_navidrome_userdata_logic = reactive({
       store_server_user_model.username = value.user_name
       store_server_user_model.password = value.password
       store_server_login_info.server_url = value.url
-      store_app_configs_logic_save.save_system_config_of_Servers_Config()
+      store_system_configs_save.save_system_config_of_Servers_Config()
 
       const { salt, token } = this.navidrome_get_EncryptedPassword(
         store_server_users.server_config_of_current_user_of_sqlite?.password

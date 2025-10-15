@@ -9,7 +9,7 @@ import { Get_Jellyfin_Temp_Data_To_LocalSqlite } from '@/data/data_configs/jelly
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { Playlist_ApiService_of_NineSong } from '@/data/data_configs/ninesong_api/services_web/Scene/Music/Playlist/index_service'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
-import { store_local_data_set_playlistInfo } from '@/data/data_stores/local_stores/local_data_synchronization/store_local_data_set_playlistInfo'
+import { store_local_data_set_playlistInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_playlistInfo'
 
 export const store_general_model_player_list = reactive({
   async get_playlists_info() {

@@ -28,7 +28,7 @@ import { RouterLink, RouterView, useRouter } from 'vue-router'
 import Bar_Music_Player from '@/views/view_app/components/player_bar/Bar_Music_Player.vue'
 import Bar_Music_PlayList from '@/views/view_app/drawer/View_Player_PlayList.vue'
 import View_Screen_Music_Player from '@/views/view_app/page/page_player/View_Screen_Music_Player.vue'
-import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
 import { store_player_sound_effects } from '@/views/view_app/page/page_player/store/store_player_sound_effects'
 import { store_player_sound_speed } from '@/views/view_app/page/page_player/store/store_player_sound_speed'
@@ -36,20 +36,20 @@ import { store_player_sound_more } from '@/views/view_app/page/page_player/store
 import { store_playlist_appearance } from '@/views/view_app/components/player_list/store/store_playlist_appearance'
 import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
 import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
-import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
+import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
 import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
 import { store_view_artist_page_logic } from '@/views/view_app/page/page_artist/store/store_view_artist_page_logic'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
-import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
-import { store_app_configs_logic_theme } from '@/data/data_stores/app_stores/store_app_configs_logic_theme'
-import { store_general_fetch_media_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'
-import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list'
-import { store_general_fetch_home_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_home/store_general_fetch_home_list'
-import { store_general_fetch_album_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list'
-import { store_general_fetch_artist_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_artist/store_general_fetch_artist_list'
+import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
+import { store_system_configs_theme } from '@/data/data_stores/local_system_stores/store_system_configs_theme'
+import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
+import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list'
+import { store_general_fetch_home_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_home/store_general_fetch_home_list'
+import { store_general_fetch_album_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_album/store_general_fetch_album_list'
+import { store_general_fetch_artist_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_artist/store_general_fetch_artist_list'
 import { store_view_media_cue_page_logic } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_logic'
 import { store_view_media_cue_page_info } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_info'
 
@@ -57,8 +57,8 @@ import { store_view_media_cue_page_info } from '@/views/view_app/page/page_media
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 let mobile_model = false
 window.addEventListener('resize', () => {
-  store_app_configs_info.window_innerWidth = window.innerWidth
-  store_app_configs_info.window_innerHeight = window.innerHeight
+  store_system_configs_info.window_innerWidth = window.innerWidth
+  store_system_configs_info.window_innerHeight = window.innerHeight
 
   mobile_model = window.innerWidth / window.innerHeight < 0.5
 
@@ -82,8 +82,8 @@ function renderRouterLink(nameValue, defaultValue) {
   return () => h(RouterLink, { to: { name: nameValue } }, { default: () => defaultValue })
 }
 function create_menuOptions_appBar() {
-  store_app_configs_info.app_view_menuOptions = []
-  store_app_configs_info.app_view_menuOptions.push(
+  store_system_configs_info.app_view_menuOptions = []
+  store_system_configs_info.app_view_menuOptions.push(
     {
       label: computed(() => renderRouterLink('setting', t('HeaderAdmin') + t('Console'))),
       key: 'setting',
@@ -91,7 +91,7 @@ function create_menuOptions_appBar() {
     },
     { key: 'divider-1', type: 'divider', props: { style: { marginLeft: '22px' } } }
   )
-  store_app_configs_info.app_view_menuOptions.push(
+  store_system_configs_info.app_view_menuOptions.push(
     // {
     //   label: computed(() =>
     //     renderRouterLink('categories', t('entity.smartPlaylist') + t('Categories'))
@@ -145,10 +145,10 @@ function create_menuOptions_appBar() {
     }
   )
   /// 兼容性代码，在更新多模态模式之后，将删除方法部分代码
-  store_app_configs_info.menuOptions_selectd_model_1 = false
-  store_app_configs_info.menuOptions_selectd_model_2 = false
-  store_app_configs_info.menuOptions_selectd_model_3 = false
-  store_app_configs_info.menuOptions_selectd_model_4 = false
+  store_system_configs_info.menuOptions_selectd_model_1 = false
+  store_system_configs_info.menuOptions_selectd_model_2 = false
+  store_system_configs_info.menuOptions_selectd_model_3 = false
+  store_system_configs_info.menuOptions_selectd_model_4 = false
 }
 
 ////// player view
@@ -160,19 +160,19 @@ async function get_playerbar_to_switch_playerview(value) {
   if (value === 0) {
     store_player_appearance.player_show = true
     if (store_router_data_logic.clear_Memory_Model) {
-      store_app_configs_info.app_view_bar_show = false
+      store_system_configs_info.app_view_bar_show = false
     }
   }
   setTimeout(() => {
     store_player_appearance.player_show_hight_animation_value = value
     setTimeout(() => {
       if (value === 0) {
-        store_app_configs_info.theme_app = darkTheme
+        store_system_configs_info.theme_app = darkTheme
       } else {
-        store_app_configs_info.theme_app = store_app_configs_info.theme
+        store_system_configs_info.theme_app = store_system_configs_info.theme
         store_player_appearance.player_show = false
         if (store_router_data_logic.clear_Memory_Model) {
-          store_app_configs_info.app_view_bar_show = true
+          store_system_configs_info.app_view_bar_show = true
         }
       }
     }, 200)
@@ -251,7 +251,7 @@ async function handleMenuSelection() {
       store_router_data_info.router_select_model_server_setting = true
     },
   }
-  const selectedAction = menuActions[store_app_configs_info.app_view_left_menu_select_activeKey]
+  const selectedAction = menuActions[store_system_configs_info.app_view_left_menu_select_activeKey]
   if (selectedAction) {
     await selectedAction()
   }
@@ -327,11 +327,11 @@ provide('get_playerbar_to_switch_playerview', get_playerbar_to_switch_playerview
 ////// router_music custom class
 store_router_data_info.router = useRouter()
 import routers from './router'
-import { store_app_configs_logic_update } from '@/data/data_stores/app_stores/store_app_configs_logic_update'
+import { store_system_configs_update } from '@/data/data_stores/local_system_stores/store_system_configs_update'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
-import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
+import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 routers.beforeEach((to, from, next) => {
   if (to.name !== from.name) {
     store_router_data_logic.clear_Files_temporary()
@@ -386,15 +386,15 @@ routers.afterEach(async (to, from) => {
     if (!store_router_data_info.router_name || store_router_data_info.router_name === 'null') {
       store_router_data_info.router_name = 'home'
     }
-    store_app_configs_info.app_view_left_menu_select_activeKey = to.name
+    store_system_configs_info.app_view_left_menu_select_activeKey = to.name
     if (
-      !store_app_configs_info.app_view_left_menu_select_activeKey ||
-      store_app_configs_info.app_view_left_menu_select_activeKey === 'null'
+      !store_system_configs_info.app_view_left_menu_select_activeKey ||
+      store_system_configs_info.app_view_left_menu_select_activeKey === 'null'
     ) {
-      store_app_configs_info.app_view_left_menu_select_activeKey = 'home'
+      store_system_configs_info.app_view_left_menu_select_activeKey = 'home'
     }
     console.log(to.name)
-    store_app_configs_info.app_view_left_menu_collapsed = true
+    store_system_configs_info.app_view_left_menu_collapsed = true
     if (!store_router_data_logic.clear_UserExperience_Model) {
       if (to.name !== 'media') {
         try {
@@ -852,7 +852,7 @@ const { locale } = useI18n({
   useScope: 'global',
 })
 import { store_server_login_logic } from '@/views/view_server/page_login/store/store_server_login_logic'
-import { store_server_model_statistics } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/model/model_statistics'
+import { store_server_model_statistics } from '@/data/data_stores/server_api_stores/server_api_core/model/model_statistics'
 onMounted(() => {
   create_menuOptions_appBar()
 })
@@ -862,7 +862,7 @@ onMounted(async () => {
       // isLogin
       await store_server_login_logic.checkLoginStatus()
     } else {
-      await store_app_configs_info.load_app()
+      await store_system_configs_info.load_app()
       /// init tray
       try {
         await ipcRenderer.invoke('i18n-tray-label-menu', [
@@ -888,42 +888,42 @@ onMounted(async () => {
   store_player_audio_logic.player_init_play = true
 })
 watch(
-  () => store_app_configs_info.lang,
+  () => store_system_configs_info.lang,
   async (newValue) => {
     locale.value = newValue
   }
 )
 if (isElectron) {
   ipcRenderer.on('tray-app-quit', () => {
-    store_app_configs_logic_save.save_system_config_of_Player_Configs_of_Audio_Info()
+    store_system_configs_save.save_system_config_of_Player_Configs_of_Audio_Info()
   })
 }
 
 function fullMaximize() {
   if (isElectron) {
-    if (store_app_configs_info.desktop_system_kind === 'linux') {
+    if (store_system_configs_info.desktop_system_kind === 'linux') {
       ipcRenderer.send('window-fullscreen')
-      store_app_configs_info.window_full = !store_app_configs_info.window_full
-      store_app_configs_info.window_max = store_app_configs_info.window_full
+      store_system_configs_info.window_full = !store_system_configs_info.window_full
+      store_system_configs_info.window_max = store_system_configs_info.window_full
     } else {
       ipcRenderer.send('window-max')
-      store_app_configs_info.window_max = !store_app_configs_info.window_max
-      store_app_configs_info.window_full = false
+      store_system_configs_info.window_max = !store_system_configs_info.window_max
+      store_system_configs_info.window_full = false
     }
     //
-    store_app_configs_info.window_innerWidth = window.innerWidth
-    store_app_configs_info.window_innerHeight = window.innerHeight
+    store_system_configs_info.window_innerWidth = window.innerWidth
+    store_system_configs_info.window_innerHeight = window.innerHeight
   }
 }
 function fullScreen() {
   if (isElectron) {
     ipcRenderer.send('window-fullscreen')
   }
-  store_app_configs_info.window_full = !store_app_configs_info.window_full
-  store_app_configs_info.window_max = store_app_configs_info.window_full
+  store_system_configs_info.window_full = !store_system_configs_info.window_full
+  store_system_configs_info.window_max = store_system_configs_info.window_full
   //
-  store_app_configs_info.window_innerWidth = window.innerWidth
-  store_app_configs_info.window_innerHeight = window.innerHeight
+  store_system_configs_info.window_innerWidth = window.innerWidth
+  store_system_configs_info.window_innerHeight = window.innerHeight
 }
 </script>
 <template>
@@ -932,7 +932,7 @@ function fullScreen() {
     <n-config-provider
       class="this_App"
       v-if="!store_router_data_info.router_select_model_server_login"
-      :theme="store_app_configs_info.theme"
+      :theme="store_system_configs_info.theme"
     >
       <n-global-style />
       <n-message-provider class="this_App">
@@ -942,12 +942,12 @@ function fullScreen() {
             <div></div>
             <n-layout-sider
               show-trigger="bar"
-              v-if="store_app_configs_info.app_view_left_menu_collapsed"
+              v-if="store_system_configs_info.app_view_left_menu_collapsed"
               collapse-mode="width"
               :collapsed-width="66"
-              :collapsed="store_app_configs_info.app_view_left_menu_collapsed"
-              @collapse="store_app_configs_info.app_view_left_menu_collapsed = true"
-              @expand="store_app_configs_info.app_view_left_menu_collapsed = false"
+              :collapsed="store_system_configs_info.app_view_left_menu_collapsed"
+              @collapse="store_system_configs_info.app_view_left_menu_collapsed = true"
+              @expand="store_system_configs_info.app_view_left_menu_collapsed = false"
               :width="166"
               style="border-radius: 0 20px 20px 0"
               :style="{
@@ -957,13 +957,13 @@ function fullScreen() {
               <n-flex vertical justify="center">
                 <div></div>
                 <n-menu
-                  v-if="store_app_configs_info.app_view_bar_show"
-                  v-model:value="store_app_configs_info.app_view_left_menu_select_activeKey"
-                  :collapsed="store_app_configs_info.app_view_left_menu_collapsed"
+                  v-if="store_system_configs_info.app_view_bar_show"
+                  v-model:value="store_system_configs_info.app_view_left_menu_select_activeKey"
+                  :collapsed="store_system_configs_info.app_view_left_menu_collapsed"
                   :collapsed-width="66"
                   :collapsed-icon-size="22"
                   :icon-size="20"
-                  :options="store_app_configs_info.app_view_menuOptions"
+                  :options="store_system_configs_info.app_view_menuOptions"
                   @click="
                     store_general_fetch_media_list.fetchData_Media_of_server_web_clear_all_parms()
                   "
@@ -975,26 +975,26 @@ function fullScreen() {
           </n-flex>
           <!--Left Router_Menu app_view_left_menu_show-->
           <n-drawer
-            v-model:show="store_app_configs_info.app_view_left_menu_show"
+            v-model:show="store_system_configs_info.app_view_left_menu_show"
             placement="left"
             :width="200"
             style="border: 0; border-radius: 0 20px 20px 0"
           >
             <n-layout-sider
-              v-if="store_app_configs_info.app_view_left_menu_show"
+              v-if="store_system_configs_info.app_view_left_menu_show"
               :width="200"
               style="border: 0; z-index: 200; height: 100vh"
             >
               <n-flex vertical justify="center" style="height: 100vh">
                 <div></div>
                 <n-menu
-                  v-if="store_app_configs_info.app_view_bar_show"
-                  v-model:value="store_app_configs_info.app_view_left_menu_select_activeKey"
-                  :collapsed="store_app_configs_info.app_view_left_menu_collapsed"
+                  v-if="store_system_configs_info.app_view_bar_show"
+                  v-model:value="store_system_configs_info.app_view_left_menu_select_activeKey"
+                  :collapsed="store_system_configs_info.app_view_left_menu_collapsed"
                   :collapsed-width="66"
                   :collapsed-icon-size="22"
                   :icon-size="20"
-                  :options="store_app_configs_info.app_view_menuOptions"
+                  :options="store_system_configs_info.app_view_menuOptions"
                   @click="
                     store_general_fetch_media_list.fetchData_Media_of_server_web_clear_all_parms()
                   "
@@ -1090,16 +1090,16 @@ function fullScreen() {
               <n-tooltip
                 trigger="hover"
                 placement="top"
-                v-if="!store_app_configs_info.window_state_miniplayer"
+                v-if="!store_system_configs_info.window_state_miniplayer"
               >
                 <template #trigger>
                   <n-badge
-                    :value="store_app_configs_info.version_updated"
+                    :value="store_system_configs_info.version_updated"
                     :offset="[-17, -4]"
-                    :type="store_app_configs_info.version_updated === 1 ? 'error' : 'info'"
+                    :type="store_system_configs_info.version_updated === 1 ? 'error' : 'info'"
                     :style="{
                       marginRight: isElectron
-                        ? store_app_configs_info.desktop_system_kind !== 'darwin'
+                        ? store_system_configs_info.desktop_system_kind !== 'darwin'
                           ? '257px'
                           : '106px'
                         : '76px',
@@ -1110,7 +1110,7 @@ function fullScreen() {
                       quaternary
                       circle
                       @click="
-                        store_app_configs_info.update_show = !store_app_configs_info.update_show
+                        store_system_configs_info.update_show = !store_system_configs_info.update_show
                       "
                     >
                       <template #icon>
@@ -1135,7 +1135,7 @@ function fullScreen() {
                 <n-tooltip
                   trigger="hover"
                   placement="top"
-                  v-if="!store_app_configs_info.window_state_miniplayer"
+                  v-if="!store_system_configs_info.window_state_miniplayer"
                 >
                   <template #trigger>
                     <n-button
@@ -1143,12 +1143,12 @@ function fullScreen() {
                       circle
                       :style="{
                         marginRight: isElectron
-                          ? store_app_configs_info.desktop_system_kind != 'darwin'
+                          ? store_system_configs_info.desktop_system_kind != 'darwin'
                             ? '4px'
                             : '4px'
                           : '36px',
                       }"
-                      @click="store_app_configs_logic_theme.theme_mode_change_click()"
+                      @click="store_system_configs_theme.theme_mode_change_click()"
                     >
                       <template #icon>
                         <n-icon size="20" :depth="2"><DarkTheme24Filled /></n-icon>
@@ -1162,14 +1162,14 @@ function fullScreen() {
                   placement="top"
                   v-if="
                     isElectron &&
-                    !store_app_configs_info.window_state_miniplayer &&
-                    store_app_configs_info.desktop_system_kind != 'darwin'
+                    !store_system_configs_info.window_state_miniplayer &&
+                    store_system_configs_info.desktop_system_kind != 'darwin'
                   "
                 >
                   <template #trigger>
                     <n-button quaternary circle style="margin-right: 4px" @click="fullScreen">
                       <template #icon>
-                        <n-icon size="19" :depth="2" v-if="store_app_configs_info.window_full">
+                        <n-icon size="19" :depth="2" v-if="store_system_configs_info.window_full">
                           <ArrowsMinimize />
                         </n-icon>
                         <n-icon size="19" :depth="2" v-else>
@@ -1187,25 +1187,25 @@ function fullScreen() {
                       circle
                       :style="{
                         marginRight:
-                          store_app_configs_info.desktop_system_kind != 'darwin' ? '4px' : '30px',
+                          store_system_configs_info.desktop_system_kind != 'darwin' ? '4px' : '30px',
                       }"
                       @click="
                         async () => {
                           if (isElectron) {
                             // 请不要更改这段诡异的代码，它依靠Electron的BUG运行，呵呵
-                            store_app_configs_info.window_state_miniplayer_card = false
-                            store_app_configs_info.window_state_miniplayer_desktop_lyric = false
-                            store_app_configs_info.window_state_miniplayer_album = false
+                            store_system_configs_info.window_state_miniplayer_card = false
+                            store_system_configs_info.window_state_miniplayer_desktop_lyric = false
+                            store_system_configs_info.window_state_miniplayer_album = false
                             ipcRenderer.send('window-state-miniplayer-open')
                             ipcRenderer.send('window-state-miniplayer-open')
                             //
-                            store_app_configs_info.window_state_miniplayer =
-                              !store_app_configs_info.window_state_miniplayer
+                            store_system_configs_info.window_state_miniplayer =
+                              !store_system_configs_info.window_state_miniplayer
                             //await ipcRenderer.invoke('get-window-state-miniplayer');
                             store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false
                             //
-                            store_app_configs_info.window_full = false
-                            store_app_configs_info.window_max = false
+                            store_system_configs_info.window_full = false
+                            store_system_configs_info.window_max = false
                           }
                         }
                       "
@@ -1220,7 +1220,7 @@ function fullScreen() {
                 <n-tooltip
                   trigger="hover"
                   placement="top"
-                  v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'"
+                  v-if="isElectron && store_system_configs_info.desktop_system_kind != 'darwin'"
                 >
                   <template #trigger>
                     <n-button
@@ -1245,12 +1245,12 @@ function fullScreen() {
                 <n-tooltip
                   trigger="hover"
                   placement="top"
-                  v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'"
+                  v-if="isElectron && store_system_configs_info.desktop_system_kind != 'darwin'"
                 >
                   <template #trigger>
                     <n-button quaternary circle style="margin-right: 4px" @click="fullMaximize">
                       <template #icon>
-                        <n-icon size="20" :depth="2" v-if="store_app_configs_info.window_max"
+                        <n-icon size="20" :depth="2" v-if="store_system_configs_info.window_max"
                           ><FullScreenMinimize24Filled
                         /></n-icon>
                         <n-icon size="20" :depth="2" v-else><FullScreenMaximize24Filled /></n-icon>
@@ -1262,7 +1262,7 @@ function fullScreen() {
                 <n-tooltip
                   trigger="hover"
                   placement="top"
-                  v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'"
+                  v-if="isElectron && store_system_configs_info.desktop_system_kind != 'darwin'"
                 >
                   <template #trigger>
                     <n-button
@@ -1288,7 +1288,7 @@ function fullScreen() {
             </div>
           </n-layout>
           <!-- bottom PlayerBar and PlayerView -->
-          <n-config-provider :theme="store_app_configs_info.theme_app" style="z-index: 205">
+          <n-config-provider :theme="store_system_configs_info.theme_app" style="z-index: 205">
             <!-- n-card can change Bar_Music_Player(text color) -->
             <n-card
               style="
@@ -1306,12 +1306,12 @@ function fullScreen() {
             </n-card>
           </n-config-provider>
           <!-- bottom PlayerBar and PlayerView -->
-          <n-config-provider :theme="store_app_configs_info.theme_app" style="z-index: 203">
+          <n-config-provider :theme="store_system_configs_info.theme_app" style="z-index: 203">
             <View_Screen_Music_Player
               class="view_music_player"
               v-if="
                 store_player_appearance.player_show &&
-                !store_app_configs_info.window_state_miniplayer
+                !store_system_configs_info.window_state_miniplayer
               "
               :style="{
                 height: `calc(100vh - ${store_player_appearance.player_show_hight_animation_value}vh)`,
@@ -1320,9 +1320,9 @@ function fullScreen() {
             </View_Screen_Music_Player>
           </n-config-provider>
           <!-- bottom PlayerBar and PlayerView -->
-          <n-config-provider :theme="store_app_configs_info.theme_app" style="z-index: 211">
+          <n-config-provider :theme="store_system_configs_info.theme_app" style="z-index: 211">
             <View_Mini_Music_Player
-              v-if="store_app_configs_info.window_state_miniplayer"
+              v-if="store_system_configs_info.window_state_miniplayer"
               class="view_music_player"
               style="height: 100vh"
             >
@@ -1330,7 +1330,7 @@ function fullScreen() {
           </n-config-provider>
           <n-config-provider :theme="darkTheme">
             <n-drawer
-              v-model:show="store_app_configs_info.window_state_miniplayer_playlist"
+              v-model:show="store_system_configs_info.window_state_miniplayer_playlist"
               :width="310"
               z-index="100"
               style="
@@ -1480,7 +1480,7 @@ function fullScreen() {
       </n-drawer>
       <!-- right drwaer of update -->
       <n-drawer
-        v-model:show="store_app_configs_info.update_show"
+        v-model:show="store_system_configs_info.update_show"
         :width="640"
         style="
           border-radius: 12px 0 0 12px;
@@ -1497,11 +1497,11 @@ function fullScreen() {
               <n-space vertical style="font-size: 16px; font-weight: bolder">
                 <div>
                   {{ $t('nsmusics.view_page.current') }}{{ $t('common.version') }} :
-                  {{ store_app_configs_info.version }}
+                  {{ store_system_configs_info.version }}
                 </div>
                 <div>
                   {{ $t('nsmusics.view_page.last_next') }}{{ $t('common.version') }} :
-                  {{ store_app_configs_logic_update.version }}
+                  {{ store_system_configs_update.version }}
                 </div>
                 <br />
                 NSMusicS{{ $t('nsmusics.view_page.install') }}{{ $t('common.description') }} :
@@ -1512,9 +1512,9 @@ function fullScreen() {
                   https://github.com/Super-Badmen-Viper/NSMusicS/releases
                 </a>
                 <br />
-                <!--                NSMusicS{{$t('nsmusics.view_page.download')}}{{$t('common.description')}} : <a class="link" @click="openLink(store_app_configs_info.version_update_address)">{{ store_app_configs_info.version_update_address }}</a>-->
+                <!--                NSMusicS{{$t('nsmusics.view_page.download')}}{{$t('common.description')}} : <a class="link" @click="openLink(store_system_configs_info.version_update_address)">{{ store_system_configs_info.version_update_address }}</a>-->
                 <!--                <br>-->
-                <div v-html="store_app_configs_info.version_update_explain"></div>
+                <div v-html="store_system_configs_info.version_update_explain"></div>
               </n-space>
             </n-card>
           </template>

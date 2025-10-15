@@ -1,16 +1,16 @@
 import { reactive, watch } from 'vue'
-import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
+import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { Audio_node_mpv } from '@/data/data_models/app_models/song_Audio_Out/Audio_node_mpv'
 import { Audio_howler } from '@/data/data_models/app_models/song_Audio_Out/Audio_howler'
 import { store_player_audio_info } from './store_player_audio_info'
 import { store_player_view } from './store_player_view'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { store_player_tag_modify } from './store_player_tag_modify'
-import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
+import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import error_album from '@/assets/img/error_album.jpg'
-import { Audio_ApiService_of_Je } from '@/data/servers_configs/jellyfin_api/services_web/Audio/index_service'
-import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
-import { Retrieval_ApiService_of_NineSong } from '@/data/servers_configs/ninesong_api/services_web/Scene/Music/Retrieval/index_service'
+import { Audio_ApiService_of_Je } from '@/data/data_configs/jellyfin_api/services_web/Audio/index_service'
+import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { Retrieval_ApiService_of_NineSong } from '@/data/data_configs/ninesong_api/services_web/Scene/Music/Retrieval/index_service'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 
 export const store_player_audio_logic = reactive({
@@ -382,7 +382,7 @@ watch(
       // other
     }
 
-    store_app_configs_logic_save.save_system_config_of_App_Configs()
+    store_system_configs_save.save_system_config_of_App_Configs()
   }
 )
 watch(
@@ -410,87 +410,87 @@ watch(
         }
       }
     }
-    store_app_configs_logic_save.save_system_config_of_App_Configs()
+    store_system_configs_save.save_system_config_of_App_Configs()
   }
 )
 watch(
   () => store_player_audio_logic.player_fade_value,
   (newValue) => {
-    store_app_configs_logic_save.save_system_config_of_App_Configs()
+    store_system_configs_save.save_system_config_of_App_Configs()
   }
 )
 watch(
   () => store_player_audio_logic.player_dolby,
   (newValue) => {
-    store_app_configs_logic_save.save_system_config_of_App_Configs()
+    store_system_configs_save.save_system_config_of_App_Configs()
   }
 )
 watch(
   () => store_player_audio_logic.player_audio_channel,
   (newValue) => {
-    store_app_configs_logic_save.save_system_config_of_App_Configs()
+    store_system_configs_save.save_system_config_of_App_Configs()
   }
 )
 watch(
   () => store_player_audio_logic.player_samp_value,
   (newValue) => {
-    store_app_configs_logic_save.save_system_config_of_App_Configs()
+    store_system_configs_save.save_system_config_of_App_Configs()
   }
 )
 watch(
   () => store_player_audio_logic.player_gaplessAudio,
   (newValue) => {
-    store_app_configs_logic_save.save_system_config_of_App_Configs()
+    store_system_configs_save.save_system_config_of_App_Configs()
   }
 )
 watch(
   () => store_player_audio_logic.player_audioExclusiveMode,
   (newValue) => {
-    store_app_configs_logic_save.save_system_config_of_App_Configs()
+    store_system_configs_save.save_system_config_of_App_Configs()
   }
 )
 watch(
   () => store_player_audio_logic.player_replayGainMode,
   (newValue) => {
-    store_app_configs_logic_save.save_system_config_of_App_Configs()
+    store_system_configs_save.save_system_config_of_App_Configs()
   }
 )
 watch(
   () => store_player_audio_logic.player_replayGainPreamp,
   (newValue) => {
-    store_app_configs_logic_save.save_system_config_of_App_Configs()
+    store_system_configs_save.save_system_config_of_App_Configs()
   }
 )
 watch(
   () => store_player_audio_logic.player_replayGainClip,
   (newValue) => {
-    store_app_configs_logic_save.save_system_config_of_App_Configs()
+    store_system_configs_save.save_system_config_of_App_Configs()
   }
 )
 watch(
   () => store_player_audio_logic.player_replayGainFallback,
   (newValue) => {
-    store_app_configs_logic_save.save_system_config_of_App_Configs()
+    store_system_configs_save.save_system_config_of_App_Configs()
   }
 )
 watch(
   () => store_player_audio_logic.player_mpvExtraParameters,
   (newValue) => {
-    store_app_configs_logic_save.save_system_config_of_App_Configs()
+    store_system_configs_save.save_system_config_of_App_Configs()
   }
 )
 watch(
   () => store_player_audio_logic.play_order,
   (newValue) => {
     if (newValue && newValue.length > 0) {
-      store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()
+      store_system_configs_save.save_system_config_of_Player_Configs_of_UI()
     }
   }
 )
 watch(
   () => store_player_audio_logic.player_save_new_data,
   (newValue) => {
-    store_app_configs_logic_save.save_system_config_of_Player_Configs_of_Audio_Info()
+    store_system_configs_save.save_system_config_of_Player_Configs_of_Audio_Info()
     store_player_audio_logic.player_save_new_data = false
   }
 )

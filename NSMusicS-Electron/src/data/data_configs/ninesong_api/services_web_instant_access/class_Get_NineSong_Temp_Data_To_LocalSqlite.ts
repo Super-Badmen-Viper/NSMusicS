@@ -3,13 +3,13 @@ import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/s
 import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
-import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
-import { store_general_fetch_player_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list'
+import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
+import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
-import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
+import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
-import { store_general_fetch_media_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'
+import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 
 import { Artists_ApiService_of_NineSong } from '../services_web/Scene/Music/Artists/index_service'
@@ -418,7 +418,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
         if (store_general_fetch_media_list._load_model === 'play') {
           store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
             store_view_media_page_info.media_Files_temporary.map((item) => item.id)
-          store_app_configs_logic_save.save_system_playlist_item_id_config()
+          store_system_configs_save.save_system_playlist_item_id_config()
         }
       }
     }
@@ -771,7 +771,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       })
       store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
         store_playlist_list_info.playlist_MediaFiles_temporary.map((item) => item.id)
-      store_app_configs_logic_save.save_system_playlist_item_id_config()
+      store_system_configs_save.save_system_playlist_item_id_config()
     }
   }
 

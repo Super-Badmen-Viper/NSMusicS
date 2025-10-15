@@ -2,16 +2,16 @@ import { reactive } from 'vue'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 import axios from 'axios'
-import { Auth_Token_ApiService_of_NineSong } from '@/data/servers_configs/ninesong_api/services_web/Auth/Auth_Token/index_service'
-import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
-import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
-import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
+import { Auth_Token_ApiService_of_NineSong } from '@/data/data_configs/ninesong_api/services_web/Auth/Auth_Token/index_service'
+import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
+import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { Set_ServerInfo_To_LocalSqlite } from '@/data/data_repository/app_repository/class_Set_ServerInfo_To_LocalSqlite'
 import { isElectron } from '@/utils/electron/isElectron'
-import { Folder_Entity_ApiService_of_NineSong } from '@/data/servers_configs/ninesong_api/services_web/Folder_Entity/index_service'
+import { Folder_Entity_ApiService_of_NineSong } from '@/data/data_configs/ninesong_api/services_web/Folder_Entity/index_service'
 
 export const store_server_ninesong_userdata_logic = reactive({
-  /// docker server_stores manage
+  /// docker server_configs_stores manage
   async update_app_configs_server(
     id: string,
     server_name: string,
@@ -83,8 +83,8 @@ export const store_server_ninesong_userdata_logic = reactive({
     return true
   },
 
-  /// app server_stores manage
-  /// server_stores add
+  /// app server_configs_stores manage
+  /// server_configs_stores add
   async ninesong_update_server_addUser(
     server_name: string,
     url: string,
@@ -116,7 +116,7 @@ export const store_server_ninesong_userdata_logic = reactive({
         } else {
           // Golang
           data = await store_server_ninesong_userdata_logic.update_app_configs_server(
-            store_app_configs_logic_save.generateMockObjectId(),
+            store_system_configs_save.generateMockObjectId(),
             server_name,
             url,
             user_name,
@@ -140,7 +140,7 @@ export const store_server_ninesong_userdata_logic = reactive({
     return false
   },
 
-  /// server_stores update
+  /// server_configs_stores update
   async ninesong_update_server_setUser(
     id: string,
     server_name: string,
@@ -197,7 +197,7 @@ export const store_server_ninesong_userdata_logic = reactive({
     return false
   },
 
-  /// server_stores select login
+  /// server_configs_stores select login
   async ninesong_update_server_config_of_current_user_of_sqlite(value: any) {
     try {
       const index = store_server_users.server_config_of_all_user_of_sqlite.findIndex(
@@ -214,13 +214,13 @@ export const store_server_ninesong_userdata_logic = reactive({
       await this.ninesong_get_server_config(
         store_server_users.server_config_of_all_user_of_sqlite[index]
       )
-      store_app_configs_logic_save.save_system_config_of_App_Configs()
-      store_app_configs_logic_save.save_system_config_of_Servers_Config()
+      store_system_configs_save.save_system_config_of_App_Configs()
+      store_system_configs_save.save_system_config_of_Servers_Config()
       return true
     } catch {}
     return false
   },
-  /// server_stores start login
+  /// server_configs_stores start login
   async ninesong_get_server_config(value: Server_Configs_Props) {
     store_server_users.server_config_of_current_user_of_sqlite = value
     store_server_users.server_config_of_current_user_of_select = {
@@ -235,6 +235,6 @@ export const store_server_ninesong_userdata_logic = reactive({
     store_server_user_model.username = value.user_name
     store_server_user_model.password = value.password
     store_server_login_info.server_url = value.url
-    store_app_configs_logic_save.save_system_config_of_Servers_Config()
+    store_system_configs_save.save_system_config_of_Servers_Config()
   },
 })

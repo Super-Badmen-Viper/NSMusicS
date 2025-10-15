@@ -1,15 +1,15 @@
 <script setup lang="ts">
 ////// this_view resource of vicons_svg
 import { AddCircle32Regular, ArrowReset24Filled, Folder24Regular } from '@vicons/fluent'
-import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
-import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
+import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { Close } from '@vicons/carbon'
 import { NButton, NIcon } from 'naive-ui'
 
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 
-import { Folder_Entity_ApiService_of_NineSong } from '@/data/servers_configs/ninesong_api/services_web/Folder_Entity/index_service'
-import { File_Entity_ApiService_of_NineSong } from '@/data/servers_configs/ninesong_api/services_web/File_Entity/Scan Folders/index_service'
+import { Folder_Entity_ApiService_of_NineSong } from '@/data/data_configs/ninesong_api/services_web/Folder_Entity/index_service'
+import { File_Entity_ApiService_of_NineSong } from '@/data/data_configs/ninesong_api/services_web/File_Entity/Scan Folders/index_service'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n({
   inheritLocale: true,
@@ -278,7 +278,7 @@ const gridItems = ref(5)
 const itemSecondarySize = ref(185)
 const collapsed_width = ref<number>(1090)
 const stopWatching_window_innerWidth = watch(
-  () => store_app_configs_info.window_innerWidth,
+  () => store_system_configs_info.window_innerWidth,
   () => {
     updateGridItems()
   }

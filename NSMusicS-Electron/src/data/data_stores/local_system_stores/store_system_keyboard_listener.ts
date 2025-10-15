@@ -1,6 +1,6 @@
-// store_app_keyboard_listener.ts
+// store_system_keyboard_listener.ts
 import { reactive, watch } from 'vue'
-import { store_app_configs_logic_save } from '@/data/data_stores/local_system_stores/store_app_configs_logic_save' // 您的保存逻辑
+import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save' // 您的保存逻辑
 
 // 定义快捷键配置项的接口
 interface ShortcutConfig {
@@ -11,7 +11,7 @@ interface ShortcutConfig {
   // 其他您需要的元数据...
 }
 
-export const store_app_keyboard_listener = reactive({
+export const store_system_keyboard_listener = reactive({
   // 当前所有可用的快捷键配置列表
   allShortcutConfigs: [] as ShortcutConfig[],
 
@@ -71,7 +71,7 @@ export const store_app_keyboard_listener = reactive({
     // 将 Map 转换为普通对象以便存储
     const configToSave = Object.fromEntries(this.activeShortcutMap)
     // 调用您的保存逻辑，例如保存到 app config 或服务器
-    // await store_app_configs_logic_save.save_system_config_of_App_Configs({ shortcuts: configToSave });
+    // await store_system_configs_save.save_system_config_of_App_Configs({ shortcuts: configToSave });
     console.log('Shortcut configuration saved.', configToSave)
   },
 
@@ -101,13 +101,13 @@ export const store_app_keyboard_listener = reactive({
 })
 
 // 可选：初始化这个 store
-store_app_keyboard_listener.init()
+store_system_keyboard_listener.init()
 
 // 您可以监听其他需要重置快捷键配置的情况
 // watch(
 //   () => someCondition,
 //   () => {
-//     store_app_keyboard_listener.init();
+//     store_system_keyboard_listener.init();
 //   }
 // );
 
@@ -139,12 +139,12 @@ store_app_keyboard_listener.init()
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { store_app_keyboard_listener } from '@/data/data_stores/local_system_stores/store_app_keyboard_listener';
-import { store_app_configs_logic_theme } from '@/data/data_stores/local_system_stores/store_app_configs_logic_theme'; // 您的主题store
+import { store_system_keyboard_listener } from '@/data/data_stores/local_system_stores/store_system_keyboard_listener';
+import { store_system_configs_theme } from '@/data/data_stores/local_system_stores/store_system_configs_theme'; // 您的主题store
 
 // 获取指定快捷键的当前键位组合
 const getShortcutKeyCombo = (shortcutId: string) => {
-  return store_app_keyboard_listener.getKeyCombo(shortcutId);
+  return store_system_keyboard_listener.getKeyCombo(shortcutId);
 };
 
 // 格式化按键组合用于显示（例如：Ctrl+S）
@@ -161,7 +161,7 @@ const handleSave = (event: KeyboardEvent) => {
 
 const toggleTheme = (event: KeyboardEvent) => {
   event.preventDefault();
-  store_app_configs_logic_theme.theme_mode_change_click();
+  store_system_configs_theme.theme_mode_change_click();
   console.log('Theme toggled by shortcut');
 };
 </script>
@@ -185,7 +185,7 @@ const toggleTheme = (event: KeyboardEvent) => {
 </template>
 
 <script setup lang="ts">
-import { store_app_keyboard_listener as store } from '@/data/data_stores/local_system_stores/store_app_keyboard_listener';
+import { store_system_keyboard_listener as store } from '@/data/data_stores/local_system_stores/store_system_keyboard_listener';
 
 const assignNewKey = (shortcutId: string, event: KeyboardEvent) => {
   event.preventDefault();

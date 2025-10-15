@@ -1,4 +1,4 @@
-import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { isElectron } from '@/utils/electron/isElectron'
 
 export class Set_ServerInfo_To_LocalSqlite {
@@ -46,7 +46,7 @@ export class Set_ServerInfo_To_LocalSqlite {
     type: string
   ) {
     if (isElectron) {
-      const db = require('better-sqlite3')(store_app_configs_info.nsmusics_db)
+      const db = require('better-sqlite3')(store_system_configs_info.nsmusics_db)
       ///
       const new_id = this.getUniqueId(db)
       const new_date = this.getCurrentDateTime()
@@ -85,7 +85,7 @@ export class Set_ServerInfo_To_LocalSqlite {
     type: string
   ) {
     if (isElectron) {
-      const db = require('better-sqlite3')(store_app_configs_info.nsmusics_db)
+      const db = require('better-sqlite3')(store_system_configs_info.nsmusics_db)
       db.pragma('journal_mode = WAL')
       db.exec('PRAGMA foreign_keys = OFF')
       ///
@@ -137,7 +137,7 @@ export class Set_ServerInfo_To_LocalSqlite {
   }
   public Set_ServerInfo_To_Update_DeleteUser(id: string) {
     if (isElectron) {
-      const db = require('better-sqlite3')(store_app_configs_info.nsmusics_db)
+      const db = require('better-sqlite3')(store_system_configs_info.nsmusics_db)
       db.pragma('journal_mode = WAL')
       db.exec('PRAGMA foreign_keys = OFF')
       ///

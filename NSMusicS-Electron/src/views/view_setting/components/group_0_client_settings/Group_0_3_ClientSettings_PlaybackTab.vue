@@ -6,7 +6,7 @@ const { t } = useI18n({
 })
 
 ////// this_view views_components
-import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { ref, onMounted, computed } from 'vue'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
@@ -23,7 +23,7 @@ const theme_options = ref([
   },
 ])
 onMounted(() => {
-  if (store_app_configs_info.update_theme) theme_value.value = theme_options.value[1].value
+  if (store_system_configs_info.update_theme) theme_value.value = theme_options.value[1].value
   else theme_value.value = theme_options.value[0].value
 })
 
@@ -171,8 +171,8 @@ import { openLink } from '@/utils/electron/openLink'
           v-model:value="store_player_audio_logic.player_select"
           :options="store_player_audio_logic.player_kind"
           :disabled="
-            store_app_configs_info.desktop_system_kind === 'linux' ||
-            store_app_configs_info.desktop_system_kind === 'docker'
+            store_system_configs_info.desktop_system_kind === 'linux' ||
+            store_system_configs_info.desktop_system_kind === 'docker'
           "
           @update:value="
             () => {

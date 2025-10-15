@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import { App_Configs } from '@/data/data_models/app_models/app_Configs/class_App_Configs'
 import { Player_Configs_of_Audio_Info } from '@/data/data_models/app_models/app_Configs/class_Player_Configs_of_Audio_Info'
 import { Player_Configs_of_UI } from '@/data/data_models/app_models/app_Configs/class_Player_Configs_of_UI'
-import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { isElectron } from '@/utils/electron/isElectron'
 import axios from 'axios'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
@@ -122,34 +122,34 @@ export class Class_Get_System_Configs_Read {
       let db_navidrome: any = null
       let db: any = null
       try {
-        store_app_configs_info.resourcesPath =
+        store_system_configs_info.resourcesPath =
           process.env.NODE_ENV === 'development'
             ? path.resolve('resources')
             : path.join(process.resourcesPath)
         if (process.platform === 'win32') {
-          store_app_configs_info.driveDbPath = 'C:\\Users\\Public\\Documents\\NSMusicS\\'
-          store_app_configs_info.driveTempPath = 'C:\\Users\\Public\\Documents\\NSMusicS\\temp'
+          store_system_configs_info.driveDbPath = 'C:\\Users\\Public\\Documents\\NSMusicS\\'
+          store_system_configs_info.driveTempPath = 'C:\\Users\\Public\\Documents\\NSMusicS\\temp'
         } else if (process.platform === 'darwin') {
-          // store_app_configs_info.driveDbPath = path.join(os.homedir(), 'Library', 'Application Scripts', 'NSMusicS');
-          store_app_configs_info.driveDbPath = path.join(os.homedir(), 'Applications', 'NSMusicS')
+          // store_system_configs_info.driveDbPath = path.join(os.homedir(), 'Library', 'Application Scripts', 'NSMusicS');
+          store_system_configs_info.driveDbPath = path.join(os.homedir(), 'Applications', 'NSMusicS')
         } else {
-          store_app_configs_info.driveDbPath = path.join(os.homedir(), '.NSMusicS')
+          store_system_configs_info.driveDbPath = path.join(os.homedir(), '.NSMusicS')
         }
         //
-        store_app_configs_info.navidrome_db = path.join(
-          store_app_configs_info.driveDbPath,
+        store_system_configs_info.navidrome_db = path.join(
+          store_system_configs_info.driveDbPath,
           'navidrome.db'
         )
-        store_app_configs_info.nsmusics_db = path.join(
-          store_app_configs_info.driveDbPath,
+        store_system_configs_info.nsmusics_db = path.join(
+          store_system_configs_info.driveDbPath,
           'nsmusics.db'
         )
         //
-        db_navidrome = require('better-sqlite3')(store_app_configs_info.navidrome_db)
-        db = require('better-sqlite3')(store_app_configs_info.nsmusics_db)
+        db_navidrome = require('better-sqlite3')(store_system_configs_info.navidrome_db)
+        db = require('better-sqlite3')(store_system_configs_info.nsmusics_db)
       } catch {
-        db_navidrome = require('better-sqlite3')(store_app_configs_info.navidrome_db)
-        db = require('better-sqlite3')(store_app_configs_info.nsmusics_db)
+        db_navidrome = require('better-sqlite3')(store_system_configs_info.navidrome_db)
+        db = require('better-sqlite3')(store_system_configs_info.nsmusics_db)
       }
       db_navidrome.pragma('journal_mode = WAL')
       db.pragma('journal_mode = WAL')

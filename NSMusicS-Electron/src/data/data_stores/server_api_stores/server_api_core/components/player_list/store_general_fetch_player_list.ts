@@ -1,7 +1,7 @@
 import { reactive } from 'vue'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
-import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
+import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { store_view_media_cue_page_info } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_info'
 
@@ -22,7 +22,7 @@ export const store_general_fetch_player_list = reactive({
       }
       store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
         store_view_media_page_info.media_Files_temporary.map((item: any) => item.id)
-      store_app_configs_logic_save.save_system_playlist_item_id_config()
+      store_system_configs_save.save_system_playlist_item_id_config()
     } else {
       store_playlist_list_info.playlist_MediaFiles_temporary =
         store_view_media_cue_page_info.media_Files_temporary.map((row: any) => {

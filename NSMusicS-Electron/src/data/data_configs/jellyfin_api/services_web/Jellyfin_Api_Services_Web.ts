@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
+import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 
 export class Jellyfin_Api_Services_Web {
   protected readonly baseUrl: string

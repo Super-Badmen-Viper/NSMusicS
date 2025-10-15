@@ -10,8 +10,8 @@ import { store_view_artist_page_logic } from '@/views/view_app/page/page_artist/
 import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
 import { store_router_history_data_of_album } from '@/router/router_store/store_router_history_data_of_album'
 import { store_router_history_data_of_artist } from '@/router/router_store/store_router_history_data_of_artist'
-import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
-import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
+import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
+import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 
 export const store_router_data_logic = reactive({
   reset_data() {
@@ -39,7 +39,7 @@ export const store_router_data_logic = reactive({
       store_router_data_logic.clear_Equilibrium_Model = false
       store_router_data_logic.clear_UserExperience_Model = true
     }
-    store_app_configs_logic_save.save_system_config_of_App_Configs()
+    store_system_configs_save.save_system_config_of_App_Configs()
   },
   clear_Equilibrium_Model: false,
   get_clear_Equilibrium_Model(value: any) {
@@ -50,7 +50,7 @@ export const store_router_data_logic = reactive({
       store_router_data_logic.clear_Memory_Model = true
       store_router_data_logic.clear_UserExperience_Model = false
     }
-    store_app_configs_logic_save.save_system_config_of_App_Configs()
+    store_system_configs_save.save_system_config_of_App_Configs()
   },
   clear_UserExperience_Model: true,
   get_clear_UserExperience_Model(value: any) {
@@ -61,7 +61,7 @@ export const store_router_data_logic = reactive({
       store_router_data_logic.clear_Memory_Model = true
       store_router_data_logic.clear_Equilibrium_Model = false
     }
-    store_app_configs_logic_save.save_system_config_of_App_Configs()
+    store_system_configs_save.save_system_config_of_App_Configs()
   },
 
   clear_Files_temporary() {

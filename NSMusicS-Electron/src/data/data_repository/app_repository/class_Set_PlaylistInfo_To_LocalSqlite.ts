@@ -1,5 +1,5 @@
-import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
-import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
+import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { isElectron } from '@/utils/electron/isElectron'
 
 export class Set_PlaylistInfo_To_LocalSqlite {
@@ -47,7 +47,7 @@ export class Set_PlaylistInfo_To_LocalSqlite {
     owner_id: string
   ) {
     if (isElectron) {
-      const db = require('better-sqlite3')(store_app_configs_info.navidrome_db)
+      const db = require('better-sqlite3')(store_system_configs_info.navidrome_db)
       ///
       const new_id = this.getUniqueId(db)
       const new_date = this.getCurrentDateTime()
@@ -99,7 +99,7 @@ export class Set_PlaylistInfo_To_LocalSqlite {
     owner_id: string
   ) {
     if (isElectron) {
-      const db = require('better-sqlite3')(store_app_configs_info.navidrome_db)
+      const db = require('better-sqlite3')(store_system_configs_info.navidrome_db)
       db.pragma('journal_mode = WAL')
       db.exec('PRAGMA foreign_keys = OFF')
 
@@ -173,7 +173,7 @@ export class Set_PlaylistInfo_To_LocalSqlite {
   }
   public Set_PlaylistInfo_To_Update_DeletePlaylist_Local(id: string) {
     if (isElectron) {
-      const db = require('better-sqlite3')(store_app_configs_info.navidrome_db)
+      const db = require('better-sqlite3')(store_system_configs_info.navidrome_db)
       db.pragma('journal_mode = WAL')
       db.exec('PRAGMA foreign_keys = OFF')
       ///
@@ -205,7 +205,7 @@ export class Set_PlaylistInfo_To_LocalSqlite {
 
   public Set_Selected_MediaInfo_Add_Selected_Playlist_Local(ids: string[], playlist_id: string) {
     if (isElectron) {
-      const db = require('better-sqlite3')(store_app_configs_info.navidrome_db)
+      const db = require('better-sqlite3')(store_system_configs_info.navidrome_db)
       db.pragma('journal_mode = WAL')
       db.exec('PRAGMA foreign_keys = OFF')
 
@@ -248,7 +248,7 @@ export class Set_PlaylistInfo_To_LocalSqlite {
   }
   public Set_Selected_MediaInfo_Delete_Selected_Playlist_Local(ids: string[], playlist_id: string) {
     if (isElectron) {
-      const db = require('better-sqlite3')(store_app_configs_info.navidrome_db)
+      const db = require('better-sqlite3')(store_system_configs_info.navidrome_db)
       db.pragma('journal_mode = WAL')
       db.exec('PRAGMA foreign_keys = OFF')
 

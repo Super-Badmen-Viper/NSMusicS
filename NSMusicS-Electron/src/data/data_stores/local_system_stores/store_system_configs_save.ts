@@ -22,9 +22,9 @@ import { isElectron } from '@/utils/electron/isElectron'
 import { store_local_db_info } from '@/data/data_stores/local_app_stores/store_local_db_info'
 import axios from 'axios'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
-import { store_system_configs_logic_load } from './store_system_configs_logic_load'
+import { store_system_configs_load } from './store_system_configs_load'
 
-export const store_app_configs_logic_save = reactive({
+export const store_system_configs_save = reactive({
   generateMockObjectId() {
     const hexChars = '0123456789abcdef'
     let id = ''
@@ -34,7 +34,7 @@ export const store_app_configs_logic_save = reactive({
     return id
   },
   async save_system_config_of_App_Configs() {
-    if (!store_system_configs_logic_load.app_configs_loading) {
+    if (!store_system_configs_load.app_configs_loading) {
       const app_Configs = ref(
         new App_Configs({
           theme: store_system_configs_info.theme_name,

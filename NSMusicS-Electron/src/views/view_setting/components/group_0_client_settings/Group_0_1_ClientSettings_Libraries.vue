@@ -8,22 +8,22 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n({
   inheritLocale: true,
 })
-import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
+import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 onBeforeUnmount(() => {
   unwatch_server_set_of_addUser_of_type()
 })
 
 ////// this_view views_components
-import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
-import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
+import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { ref, onMounted, watch, onBeforeUnmount, computed, h } from 'vue'
 import { NButton, NIcon } from 'naive-ui'
-import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
+import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
-import { store_local_db_info } from '@/data/data_stores/local_stores/store_local_db_info'
+import { store_local_db_info } from '@/data/data_stores/local_app_stores/store_local_db_info'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
-import { store_server_data_select_logic } from '@/data/data_stores/server_stores/server_data_select/store_server_data_select_logic'
-import { Users_ApiService_of_Je } from '@/data/servers_configs/jellyfin_api/services_web/Users/index_service'
+import { store_server_data_select_logic } from '@/data/data_stores/server_configs_stores/server_data_select/store_server_data_select_logic'
+import { Users_ApiService_of_Je } from '@/data/data_configs/jellyfin_api/services_web/Users/index_service'
 const theme_value = ref('lightTheme')
 const theme_options = ref([
   {
@@ -36,7 +36,7 @@ const theme_options = ref([
   },
 ])
 onMounted(() => {
-  if (store_app_configs_info.update_theme) theme_value.value = theme_options.value[1].value
+  if (store_system_configs_info.update_theme) theme_value.value = theme_options.value[1].value
   else theme_value.value = theme_options.value[0].value
 })
 
@@ -299,7 +299,7 @@ async function update_server_config_of_current_user_of_sqlite(value: any, select
         } else if (user_config?.type === 'ninesong') {
           store_server_users.server_select_kind = 'ninesong'
         }
-        store_app_configs_logic_save.save_system_config_of_App_Configs()
+        store_system_configs_save.save_system_config_of_App_Configs()
       } else {
         message.error(t('error.invalidServer'), { duration: 3000 })
         return
@@ -393,7 +393,7 @@ async function select_Folder() {
             label: `${folderName} - ${rootPath}`, // 标签格式：文件夹名 - 根目录路径
             value: rootPath, // 值：根目录路径
           })
-          store_app_configs_logic_save.save_system_library_config()
+          store_system_configs_save.save_system_library_config()
         } else {
           console.error('文件夹名为空或配置已存在，无法添加')
         }
@@ -440,7 +440,7 @@ async function begin_import_Folder(cover: boolean) {
         // reset data
         await store_server_user_model.switchToMode_Local()
         store_server_user_model.model_select = 'local'
-        store_app_configs_logic_save.save_system_config_of_App_Configs()
+        store_system_configs_save.save_system_config_of_App_Configs()
         //
         await ipcRenderer.send('window-reset-all')
       }
@@ -478,7 +478,7 @@ async function update_local_deleteFolder(id: string) {
     message.error(t('LibraryInvalidItemIdError'), { duration: 3000 })
   }
 }
-/// server_stores update
+/// server_configs_stores update
 async function update_local_setFolder(id: string, local_name: string, local_url: string) {
   try {
     const result = await store_local_data_select_logic.update_local_setFolder(
@@ -519,7 +519,7 @@ async function update_local_setFolder(id: string, local_name: string, local_url:
 //////
 import type { StepsProps } from 'naive-ui'
 const currentStatus = ref<StepsProps['status']>('process')
-/// server_stores model
+/// server_configs_stores model
 const model_server_step_1 = computed(() => t('nsmusics.view_page.modelSelect'))
 const model_server_step_2 = computed(() => t('page.appMenu.manageServers'))
 const model_server_step_3 = computed(() => t('nsmusics.view_page.modelServer'))
@@ -529,8 +529,8 @@ const model_local_step_1 = computed(() => t('Add') + t('HeaderMediaFolders'))
 const model_local_step_2 = computed(() => t('nsmusics.view_page.selectLibrary'))
 
 //////
-import { store_local_data_select_logic } from '@/data/data_stores/local_stores/local_data_select/store_local_data_select_logic'
-import { Library_ApiService_of_Je } from '@/data/servers_configs/jellyfin_api/services_web/Library/index_service'
+import { store_local_data_select_logic } from '@/data/data_stores/local_app_stores/local_data_select/store_local_data_select_logic'
+import { Library_ApiService_of_Je } from '@/data/data_configs/jellyfin_api/services_web/Library/index_service'
 import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
@@ -551,7 +551,7 @@ import { store_view_media_page_logic } from '@/views/view_app/page/page_media/st
               <n-select
                 v-model:value="Type_Server_Model_Open_Value"
                 :options="Type_Server_Model_Open_Option"
-                :disabled="store_app_configs_info.desktop_system_kind != 'win32'"
+                :disabled="store_system_configs_info.desktop_system_kind != 'win32'"
                 @update:value="
                   async () => {
                     Type_Server_Model_Open_Value === 'server'
@@ -565,7 +565,7 @@ import { store_view_media_page_logic } from '@/views/view_app/page/page_media/st
               />
             </div>
           </n-step>
-          <!-- server_stores model -->
+          <!-- server_configs_stores model -->
           <n-step :title="model_server_step_2" v-if="Type_Server_Model_Open_Value === 'server'">
             <div>
               <n-space vertical>
@@ -609,7 +609,7 @@ import { store_view_media_page_logic } from '@/views/view_app/page/page_media/st
                             let show = false
                             if (item.type !== 'ninesong') {
                               show = true
-                            } else if (store_app_configs_info.desktop_system_kind !== 'docker') {
+                            } else if (store_system_configs_info.desktop_system_kind !== 'docker') {
                               show = true
                             }
                             if (show) {

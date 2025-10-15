@@ -212,7 +212,7 @@ const scrollToItem = (index: number) => {
 
   const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active')
   itemElements_active[index].style.fontSize =
-    !store_app_configs_info.window_state_miniplayer_desktop_lyric ? '20px' : '26px'
+    !store_system_configs_info.window_state_miniplayer_desktop_lyric ? '20px' : '26px'
   itemElements_active[index].style.fontWeight = store_player_appearance.player_lyric_fontWeight
 
   const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info')
@@ -220,7 +220,7 @@ const scrollToItem = (index: number) => {
   itemElements[index].style.filter = 'blur(0px)'
   itemElements[index].style.textShadow = '0 0 1px White'
   itemElements[index].style.transition = 'color 0.5s, transform 0.5s'
-  if (!store_app_configs_info.window_state_miniplayer_desktop_lyric) {
+  if (!store_system_configs_info.window_state_miniplayer_desktop_lyric) {
     itemElements[index].style.transform = 'scale(1.1) translateY(0px)'
     itemElements[index].style.transformOrigin = 'left center'
     itemElements[index].style.width = 'calc(82vw)'
@@ -315,12 +315,12 @@ const startByteAnimations = (index: number, num: number) => {
     elementWidth += parseFloat(computedStyle.width)
 
     itemElements_active[i].style.fontSize =
-      !store_app_configs_info.window_state_miniplayer_desktop_lyric ? '20px' : '26px'
+      !store_system_configs_info.window_state_miniplayer_desktop_lyric ? '20px' : '26px'
     itemElements_active[i].style.fontWeight = 400
 
     itemElements_active[i].style.filter = 'blur(0px)'
     itemElements_active[i].style.transition = 'color 0.5s, transform 0.5s'
-    if (!store_app_configs_info.window_state_miniplayer_desktop_lyric) {
+    if (!store_system_configs_info.window_state_miniplayer_desktop_lyric) {
       itemElements_active[i].style.transform = 'scale(1.1) translateY(0px)'
       itemElements_active[i].style.transformOrigin = 'left center'
       itemElements_active[i].style.width = 'calc(82vw)'
@@ -447,7 +447,7 @@ const handleLeave_Refresh_Lyric_Color = () => {
 const handleAuto_fontSize = (value: number) => {
   const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active')
   itemElements_active.forEach((itemElement) => {
-    itemElement.style.fontSize = !store_app_configs_info.window_state_miniplayer_desktop_lyric
+    itemElement.style.fontSize = !store_system_configs_info.window_state_miniplayer_desktop_lyric
       ? '20px'
       : '26px'
     itemElement.style.fontWeight = 400
@@ -499,14 +499,14 @@ const unwatch_player_collapsed = watchEffect(() => {
 import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
-import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
-import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
+import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { Pause, Play, PlayBack, PlayForward, VolumeMedium } from '@vicons/ionicons5'
 import Bar_Music_PlayList from '@/views/view_app/drawer/View_Player_PlayList.vue'
-import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
-import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
+import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
+import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
-import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_stores/local_data_synchronization/store_local_data_set_mediaInfo'
+import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
@@ -603,25 +603,25 @@ onBeforeUnmount(() => {
       <div
         id="player_bg_zindex_0"
         :style="{
-          width: !store_app_configs_info.window_state_miniplayer_album ? '200vh' : '100vw',
-          height: !store_app_configs_info.window_state_miniplayer_album ? '200vh' : '100vh',
+          width: !store_system_configs_info.window_state_miniplayer_album ? '200vh' : '100vw',
+          height: !store_system_configs_info.window_state_miniplayer_album ? '200vh' : '100vh',
           backgroundImage: `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`,
-          filter: !store_app_configs_info.window_state_miniplayer_album
+          filter: !store_system_configs_info.window_state_miniplayer_album
             ? 'brightness(46%) blur(40px)'
             : collapsed_action_bar
               ? 'brightness(100%) blur(0px)'
               : 'brightness(46%) blur(5px)',
-          backgroundSize: !store_app_configs_info.window_state_miniplayer_album
+          backgroundSize: !store_system_configs_info.window_state_miniplayer_album
             ? '20vw auto'
             : 'cover',
-          backgroundRepeat: !store_app_configs_info.window_state_miniplayer_album
+          backgroundRepeat: !store_system_configs_info.window_state_miniplayer_album
             ? 'repeat'
             : 'no-repeat',
           backgroundPosition: 'center',
         }"
         :class="{
           player_bg_zindex_0_auto_rotateDefault:
-            !store_app_configs_info.window_state_miniplayer_album,
+            !store_system_configs_info.window_state_miniplayer_album,
         }"
       ></div>
       <div
@@ -660,16 +660,16 @@ onBeforeUnmount(() => {
                       async () => {
                         if (isElectron) {
                           // 请不要更改这段诡异的代码，它依靠Electron的BUG运行，呵呵
-                          store_app_configs_info.window_state_miniplayer_card = false
-                          store_app_configs_info.window_state_miniplayer_desktop_lyric = false
-                          store_app_configs_info.window_state_miniplayer_album = false
+                          store_system_configs_info.window_state_miniplayer_card = false
+                          store_system_configs_info.window_state_miniplayer_desktop_lyric = false
+                          store_system_configs_info.window_state_miniplayer_album = false
                           show_mini_album_model = false
                           collapsed_action_bar = true
                           ipcRenderer.send('window-state-miniplayer-hidden')
                           ipcRenderer.send('window-state-miniplayer-hidden')
                           //
-                          store_app_configs_info.window_state_miniplayer =
-                            !store_app_configs_info.window_state_miniplayer
+                          store_system_configs_info.window_state_miniplayer =
+                            !store_system_configs_info.window_state_miniplayer
                           //await ipcRenderer.invoke('get-window-state-miniplayer');
                         }
                       }
@@ -685,7 +685,7 @@ onBeforeUnmount(() => {
               <n-tooltip
                 trigger="hover"
                 placement="top"
-                v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'"
+                v-if="isElectron && store_system_configs_info.desktop_system_kind != 'darwin'"
               >
                 <template #trigger>
                   <n-button
@@ -710,7 +710,7 @@ onBeforeUnmount(() => {
               <n-tooltip
                 trigger="hover"
                 placement="top"
-                v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'"
+                v-if="isElectron && store_system_configs_info.desktop_system_kind != 'darwin'"
               >
                 <template #trigger>
                   <n-button
@@ -736,10 +736,10 @@ onBeforeUnmount(() => {
           <n-flex justify="start" style="width: 400px; height: 70px">
             <div
               class="gird_Left"
-              v-if="!store_app_configs_info.window_state_miniplayer_desktop_lyric"
+              v-if="!store_system_configs_info.window_state_miniplayer_desktop_lyric"
             >
               <n-tooltip
-                v-if="!store_app_configs_info.window_state_miniplayer_album"
+                v-if="!store_system_configs_info.window_state_miniplayer_album"
                 trigger="hover"
                 placement="top"
               >
@@ -756,9 +756,9 @@ onBeforeUnmount(() => {
                       @mouseout="leave_back_svg"
                       @click="
                         async () => {
-                          store_app_configs_info.window_state_miniplayer_card = true
-                          store_app_configs_info.window_state_miniplayer_desktop_lyric = false
-                          store_app_configs_info.window_state_miniplayer_album = true
+                          store_system_configs_info.window_state_miniplayer_card = true
+                          store_system_configs_info.window_state_miniplayer_desktop_lyric = false
+                          store_system_configs_info.window_state_miniplayer_album = true
                           show_mini_album_model = false
                           collapsed_action_bar = true
                           await ipcRenderer.invoke('window-state-miniplayer-album-show')
@@ -782,7 +782,7 @@ onBeforeUnmount(() => {
                 {{ $t('common.expand') + $t('LabelAlbum') }}
               </n-tooltip>
               <div
-                v-if="!store_app_configs_info.window_state_miniplayer_album"
+                v-if="!store_system_configs_info.window_state_miniplayer_album"
                 class="bar_left_text_info"
               >
                 <n-space>
@@ -821,7 +821,7 @@ onBeforeUnmount(() => {
           <n-flex
             justify="center"
             :style="{
-              marginTop: store_app_configs_info.window_state_miniplayer_desktop_lyric
+              marginTop: store_system_configs_info.window_state_miniplayer_desktop_lyric
                 ? '-30px'
                 : '76px',
             }"
@@ -831,17 +831,17 @@ onBeforeUnmount(() => {
               <!-- Lyric -->
               <div
                 v-if="
-                  store_app_configs_info.window_state_miniplayer_desktop_lyric ||
-                  (!store_app_configs_info.window_state_miniplayer_card &&
-                    !store_app_configs_info.window_state_miniplayer_album)
+                  store_system_configs_info.window_state_miniplayer_desktop_lyric ||
+                  (!store_system_configs_info.window_state_miniplayer_card &&
+                    !store_system_configs_info.window_state_miniplayer_album)
                 "
                 :style="{
-                  height: store_app_configs_info.window_state_miniplayer_desktop_lyric
+                  height: store_system_configs_info.window_state_miniplayer_desktop_lyric
                     ? collapsed_action_bar
                       ? '270px'
                       : '170px'
                     : '620px',
-                  marginTop: store_app_configs_info.window_state_miniplayer_desktop_lyric
+                  marginTop: store_system_configs_info.window_state_miniplayer_desktop_lyric
                     ? '-24px'
                     : '-110px',
                   transition: 'height 0.4s, margin 0.4s',
@@ -867,7 +867,7 @@ onBeforeUnmount(() => {
                     }
                   "
                   :style="{
-                    height: store_app_configs_info.window_state_miniplayer_desktop_lyric
+                    height: store_system_configs_info.window_state_miniplayer_desktop_lyric
                       ? collapsed_action_bar
                         ? '200px'
                         : '170px'
@@ -880,7 +880,7 @@ onBeforeUnmount(() => {
                     <n-list-item
                       class="lyrics_info"
                       :style="{
-                        textAlign: store_app_configs_info.window_state_miniplayer_desktop_lyric
+                        textAlign: store_system_configs_info.window_state_miniplayer_desktop_lyric
                           ? 'center'
                           : 'left',
                       }"
@@ -906,7 +906,7 @@ onBeforeUnmount(() => {
               </div>
               <!-- Album -->
               <n-space
-                v-if="store_app_configs_info.window_state_miniplayer_album"
+                v-if="store_system_configs_info.window_state_miniplayer_album"
                 :style="{
                   opacity: collapsed_action_bar ? 0 : 1,
                   transition: 'opacity 0.4s, margin 0.4s',
@@ -924,9 +924,9 @@ onBeforeUnmount(() => {
                         @mouseout="leave_back_svg"
                         @click="
                           async () => {
-                            store_app_configs_info.window_state_miniplayer_card = false
-                            store_app_configs_info.window_state_miniplayer_desktop_lyric = false
-                            store_app_configs_info.window_state_miniplayer_album = false
+                            store_system_configs_info.window_state_miniplayer_card = false
+                            store_system_configs_info.window_state_miniplayer_desktop_lyric = false
+                            store_system_configs_info.window_state_miniplayer_album = false
                             show_mini_album_model = false
                             collapsed_action_bar = true
                             await ipcRenderer.invoke('window-state-miniplayer-show')
@@ -974,15 +974,15 @@ onBeforeUnmount(() => {
                 style="z-index: 3"
                 :style="{
                   marginTop:
-                    !store_app_configs_info.window_state_miniplayer_card &&
-                    !store_app_configs_info.window_state_miniplayer_desktop_lyric &&
-                    !store_app_configs_info.window_state_miniplayer_album
+                    !store_system_configs_info.window_state_miniplayer_card &&
+                    !store_system_configs_info.window_state_miniplayer_desktop_lyric &&
+                    !store_system_configs_info.window_state_miniplayer_album
                       ? '-52px'
-                      : store_app_configs_info.window_state_miniplayer_album
+                      : store_system_configs_info.window_state_miniplayer_album
                         ? '166px'
                         : '-3px',
                   opacity:
-                    store_app_configs_info.window_state_miniplayer_album && collapsed_action_bar
+                    store_system_configs_info.window_state_miniplayer_album && collapsed_action_bar
                       ? 0
                       : 1,
                   transition: 'opacity 0.4s, margin 0.4s',
@@ -990,7 +990,7 @@ onBeforeUnmount(() => {
               >
                 <n-space
                   :style="{
-                    color: !store_app_configs_info.window_state_miniplayer_album
+                    color: !store_system_configs_info.window_state_miniplayer_album
                       ? '#FFFFFF80'
                       : '#FFFFFF',
                   }"
@@ -1049,7 +1049,7 @@ onBeforeUnmount(() => {
                 </n-slider>
                 <n-space
                   :style="{
-                    color: !store_app_configs_info.window_state_miniplayer_album
+                    color: !store_system_configs_info.window_state_miniplayer_album
                       ? '#FFFFFF80'
                       : '#FFFFFF',
                   }"
@@ -1064,13 +1064,13 @@ onBeforeUnmount(() => {
                 style="z-index: 3"
                 :style="{
                   marginTop:
-                    !store_app_configs_info.window_state_miniplayer_card &&
-                    !store_app_configs_info.window_state_miniplayer_desktop_lyric &&
-                    !store_app_configs_info.window_state_miniplayer_album
+                    !store_system_configs_info.window_state_miniplayer_card &&
+                    !store_system_configs_info.window_state_miniplayer_desktop_lyric &&
+                    !store_system_configs_info.window_state_miniplayer_album
                       ? '-37px'
                       : '-4px',
                   opacity:
-                    store_app_configs_info.window_state_miniplayer_album && collapsed_action_bar
+                    store_system_configs_info.window_state_miniplayer_album && collapsed_action_bar
                       ? 0
                       : 1,
                   transition: 'opacity 0.4s, margin 0.4s',
@@ -1078,7 +1078,7 @@ onBeforeUnmount(() => {
               >
                 <n-space class="grid_Middle_button_area" justify="center">
                   <n-tooltip
-                    v-if="!store_app_configs_info.window_state_miniplayer_desktop_lyric"
+                    v-if="!store_system_configs_info.window_state_miniplayer_desktop_lyric"
                     trigger="hover"
                     placement="top"
                   >
@@ -1089,9 +1089,9 @@ onBeforeUnmount(() => {
                         style="margin-right: -10px"
                         @click="
                           async () => {
-                            store_app_configs_info.window_state_miniplayer_card = true
-                            store_app_configs_info.window_state_miniplayer_desktop_lyric = true
-                            store_app_configs_info.window_state_miniplayer_album = false
+                            store_system_configs_info.window_state_miniplayer_card = true
+                            store_system_configs_info.window_state_miniplayer_desktop_lyric = true
+                            store_system_configs_info.window_state_miniplayer_album = false
                             show_mini_album_model = false
                             collapsed_action_bar = true
                             await ipcRenderer.invoke('window-state-miniplayer-desktop-lyric-show')
@@ -1114,9 +1114,9 @@ onBeforeUnmount(() => {
                         style="margin-right: -10px"
                         @click="
                           async () => {
-                            store_app_configs_info.window_state_miniplayer_card = false
-                            store_app_configs_info.window_state_miniplayer_desktop_lyric = false
-                            store_app_configs_info.window_state_miniplayer_album = false
+                            store_system_configs_info.window_state_miniplayer_card = false
+                            store_system_configs_info.window_state_miniplayer_desktop_lyric = false
+                            store_system_configs_info.window_state_miniplayer_album = false
                             show_mini_album_model = false
                             collapsed_action_bar = true
                             await ipcRenderer.invoke('window-state-miniplayer-show')
@@ -1132,7 +1132,7 @@ onBeforeUnmount(() => {
                     {{ $t('Off') + $t('nsmusics.view_page.desktop_lyrics') }}
                   </n-tooltip>
                   <n-tooltip
-                    v-if="!store_app_configs_info.window_state_miniplayer_card"
+                    v-if="!store_system_configs_info.window_state_miniplayer_card"
                     trigger="hover"
                     placement="top"
                   >
@@ -1143,9 +1143,9 @@ onBeforeUnmount(() => {
                         style="margin-right: 10px"
                         @click="
                           async () => {
-                            store_app_configs_info.window_state_miniplayer_card = true
-                            store_app_configs_info.window_state_miniplayer_desktop_lyric = false
-                            store_app_configs_info.window_state_miniplayer_album = false
+                            store_system_configs_info.window_state_miniplayer_card = true
+                            store_system_configs_info.window_state_miniplayer_desktop_lyric = false
+                            store_system_configs_info.window_state_miniplayer_album = false
                             show_mini_album_model = false
                             collapsed_action_bar = true
                             await ipcRenderer.invoke('window-state-miniplayer-card-show')
@@ -1168,9 +1168,9 @@ onBeforeUnmount(() => {
                         style="margin-right: 10px"
                         @click="
                           async () => {
-                            store_app_configs_info.window_state_miniplayer_card = false
-                            store_app_configs_info.window_state_miniplayer_desktop_lyric = false
-                            store_app_configs_info.window_state_miniplayer_album = false
+                            store_system_configs_info.window_state_miniplayer_card = false
+                            store_system_configs_info.window_state_miniplayer_desktop_lyric = false
+                            store_system_configs_info.window_state_miniplayer_album = false
                             show_mini_album_model = false
                             collapsed_action_bar = true
                             await ipcRenderer.invoke('window-state-miniplayer-show')
@@ -1247,9 +1247,9 @@ onBeforeUnmount(() => {
                         style="margin-left: 10px"
                         @click="
                           async () => {
-                            store_app_configs_info.window_state_miniplayer_card = false
-                            store_app_configs_info.window_state_miniplayer_desktop_lyric = false
-                            store_app_configs_info.window_state_miniplayer_album = false
+                            store_system_configs_info.window_state_miniplayer_card = false
+                            store_system_configs_info.window_state_miniplayer_desktop_lyric = false
+                            store_system_configs_info.window_state_miniplayer_album = false
                             show_mini_album_model = false
                             collapsed_action_bar = true
                             await ipcRenderer.invoke('window-state-miniplayer-show')
@@ -1275,17 +1275,17 @@ onBeforeUnmount(() => {
                         style="margin-left: -10px"
                         @click="
                           async () => {
-                            store_app_configs_info.window_state_miniplayer_card = false
-                            store_app_configs_info.window_state_miniplayer_desktop_lyric = false
-                            store_app_configs_info.window_state_miniplayer_album = false
+                            store_system_configs_info.window_state_miniplayer_card = false
+                            store_system_configs_info.window_state_miniplayer_desktop_lyric = false
+                            store_system_configs_info.window_state_miniplayer_album = false
                             show_mini_album_model = false
                             collapsed_action_bar = true
                             await ipcRenderer.invoke('window-state-miniplayer-show')
                             await ipcRenderer.invoke('window-state-miniplayer-show')
                             store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false
                             ///
-                            store_app_configs_info.window_state_miniplayer_playlist =
-                              !store_app_configs_info.window_state_miniplayer_playlist
+                            store_system_configs_info.window_state_miniplayer_playlist =
+                              !store_system_configs_info.window_state_miniplayer_playlist
                           }
                         "
                       >

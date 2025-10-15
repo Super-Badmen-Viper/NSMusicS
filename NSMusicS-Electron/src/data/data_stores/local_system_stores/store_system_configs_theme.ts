@@ -1,10 +1,10 @@
 import { reactive, watch } from 'vue'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { darkTheme, lightTheme } from 'naive-ui'
-import { store_app_configs_logic_save } from '@/data/data_stores/local_system_stores/store_app_configs_logic_save'
+import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 
-export const store_app_configs_logic_theme = reactive({
+export const store_system_configs_theme = reactive({
   update_theme(value: any) {
     if (value === 'lightTheme') store_system_configs_info.update_theme = true
     else store_system_configs_info.update_theme = false
@@ -28,7 +28,7 @@ export const store_app_configs_logic_theme = reactive({
     } else {
       this.theme_dark_mode_click()
     }
-    store_app_configs_logic_save.save_system_config_of_App_Configs()
+    store_system_configs_save.save_system_config_of_App_Configs()
   },
 })
 watch(
@@ -40,8 +40,8 @@ watch(
     } else {
       // other
     }
-    if (sy_theme === 'lightTheme') store_app_configs_logic_theme.theme_normal_mode_click()
-    else store_app_configs_logic_theme.theme_dark_mode_click()
-    store_app_configs_logic_save.save_system_config_of_App_Configs()
+    if (sy_theme === 'lightTheme') store_system_configs_theme.theme_normal_mode_click()
+    else store_system_configs_theme.theme_dark_mode_click()
+    store_system_configs_save.save_system_config_of_App_Configs()
   }
 )

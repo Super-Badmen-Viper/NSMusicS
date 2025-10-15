@@ -646,7 +646,7 @@ const player_theme_set_theme = (index: number) => {
 
     init_player_theme()
 
-    store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()
+    store_system_configs_save.save_system_config_of_Player_Configs_of_UI()
   } catch {}
 }
 function init_player_theme() {
@@ -694,8 +694,8 @@ import '@lottiefiles/lottie-player'
 import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
-import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
-import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
+import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import Table_Album_Model_1_AlbumScroll from '@/views/view_app/page/page_player/components/Table_Album_Model_1_AlbumScroll.vue'
 import { ArrowsMaximize, ArrowsMinimize } from '@vicons/tabler'
 import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
@@ -1157,7 +1157,7 @@ onBeforeUnmount(() => {
             <n-tooltip
               trigger="hover"
               placement="top"
-              v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'"
+              v-if="isElectron && store_system_configs_info.desktop_system_kind != 'darwin'"
             >
               <template #trigger>
                 <n-button
@@ -1169,13 +1169,13 @@ onBeforeUnmount(() => {
                       if (isElectron) {
                         ipcRenderer.send('window-fullscreen')
                       }
-                      store_app_configs_info.window_full = !store_app_configs_info.window_full
-                      store_app_configs_info.window_max = store_app_configs_info.window_full
+                      store_system_configs_info.window_full = !store_system_configs_info.window_full
+                      store_system_configs_info.window_max = store_system_configs_info.window_full
                     }
                   "
                 >
                   <template #icon>
-                    <n-icon size="19" :depth="3" v-if="store_app_configs_info.window_full">
+                    <n-icon size="19" :depth="3" v-if="store_system_configs_info.window_full">
                       <ArrowsMinimize />
                     </n-icon>
                     <n-icon size="19" :depth="3" v-else>
@@ -1193,20 +1193,20 @@ onBeforeUnmount(() => {
                   circle
                   :style="{
                     marginRight:
-                      store_app_configs_info.desktop_system_kind != 'darwin' ? '4px' : '36px',
+                      store_system_configs_info.desktop_system_kind != 'darwin' ? '4px' : '36px',
                   }"
                   @click="
                     async () => {
                       if (isElectron) {
                         // 请不要更改这段诡异的代码，它依靠Electron的BUG运行，呵呵
-                        store_app_configs_info.window_state_miniplayer_card = false
-                        store_app_configs_info.window_state_miniplayer_desktop_lyric = false
-                        store_app_configs_info.window_state_miniplayer_album = false
+                        store_system_configs_info.window_state_miniplayer_card = false
+                        store_system_configs_info.window_state_miniplayer_desktop_lyric = false
+                        store_system_configs_info.window_state_miniplayer_album = false
                         ipcRenderer.send('window-state-miniplayer-open')
                         ipcRenderer.send('window-state-miniplayer-open')
                         //
-                        store_app_configs_info.window_state_miniplayer =
-                          !store_app_configs_info.window_state_miniplayer
+                        store_system_configs_info.window_state_miniplayer =
+                          !store_system_configs_info.window_state_miniplayer
                         //await ipcRenderer.invoke('get-window-state-miniplayer');
                       }
                     }
@@ -1222,7 +1222,7 @@ onBeforeUnmount(() => {
             <n-tooltip
               trigger="hover"
               placement="top"
-              v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'"
+              v-if="isElectron && store_system_configs_info.desktop_system_kind != 'darwin'"
             >
               <template #trigger>
                 <n-button
@@ -1247,7 +1247,7 @@ onBeforeUnmount(() => {
             <n-tooltip
               trigger="hover"
               placement="top"
-              v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'"
+              v-if="isElectron && store_system_configs_info.desktop_system_kind != 'darwin'"
             >
               <template #trigger>
                 <n-button
@@ -1259,13 +1259,13 @@ onBeforeUnmount(() => {
                       if (isElectron) {
                         ipcRenderer.send('window-max')
                       }
-                      store_app_configs_info.window_max = !store_app_configs_info.window_max
-                      store_app_configs_info.window_full = false
+                      store_system_configs_info.window_max = !store_system_configs_info.window_max
+                      store_system_configs_info.window_full = false
                     }
                   "
                 >
                   <template #icon>
-                    <n-icon size="20" :depth="3" v-if="store_app_configs_info.window_max"
+                    <n-icon size="20" :depth="3" v-if="store_system_configs_info.window_max"
                       ><FullScreenMinimize24Filled
                     /></n-icon>
                     <n-icon size="20" :depth="3" v-else><FullScreenMaximize24Filled /></n-icon>
@@ -1277,7 +1277,7 @@ onBeforeUnmount(() => {
             <n-tooltip
               trigger="hover"
               placement="top"
-              v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'"
+              v-if="isElectron && store_system_configs_info.desktop_system_kind != 'darwin'"
             >
               <template #trigger>
                 <n-button

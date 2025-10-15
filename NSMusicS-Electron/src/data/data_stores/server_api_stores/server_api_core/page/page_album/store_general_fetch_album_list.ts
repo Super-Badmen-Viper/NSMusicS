@@ -1,7 +1,7 @@
 import { reactive } from 'vue'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
-import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { store_router_history_data_of_album } from '@/router/router_store/store_router_history_data_of_album'
 import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
@@ -9,11 +9,11 @@ import { store_view_album_page_info } from '@/views/view_app/page/page_album/sto
 import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
-import { store_general_fetch_media_list } from '@/data/data_stores/server_configs_stores/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'
+import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
 import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
 import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
-import { store_general_fetch_player_list } from '@/data/data_stores/server_configs_stores/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list'
+import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 import error_album from '@/assets/img/error_album.jpg'
 import { isElectron } from '@/utils/electron/isElectron'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
@@ -37,7 +37,7 @@ export const store_general_fetch_album_list = reactive({
         }
 
         try {
-          db = require('better-sqlite3')(store_app_configs_info.navidrome_db)
+          db = require('better-sqlite3')(store_system_configs_info.navidrome_db)
           db.pragma('journal_mode = WAL')
           db.exec('PRAGMA foreign_keys = OFF')
 
@@ -173,7 +173,7 @@ export const store_general_fetch_album_list = reactive({
               if (row.embed_art_path) {
                 const fileName = row.embed_art_path.split(/[\\/]/).pop() // 兼容 Windows 和 Unix 路径分隔符
                 const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg')
-                row.medium_image_url = `${store_app_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
+                row.medium_image_url = `${store_system_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
               } else {
                 row.medium_image_url = error_album
               }

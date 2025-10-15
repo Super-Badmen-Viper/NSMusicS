@@ -8,8 +8,8 @@ import PolarChart from '@/views/view_app/page/page_charts/demo/examples/PolarCha
 import ScatterChart from '@/views/view_app/page/page_charts/demo/examples/ScatterChart.vue'
 import { computed, onMounted } from 'vue'
 import { store_view_charts_page_info } from '@/views/view_app/page/page_charts/store/store_view_charts_page_info'
-import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
-import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
+import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 
 use([CanvasRenderer, SVGRenderer])
 

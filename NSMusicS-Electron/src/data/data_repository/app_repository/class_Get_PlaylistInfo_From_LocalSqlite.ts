@@ -1,5 +1,5 @@
-import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
-import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
+import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import error_album from '@/assets/img/error_album.jpg'
 import { isElectron } from '@/utils/electron/isElectron'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
@@ -9,7 +9,7 @@ export class Get_PlaylistInfo_From_LocalSqlite {
     if (isElectron) {
       let db
       try {
-        db = require('better-sqlite3')(store_app_configs_info.navidrome_db)
+        db = require('better-sqlite3')(store_system_configs_info.navidrome_db)
         db.pragma('journal_mode = WAL')
         db.pragma('foreign_keys = OFF')
         const stmt_playlist = db.prepare(
@@ -30,7 +30,7 @@ export class Get_PlaylistInfo_From_LocalSqlite {
   }
   public Get_Playlist() {
     if (isElectron) {
-      const db = require('better-sqlite3')(store_app_configs_info.navidrome_db)
+      const db = require('better-sqlite3')(store_system_configs_info.navidrome_db)
       db.pragma('journal_mode = WAL')
       db.exec('PRAGMA foreign_keys = OFF')
 
@@ -50,7 +50,7 @@ export class Get_PlaylistInfo_From_LocalSqlite {
   }
   public Get_Playlist_Tracks(playlist_id: string) {
     if (isElectron) {
-      const db = require('better-sqlite3')(store_app_configs_info.navidrome_db)
+      const db = require('better-sqlite3')(store_system_configs_info.navidrome_db)
       db.pragma('journal_mode = WAL')
       db.exec('PRAGMA foreign_keys = OFF')
 
@@ -71,11 +71,11 @@ export class Get_PlaylistInfo_From_LocalSqlite {
   }
   public Get_Playlist_Media_File_Id_of_list(list_of_media_file_id: string[]) {
     if (isElectron) {
-      const db = require('better-sqlite3')(store_app_configs_info.navidrome_db)
+      const db = require('better-sqlite3')(store_system_configs_info.navidrome_db)
       db.pragma('journal_mode = WAL')
       db.exec('PRAGMA foreign_keys = OFF')
 
-      db.exec(`ATTACH DATABASE '${store_app_configs_info.nsmusics_db}' AS nsmusics`)
+      db.exec(`ATTACH DATABASE '${store_system_configs_info.nsmusics_db}' AS nsmusics`)
       const placeholders = list_of_media_file_id.map(() => '?').join(',')
       const stmt = db.prepare(`
                 SELECT mf.*
@@ -98,7 +98,7 @@ export class Get_PlaylistInfo_From_LocalSqlite {
           if (row.path) {
             const fileName = row.path.split(/[\\/]/).pop() // 兼容 Windows 和 Unix 路径分隔符
             const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg')
-            row.medium_image_url = `${store_app_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
+            row.medium_image_url = `${store_system_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
           } else {
             row.medium_image_url = error_album
           }
@@ -145,7 +145,7 @@ export class Get_PlaylistInfo_From_LocalSqlite {
   }
   public Get_Playlist_Media_File_of_list() {
     if (isElectron) {
-      const db = require('better-sqlite3')(store_app_configs_info.navidrome_db)
+      const db = require('better-sqlite3')(store_system_configs_info.navidrome_db)
       db.pragma('journal_mode = WAL')
       db.exec('PRAGMA foreign_keys = OFF')
 
@@ -164,7 +164,7 @@ export class Get_PlaylistInfo_From_LocalSqlite {
           if (row.path) {
             const fileName = row.path.split(/[\\/]/).pop() // 兼容 Windows 和 Unix 路径分隔符
             const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg')
-            row.medium_image_url = `${store_app_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
+            row.medium_image_url = `${store_system_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
           } else {
             row.medium_image_url = error_album
           }
