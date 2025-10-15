@@ -8,8 +8,8 @@ import { NButton, NIcon } from 'naive-ui'
 
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 
-import { Folder_Entity_ApiService_of_NineSong } from '@/data/data_configs/servers_configs/ninesong_api/services_web/Folder_Entity/index_service'
-import { File_Entity_ApiService_of_NineSong } from '@/data/data_configs/servers_configs/ninesong_api/services_web/File_Entity/Scan Folders/index_service'
+import { Folder_Entity_ApiService_of_NineSong } from '@/data/servers_configs/ninesong_api/services_web/Folder_Entity/index_service'
+import { File_Entity_ApiService_of_NineSong } from '@/data/servers_configs/ninesong_api/services_web/File_Entity/Scan Folders/index_service'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n({
   inheritLocale: true,

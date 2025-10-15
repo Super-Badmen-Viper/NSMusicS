@@ -69,9 +69,9 @@ import { store_general_fetch_media_list } from '@/data/data_stores/server_stores
 import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
 import { store_general_model_player_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/components/player_list/store_general_model_player_list'
 import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
-import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
+import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
-import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_configs/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
+import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
 const contextmenu = ref(null)
 async function update_playlist_addMediaFile(id: any, playlist_id: any) {
   try {

@@ -4,7 +4,7 @@ import { NButton } from 'naive-ui'
 import { ref } from 'vue'
 
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
-import { Auth_Info_ApiService_of_NineSong } from '@/data/data_configs/servers_configs/ninesong_api/services_web/Auth/Auth_Info/index_service'
+import { Auth_Info_ApiService_of_NineSong } from '@/data/servers_configs/ninesong_api/services_web/Auth/Auth_Info/index_service'
 
 const new_server_email = ref('')
 const current_password = ref('')

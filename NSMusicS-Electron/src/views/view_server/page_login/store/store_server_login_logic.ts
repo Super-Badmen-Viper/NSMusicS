@@ -6,9 +6,9 @@ import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_
 import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
 import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
 import { store_general_fetch_home_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_home/store_general_fetch_home_list'
-import { Auth_Token_ApiService_of_NineSong } from '@/data/data_configs/servers_configs/ninesong_api/services_web/Auth/Auth_Token/index_service'
+import { Auth_Token_ApiService_of_NineSong } from '@/data/servers_configs/ninesong_api/services_web/Auth/Auth_Token/index_service'
 import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
-import { Folder_Entity_ApiService_of_NineSong } from '@/data/data_configs/servers_configs/ninesong_api/services_web/Folder_Entity/index_service'
+import { Folder_Entity_ApiService_of_NineSong } from '@/data/servers_configs/ninesong_api/services_web/Folder_Entity/index_service'
 
 export const store_server_login_logic = reactive({
   jwt_expire_time: 24 * 60 * 60 * 1000, // 24小时

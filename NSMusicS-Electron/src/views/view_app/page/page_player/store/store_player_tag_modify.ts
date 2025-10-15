@@ -3,7 +3,7 @@ import { store_server_user_model } from '@/data/data_stores/server_stores/store_
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
 import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
-import { Browsing_ApiService_of_ND } from '@/data/data_configs/servers_configs/navidrome_api/services_normal/browsing/index_service'
+import { Browsing_ApiService_of_ND } from '@/data/servers_configs/navidrome_api/services_normal/browsing/index_service'
 import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 
