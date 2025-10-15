@@ -978,9 +978,9 @@ onMounted(() => {
       input_search_InstRef.value?.clear()
       bool_show_search_area.value = false
       store_view_album_page_logic.page_albumlists_keyword = ''
-    } else {
-      bool_show_search_area.value = true
     }
+  } else {
+    bool_show_search_area.value = true
   }
   if (store_general_fetch_album_list._artist_id.length > 0) {
     bool_show_search_area.value = true
