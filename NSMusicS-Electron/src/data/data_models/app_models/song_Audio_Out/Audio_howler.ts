@@ -59,6 +59,7 @@ export class Audio_howler {
   setCurrentTime(time: number) {
     if (this.howl) {
       this.howl.seek(time)
+      this.howl.play()
     }
   }
   setVolume(volume: number) {
