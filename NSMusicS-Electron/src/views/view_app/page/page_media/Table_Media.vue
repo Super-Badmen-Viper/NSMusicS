@@ -572,7 +572,7 @@ const page_songlists_handleselected_updatevalue = async (value: any) => {
     input_search_InstRef.value?.clear()
     store_view_media_page_logic.page_songlists_bool_show_search_area = false
   }
-  /// navidrome/local
+  /// navidrome/app
   store_view_media_page_logic.set_media_Files_selected_all(false)
   store_view_media_page_logic.list_selected_Hand_click = true
   await store_view_media_page_logic.get_page_songlists_selected(value)
@@ -792,7 +792,7 @@ import { useMessage } from 'naive-ui'
 const message = useMessage()
 const themeVars = useThemeVars()
 /// add playlist
-import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
+import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
 import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
@@ -800,27 +800,27 @@ import { store_view_media_page_info } from '@/views/view_app/page/page_media/sto
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
 import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
-import { store_local_data_set_mediaInfo } from '@/data/data_stores/local/local_data_synchronization/store_local_data_set_mediaInfo'
+import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_stores/local_data_synchronization/store_local_data_set_mediaInfo'
 import type { SelectBaseOption } from 'naive-ui/es/select/src/interface'
-import { store_local_db_info } from '@/data/data_stores/local/store_local_db_info'
-import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
-import { store_server_data_set_playlistInfo } from '@/data/data_stores/server/server_api_synchronization/store_server_data_set_playlistInfo'
+import { store_local_db_info } from '@/data/data_stores/local_stores/store_local_db_info'
+import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
+import { store_server_data_set_playlistInfo } from '@/data/data_stores/server_stores/server_api_synchronization/store_server_data_set_playlistInfo'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
-import { store_app_configs_logic_save } from '@/data/data_stores/app/store_app_configs_logic_save'
-import { store_general_fetch_media_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'
+import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
+import { store_general_fetch_media_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
-import { store_general_fetch_album_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list'
-import { store_general_fetch_player_list } from '@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list'
+import { store_general_fetch_album_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list'
+import { store_general_fetch_player_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list'
 import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
-import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_server/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
-import { store_server_users } from '@/data/data_stores/server/store_server_users'
+import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_configs/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
+import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
 import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
-import { store_general_model_player_list } from '@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list'
-import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_server/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
+import { store_general_model_player_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/components/player_list/store_general_model_player_list'
+import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 import { debounce } from 'lodash'
-import { Folder_Entity_ApiService_of_NineSong } from '@/data/data_server/servers_configs/ninesong_api/services_web/Folder_Entity/index_service'
+import { Folder_Entity_ApiService_of_NineSong } from '@/data/data_configs/servers_configs/ninesong_api/services_web/Folder_Entity/index_service'
 
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
@@ -830,7 +830,7 @@ async function update_playlist_addPlaylist() {
   try {
     Type_Add_Playlist.value = false
     if (store_server_user_model.model_select === 'server') {
-      // send json to server
+      // send json to server_stores
       let getCreatePlaylist_set_id =
         await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_CreatePlaylist_Server(
           playlist_set_of_addPlaylist_of_playlistname.value,
@@ -852,7 +852,7 @@ async function update_playlist_addPlaylist() {
         console.log(
           'SetPlaylist_of_ND: ' + store_server_user_model.username + ': ' + getCreatePlaylist_set_id
         )
-        // get server all playlist
+        // get server_stores all playlist
         await store_general_model_player_list.get_playlists_info()
         //
         console.log(
@@ -895,7 +895,7 @@ function update_playlist_set_of_updatePlaylist_of_playlistname(
 ) {
   playlist_update_emit_id.value = value
   playlist_set_of_updatePlaylist_of_playlistcomment.value = option.label
-  // if(store_server_user_model.model_select === 'server'){
+  // if(store_server_user_model.model_select === 'server_stores'){
   //   playlist_set_of_updatePlaylist_of_comment.value =
   //   playlist_set_of_updatePlaylist_of_public.value =
   // }
@@ -2928,11 +2928,11 @@ onBeforeUnmount(() => {
               v-model:value="playlist_set_of_updatePlaylist_of_playlistcomment"
             />
           </n-space>
-          <!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server'">-->
+          <!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server_stores'">-->
           <!--            <span>{{ $t('filter.comment') }}</span>-->
           <!--            <n-input clearable placeholder="" v-model:value="playlist_set_of_updatePlaylist_of_comment"/>-->
           <!--          </n-space>-->
-          <!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server'">-->
+          <!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server_stores'">-->
           <!--            <span>{{ $t('form.createPlaylist.input_public') }}</span>-->
           <!--            <n-switch v-model:value="playlist_set_of_updatePlaylist_of_public"/>-->
           <!--          </n-space>-->
@@ -2996,11 +2996,11 @@ onBeforeUnmount(() => {
               v-model:value="playlist_set_of_addPlaylist_of_playlistname"
             />
           </n-space>
-          <!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server'">-->
+          <!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server_stores'">-->
           <!--            <span>{{ $t('filter.comment') }}</span>-->
           <!--            <n-input clearable placeholder="" v-model:value="playlist_set_of_addPlaylist_of_comment"/>-->
           <!--          </n-space>-->
-          <!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server'">-->
+          <!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server_stores'">-->
           <!--            <span>{{ $t('form.createPlaylist.input_public') }}</span>-->
           <!--            <n-switch v-model:value="playlist_set_of_addPlaylist_of_public" />-->
           <!--          </n-space>-->

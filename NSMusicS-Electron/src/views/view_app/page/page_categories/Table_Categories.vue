@@ -15,10 +15,10 @@ import { Play, RefreshSharp } from '@vicons/ionicons5'
 import { onBeforeUnmount, onMounted, ref, watch, computed } from 'vue'
 import { NButton, NIcon, NImage } from 'naive-ui'
 import { Icon } from '@vicons/utils'
-import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
+import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
 import { store_view_home_page_logic } from '@/views/view_app/page/page_home/store/store_view_home_page_logic'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
-import { store_general_fetch_album_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list'
+import { store_general_fetch_album_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list'
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
@@ -28,8 +28,8 @@ const { t } = useI18n({
 
 ////// passed as argument
 import { store_view_home_page_info } from '@/views/view_app/page/page_home/store/store_view_home_page_info'
-import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
-import { store_server_users } from '@/data/data_stores/server/store_server_users'
+import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
+import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
 
 ////// albumlist_view page_layout gridItems
 const item_album = ref(160)
@@ -121,7 +121,7 @@ onMounted(() => {
 })
 
 ////// dynamicScroller of albumlist_view
-import { store_general_fetch_home_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_home/store_general_fetch_home_list'
+import { store_general_fetch_home_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_home/store_general_fetch_home_list'
 const dynamicScroller_maximum_playback = ref(null)
 let offset_maximum_playback = 0
 const scrollTo_maximum_playback = (value: number) => {
@@ -290,7 +290,7 @@ watch(
 )
 
 ////// changed_data write to sqlite
-import { store_local_data_set_albumInfo } from '@/data/data_stores/local/local_data_synchronization/store_local_data_set_albumInfo'
+import { store_local_data_set_albumInfo } from '@/data/data_stores/local_stores/local_data_synchronization/store_local_data_set_albumInfo'
 const handleItemClick_Favorite = (id: any, favorite: boolean) => {
   store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(id, favorite)
 }
@@ -306,17 +306,17 @@ const handleItemClick_Rating = (id_rating: any) => {
 }
 
 ////// right menu
-import { store_app_configs_logic_save } from '@/data/data_stores/app/store_app_configs_logic_save'
+import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
 import { useMessage } from 'naive-ui'
 import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
-import { store_general_fetch_media_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'
+import { store_general_fetch_media_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
-import { store_local_data_set_mediaInfo } from '@/data/data_stores/local/local_data_synchronization/store_local_data_set_mediaInfo'
+import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_stores/local_data_synchronization/store_local_data_set_mediaInfo'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
-import { store_general_fetch_player_list } from '@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list'
-import { store_general_model_player_list } from '@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list'
+import { store_general_fetch_player_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list'
+import { store_general_model_player_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/components/player_list/store_general_model_player_list'
 const contextmenu = ref(null)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'))
 const message = useMessage()

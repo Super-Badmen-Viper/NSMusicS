@@ -1,15 +1,15 @@
 <script setup lang="ts">
 ////// this_view resource of vicons_svg
 import { AddCircle32Regular, ArrowReset24Filled, Folder24Regular } from '@vicons/fluent'
-import { store_server_users } from '@/data/data_stores/server/store_server_users'
-import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
+import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
+import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
 import { Close } from '@vicons/carbon'
 import { NButton, NIcon } from 'naive-ui'
 
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 
-import { Folder_Entity_ApiService_of_NineSong } from '@/data/data_server/servers_configs/ninesong_api/services_web/Folder_Entity/index_service'
-import { File_Entity_ApiService_of_NineSong } from '@/data/data_server/servers_configs/ninesong_api/services_web/File_Entity/Scan Folders/index_service'
+import { Folder_Entity_ApiService_of_NineSong } from '@/data/data_configs/servers_configs/ninesong_api/services_web/Folder_Entity/index_service'
+import { File_Entity_ApiService_of_NineSong } from '@/data/data_configs/servers_configs/ninesong_api/services_web/File_Entity/Scan Folders/index_service'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n({
   inheritLocale: true,
@@ -22,7 +22,7 @@ const Type_Server_Add = ref(false)
 const server_set_of_addLibrary_of_name = ref('')
 const server_set_of_addLibrary_of_path = ref('')
 const scanningPaths = ref<string[]>([]) // 存储正在扫描的路径
-/// server add
+/// app add
 async function update_server_addUser() {
   browseFolderOptions.value.forEach((folder) => {
     if (folder === server_set_of_addLibrary_of_path.value) {
@@ -69,7 +69,7 @@ async function update_server_addUser() {
   }
 }
 
-/// server delete - 添加路径锁检查
+/// app delete - 添加路径锁检查
 async function update_server_deleteUser(id: string, folderPath: string) {
   if (scanningPaths.value.length === 0 && !store_server_login_info.scanningAll) {
     try {
@@ -92,7 +92,7 @@ async function update_server_deleteUser(id: string, folderPath: string) {
   }
 }
 
-/// server update
+/// app update
 async function update_server_setUser(id: string, newName: string, newFolderPath: string) {
   // 直接检查路径是否在扫描中
   if (scanningPaths.value.includes(newFolderPath)) {
@@ -121,7 +121,7 @@ async function update_server_setUser(id: string, newName: string, newFolderPath:
   }
 }
 
-/// server folder find
+/// app folder find
 async function find_server_folder_path(path: string) {
   server_set_of_addLibrary_of_path.value = path
   server_set_of_addLibrary_of_name.value = getFolderNameFromPath(path)
@@ -153,7 +153,7 @@ const stopWatching_Type_Server_Add = watch(
   }
 )
 
-/// server scan - 添加路径锁管理
+/// app scan - 添加路径锁管理
 const timer = ref(null)
 
 async function scan_server_folder_path(

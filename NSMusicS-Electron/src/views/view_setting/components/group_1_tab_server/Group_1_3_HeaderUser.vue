@@ -4,7 +4,7 @@ import { NButton } from 'naive-ui'
 import { ref } from 'vue'
 
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
-import { Auth_Info_ApiService_of_NineSong } from '@/data/data_server/servers_configs/ninesong_api/services_web/Auth/Auth_Info/index_service'
+import { Auth_Info_ApiService_of_NineSong } from '@/data/data_configs/servers_configs/ninesong_api/services_web/Auth/Auth_Info/index_service'
 
 const new_server_email = ref('')
 const current_password = ref('')
@@ -13,9 +13,9 @@ const new_password = ref('')
 let auth_Info_ApiService_of_NineSong = new Auth_Info_ApiService_of_NineSong(
   store_server_login_info.server_url
 )
-import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
-import { store_server_users } from '@/data/data_stores/server/store_server_users'
-import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
+import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
+import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
+import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
 
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n({
@@ -23,8 +23,8 @@ const { t } = useI18n({
 })
 
 import { useMessage } from 'naive-ui'
-import { store_server_ninesong_userdata_logic } from '@/data/data_stores/server/server_data_select/server_ninesong_user_data/store_server_ninesong_userdata_logic'
-import { store_app_configs_logic_save } from '@/data/data_stores/app/store_app_configs_logic_save'
+import { store_server_ninesong_userdata_logic } from '@/data/data_stores/server_stores/server_data_select/server_ninesong_user_data/store_server_ninesong_userdata_logic'
+import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
 const message = useMessage()
 
 async function change_email(new_server_email: string) {

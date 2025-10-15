@@ -1,6 +1,6 @@
 <script setup lang="ts">
 ////// this_view resource of vicons_svg
-import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
+import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
 import { NotificationsOutline } from '@vicons/ionicons5'
 import {
   BareMetalServer,
@@ -63,9 +63,9 @@ function renderIcon(icon) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
 import { useI18n } from 'vue-i18n'
-import { store_server_users } from '@/data/data_stores/server/store_server_users'
-import { store_local_db_info } from '@/data/data_stores/local/store_local_db_info'
-import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
+import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
+import { store_local_db_info } from '@/data/data_stores/local_stores/store_local_db_info'
+import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
 import { isElectron } from '@/utils/electron/isElectron'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 const { t } = useI18n({

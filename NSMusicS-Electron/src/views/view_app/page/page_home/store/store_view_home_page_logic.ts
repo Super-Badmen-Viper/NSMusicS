@@ -1,5 +1,5 @@
 import { reactive, watch } from 'vue'
-import { store_general_fetch_home_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_home/store_general_fetch_home_list'
+import { store_general_fetch_home_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_home/store_general_fetch_home_list'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 
 export const store_view_home_page_logic = reactive({

@@ -1,8 +1,8 @@
 import { reactive, watch } from 'vue'
 import { store_router_history_data_of_album } from '@/router/router_store/store_router_history_data_of_album'
-import { store_general_fetch_album_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list'
+import { store_general_fetch_album_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
-import { store_app_configs_logic_save } from '@/data/data_stores/app/store_app_configs_logic_save'
+import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
 
 export const store_view_album_page_logic = reactive({
   list_data_StartUpdate: false,

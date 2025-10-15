@@ -30,9 +30,9 @@ import { onBeforeUnmount } from 'vue'
 const get_playerbar_to_switch_playerview = inject('get_playerbar_to_switch_playerview')
 
 import { useI18n } from 'vue-i18n'
-import { store_server_data_set_mediaInfo } from '@/data/data_stores/server/server_api_synchronization/store_server_data_set_mediaInfo'
-import { store_server_data_set_albumInfo } from '@/data/data_stores/server/server_api_synchronization/store_server_data_set_albumInfo'
-import { store_server_data_set_artistInfo } from '@/data/data_stores/server/server_api_synchronization/store_server_data_set_artistInfo'
+import { store_server_data_set_mediaInfo } from '@/data/data_stores/server_stores/server_api_synchronization/store_server_data_set_mediaInfo'
+import { store_server_data_set_albumInfo } from '@/data/data_stores/server_stores/server_api_synchronization/store_server_data_set_albumInfo'
+import { store_server_data_set_artistInfo } from '@/data/data_stores/server_stores/server_api_synchronization/store_server_data_set_artistInfo'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 const { t } = useI18n({
@@ -572,7 +572,7 @@ watch(
 // )
 
 ////// player_configs player_button order area
-import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
+import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
 const backpanel_order_leave = () => {
   if (!store_player_appearance.player_show) {
     // store_player_audio_logic.drawer_order_show = false;
@@ -927,7 +927,7 @@ function play_skip_cue_order(
   ///
   return true
 }
-import { Retrieval_ApiService_of_NineSong } from '@/data/data_server/servers_configs/ninesong_api/services_web/Scene/Music/Retrieval/index_service'
+import { Retrieval_ApiService_of_NineSong } from '@/data/data_configs/servers_configs/ninesong_api/services_web/Scene/Music/Retrieval/index_service'
 watch(
   () => store_player_audio_info.this_audio_cue_track_current_no,
   async (newValue) => {
@@ -1084,23 +1084,19 @@ import { store_player_sound_more } from '@/views/view_app/page/page_player/store
 import { store_playlist_appearance } from '@/views/view_app/components/player_list/store/store_playlist_appearance'
 import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
-import { store_local_data_set_mediaInfo } from '@/data/data_stores/local/local_data_synchronization/store_local_data_set_mediaInfo'
+import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_stores/local_data_synchronization/store_local_data_set_mediaInfo'
 import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
-import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
-import { store_general_fetch_player_list } from '@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list'
+import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
 import { Audio_howler } from '@/data/data_models/app_models/song_Audio_Out/Audio_howler'
 import { Audio_node_mpv } from '@/data/data_models/app_models/song_Audio_Out/Audio_node_mpv'
 import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
-import { Get_AnnotationInfo_To_LocalSqlite } from '@/data/data_app/repository_app/class_Get_AnnotationInfo_To_LocalSqlite'
-import { store_local_data_set_artistInfo } from '@/data/data_stores/local/local_data_synchronization/store_local_data_set_artistInfo'
-import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_server/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
-import { store_server_users } from '@/data/data_stores/server/store_server_users'
-import { store_general_fetch_media_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'
-import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_server/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
+import { Get_AnnotationInfo_To_LocalSqlite } from '@/data/data_repository/app_repository/class_Get_AnnotationInfo_To_LocalSqlite'
+import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_configs/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
+import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
+import { store_general_fetch_media_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'
+import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
-import { store_general_fetch_media_cue_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list'
 import { store_view_media_cue_page_info } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_info'
-import { store_local_data_set_albumInfo } from '@/data/data_stores/local/local_data_synchronization/store_local_data_set_albumInfo'
 
 const handleItemClick_Favorite = (id, favorite) => {
   if (id != null && id.length > 0 && id != 'undefined') {

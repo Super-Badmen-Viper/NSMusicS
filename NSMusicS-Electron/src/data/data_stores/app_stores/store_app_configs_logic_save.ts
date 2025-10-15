@@ -1,25 +1,25 @@
 import { reactive, ref } from 'vue'
 import { App_Configs } from '@/data/data_models/app_models/app_Configs/class_App_Configs'
-import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
-import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
+import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
+import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
-import { Class_Set_System_Configs_Write } from '@/data/data_app/repository_system/class_Set_System_Configs_Write'
+import { Class_Set_System_Configs_Write } from '@/data/data_repository/system_repository/class_Set_System_Configs_Write'
 import { Player_Configs_of_UI } from '@/data/data_models/app_models/app_Configs/class_Player_Configs_of_UI'
 import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
 import { Player_Configs_of_Audio_Info } from '@/data/data_models/app_models/app_Configs/class_Player_Configs_of_Audio_Info'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
-import { store_server_users } from '@/data/data_stores/server/store_server_users'
+import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
 import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
-import { store_general_fetch_player_list } from '@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list'
+import { store_general_fetch_player_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 import { isElectron } from '@/utils/electron/isElectron'
-import { store_local_db_info } from '@/data/data_stores/local/store_local_db_info'
+import { store_local_db_info } from '@/data/data_stores/local_stores/store_local_db_info'
 import axios from 'axios'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 import { store_app_configs_logic_load } from './store_app_configs_logic_load'
@@ -404,7 +404,7 @@ export const store_app_configs_logic_save = reactive({
       }
     } else {
       // 不提供服务端配置整体写入
-      // NineSong app server config 仅支持get查询所有、put单项创建：新ID值、put单项更新：已有ID值
+      // NineSong app app config 仅支持get查询所有、put单项创建：新ID值、put单项更新：已有ID值
     }
   },
 })

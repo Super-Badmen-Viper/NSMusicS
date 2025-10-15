@@ -1,7 +1,7 @@
 import { reactive } from 'vue'
-import { Set_AlbumInfo_To_LocalSqlite } from '@/data/data_app/repository_app/class_Set_AlbumInfo_To_LocalSqlite'
-import { store_server_data_set_albumInfo } from '@/data/data_stores/server/server_api_synchronization/store_server_data_set_albumInfo'
-import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
+import { Set_AlbumInfo_To_LocalSqlite } from '@/data/data_repository/app_repository/class_Set_AlbumInfo_To_LocalSqlite'
+import { store_server_data_set_albumInfo } from '@/data/data_stores/server_stores/server_api_synchronization/store_server_data_set_albumInfo'
+import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
 const set_AlbumInfo_To_LocalSqlite = new Set_AlbumInfo_To_LocalSqlite()
 export const store_local_data_set_albumInfo = reactive({
   Set_AlbumInfo_To_Favorite(id: string, value: boolean) {

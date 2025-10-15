@@ -10,8 +10,8 @@ import { store_view_artist_page_logic } from '@/views/view_app/page/page_artist/
 import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
 import { store_router_history_data_of_album } from '@/router/router_store/store_router_history_data_of_album'
 import { store_router_history_data_of_artist } from '@/router/router_store/store_router_history_data_of_artist'
-import { store_app_configs_logic_save } from '@/data/data_stores/app/store_app_configs_logic_save'
-import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
+import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
+import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
 
 export const store_router_data_logic = reactive({
   reset_data() {

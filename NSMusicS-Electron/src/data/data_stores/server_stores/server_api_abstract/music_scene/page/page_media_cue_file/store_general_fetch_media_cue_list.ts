@@ -11,7 +11,7 @@ import { store_general_fetch_player_list } from '@/data/data_stores/server_store
 import error_album from '@/assets/img/error_album.jpg'
 import { isElectron } from '@/utils/electron/isElectron'
 import { store_playlist_appearance } from '@/views/view_app/components/player_list/store/store_playlist_appearance'
-import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_config_server/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
+import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 
 /**

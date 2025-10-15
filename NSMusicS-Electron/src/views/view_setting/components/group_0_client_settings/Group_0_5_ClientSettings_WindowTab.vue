@@ -6,7 +6,7 @@ const { t } = useI18n({
 })
 
 ////// this_view views_components
-import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
+import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
 import { ref, onMounted, computed } from 'vue'
 const theme_value = ref('lightTheme')
 const theme_options = ref([

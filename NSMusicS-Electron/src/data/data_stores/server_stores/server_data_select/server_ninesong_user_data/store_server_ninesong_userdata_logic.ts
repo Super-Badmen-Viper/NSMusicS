@@ -2,13 +2,13 @@ import { reactive } from 'vue'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 import axios from 'axios'
-import { Auth_Token_ApiService_of_NineSong } from '@/data/data_config_server/servers_configs/ninesong_api/services_web/Auth/Auth_Token/index_service'
+import { Auth_Token_ApiService_of_NineSong } from '@/data/data_configs/servers_configs/ninesong_api/services_web/Auth/Auth_Token/index_service'
 import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
 import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
 import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
-import { Set_ServerInfo_To_LocalSqlite } from '@/data/data_config_app/app_repository/class_Set_ServerInfo_To_LocalSqlite'
+import { Set_ServerInfo_To_LocalSqlite } from '@/data/data_repository/app_repository/class_Set_ServerInfo_To_LocalSqlite'
 import { isElectron } from '@/utils/electron/isElectron'
-import { Folder_Entity_ApiService_of_NineSong } from '@/data/data_config_server/servers_configs/ninesong_api/services_web/Folder_Entity/index_service'
+import { Folder_Entity_ApiService_of_NineSong } from '@/data/data_configs/servers_configs/ninesong_api/services_web/Folder_Entity/index_service'
 
 export const store_server_ninesong_userdata_logic = reactive({
   /// docker server_stores manage
@@ -83,7 +83,7 @@ export const store_server_ninesong_userdata_logic = reactive({
     return true
   },
 
-  /// app_stores server_stores manage
+  /// app server_stores manage
   /// server_stores add
   async ninesong_update_server_addUser(
     server_name: string,

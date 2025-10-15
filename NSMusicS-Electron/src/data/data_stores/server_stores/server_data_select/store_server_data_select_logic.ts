@@ -1,6 +1,6 @@
 import { reactive } from 'vue'
 import { store_server_navidrome_userdata_logic } from '@/data/data_stores/server_stores/server_data_select/server_navidrome_user_data/store_server_navidrome_userdata_logic'
-import { Set_ServerInfo_To_LocalSqlite } from '@/data/data_config_app/app_repository/class_Set_ServerInfo_To_LocalSqlite'
+import { Set_ServerInfo_To_LocalSqlite } from '@/data/data_repository/app_repository/class_Set_ServerInfo_To_LocalSqlite'
 import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
 import { store_server_jellyfin_userdata_logic } from './server_jellyfin_user_data/store_server_jellyfin_userdata_logic'
 import { isElectron } from '@/utils/electron/isElectron'
@@ -10,7 +10,7 @@ import { store_view_album_page_logic } from '@/views/view_app/page/page_album/st
 import { store_view_artist_page_logic } from '@/views/view_app/page/page_artist/store/store_view_artist_page_logic'
 
 export const store_server_data_select_logic = reactive({
-  /// server_stores add
+  /// app add
   async update_server_addUser(
     server_set_of_addUser_of_servername: string,
     server_set_of_addUser_of_url: string,
@@ -46,7 +46,7 @@ export const store_server_data_select_logic = reactive({
     return false
   },
 
-  /// server_stores update
+  /// app update
   async update_server_setUser(
     id: string,
     server_name: string,
@@ -86,7 +86,7 @@ export const store_server_data_select_logic = reactive({
     return false
   },
 
-  /// server_stores login and get token
+  /// app login and get token
   async update_server_config_of_current_user_of_sqlite(value: any, type: string) {
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
     store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
@@ -108,7 +108,7 @@ export const store_server_data_select_logic = reactive({
     return false
   },
 
-  /// server_stores delete
+  /// app delete
   async update_server_deleteUser(id: string) {
     try {
       if (isElectron) {

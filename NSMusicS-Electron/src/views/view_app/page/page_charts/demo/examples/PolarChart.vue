@@ -22,7 +22,7 @@ use([
   VisualMapComponent,
 ])
 
-import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
+import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
 import { store_view_charts_page_info } from '@/views/view_app/page/page_charts/store/store_view_charts_page_info'
 
 const selectedCategory = ref('media_file')

@@ -1,6 +1,6 @@
 import { computed, reactive } from 'vue'
 import { store_view_charts_page_info } from './store_view_charts_page_info'
-import { store_general_fetch_charts_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_charts/store_general_fetch_charts_list'
+import { store_general_fetch_charts_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_charts/store_general_fetch_charts_list'
 
 export const store_view_charts_page_logic = reactive({
   async fetchData_Charts() {

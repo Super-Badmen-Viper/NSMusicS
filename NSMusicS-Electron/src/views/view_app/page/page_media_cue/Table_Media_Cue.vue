@@ -411,7 +411,7 @@ const page_songlists_handleselected_updatevalue = async (value: any) => {
     input_search_InstRef.value?.clear()
     store_view_media_cue_page_logic.page_songlists_bool_show_search_area = false
   }
-  /// navidrome/local
+  /// navidrome/app
   store_view_media_cue_page_logic.set_media_Files_selected_all(false)
   store_view_media_cue_page_logic.list_selected_Hand_click = true
   await store_view_media_cue_page_logic.get_page_songlists_selected(value)
@@ -635,7 +635,7 @@ import { useMessage } from 'naive-ui'
 const message = useMessage()
 const themeVars = useThemeVars()
 /// add playlist
-import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
+import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
 import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
@@ -643,29 +643,29 @@ import { store_view_media_cue_page_info } from '@/views/view_app/page/page_media
 import { store_view_media_cue_page_logic } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_logic'
 import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
 import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
-import { store_server_data_set_media_cueInfo } from '@/data/data_stores/server/server_api_synchronization/store_server_data_set_media_cueInfo'
+import { store_server_data_set_media_cueInfo } from '@/data/data_stores/server_stores/server_api_synchronization/store_server_data_set_media_cueInfo'
 import type { SelectBaseOption } from 'naive-ui/es/select/src/interface'
-import { store_local_db_info } from '@/data/data_stores/local/store_local_db_info'
-import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
-import { store_server_data_set_playlistInfo } from '@/data/data_stores/server/server_api_synchronization/store_server_data_set_playlistInfo'
+import { store_local_db_info } from '@/data/data_stores/local_stores/store_local_db_info'
+import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
+import { store_server_data_set_playlistInfo } from '@/data/data_stores/server_stores/server_api_synchronization/store_server_data_set_playlistInfo'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
-import { store_app_configs_logic_save } from '@/data/data_stores/app/store_app_configs_logic_save'
-import { store_general_fetch_media_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'
+import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
+import { store_general_fetch_media_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
-import { store_general_fetch_album_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list'
-import { store_general_fetch_player_list } from '@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list'
+import { store_general_fetch_album_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list'
+import { store_general_fetch_player_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/components/player_list/store_general_fetch_player_list'
 import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
-import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_server/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
-import { store_server_users } from '@/data/data_stores/server/store_server_users'
+import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_configs/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
+import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
 import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
-import { store_general_model_player_list } from '@/data/data_stores/server/server_api_abstract/music_scene/components/player_list/store_general_model_player_list'
-import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_server/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
+import { store_general_model_player_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/components/player_list/store_general_model_player_list'
+import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/servers_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 import { debounce } from 'lodash'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { MultipleStopOutlined } from '@vicons/material'
-import { store_general_fetch_media_cue_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list'
+import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list'
 
 ////// Right_click_on_songline show menu
 let click_count = 0

@@ -28,7 +28,7 @@ import { RouterLink, RouterView, useRouter } from 'vue-router'
 import Bar_Music_Player from '@/views/view_app/components/player_bar/Bar_Music_Player.vue'
 import Bar_Music_PlayList from '@/views/view_app/drawer/View_Player_PlayList.vue'
 import View_Screen_Music_Player from '@/views/view_app/page/page_player/View_Screen_Music_Player.vue'
-import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
+import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
 import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
 import { store_player_sound_effects } from '@/views/view_app/page/page_player/store/store_player_sound_effects'
 import { store_player_sound_speed } from '@/views/view_app/page/page_player/store/store_player_sound_speed'
@@ -36,20 +36,20 @@ import { store_player_sound_more } from '@/views/view_app/page/page_player/store
 import { store_playlist_appearance } from '@/views/view_app/components/player_list/store/store_playlist_appearance'
 import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
 import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
-import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
+import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
 import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
 import { store_view_artist_page_logic } from '@/views/view_app/page/page_artist/store/store_view_artist_page_logic'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
-import { store_app_configs_logic_save } from '@/data/data_stores/app/store_app_configs_logic_save'
-import { store_app_configs_logic_theme } from '@/data/data_stores/app/store_app_configs_logic_theme'
-import { store_general_fetch_media_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'
-import { store_general_fetch_media_cue_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list'
-import { store_general_fetch_home_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_home/store_general_fetch_home_list'
-import { store_general_fetch_album_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list'
-import { store_general_fetch_artist_list } from '@/data/data_stores/server/server_api_abstract/music_scene/page/page_artist/store_general_fetch_artist_list'
+import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
+import { store_app_configs_logic_theme } from '@/data/data_stores/app_stores/store_app_configs_logic_theme'
+import { store_general_fetch_media_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_media_file/store_general_fetch_media_list'
+import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_media_cue_file/store_general_fetch_media_cue_list'
+import { store_general_fetch_home_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_home/store_general_fetch_home_list'
+import { store_general_fetch_album_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_album/store_general_fetch_album_list'
+import { store_general_fetch_artist_list } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/page/page_artist/store_general_fetch_artist_list'
 import { store_view_media_cue_page_logic } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_logic'
 import { store_view_media_cue_page_info } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_info'
 
@@ -331,11 +331,11 @@ provide('get_playerbar_to_switch_playerview', get_playerbar_to_switch_playerview
 ////// router_music custom class
 store_router_data_info.router = useRouter()
 import routers from './router'
-import { store_app_configs_logic_update } from '@/data/data_stores/app/store_app_configs_logic_update'
+import { store_app_configs_logic_update } from '@/data/data_stores/app_stores/store_app_configs_logic_update'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
-import { store_server_users } from '@/data/data_stores/server/store_server_users'
+import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
 routers.beforeEach((to, from, next) => {
   if (to.name !== from.name) {
     store_router_data_logic.clear_Files_temporary()
@@ -854,7 +854,7 @@ const { locale } = useI18n({
   useScope: 'global',
 })
 import { store_server_login_logic } from '@/views/view_server/page_login/store/store_server_login_logic'
-import { store_server_model_statistics } from '@/data/data_stores/server/server_api_abstract/music_scene/model/model_statistics'
+import { store_server_model_statistics } from '@/data/data_stores/server_stores/server_api_abstract/music_scene/model/model_statistics'
 onMounted(() => {
   create_menuOptions_appBar()
 })
@@ -1354,7 +1354,7 @@ function fullScreen() {
         </n-layout>
       </n-message-provider>
     </n-config-provider>
-    <!-- server login-->
+    <!-- app login-->
     <RouterView class="this_App" v-if="store_router_data_info.router_select_model_server_login">
     </RouterView>
 

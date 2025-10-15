@@ -1,9 +1,9 @@
 import { reactive } from 'vue'
-import { Set_MediaInfo_To_LocalSqlite } from '@/data/data_app/repository_app/class_Set_MediaInfo_To_LocalSqlite'
-import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
-import { store_server_data_set_mediaInfo } from '@/data/data_stores/server/server_api_synchronization/store_server_data_set_mediaInfo'
-import { store_server_users } from '../../server/store_server_users'
-import { store_server_data_set_media_cueInfo } from '../../server/server_api_synchronization/store_server_data_set_media_cueInfo'
+import { Set_MediaInfo_To_LocalSqlite } from '@/data/data_repository/app_repository/class_Set_MediaInfo_To_LocalSqlite'
+import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
+import { store_server_data_set_mediaInfo } from '@/data/data_stores/server_stores/server_api_synchronization/store_server_data_set_mediaInfo'
+import { store_server_users } from '../../server_stores/store_server_users'
+import { store_server_data_set_media_cueInfo } from '../../server_stores/server_api_synchronization/store_server_data_set_media_cueInfo'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 
 export const store_local_data_set_mediaInfo = reactive({

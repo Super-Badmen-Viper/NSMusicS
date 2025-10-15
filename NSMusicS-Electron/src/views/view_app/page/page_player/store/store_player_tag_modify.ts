@@ -1,9 +1,9 @@
 import { reactive, watch } from 'vue'
-import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
+import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
-import { store_server_users } from '@/data/data_stores/server/store_server_users'
-import { Browsing_ApiService_of_ND } from '@/data/data_server/servers_configs/navidrome_api/services_normal/browsing/index_service'
+import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
+import { Browsing_ApiService_of_ND } from '@/data/data_configs/servers_configs/navidrome_api/services_normal/browsing/index_service'
 import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 
@@ -81,7 +81,7 @@ watch(
     if (newValue) {
       if (isElectron) {
         if (store_server_user_model.model_server_type_of_local) {
-          /// modify 'local media file tag' and 'database $media_file$ info'
+          /// modify 'app media file tag' and 'database $media_file$ info'
           if (store_player_tag_modify.player_show_tag_kind === 'media') {
             if (
               store_player_tag_modify.player_current_media_path != undefined &&
@@ -91,15 +91,15 @@ watch(
                 'node-taglib-sharp-get-media-path',
                 store_player_tag_modify.player_current_media_path
               )
-              /// local model | database media_file
+              /// app model | database media_file
               if (local_file) {
-                // read local file tag
+                // read app file tag
                 store_player_tag_modify.player_current_media_tag = await ipcRenderer.invoke(
                   'node-taglib-sharp-get-media-tag',
                   store_player_tag_modify.player_current_media_path
                 )
               }
-              /// server model | database server_media_file
+              /// server_stores model | database server_media_file
               else {
                 const item: Media_File | undefined =
                   store_view_media_page_info.media_Files_temporary.find(

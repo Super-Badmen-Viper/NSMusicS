@@ -8,22 +8,22 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n({
   inheritLocale: true,
 })
-import { store_app_configs_logic_save } from '@/data/data_stores/app/store_app_configs_logic_save'
+import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
 onBeforeUnmount(() => {
   unwatch_server_set_of_addUser_of_type()
 })
 
 ////// this_view views_components
-import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
-import { store_server_users } from '@/data/data_stores/server/store_server_users'
+import { store_app_configs_info } from '@/data/data_stores/app_stores/store_app_configs_info'
+import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
 import { ref, onMounted, watch, onBeforeUnmount, computed, h } from 'vue'
 import { NButton, NIcon } from 'naive-ui'
-import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
+import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
-import { store_local_db_info } from '@/data/data_stores/local/store_local_db_info'
+import { store_local_db_info } from '@/data/data_stores/local_stores/store_local_db_info'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
-import { store_server_data_select_logic } from '@/data/data_stores/server/server_data_select/store_server_data_select_logic'
-import { Users_ApiService_of_Je } from '@/data/data_server/servers_configs/jellyfin_api/services_web/Users/index_service'
+import { store_server_data_select_logic } from '@/data/data_stores/server_stores/server_data_select/store_server_data_select_logic'
+import { Users_ApiService_of_Je } from '@/data/data_configs/servers_configs/jellyfin_api/services_web/Users/index_service'
 const theme_value = ref('lightTheme')
 const theme_options = ref([
   {
@@ -43,7 +43,7 @@ onMounted(() => {
 import { useMessage } from 'naive-ui'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 const message = useMessage()
-////// server
+////// app
 const Type_Server_Kinds = [
   {
     value: 'ninesong',
@@ -163,7 +163,7 @@ async function update_server_apikey_user_option(data) {
   } else {
   }
 }
-/// server add
+/// app add
 async function update_server_addUser() {
   try {
     server_set_of_addUser_of_url.value = server_set_of_addUser_of_url.value.replace(/\/$/, '')
@@ -213,7 +213,7 @@ async function update_server_addUser() {
     Type_Server_Add.value = !Type_Server_Add.value
   }
 }
-/// server delete
+/// app delete
 async function update_server_deleteUser(id: string, type: string) {
   try {
     const result = await store_server_data_select_logic.update_server_deleteUser(id, type)
@@ -226,7 +226,7 @@ async function update_server_deleteUser(id: string, type: string) {
     message.error(t('error.invalidServer'), { duration: 3000 })
   }
 }
-/// server update
+/// app update
 async function update_server_setUser(
   id: string,
   server_name: string,
@@ -275,7 +275,7 @@ async function update_server_setUser(
     message.error(t('error.invalidServer'), { duration: 3000 })
   }
 }
-/// server select
+/// app select
 async function update_server_config_of_current_user_of_sqlite(value: any, select_change: any) {
   if (select_change) {
     try {
@@ -371,7 +371,7 @@ enum state_Sort {
   Default = 'default',
 }
 
-////// local
+////// app
 async function select_Folder() {
   try {
     if (isElectron) {
@@ -452,7 +452,7 @@ async function begin_import_Folder(cover: boolean) {
     store_server_users.percentage_of_local = 0
   }
 }
-/// server delete
+/// app delete
 async function update_local_deleteFolder(id: string) {
   try {
     const result = await store_local_data_select_logic.update_local_deleteFolder(id)
@@ -478,7 +478,7 @@ async function update_local_deleteFolder(id: string) {
     message.error(t('LibraryInvalidItemIdError'), { duration: 3000 })
   }
 }
-/// server update
+/// server_stores update
 async function update_local_setFolder(id: string, local_name: string, local_url: string) {
   try {
     const result = await store_local_data_select_logic.update_local_setFolder(
@@ -519,18 +519,18 @@ async function update_local_setFolder(id: string, local_name: string, local_url:
 //////
 import type { StepsProps } from 'naive-ui'
 const currentStatus = ref<StepsProps['status']>('process')
-/// server model
+/// server_stores model
 const model_server_step_1 = computed(() => t('nsmusics.view_page.modelSelect'))
 const model_server_step_2 = computed(() => t('page.appMenu.manageServers'))
 const model_server_step_3 = computed(() => t('nsmusics.view_page.modelServer'))
 const model_server_step_4 = computed(() => t('page.appMenu.selectServer'))
-/// local model
+/// app model
 const model_local_step_1 = computed(() => t('Add') + t('HeaderMediaFolders'))
 const model_local_step_2 = computed(() => t('nsmusics.view_page.selectLibrary'))
 
 //////
-import { store_local_data_select_logic } from '@/data/data_stores/local/local_data_select/store_local_data_select_logic'
-import { Library_ApiService_of_Je } from '@/data/data_server/servers_configs/jellyfin_api/services_web/Library/index_service'
+import { store_local_data_select_logic } from '@/data/data_stores/local_stores/local_data_select/store_local_data_select_logic'
+import { Library_ApiService_of_Je } from '@/data/data_configs/servers_configs/jellyfin_api/services_web/Library/index_service'
 import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
@@ -565,7 +565,7 @@ import { store_view_media_page_logic } from '@/views/view_app/page/page_media/st
               />
             </div>
           </n-step>
-          <!-- server model -->
+          <!-- server_stores model -->
           <n-step :title="model_server_step_2" v-if="Type_Server_Model_Open_Value === 'server'">
             <div>
               <n-space vertical>
@@ -932,7 +932,7 @@ import { store_view_media_page_logic } from '@/views/view_app/page/page_media/st
               </n-space>
             </div>
           </n-step>
-          <!-- local model -->
+          <!-- app model -->
           <n-step :title="model_local_step_1" v-if="Type_Server_Model_Open_Value != 'server'">
             <div>
               <n-space vertical>

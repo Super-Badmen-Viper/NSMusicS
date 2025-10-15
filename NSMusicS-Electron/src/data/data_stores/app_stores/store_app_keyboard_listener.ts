@@ -1,6 +1,6 @@
 // store_app_keyboard_listener.ts
 import { reactive, watch } from 'vue';
-import { store_app_configs_logic_save } from '@/data/data_stores/app/store_app_configs_logic_save'; // 您的保存逻辑
+import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'; // 您的保存逻辑
 
 // 定义快捷键配置项的接口
 interface ShortcutConfig {
@@ -139,8 +139,8 @@ store_app_keyboard_listener.init();
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { store_app_keyboard_listener } from '@/data/data_stores/app/store_app_keyboard_listener';
-import { store_app_configs_logic_theme } from '@/data/data_stores/app/store_app_configs_logic_theme'; // 您的主题store
+import { store_app_keyboard_listener } from '@/data/data_stores/app_stores/store_app_keyboard_listener';
+import { store_app_configs_logic_theme } from '@/data/data_stores/app_stores/store_app_configs_logic_theme'; // 您的主题store
 
 // 获取指定快捷键的当前键位组合
 const getShortcutKeyCombo = (shortcutId: string) => {
@@ -185,7 +185,7 @@ const toggleTheme = (event: KeyboardEvent) => {
 </template>
 
 <script setup lang="ts">
-import { store_app_keyboard_listener as store } from '@/data/data_stores/app/store_app_keyboard_listener';
+import { store_app_keyboard_listener as store } from '@/data/data_stores/app_stores/store_app_keyboard_listener';
 
 const assignNewKey = (shortcutId: string, event: KeyboardEvent) => {
   event.preventDefault();

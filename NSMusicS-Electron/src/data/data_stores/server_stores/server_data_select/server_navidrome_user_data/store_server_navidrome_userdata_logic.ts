@@ -2,17 +2,17 @@ import { reactive } from 'vue'
 import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
 import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
 import { store_app_configs_logic_save } from '@/data/data_stores/app_stores/store_app_configs_logic_save'
-import { User_Authorization_ApiWebService_of_ND } from '@/data/data_config_server/servers_configs/navidrome_api/services_web/user_authorization/index_service'
-import { Set_Navidrome_ALL_Data_To_LocalSqlite } from '@/data/data_config_server/servers_configs/navidrome_api/services_normal_middleware/class_Set_Navidrome_ALL_Data_To_LocalSqlite'
-import { User_ApiService_of_ND } from '@/data/data_config_server/servers_configs/navidrome_api/services_normal/user_management/index_service'
-import { Set_ServerInfo_To_LocalSqlite } from '@/data/data_config_app/app_repository/class_Set_ServerInfo_To_LocalSqlite'
+import { User_Authorization_ApiWebService_of_ND } from '@/data/data_configs/servers_configs/navidrome_api/services_web/user_authorization/index_service'
+import { Set_Navidrome_ALL_Data_To_LocalSqlite } from '@/data/data_configs/servers_configs/navidrome_api/services_normal_middleware/class_Set_Navidrome_ALL_Data_To_LocalSqlite'
+import { User_ApiService_of_ND } from '@/data/data_configs/servers_configs/navidrome_api/services_normal/user_management/index_service'
+import { Set_ServerInfo_To_LocalSqlite } from '@/data/data_repository/app_repository/class_Set_ServerInfo_To_LocalSqlite'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { hash } from 'spark-md5'
 import { store_server_ninesong_userdata_logic } from '../server_ninesong_user_data/store_server_ninesong_userdata_logic'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 
 export const store_server_navidrome_userdata_logic = reactive({
-  /// server_stores add
+  /// app add
   async navidrome_update_server_addUser(
     server_name: string,
     url: string,
@@ -68,7 +68,7 @@ export const store_server_navidrome_userdata_logic = reactive({
     return false
   },
 
-  /// server_stores update
+  /// app update
   async navidrome_update_server_setUser(
     id: string,
     server_name: string,
@@ -117,7 +117,7 @@ export const store_server_navidrome_userdata_logic = reactive({
     return false
   },
 
-  /// server_stores select login
+  /// app select login
   async navidrome_update_server_config_of_current_user_of_sqlite(value: any) {
     try {
       const index = store_server_users.server_config_of_all_user_of_sqlite.findIndex(
@@ -147,7 +147,7 @@ export const store_server_navidrome_userdata_logic = reactive({
     } catch {}
     return false
   },
-  /// server_stores start login
+  /// app start login
   async navidrome_get_server_config(value: Server_Configs_Props) {
     store_server_users.server_config_of_current_user_of_sqlite = value
     if (value != undefined) {
@@ -177,14 +177,14 @@ export const store_server_navidrome_userdata_logic = reactive({
           store_server_user_model.token,
           store_server_user_model.salt
         )
-        /// reset app_stores data
+        /// reset app data
         if (isElectron) {
           ipcRenderer.send('window-reset-data')
         }
       }
     }
   },
-  /// server_stores get token
+  /// app get token
   navidrome_get_EncryptedPassword(password: string): { salt: string; token: string } {
     const saltLength = 6
     const characters = 'dfeVYUY9iu239iBUYHuji46h39BHUJ8u42nmrfhDD3r4ouj123890fvn48u95h'

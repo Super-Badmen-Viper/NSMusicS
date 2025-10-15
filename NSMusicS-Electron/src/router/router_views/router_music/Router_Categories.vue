@@ -2,8 +2,8 @@
 import { onMounted } from 'vue'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import Table_Categories from '@/views/view_app/page/page_categories/Table_Categories.vue'
-import { store_server_user_model } from '@/data/data_stores/server/store_server_user_model'
-import { store_server_users } from '@/data/data_stores/server/store_server_users'
+import { store_server_user_model } from '@/data/data_stores/server_stores/store_server_user_model'
+import { store_server_users } from '@/data/data_stores/server_stores/store_server_users'
 
 onMounted(async () => {
   store_router_data_info.router_select = 'categories'
