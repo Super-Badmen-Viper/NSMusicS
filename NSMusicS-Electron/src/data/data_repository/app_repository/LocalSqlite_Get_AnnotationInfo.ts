@@ -1,7 +1,7 @@
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { isElectron } from '@/utils/electron/isElectron'
 
-export class Get_AnnotationInfo_To_LocalSqlite {
+export class Get_LocalSqlite_AnnotationInfo {
   public Get_Annotation_ItemInfo_Play_Count(item_type: string): number {
     if (isElectron) {
       const tableName = item_type
@@ -13,15 +13,15 @@ export class Get_AnnotationInfo_To_LocalSqlite {
         const annotations = db
           .prepare(`SELECT ann_id, item_id FROM annotation WHERE item_type = ?`)
           .all(item_type)
-        const validAnnotations = annotations.filter((annotation) => {
+        const validAnnotations = annotations.filter((annotation: any) => {
           const exists = db
             .prepare(`SELECT 1 FROM ${tableName} WHERE id = ?`)
             .get(annotation.item_id)
           return exists !== undefined
         })
         const invalidAnnotationIds = annotations
-          .filter((annotation) => !validAnnotations.includes(annotation))
-          .map((annotation) => annotation.ann_id)
+          .filter((annotation: any) => !validAnnotations.includes(annotation))
+          .map((annotation: any) => annotation.ann_id)
         if (invalidAnnotationIds.length > 0) {
           db.prepare(
             `DELETE FROM annotation WHERE ann_id IN (${invalidAnnotationIds.map(() => '?').join(',')})`
@@ -29,7 +29,7 @@ export class Get_AnnotationInfo_To_LocalSqlite {
         }
         db.exec('COMMIT')
         return validAnnotations.length
-      } catch (error) {
+      } catch (error: any) {
         db.exec('ROLLBACK')
         throw new Error(`Failed to get annotation item info play count: ${error.message}`)
       } finally {

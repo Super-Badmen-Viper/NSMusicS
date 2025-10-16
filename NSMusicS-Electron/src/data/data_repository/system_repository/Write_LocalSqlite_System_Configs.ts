@@ -2,7 +2,7 @@ import { App_Configs } from '@/data/data_models/app_models/app_Configs/class_App
 import { Player_Configs_of_Audio_Info } from '@/data/data_models/app_models/app_Configs/class_Player_Configs_of_Audio_Info'
 import { Player_Configs_of_UI } from '@/data/data_models/app_models/app_Configs/class_Player_Configs_of_UI'
 
-export class Class_Set_System_Configs_Write {
+export class Write_LocalSqlite_System_Configs {
   system_app_config(db: any, app_Configs: App_Configs) {
     /// system_app_config
     db.exec('DELETE FROM system_app_config')
