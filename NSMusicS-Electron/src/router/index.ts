@@ -21,7 +21,7 @@ const router = createRouter({
     {
       path: '/home',
       name: 'home',
-      component: () => import('@/router/router_views/router_music/Router_Home.vue'),
+      component: () => import('@/router/router_views/router_app/Router_Home.vue'),
       meta: {
         cleanup: true,
       },
@@ -29,7 +29,7 @@ const router = createRouter({
     {
       path: '/categories',
       name: 'categories',
-      component: () => import('@/router/router_views/router_music/Router_Categories.vue'),
+      component: () => import('@/router/router_views/router_app/Router_Categories.vue'),
       meta: {
         cleanup: true,
       },
@@ -37,7 +37,7 @@ const router = createRouter({
     {
       path: '/charts',
       name: 'charts',
-      component: () => import('@/router/router_views/router_music/Router_Chart.vue'),
+      component: () => import('@/router/router_views/router_app/Router_Chart.vue'),
       meta: {
         cleanup: true,
       },
@@ -45,7 +45,7 @@ const router = createRouter({
     {
       path: '/recommend',
       name: 'recommend',
-      component: () => import('@/router/router_views/router_music/Router_Recommend.vue'),
+      component: () => import('@/router/router_views/router_app/Router_Recommend.vue'),
       meta: {
         cleanup: true,
       },
@@ -53,7 +53,7 @@ const router = createRouter({
     {
       path: '/tag',
       name: 'tag',
-      component: () => import('@/router/router_views/router_music/Router_Tag.vue'),
+      component: () => import('@/router/router_views/router_app/Router_Tag.vue'),
       meta: {
         cleanup: true,
       },
@@ -61,7 +61,7 @@ const router = createRouter({
     {
       path: '/media_cue',
       name: 'media_cue',
-      component: () => import('@/router/router_views/router_music/Router_Media_Cue.vue'),
+      component: () => import('@/router/router_views/router_app/Router_Media_Cue.vue'),
       meta: {
         cleanup: true,
       },
@@ -69,7 +69,7 @@ const router = createRouter({
     {
       path: '/media',
       name: 'media',
-      component: () => import('@/router/router_views/router_music/Router_Media.vue'),
+      component: () => import('@/router/router_views/router_app/Router_Media.vue'),
       meta: {
         cleanup: true,
       },
@@ -77,7 +77,7 @@ const router = createRouter({
     {
       path: '/album',
       name: 'album',
-      component: () => import('@/router/router_views/router_music/Router_Album.vue'),
+      component: () => import('@/router/router_views/router_app/Router_Album.vue'),
       meta: {
         cleanup: true,
       },
@@ -85,7 +85,7 @@ const router = createRouter({
     {
       path: '/artist',
       name: 'artist',
-      component: () => import('@/router/router_views/router_music/Router_Artist.vue'),
+      component: () => import('@/router/router_views/router_app/Router_Artist.vue'),
       meta: {
         cleanup: true,
       },

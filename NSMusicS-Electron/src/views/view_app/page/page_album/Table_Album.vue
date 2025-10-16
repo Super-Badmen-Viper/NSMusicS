@@ -596,7 +596,7 @@ const page_albumlists_handleSelected_updateValue = (value: any) => {
       ?.label || ''
 }
 
-////// router_music history
+////// router_app history
 const get_router_history_model_pervious = () => {
   store_view_album_page_logic.page_albumlists_keyword = ''
   input_search_InstRef.value?.clear()

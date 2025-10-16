@@ -584,7 +584,7 @@ const page_songlists_handleselected_updatevalue = async (value: any) => {
   store_view_media_page_logic.set_media_Files_selected_all(false)
 }
 
-////// router_music history
+////// router_app history
 const get_router_history_model_pervious = () => {
   store_router_history_data_of_media.get_router_history_model_of_Media(-1)
 }

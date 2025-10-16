@@ -489,7 +489,7 @@ const page_artistlists_handleselected_updatevalue = (value: any) => {
       ?.label || ''
 }
 
-////// router_music history
+////// router_app history
 const get_router_history_model_pervious = () => {
   store_router_history_data_of_artist.get_router_history_model_of_Artist(-1)
 }

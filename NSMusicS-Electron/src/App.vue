@@ -324,7 +324,7 @@ function fetchDataIfNeeded(
 }
 provide('get_playerbar_to_switch_playerview', get_playerbar_to_switch_playerview)
 
-////// router_music custom class
+////// router_app custom class
 store_router_data_info.router = useRouter()
 import routers from './router'
 import { store_system_configs_update } from '@/data/data_stores/local_system_stores/store_system_configs_update'
