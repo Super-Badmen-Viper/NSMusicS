@@ -27,6 +27,7 @@
       "@/data_configs/*": ["src/data_configs/*"],
       "@/data_models/*": ["src/data_models/*"],
       "@/router/*": ["src/router/*"],
+      "@/utils/*": ["src/utils/*"],
       "@/views_components/*": ["src/views_components/*"],
       "@/views_drawer/*": ["src/views_drawer/*"],
       "@/views_page/*": ["src/views_page/*"],
