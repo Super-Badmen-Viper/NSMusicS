@@ -2,7 +2,7 @@ import { reactive } from 'vue'
 import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
-import { Get_PlaylistInfo_From_LocalSqlite } from '@/data/data_repository/app_repository/class_Get_PlaylistInfo_From_LocalSqlite'
+import { Get_LocalSqlite_PlaylistInfo } from '@/data/data_repository/app_repository/LocalSqlite_Get_PlaylistInfo'
 import { Set_Navidrome_ALL_Data_To_LocalSqlite } from '@/data/data_configs/navidrome_api/services_normal_middleware/class_Set_Navidrome_ALL_Data_To_LocalSqlite'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { Get_Jellyfin_Temp_Data_To_LocalSqlite } from '@/data/data_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite'
@@ -112,7 +112,7 @@ export const store_general_model_player_list = reactive({
       (store_server_users.server_select_kind === 'navidrome' &&
         store_server_user_model.model_server_type_of_web)
     ) {
-      const get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
+      const get_PlaylistInfo_From_LocalSqlite = new Get_LocalSqlite_PlaylistInfo()
       get_PlaylistInfo_From_LocalSqlite.Get_Playlist().forEach((item: Play_List) => {
         store_playlist_list_info.playlist_names_ALLLists.push({
           label: item.name,

@@ -1,6 +1,6 @@
 import { reactive } from 'vue'
 import { store_view_home_page_info } from '@/views/view_app/page/page_home/store/store_view_home_page_info'
-import { Get_HomeDataInfos_From_LocalSqlite } from '@/data/data_repository/app_repository/class_Get_HomeDataInfos_From_LocalSqlite'
+import { Get_LocalSqlite_HomeDataInfos } from '@/data/data_repository/app_repository/LocalSqlite_Get_HomeDataInfos'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
@@ -18,7 +18,7 @@ export const store_general_fetch_home_list = reactive({
       store_view_home_page_info.home_selected_top_album = undefined
 
       if (store_server_user_model.model_server_type_of_local) {
-        const get_HomeDataInfos_From_LocalSqlite = new Get_HomeDataInfos_From_LocalSqlite()
+        const get_HomeDataInfos_From_LocalSqlite = new Get_LocalSqlite_HomeDataInfos()
         store_view_home_page_info.home_Files_temporary_maximum_playback =
           get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Album_Maximum_Playback()
         store_view_home_page_info.home_Files_temporary_random_search =
@@ -65,7 +65,7 @@ export const store_general_fetch_home_list = reactive({
     try {
       store_view_home_page_info.home_Files_temporary_maximum_playback = []
       if (store_server_user_model.model_server_type_of_local) {
-        const get_HomeDataInfos_From_LocalSqlite = new Get_HomeDataInfos_From_LocalSqlite()
+        const get_HomeDataInfos_From_LocalSqlite = new Get_LocalSqlite_HomeDataInfos()
         store_view_home_page_info.home_Files_temporary_maximum_playback =
           get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Album_Maximum_Playback()
       } else if (store_server_user_model.model_server_type_of_web) {
@@ -104,7 +104,7 @@ export const store_general_fetch_home_list = reactive({
       store_view_home_page_info.home_Files_temporary_random_search = []
       store_view_home_page_info.home_selected_top_album = undefined
       if (store_server_user_model.model_server_type_of_local) {
-        const get_HomeDataInfos_From_LocalSqlite = new Get_HomeDataInfos_From_LocalSqlite()
+        const get_HomeDataInfos_From_LocalSqlite = new Get_LocalSqlite_HomeDataInfos()
         store_view_home_page_info.home_Files_temporary_random_search =
           get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Album_Random_Search()
       } else if (store_server_user_model.model_server_type_of_web) {
@@ -144,7 +144,7 @@ export const store_general_fetch_home_list = reactive({
     try {
       store_view_home_page_info.home_Files_temporary_recently_added = []
       if (store_server_user_model.model_server_type_of_local) {
-        const get_HomeDataInfos_From_LocalSqlite = new Get_HomeDataInfos_From_LocalSqlite()
+        const get_HomeDataInfos_From_LocalSqlite = new Get_LocalSqlite_HomeDataInfos()
         store_view_home_page_info.home_Files_temporary_recently_added =
           get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Album_Recently_Added()
       } else if (store_server_user_model.model_server_type_of_web) {
@@ -180,7 +180,7 @@ export const store_general_fetch_home_list = reactive({
     try {
       store_view_home_page_info.home_Files_temporary_recently_played = []
       if (store_server_user_model.model_server_type_of_local) {
-        const get_HomeDataInfos_From_LocalSqlite = new Get_HomeDataInfos_From_LocalSqlite()
+        const get_HomeDataInfos_From_LocalSqlite = new Get_LocalSqlite_HomeDataInfos()
         store_view_home_page_info.home_Files_temporary_recently_played =
           get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Album_Recently_Played()
       } else if (store_server_user_model.model_server_type_of_web) {

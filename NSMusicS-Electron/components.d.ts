@@ -37,7 +37,7 @@ declare module 'vue' {
     NMenu: typeof import('naive-ui')['NMenu']
     NMessageProvider: typeof import('naive-ui')['NMessageProvider']
     NModal: typeof import('naive-ui')['NModal']
-    NP: typeof import('naive-ui')['NP']
+    NP: (typeof import('naive-ui'))['NP']
     NPageHeader: typeof import('naive-ui')['NPageHeader']
     NProgress: (typeof import('naive-ui'))['NProgress']
     NRadio: typeof import('naive-ui')['NRadio']

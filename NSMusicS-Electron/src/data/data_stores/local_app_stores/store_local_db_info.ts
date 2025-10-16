@@ -1,5 +1,5 @@
 import { reactive } from 'vue'
-import { Set_ALL_LocalData } from '@/data/data_repository/app_repository/class_Set_ALL_LocalData'
+import { Set_ALL_LocalData } from '@/data/data_repository/app_repository/LocalSqlite_Set_AllLocalData'
 
 export const store_local_db_info = reactive({
   local_config_of_all_user_of_sqlite: [] as Local_Configs_Props[],

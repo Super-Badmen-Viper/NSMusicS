@@ -1,6 +1,6 @@
 import { reactive } from 'vue'
-import { Set_PlaylistInfo_To_LocalSqlite } from '@/data/data_repository/app_repository/class_Set_PlaylistInfo_To_LocalSqlite'
-const set_PlaylistInfo_To_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite()
+import { Set_LocalSqlite_PlaylistInfo } from '@/data/data_repository/app_repository/LocalSqlite_Set_PlaylistInfo'
+const set_PlaylistInfo_To_LocalSqlite = new Set_LocalSqlite_PlaylistInfo()
 export const store_local_data_set_playlistInfo = reactive({
   Set_PlaylistInfo_To_Update_CreatePlaylist(
     name: string,

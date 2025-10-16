@@ -1,5 +1,5 @@
 import { reactive, watch } from 'vue'
-import { Set_LibraryInfo_To_LocalSqlite } from '@/data/data_repository/app_repository/class_Set_LibraryInfo_To_LocalSqlite'
+import { Set_LocalSqlite_LibraryInfo } from '@/data/data_repository/app_repository/LocalSqlite_Set_LibraryInfo'
 import { store_view_media_page_info } from './store_view_media_page_info'
 import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
@@ -155,7 +155,7 @@ export const store_view_media_page_logic = reactive({
 
   get_selected_locallist_delete_MediaFile(value: any) {
     console.log('selected_locallist_deleteMediaFile', value)
-    const set_LibraryInfo_To_LocalSqlite = new Set_LibraryInfo_To_LocalSqlite()
+    const set_LibraryInfo_To_LocalSqlite = new Set_LocalSqlite_LibraryInfo()
     set_LibraryInfo_To_LocalSqlite.Set_LibraryInfo_Delete_Selected_Playlist(
       store_view_media_page_info.media_Files_selected.map((file: any) => file.id)
     )

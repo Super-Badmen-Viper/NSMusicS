@@ -6,5 +6,5 @@ interface Server_Configs_Props {
   url: string
   user_name: string
   password: string
-  last_login_at?: Date
+  last_login_at?: string
 }

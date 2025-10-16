@@ -4,7 +4,7 @@ import error_album from '@/assets/img/error_album.jpg'
 import { isElectron } from '@/utils/electron/isElectron'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 
-export class Get_PlaylistInfo_From_LocalSqlite {
+export class Get_LocalSqlite_PlaylistInfo {
   public Get_Playlist_Count(): number {
     if (isElectron) {
       let db
@@ -90,15 +90,17 @@ export class Get_PlaylistInfo_From_LocalSqlite {
         row.absoluteIndex = index
         row.selected = false
         row.duration_txt = this.formatTime(row.duration)
-        if (
-          row.medium_image_url == null ||
-          row.medium_image_url == undefined ||
-          row.medium_image_url.length == 0
-        ) {
+        if (row.medium_image_url == null || row.medium_image_url.length == 0) {
           if (row.path) {
             const fileName = row.path.split(/[\\/]/).pop() // 兼容 Windows 和 Unix 路径分隔符
-            const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg')
-            row.medium_image_url = `${store_system_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
+            const newFileName =
+              fileName != undefined && fileName.length > 0
+                ? fileName.replace(/\.(mp3|flac)$/i, '.jpg')
+                : ''
+            row.medium_image_url =
+              newFileName != undefined && newFileName.length > 0
+                ? `${store_system_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
+                : error_album
           } else {
             row.medium_image_url = error_album
           }
@@ -156,15 +158,17 @@ export class Get_PlaylistInfo_From_LocalSqlite {
         row.absoluteIndex = index
         row.selected = false
         row.duration_txt = this.formatTime(row.duration)
-        if (
-          row.medium_image_url == null ||
-          row.medium_image_url == undefined ||
-          row.medium_image_url.length == 0
-        ) {
+        if (row.medium_image_url == null || row.medium_image_url.length == 0) {
           if (row.path) {
             const fileName = row.path.split(/[\\/]/).pop() // 兼容 Windows 和 Unix 路径分隔符
-            const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg')
-            row.medium_image_url = `${store_system_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
+            const newFileName =
+              fileName != undefined && fileName.length > 0
+                ? fileName.replace(/\.(mp3|flac)$/i, '.jpg')
+                : ''
+            row.medium_image_url =
+              newFileName != undefined && newFileName.length > 0
+                ? `${store_system_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
+                : error_album
           } else {
             row.medium_image_url = error_album
           }

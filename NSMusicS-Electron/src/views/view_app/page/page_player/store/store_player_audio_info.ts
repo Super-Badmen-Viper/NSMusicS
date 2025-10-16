@@ -11,7 +11,7 @@ import { store_player_tag_modify } from './store_player_tag_modify'
 import error_album from '@/assets/img/error_album.jpg'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
-import { Get_AnnotationInfo_To_LocalSqlite } from '@/data/data_repository/app_repository/class_Get_AnnotationInfo_To_LocalSqlite'
+import { Get_LocalSqlite_AnnotationInfo } from '@/data/data_repository/app_repository/LocalSqlite_Get_AnnotationInfo'
 import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
 import { store_player_audio_logic } from './store_player_audio_logic'
 import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
@@ -344,9 +344,9 @@ watch(
     store_local_data_set_albumInfo.Set_AlbumInfo_To_PlayCount_of_Album(newValue)
 
     if (store_server_user_model.model_server_type_of_local) {
-      const get_AnnotationInfo_To_LocalSqlite = new Get_AnnotationInfo_To_LocalSqlite()
+      const get_LocalSqlite_AnnotationInfo = new Get_LocalSqlite_AnnotationInfo()
       store_view_album_page_info.album_recently_count =
-        get_AnnotationInfo_To_LocalSqlite.Get_Annotation_ItemInfo_Play_Count('album')
+        get_LocalSqlite_AnnotationInfo.Get_Annotation_ItemInfo_Play_Count('album')
       store_view_album_page_logic.page_albumlists_statistic.forEach((item: any) => {
         if (item.id === 'album_list_recently') {
           item.song_count = store_view_album_page_info.album_recently_count + ' *'
@@ -364,9 +364,9 @@ watch(
       store_player_audio_info.this_audio_artist_id
     )
     if (store_server_user_model.model_server_type_of_local) {
-      const get_AnnotationInfo_To_LocalSqlite = new Get_AnnotationInfo_To_LocalSqlite()
+      const get_LocalSqlite_AnnotationInfo = new Get_LocalSqlite_AnnotationInfo()
       store_view_artist_page_info.artist_recently_count =
-        get_AnnotationInfo_To_LocalSqlite.Get_Annotation_ItemInfo_Play_Count('artist')
+        get_LocalSqlite_AnnotationInfo.Get_Annotation_ItemInfo_Play_Count('artist')
       store_player_audio_logic.boolHandleItemClick_Played = true
     }
   }

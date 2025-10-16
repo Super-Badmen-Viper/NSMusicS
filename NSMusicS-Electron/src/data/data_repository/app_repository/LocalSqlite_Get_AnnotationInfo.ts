@@ -2,7 +2,7 @@ import { store_system_configs_info } from '@/data/data_stores/local_system_store
 import { isElectron } from '@/utils/electron/isElectron'
 
 export class Get_LocalSqlite_AnnotationInfo {
-  public Get_Annotation_ItemInfo_Play_Count(item_type: string): number {
+  public Get_Annotation_ItemInfo_Play_Count(item_type: string) {
     if (isElectron) {
       const tableName = item_type
       const db = require('better-sqlite3')(store_system_configs_info.navidrome_db)
@@ -38,5 +38,6 @@ export class Get_LocalSqlite_AnnotationInfo {
     } else {
       // other
     }
+    return 0
   }
 }

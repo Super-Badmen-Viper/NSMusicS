@@ -4,7 +4,7 @@ import { store_system_configs_info } from '@/data/data_stores/local_system_store
 import error_album from '@/assets/img/error_album.jpg'
 import { isElectron } from '@/utils/electron/isElectron'
 
-export class Get_HomeDataInfos_From_LocalSqlite {
+export class Get_LocalSqlite_HomeDataInfos {
   public Get_Annotation_Album_Maximum_Playback() {
     if (isElectron) {
       const db = require('better-sqlite3')(store_system_configs_info.navidrome_db)
@@ -30,15 +30,17 @@ export class Get_HomeDataInfos_From_LocalSqlite {
       const allData = db.prepare(sql).all()
       const result: Album[] = []
       allData.forEach((row: Album) => {
-        if (
-          row.medium_image_url == null ||
-          row.medium_image_url == undefined ||
-          row.medium_image_url.length == 0
-        ) {
+        if (row.medium_image_url == null || row.medium_image_url.length == 0) {
           if (row.embed_art_path) {
             const fileName = row.embed_art_path.split(/[\\/]/).pop() // 兼容 Windows 和 Unix 路径分隔符
-            const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg')
-            row.medium_image_url = `${store_system_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
+            const newFileName =
+              fileName != undefined && fileName.length > 0
+                ? fileName.replace(/\.(mp3|flac)$/i, '.jpg')
+                : ''
+            row.medium_image_url =
+              newFileName != undefined && newFileName.length > 0
+                ? `${store_system_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
+                : error_album
           } else {
             row.medium_image_url = error_album
           }
@@ -114,15 +116,17 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         .all()
       const result: Album[] = []
       rows.forEach((row: Album) => {
-        if (
-          row.medium_image_url == null ||
-          row.medium_image_url == undefined ||
-          row.medium_image_url.length == 0
-        ) {
+        if (row.medium_image_url == null || row.medium_image_url.length == 0) {
           if (row.embed_art_path) {
             const fileName = row.embed_art_path.split(/[\\/]/).pop() // 兼容 Windows 和 Unix 路径分隔符
-            const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg')
-            row.medium_image_url = `${store_system_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
+            const newFileName =
+              fileName != undefined && fileName.length > 0
+                ? fileName.replace(/\.(mp3|flac)$/i, '.jpg')
+                : ''
+            row.medium_image_url =
+              newFileName != undefined && newFileName.length > 0
+                ? `${store_system_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
+                : error_album
           } else {
             row.medium_image_url = error_album
           }
@@ -198,15 +202,17 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         .all()
       const result: Album[] = []
       rows.forEach((row: Album) => {
-        if (
-          row.medium_image_url == null ||
-          row.medium_image_url == undefined ||
-          row.medium_image_url.length == 0
-        ) {
+        if (row.medium_image_url == null || row.medium_image_url.length == 0) {
           if (row.embed_art_path) {
             const fileName = row.embed_art_path.split(/[\\/]/).pop() // 兼容 Windows 和 Unix 路径分隔符
-            const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg')
-            row.medium_image_url = `${store_system_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
+            const newFileName =
+              fileName != undefined && fileName.length > 0
+                ? fileName.replace(/\.(mp3|flac)$/i, '.jpg')
+                : ''
+            row.medium_image_url =
+              newFileName != undefined && newFileName.length > 0
+                ? `${store_system_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
+                : error_album
           } else {
             row.medium_image_url = error_album
           }
@@ -292,15 +298,17 @@ export class Get_HomeDataInfos_From_LocalSqlite {
       const allData = db.prepare(sql).all()
       const result: Album[] = []
       allData.forEach((row: Album) => {
-        if (
-          row.medium_image_url == null ||
-          row.medium_image_url == undefined ||
-          row.medium_image_url.length == 0
-        ) {
+        if (row.medium_image_url == null || row.medium_image_url.length == 0) {
           if (row.embed_art_path) {
             const fileName = row.embed_art_path.split(/[\\/]/).pop() // 兼容 Windows 和 Unix 路径分隔符
-            const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg')
-            row.medium_image_url = `${store_system_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
+            const newFileName =
+              fileName != undefined && fileName.length > 0
+                ? fileName.replace(/\.(mp3|flac)$/i, '.jpg')
+                : ''
+            row.medium_image_url =
+              newFileName != undefined && newFileName.length > 0
+                ? `${store_system_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
+                : error_album
           } else {
             row.medium_image_url = error_album
           }

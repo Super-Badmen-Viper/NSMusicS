@@ -3,7 +3,7 @@ import { App_Configs } from '@/data/data_models/app_models/app_Configs/class_App
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
-import { Class_Set_System_Configs_Write } from '@/data/data_repository/system_repository/class_Set_System_Configs_Write'
+import { Write_LocalSqlite_System_Configs } from '@/data/data_repository/system_repository/Write_LocalSqlite_System_Configs'
 import { Player_Configs_of_UI } from '@/data/data_models/app_models/app_Configs/class_Player_Configs_of_UI'
 import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
 import { Player_Configs_of_Audio_Info } from '@/data/data_models/app_models/app_Configs/class_Player_Configs_of_Audio_Info'
@@ -22,7 +22,7 @@ import { isElectron } from '@/utils/electron/isElectron'
 import { store_local_db_info } from '@/data/data_stores/local_app_stores/store_local_db_info'
 import axios from 'axios'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
-import { store_system_configs_load } from './store_system_configs_load'
+import { store_system_configs_load } from '@/data/data_stores/local_system_stores/store_system_configs_load'
 
 export const store_system_configs_save = reactive({
   generateMockObjectId() {
@@ -103,7 +103,7 @@ export const store_system_configs_save = reactive({
           db = require('better-sqlite3')(store_system_configs_info.nsmusics_db)
           db.pragma('journal_mode = WAL')
           db.exec('PRAGMA foreign_keys = OFF')
-          const system_Configs_Write = new Class_Set_System_Configs_Write()
+          const system_Configs_Write = new Write_LocalSqlite_System_Configs()
           system_Configs_Write.system_app_config(db, app_Configs.value)
           console.log('save config succuessful')
           db.close()
@@ -143,7 +143,7 @@ export const store_system_configs_save = reactive({
         db.pragma('journal_mode = WAL')
         db.exec('PRAGMA foreign_keys = OFF')
 
-        const system_Configs_Write = new Class_Set_System_Configs_Write()
+        const system_Configs_Write = new Write_LocalSqlite_System_Configs()
         system_Configs_Write.system_library_config(
           db,
           store_local_db_info.local_config_of_all_user_of_sqlite
@@ -205,7 +205,7 @@ export const store_system_configs_save = reactive({
         player_use_playbar_auto_hide: String(store_player_appearance.player_use_playbar_auto_hide),
       })
     )
-    const system_Configs_Write = new Class_Set_System_Configs_Write()
+    const system_Configs_Write = new Write_LocalSqlite_System_Configs()
     if (isElectron) {
       try {
         let db: any = null
@@ -287,7 +287,7 @@ export const store_system_configs_save = reactive({
         db = require('better-sqlite3')(store_system_configs_info.nsmusics_db)
         db.pragma('journal_mode = WAL')
         db.exec('PRAGMA foreign_keys = OFF')
-        const system_Configs_Write = new Class_Set_System_Configs_Write()
+        const system_Configs_Write = new Write_LocalSqlite_System_Configs()
         system_Configs_Write.system_player_config_of_audio(db, player_Configs_of_Audio_Info.value)
         this.save_system_config_of_App_Configs()
         db.close()
@@ -327,7 +327,7 @@ export const store_system_configs_save = reactive({
           db.pragma('journal_mode = WAL')
           db.exec('PRAGMA foreign_keys = OFF')
 
-          const system_Configs_Write = new Class_Set_System_Configs_Write()
+          const system_Configs_Write = new Write_LocalSqlite_System_Configs()
           system_Configs_Write.system_playlist_item_id_config(
             db,
             store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds
@@ -337,7 +337,7 @@ export const store_system_configs_save = reactive({
           db.pragma('journal_mode = WAL')
           db.exec('PRAGMA foreign_keys = OFF')
 
-          const system_Configs_Write = new Class_Set_System_Configs_Write()
+          const system_Configs_Write = new Write_LocalSqlite_System_Configs()
           system_Configs_Write.system_playlist_item_config(
             db,
             store_playlist_list_info.playlist_MediaFiles_temporary
@@ -401,7 +401,7 @@ export const store_system_configs_save = reactive({
         db = require('better-sqlite3')(store_system_configs_info.nsmusics_db)
         db.pragma('journal_mode = WAL')
         db.exec('PRAGMA foreign_keys = OFF')
-        const system_Configs_Write = new Class_Set_System_Configs_Write()
+        const system_Configs_Write = new Write_LocalSqlite_System_Configs()
         system_Configs_Write.system_servers_config(
           db,
           store_server_users.server_config_of_all_user_of_sqlite

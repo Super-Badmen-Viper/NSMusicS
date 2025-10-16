@@ -33,4 +33,8 @@ const i18n = new Language().i18n
 console.log(i18n.locale)
 app.use(i18n)
 
+import { createPinia } from 'pinia'
+const pinia = createPinia()
+app.use(pinia)
+
 app.mount('#app')

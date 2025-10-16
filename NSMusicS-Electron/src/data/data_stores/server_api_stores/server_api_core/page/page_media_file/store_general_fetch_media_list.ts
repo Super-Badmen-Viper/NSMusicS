@@ -426,8 +426,14 @@ export const store_general_fetch_media_list = reactive({
       const path = row.path || row.medium_image_url
       if (path) {
         const fileName = path.split(/[\\/]/).pop()!
-        const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg')
-        row.medium_image_url = `${store_system_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
+        const newFileName =
+          fileName != undefined && fileName.length > 0
+            ? fileName.replace(/\.(mp3|flac)$/i, '.jpg')
+            : ''
+        row.medium_image_url =
+          newFileName != undefined && newFileName.length > 0
+            ? `${store_system_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
+            : error_album
       } else {
         row.medium_image_url = error_album
       }

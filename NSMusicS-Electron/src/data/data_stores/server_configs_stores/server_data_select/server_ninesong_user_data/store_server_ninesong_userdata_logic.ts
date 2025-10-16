@@ -6,7 +6,7 @@ import { Auth_Token_ApiService_of_NineSong } from '@/data/data_configs/ninesong_
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
-import { Set_ServerInfo_To_LocalSqlite } from '@/data/data_repository/app_repository/class_Set_ServerInfo_To_LocalSqlite'
+import { Set_LocalSqlite_ServerInfo } from '@/data/data_repository/app_repository/LocalSqlite_Set_ServerInfo'
 import { isElectron } from '@/utils/electron/isElectron'
 import { Folder_Entity_ApiService_of_NineSong } from '@/data/data_configs/ninesong_api/services_web/Folder_Entity/index_service'
 
@@ -105,7 +105,7 @@ export const store_server_ninesong_userdata_logic = reactive({
 
         let data: Server_Configs_Props = null
         if (isElectron) {
-          const set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite()
+          const set_ServerInfo_To_LocalSqlite = new Set_LocalSqlite_ServerInfo()
           data = set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_CreateUser(
             server_name,
             url,
@@ -162,7 +162,7 @@ export const store_server_ninesong_userdata_logic = reactive({
 
       let data: Server_Configs_Props = null
       if (isElectron) {
-        const set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite()
+        const set_ServerInfo_To_LocalSqlite = new Set_LocalSqlite_ServerInfo()
         data = set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_SetUser(
           id,
           server_name,

@@ -405,9 +405,9 @@ const Set_MediaInfo_To_PlayCount = debounce(async (event, args) => {
   }
   ///
   if (store_server_user_model.model_server_type_of_local) {
-    let get_AnnotationInfo_To_LocalSqlite = new Get_AnnotationInfo_To_LocalSqlite()
+    let get_LocalSqlite_AnnotationInfo = new Get_LocalSqlite_AnnotationInfo()
     store_view_media_page_info.media_recently_count =
-      get_AnnotationInfo_To_LocalSqlite.Get_Annotation_ItemInfo_Play_Count('media_file')
+      get_LocalSqlite_AnnotationInfo.Get_Annotation_ItemInfo_Play_Count('media_file')
     store_view_media_page_logic.page_songlists_statistic.forEach((item: any) => {
       if (item.id === 'song_list_recently') {
         item.song_count = store_view_media_page_info.media_recently_count + ' *'
@@ -1090,7 +1090,7 @@ import { store_server_user_model } from '@/data/data_stores/server_configs_store
 import { Audio_howler } from '@/data/data_models/app_models/song_Audio_Out/Audio_howler'
 import { Audio_node_mpv } from '@/data/data_models/app_models/song_Audio_Out/Audio_node_mpv'
 import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
-import { Get_AnnotationInfo_To_LocalSqlite } from '@/data/data_repository/app_repository/class_Get_AnnotationInfo_To_LocalSqlite'
+import { Get_LocalSqlite_AnnotationInfo } from '@/data/data_repository/app_repository/LocalSqlite_Get_AnnotationInfo'
 import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'

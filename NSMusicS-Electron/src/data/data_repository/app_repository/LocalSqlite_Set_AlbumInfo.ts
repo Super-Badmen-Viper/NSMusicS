@@ -2,7 +2,7 @@ import { store_server_user_model } from '@/data/data_stores/server_configs_store
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { isElectron } from '@/utils/electron/isElectron'
 
-export class Set_AlbumInfo_To_LocalSqlite {
+export class Set_LocalSqlite_AlbumInfo {
   private getUniqueId(db: any) {
     if (isElectron) {
       const { v4: uuidv4 } = require('uuid')

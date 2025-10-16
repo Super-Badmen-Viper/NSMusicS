@@ -1,6 +1,6 @@
 import { reactive } from 'vue'
 import { store_server_navidrome_userdata_logic } from '@/data/data_stores/server_configs_stores/server_data_select/server_navidrome_user_data/store_server_navidrome_userdata_logic'
-import { Set_ServerInfo_To_LocalSqlite } from '@/data/data_repository/app_repository/class_Set_ServerInfo_To_LocalSqlite'
+import { Set_LocalSqlite_ServerInfo } from '@/data/data_repository/app_repository/LocalSqlite_Set_ServerInfo'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_server_jellyfin_userdata_logic } from './server_jellyfin_user_data/store_server_jellyfin_userdata_logic'
 import { isElectron } from '@/utils/electron/isElectron'
@@ -112,7 +112,7 @@ export const store_server_data_select_logic = reactive({
   async update_server_deleteUser(id: string) {
     try {
       if (isElectron) {
-        const set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite()
+        const set_ServerInfo_To_LocalSqlite = new Set_LocalSqlite_ServerInfo()
         set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_DeleteUser(id)
       } else {
         const result = await store_server_ninesong_userdata_logic.delete_app_configs_server(id)

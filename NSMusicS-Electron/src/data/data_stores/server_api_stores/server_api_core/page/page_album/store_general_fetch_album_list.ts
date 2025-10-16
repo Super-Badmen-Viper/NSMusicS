@@ -165,15 +165,17 @@ export const store_general_fetch_album_list = reactive({
           store_view_album_page_info.album_Files_temporary = []
           const rows = stmt_album.all()
           rows.forEach((row: Album) => {
-            if (
-              row.medium_image_url == null ||
-              row.medium_image_url == undefined ||
-              row.medium_image_url.length == 0
-            ) {
+            if (row.medium_image_url == null || row.medium_image_url.length == 0) {
               if (row.embed_art_path) {
                 const fileName = row.embed_art_path.split(/[\\/]/).pop() // 兼容 Windows 和 Unix 路径分隔符
-                const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg')
-                row.medium_image_url = `${store_system_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
+                const newFileName =
+                  fileName != undefined && fileName.length > 0
+                    ? fileName.replace(/\.(mp3|flac)$/i, '.jpg')
+                    : ''
+                row.medium_image_url =
+                  newFileName != undefined && newFileName.length > 0
+                    ? `${store_system_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
+                    : error_album
               } else {
                 row.medium_image_url = error_album
               }

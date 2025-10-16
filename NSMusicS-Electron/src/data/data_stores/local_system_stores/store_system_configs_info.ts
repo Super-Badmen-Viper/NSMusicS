@@ -2,8 +2,8 @@ import { reactive, watch } from 'vue'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
-import { store_system_configs_load } from './store_system_configs_load'
-import { store_system_configs_update } from './store_system_configs_update'
+import { store_system_configs_load } from '@/data/data_stores/local_system_stores/store_system_configs_load'
+import { store_system_configs_update } from '@/data/data_stores/local_system_stores/store_system_configs_update'
 
 export const store_system_configs_info = reactive({
   // Electron Desktop Kind

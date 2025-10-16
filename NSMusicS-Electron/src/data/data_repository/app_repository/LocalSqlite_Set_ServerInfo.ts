@@ -1,7 +1,7 @@
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { isElectron } from '@/utils/electron/isElectron'
 
-export class Set_ServerInfo_To_LocalSqlite {
+export class Set_LocalSqlite_ServerInfo {
   private getUniqueId(db: any) {
     if (isElectron) {
       const { v4: uuidv4 } = require('uuid')

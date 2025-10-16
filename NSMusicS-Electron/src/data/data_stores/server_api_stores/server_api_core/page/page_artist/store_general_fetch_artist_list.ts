@@ -17,7 +17,7 @@ import { store_playlist_list_logic } from '@/views/view_app/components/player_li
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 import error_album from '@/assets/img/error_album.jpg'
 import { isElectron } from '@/utils/electron/isElectron'
-import { Get_AnnotationInfo_To_LocalSqlite } from '@/data/data_repository/app_repository/class_Get_AnnotationInfo_To_LocalSqlite'
+import { Get_LocalSqlite_AnnotationInfo } from '@/data/data_repository/app_repository/LocalSqlite_Get_AnnotationInfo'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
 import { Get_Jellyfin_Temp_Data_To_LocalSqlite } from '@/data/data_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite'
@@ -135,15 +135,17 @@ export const store_general_fetch_artist_list = reactive({
           rows.forEach((row: Artist) => {
             for (let j = 0; j < pathfiles.length; j++) {
               if (pathfiles[j].artist_id === row.id) {
-                if (
-                  row.medium_image_url == null ||
-                  row.medium_image_url == undefined ||
-                  row.medium_image_url.length == 0
-                ) {
+                if (row.medium_image_url == null || row.medium_image_url.length == 0) {
                   if (pathfiles[j].path) {
                     const fileName = pathfiles[j].path.split(/[\\/]/).pop() // 兼容 Windows 和 Unix 路径分隔符
-                    const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg')
-                    row.medium_image_url = `${store_system_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
+                    const newFileName =
+                      fileName != undefined && fileName.length > 0
+                        ? fileName.replace(/\.(mp3|flac)$/i, '.jpg')
+                        : ''
+                    row.medium_image_url =
+                      newFileName != undefined && newFileName.length > 0
+                        ? `${store_system_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`
+                        : error_album
                   } else {
                     row.medium_image_url = error_album
                   }
@@ -288,9 +290,9 @@ export const store_general_fetch_artist_list = reactive({
       store_playlist_list_info.playlist_MediaFiles_temporary[0].artist_id
     )
     if (store_server_user_model.model_server_type_of_local) {
-      const get_AnnotationInfo_To_LocalSqlite = new Get_AnnotationInfo_To_LocalSqlite()
+      const get_LocalSqlite_AnnotationInfo = new Get_LocalSqlite_AnnotationInfo()
       store_view_artist_page_info.artist_recently_count =
-        get_AnnotationInfo_To_LocalSqlite.Get_Annotation_ItemInfo_Play_Count('artist')
+        get_LocalSqlite_AnnotationInfo.Get_Annotation_ItemInfo_Play_Count('artist')
       store_player_audio_logic.boolHandleItemClick_Played = true
     }
   },

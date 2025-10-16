@@ -1,8 +1,8 @@
 import { reactive } from 'vue'
-import { Set_ArtistInfo_To_LocalSqlite } from '@/data/data_repository/app_repository/class_Set_ArtistInfo_To_LocalSqlite'
+import { Set_LocalSqlite_ArtistInfo } from '@/data/data_repository/app_repository/LocalSqlite_Set_ArtistInfo'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_server_data_set_artistInfo } from '@/data/data_stores/server_api_stores/server_api_core/annotation/store_server_data_set_artistInfo'
-const set_ArtistInfo_To_LocalSqlite = new Set_ArtistInfo_To_LocalSqlite()
+const set_ArtistInfo_To_LocalSqlite = new Set_LocalSqlite_ArtistInfo()
 export const store_local_data_set_artistInfo = reactive({
   Set_ArtistInfo_To_Favorite(id: string, value: boolean) {
     set_ArtistInfo_To_LocalSqlite.Set_ArtistInfo_To_Favorite_Local(id, value)

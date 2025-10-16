@@ -3,8 +3,8 @@ import { Browsing_ApiService_of_ND } from '../services_normal/browsing/index_ser
 import { Media_Retrieval_ApiService_of_ND } from '../services_normal/media_retrieval/index_service'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { Album$Medias_Lists_ApiService_of_ND } from '../services_normal/album$songs_lists/index_service'
-import { Set_AlbumInfo_To_LocalSqlite } from '@/data/data_repository/app_repository/class_Set_AlbumInfo_To_LocalSqlite'
-import { Set_MediaInfo_To_LocalSqlite } from '@/data/data_repository/app_repository/class_Set_MediaInfo_To_LocalSqlite'
+import { Set_LocalSqlite_AlbumInfo } from '@/data/data_repository/app_repository/LocalSqlite_Set_AlbumInfo'
+import { Set_LocalSqlite_MediaInfo } from '@/data/data_repository/app_repository/LocalSqlite_Set_MediaInfo'
 import { store_local_data_set_albumInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_albumInfo'
 import { store_local_data_set_artistInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_artistInfo'
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
@@ -510,9 +510,9 @@ export class Set_Navidrome_ALL_Data_To_LocalSqlite {
 
       /// play_count / play_history_time
       try {
-        const set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
-        const set_AlbumInfo_To_LocalSqlite = new Set_AlbumInfo_To_LocalSqlite()
-        // let set_ArtistInfo_To_LocalSqlite = new Set_ArtistInfo_To_LocalSqlite();
+        const set_MediaInfo_To_LocalSqlite = new Set_LocalSqlite_MediaInfo()
+        const set_AlbumInfo_To_LocalSqlite = new Set_LocalSqlite_AlbumInfo()
+        // let set_ArtistInfo_To_LocalSqlite = new Set_LocalSqlite_ArtistInfo();
 
         songsAnnotionArray.forEach((annotion) => {
           set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_PlayCount_of_Media_File_ND(

@@ -4,7 +4,7 @@ import { store_server_user_model } from '@/data/data_stores/server_configs_store
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
-import { Get_PlaylistInfo_From_LocalSqlite } from '@/data/data_repository/app_repository/class_Get_PlaylistInfo_From_LocalSqlite'
+import { Get_LocalSqlite_PlaylistInfo } from '@/data/data_repository/app_repository/LocalSqlite_Get_PlaylistInfo'
 import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
 
 export const store_playlist_list_logic = reactive({
@@ -15,7 +15,7 @@ export const store_playlist_list_logic = reactive({
       await store_general_model_player_list.get_playlists_info()
     } else {
       try {
-        const get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
+        const get_PlaylistInfo_From_LocalSqlite = new Get_LocalSqlite_PlaylistInfo()
         const playlist_temporary = get_PlaylistInfo_From_LocalSqlite.Get_Playlist()
         playlist_temporary.forEach((item: Play_List) => {
           store_playlist_list_info.playlist_names_ALLLists.push({
