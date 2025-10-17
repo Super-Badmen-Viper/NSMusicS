@@ -820,10 +820,10 @@ function menu_item_add_to_playlist_end() {
     const newItem: any = JSON.parse(JSON.stringify(item))
     newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
     usePlaylistStore().playlist_MediaFiles_temporary.push(newItem)
-usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
-  item.order_title = index + 1
-})
-usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id)
+    usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+      item.order_title = index + 1
+    })
+    usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id)
 
     store_system_configs_save.save_system_playlist_item_id_config()
 
@@ -843,14 +843,10 @@ function menu_item_add_to_playlist_next() {
     newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
     usePlaylistStore().playlist_MediaFiles_temporary.splice(index + 1, 0, newItem)
 
-usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
-  item.order_title = index + 1
-})
-usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.splice(
-      index + 1,
-      0,
-      newItem.id
-    )
+    usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+      item.order_title = index + 1
+    })
+    usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.splice(index + 1, 0, newItem.id)
 
     store_system_configs_save.save_system_playlist_item_id_config()
 
@@ -1427,9 +1423,9 @@ onBeforeUnmount(() => {
             @contextmenu.prevent="
               () => {
                 usePlaylistStore().playlist_Menu_Item_Id = item.id
-usePlaylistStore().playlist_Menu_Item_Rating = item.rating
-usePlaylistStore().playlist_Menu_Item_IndexId = item.order_title
-usePlaylistStore().playlist_Menu_Item = item
+                usePlaylistStore().playlist_Menu_Item_Rating = item.rating
+                usePlaylistStore().playlist_Menu_Item_IndexId = item.order_title
+                usePlaylistStore().playlist_Menu_Item = item
               }
             "
             class="message_media_cue"
@@ -1630,7 +1626,8 @@ usePlaylistStore().playlist_Menu_Item = item
             store_server_users.server_select_kind === 'navidrome' ||
             store_server_user_model.model_server_type_of_local
           "
-          v-for="artist in usePlaylistStore().playlist_Menu_Item.artist.split(/[/|｜、]/) ?? usePlaylistStore().playlist_Menu_Item.artist"
+          v-for="artist in usePlaylistStore().playlist_Menu_Item.artist.split(/[/|｜、]/) ??
+          usePlaylistStore().playlist_Menu_Item.artist"
         >
           <v-contextmenu-item>
             <span
@@ -1679,10 +1676,7 @@ usePlaylistStore().playlist_Menu_Item = item
             "
             @after-rate="
               (value) => {
-                if (
-                  usePlaylistStore().playlist_Menu_Item_Rating == 1 &&
-                  before_rating == true
-                ) {
+                if (usePlaylistStore().playlist_Menu_Item_Rating == 1 && before_rating == true) {
                   after_rating = true
                   before_rating = false
                 }

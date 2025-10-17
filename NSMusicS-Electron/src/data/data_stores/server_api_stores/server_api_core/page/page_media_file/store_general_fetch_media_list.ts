@@ -270,11 +270,10 @@ export const store_general_fetch_media_list = reactive({
                 ) {
                   return order_play_date.includes(item.id)
                 } else {
-                  const index =
-                    usePlaylistStore().playlist_tracks_temporary_of_ALLLists.findIndex(
-                      (list: any) =>
-                        list.playlist.id === store_view_media_page_logic.page_songlists_selected
-                    )
+                  const index = usePlaylistStore().playlist_tracks_temporary_of_ALLLists.findIndex(
+                    (list: any) =>
+                      list.playlist.id === store_view_media_page_logic.page_songlists_selected
+                  )
                   let playlistTracks: any[] = []
                   if (index >= 0) {
                     playlistTracks = usePlaylistStore().playlist_tracks_temporary_of_ALLLists[

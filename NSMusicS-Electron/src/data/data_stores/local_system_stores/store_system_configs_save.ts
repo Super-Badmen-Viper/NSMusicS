@@ -370,8 +370,8 @@ export const store_system_configs_save = reactive({
         'cue_track_count',
         'cue_track_show',
       ])
-      const data = usePlaylistStore().playlist_MediaFiles_temporary
-        .filter((item) => item.id && !excludedFields.has('id'))
+      const data = usePlaylistStore()
+        .playlist_MediaFiles_temporary.filter((item) => item.id && !excludedFields.has('id'))
         .map((item, index) => ({
           ID: this.generateMockObjectId(),
           ConfigKey: item.id,

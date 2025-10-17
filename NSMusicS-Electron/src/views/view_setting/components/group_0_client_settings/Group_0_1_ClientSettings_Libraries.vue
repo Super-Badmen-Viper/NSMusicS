@@ -558,13 +558,17 @@ import { store_view_media_page_logic } from '@/views/view_app/page/page_media/st
                       await store_server_user_model.switchToMode_Server()
                       // auto login
                       if (
-                        store_server_users.server_config_of_current_user_of_select.value != undefined &&
+                        store_server_users.server_config_of_current_user_of_select.value !=
+                          undefined &&
                         store_server_users.server_config_of_current_user_of_select.value.length > 0
                       ) {
                         store_server_user_model.model_server_type_of_local_server_download = false
                         store_router_data_logic.clear_UserExperience_Model = true
                         store_router_data_logic.get_clear_UserExperience_Model(true)
-                        update_server_config_of_current_user_of_sqlite(store_server_users.server_config_of_current_user_of_select.value,false)
+                        update_server_config_of_current_user_of_sqlite(
+                          store_server_users.server_config_of_current_user_of_select.value,
+                          false
+                        )
                       }
                     } else {
                       await store_server_user_model.switchToMode_Local()

@@ -26,21 +26,17 @@ const errorHandled = ref(new Map())
 
 // 创建包装方法以便在模板中使用
 const openDragSort = () => {
-  
-  usePlaylistStore().menu_item_open_drag_sort();
-};
+  usePlaylistStore().menu_item_open_drag_sort()
+}
 
 const setMenuItemId = (id) => {
-  
-  usePlaylistStore().playlist_Menu_Item_Id = id;
-};
+  usePlaylistStore().playlist_Menu_Item_Id = id
+}
 
 const closeDragSort = () => {
-  
-  usePlaylistStore().playlist_DragSort_Model = false;
-};
+  usePlaylistStore().playlist_DragSort_Model = false
+}
 const handleImageError = async (item: any) => {
-
   let result_src = error_album
   if (errorHandled.value.has(item.id)) {
     item.medium_image_url = result_src
@@ -131,8 +127,9 @@ function menu_item_move_to_playlist_start() {
       usePlaylistStore().playlist_MediaFiles_temporary.splice(index, 1)
     }
 
-    const mediaIdIndex =
-      usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.indexOf(item.id)
+    const mediaIdIndex = usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.indexOf(
+      item.id
+    )
     if (mediaIdIndex !== -1) {
       usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.splice(mediaIdIndex, 1)
     }
@@ -162,8 +159,9 @@ function menu_item_move_to_playlist_end() {
       usePlaylistStore().playlist_MediaFiles_temporary.splice(index, 1)
     }
 
-    const mediaIdIndex =
-      usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.indexOf(item.id)
+    const mediaIdIndex = usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.indexOf(
+      item.id
+    )
     if (mediaIdIndex !== -1) {
       usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.splice(mediaIdIndex, 1)
     }
@@ -257,9 +255,7 @@ onMounted(() => {
           <v-contextmenu-item
             v-for="n in usePlaylistStore().playlist_names_ALLLists"
             :key="n.value"
-            @click="
-              update_playlist_addMediaFile(usePlaylistStore().playlist_Menu_Item_Id, n.value)
-            "
+            @click="update_playlist_addMediaFile(usePlaylistStore().playlist_Menu_Item_Id, n.value)"
           >
             {{ n.label }}
           </v-contextmenu-item>
@@ -407,10 +403,7 @@ onMounted(() => {
       <n-space v-if="usePlaylistStore().playlist_DragSort_Model">
         <n-space style="height: calc(100vh - 212px)" vertical justify="space-between">
           <div></div>
-          <n-button
-            style="border-radius: 8px"
-            @click="closeDragSort"
-          >
+          <n-button style="border-radius: 8px" @click="closeDragSort">
             <n-icon size="26" :depth="2">
               <ChevronLeft16Filled />
             </n-icon>
@@ -428,9 +421,7 @@ onMounted(() => {
           v-model="usePlaylistStore().playlist_MediaFiles_temporary_Sort_Items"
         >
           <div
-            v-for="(
-              item, index
-            ) in usePlaylistStore().playlist_MediaFiles_temporary_Sort_Items"
+            v-for="(item, index) in usePlaylistStore().playlist_MediaFiles_temporary_Sort_Items"
             :key="item.id"
             class="message_playlist"
           >

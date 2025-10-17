@@ -23,12 +23,8 @@ import { store_view_media_page_info } from '@/views/view_app/page/page_media/sto
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { Get_LocalSqlite_PlaylistInfo } from '@/data/data_repository/app_repository/LocalSqlite_Get_PlaylistInfo'
 import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
-import {
-  store_general_fetch_media_list
-} from "../../../../data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list";
-import {
-  store_general_fetch_media_cue_list
-} from "../../../../data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list";
+import { store_general_fetch_media_list } from '../../../../data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
+import { store_general_fetch_media_cue_list } from '../../../../data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list'
 
 export const usePlaylistStore = defineStore('playlist', () => {
   // 外观状态
@@ -38,7 +34,9 @@ export const usePlaylistStore = defineStore('playlist', () => {
   // 列表信息状态
   const playlist_names_ALLLists = ref<{ label: string; value: string }[]>([])
   const playlist_datas_CurrentPlayList_ALLMediaIds = ref<string[]>([])
-  const playlist_tracks_temporary_of_ALLLists = ref<{ playlist: Play_List; playlist_tracks: any[] }[]>([])
+  const playlist_tracks_temporary_of_ALLLists = ref<
+    { playlist: Play_List; playlist_tracks: any[] }[]
+  >([])
   const playlist_MediaFiles_metadata = ref<Media_File[]>([])
   const playlist_MediaFiles_temporary = ref<Media_File[]>([])
   const playlist_MediaFiles_temporary_carousel = ref<Media_File[]>([])
@@ -70,12 +68,12 @@ export const usePlaylistStore = defineStore('playlist', () => {
       )
 
       const startIndex = Math.max(0, index - 4)
-      const endIndex = Math.min(
-        playlist_MediaFiles_temporary.value.length - 1,
-        index + 45
-      )
+      const endIndex = Math.min(playlist_MediaFiles_temporary.value.length - 1, index + 45)
 
-      playlist_MediaFiles_temporary_Sort_Items.value = playlist_MediaFiles_temporary.value.slice(startIndex, endIndex + 1)
+      playlist_MediaFiles_temporary_Sort_Items.value = playlist_MediaFiles_temporary.value.slice(
+        startIndex,
+        endIndex + 1
+      )
       playlist_Sort_StartIndex.value = startIndex
       playlist_Sort_EndIndex.value = endIndex
     }
@@ -103,7 +101,9 @@ export const usePlaylistStore = defineStore('playlist', () => {
       item.absoluteIndex = index
     })
 
-    playlist_datas_CurrentPlayList_ALLMediaIds.value = playlist_MediaFiles_temporary.value.map((item: any) => item.id)
+    playlist_datas_CurrentPlayList_ALLMediaIds.value = playlist_MediaFiles_temporary.value.map(
+      (item: any) => item.id
+    )
     store_system_configs_save.save_system_playlist_item_id_config()
   }
 
@@ -117,13 +117,16 @@ export const usePlaylistStore = defineStore('playlist', () => {
     if (playlist_MediaFiles_temporary.value.length > 1) {
       if (!isNaN(store_player_audio_info.this_audio_Index_of_play_list)) {
         const startIndex = Math.max(store_player_audio_info.this_audio_Index_of_play_list - 14, 0)
-        const endIndex = Math.min(
-          startIndex + 30,
-          playlist_MediaFiles_temporary.value.length
+        const endIndex = Math.min(startIndex + 30, playlist_MediaFiles_temporary.value.length)
+        playlist_MediaFiles_temporary_carousel.value = playlist_MediaFiles_temporary.value.slice(
+          startIndex,
+          endIndex
         )
-        playlist_MediaFiles_temporary_carousel.value = playlist_MediaFiles_temporary.value.slice(startIndex, endIndex)
       } else {
-        playlist_MediaFiles_temporary_carousel.value = playlist_MediaFiles_temporary.value.slice(0, 30)
+        playlist_MediaFiles_temporary_carousel.value = playlist_MediaFiles_temporary.value.slice(
+          0,
+          30
+        )
       }
       store_player_audio_info.set_carousel_index()
     } else if (playlist_MediaFiles_temporary.value.length === 1) {
@@ -165,8 +168,8 @@ export const usePlaylistStore = defineStore('playlist', () => {
       // Data synchronization
       playlist_MediaFiles_temporary.value.forEach((row: Media_File) => {
         const existingIndex = store_view_media_page_info.media_Files_temporary.findIndex(
-            (item: Media_File) => item.id === row.id
-          )
+          (item: Media_File) => item.id === row.id
+        )
         if (existingIndex === -1) {
           const newRow = { ...row }
           delete newRow.play_id
@@ -181,21 +184,23 @@ export const usePlaylistStore = defineStore('playlist', () => {
 
   // 监听器
   watch(
-      () => {playlist_show.value},
-      (newValue) => {
-        if (newValue) {
-          store_general_fetch_media_list._load_model = 'play'
-          store_general_fetch_media_cue_list._load_model = 'play'
-          const index = playlist_MediaFiles_temporary.value.length / 30
-          if (index > 0) {
-            store_general_fetch_player_list._start = 30 * index - 30
-            store_general_fetch_player_list._end = 30 * index
-          }
-        } else {
-          store_general_fetch_media_list._load_model = 'search'
-          store_general_fetch_media_cue_list._load_model = 'search'
+    () => {
+      playlist_show.value
+    },
+    (newValue) => {
+      if (newValue) {
+        store_general_fetch_media_list._load_model = 'play'
+        store_general_fetch_media_cue_list._load_model = 'play'
+        const index = playlist_MediaFiles_temporary.value.length / 30
+        if (index > 0) {
+          store_general_fetch_player_list._start = 30 * index - 30
+          store_general_fetch_player_list._end = 30 * index
         }
+      } else {
+        store_general_fetch_media_list._load_model = 'search'
+        store_general_fetch_media_cue_list._load_model = 'search'
       }
+    }
   )
 
   watch(
@@ -220,7 +225,7 @@ export const usePlaylistStore = defineStore('playlist', () => {
     // 外观状态
     playlist_show,
     playlist_use_model,
-    
+
     // 列表信息状态
     playlist_names_ALLLists,
     playlist_datas_CurrentPlayList_ALLMediaIds,
@@ -237,16 +242,16 @@ export const usePlaylistStore = defineStore('playlist', () => {
     playlist_MediaFiles_temporary_Sort_Items,
     playlist_Sort_StartIndex,
     playlist_Sort_EndIndex,
-    
+
     // 逻辑状态
     playlist_names_StartUpdate,
     media_page_handleItemDbClick,
-    
+
     // 方法
     menu_item_open_drag_sort,
     menu_item_reinsert_drag_sort,
     reset_carousel,
     reset_data,
-    handleItemDbClick
+    handleItemDbClick,
   }
 })

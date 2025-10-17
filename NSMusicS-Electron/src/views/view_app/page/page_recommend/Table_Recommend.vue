@@ -659,7 +659,7 @@ const { t } = useI18n({
                 @dblclick="
                   () => {
                     usePlaylistStore().handleItemDbClick(item, index)
-usePlaylistStore().playlist_MediaFiles_temporary =
+                    usePlaylistStore().playlist_MediaFiles_temporary =
                       store_view_recommend_page_info.recommend_MediaFiles_temporary
                   }
                 "

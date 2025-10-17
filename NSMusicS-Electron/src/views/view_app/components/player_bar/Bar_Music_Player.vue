@@ -691,7 +691,6 @@ async function Play_Media_Order(model_num: string, increased: number) {
               await store_general_fetch_media_list.fetchData_Media_of_server_web_start()
               store_general_fetch_media_list._load_model = 'search'
 
-              
               const media_file = usePlaylistStore().playlist_MediaFiles_temporary[index]
               await store_player_audio_logic.update_current_media_info(media_file, index)
               console.log(media_file)
@@ -710,7 +709,6 @@ async function Play_Media_Order(model_num: string, increased: number) {
       if (!store_server_user_model.random_play_model || index < last_index) {
         if (!stop_play) {
           if (store_server_user_model.model_server_type_of_web) {
-            
             if (index >= usePlaylistStore().playlist_MediaFiles_temporary.length) {
               store_general_fetch_media_list._load_model = 'play'
               await store_general_fetch_media_list.fetchData_Media_of_server_web_end()
@@ -1116,7 +1114,7 @@ const handleItemClick_Favorite = (id, favorite) => {
     const item_file: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find(
       (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
     )
-  const item_playlist: Media_File | undefined =
+    const item_playlist: Media_File | undefined =
       usePlaylistStore().playlist_MediaFiles_temporary.find(
         (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
       )

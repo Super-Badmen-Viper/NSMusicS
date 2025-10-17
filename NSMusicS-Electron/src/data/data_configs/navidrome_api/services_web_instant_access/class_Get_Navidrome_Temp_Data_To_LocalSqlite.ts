@@ -728,7 +728,7 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
           }
         }
       })
-      
+
       usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds =
         usePlaylistStore().playlist_MediaFiles_temporary.map((item) => item.id)
       store_system_configs_save.save_system_playlist_item_id_config()

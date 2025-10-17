@@ -663,7 +663,7 @@ const Play_this_album_MediaList_click = async (album_id: string) => {
   }
   console.log('play_this_album_click：' + album_id)
   await store_general_fetch_album_list.fetchData_This_Album_MediaList(album_id)
-  
+
   usePlaylistStore().reset_carousel()
 }
 
@@ -850,7 +850,6 @@ async function update_playlist_addAlbum(id: any, playlist_id: any) {
   }
 }
 async function menu_item_add_to_playlist_end() {
-  
   await store_general_fetch_media_list.fetchData_Media_Find_This_Album(
     usePlaylistStore().playlist_Menu_Item_Id
   )
@@ -883,7 +882,6 @@ async function menu_item_add_to_playlist_next() {
 
   store_view_media_page_info.media_Files_temporary = []
 
-    
   const index = usePlaylistStore().playlist_MediaFiles_temporary.findIndex(
     (item: any) => item.id === store_player_audio_info.this_audio_song_id
   )
@@ -910,7 +908,6 @@ async function menu_item_add_to_playlist_next() {
   }
 }
 function menu_item_edit_selected_media_tags() {
-  
   store_player_tag_modify.player_show_tag_kind = 'album'
   const item: Album | undefined = store_view_album_page_info.album_Files_temporary.find(
     (album: Album) => album.id === usePlaylistStore().playlist_Menu_Item_Id
@@ -979,8 +976,8 @@ function Refresh_page_albumlists_statistic() {
 }
 onMounted(() => {
   Refresh_page_albumlists_statistic()
-  const { _artist_id } = store_general_fetch_album_list;
-  const hasMediaId = _artist_id.length > 0;
+  const { _artist_id } = store_general_fetch_album_list
+  const hasMediaId = _artist_id.length > 0
   if (hasMediaId) {
     bool_show_search_area.value = true
   }
@@ -1453,7 +1450,6 @@ onBeforeUnmount(() => {
             v-contextmenu:contextmenu
             @contextmenu.prevent="
               () => {
-                
                 usePlaylistStore().playlist_Menu_Item_Id = item.id
                 usePlaylistStore().playlist_Menu_Item = item
               }
@@ -1623,10 +1619,7 @@ onBeforeUnmount(() => {
           <v-contextmenu-item
             v-for="n in usePlaylistStore().playlist_names_ALLLists"
             :key="n.value"
-            @click="
-              
-              update_playlist_addAlbum(usePlaylistStore().playlist_Menu_Item_Id, n.value)
-            "
+            @click="update_playlist_addAlbum(usePlaylistStore().playlist_Menu_Item_Id, n.value)"
           >
             {{ n.label }}
           </v-contextmenu-item>
@@ -1640,7 +1633,6 @@ onBeforeUnmount(() => {
           "
           @click="
             () => {
-              
               handleItemClick_album(usePlaylistStore().playlist_Menu_Item.name)
             }
           "
@@ -1650,7 +1642,6 @@ onBeforeUnmount(() => {
         <v-contextmenu-item
           @click="
             () => {
-              
               if (store_server_user_model.model_server_type_of_local) {
                 handleItemClick_artist(usePlaylistStore().playlist_Menu_Item.artist_id)
               } else if (store_server_user_model.model_server_type_of_web) {

@@ -245,7 +245,7 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
       store_general_fetch_player_list.fetchData_PlayList(false)
       ////
       usePlaylistStore().playlist_MediaFiles_temporary = []
-usePlaylistStore().playlist_MediaFiles_temporary.push({
+      usePlaylistStore().playlist_MediaFiles_temporary.push({
         ...item,
         play_id: item.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
       })
@@ -263,7 +263,6 @@ usePlaylistStore().playlist_MediaFiles_temporary.push({
       store_general_fetch_player_list.fetchData_PlayList(true)
     }
     if (store_view_home_page_info.home_Files_temporary_type_select != 'album') {
-      
       usePlaylistStore().reset_carousel()
       return
     }
@@ -404,9 +403,7 @@ async function add_to_playlist(next: boolean) {
     }
   } else {
     usePlaylistStore().playlist_MediaFiles_temporary.push(...newItems)
-    usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.push(
-      ...newItems.map((i) => i.id)
-    )
+    usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.push(...newItems.map((i) => i.id))
   }
 
   usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
@@ -450,7 +447,7 @@ onMounted(() => {
   if (store_server_user_model.model_server_type_of_web) {
     if (store_server_users.server_select_kind === 'navidrome') {
       store_view_home_page_info.home_Files_temporary_type_select = 'album'
-    } else if (store_server_users.server_select_kind != 'ninesong')  {
+    } else if (store_server_users.server_select_kind != 'ninesong') {
       store_view_home_page_info.home_Files_temporary_type_select = 'media'
     }
   } else {
@@ -623,7 +620,7 @@ function change_home_Files_temporary_type() {
             @contextmenu.prevent="
               () => {
                 usePlaylistStore().playlist_Menu_Item = item
-usePlaylistStore().playlist_Menu_Item_Id = item.id
+                usePlaylistStore().playlist_Menu_Item_Id = item.id
               }
             "
           >
@@ -825,7 +822,7 @@ usePlaylistStore().playlist_Menu_Item_Id = item.id
             @contextmenu.prevent="
               () => {
                 usePlaylistStore().playlist_Menu_Item = item
-usePlaylistStore().playlist_Menu_Item_Id = item.id
+                usePlaylistStore().playlist_Menu_Item_Id = item.id
               }
             "
           >
@@ -1027,7 +1024,7 @@ usePlaylistStore().playlist_Menu_Item_Id = item.id
             @contextmenu.prevent="
               () => {
                 usePlaylistStore().playlist_Menu_Item = item
-usePlaylistStore().playlist_Menu_Item_Id = item.id
+                usePlaylistStore().playlist_Menu_Item_Id = item.id
                 recently_added_contextmenu_of_emby = true
               }
             "
@@ -1230,7 +1227,7 @@ usePlaylistStore().playlist_Menu_Item_Id = item.id
             @contextmenu.prevent="
               () => {
                 usePlaylistStore().playlist_Menu_Item = item
-usePlaylistStore().playlist_Menu_Item_Id = item.id
+                usePlaylistStore().playlist_Menu_Item_Id = item.id
               }
             "
           >

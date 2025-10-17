@@ -58,8 +58,6 @@ const { t } = useI18n({
   inheritLocale: true,
 })
 
-
-
 ////// artistlist_view page_layout gridItems
 const item_artist = ref(170)
 const item_artist_image = ref(item_artist.value - 20)
@@ -715,7 +713,6 @@ async function update_playlist_addArtist(id: any, playlist_id: any) {
   }
 }
 async function menu_item_add_to_playlist_end() {
-  
   await store_general_fetch_media_list.fetchData_Media_Find_This_Artist(
     usePlaylistStore().playlist_Menu_Item_Id
   )
@@ -1402,9 +1399,7 @@ onBeforeUnmount(() => {
           <v-contextmenu-item
             v-for="n in usePlaylistStore().playlist_names_ALLLists"
             :key="n.value"
-            @click="
-              update_playlist_addArtist(usePlaylistStore().playlist_Menu_Item_Id, n.value)
-            "
+            @click="update_playlist_addArtist(usePlaylistStore().playlist_Menu_Item_Id, n.value)"
           >
             {{ n.label }}
           </v-contextmenu-item>

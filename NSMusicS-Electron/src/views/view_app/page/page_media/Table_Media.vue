@@ -470,31 +470,30 @@ const back_search_default = () => {
 }
 onMounted(() => {
   // local
-  if (store_server_user_model.model_server_type_of_local){
+  if (store_server_user_model.model_server_type_of_local) {
     if (store_view_media_page_logic.page_songlists_keywordFilter.length > 0) {
-      store_view_media_page_logic.page_songlists_bool_show_search_area = true;
-      bool_input_search = true;
+      store_view_media_page_logic.page_songlists_bool_show_search_area = true
+      bool_input_search = true
       return
     }
   }
   // server
-  const { _artist_id, _album_id, _album_artist_id } = store_general_fetch_media_list;
-  const hasMediaId = _artist_id.length > 0 || _album_id.length > 0 || _album_artist_id.length > 0;
+  const { _artist_id, _album_id, _album_artist_id } = store_general_fetch_media_list
+  const hasMediaId = _artist_id.length > 0 || _album_id.length > 0 || _album_artist_id.length > 0
   if (hasMediaId) {
     store_view_media_page_logic.page_songlists_input_search_Value =
-        _album_id.length > 0 ? _album_id :
-            _artist_id.length > 0 ? _artist_id :
-                _album_artist_id;
+      _album_id.length > 0 ? _album_id : _artist_id.length > 0 ? _artist_id : _album_artist_id
 
-    store_view_media_page_logic.page_songlists_bool_show_search_area = true;
-    bool_input_search = true;
+    store_view_media_page_logic.page_songlists_bool_show_search_area = true
+    bool_input_search = true
   } else {
     store_view_media_page_logic.page_songlists_input_search_Value =
-        store_view_media_page_logic.page_songlists_keyword;
+      store_view_media_page_logic.page_songlists_keyword
 
-    const shouldShowSearch = store_view_media_page_logic.page_songlists_input_search_Value.length > 0;
-    store_view_media_page_logic.page_songlists_bool_show_search_area = shouldShowSearch;
-    bool_input_search = shouldShowSearch;
+    const shouldShowSearch =
+      store_view_media_page_logic.page_songlists_input_search_Value.length > 0
+    store_view_media_page_logic.page_songlists_bool_show_search_area = shouldShowSearch
+    bool_input_search = shouldShowSearch
   }
 })
 // lineItems Filter To Favorite
@@ -1391,11 +1390,7 @@ function menu_item_add_to_playlist_next() {
       item.absoluteIndex = index
     })
 
-    usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.splice(
-      index + 1,
-      0,
-      newItem.id
-    )
+    usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.splice(index + 1, 0, newItem.id)
 
     store_system_configs_save.save_system_playlist_item_id_config()
 
@@ -2712,9 +2707,7 @@ onBeforeUnmount(() => {
           <v-contextmenu-item
             v-for="n in usePlaylistStore().playlist_names_ALLLists"
             :key="n.value"
-            @click="
-              update_playlist_addMediaFile(usePlaylistStore().playlist_Menu_Item_Id, n.value)
-            "
+            @click="update_playlist_addMediaFile(usePlaylistStore().playlist_Menu_Item_Id, n.value)"
           >
             {{ n.label }}
           </v-contextmenu-item>
@@ -2853,10 +2846,7 @@ onBeforeUnmount(() => {
             "
             @after-rate="
               (value) => {
-                if (
-                  usePlaylistStore().playlist_Menu_Item_Rating == 1 &&
-                  before_rating == true
-                ) {
+                if (usePlaylistStore().playlist_Menu_Item_Rating == 1 && before_rating == true) {
                   after_rating = true
                   before_rating = false
                 }

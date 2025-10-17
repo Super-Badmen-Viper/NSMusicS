@@ -240,14 +240,14 @@ watch(
         }
         if (!store_player_appearance.player_mode_of_lock_playlist) {
           if (!store_system_configs_load.app_configs_loading) {
-        if (!usePlaylistStore().playlist_show) {
-          if (usePlaylistStore().media_page_handleItemDbClick) {
-            if (!store_server_user_model.random_play_model) {
-              store_general_fetch_player_list.fetchData_PlayList(false)
+            if (!usePlaylistStore().playlist_show) {
+              if (usePlaylistStore().media_page_handleItemDbClick) {
+                if (!store_server_user_model.random_play_model) {
+                  store_general_fetch_player_list.fetchData_PlayList(false)
+                }
+              }
             }
           }
-        }
-      }
         }
       }
       store_view_media_page_info.media_Files_temporary.forEach((item: any, index: number) => {

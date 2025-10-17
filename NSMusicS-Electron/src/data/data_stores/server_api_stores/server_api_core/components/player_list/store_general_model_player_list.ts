@@ -71,8 +71,7 @@ export const store_general_model_player_list = reactive({
       (list: any) => list.playlist.id === value.id
     )
     if (index >= 0) {
-      usePlaylistStore().playlist_tracks_temporary_of_ALLLists[index].playlist.name =
-        value.name
+      usePlaylistStore().playlist_tracks_temporary_of_ALLLists[index].playlist.name = value.name
       usePlaylistStore().playlist_names_StartUpdate = true
       usePlaylistStore().playlist_names_ALLLists = []
       usePlaylistStore().playlist_tracks_temporary_of_ALLLists.forEach((item: any) => {
