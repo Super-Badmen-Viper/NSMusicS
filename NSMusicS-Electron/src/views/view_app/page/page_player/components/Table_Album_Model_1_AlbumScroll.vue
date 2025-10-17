@@ -3,7 +3,8 @@ import { store_player_audio_info } from '@/views/view_app/page/page_player/store
 import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { NSlider } from 'naive-ui'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
+
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 function getAssetImage(firstImage: string) {
   return new URL(firstImage, import.meta.url).href
@@ -27,7 +28,7 @@ const handleImageError = async (event) => {
     }
     ///
     const scroll_item: Media_File | undefined =
-      store_playlist_list_info.playlist_MediaFiles_temporary.find(
+      usePlaylistStore().playlist_MediaFiles_temporary.find(
         (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
       )
     if (scroll_item != undefined && scroll_item != 'undefined') {
@@ -41,6 +42,7 @@ const handleImageError = async (event) => {
 }
 
 import { ref, computed } from 'vue'
+
 import { NCarousel, NCarouselItem } from 'naive-ui'
 
 const directionRef = ref('vertical')
@@ -98,8 +100,8 @@ const nextSlideStyle = computed(() => {
           : 'calc(28vh - 182px)',
         transition: 'margin 0.4s, height 0.4s',
         backgroundImage:
-          !store_playlist_list_info.playlist_MediaFiles_temporary_carousel ||
-          store_playlist_list_info.playlist_MediaFiles_temporary_carousel.length === 0
+          !usePlaylistStore().playlist_MediaFiles_temporary_carousel ||
+          usePlaylistStore().playlist_MediaFiles_temporary_carousel.length === 0
             ? `url(${error_album})`
             : 'none',
         backgroundRepeat: 'no-repeat',
@@ -107,7 +109,7 @@ const nextSlideStyle = computed(() => {
       }"
     >
       <n-carousel-item
-        v-for="(item, index) in store_playlist_list_info.playlist_MediaFiles_temporary_carousel"
+        v-for="(item, index) in usePlaylistStore().playlist_MediaFiles_temporary_carousel"
         :key="index"
         style="width: 55vh; height: 55vh"
       >

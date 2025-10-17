@@ -3,12 +3,12 @@ import { store_player_appearance } from '@/views/view_app/page/page_player/store
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
+
 import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_general_fetch_album_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_album/store_general_fetch_album_list'
@@ -16,7 +16,7 @@ import { store_general_fetch_player_list } from '@/data/data_stores/server_api_s
 import error_album from '@/assets/img/error_album.jpg'
 import { isElectron } from '@/utils/electron/isElectron'
 import { Get_Jellyfin_Temp_Data_To_LocalSqlite } from '@/data/data_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite'
-import { store_playlist_appearance } from '@/views/view_app/components/player_list/store/store_playlist_appearance'
+
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 
@@ -50,7 +50,7 @@ export const store_general_fetch_media_list = reactive({
             let stmt_media_file_string = ''
 
             // Init media_model data
-            store_playlist_list_logic.playlist_names_StartUpdate = true
+            usePlaylistStore().playlist_names_StartUpdate = true
 
             // load media_Files_temporary data
             if (store_router_history_data_of_media.router_history_model_of_Media === 0) {
@@ -271,13 +271,13 @@ export const store_general_fetch_media_list = reactive({
                   return order_play_date.includes(item.id)
                 } else {
                   const index =
-                    store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.findIndex(
+                    usePlaylistStore().playlist_tracks_temporary_of_ALLLists.findIndex(
                       (list: any) =>
                         list.playlist.id === store_view_media_page_logic.page_songlists_selected
                     )
                   let playlistTracks: any[] = []
                   if (index >= 0) {
-                    playlistTracks = store_playlist_list_info.playlist_tracks_temporary_of_ALLLists[
+                    playlistTracks = usePlaylistStore().playlist_tracks_temporary_of_ALLLists[
                       index
                     ].playlist_tracks.map((track) => track.media_file_id)
                   }
@@ -776,7 +776,7 @@ export const store_general_fetch_media_list = reactive({
   },
   fetchData_Media_of_data_synchronization_to_playlist() {
     store_view_media_page_info.media_Files_temporary.forEach((row) => {
-      const existingIndex = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
+      const existingIndex = usePlaylistStore().playlist_MediaFiles_temporary.findIndex(
         (item) => item.id === row.id
       )
       if (existingIndex === -1) {
@@ -784,23 +784,8 @@ export const store_general_fetch_media_list = reactive({
           ...row,
           play_id: row.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
         }
-        store_playlist_list_info.playlist_MediaFiles_temporary.push(newRow)
+        usePlaylistStore().playlist_MediaFiles_temporary.push(newRow)
       }
     })
   },
 })
-watch(
-  () => store_playlist_appearance.playlist_show,
-  async (newValue) => {
-    if (newValue) {
-      store_general_fetch_media_list._load_model = 'play'
-      const index = store_playlist_list_info.playlist_MediaFiles_temporary.length / 30
-      if (index > 0) {
-        store_general_fetch_player_list._start = 30 * index - 30
-        store_general_fetch_player_list._end = 30 * index
-      }
-    } else {
-      store_general_fetch_media_list._load_model = 'search'
-    }
-  }
-)

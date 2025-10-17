@@ -4,13 +4,13 @@ import { store_system_configs_info } from '@/data/data_stores/local_system_store
 import { store_view_media_cue_page_info } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_info'
 import { store_view_media_cue_page_logic } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_logic'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_general_fetch_album_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_album/store_general_fetch_album_list'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 import error_album from '@/assets/img/error_album.jpg'
 import { isElectron } from '@/utils/electron/isElectron'
-import { store_playlist_appearance } from '@/views/view_app/components/player_list/store/store_playlist_appearance'
+
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 
@@ -363,7 +363,7 @@ export const store_general_fetch_media_cue_list = reactive({
   },
   fetchData_Media_of_data_synchronization_to_playlist() {
     store_view_media_cue_page_info.media_Files_temporary.forEach((row) => {
-      const existingIndex = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
+      const existingIndex = usePlaylistStore().playlist_MediaFiles_temporary.findIndex(
         (item) => item.id === row.id
       )
       if (existingIndex === -1) {
@@ -371,23 +371,8 @@ export const store_general_fetch_media_cue_list = reactive({
           ...row,
           play_id: row.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
         }
-        store_playlist_list_info.playlist_MediaFiles_temporary.push(newRow)
+        usePlaylistStore().playlist_MediaFiles_temporary.push(newRow)
       }
     })
   },
 })
-watch(
-  () => store_playlist_appearance.playlist_show,
-  async (newValue) => {
-    if (newValue) {
-      store_general_fetch_media_cue_list._load_model = 'play'
-      const index = store_playlist_list_info.playlist_MediaFiles_temporary.length / 30
-      if (index > 0) {
-        store_general_fetch_player_list._start = 30 * index - 30
-        store_general_fetch_player_list._end = 30 * index
-      }
-    } else {
-      store_general_fetch_media_cue_list._load_model = 'search'
-    }
-  }
-)

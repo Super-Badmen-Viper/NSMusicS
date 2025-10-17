@@ -31,9 +31,9 @@ import { CanvasRenderer } from 'echarts/renderers'
 import 'echarts-wordcloud'
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_view_recommend_page_info } from '@/views/view_app/page/page_recommend/store/store_view_recommend_page_info'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
+
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 
 echarts.use([TooltipComponent, VisualMapComponent, CanvasRenderer])
 
@@ -658,8 +658,8 @@ const { t } = useI18n({
                 class="message"
                 @dblclick="
                   () => {
-                    store_playlist_list_logic.handleItemDbClick(item, index)
-                    store_playlist_list_info.playlist_MediaFiles_temporary =
+                    usePlaylistStore().handleItemDbClick(item, index)
+usePlaylistStore().playlist_MediaFiles_temporary =
                       store_view_recommend_page_info.recommend_MediaFiles_temporary
                   }
                 "

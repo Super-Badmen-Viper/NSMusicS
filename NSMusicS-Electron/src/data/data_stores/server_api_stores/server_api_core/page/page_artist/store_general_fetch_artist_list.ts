@@ -10,10 +10,11 @@ import { store_player_appearance } from '@/views/view_app/page/page_player/store
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore';
+
 import { store_local_data_set_artistInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_artistInfo'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
-import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
+
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 import error_album from '@/assets/img/error_album.jpg'
 import { isElectron } from '@/utils/electron/isElectron'
@@ -278,16 +279,16 @@ export const store_general_fetch_artist_list = reactive({
 
     store_router_data_info.router_select_model_artist = true
 
-    if (store_playlist_list_info.playlist_MediaFiles_temporary.length > 0) {
+    if (usePlaylistStore().playlist_MediaFiles_temporary.length > 0) {
       store_player_appearance.player_mode_of_lock_playlist = false
-      const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[0]
+      const media_file = usePlaylistStore().playlist_MediaFiles_temporary[0]
       await store_player_audio_logic.update_current_media_info(media_file, media_file.absoluteIndex)
       //
-      store_playlist_list_logic.media_page_handleItemDbClick = false
+      usePlaylistStore().media_page_handleItemDbClick = false
     }
 
     store_local_data_set_artistInfo.Set_ArtistInfo_To_PlayCount_of_Artist(
-      store_playlist_list_info.playlist_MediaFiles_temporary[0].artist_id
+      usePlaylistStore().playlist_MediaFiles_temporary[0].artist_id
     )
     if (store_server_user_model.model_server_type_of_local) {
       const get_LocalSqlite_AnnotationInfo = new Get_LocalSqlite_AnnotationInfo()

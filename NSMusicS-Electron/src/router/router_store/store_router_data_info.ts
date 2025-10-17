@@ -5,7 +5,7 @@ import { store_general_fetch_album_list } from '@/data/data_stores/server_api_st
 import { store_general_fetch_artist_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_artist/store_general_fetch_artist_list'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { store_playlist_appearance } from '@/views/view_app/components/player_list/store/store_playlist_appearance'
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
 import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list'
 import {store_view_media_page_logic} from "../../views/view_app/page/page_media/store/store_view_media_page_logic";
@@ -36,7 +36,7 @@ export const store_router_data_info = reactive({
 watch(
   () => store_router_data_info.router_select,
   async (newValue) => {
-    if (!store_playlist_appearance.playlist_show) {
+    if (!usePlaylistStore().playlist_show) {
       store_router_data_info.router_select = newValue
       if (newValue === 'home') {
         await store_general_fetch_home_list.fetchData_Home()

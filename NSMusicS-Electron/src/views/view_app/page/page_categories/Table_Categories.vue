@@ -122,6 +122,10 @@ onMounted(() => {
 
 ////// dynamicScroller of albumlist_view
 import { store_general_fetch_home_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_home/store_general_fetch_home_list'
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+
+
+
 const dynamicScroller_maximum_playback = ref(null)
 let offset_maximum_playback = 0
 const scrollTo_maximum_playback = (value: number) => {
@@ -234,7 +238,7 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
   }
   console.log('play_this_album_click：' + temp_id)
   await store_general_fetch_album_list.fetchData_This_Album_MediaList(temp_id)
-  store_playlist_list_info.reset_carousel()
+  usePlaylistStore().reset_carousel()
 }
 const Get_this_album_info = (item: any, list_name: string): string => {
   let temp_id = item.id
@@ -308,7 +312,7 @@ const handleItemClick_Rating = (id_rating: any) => {
 ////// right menu
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { useMessage } from 'naive-ui'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
+
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
@@ -322,7 +326,47 @@ const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'))
 const message = useMessage()
 const recently_added_contextmenu_of_emby = ref(false)
 async function update_playlist_addAlbum(id: any, playlist_id: any) {
-  try {
+    try {
+      let result_album = false
+      if (
+        (store_server_users.server_select_kind != 'jellyfin' &&
+          store_server_users.server_select_kind != 'emby') ||
+        store_server_user_model.model_server_type_of_local
+      ) {
+        result_album = true
+      } else {
+        if (store_server_users.server_select_kind === 'jellyfin') {
+          result_album = false
+        } else if (store_server_users.server_select_kind === 'emby') {
+          result_album = recently_added_contextmenu_of_emby.value
+        }
+      }
+      recently_added_contextmenu_of_emby.value = false
+      if (result_album) {
+        await store_general_fetch_media_list.fetchData_Media_Find_This_Album(id)
+        const matchingIds: string[] = []
+        store_view_media_page_info.media_Files_temporary.forEach((item: Media_File) => {
+          if (item.album_id === id) {
+            matchingIds.push(item.id)
+          }
+        })
+        store_view_media_page_info.media_Files_temporary = []
+        for (let item_id of matchingIds) {
+          await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(
+            item_id,
+            playlist_id
+          )
+        }
+      } else {
+        await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(id, playlist_id)
+      }
+      message.success(t('common.add'))
+      store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
+    } catch (e) {
+      console.error(e)
+    }
+  }
+async function menu_item_add_to_playlist_end() {
     let result_album = false
     if (
       (store_server_users.server_select_kind != 'jellyfin' &&
@@ -338,133 +382,91 @@ async function update_playlist_addAlbum(id: any, playlist_id: any) {
       }
     }
     recently_added_contextmenu_of_emby.value = false
+    let matchingItems = []
     if (result_album) {
-      await store_general_fetch_media_list.fetchData_Media_Find_This_Album(id)
-      const matchingIds: string[] = []
-      store_view_media_page_info.media_Files_temporary.forEach((item: Media_File) => {
-        if (item.album_id === id) {
-          matchingIds.push(item.id)
-        }
-      })
-      store_view_media_page_info.media_Files_temporary = []
-      for (let item_id of matchingIds) {
-        ////
-        await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(
-          item_id,
-          playlist_id
-        )
-      }
-    } else {
-      await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(id, playlist_id)
-    }
-    ////
-    message.success(t('common.add'))
-    store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
-  } catch (e) {
-    console.error(e)
-  }
-}
-async function menu_item_add_to_playlist_end() {
-  let result_album = false
-  if (
-    (store_server_users.server_select_kind != 'jellyfin' &&
-      store_server_users.server_select_kind != 'emby') ||
-    store_server_user_model.model_server_type_of_local
-  ) {
-    result_album = true
-  } else {
-    if (store_server_users.server_select_kind === 'jellyfin') {
-      result_album = false
-    } else if (store_server_users.server_select_kind === 'emby') {
-      result_album = recently_added_contextmenu_of_emby.value
-    }
-  }
-  recently_added_contextmenu_of_emby.value = false
-  let matchingItems = []
-  if (result_album) {
-    await store_general_fetch_media_list.fetchData_Media_Find_This_Album(
-      store_playlist_list_info.playlist_Menu_Item_Id
-    )
-    matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-      (item: Media_File) => item.album_id === store_playlist_list_info.playlist_Menu_Item_Id
-    )
-  } else {
-    store_general_fetch_media_list._media_id = store_playlist_list_info.playlist_Menu_Item_Id
-    await store_general_fetch_media_list.fetchData_Media()
-    matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-      (item: Media_File) => item.id === store_playlist_list_info.playlist_Menu_Item_Id
-    )
-  }
-  ///
-  store_view_media_page_info.media_Files_temporary = []
-  for (let item of matchingItems) {
-    const newItem: any = JSON.parse(JSON.stringify(item))
-    newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
-    store_playlist_list_info.playlist_MediaFiles_temporary.push(newItem)
-    store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id)
-  }
-  ///
-  store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
-    item.absoluteIndex = index
-  })
-  store_system_configs_save.save_system_playlist_item_id_config()
-  contextmenu.value.hide()
-}
-async function menu_item_add_to_playlist_next() {
-  let result_album = false
-  if (
-    (store_server_users.server_select_kind != 'jellyfin' &&
-      store_server_users.server_select_kind != 'emby') ||
-    store_server_user_model.model_server_type_of_local
-  ) {
-    result_album = true
-  } else {
-    if (store_server_users.server_select_kind === 'jellyfin') {
-      result_album = false
-    } else if (store_server_users.server_select_kind === 'emby') {
-      result_album = recently_added_contextmenu_of_emby.value
-    }
-  }
-  recently_added_contextmenu_of_emby.value = false
-  let matchingItems = []
-  if (result_album) {
-    await store_general_fetch_media_list.fetchData_Media_Find_This_Album(
-      store_playlist_list_info.playlist_Menu_Item_Id
-    )
-    matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-      (item: Media_File) => item.album_id === store_playlist_list_info.playlist_Menu_Item_Id
-    )
-  } else {
-    store_general_fetch_media_list._media_id = store_playlist_list_info.playlist_Menu_Item_Id
-    await store_general_fetch_media_list.fetchData_Media()
-    matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-      (item: Media_File) => item.id === store_playlist_list_info.playlist_Menu_Item_Id
-    )
-  }
-  store_view_media_page_info.media_Files_temporary = []
-  const index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
-    (item: any) => item.id === store_player_audio_info.this_audio_song_id
-  )
-  if (index !== -1) {
-    matchingItems.forEach((item: Media_File, i: number) => {
-      const newItem = JSON.parse(JSON.stringify(item))
-      newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
-      store_playlist_list_info.playlist_MediaFiles_temporary.splice(index + 1 + i, 0, newItem)
-      store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.splice(
-        index + 1 + i,
-        0,
-        newItem.id
+      await store_general_fetch_media_list.fetchData_Media_Find_This_Album(
+        usePlaylistStore().playlist_Menu_Item_Id
       )
-    })
+    matchingItems = store_view_media_page_info.media_Files_temporary.filter(
+      (item: Media_File) => item.album_id === usePlaylistStore().playlist_Menu_Item_Id
+    )
   } else {
-    console.error('Current audio song not found in playlist')
+      store_general_fetch_media_list._media_id = usePlaylistStore().playlist_Menu_Item_Id
+      await store_general_fetch_media_list.fetchData_Media()
+      matchingItems = store_view_media_page_info.media_Files_temporary.filter(
+        (item: Media_File) => item.id === usePlaylistStore().playlist_Menu_Item_Id
+      )
   }
-  store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
-    item.absoluteIndex = index
-  })
-  store_system_configs_save.save_system_playlist_item_id_config()
-  contextmenu.value.hide()
-}
+    ///
+    store_view_media_page_info.media_Files_temporary = []
+    for (let item of matchingItems) {
+      const newItem: any = JSON.parse(JSON.stringify(item))
+      newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
+      usePlaylistStore().playlist_MediaFiles_temporary.push(newItem)
+      usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id)
+    }
+    ///
+    usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+      item.absoluteIndex = index
+    })
+    store_system_configs_save.save_system_playlist_item_id_config()
+    contextmenu.value.hide()
+  }
+  async function menu_item_add_to_playlist_next() {
+    let result_album = false
+    if (
+      (store_server_users.server_select_kind != 'jellyfin' &&
+        store_server_users.server_select_kind != 'emby') ||
+      store_server_user_model.model_server_type_of_local
+    ) {
+      result_album = true
+    } else {
+      if (store_server_users.server_select_kind === 'jellyfin') {
+        result_album = false
+      } else if (store_server_users.server_select_kind === 'emby') {
+        result_album = recently_added_contextmenu_of_emby.value
+      }
+    }
+    recently_added_contextmenu_of_emby.value = false
+    let matchingItems = []
+    if (result_album) {
+      await store_general_fetch_media_list.fetchData_Media_Find_This_Album(
+        usePlaylistStore().playlist_Menu_Item_Id
+      )
+      matchingItems = store_view_media_page_info.media_Files_temporary.filter(
+        (item: Media_File) => item.album_id === usePlaylistStore().playlist_Menu_Item_Id
+      )
+    } else {
+      store_general_fetch_media_list._media_id = usePlaylistStore().playlist_Menu_Item_Id
+      await store_general_fetch_media_list.fetchData_Media()
+      matchingItems = store_view_media_page_info.media_Files_temporary.filter(
+        (item: Media_File) => item.id === usePlaylistStore().playlist_Menu_Item_Id
+      )
+    }
+    store_view_media_page_info.media_Files_temporary = []
+    const index = usePlaylistStore().playlist_MediaFiles_temporary.findIndex(
+      (item: any) => item.id === store_player_audio_info.this_audio_song_id
+    )
+    if (index !== -1) {
+      matchingItems.forEach((item: Media_File, i: number) => {
+        const newItem = JSON.parse(JSON.stringify(item))
+        newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
+        usePlaylistStore().playlist_MediaFiles_temporary.splice(index + 1 + i, 0, newItem)
+        usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.splice(
+          index + 1 + i,
+          0,
+          newItem.id
+        )
+      })
+    } else {
+      console.error('Current audio song not found in playlist')
+    }
+    usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+      item.absoluteIndex = index
+    })
+    store_system_configs_save.save_system_playlist_item_id_config()
+    contextmenu.value.hide()
+  }
 
 ////// view albumlist_view Remove data
 onBeforeUnmount(() => {
@@ -487,9 +489,9 @@ onBeforeUnmount(() => {
         v-contextmenu:contextmenu
         @contextmenu.prevent="
           () => {
-            store_playlist_list_info.playlist_Menu_Item =
+            usePlaylistStore().playlist_Menu_Item =
               store_view_home_page_info.home_selected_top_album
-            store_playlist_list_info.playlist_Menu_Item_Id =
+            usePlaylistStore().playlist_Menu_Item_Id =
               store_view_home_page_info.home_selected_top_album?.id
           }
         "
@@ -750,8 +752,8 @@ onBeforeUnmount(() => {
             v-contextmenu:contextmenu
             @contextmenu.prevent="
               () => {
-                store_playlist_list_info.playlist_Menu_Item = item
-                store_playlist_list_info.playlist_Menu_Item_Id = item.id
+                usePlaylistStore().playlist_Menu_Item = item
+                usePlaylistStore().playlist_Menu_Item_Id = item.id
               }
             "
           >
@@ -1005,8 +1007,8 @@ onBeforeUnmount(() => {
             v-contextmenu:contextmenu
             @contextmenu.prevent="
               () => {
-                store_playlist_list_info.playlist_Menu_Item = item
-                store_playlist_list_info.playlist_Menu_Item_Id = item.id
+                usePlaylistStore().playlist_Menu_Item = item
+                usePlaylistStore().playlist_Menu_Item_Id = item.id
               }
             "
           >
@@ -1259,8 +1261,8 @@ onBeforeUnmount(() => {
             v-contextmenu:contextmenu
             @contextmenu.prevent="
               () => {
-                store_playlist_list_info.playlist_Menu_Item = item
-                store_playlist_list_info.playlist_Menu_Item_Id = item.id
+                usePlaylistStore().playlist_Menu_Item = item
+                usePlaylistStore().playlist_Menu_Item_Id = item.id
                 recently_added_contextmenu_of_emby = true
               }
             "
@@ -1514,8 +1516,8 @@ onBeforeUnmount(() => {
             v-contextmenu:contextmenu
             @contextmenu.prevent="
               () => {
-                store_playlist_list_info.playlist_Menu_Item = item
-                store_playlist_list_info.playlist_Menu_Item_Id = item.id
+                usePlaylistStore().playlist_Menu_Item = item
+                usePlaylistStore().playlist_Menu_Item_Id = item.id
               }
             "
           >
@@ -1687,9 +1689,12 @@ onBeforeUnmount(() => {
     >
       <v-contextmenu-submenu :title="menu_item_add_to_songlist">
         <v-contextmenu-item
-          v-for="n in store_playlist_list_info.playlist_names_ALLLists"
+          v-for="n in usePlaylistStore().playlist_names_ALLLists"
           :key="n.value"
-          @click="update_playlist_addAlbum(store_playlist_list_info.playlist_Menu_Item_Id, n.value)"
+          @click="
+            
+            update_playlist_addAlbum(usePlaylistStore().playlist_Menu_Item_Id, n.value)
+          "
         >
           {{ n.label }}
         </v-contextmenu-item>

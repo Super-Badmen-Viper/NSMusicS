@@ -437,13 +437,13 @@ const handleItemDbClick = async (media_file: any, index: any) => {
           store_server_user_model.random_play_model = false
         }
         await store_player_audio_logic.update_current_media_info(media_file, index)
-        store_playlist_list_logic.media_page_handleItemDbClick = true
+        usePlaylistStore().media_page_handleItemDbClick = true
         store_player_appearance.player_mode_of_lock_playlist = false
         store_player_audio_info.this_audio_restart_play = true
         //
         store_general_fetch_player_list.fetchData_PlayList(true)
         //
-        store_playlist_list_info.reset_carousel()
+        usePlaylistStore().reset_carousel()
       } else {
         const index_num = typeof index === 'number' ? Number(index) : Number(index.split('-')[1])
         // cue
@@ -582,7 +582,7 @@ const handleItemClick_Favorite = (id: any, favorite: boolean) => {
     store_player_audio_info.this_audio_song_favorite = !favorite
     //
     const item_playlist: Media_File | undefined =
-      store_playlist_list_info.playlist_MediaFiles_temporary.find(
+      usePlaylistStore().playlist_MediaFiles_temporary.find(
         (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
       )
     if (item_playlist !== undefined) {
@@ -596,7 +596,7 @@ const handleItemClick_Rating = (id_rating: any) => {
   click_count = 0
   const rating_item: Media_File | undefined =
     store_view_media_cue_page_info.media_Files_temporary.find(
-      (mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id
+      (mediaFile: Media_File) => mediaFile.id === usePlaylistStore().playlist_Menu_Item_Id
     )
   if (rating_item != undefined) {
     const [id, rating] = id_rating.split('-')
@@ -606,26 +606,26 @@ const handleItemClick_Rating = (id_rating: any) => {
         store_player_audio_info.this_audio_song_rating = 0
         //
         const item_playlist: Media_File | undefined =
-          store_playlist_list_info.playlist_MediaFiles_temporary.find(
+          usePlaylistStore().playlist_MediaFiles_temporary.find(
             (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
           )
         if (item_playlist !== undefined) item_playlist.rating = rating
       }
       rating_item.rating = 0
-      store_playlist_list_info.playlist_Menu_Item_Rating = 0
+      usePlaylistStore().playlist_Menu_Item_Rating = 0
     } else {
       store_server_data_set_media_cueInfo.Set_MediaInfo_To_Rating_Server(id, rating)
       if (id === store_player_audio_info.this_audio_song_id) {
         store_player_audio_info.this_audio_song_rating = rating
         //
         const item_playlist: Media_File | undefined =
-          store_playlist_list_info.playlist_MediaFiles_temporary.find(
+          usePlaylistStore().playlist_MediaFiles_temporary.find(
             (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
           )
         if (item_playlist !== undefined) item_playlist.rating = rating
       }
       rating_item.rating = rating
-      store_playlist_list_info.playlist_Menu_Item_Rating = rating
+      usePlaylistStore().playlist_Menu_Item_Rating = rating
     }
   }
 }
@@ -637,8 +637,9 @@ const themeVars = useThemeVars()
 /// add playlist
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
-import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
+// 延迟导入，避免循环依赖
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+
 import { store_view_media_cue_page_info } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_info'
 import { store_view_media_cue_page_logic } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_logic'
 import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
@@ -813,17 +814,16 @@ onMounted(() => {
 const contextmenu = ref(null)
 function menu_item_add_to_playlist_end() {
   const item: Media_File | undefined = store_view_media_cue_page_info.media_Files_temporary.find(
-    (mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id
+    (mediaFile: Media_File) => mediaFile.id === usePlaylistStore().playlist_Menu_Item_Id
   )
   if (item != undefined && item != 'undefined') {
     const newItem: any = JSON.parse(JSON.stringify(item))
     newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
-    store_playlist_list_info.playlist_MediaFiles_temporary.push(newItem)
-    store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
-      item.absoluteIndex = index
-    })
-
-    store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id)
+    usePlaylistStore().playlist_MediaFiles_temporary.push(newItem)
+usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+  item.order_title = index + 1
+})
+usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id)
 
     store_system_configs_save.save_system_playlist_item_id_config()
 
@@ -832,22 +832,21 @@ function menu_item_add_to_playlist_end() {
 }
 function menu_item_add_to_playlist_next() {
   const item: Media_File | undefined = store_view_media_cue_page_info.media_Files_temporary.find(
-    (mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id
+    (mediaFile: Media_File) => mediaFile.id === usePlaylistStore().playlist_Menu_Item_Id
   )
   if (item != undefined && item != 'undefined') {
-    let index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
+    let index = usePlaylistStore().playlist_MediaFiles_temporary.findIndex(
       (item: any) => item.id === store_player_audio_info.this_audio_song_id
     )
 
     const newItem: any = JSON.parse(JSON.stringify(item))
     newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
-    store_playlist_list_info.playlist_MediaFiles_temporary.splice(index + 1, 0, newItem)
+    usePlaylistStore().playlist_MediaFiles_temporary.splice(index + 1, 0, newItem)
 
-    store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
-      item.absoluteIndex = index
-    })
-
-    store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.splice(
+usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+  item.order_title = index + 1
+})
+usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.splice(
       index + 1,
       0,
       newItem.id
@@ -1427,10 +1426,10 @@ onBeforeUnmount(() => {
             v-contextmenu:contextmenu
             @contextmenu.prevent="
               () => {
-                store_playlist_list_info.playlist_Menu_Item_Id = item.id
-                store_playlist_list_info.playlist_Menu_Item_Rating = item.rating
-                store_playlist_list_info.playlist_Menu_Item_IndexId = item.order_title
-                store_playlist_list_info.playlist_Menu_Item = item
+                usePlaylistStore().playlist_Menu_Item_Id = item.id
+usePlaylistStore().playlist_Menu_Item_Rating = item.rating
+usePlaylistStore().playlist_Menu_Item_IndexId = item.order_title
+usePlaylistStore().playlist_Menu_Item = item
               }
             "
             class="message_media_cue"
@@ -1631,8 +1630,7 @@ onBeforeUnmount(() => {
             store_server_users.server_select_kind === 'navidrome' ||
             store_server_user_model.model_server_type_of_local
           "
-          v-for="artist in store_playlist_list_info.playlist_Menu_Item.artist.split(/[\/|｜、]/) ??
-          store_playlist_list_info.playlist_Menu_Item.artist"
+          v-for="artist in usePlaylistStore().playlist_Menu_Item.artist.split(/[/|｜、]/) ?? usePlaylistStore().playlist_Menu_Item.artist"
         >
           <v-contextmenu-item>
             <span
@@ -1671,10 +1669,10 @@ onBeforeUnmount(() => {
             class="viaSlot"
             style="margin-left: -12px; margin-top: -12px; height: 16px"
             :length="5"
-            v-model="store_playlist_list_info.playlist_Menu_Item_Rating"
+            v-model="usePlaylistStore().playlist_Menu_Item_Rating"
             @before-rate="
               (value) => {
-                if (store_playlist_list_info.playlist_Menu_Item_Rating == 1) {
+                if (usePlaylistStore().playlist_Menu_Item_Rating == 1) {
                   before_rating = true
                 }
               }
@@ -1682,21 +1680,21 @@ onBeforeUnmount(() => {
             @after-rate="
               (value) => {
                 if (
-                  store_playlist_list_info.playlist_Menu_Item_Rating == 1 &&
+                  usePlaylistStore().playlist_Menu_Item_Rating == 1 &&
                   before_rating == true
                 ) {
                   after_rating = true
                   before_rating = false
                 }
-                handleItemClick_Rating(store_playlist_list_info.playlist_Menu_Item_Id + '-' + value)
+                handleItemClick_Rating(usePlaylistStore().playlist_Menu_Item_Id + '-' + value)
                 if (after_rating) {
                   if (
-                    store_playlist_list_info.playlist_Menu_Item_Rating ===
+                    usePlaylistStore().playlist_Menu_Item_Rating ===
                     store_player_audio_info.this_audio_song_id
                   ) {
                     store_player_audio_info.this_audio_song_rating = 0
                   }
-                  store_playlist_list_info.playlist_Menu_Item_Rating = 0
+                  usePlaylistStore().playlist_Menu_Item_Rating = 0
                   after_rating = false
                 }
               }

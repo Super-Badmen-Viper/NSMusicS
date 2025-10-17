@@ -33,9 +33,9 @@ import { store_player_appearance } from '@/views/view_app/page/page_player/store
 import { store_player_sound_effects } from '@/views/view_app/page/page_player/store/store_player_sound_effects'
 import { store_player_sound_speed } from '@/views/view_app/page/page_player/store/store_player_sound_speed'
 import { store_player_sound_more } from '@/views/view_app/page/page_player/store/store_player_sound_more'
-import { store_playlist_appearance } from '@/views/view_app/components/player_list/store/store_playlist_appearance'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
-import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+import { store_server_login_logic } from '@/views/view_server/page_login/store/store_server_login_logic'
+import { store_server_model_statistics } from '@/data/data_stores/server_api_stores/server_api_core/model/model_statistics'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
@@ -52,6 +52,7 @@ import { store_general_fetch_album_list } from '@/data/data_stores/server_api_st
 import { store_general_fetch_artist_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_artist/store_general_fetch_artist_list'
 import { store_view_media_cue_page_logic } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_logic'
 import { store_view_media_cue_page_info } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_info'
+import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
 
 ////// BrowserWindow
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
@@ -511,7 +512,7 @@ const Init_page_songlists_statistic_Data = () => {
     id: 'song_list_all_PlayList',
   })
   //////
-  store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.forEach((item: any) => {
+  usePlaylistStore().playlist_tracks_temporary_of_ALLLists.forEach((item: any) => {
     const temp_playlist: Play_List = {
       label: item.playlist.name,
       value: item.playlist.id,
@@ -825,13 +826,13 @@ const Init_page_artistlists_statistic_Data = () => {
 }
 ///// view of playlist
 watch(
-  () => store_playlist_list_logic.playlist_names_StartUpdate,
+  () => usePlaylistStore().playlist_names_StartUpdate,
   (newValue) => {
     if (newValue) {
       Init_page_songlists_statistic_Data()
       Init_page_cuelists_statistic_Data()
-      store_playlist_list_logic.playlist_names_StartUpdate = false
-      console.log('store_playlist_list_logic.playlist_names_StartUpdate')
+      usePlaylistStore().playlist_names_StartUpdate = false
+      console.log('usePlaylistStore().playlist_names_StartUpdate')
     }
   }
 )
@@ -841,7 +842,6 @@ import { openLink } from '@/utils/electron/openLink'
 const computed_i18n_Label_Update = computed(() => t('filter.recentlyUpdated'))
 
 ////
-import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
 import View_Edit_Tag from '@/views/view_app/drawer/View_Edit_Tag.vue'
 import View_Player_Effect from '@/views/view_app/drawer/View_Player_Effect.vue'
 import View_Mini_Music_Player from '@/views/view_app/page/page_player/View_Mini_Music_Player.vue'
@@ -851,8 +851,6 @@ const { locale } = useI18n({
   inheritLocale: true,
   useScope: 'global',
 })
-import { store_server_login_logic } from '@/views/view_server/page_login/store/store_server_login_logic'
-import { store_server_model_statistics } from '@/data/data_stores/server_api_stores/server_api_core/model/model_statistics'
 onMounted(() => {
   create_menuOptions_appBar()
 })
@@ -1364,7 +1362,8 @@ function fullScreen() {
     <n-config-provider :theme="darkTheme">
       <!-- right drwaer of music_playlist -->
       <n-drawer
-        v-model:show="store_playlist_appearance.playlist_show"
+        :show="usePlaylistStore().playlist_show"
+        @update:show="(value) => (usePlaylistStore().playlist_show = value)"
         :width="520"
         z-index="100"
         style="

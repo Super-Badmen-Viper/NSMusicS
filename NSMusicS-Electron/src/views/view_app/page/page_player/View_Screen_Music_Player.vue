@@ -698,8 +698,11 @@ import { store_system_configs_save } from '@/data/data_stores/local_system_store
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import Table_Album_Model_1_AlbumScroll from '@/views/view_app/page/page_player/components/Table_Album_Model_1_AlbumScroll.vue'
 import { ArrowsMaximize, ArrowsMinimize } from '@vicons/tabler'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
+
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+
 const clear_lottie_animationInstance = ref(false)
+
 const animationInstance_model_1_spectrum = ref<any>(null)
 const animationInstance_model_1_spectrum_copy = ref<any>(null)
 const animationInstance_model_1_wave = ref<any>(null)
@@ -1898,7 +1901,7 @@ onBeforeUnmount(() => {
                 <n-carousel-item
                   v-for="(
                     item, index
-                  ) in store_playlist_list_info.playlist_MediaFiles_temporary_carousel"
+                  ) in usePlaylistStore().playlist_MediaFiles_temporary_carousel"
                   :key="item.id"
                   style="width: 50vh; height: 50vh"
                 >

@@ -30,11 +30,14 @@ import { darkTheme, NAvatar, NConfigProvider, NIcon, NSlider, NSpace, NText } fr
 import { ref, watch, watchEffect, onMounted, computed, h } from 'vue'
 import { onBeforeUnmount } from 'vue'
 
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n({
   inheritLocale: true,
 })
+
 const computed_i18n_Label_ViewSetConfig_Cover_1 = computed(() =>
   t('nsmusics.view_player.view_seting.coverSquare_1')
 )
@@ -509,7 +512,7 @@ import { store_player_tag_modify } from '@/views/view_app/page/page_player/store
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
+
 
 ///
 const show_mini_album_model = ref(false)
@@ -538,7 +541,7 @@ const handleItemClick_Favorite = (id: any, favorite: boolean) => {
       (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
     )
     const item_playlist: Media_File | undefined =
-      store_playlist_list_info.playlist_MediaFiles_temporary.find(
+      usePlaylistStore().playlist_MediaFiles_temporary.find(
         (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
       )
     if (item_file !== undefined) item_file.favorite = !favorite
@@ -553,7 +556,7 @@ const handleItemClick_Rating = (id: any, rating: any) => {
     (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
   )
   const item_playlist: Media_File | undefined =
-    store_playlist_list_info.playlist_MediaFiles_temporary.find(
+    usePlaylistStore().playlist_MediaFiles_temporary.find(
       (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
     )
   if (item_file !== undefined) item_file.rating = rating

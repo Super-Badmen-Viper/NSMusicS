@@ -2,10 +2,11 @@ import { reactive, watch } from 'vue'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
+
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
-import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
+
 import { store_system_configs_load } from '@/data/data_stores/local_system_stores/store_system_configs_load'
 import { User_Authorization_ApiWebService_of_ND } from '@/data/data_configs/navidrome_api/services_web/user_authorization/index_service'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
@@ -138,8 +139,8 @@ export const store_server_user_model = reactive({
         await store_player_audio_logic.init_player()
       } catch {}
       // Refresh Playlist(Local / Server)
-      await store_playlist_list_logic.reset_data()
-      store_playlist_list_info.playlist_MediaFiles_temporary = []
+      await usePlaylistStore().reset_data()
+      usePlaylistStore().playlist_MediaFiles_temporary = []
       // Refresh Router Data
       store_router_data_logic.reset_data()
       //

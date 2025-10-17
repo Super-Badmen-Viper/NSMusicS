@@ -317,7 +317,7 @@ async function update_server_config_of_current_user_of_sqlite(value: any, select
   // Close navidrome random model
   store_server_user_model.random_play_model = false
   // Refresh Playlist(Local / Server)
-  store_playlist_list_info.playlist_MediaFiles_temporary = []
+  usePlaylistStore().playlist_MediaFiles_temporary = []
   await store_player_audio_logic.player.pause()
   store_player_audio_info.reset_data()
   // Refresh play_order(Local / Server)
@@ -531,7 +531,7 @@ const model_local_step_2 = computed(() => t('nsmusics.view_page.selectLibrary'))
 //////
 import { store_local_data_select_logic } from '@/data/data_stores/local_app_stores/local_data_select/store_local_data_select_logic'
 import { Library_ApiService_of_Je } from '@/data/data_configs/jellyfin_api/services_web/Library/index_service'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 </script>

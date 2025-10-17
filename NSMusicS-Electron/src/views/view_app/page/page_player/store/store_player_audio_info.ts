@@ -1,11 +1,9 @@
 import { reactive, watch } from 'vue'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_player_appearance } from './store_player_appearance'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
 import { store_system_configs_load } from '@/data/data_stores/local_system_stores/store_system_configs_load'
 import { store_local_data_set_albumInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_albumInfo'
-import { store_playlist_appearance } from '@/views/view_app/components/player_list/store/store_playlist_appearance'
-import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 import { store_player_tag_modify } from './store_player_tag_modify'
 import error_album from '@/assets/img/error_album.jpg'
@@ -216,8 +214,8 @@ export const store_player_audio_info = reactive({
     }
     store_player_audio_info.this_audio_lyrics_loaded_complete = true
   },
-  set_carousel_index() {
-    const index = store_playlist_list_info.playlist_MediaFiles_temporary_carousel.findIndex(
+  async set_carousel_index() {
+    const index = usePlaylistStore().playlist_MediaFiles_temporary_carousel.findIndex(
       (item) => item.path === store_player_audio_info.this_audio_file_path
     )
     store_player_audio_info.this_audio_Index_of_play_list_carousel = index != -1 ? index : 0
@@ -242,20 +240,20 @@ watch(
         }
         if (!store_player_appearance.player_mode_of_lock_playlist) {
           if (!store_system_configs_load.app_configs_loading) {
-            if (!store_playlist_appearance.playlist_show) {
-              if (store_playlist_list_logic.media_page_handleItemDbClick) {
-                if (!store_server_user_model.random_play_model) {
-                  store_general_fetch_player_list.fetchData_PlayList(false)
-                }
-              }
+        if (!usePlaylistStore().playlist_show) {
+          if (usePlaylistStore().media_page_handleItemDbClick) {
+            if (!store_server_user_model.random_play_model) {
+              store_general_fetch_player_list.fetchData_PlayList(false)
             }
           }
+        }
+      }
         }
       }
       store_view_media_page_info.media_Files_temporary.forEach((item: any, index: number) => {
         item.playing = item.id === store_player_audio_info.this_audio_song_id
       })
-      store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+      usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
         item.playing = item.id === store_player_audio_info.this_audio_song_id
       })
 
@@ -374,6 +372,6 @@ watch(
 watch(
   () => store_player_audio_info.this_audio_Index_of_play_list,
   (newValue) => {
-    store_playlist_list_info.reset_carousel()
+    usePlaylistStore().reset_carousel()
   }
 )

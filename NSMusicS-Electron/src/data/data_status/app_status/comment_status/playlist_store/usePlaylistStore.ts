@@ -16,13 +16,19 @@ interface Play_List {
 }
 
 // 导入依赖
-import { store_system_configs_save } from '@/data/data_pinia_stores/local_system_stores/store_system_configs_save'
+import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
-import { store_server_user_model } from '@/data/data_pinia_stores/server_configs_stores/store_server_user_model'
+import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { Get_LocalSqlite_PlaylistInfo } from '@/data/data_repository/app_repository/LocalSqlite_Get_PlaylistInfo'
-import { store_general_model_player_list } from '@/data/data_pinia_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
+import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
+import {
+  store_general_fetch_media_list
+} from "../../../../data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list";
+import {
+  store_general_fetch_media_cue_list
+} from "../../../../data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list";
 
 export const usePlaylistStore = defineStore('playlist', () => {
   // 外观状态
@@ -174,6 +180,24 @@ export const usePlaylistStore = defineStore('playlist', () => {
   }
 
   // 监听器
+  watch(
+      () => {playlist_show.value},
+      (newValue) => {
+        if (newValue) {
+          store_general_fetch_media_list._load_model = 'play'
+          store_general_fetch_media_cue_list._load_model = 'play'
+          const index = playlist_MediaFiles_temporary.value.length / 30
+          if (index > 0) {
+            store_general_fetch_player_list._start = 30 * index - 30
+            store_general_fetch_player_list._end = 30 * index
+          }
+        } else {
+          store_general_fetch_media_list._load_model = 'search'
+          store_general_fetch_media_cue_list._load_model = 'search'
+        }
+      }
+  )
+
   watch(
     () => playlist_MediaFiles_temporary.value,
     async () => {

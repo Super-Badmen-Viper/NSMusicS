@@ -3,7 +3,9 @@ import { store_player_audio_info } from '@/views/view_app/page/page_player/store
 import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { NSlider } from 'naive-ui'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
+
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+
 function getAssetImage(firstImage: string) {
   return new URL(firstImage, import.meta.url).href
 }
@@ -68,7 +70,7 @@ const nextSlideStyle = computed(() => {
       }"
     >
       <n-carousel-item
-        v-for="(item, index) in store_playlist_list_info.playlist_MediaFiles_temporary_carousel"
+        v-for="(item, index) in usePlaylistStore().playlist_MediaFiles_temporary_carousel"
         :key="index"
         style="width: 40vh; height: 40vh"
       >

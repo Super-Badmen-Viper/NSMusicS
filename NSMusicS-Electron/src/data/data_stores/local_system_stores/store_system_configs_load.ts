@@ -6,8 +6,7 @@ import { store_system_configs_info } from '@/data/data_stores/local_system_store
 import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
-import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
@@ -481,7 +480,7 @@ export const store_system_configs_load = reactive({
 
       try {
         /// playlist configs
-        await store_playlist_list_logic.reset_data()
+        await usePlaylistStore().reset_data()
         /// player
         store_player_audio_logic.play_order =
           '' + system_Configs_Read.app_Configs.value['play_order']
@@ -603,20 +602,20 @@ export const store_system_configs_load = reactive({
       try {
         // Golang // NineSong流媒体模块未完成开发前，不开放回放功能(恢复上次播放数据)
         if (isElectron) {
-          store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
+          usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds =
             system_Configs_Read.playlist_File_Configs.value
           const get_PlaylistInfo_From_LocalSqlite = new Get_LocalSqlite_PlaylistInfo()
           if (store_server_user_model.model_server_type_of_local) {
-            store_playlist_list_info.playlist_MediaFiles_temporary =
+            usePlaylistStore().playlist_MediaFiles_temporary =
               get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Media_File_Id_of_list(
-                store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds
+                usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds
               )
           } else if (store_server_user_model.model_server_type_of_web) {
-            store_playlist_list_info.playlist_MediaFiles_temporary =
+            usePlaylistStore().playlist_MediaFiles_temporary =
               get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Media_File_of_list()
           }
           // Get Play_Id
-          const media_file = store_playlist_list_info.playlist_MediaFiles_temporary.find(
+          const media_file = usePlaylistStore().playlist_MediaFiles_temporary.find(
             (row) => row.id === store_player_audio_info.this_audio_song_id
           )
           if (media_file) {

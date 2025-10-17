@@ -8,9 +8,9 @@ import { Set_LocalSqlite_MediaInfo } from '@/data/data_repository/app_repository
 import { store_local_data_set_albumInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_albumInfo'
 import { store_local_data_set_artistInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_artistInfo'
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
-import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
+
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { isElectron } from '@/utils/electron/isElectron'
 
@@ -562,7 +562,7 @@ export class Set_Navidrome_ALL_Data_To_LocalSqlite {
 
       db.exec('DELETE FROM server_playlist')
       db.exec('DELETE FROM server_playlist_tracks')
-      store_playlist_list_info.playlist_tracks_temporary_of_ALLLists = []
+      usePlaylistStore().playlist_tracks_temporary_of_ALLLists = []
       if (playlists != null) {
         for (const playlist of playlists) {
           const sqlite_playlists = {
@@ -604,7 +604,7 @@ export class Set_Navidrome_ALL_Data_To_LocalSqlite {
             playlist_tracks.push(sqlite_song)
             this.insertData(db, 'server_playlist_tracks', sqlite_song)
           }
-          store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.push({
+          usePlaylistStore().playlist_tracks_temporary_of_ALLLists.push({
             playlist: {
               label: playlist.name,
               value: playlist.id,
@@ -628,11 +628,11 @@ export class Set_Navidrome_ALL_Data_To_LocalSqlite {
         }
       }
       db.close()
-      store_playlist_list_logic.playlist_names_StartUpdate = true
-      store_playlist_list_info.playlist_names_ALLLists = []
-      store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.forEach((item: any) => {
+      usePlaylistStore().playlist_names_StartUpdate = true
+      usePlaylistStore().playlist_names_ALLLists = []
+      usePlaylistStore().playlist_tracks_temporary_of_ALLLists.forEach((item: any) => {
         if (item.playlist && item.playlist.name && item.playlist.id) {
-          store_playlist_list_info.playlist_names_ALLLists.push({
+          usePlaylistStore().playlist_names_ALLLists.push({
             label: item.playlist.name,
             value: item.playlist.id,
           })

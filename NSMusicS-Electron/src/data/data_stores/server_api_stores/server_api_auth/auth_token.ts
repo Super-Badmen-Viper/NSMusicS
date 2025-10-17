@@ -2,7 +2,8 @@ import { reactive } from 'vue'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
+
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { Users_ApiService_of_Je } from '@/data/data_configs/jellyfin_api/services_web/Users/index_service'
 import { Library_ApiService_of_Je } from '@/data/data_configs/jellyfin_api/services_web/Library/index_service'
@@ -151,7 +152,7 @@ export const store_server_auth_token = reactive({
     }
 
     // 更新 playlist_MediaFiles_temporary
-    store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any) => {
+    usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any) => {
       if (item.medium_image_url) {
         item.medium_image_url = updateUrl(item.medium_image_url)
       }

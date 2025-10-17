@@ -34,7 +34,9 @@ import error_artist from '@/assets/img/error_artist.jpg'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 ////// changed_data write to sqlite
 import { store_local_data_set_artistInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_artistInfo'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
+
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 ////// right menu
@@ -55,6 +57,8 @@ import { MultipleStopOutlined } from '@vicons/material'
 const { t } = useI18n({
   inheritLocale: true,
 })
+
+
 
 ////// artistlist_view page_layout gridItems
 const item_artist = ref(170)
@@ -528,7 +532,7 @@ const Play_this_artist_all_media_list_click = async (artist_id: string) => {
   }
   console.log('play_this_artist_song_list：' + artist_id)
   await store_general_fetch_artist_list.fetchData_This_Artist_MediaList(artist_id)
-  store_playlist_list_info.reset_carousel()
+  usePlaylistStore().reset_carousel()
 }
 
 const handleItemClick_Favorite = (id: any, favorite: boolean) => {
@@ -711,11 +715,12 @@ async function update_playlist_addArtist(id: any, playlist_id: any) {
   }
 }
 async function menu_item_add_to_playlist_end() {
+  
   await store_general_fetch_media_list.fetchData_Media_Find_This_Artist(
-    store_playlist_list_info.playlist_Menu_Item_Id
+    usePlaylistStore().playlist_Menu_Item_Id
   )
   const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-    (item: Media_File) => item.artist_id === store_playlist_list_info.playlist_Menu_Item_Id
+    (item: Media_File) => item.artist_id === usePlaylistStore().playlist_Menu_Item_Id
   )
 
   store_view_media_page_info.media_Files_temporary = []
@@ -723,11 +728,11 @@ async function menu_item_add_to_playlist_end() {
   for (let item of matchingItems) {
     const newItem: any = JSON.parse(JSON.stringify(item))
     newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
-    store_playlist_list_info.playlist_MediaFiles_temporary.push(newItem)
-    store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id)
+    usePlaylistStore().playlist_MediaFiles_temporary.push(newItem)
+    usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id)
   }
 
-  store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+  usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
     item.absoluteIndex = index
   })
   store_system_configs_save.save_system_playlist_item_id_config()
@@ -735,15 +740,15 @@ async function menu_item_add_to_playlist_end() {
 }
 async function menu_item_add_to_playlist_next() {
   await store_general_fetch_media_list.fetchData_Media_Find_This_Artist(
-    store_playlist_list_info.playlist_Menu_Item_Id
+    usePlaylistStore().playlist_Menu_Item_Id
   )
   const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-    (item: Media_File) => item.artist_id === store_playlist_list_info.playlist_Menu_Item_Id
+    (item: Media_File) => item.artist_id === usePlaylistStore().playlist_Menu_Item_Id
   )
 
   store_view_media_page_info.media_Files_temporary = []
 
-  const index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
+  const index = usePlaylistStore().playlist_MediaFiles_temporary.findIndex(
     (item: any) => item.id === store_player_audio_info.this_audio_song_id
   )
 
@@ -751,15 +756,15 @@ async function menu_item_add_to_playlist_next() {
     matchingItems.forEach((item: Media_File, i: number) => {
       const newItem = JSON.parse(JSON.stringify(item))
       newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
-      store_playlist_list_info.playlist_MediaFiles_temporary.splice(index + 1 + i, 0, newItem)
-      store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.splice(
+      usePlaylistStore().playlist_MediaFiles_temporary.splice(index + 1 + i, 0, newItem)
+      usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.splice(
         index + 1 + i,
         0,
         newItem.id
       )
     })
 
-    store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+    usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
       item.absoluteIndex = index
     })
     store_system_configs_save.save_system_playlist_item_id_config()
@@ -771,7 +776,7 @@ async function menu_item_add_to_playlist_next() {
 function menu_item_edit_selected_media_tags() {
   store_player_tag_modify.player_show_tag_kind = 'artist'
   const item: Album | undefined = store_view_artist_page_info.artist_Files_temporary.find(
-    (artist: Album) => artist.id === store_playlist_list_info.playlist_Menu_Item_Id
+    (artist: Album) => artist.id === usePlaylistStore().playlist_Menu_Item_Id
   )
   if (item != undefined && item != 'undefined') {
     store_player_tag_modify.player_current_artist_id = item.id
@@ -1208,8 +1213,8 @@ onBeforeUnmount(() => {
             v-contextmenu:contextmenu
             @contextmenu.prevent="
               () => {
-                store_playlist_list_info.playlist_Menu_Item = item
-                store_playlist_list_info.playlist_Menu_Item_Id = item.id
+                usePlaylistStore().playlist_Menu_Item = item
+                usePlaylistStore().playlist_Menu_Item_Id = item.id
               }
             "
           >
@@ -1395,10 +1400,10 @@ onBeforeUnmount(() => {
       >
         <v-contextmenu-submenu :title="menu_item_add_to_songlist">
           <v-contextmenu-item
-            v-for="n in store_playlist_list_info.playlist_names_ALLLists"
+            v-for="n in usePlaylistStore().playlist_names_ALLLists"
             :key="n.value"
             @click="
-              update_playlist_addArtist(store_playlist_list_info.playlist_Menu_Item_Id, n.value)
+              update_playlist_addArtist(usePlaylistStore().playlist_Menu_Item_Id, n.value)
             "
           >
             {{ n.label }}

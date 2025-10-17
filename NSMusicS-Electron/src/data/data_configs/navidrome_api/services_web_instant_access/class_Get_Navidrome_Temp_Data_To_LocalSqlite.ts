@@ -11,13 +11,13 @@ import { Media_Lists_ApiWebService_of_ND } from '../services_web/page_lists/song
 import { Playlists_ApiService_of_ND } from '../services_normal/playlists/index_service'
 import { Album$Medias_Lists_ApiService_of_ND } from '../services_normal/album$songs_lists/index_service'
 import { Browsing_ApiService_of_ND } from '../services_normal/browsing/index_service'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { Media_Retrieval_ApiService_of_ND } from '../services_normal/media_retrieval/index_service'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
-import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
+
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
 
@@ -343,7 +343,7 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
           console.error('警告，获取的Media项存在重复，服务端的查询业务存在问题')
         }
       } else {
-        const existingSong = store_playlist_list_info.playlist_MediaFiles_temporary.find(
+        const existingSong = usePlaylistStore().playlist_MediaFiles_temporary.find(
           (item) => item.id === songlist[0].id
         )
         if (existingSong) {
@@ -362,7 +362,7 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
       const last_index =
         store_general_fetch_media_list._load_model === 'search'
           ? store_view_media_page_info.media_Files_temporary.length
-          : store_playlist_list_info.playlist_MediaFiles_temporary.length
+          : usePlaylistStore().playlist_MediaFiles_temporary.length
       store_view_media_page_info.media_File_metadata = []
       songlist.map(async (song: any, index: number) => {
         const lyrics = this.convertToLRC(song.lyrics)
@@ -445,14 +445,14 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
           store_view_media_page_info.media_File_metadata.push(song)
           store_view_media_page_info.media_Files_temporary.push(newsong)
         } else {
-          store_playlist_list_info.playlist_MediaFiles_temporary.push({
+          usePlaylistStore().playlist_MediaFiles_temporary.push({
             ...newsong,
             play_id: newsong.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
           })
         }
       })
       if (store_general_fetch_media_list._load_model === 'play') {
-        store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
+        usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds =
           store_view_media_page_info.media_Files_temporary.map((item) => item.id)
         store_system_configs_save.save_system_playlist_item_id_config()
       }
@@ -710,26 +710,27 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
             '&v=1.12.0&c=nsmusics&f=json&id=' +
             song.id,
         }
-        store_playlist_list_info.playlist_MediaFiles_temporary.push({
+        usePlaylistStore().playlist_MediaFiles_temporary.push({
           ...new_song,
           play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
         })
         if (!store_server_user_model.random_play_model_search) {
           if (index === songlist.length - 1) {
             const index = store_server_user_model.random_play_model_add
-              ? store_playlist_list_info.playlist_MediaFiles_temporary.length - size
+              ? usePlaylistStore().playlist_MediaFiles_temporary.length - size
               : 0
-            const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[index]
+            const media_file = usePlaylistStore().playlist_MediaFiles_temporary[index]
             await store_player_audio_logic.update_current_media_info(media_file, index)
-            store_playlist_list_logic.media_page_handleItemDbClick = false
+            usePlaylistStore().media_page_handleItemDbClick = false
             store_player_audio_info.this_audio_restart_play = true
             //
             store_server_user_model.random_play_model_add = false
           }
         }
       })
-      store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
-        store_playlist_list_info.playlist_MediaFiles_temporary.map((item) => item.id)
+      
+      usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds =
+        usePlaylistStore().playlist_MediaFiles_temporary.map((item) => item.id)
       store_system_configs_save.save_system_playlist_item_id_config()
     }
   }

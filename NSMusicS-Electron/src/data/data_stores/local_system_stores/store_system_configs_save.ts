@@ -9,7 +9,7 @@ import { store_player_appearance } from '@/views/view_app/page/page_player/store
 import { Player_Configs_of_Audio_Info } from '@/data/data_models/app_models/app_Configs/class_Player_Configs_of_Audio_Info'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
@@ -330,7 +330,7 @@ export const store_system_configs_save = reactive({
           const system_Configs_Write = new Write_LocalSqlite_System_Configs()
           system_Configs_Write.system_playlist_item_id_config(
             db,
-            store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds
+            usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds
           )
         } else {
           db = require('better-sqlite3')(store_system_configs_info.navidrome_db)
@@ -340,7 +340,7 @@ export const store_system_configs_save = reactive({
           const system_Configs_Write = new Write_LocalSqlite_System_Configs()
           system_Configs_Write.system_playlist_item_config(
             db,
-            store_playlist_list_info.playlist_MediaFiles_temporary
+            usePlaylistStore().playlist_MediaFiles_temporary
           )
         }
         await this.save_system_config_of_App_Configs()
@@ -370,7 +370,7 @@ export const store_system_configs_save = reactive({
         'cue_track_count',
         'cue_track_show',
       ])
-      const data = store_playlist_list_info.playlist_MediaFiles_temporary
+      const data = usePlaylistStore().playlist_MediaFiles_temporary
         .filter((item) => item.id && !excludedFields.has('id'))
         .map((item, index) => ({
           ID: this.generateMockObjectId(),

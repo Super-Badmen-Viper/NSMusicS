@@ -4,7 +4,7 @@ import { ChevronLeft16Filled, ChevronRight16Filled } from '@vicons/fluent'
 ////// this_view views_components of navie ui
 import { ref, onMounted, computed } from 'vue'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 
 ////// scrollbar of playlist_view
@@ -23,7 +23,24 @@ onMounted(() => {
 import error_album from '@/assets/img/error_album.jpg'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 const errorHandled = ref(new Map())
+
+// 创建包装方法以便在模板中使用
+const openDragSort = () => {
+  
+  usePlaylistStore().menu_item_open_drag_sort();
+};
+
+const setMenuItemId = (id) => {
+  
+  usePlaylistStore().playlist_Menu_Item_Id = id;
+};
+
+const closeDragSort = () => {
+  
+  usePlaylistStore().playlist_DragSort_Model = false;
+};
 const handleImageError = async (item: any) => {
+
   let result_src = error_album
   if (errorHandled.value.has(item.id)) {
     item.medium_image_url = result_src
@@ -59,7 +76,7 @@ const { t } = useI18n({
 
 //////
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
-import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
+
 import { NIcon, useMessage, useThemeVars } from 'naive-ui'
 const message = useMessage()
 const themeVars = useThemeVars()
@@ -84,17 +101,17 @@ async function update_playlist_addMediaFile(id: any, playlist_id: any) {
 }
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'))
 function menu_item_remove_to_playlist_current() {
-  store_playlist_list_info.playlist_MediaFiles_temporary =
-    store_playlist_list_info.playlist_MediaFiles_temporary.filter(
-      (mediaFile: Media_File) => mediaFile.id !== store_playlist_list_info.playlist_Menu_Item_Id
+  usePlaylistStore().playlist_MediaFiles_temporary =
+    usePlaylistStore().playlist_MediaFiles_temporary.filter(
+      (mediaFile: Media_File) => mediaFile.id !== usePlaylistStore().playlist_Menu_Item_Id
     )
 
-  store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
-    store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.filter(
-      (mediaId: string) => mediaId !== store_playlist_list_info.playlist_Menu_Item_Id
+  usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds =
+    usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.filter(
+      (mediaId: string) => mediaId !== usePlaylistStore().playlist_Menu_Item_Id
     )
 
-  store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+  usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
     item.absoluteIndex = index
   })
 
@@ -103,28 +120,28 @@ function menu_item_remove_to_playlist_current() {
   contextmenu.value.hide()
 }
 function menu_item_move_to_playlist_start() {
-  const item: Media_File | undefined = store_playlist_list_info.playlist_MediaFiles_temporary.find(
-    (mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id
+  const item: Media_File | undefined = usePlaylistStore().playlist_MediaFiles_temporary.find(
+    (mediaFile: Media_File) => mediaFile.id === usePlaylistStore().playlist_Menu_Item_Id
   )
   if (item != undefined && item != 'undefined') {
-    const index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
+    const index = usePlaylistStore().playlist_MediaFiles_temporary.findIndex(
       (mediaFile: Media_File) => mediaFile.id === item.id
     )
     if (index !== -1) {
-      store_playlist_list_info.playlist_MediaFiles_temporary.splice(index, 1)
+      usePlaylistStore().playlist_MediaFiles_temporary.splice(index, 1)
     }
 
     const mediaIdIndex =
-      store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.indexOf(item.id)
+      usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.indexOf(item.id)
     if (mediaIdIndex !== -1) {
-      store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.splice(mediaIdIndex, 1)
+      usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.splice(mediaIdIndex, 1)
     }
 
-    store_playlist_list_info.playlist_MediaFiles_temporary.unshift(item)
+    usePlaylistStore().playlist_MediaFiles_temporary.unshift(item)
 
-    store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.unshift(item.id)
+    usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.unshift(item.id)
 
-    store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+    usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
       item.absoluteIndex = index
     })
 
@@ -134,28 +151,28 @@ function menu_item_move_to_playlist_start() {
   }
 }
 function menu_item_move_to_playlist_end() {
-  const item: Media_File | undefined = store_playlist_list_info.playlist_MediaFiles_temporary.find(
-    (mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id
+  const item: Media_File | undefined = usePlaylistStore().playlist_MediaFiles_temporary.find(
+    (mediaFile: Media_File) => mediaFile.id === usePlaylistStore().playlist_Menu_Item_Id
   )
   if (item != undefined && item != 'undefined') {
-    const index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
+    const index = usePlaylistStore().playlist_MediaFiles_temporary.findIndex(
       (mediaFile: Media_File) => mediaFile.id === item.id
     )
     if (index !== -1) {
-      store_playlist_list_info.playlist_MediaFiles_temporary.splice(index, 1)
+      usePlaylistStore().playlist_MediaFiles_temporary.splice(index, 1)
     }
 
     const mediaIdIndex =
-      store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.indexOf(item.id)
+      usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.indexOf(item.id)
     if (mediaIdIndex !== -1) {
-      store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.splice(mediaIdIndex, 1)
+      usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.splice(mediaIdIndex, 1)
     }
 
-    store_playlist_list_info.playlist_MediaFiles_temporary.push(item)
+    usePlaylistStore().playlist_MediaFiles_temporary.push(item)
 
-    store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.push(item.id)
+    usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.push(item.id)
 
-    store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+    usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
       item.absoluteIndex = index
     })
 
@@ -166,19 +183,19 @@ function menu_item_move_to_playlist_end() {
 }
 //////
 function onChange() {
-  store_playlist_list_info.playlist_MediaFiles_temporary_Sort_Items.forEach(
+  usePlaylistStore().playlist_MediaFiles_temporary_Sort_Items.forEach(
     (item: any, index: number) => {
-      item.absoluteIndex = index + store_playlist_list_info.playlist_Sort_StartIndex
+      item.absoluteIndex = index + usePlaylistStore().playlist_Sort_StartIndex
     }
   )
-  store_playlist_list_info.menu_item_reinsert_drag_sort()
+  usePlaylistStore().menu_item_reinsert_drag_sort()
 }
 
 //////
 const isScrolling = ref(false)
 const onScrollEnd = async () => {
   if (isScrolling.value) return
-  if (store_playlist_list_info.playlist_MediaFiles_temporary.length < 30) return
+  if (usePlaylistStore().playlist_MediaFiles_temporary.length < 30) return
   isScrolling.value = true
   if (store_server_user_model.model_server_type_of_web) {
     if (!store_server_user_model.random_play_model) {
@@ -220,28 +237,28 @@ const onScrollEnd = async () => {
 }
 
 const handleDoubleTap = (item: any, index: number) => {
-  store_playlist_list_logic.handleItemDbClick(item, index)
+  usePlaylistStore().handleItemDbClick(item, index)
 }
 
 onMounted(() => {
-  store_playlist_list_info.playlist_DragSort_Model = false
+  usePlaylistStore().playlist_DragSort_Model = false
 })
 </script>
 <template>
   <n-space vertical :size="12">
     <div class="dynamic-scroller-demo-playlist">
       <v-contextmenu
-        v-if="!store_playlist_list_info.playlist_DragSort_Model"
+        v-if="!usePlaylistStore().playlist_DragSort_Model"
         ref="contextmenu"
         class="v-contextmenu-item v-contextmenu-item--hover"
         style="z-index: 9999; position: absolute"
       >
         <v-contextmenu-submenu :title="menu_item_add_to_songlist">
           <v-contextmenu-item
-            v-for="n in store_playlist_list_info.playlist_names_ALLLists"
+            v-for="n in usePlaylistStore().playlist_names_ALLLists"
             :key="n.value"
             @click="
-              update_playlist_addMediaFile(store_playlist_list_info.playlist_Menu_Item_Id, n.value)
+              update_playlist_addMediaFile(usePlaylistStore().playlist_Menu_Item_Id, n.value)
             "
           >
             {{ n.label }}
@@ -259,18 +276,18 @@ onMounted(() => {
           {{ $t('action.moveToBottom') }}
         </v-contextmenu-item>
         <v-contextmenu-divider />
-        <v-contextmenu-item @click="store_playlist_list_info.menu_item_open_drag_sort">
+        <v-contextmenu-item @click="openDragSort">
           {{ $t('nsmusics.view_page.drag_sort') }}
         </v-contextmenu-item>
       </v-contextmenu>
       <DynamicScroller
-        v-if="!store_playlist_list_info.playlist_DragSort_Model"
+        v-if="!usePlaylistStore().playlist_DragSort_Model"
         class="table-playlist"
         ref="scrollbar"
         :style="{
           width: store_system_configs_info.window_state_miniplayer_playlist ? '280px' : '488px',
         }"
-        :items="store_playlist_list_info.playlist_MediaFiles_temporary"
+        :items="usePlaylistStore().playlist_MediaFiles_temporary"
         key-field="play_id"
         :minItemSize="50"
         @scroll-end="onScrollEnd"
@@ -283,8 +300,8 @@ onMounted(() => {
             :data-active="active"
             class="message_playlist"
             v-contextmenu:contextmenu
-            @contextmenu.prevent="store_playlist_list_info.playlist_Menu_Item_Id = item.id"
-            @dblclick="store_playlist_list_logic.handleItemDbClick(item, index)"
+            @contextmenu.prevent="setMenuItemId(item.id)"
+            @dblclick="usePlaylistStore().handleItemDbClick(item, index)"
           >
             <!--            v-hammer:doubletap="() => handleDoubleTap(item, index)"-->
             <div
@@ -387,12 +404,12 @@ onMounted(() => {
           </DynamicScrollerItem>
         </template>
       </DynamicScroller>
-      <n-space v-if="store_playlist_list_info.playlist_DragSort_Model">
+      <n-space v-if="usePlaylistStore().playlist_DragSort_Model">
         <n-space style="height: calc(100vh - 212px)" vertical justify="space-between">
           <div></div>
           <n-button
             style="border-radius: 8px"
-            @click="store_playlist_list_info.playlist_DragSort_Model = false"
+            @click="closeDragSort"
           >
             <n-icon size="26" :depth="2">
               <ChevronLeft16Filled />
@@ -408,12 +425,12 @@ onMounted(() => {
           }"
           style="position: absolute; overflow-y: auto; overflow-x: hidden"
           @update="onChange"
-          v-model="store_playlist_list_info.playlist_MediaFiles_temporary_Sort_Items"
+          v-model="usePlaylistStore().playlist_MediaFiles_temporary_Sort_Items"
         >
           <div
             v-for="(
               item, index
-            ) in store_playlist_list_info.playlist_MediaFiles_temporary_Sort_Items"
+            ) in usePlaylistStore().playlist_MediaFiles_temporary_Sort_Items"
             :key="item.id"
             class="message_playlist"
           >

@@ -39,6 +39,8 @@ const { t } = useI18n({
   inheritLocale: true,
 })
 
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+
 import { useMessage } from 'naive-ui'
 const message = useMessage()
 const themeVars = useThemeVars()
@@ -101,7 +103,7 @@ const click_back_svg = () => {
     store_player_audio_logic.player_back_ChevronDouble =
       player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow
   }
-  store_playlist_list_info.reset_carousel()
+  usePlaylistStore().reset_carousel()
 }
 watch(
   () => store_player_appearance.player_show_click,
@@ -155,7 +157,7 @@ const this_audio_buffer_file = ref()
 const timer_this_audio_player = ref() // 延迟触发：接收大量数据时，仅触发最后一个值
 import { Howl } from '@/utils/howler/howlerLoader'
 import { clearCache } from '@/utils/electron/webFrame'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
+
 watch(
   () => this_audio_buffer_file.value,
   (newValue, oldValue) => {
@@ -377,8 +379,8 @@ const Set_MediaInfo_To_PlayCount = debounce(async (event, args) => {
     ) {
       if (
         store_player_audio_info.this_audio_song_id ===
-        store_playlist_list_info.playlist_MediaFiles_temporary[
-          store_playlist_list_info.playlist_MediaFiles_temporary.length - 1
+        usePlaylistStore().playlist_MediaFiles_temporary[
+          usePlaylistStore().playlist_MediaFiles_temporary.length - 1
         ]
       ) {
         store_server_data_set_albumInfo.Set_AlbumInfo_To_PlayCompleteCount_of_Album_Server(
@@ -393,8 +395,8 @@ const Set_MediaInfo_To_PlayCount = debounce(async (event, args) => {
     ) {
       if (
         store_player_audio_info.this_audio_song_id ===
-        store_playlist_list_info.playlist_MediaFiles_temporary[
-          store_playlist_list_info.playlist_MediaFiles_temporary.length - 1
+        usePlaylistStore().playlist_MediaFiles_temporary[
+          usePlaylistStore().playlist_MediaFiles_temporary.length - 1
         ]
       ) {
         store_server_data_set_artistInfo.Set_ArtistInfo_To_PlayCompleteCount_of_Artist_Server(
@@ -419,10 +421,10 @@ const Set_MediaInfo_To_PlayCount = debounce(async (event, args) => {
 
 const handleMpvStopped = debounce(async (event, args) => {
   store_player_audio_logic.player_is_play_ended = true
-  let index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
+  let index = usePlaylistStore().playlist_MediaFiles_temporary.findIndex(
     (item: any) => item.play_id === store_player_audio_info.this_audio_play_id
   )
-  let last_play = index >= store_playlist_list_info.playlist_MediaFiles_temporary.length - 1
+  let last_play = index >= usePlaylistStore().playlist_MediaFiles_temporary.length - 1
   if (last_play && store_player_audio_logic.play_order === 'playback-1') {
     await store_player_audio_logic.player.pause()
   } else {
@@ -545,17 +547,17 @@ watch(
 //   () => store_player_audio_info.this_audio_Index_of_play_list_carousel,
 //   cooldownDebounce(async (newValue, oldValue) => {
 //     if (store_player_audio_info.play_list_carousel_model) {
-//       const index = store_playlist_list_info.playlist_MediaFiles_temporary_carousel.findIndex(
+
 //         (item) => item.path === store_player_audio_info.this_audio_file_path
 //       )
 //       if (newValue !== index) {
 //         if (
 //           newValue === 0 &&
-//           oldValue === store_playlist_list_info.playlist_MediaFiles_temporary_carousel.length - 1
+
 //         ) {
 //           await play_skip_forward_click()
 //         } else if (
-//           newValue === store_playlist_list_info.playlist_MediaFiles_temporary_carousel.length - 1 &&
+
 //           oldValue === 0
 //         ) {
 //           await play_skip_back_click()
@@ -563,7 +565,7 @@ watch(
 //           newValue - oldValue < 0 ? await play_skip_back_click() : await play_skip_forward_click()
 //         }
 //       } else {
-//         newValue === store_playlist_list_info.playlist_MediaFiles_temporary_carousel.length
+
 //           ? await play_skip_forward_click()
 //           : await play_skip_back_click()
 //       }
@@ -609,13 +611,13 @@ const backpanel_order_click = () => {
   }
 }
 async function Play_Media_Order(model_num: string, increased: number) {
-  let last_index = store_playlist_list_info.playlist_MediaFiles_temporary.length
+  let last_index = usePlaylistStore().playlist_MediaFiles_temporary.length
   if (last_index > 0) {
-    let index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
+    let index = usePlaylistStore().playlist_MediaFiles_temporary.findIndex(
       (item: any) => item.play_id === store_player_audio_info.this_audio_play_id
     )
     if (index === -1) {
-      index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
+      index = usePlaylistStore().playlist_MediaFiles_temporary.findIndex(
         (item: any) => item.id === store_player_audio_info.this_audio_song_id
       )
     }
@@ -689,11 +691,12 @@ async function Play_Media_Order(model_num: string, increased: number) {
               await store_general_fetch_media_list.fetchData_Media_of_server_web_start()
               store_general_fetch_media_list._load_model = 'search'
 
-              const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[index]
+              
+              const media_file = usePlaylistStore().playlist_MediaFiles_temporary[index]
               await store_player_audio_logic.update_current_media_info(media_file, index)
               console.log(media_file)
 
-              store_playlist_list_logic.media_page_handleItemDbClick = false
+              usePlaylistStore().media_page_handleItemDbClick = false
               store_player_audio_info.this_audio_restart_play = true
             }
           } else if (index < 0) {
@@ -707,17 +710,18 @@ async function Play_Media_Order(model_num: string, increased: number) {
       if (!store_server_user_model.random_play_model || index < last_index) {
         if (!stop_play) {
           if (store_server_user_model.model_server_type_of_web) {
-            if (index >= store_playlist_list_info.playlist_MediaFiles_temporary.length) {
+            
+            if (index >= usePlaylistStore().playlist_MediaFiles_temporary.length) {
               store_general_fetch_media_list._load_model = 'play'
               await store_general_fetch_media_list.fetchData_Media_of_server_web_end()
               store_general_fetch_media_list._load_model = 'search'
             }
           }
-          const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[index]
+          const media_file = usePlaylistStore().playlist_MediaFiles_temporary[index]
           await store_player_audio_logic.update_current_media_info(media_file, index)
           console.log(media_file)
 
-          store_playlist_list_logic.media_page_handleItemDbClick = false
+          usePlaylistStore().media_page_handleItemDbClick = false
           store_player_audio_info.this_audio_restart_play = true
         }
       }
@@ -725,7 +729,7 @@ async function Play_Media_Order(model_num: string, increased: number) {
   }
 }
 async function begin_random_play_model() {
-  store_playlist_list_info.playlist_MediaFiles_temporary = []
+  usePlaylistStore().playlist_MediaFiles_temporary = []
   store_player_audio_logic.play_order = 'playback-4'
   if (store_server_users.server_select_kind === 'ninesong') {
     let get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
@@ -747,11 +751,11 @@ async function begin_random_play_model() {
     )
   }
   ///
-  const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[0]
+  const media_file = usePlaylistStore().playlist_MediaFiles_temporary[0]
   await store_player_audio_logic.update_current_media_info(media_file, 0)
   console.log(media_file)
   ///
-  store_playlist_list_logic.media_page_handleItemDbClick = false
+  usePlaylistStore().media_page_handleItemDbClick = false
   store_player_audio_info.this_audio_restart_play = true
 }
 
@@ -1045,7 +1049,7 @@ watch(
 
 ////// open playList
 const Set_Playlist_Show = () => {
-  store_playlist_appearance.playlist_show = !store_playlist_appearance.playlist_show
+  usePlaylistStore().playlist_show = !usePlaylistStore().playlist_show
 }
 ////// open sound effects
 const Set_Player_Show_Sound_effects = () => {
@@ -1081,11 +1085,9 @@ import { store_player_audio_logic } from '@/views/view_app/page/page_player/stor
 import { store_player_sound_effects } from '@/views/view_app/page/page_player/store/store_player_sound_effects'
 import { store_player_sound_speed } from '@/views/view_app/page/page_player/store/store_player_sound_speed'
 import { store_player_sound_more } from '@/views/view_app/page/page_player/store/store_player_sound_more'
-import { store_playlist_appearance } from '@/views/view_app/components/player_list/store/store_playlist_appearance'
-import { store_playlist_list_info } from '@/views/view_app/components/player_list/store/store_playlist_list_info'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
-import { store_playlist_list_logic } from '@/views/view_app/components/player_list/store/store_playlist_list_logic'
+
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { Audio_howler } from '@/data/data_models/app_models/song_Audio_Out/Audio_howler'
 import { Audio_node_mpv } from '@/data/data_models/app_models/song_Audio_Out/Audio_node_mpv'
@@ -1114,8 +1116,8 @@ const handleItemClick_Favorite = (id, favorite) => {
     const item_file: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find(
       (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
     )
-    const item_playlist: Media_File | undefined =
-      store_playlist_list_info.playlist_MediaFiles_temporary.find(
+  const item_playlist: Media_File | undefined =
+      usePlaylistStore().playlist_MediaFiles_temporary.find(
         (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
       )
     if (item_file !== undefined) item_file.favorite = !favorite
@@ -1130,7 +1132,7 @@ const handleItemClick_Rating = (id, rating) => {
     (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
   )
   const item_playlist: Media_File | undefined =
-    store_playlist_list_info.playlist_MediaFiles_temporary.find(
+    usePlaylistStore().playlist_MediaFiles_temporary.find(
       (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
     )
   if (item_file !== undefined) item_file.rating = rating
@@ -1889,7 +1891,7 @@ watch(
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-badge
-                :value="store_playlist_list_info.playlist_MediaFiles_temporary.length"
+                :value="usePlaylistStore().playlist_MediaFiles_temporary.length"
                 show-zero
                 :max="9999"
                 :offset="[-7, 3]"
