@@ -886,6 +886,7 @@ onMounted(async () => {
     console.error(e)
   }
   store_player_audio_logic.player_init_play = true
+  store_router_data_info.router_click = false
 })
 watch(
   () => store_system_configs_info.lang,

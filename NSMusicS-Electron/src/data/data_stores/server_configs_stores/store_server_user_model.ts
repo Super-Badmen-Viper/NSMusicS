@@ -125,6 +125,13 @@ export const store_server_user_model = reactive({
         //
         store_router_data_info.store_router_history_data_of_local = true
         store_router_data_info.store_router_history_data_of_web = false
+        //
+        store_view_media_page_logic.page_songlists_options_Sort_key = [
+          {
+            columnKey: String('id'),
+            order: String('ascend'),
+          },
+        ]
       }
       //
       try {

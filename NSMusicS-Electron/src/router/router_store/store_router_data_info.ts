@@ -8,6 +8,11 @@ import { store_system_configs_info } from '@/data/data_stores/local_system_store
 import { store_playlist_appearance } from '@/views/view_app/components/player_list/store/store_playlist_appearance'
 import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
 import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list'
+import {store_view_media_page_logic} from "../../views/view_app/page/page_media/store/store_view_media_page_logic";
+import {store_view_album_page_logic} from "../../views/view_app/page/page_album/store/store_view_album_page_logic";
+import {
+  store_view_media_cue_page_logic
+} from "../../views/view_app/page/page_media_cue/store/store_view_media_cue_page_logic";
 
 export const store_router_data_info = reactive({
   router: null,
@@ -40,8 +45,21 @@ watch(
       } else if (newValue === 'recommend') {
       } else if (newValue === 'tag') {
       } else if (newValue === 'media_cue') {
+        if (store_router_data_info.router_click) {
+          store_view_media_cue_page_logic.page_songlists_keyword = ''
+          store_view_media_cue_page_logic.page_songlists_keywordFilter = ''
+        }
         await store_general_fetch_media_cue_list.fetchData_Media()
       } else if (newValue === 'media') {
+        if (store_router_data_info.router_click) {
+          store_view_media_page_logic.page_songlists_keyword = ''
+          store_view_media_page_logic.page_songlists_keywordFilter = ''
+          //
+          store_general_fetch_media_list._artist_id = ''
+          store_general_fetch_media_list._album_id = ''
+          store_general_fetch_media_list._album_artist_id = ''
+          store_general_fetch_media_list._media_id = ''
+        }
         await store_general_fetch_media_list.fetchData_Media()
         /// Synchronize API data
         if (store_server_user_model.model_select === 'server') {
@@ -49,10 +67,14 @@ watch(
           await store_general_model_player_list.get_playlists_info()
         }
       } else if (newValue === 'album') {
+        if (store_router_data_info.router_click) {
+          store_view_album_page_logic.page_albumlists_keyword = ''
+        }
         await store_general_fetch_album_list.fetchData_Album()
       } else if (newValue === 'artist') {
         await store_general_fetch_artist_list.fetchData_Artist()
       }
+      store_router_data_info.router_click = false
     }
   }
 )

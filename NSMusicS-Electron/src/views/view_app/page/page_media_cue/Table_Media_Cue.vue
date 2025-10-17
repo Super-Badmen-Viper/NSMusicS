@@ -911,13 +911,6 @@ function Refresh_page_songlists_statistic() {
 }
 onMounted(() => {
   Refresh_page_songlists_statistic()
-  if (store_router_data_info.router_click) {
-    if (store_server_user_model.model_server_type_of_web) {
-      store_view_media_cue_page_logic.page_songlists_keyword = ''
-      input_search_InstRef.value?.clear()
-      store_view_media_cue_page_logic.page_songlists_keywordFilter = ''
-    }
-  }
   if (
     store_general_fetch_media_list._artist_id.length > 0 ||
     store_general_fetch_media_list._album_id.length > 0 ||

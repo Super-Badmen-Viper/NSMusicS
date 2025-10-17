@@ -973,16 +973,9 @@ function Refresh_page_albumlists_statistic() {
 }
 onMounted(() => {
   Refresh_page_albumlists_statistic()
-  if (store_router_data_info.router_click) {
-    if (store_server_user_model.model_server_type_of_web) {
-      input_search_InstRef.value?.clear()
-      bool_show_search_area.value = false
-      store_view_album_page_logic.page_albumlists_keyword = ''
-    }
-  } else {
-    bool_show_search_area.value = true
-  }
-  if (store_general_fetch_album_list._artist_id.length > 0) {
+  const { _artist_id } = store_general_fetch_album_list;
+  const hasMediaId = _artist_id.length > 0;
+  if (hasMediaId) {
     bool_show_search_area.value = true
   }
 })

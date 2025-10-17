@@ -469,21 +469,32 @@ const back_search_default = () => {
   }
 }
 onMounted(() => {
-  store_view_media_page_logic.page_songlists_input_search_Value =
-    store_view_media_page_logic.page_songlists_keyword
-  if (store_view_media_page_logic.page_songlists_input_search_Value.length > 0) {
-    store_view_media_page_logic.page_songlists_bool_show_search_area = true
-    bool_input_search = true
-  } else {
-    store_view_media_page_logic.page_songlists_bool_show_search_area = false
-    bool_input_search = false
+  // local
+  if (store_server_user_model.model_server_type_of_local){
+    if (store_view_media_page_logic.page_songlists_keywordFilter.length > 0) {
+      store_view_media_page_logic.page_songlists_bool_show_search_area = true;
+      bool_input_search = true;
+      return
+    }
   }
-
-  if (store_general_fetch_media_list._album_id.length > 0) {
-    store_view_media_page_logic.page_songlists_bool_show_search_area = true
-    bool_input_search = true
+  // server
+  const { _artist_id, _album_id, _album_artist_id } = store_general_fetch_media_list;
+  const hasMediaId = _artist_id.length > 0 || _album_id.length > 0 || _album_artist_id.length > 0;
+  if (hasMediaId) {
     store_view_media_page_logic.page_songlists_input_search_Value =
-      store_general_fetch_media_list._album_id
+        _album_id.length > 0 ? _album_id :
+            _artist_id.length > 0 ? _artist_id :
+                _album_artist_id;
+
+    store_view_media_page_logic.page_songlists_bool_show_search_area = true;
+    bool_input_search = true;
+  } else {
+    store_view_media_page_logic.page_songlists_input_search_Value =
+        store_view_media_page_logic.page_songlists_keyword;
+
+    const shouldShowSearch = store_view_media_page_logic.page_songlists_input_search_Value.length > 0;
+    store_view_media_page_logic.page_songlists_bool_show_search_area = shouldShowSearch;
+    bool_input_search = shouldShowSearch;
   }
 })
 // lineItems Filter To Favorite
@@ -553,7 +564,6 @@ const scrollTo = (value: number) => {
 onMounted(() => {
   if (store_server_user_model.model_server_type_of_local) {
     scrollTo(store_router_history_data_of_media.router_history_model_of_Media_scroller_value)
-  } else if (store_server_user_model.model_server_type_of_web) {
   }
   store_player_appearance.player_mode_of_medialist_from_external_import = false
 })
@@ -1468,20 +1478,6 @@ function Refresh_page_songlists_statistic() {
 }
 onMounted(() => {
   Refresh_page_songlists_statistic()
-  if (store_router_data_info.router_click) {
-    if (store_server_user_model.model_server_type_of_web) {
-      store_view_media_page_logic.page_songlists_keyword = ''
-      input_search_InstRef.value?.clear()
-      store_view_media_page_logic.page_songlists_keywordFilter = ''
-    }
-  }
-  if (
-    store_general_fetch_media_list._artist_id.length > 0 ||
-    store_general_fetch_media_list._album_id.length > 0 ||
-    store_general_fetch_media_list._album_artist_id.length > 0
-  ) {
-    store_view_media_page_logic.page_songlists_bool_show_search_area = true
-  }
 })
 const stopWatching_boolHandleItemClick_Favorite = watch(
   () => store_player_audio_logic.boolHandleItemClick_Favorite,

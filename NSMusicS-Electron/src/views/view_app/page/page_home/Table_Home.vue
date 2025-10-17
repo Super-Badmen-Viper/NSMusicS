@@ -445,6 +445,15 @@ const stopWatchSubscript = watch(
 onMounted(() => {
   startTimer()
   updateGridItems()
+  if (store_server_user_model.model_server_type_of_web) {
+    if (store_server_users.server_select_kind === 'navidrome') {
+      store_view_home_page_info.home_Files_temporary_type_select = 'album'
+    } else if (store_server_users.server_select_kind != 'ninesong')  {
+      store_view_home_page_info.home_Files_temporary_type_select = 'media'
+    }
+  } else {
+    store_view_home_page_info.home_Files_temporary_type_select = 'album'
+  }
 })
 
 onBeforeUnmount(() => {
