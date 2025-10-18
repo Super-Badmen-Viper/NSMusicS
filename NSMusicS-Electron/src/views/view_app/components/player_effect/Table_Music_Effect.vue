@@ -4,7 +4,7 @@ import { ref, computed, onMounted } from 'vue'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
-import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 
 // 导入 storeToRefs
 import { storeToRefs } from 'pinia'
@@ -17,7 +17,7 @@ const { t } = useI18n({
 
 // 在setup上下文中获取Store实例
 const playerAppearanceStore = usePlayerAppearanceStore()
-const playerAudioStore = usePlayerAudioStore()
+const playerSettingStore = usePlayerSettingStore()
 // 使用 storeToRefs 解构出所需的响应式属性
 const {
   player_use_lottie_animation,
@@ -41,7 +41,7 @@ const {
   player_replayGainClip,
   player_replayGainFallback,
   player_dolby,
-} = storeToRefs(playerAudioStore)
+} = storeToRefs(playerSettingStore)
 
 // store_router_data_logic 不是 Pinia store，所以直接使用
 const { clear_Memory_Model, clear_Equilibrium_Model, clear_UserExperience_Model } =
