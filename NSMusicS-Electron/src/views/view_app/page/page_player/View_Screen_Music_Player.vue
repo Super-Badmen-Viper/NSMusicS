@@ -47,6 +47,40 @@ import { store_player_view } from '@/views/view_app/page/page_player/store/store
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 
+// 在setup上下文中获取Store实例
+const playerAppearanceStore = usePlayerAppearanceStore()
+const playlistStore = usePlaylistStore()
+// 使用 storeToRefs 解构出所需的响应式属性
+const {
+  player_show,
+  player_show_complete,
+  player_show_hight_animation_value,
+  player_show_of_control_info,
+  player_collapsed_action_bar_of_Immersion_model,
+  player_show_click,
+  player_collapsed_album,
+  player_collapsed_skin,
+  player_lyric_fontSize,
+  player_lyric_fontSize_Num,
+  player_lyric_fontWeight,
+  player_lyric_color,
+  player_lyric_colorHover,
+  player_lyric_color_hidden_value,
+  player_lyric_color_hidden_coefficient,
+  player_theme_Styles_Selected,
+  player_background_model_num,
+  player_use_lottie_animation,
+  player_use_lyric_skip_forward,
+  player_use_background_filter_blur,
+  player_use_background_automatic_rotation,
+  player_use_background_repeat_fill,
+  player_use_playbar_auto_hide,
+  player_mode_of_medialist_from_external_import,
+  player_mode_of_lock_playlist,
+} = storeToRefs(playerAppearanceStore)
+
+const { playlist_MediaFiles_temporary_carousel } = storeToRefs(playlistStore)
+
 ////// lyircs load
 let unwatch = watch(
   () => store_player_audio_info.this_audio_lyrics_loaded_complete,
@@ -74,7 +108,7 @@ function load_lyrics() {
         }
       )
     }
-    handleAuto_fontSize(store_player_appearance.player_lyric_fontSize_Num)
+    handleAuto_fontSize(player_lyric_fontSize_Num.value)
     begin_lyrics_animation()
     try {
       setTimeout(() => {
@@ -150,36 +184,38 @@ function begin_lyrics_animation() {
           handleClear_Lyric_Color()
           lyrics_list_whell.value = false
           store_player_audio_logic.player_slider_click = false
-          const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info')
-          const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active')
-          let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2)
-          const index =
-            store_player_view.currentScrollIndex +
-            store_player_audio_info.this_audio_lyrics_info_line_num
-          scrollToItem(index)
-          for (let i = index - 16; i <= index + 16; i++) {
-            const colorValue = Math.max(
-              store_player_appearance.player_lyric_color_hidden_value -
-                (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient,
-              0
-            )
-            if (i < index) {
-              if (store_player_appearance.player_use_lyric_skip_forward) {
-                itemElements[i].style.color = 'transparent'
-              } else {
+          if (scrollbar.value) {
+            const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info')
+            const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active')
+            let color_hidden = player_lyric_color.value.slice(0, -2)
+            const index =
+              store_player_view.currentScrollIndex +
+              store_player_audio_info.this_audio_lyrics_info_line_num
+            scrollToItem(index)
+            for (let i = index - 16; i <= index + 16; i++) {
+              const colorValue = Math.max(
+                player_lyric_color_hidden_value.value -
+                  (index - i) * player_lyric_color_hidden_coefficient.value,
+                0
+              )
+              if (i < index) {
+                if (player_use_lyric_skip_forward.value) {
+                  itemElements[i].style.color = 'transparent'
+                } else {
+                  itemElements[i].style.color =
+                    colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`
+                }
+                itemElements[i].style.transform = 'scale(1)'
+                itemElements[i].style.textShadow = '0 0 0px transparent'
+                itemElements[i].style.width = 'calc(40vw)'
+              } else if (i !== index) {
                 itemElements[i].style.color =
                   colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`
+                itemElements[i].style.transform = 'scale(1)'
+                itemElements[i].style.textShadow = '0 0 0px transparent'
+                itemElements[i].style.width = 'calc(40vw)'
+                itemElements_active[i].style.fontWeight = 400
               }
-              itemElements[i].style.transform = 'scale(1)'
-              itemElements[i].style.textShadow = '0 0 0px transparent'
-              itemElements[i].style.width = 'calc(40vw)'
-            } else if (i !== index) {
-              itemElements[i].style.color =
-                colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`
-              itemElements[i].style.transform = 'scale(1)'
-              itemElements[i].style.textShadow = '0 0 0px transparent'
-              itemElements[i].style.width = 'calc(40vw)'
-              itemElements_active[i].style.fontWeight = 400
             }
           }
         }
@@ -219,7 +255,7 @@ const handleItemDbClick = async (index: any) => {
 
   handleLeave_Refresh_Lyric_Color()
 }
-const scrollbar = ref(null)
+const scrollbar = ref<any>(null)
 const perviousIndex = ref(0)
 const scrollToItem = (index: number) => {
   try {
@@ -234,15 +270,15 @@ const scrollToItem = (index: number) => {
     }
 
     const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active')
-    itemElements_active[index].style.fontSize = store_player_appearance.player_lyric_fontSize
-    itemElements_active[index].style.fontWeight = store_player_appearance.player_lyric_fontWeight
+    itemElements_active[index].style.fontSize = player_lyric_fontSize.value
+    itemElements_active[index].style.fontWeight = player_lyric_fontWeight.value
 
     const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info')
-    itemElements[index].style.color = store_player_appearance.player_lyric_colorHover
+    itemElements[index].style.color = player_lyric_colorHover.value
     itemElements[index].style.filter = 'blur(0px)'
     itemElements[index].style.textShadow = '0 0 1px White'
     itemElements[index].style.transition = 'color 0.5s, transform 0.5s'
-    if (!store_player_appearance.player_collapsed_album) {
+    if (!player_collapsed_album.value) {
       itemElements[index].style.transform = 'scale(1.1) translateY(0px)'
       itemElements[index].style.transformOrigin = 'left center'
       itemElements[index].style.width = 'calc(36.3vw)'
@@ -257,15 +293,15 @@ const scrollToItem = (index: number) => {
     // 设置前后16列的颜色
     handleLeave_Refresh_Lyric_Color()
     // 设置perviousIndex.value列的颜色
-    let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2)
+    let color_hidden = player_lyric_color.value.slice(0, -2)
     for (let i = index - 16; i <= index + 16; i++) {
       if (i < index) {
-        if (store_player_appearance.player_use_lyric_skip_forward) {
+        if (player_use_lyric_skip_forward.value) {
           itemElements[i].style.color = 'transparent'
-        } else {
+        } else if (i != index) {
           const colorValue = Math.max(
-            store_player_appearance.player_lyric_color_hidden_value -
-              (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient,
+            player_lyric_color_hidden_value.value -
+              (index - i) * player_lyric_color_hidden_coefficient.value,
             0
           )
           itemElements[i].style.color =
@@ -277,8 +313,8 @@ const scrollToItem = (index: number) => {
         itemElements_active[i].style.fontWeight = 400
       } else if (i != index) {
         const colorValue = Math.max(
-          store_player_appearance.player_lyric_color_hidden_value -
-            (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient,
+          player_lyric_color_hidden_value.value -
+            (index - i) * player_lyric_color_hidden_coefficient.value,
           0
         )
         itemElements[i].style.color =
@@ -306,6 +342,7 @@ const scrollToItem = (index: number) => {
 const lastIndex = ref(-1)
 const startByteAnimations = (index: number, num: number) => {
   try {
+    if (!scrollbar.value) return
     const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active')
     let position_i_length = store_player_audio_info.this_audio_lyrics_info_byte_time.reduce(
       (acc: any, curr: any) => {
@@ -342,12 +379,12 @@ const startByteAnimations = (index: number, num: number) => {
       const computedStyle = window.getComputedStyle(element)
       elementWidth += parseFloat(computedStyle.width)
 
-      itemElements_active[i].style.fontSize = store_player_appearance.player_lyric_fontSize
+      itemElements_active[i].style.fontSize = player_lyric_fontSize.value
       itemElements_active[i].style.fontWeight = 400
 
       itemElements_active[i].style.filter = 'blur(0px)'
       itemElements_active[i].style.transition = 'color 0.5s, transform 0.5s'
-      if (!store_player_appearance.player_collapsed_album) {
+      if (!player_collapsed_album.value) {
         itemElements_active[i].style.transform = 'scale(1.1) translateY(0px)'
         itemElements_active[i].style.transformOrigin = 'left center'
         itemElements_active[i].style.width = 'calc(36.3vw)'
@@ -393,11 +430,11 @@ const startByteAnimations = (index: number, num: number) => {
     }
 
     try {
-      let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2)
+      let color_hidden = player_lyric_color.value.slice(0, -2)
       for (let i = 0; i < position_i_start; i++) {
         const colorValue = Math.max(
-          store_player_appearance.player_lyric_color_hidden_value -
-            (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient,
+          player_lyric_color_hidden_value.value -
+            (index - i) * player_lyric_color_hidden_coefficient.value,
           0
         )
         itemElements_active[i].style.color =
@@ -413,8 +450,8 @@ const startByteAnimations = (index: number, num: number) => {
       }
       for (let i = position_i_end; i <= position_i_length; i++) {
         const colorValue = Math.max(
-          store_player_appearance.player_lyric_color_hidden_value -
-            (i - index) * store_player_appearance.player_lyric_color_hidden_coefficient,
+          player_lyric_color_hidden_value.value -
+            (i - index) * player_lyric_color_hidden_coefficient.value,
           0
         )
         itemElements_active[i].style.color =
@@ -428,10 +465,10 @@ const startByteAnimations = (index: number, num: number) => {
         itemElements_active[i].style.marginRight = `0px`
         itemElements_active[i].style.width = 'calc(40vw)'
       }
-    } catch {}
-  } catch {}
+    } catch (e) {}
+  } catch (e) {}
 }
-let intervals = []
+let intervals: any[] = []
 const lyrics_list_whell = ref(false)
 const handleWheel = (event: any) => {
   handleClear_Lyric_Color()
@@ -439,6 +476,7 @@ const handleWheel = (event: any) => {
 function handleClear_Lyric_Color() {
   try {
     lyrics_list_whell.value = true
+    if (!scrollbar.value) return
     const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info')
     for (let i = 0; i < itemElements.length; i++) {
       itemElements[i].style.color = '#FFFFFF99'
@@ -451,20 +489,20 @@ function handleClear_Lyric_Color() {
 const handleLeave_Refresh_Lyric_Color = () => {
   try {
     lyrics_list_whell.value = false
+    if (!scrollbar.value) return
     const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info')
-    let lyric_bottom_hidden_num = store_player_appearance.player_use_lyric_skip_forward ? 0 : 10
-    let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2)
+    let lyric_bottom_hidden_num = player_use_lyric_skip_forward.value ? 0 : 10
+    let color_hidden = player_lyric_color.value.slice(0, -2)
     for (let i = perviousIndex.value - 16; i <= perviousIndex.value + 16; i++) {
       if (i < perviousIndex.value) {
         const colorValue = Math.max(
-          store_player_appearance.player_lyric_color_hidden_value +
+          player_lyric_color_hidden_value.value +
             lyric_bottom_hidden_num -
-            (perviousIndex.value - i) *
-              store_player_appearance.player_lyric_color_hidden_coefficient,
+            (perviousIndex.value - i) * player_lyric_color_hidden_coefficient.value,
           0
         )
         try {
-          if (store_player_appearance.player_use_lyric_skip_forward) {
+          if (player_use_lyric_skip_forward.value) {
             itemElements[i].style.color = 'transparent'
           } else {
             itemElements[i].style.color =
@@ -473,10 +511,9 @@ const handleLeave_Refresh_Lyric_Color = () => {
         } catch {}
       } else {
         const colorValue = Math.max(
-          store_player_appearance.player_lyric_color_hidden_value +
+          player_lyric_color_hidden_value.value +
             lyric_bottom_hidden_num -
-            (i - perviousIndex.value) *
-              store_player_appearance.player_lyric_color_hidden_coefficient,
+            (i - perviousIndex.value) * player_lyric_color_hidden_coefficient.value,
           0
         )
         try {
@@ -489,23 +526,24 @@ const handleLeave_Refresh_Lyric_Color = () => {
 }
 const handleAuto_fontSize = (value: number) => {
   try {
-    store_player_appearance.player_lyric_fontSize_Num = value
-    store_player_appearance.player_lyric_fontSize = value + 'px'
+    player_lyric_fontSize_Num.value = value
+    player_lyric_fontSize.value = value + 'px'
+    if (!scrollbar.value) return
     const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active')
-    itemElements_active.forEach((itemElement) => {
-      itemElement.style.fontSize = store_player_appearance.player_lyric_fontSize
+    itemElements_active.forEach((itemElement: any) => {
+      itemElement.style.fontSize = player_lyric_fontSize.value
       itemElement.style.fontWeight = 400
     })
     let marginTop = 6 + Math.floor((window.innerHeight - 880) / 200) * 0.5
     const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info')
-    itemElements.forEach((itemElement) => {
+    itemElements.forEach((itemElement: any) => {
       itemElement.style.marginTop = marginTop
       itemElement.style.lineHeight = marginTop * 2 * 0.1
     })
   } catch {}
 }
 watch(
-  () => store_player_appearance.player_lyric_fontSize_Num,
+  () => player_lyric_fontSize_Num.value,
   (newValue) => {
     handleLeave_Refresh_Lyric_Color()
     handleAuto_fontSize(newValue)
@@ -618,7 +656,7 @@ const player_theme_Styles = ref<PlayerTheme_LyricItem[]>([
 
 ////// player_configs bind theme_all
 const player_theme_0_bind_style = ref<PlayerTheme_LyricItem>(
-  player_theme_Styles.value[store_player_appearance.player_theme_Styles_Selected]
+  player_theme_Styles.value[player_theme_Styles_Selected.value]
 )
 const player_theme_set_theme = (index: number) => {
   try {
@@ -628,17 +666,16 @@ const player_theme_set_theme = (index: number) => {
     // set theme
     player_theme_0_bind_style.value = player_theme_Styles.value[index]
 
-    store_player_appearance.player_theme_Styles_Selected = index
-    store_player_appearance.player_background_model_num = player_theme_0_bind_style.value.id
-    store_player_appearance.player_collapsed_album =
+    player_theme_Styles_Selected.value = index
+    player_background_model_num.value = player_theme_0_bind_style.value.id
+    player_collapsed_album.value =
       player_theme_0_bind_style.value.normalStyle.player_collapsed_album
-    store_player_appearance.player_collapsed_skin =
-      player_theme_0_bind_style.value.normalStyle.player_collapsed_skin
+    player_collapsed_skin.value = player_theme_0_bind_style.value.normalStyle.player_collapsed_skin
 
     const index_lyric =
       store_player_view.currentScrollIndex + store_player_audio_info.this_audio_lyrics_info_line_num
     const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info')
-    if (!store_player_appearance.player_collapsed_album) {
+    if (!player_collapsed_album.value) {
       itemElements[index_lyric].style.transformOrigin = 'left center'
     } else {
       itemElements[index_lyric].style.transformOrigin = 'center'
@@ -650,13 +687,11 @@ const player_theme_set_theme = (index: number) => {
   } catch {}
 }
 function init_player_theme() {
-  store_player_appearance.player_show_of_control_info =
-    store_player_appearance.player_background_model_num !== 0
-  store_player_appearance.player_lyric_fontSize_Num =
-    store_player_appearance.player_use_lyric_skip_forward
-      ? 36 + Math.floor((window.innerHeight - 880) / 200) * 6
-      : 33 + Math.floor((window.innerHeight - 880) / 200) * 6
-  store_player_appearance.player_lyric_fontSize = `${store_player_appearance.player_lyric_fontSize_Num}px`
+  player_show_of_control_info.value = player_background_model_num.value !== 0
+  player_lyric_fontSize_Num.value = player_use_lyric_skip_forward
+    ? 36 + Math.floor((window.innerHeight - 880) / 200) * 6
+    : 33 + Math.floor((window.innerHeight - 880) / 200) * 6
+  player_lyric_fontSize.value = `${player_lyric_fontSize_Num.value}px`
 }
 
 ////// player_configs page_ui set
@@ -673,33 +708,33 @@ const checkStrategy = ref<'player' | 'related'>('player')
 ////// player_bar auto hidden
 let timer_auto_hidden: string | number | NodeJS.Timeout | undefined
 const handleMouseMove = () => {
-  store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false
+  player_collapsed_action_bar_of_Immersion_model.value = false
   clearInterval(timer_auto_hidden)
   timer_auto_hidden = setInterval(() => {
-    if (store_player_appearance.player_show) {
-      if (store_player_appearance.player_use_playbar_auto_hide) {
-        store_player_appearance.player_collapsed_action_bar_of_Immersion_model = true
+    if (player_show.value) {
+      if (player_use_playbar_auto_hide.value) {
+        player_collapsed_action_bar_of_Immersion_model.value = true
       }
     }
   }, 1000)
 }
 const unwatch_player_collapsed = watchEffect(() => {
-  if (!store_player_appearance.player_collapsed_action_bar_of_Immersion_model) {
+  if (!usePlayerAppearanceStore().player_collapsed_action_bar_of_Immersion_model) {
     clearInterval(timer_auto_hidden)
   }
 })
 
 ////// Animation lottie Load // lottie-web will cause memory leaks，so replace lottie-player_configs
 import '@lottiefiles/lottie-player'
-import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
+import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import Table_Album_Model_1_AlbumScroll from '@/views/view_app/page/page_player/components/Table_Album_Model_1_AlbumScroll.vue'
 import { ArrowsMaximize, ArrowsMinimize } from '@vicons/tabler'
 
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+import { storeToRefs } from 'pinia'
 
 const clear_lottie_animationInstance = ref(false)
 
@@ -711,33 +746,33 @@ const animationInstance_model_5_wave = ref<any>(null)
 let unwatch_animationInstance = watch(
   () => store_player_audio_logic.player.isPlaying,
   (newValue) => {
-    if (store_player_appearance.player_use_lottie_animation) {
+    if (usePlayerAppearanceStore().player_use_lottie_animation) {
       if (newValue) {
-        if (store_player_appearance.player_background_model_num === 1) {
+        if (usePlayerAppearanceStore().player_background_model_num === 1) {
           animationInstance_model_1_spectrum.value.play()
           animationInstance_model_1_wave.value.play()
         }
-        if (store_player_appearance.player_background_model_num === 2) {
+        if (usePlayerAppearanceStore().player_background_model_num === 2) {
           animationInstance_model_2_wave.value.play()
         }
-        if (store_player_appearance.player_background_model_num === 4) {
+        if (usePlayerAppearanceStore().player_background_model_num === 4) {
           animationInstance_model_1_spectrum_copy.value.play()
         }
-        if (store_player_appearance.player_background_model_num === 5) {
+        if (usePlayerAppearanceStore().player_background_model_num === 5) {
           animationInstance_model_5_wave.value.play()
         }
       } else {
-        if (store_player_appearance.player_background_model_num === 1) {
+        if (usePlayerAppearanceStore().player_background_model_num === 1) {
           animationInstance_model_1_spectrum.value.pause()
           animationInstance_model_1_wave.value.pause()
         }
-        if (store_player_appearance.player_background_model_num === 2) {
+        if (usePlayerAppearanceStore().player_background_model_num === 2) {
           animationInstance_model_2_wave.value.pause()
         }
-        if (store_player_appearance.player_background_model_num === 4) {
+        if (usePlayerAppearanceStore().player_background_model_num === 4) {
           animationInstance_model_1_spectrum_copy.value.pause()
         }
-        if (store_player_appearance.player_background_model_num === 5) {
+        if (usePlayerAppearanceStore().player_background_model_num === 5) {
           animationInstance_model_5_wave.value.pause()
         }
       }
@@ -747,23 +782,23 @@ let unwatch_animationInstance = watch(
 let unwatch_player_background_model_num = watch(
   () => store_player_audio_info.player_background_model_num,
   (newValue) => {
-    if (store_player_appearance.player_use_lottie_animation) {
-      if (store_player_appearance.player_background_model_num === 0) {
+    if (usePlayerAppearanceStore().player_use_lottie_animation) {
+      if (usePlayerAppearanceStore().player_background_model_num === 0) {
         animationInstance_model_1_spectrum.value.pause()
         animationInstance_model_1_wave.value.pause()
         animationInstance_model_2_wave.value.pause()
       }
-      if (store_player_appearance.player_background_model_num === 1) {
+      if (usePlayerAppearanceStore().player_background_model_num === 1) {
         animationInstance_model_2_wave.value.pause()
       }
-      if (store_player_appearance.player_background_model_num === 2) {
+      if (usePlayerAppearanceStore().player_background_model_num === 2) {
         animationInstance_model_1_spectrum.value.pause()
         animationInstance_model_1_wave.value.pause()
       }
-      if (store_player_appearance.player_background_model_num === 4) {
+      if (usePlayerAppearanceStore().player_background_model_num === 4) {
         animationInstance_model_1_spectrum_copy.value.pause()
       }
-      if (store_player_appearance.player_background_model_num === 5) {
+      if (usePlayerAppearanceStore().player_background_model_num === 5) {
         animationInstance_model_5_wave.value.pause()
       }
     }
@@ -778,7 +813,7 @@ onBeforeUnmount(() => {
 
   unwatch_animationInstance()
   unwatch_player_background_model_num()
-  if (store_player_appearance.player_use_lottie_animation) {
+  if (usePlayerAppearanceStore().player_use_lottie_animation) {
     animationInstance_model_1_spectrum.value.destroy()
     animationInstance_model_1_spectrum_copy.value.destroy()
     animationInstance_model_1_wave.value.destroy()
@@ -788,7 +823,7 @@ onBeforeUnmount(() => {
   clear_lottie_animationInstance.value = true
 
   unwatch_player_collapsed()
-  store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false
+  usePlayerAppearanceStore().player_collapsed_action_bar_of_Immersion_model = false
 })
 </script>
 
@@ -798,28 +833,22 @@ onBeforeUnmount(() => {
     <div>
       <!--Album-->
       <div
-        v-if="store_player_appearance.player_collapsed_skin"
+        v-if="player_collapsed_skin"
         id="player_bg_zindex_0"
         :style="{
           backgroundImage: `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`,
-          filter: store_player_appearance.player_use_background_filter_blur
+          filter: player_use_background_filter_blur
             ? 'brightness(46%) blur(40px)'
             : 'brightness(46%) blur(0px)',
-          backgroundSize: store_player_appearance.player_use_background_repeat_fill
-            ? '20vw auto'
-            : 'cover',
-          backgroundRepeat: store_player_appearance.player_use_background_repeat_fill
-            ? 'repeat'
-            : 'no-repeat',
+          backgroundSize: player_use_background_repeat_fill ? '20vw auto' : 'cover',
+          backgroundRepeat: player_use_background_repeat_fill ? 'repeat' : 'no-repeat',
           backgroundPosition: 'center',
         }"
         :class="{
           player_bg_zindex_0_auto_rotateDefault:
-            store_player_appearance.player_use_background_automatic_rotation &&
-            !store_player_appearance.player_use_background_repeat_fill,
+            player_use_background_automatic_rotation && !player_use_background_repeat_fill,
           player_bg_zindex_0_auto_rotateRepeat:
-            store_player_appearance.player_use_background_automatic_rotation &&
-            store_player_appearance.player_use_background_repeat_fill,
+            player_use_background_automatic_rotation && player_use_background_repeat_fill,
         }"
       ></div>
       <!--Skin-->
@@ -832,6 +861,7 @@ onBeforeUnmount(() => {
           left: 0;
           width: 100vw;
           height: 100vw;
+
           margin-top: -20vw;
           object-fit: cover;
           object-position: center;
@@ -872,7 +902,7 @@ onBeforeUnmount(() => {
             <n-space vertical align="center">
               <n-space vertical style="width: 380px">
                 <n-radio-group
-                  v-model:value="store_player_appearance.player_theme_Styles_Selected"
+                  v-model:value="player_theme_Styles_Selected"
                   @update:value="player_theme_set_theme"
                   name="radiogroup"
                   :width="430"
@@ -925,7 +955,7 @@ onBeforeUnmount(() => {
                       style="font-size: 24px; margin-top: 2px; margin-left: 7px"
                       @click="
                         () => {
-                          handleAuto_fontSize(store_player_appearance.player_lyric_fontSize_Num)
+                          handleAuto_fontSize(player_lyric_fontSize_Num)
                         }
                       "
                     >
@@ -934,7 +964,7 @@ onBeforeUnmount(() => {
                       </n-icon>
                     </n-button>
                     <n-input-number
-                      v-model:value="store_player_appearance.player_lyric_fontSize_Num"
+                      v-model:value="player_lyric_fontSize_Num"
                       @update:value="handleAuto_fontSize"
                       clearable
                       :min="6"
@@ -958,7 +988,7 @@ onBeforeUnmount(() => {
                       </n-icon>
                     </n-button>
                     <n-input-number
-                      v-model:value="store_player_appearance.player_lyric_fontSize_Num"
+                      v-model:value="player_lyric_fontSize_Num"
                       @update:value="handleAuto_fontSize"
                       clearable
                       style="width: 109px; margin-top: -4px"
@@ -987,7 +1017,7 @@ onBeforeUnmount(() => {
                       </n-icon>
                     </n-button>
                     <n-input-number
-                      v-model:value="store_player_appearance.player_lyric_fontSize"
+                      v-model:value="player_lyric_fontSize"
                       clearable
                       style="width: 109px; margin-top: -4px"
                     />
@@ -1002,7 +1032,7 @@ onBeforeUnmount(() => {
                       </n-icon>
                     </n-button>
                     <n-input-number
-                      v-model:value="store_player_appearance.player_lyric_fontSize"
+                      v-model:value="player_lyric_fontSize"
                       clearable
                       style="width: 109px; margin-top: -4px"
                     />
@@ -1039,10 +1069,8 @@ onBeforeUnmount(() => {
                   }}</span>
                   <n-space style="margin-right: 32px">
                     <n-switch
-                      v-model:value="store_player_appearance.player_use_lottie_animation"
-                      @update:value="
-                        player_theme_set_theme(store_player_appearance.player_theme_Styles_Selected)
-                      "
+                      v-model:value="player_use_lottie_animation"
+                      @update:value="player_theme_set_theme(player_theme_Styles_Selected)"
                     >
                     </n-switch>
                   </n-space>
@@ -1052,7 +1080,7 @@ onBeforeUnmount(() => {
                   <span style="font-size: 16px">{{ $t('nsmusics.view_page.hideHalfLyric') }}</span>
                   <n-space style="margin-right: 32px">
                     <n-switch
-                      v-model:value="store_player_appearance.player_use_lyric_skip_forward"
+                      v-model:value="player_use_lyric_skip_forward"
                       @update:value="
                         () => {
                           store_player_audio_logic.player_slider_click = true
@@ -1075,9 +1103,8 @@ onBeforeUnmount(() => {
                     $t('setting.albumBackground')
                   }}</span>
                   <n-space style="margin-right: 32px">
-                    <n-switch
-                      v-model:value="store_player_appearance.player_use_background_filter_blur"
-                    />
+                    <n-switch v-model:value="player_use_background_repeat_fill" />
+                    <n-switch v-model:value="player_use_background_filter_blur" />
                   </n-space>
                 </n-space>
                 <n-space style="margin-top: 20px" justify="space-between">
@@ -1085,11 +1112,7 @@ onBeforeUnmount(() => {
                     $t('Auto') + $t('MediaInfoRotation') + ' ' + $t('setting.albumBackground')
                   }}</span>
                   <n-space style="margin-right: 32px">
-                    <n-switch
-                      v-model:value="
-                        store_player_appearance.player_use_background_automatic_rotation
-                      "
-                    />
+                    <n-switch v-model:value="player_use_background_automatic_rotation" />
                   </n-space>
                 </n-space>
                 <n-space style="margin-top: 20px" justify="space-between">
@@ -1101,9 +1124,7 @@ onBeforeUnmount(() => {
                     $t('setting.albumBackground')
                   }}</span>
                   <n-space style="margin-right: 32px">
-                    <n-switch
-                      v-model:value="store_player_appearance.player_use_background_repeat_fill"
-                    />
+                    <n-switch v-model:value="player_use_background_repeat_fill" />
                   </n-space>
                 </n-space>
                 <n-divider style="margin: 8px 0; width: 336px" />
@@ -1118,7 +1139,7 @@ onBeforeUnmount(() => {
                       </n-icon>
                     </n-button>
                     <n-input-number
-                      v-model:value="store_player_appearance.player_lyric_fontSize"
+                      v-model:value="player_lyric_fontSize"
                       clearable
                       style="width: 109px; margin-top: -4px"
                     />
@@ -1129,9 +1150,7 @@ onBeforeUnmount(() => {
                     $t('nsmusics.view_player.view_seting.player_use_playbar_auto_hide')
                   }}</span>
                   <n-space style="margin-right: 32px">
-                    <n-switch
-                      v-model:value="store_player_appearance.player_use_playbar_auto_hide"
-                    />
+                    <n-switch v-model:value="player_use_playbar_auto_hide" />
                   </n-space>
                 </n-space>
               </n-space>
@@ -1146,7 +1165,7 @@ onBeforeUnmount(() => {
       <n-flex
         justify="space-between"
         :style="{
-          opacity: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? 0 : 1,
+          opacity: player_collapsed_action_bar_of_Immersion_model ? 0 : 1,
           transition: 'opacity 0.4s',
         }"
         style="width: 100vw; z-index: 10; position: absolute"
@@ -1312,25 +1331,21 @@ onBeforeUnmount(() => {
             justify="center"
             style="transition: margin 0.4s; overflow: hidden"
             :style="{
-              marginTop: store_player_appearance.player_use_lyric_skip_forward ? '70px' : '50px',
-              marginLeft:
-                store_player_appearance.player_background_model_num === 2 ? '36px' : '0px',
+              marginTop: player_use_lyric_skip_forward ? '70px' : '50px',
+              marginLeft: player_background_model_num === 2 ? '36px' : '0px',
             }"
           >
             <!-- 1,2,3,4  -->
             <n-layout
               has-sider
-              v-show="
-                store_player_appearance.player_background_model_num != 4 &&
-                store_player_appearance.player_background_model_num != 5
-              "
+              v-show="player_background_model_num != 4 && player_background_model_num != 5"
               style="overflow: hidden; background-color: transparent"
             >
               <!-- left area -->
               <n-layout-sider
-                :collapsed="store_player_appearance.player_collapsed_album"
-                @collapse="store_player_appearance.player_collapsed_album = true"
-                @expand="store_player_appearance.player_collapsed_album = false"
+                :collapsed="player_collapsed_album"
+                @collapse="player_collapsed_album = true"
+                @expand="player_collapsed_album = false"
                 :show-collapsed-content="false"
                 position="static"
                 collapsed-width="30vw"
@@ -1344,9 +1359,7 @@ onBeforeUnmount(() => {
                     'scroll-enabled': store_player_audio_logic.player.isPlaying,
                   }"
                   :style="{
-                    marginTop: store_player_appearance.player_use_lyric_skip_forward
-                      ? '0px'
-                      : '40px',
+                    marginTop: player_use_lyric_skip_forward ? '0px' : '40px',
                     transition: 'margin 0.4s',
                   }"
                   style="margin-right: 8vw"
@@ -1371,15 +1384,10 @@ onBeforeUnmount(() => {
                     justify="center"
                     style="margin-right: calc(-2vw); overflow: hidden"
                     :style="{
-                      marginTop:
-                        store_player_appearance.player_background_model_num === 1 ? '0px' : '100px',
-                      opacity: store_player_appearance.player_background_model_num === 1 ? 1 : 0,
-                      position:
-                        store_player_appearance.player_background_model_num === 1
-                          ? 'relative'
-                          : 'absolute',
-                      left:
-                        store_player_appearance.player_background_model_num === 1 ? '0' : '-100%',
+                      marginTop: player_background_model_num === 1 ? '0px' : '100px',
+                      opacity: player_background_model_num === 1 ? 1 : 0,
+                      position: player_background_model_num === 1 ? 'relative' : 'absolute',
+                      left: player_background_model_num === 1 ? '0' : '-100%',
                       transition: 'margin 0.4s, opacity 0.8s',
                     }"
                   >
@@ -1388,13 +1396,10 @@ onBeforeUnmount(() => {
                       class="animate__rotate_slower"
                       :class="{
                         animate__rotate_slower_paused:
-                          store_player_appearance.player_background_model_num !== 1 ||
+                          player_background_model_num !== 1 ||
                           !store_player_audio_logic.player.isPlaying,
                       }"
-                      v-if="
-                        !clear_lottie_animationInstance &&
-                        store_player_appearance.player_use_lottie_animation
-                      "
+                      v-if="!clear_lottie_animationInstance && player_use_lottie_animation"
                       autoplay
                       loop
                       mode="normal"
@@ -1439,21 +1444,14 @@ onBeforeUnmount(() => {
                     </div>
                     <lottie-player
                       ref="animationInstance_model_1_spectrum"
-                      v-if="
-                        !clear_lottie_animationInstance &&
-                        store_player_appearance.player_use_lottie_animation
-                      "
+                      v-if="!clear_lottie_animationInstance && player_use_lottie_animation"
                       autoplay
                       loop
                       mode="normal"
                       :src="JSON.parse(JSON.stringify(Animation_1715392202806))"
                       style="width: 54vh; height: calc(4.7vh)"
                     />
-                    <n-space
-                      align="center"
-                      justify="center"
-                      v-if="!store_player_appearance.player_collapsed_album"
-                    >
+                    <n-space align="center" justify="center" v-if="!player_collapsed_album">
                       <n-space style="width: 46px; margin-right: -10px">
                         {{ store_player_audio_logic.current_play_time }}
                       </n-space>
@@ -1529,14 +1527,14 @@ onBeforeUnmount(() => {
                     style="min-width: calc(54vw); position: absolute; overflow: hidden"
                     :style="{
                       marginTop:
-                        store_player_appearance.player_background_model_num === 2
-                          ? store_player_appearance.player_use_lyric_skip_forward
+                        player_background_model_num === 2
+                          ? player_use_lyric_skip_forward
                             ? 'calc(-6vh - 30px)'
                             : 'calc(-6vh - 30px)'
                           : '0px',
-                      opacity: store_player_appearance.player_background_model_num === 2 ? 1 : 0,
+                      opacity: player_background_model_num === 2 ? 1 : 0,
                       left:
-                        store_player_appearance.player_background_model_num === 2
+                        player_background_model_num === 2
                           ? store_player_audio_logic.player.isPlaying
                             ? '0'
                             : '10%'
@@ -1549,13 +1547,10 @@ onBeforeUnmount(() => {
                       class="animate__rotate_fast"
                       :class="{
                         animate__rotate_fast_paused:
-                          store_player_appearance.player_background_model_num !== 2 ||
+                          player_background_model_num !== 2 ||
                           !store_player_audio_logic.player.isPlaying,
                       }"
-                      v-if="
-                        !clear_lottie_animationInstance &&
-                        store_player_appearance.player_use_lottie_animation
-                      "
+                      v-if="!clear_lottie_animationInstance && player_use_lottie_animation"
                       speed="0.8"
                       autoplay
                       loop
@@ -1780,13 +1775,12 @@ onBeforeUnmount(() => {
               <n-layout-content
                 style="background-color: transparent; overflow: hidden"
                 :style="{
-                  marginLeft:
-                    store_player_appearance.player_background_model_num !== 3 ? '-1.5vw' : '2vw',
+                  marginLeft: player_background_model_num !== 3 ? '-1.5vw' : '2vw',
                 }"
               >
                 <div
                   :style="{
-                    height: store_player_appearance.player_use_lyric_skip_forward
+                    height: player_use_lyric_skip_forward
                       ? 'calc(100vh - 100px)'
                       : 'calc(100vh - 50px)',
                   }"
@@ -1824,9 +1818,7 @@ onBeforeUnmount(() => {
                       <n-list-item
                         class="lyrics_info"
                         :style="{
-                          textAlign: store_player_appearance.player_collapsed_album
-                            ? 'center'
-                            : 'left',
+                          textAlign: player_collapsed_album ? 'center' : 'left',
                         }"
                         v-for="(
                           item, index
@@ -1853,7 +1845,7 @@ onBeforeUnmount(() => {
           </n-flex>
           <!-- 5 专辑列表-->
           <n-space
-            v-show="store_player_appearance.player_background_model_num === 4"
+            v-show="player_background_model_num === 4"
             style="
               position: absolute;
               left: 0;
@@ -1899,7 +1891,7 @@ onBeforeUnmount(() => {
                 }"
               >
                 <n-carousel-item
-                  v-for="(item, index) in usePlaylistStore().playlist_MediaFiles_temporary_carousel"
+                  v-for="(item, index) in playlist_MediaFiles_temporary_carousel"
                   :key="item.id"
                   style="width: 50vh; height: 50vh"
                 >
@@ -1948,17 +1940,14 @@ onBeforeUnmount(() => {
               <!--  -->
               <lottie-player
                 ref="animationInstance_model_1_spectrum_copy"
-                v-if="
-                  !clear_lottie_animationInstance &&
-                  store_player_appearance.player_use_lottie_animation
-                "
+                v-if="!clear_lottie_animationInstance && player_use_lottie_animation"
                 autoplay
                 loop
                 mode="normal"
                 :src="JSON.parse(JSON.stringify(Animation_1715392202806))"
                 style="width: 54vh; height: calc(4.7vh)"
               />
-              <!-- store_player_appearance.player_collapsed_album -->
+              <!-- player_collapsed_album -->
               <n-space
                 align="center"
                 justify="center"
@@ -2066,7 +2055,7 @@ onBeforeUnmount(() => {
           </n-space>
           <!-- 6 黑胶唱片-->
           <n-space
-            v-show="store_player_appearance.player_background_model_num === 5"
+            v-show="player_background_model_num === 5"
             vertical
             align="end"
             justify="center"
@@ -2078,7 +2067,7 @@ onBeforeUnmount(() => {
               overflow: hidden;
             "
             :style="{
-              opacity: store_player_appearance.player_background_model_num === 5 ? 0.8 : 0,
+              opacity: player_background_model_num === 5 ? 0.8 : 0,
               transition: 'margin 0.4s, left 0.4s, opacity 0.8s',
             }"
           >
@@ -2087,13 +2076,9 @@ onBeforeUnmount(() => {
               class="animate__rotate_fast_model_6"
               :class="{
                 animate__rotate_fast_model_6_paused:
-                  store_player_appearance.player_background_model_num !== 5 ||
-                  !store_player_audio_logic.player.isPlaying,
+                  player_background_model_num !== 5 || !store_player_audio_logic.player.isPlaying,
               }"
-              v-if="
-                !clear_lottie_animationInstance &&
-                store_player_appearance.player_use_lottie_animation
-              "
+              v-if="!clear_lottie_animationInstance && player_use_lottie_animation"
               speed="0.8"
               autoplay
               loop
@@ -2117,8 +2102,7 @@ onBeforeUnmount(() => {
               class="animate__rotate_fast_model_6"
               :class="{
                 animate__rotate_fast_model_6_paused:
-                  store_player_appearance.player_background_model_num !== 5 ||
-                  !store_player_audio_logic.player.isPlaying,
+                  player_background_model_num !== 5 || !store_player_audio_logic.player.isPlaying,
               }"
               style="
                 width: calc(40vw);
@@ -2230,7 +2214,7 @@ onBeforeUnmount(() => {
   background-color: #ffffff16;
 }
 .lyrics_text_active {
-  font-size: v-bind(store_player_appearance.player_lyric_fontSize);
+  font-size: v-bind(player_lyric_fontSize);
   /* display: inline-block;
   white-space: pre; */
   max-width: calc(36vw);

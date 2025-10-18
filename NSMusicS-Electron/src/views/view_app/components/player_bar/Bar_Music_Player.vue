@@ -40,6 +40,23 @@ const { t } = useI18n({
 })
 
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+import { storeToRefs } from 'pinia'
+import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
+
+// 在setup上下文中获取Store实例
+const playerAppearanceStore = usePlayerAppearanceStore()
+const playlistStore = usePlaylistStore()
+// 使用 storeToRefs 解构出所需的响应式属性
+const {
+  player_show,
+  player_show_complete,
+  player_show_click,
+  player_collapsed_action_bar_of_Immersion_model,
+  player_background_model_num,
+  player_use_playbar_auto_hide,
+  player_mode_of_lock_playlist,
+} = storeToRefs(playerAppearanceStore)
+const { playlist_show, playlist_MediaFiles_temporary } = storeToRefs(playlistStore)
 
 import { useMessage } from 'naive-ui'
 const message = useMessage()
@@ -96,7 +113,7 @@ const leave_back_svg = () => {
   back_filter_blurValue.value = 0
 }
 const click_back_svg = () => {
-  if (store_player_appearance.player_show_complete) {
+  if (player_show_complete.value) {
     player_show_hight_animation_value.value =
       player_show_hight_animation_value.value === 0 ? 670 : 0
     get_playerbar_to_switch_playerview(player_show_hight_animation_value.value)
@@ -106,7 +123,7 @@ const click_back_svg = () => {
   usePlaylistStore().reset_carousel()
 }
 watch(
-  () => store_player_appearance.player_show_click,
+  () => player_show_click.value,
   (newValue) => {
     if (newValue) {
       player_show_hight_animation_value.value = 670
@@ -114,7 +131,7 @@ watch(
       store_player_audio_logic.player_back_ChevronDouble =
         player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow
 
-      store_player_appearance.player_show_click = false
+      player_show_click.value = false
     }
   }
 )
@@ -379,9 +396,7 @@ const Set_MediaInfo_To_PlayCount = debounce(async (event, args) => {
     ) {
       if (
         store_player_audio_info.this_audio_song_id ===
-        usePlaylistStore().playlist_MediaFiles_temporary[
-          usePlaylistStore().playlist_MediaFiles_temporary.length - 1
-        ]
+        playlist_MediaFiles_temporary.value[playlist_MediaFiles_temporary.value.length - 1]
       ) {
         store_server_data_set_albumInfo.Set_AlbumInfo_To_PlayCompleteCount_of_Album_Server(
           store_player_audio_info.this_audio_album_id
@@ -395,9 +410,7 @@ const Set_MediaInfo_To_PlayCount = debounce(async (event, args) => {
     ) {
       if (
         store_player_audio_info.this_audio_song_id ===
-        usePlaylistStore().playlist_MediaFiles_temporary[
-          usePlaylistStore().playlist_MediaFiles_temporary.length - 1
-        ]
+        playlist_MediaFiles_temporary.value[playlist_MediaFiles_temporary.value.length - 1]
       ) {
         store_server_data_set_artistInfo.Set_ArtistInfo_To_PlayCompleteCount_of_Artist_Server(
           store_player_audio_info.this_audio_artist_id
@@ -421,10 +434,10 @@ const Set_MediaInfo_To_PlayCount = debounce(async (event, args) => {
 
 const handleMpvStopped = debounce(async (event, args) => {
   store_player_audio_logic.player_is_play_ended = true
-  let index = usePlaylistStore().playlist_MediaFiles_temporary.findIndex(
+  let index = playlist_MediaFiles_temporary.value.findIndex(
     (item: any) => item.play_id === store_player_audio_info.this_audio_play_id
   )
-  let last_play = index >= usePlaylistStore().playlist_MediaFiles_temporary.length - 1
+  let last_play = index >= playlist_MediaFiles_temporary.value.length - 1
   if (last_play && store_player_audio_logic.play_order === 'playback-1') {
     await store_player_audio_logic.player.pause()
   } else {
@@ -576,7 +589,7 @@ watch(
 ////// player_configs player_button order area
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 const backpanel_order_leave = () => {
-  if (!store_player_appearance.player_show) {
+  if (!player_show.value) {
     // store_player_audio_logic.drawer_order_show = false;
   }
 }
@@ -611,13 +624,13 @@ const backpanel_order_click = () => {
   }
 }
 async function Play_Media_Order(model_num: string, increased: number) {
-  let last_index = usePlaylistStore().playlist_MediaFiles_temporary.length
+  let last_index = playlist_MediaFiles_temporary.value.length
   if (last_index > 0) {
-    let index = usePlaylistStore().playlist_MediaFiles_temporary.findIndex(
+    let index = playlist_MediaFiles_temporary.value.findIndex(
       (item: any) => item.play_id === store_player_audio_info.this_audio_play_id
     )
     if (index === -1) {
-      index = usePlaylistStore().playlist_MediaFiles_temporary.findIndex(
+      index = playlist_MediaFiles_temporary.value.findIndex(
         (item: any) => item.id === store_player_audio_info.this_audio_song_id
       )
     }
@@ -691,11 +704,11 @@ async function Play_Media_Order(model_num: string, increased: number) {
               await store_general_fetch_media_list.fetchData_Media_of_server_web_start()
               store_general_fetch_media_list._load_model = 'search'
 
-              const media_file = usePlaylistStore().playlist_MediaFiles_temporary[index]
+              const media_file = playlist_MediaFiles_temporary.value[index]
               await store_player_audio_logic.update_current_media_info(media_file, index)
               console.log(media_file)
 
-              usePlaylistStore().media_page_handleItemDbClick = false
+              playlistStore.media_page_handleItemDbClick = false
               store_player_audio_info.this_audio_restart_play = true
             }
           } else if (index < 0) {
@@ -709,17 +722,17 @@ async function Play_Media_Order(model_num: string, increased: number) {
       if (!store_server_user_model.random_play_model || index < last_index) {
         if (!stop_play) {
           if (store_server_user_model.model_server_type_of_web) {
-            if (index >= usePlaylistStore().playlist_MediaFiles_temporary.length) {
+            if (index >= playlist_MediaFiles_temporary.value.length) {
               store_general_fetch_media_list._load_model = 'play'
               await store_general_fetch_media_list.fetchData_Media_of_server_web_end()
               store_general_fetch_media_list._load_model = 'search'
             }
           }
-          const media_file = usePlaylistStore().playlist_MediaFiles_temporary[index]
+          const media_file = playlist_MediaFiles_temporary.value[index]
           await store_player_audio_logic.update_current_media_info(media_file, index)
           console.log(media_file)
 
-          usePlaylistStore().media_page_handleItemDbClick = false
+          playlistStore.media_page_handleItemDbClick = false
           store_player_audio_info.this_audio_restart_play = true
         }
       }
@@ -727,7 +740,7 @@ async function Play_Media_Order(model_num: string, increased: number) {
   }
 }
 async function begin_random_play_model() {
-  usePlaylistStore().playlist_MediaFiles_temporary = []
+  playlist_MediaFiles_temporary.value = []
   store_player_audio_logic.play_order = 'playback-4'
   if (store_server_users.server_select_kind === 'ninesong') {
     let get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
@@ -749,11 +762,11 @@ async function begin_random_play_model() {
     )
   }
   ///
-  const media_file = usePlaylistStore().playlist_MediaFiles_temporary[0]
+  const media_file = playlist_MediaFiles_temporary.value[0]
   await store_player_audio_logic.update_current_media_info(media_file, 0)
   console.log(media_file)
   ///
-  usePlaylistStore().media_page_handleItemDbClick = false
+  playlistStore.media_page_handleItemDbClick = false
   store_player_audio_info.this_audio_restart_play = true
 }
 
@@ -777,7 +790,7 @@ const play_skip_back_click = async () => {
   store_player_audio_logic.player.isPlaying = false
   Play_Media_Order(store_player_audio_logic.play_order, -1)
 
-  store_player_appearance.player_mode_of_lock_playlist = true
+  player_mode_of_lock_playlist.value = true
 }
 const play_skip_forward_click = async () => {
   if (store_player_audio_logic.player_model_cue) {
@@ -798,7 +811,7 @@ const play_skip_forward_click = async () => {
   store_player_audio_logic.player.isPlaying = false
   Play_Media_Order(store_player_audio_logic.play_order, 1)
 
-  store_player_appearance.player_mode_of_lock_playlist = true
+  player_mode_of_lock_playlist.value = true
 }
 //
 watch(
@@ -1047,7 +1060,7 @@ watch(
 
 ////// open playList
 const Set_Playlist_Show = () => {
-  usePlaylistStore().playlist_show = !usePlaylistStore().playlist_show
+  playlist_show.value = !playlist_show.value
 }
 ////// open sound effects
 const Set_Player_Show_Sound_effects = () => {
@@ -1067,9 +1080,9 @@ const Set_Player_Show_Sound_more = () => {
 
 ////// auto collapse player_configs bar
 const handleMouseMove = () => {
-  if (store_player_appearance.player_show) {
-    if (store_player_appearance.player_use_playbar_auto_hide) {
-      store_player_appearance.player_collapsed_action_bar_of_Immersion_model = true
+  if (player_show.value) {
+    if (player_use_playbar_auto_hide.value) {
+      player_collapsed_action_bar_of_Immersion_model.value = true
     }
     store_player_audio_logic.drawer_order_show = false
     store_player_audio_logic.drawer_volume_show = false
@@ -1077,7 +1090,6 @@ const handleMouseMove = () => {
 }
 
 ////// changed_data write to sqlite
-import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { store_player_sound_effects } from '@/views/view_app/page/page_player/store/store_player_sound_effects'
@@ -1114,10 +1126,9 @@ const handleItemClick_Favorite = (id, favorite) => {
     const item_file: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find(
       (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
     )
-    const item_playlist: Media_File | undefined =
-      usePlaylistStore().playlist_MediaFiles_temporary.find(
-        (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
-      )
+    const item_playlist: Media_File | undefined = playlist_MediaFiles_temporary.value.find(
+      (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
+    )
     if (item_file !== undefined) item_file.favorite = !favorite
     if (item_playlist !== undefined) item_playlist.favorite = !favorite
   }
@@ -1129,10 +1140,9 @@ const handleItemClick_Rating = (id, rating) => {
   const item_file: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find(
     (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
   )
-  const item_playlist: Media_File | undefined =
-    usePlaylistStore().playlist_MediaFiles_temporary.find(
-      (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
-    )
+  const item_playlist: Media_File | undefined = playlist_MediaFiles_temporary.value.find(
+    (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
+  )
   if (item_file !== undefined) item_file.rating = rating
   if (item_playlist !== undefined) item_playlist.rating = rating
 }
@@ -1270,9 +1280,7 @@ watch(
     class="this_Bar_Music_Player"
     style="transition: margin 0.4s"
     :style="{
-      marginBottom: store_player_appearance.player_collapsed_action_bar_of_Immersion_model
-        ? '-80px'
-        : '0px',
+      marginBottom: player_collapsed_action_bar_of_Immersion_model ? '-80px' : '0px',
     }"
     @mouseleave="
       () => {
@@ -1285,23 +1293,22 @@ watch(
       class="layout_distribution_3"
       style="transition: margin 0.4s"
       :style="{
-        // marginLeft: store_player_appearance.player_show ? '0px' : (store_system_configs_info.app_view_left_menu_collapsed ? '72px' : '166px'),
-        // width: store_player_appearance.player_show ? '100vw' : (store_system_configs_info.app_view_left_menu_collapsed ? 'calc(100vw - 72px)' : 'calc(100vw - 167px)'),
-        marginLeft: store_player_appearance.player_show ? '0px' : '72px',
-        width: store_player_appearance.player_show ? '100vw' : 'calc(100vw - 72px)',
+        // marginLeft: player_show.value ? '0px' : (store_system_configs_info.app_view_left_menu_collapsed ? '72px' : '166px'),
+        // width: player_show.value ? '100vw' : (store_system_configs_info.app_view_left_menu_collapsed ? 'calc(100vw - 72px)' : 'calc(100vw - 167px)'),
+        marginLeft: player_show ? '0px' : '72px',
+        width: player_show ? '100vw' : 'calc(100vw - 72px)',
       }"
     >
-      <!--      v-if="store_player_appearance.player_show_of_control_info"-->
       <div
         class="gird_Left"
         @mousemove="
           () => {
-            store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false
+            player_collapsed_action_bar_of_Immersion_model = false
           }
         "
         @mouseover="
           () => {
-            store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false
+            player_collapsed_action_bar_of_Immersion_model = false
           }
         "
       >
@@ -1376,12 +1383,12 @@ watch(
         align="center"
         @mousemove="
           () => {
-            store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false
+            player_collapsed_action_bar_of_Immersion_model = false
           }
         "
         @mouseover="
           () => {
-            store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false
+            player_collapsed_action_bar_of_Immersion_model = false
           }
         "
       >
@@ -1389,11 +1396,11 @@ watch(
         <n-space
           class="grid_Middle_button_area"
           :style="{
-            margin: !store_player_appearance.player_show
+            margin: !player_show
               ? '10px auto 0'
-              : store_player_appearance.player_background_model_num === 3 ||
-                  store_player_appearance.player_background_model_num === 4 ||
-                  store_player_appearance.player_background_model_num === 5
+              : player_background_model_num === 3 ||
+                  player_background_model_num === 4 ||
+                  player_background_model_num === 5
                 ? '10px auto 0'
                 : '22px auto 0',
           }"
@@ -1621,11 +1628,11 @@ watch(
           style="width: 460px"
           :style="{
             marginTop:
-              !store_player_appearance.player_show ||
-              (store_player_appearance.player_show &&
-                (store_player_appearance.player_background_model_num === 3 ||
-                  store_player_appearance.player_background_model_num === 4 ||
-                  store_player_appearance.player_background_model_num === 5))
+              !player_show ||
+              (player_show &&
+                (player_background_model_num === 3 ||
+                  player_background_model_num === 4 ||
+                  player_background_model_num === 5))
                 ? '-2px'
                 : '30px',
           }"
@@ -1876,12 +1883,12 @@ watch(
         class="gird_Right"
         @mousemove="
           () => {
-            store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false
+            player_collapsed_action_bar_of_Immersion_model = false
           }
         "
         @mouseover="
           () => {
-            store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false
+            player_collapsed_action_bar_of_Immersion_model = false
           }
         "
       >
@@ -1889,7 +1896,7 @@ watch(
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-badge
-                :value="usePlaylistStore().playlist_MediaFiles_temporary.length"
+                :value="playlist_MediaFiles_temporary.length"
                 show-zero
                 :max="9999"
                 :offset="[-7, 3]"
@@ -1913,7 +1920,7 @@ watch(
           class="gird_Right_button_area"
           style="margin-top: 16px"
           :style="{
-            width: !store_player_appearance.player_show
+            width: !player_show
               ? store_server_user_model.model_server_type_of_web
                 ? store_server_users.server_select_kind === 'ninesong'
                   ? '102px'
@@ -1960,7 +1967,7 @@ watch(
                   : '16px',
             }"
           >
-            <n-tooltip trigger="hover" placement="top" v-if="store_player_appearance.player_show">
+            <n-tooltip trigger="hover" placement="top" v-if="player_show">
               <template #trigger>
                 <n-button
                   size="tiny"

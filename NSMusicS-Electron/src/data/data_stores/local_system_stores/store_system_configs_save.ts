@@ -5,7 +5,7 @@ import { store_server_user_model } from '@/data/data_stores/server_configs_store
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { Write_LocalSqlite_System_Configs } from '@/data/data_repository/system_repository/Write_LocalSqlite_System_Configs'
 import { Player_Configs_of_UI } from '@/data/data_models/app_models/app_Configs/class_Player_Configs_of_UI'
-import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
+import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { Player_Configs_of_Audio_Info } from '@/data/data_models/app_models/app_Configs/class_Player_Configs_of_Audio_Info'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
@@ -180,29 +180,28 @@ export const store_system_configs_save = reactive({
     }
   },
   async save_system_config_of_Player_Configs_of_UI() {
+    const playerAppearanceStore = usePlayerAppearanceStore()
     const player_Configs_of_UI = ref(
       new Player_Configs_of_UI({
-        player_collapsed_album: String(store_player_appearance.player_collapsed_album),
-        player_collapsed_skin: String(store_player_appearance.player_collapsed_skin),
-        player_lyric_fontSize: String(store_player_appearance.player_lyric_fontSize),
-        player_lyric_fontWeight: String(store_player_appearance.player_lyric_fontWeight),
-        player_lyric_color: String(store_player_appearance.player_lyric_color),
-        player_theme_Styles_Selected: String(store_player_appearance.player_theme_Styles_Selected),
-        player_background_model_num: String(store_player_appearance.player_background_model_num),
-        player_use_lottie_animation: String(store_player_appearance.player_use_lottie_animation),
-        player_use_lyric_skip_forward: String(
-          store_player_appearance.player_use_lyric_skip_forward
-        ),
+        player_collapsed_album: String(playerAppearanceStore.player_collapsed_album),
+        player_collapsed_skin: String(playerAppearanceStore.player_collapsed_skin),
+        player_lyric_fontSize: String(playerAppearanceStore.player_lyric_fontSize),
+        player_lyric_fontWeight: String(playerAppearanceStore.player_lyric_fontWeight),
+        player_lyric_color: String(playerAppearanceStore.player_lyric_color),
+        player_theme_Styles_Selected: String(playerAppearanceStore.player_theme_Styles_Selected),
+        player_background_model_num: String(playerAppearanceStore.player_background_model_num),
+        player_use_lottie_animation: String(playerAppearanceStore.player_use_lottie_animation),
+        player_use_lyric_skip_forward: String(playerAppearanceStore.player_use_lyric_skip_forward),
         player_use_background_filter_blur: String(
-          store_player_appearance.player_use_background_filter_blur
+          playerAppearanceStore.player_use_background_filter_blur
         ),
         player_use_background_automatic_rotation: String(
-          store_player_appearance.player_use_background_automatic_rotation
+          playerAppearanceStore.player_use_background_automatic_rotation
         ),
         player_use_background_repeat_fill: String(
-          store_player_appearance.player_use_background_repeat_fill
+          playerAppearanceStore.player_use_background_repeat_fill
         ),
-        player_use_playbar_auto_hide: String(store_player_appearance.player_use_playbar_auto_hide),
+        player_use_playbar_auto_hide: String(playerAppearanceStore.player_use_playbar_auto_hide),
       })
     )
     const system_Configs_Write = new Write_LocalSqlite_System_Configs()
@@ -244,6 +243,7 @@ export const store_system_configs_save = reactive({
   },
   async save_system_config_of_Player_Configs_of_Audio_Info() {
     let player_Configs_of_Audio_Info = null
+    const playerAppearanceStore = usePlayerAppearanceStore()
     player_Configs_of_Audio_Info = ref(
       new Player_Configs_of_Audio_Info({
         this_audio_file_path: String(store_player_audio_info.this_audio_file_path),
@@ -275,9 +275,9 @@ export const store_system_configs_save = reactive({
 
         page_songlists_selected: String(store_view_media_page_logic.page_songlists_selected),
 
-        player_mode_of_lock_playlist: String(store_player_appearance.player_mode_of_lock_playlist),
+        player_mode_of_lock_playlist: String(playerAppearanceStore.player_mode_of_lock_playlist),
         player_mode_of_medialist_from_external_import: String(
-          store_player_appearance.player_mode_of_medialist_from_external_import
+          playerAppearanceStore.player_mode_of_medialist_from_external_import
         ),
       })
     )

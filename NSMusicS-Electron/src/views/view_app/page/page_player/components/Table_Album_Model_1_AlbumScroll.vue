@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
-import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
+import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { NSlider } from 'naive-ui'
 
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
+import { storeToRefs } from 'pinia'
+
 function getAssetImage(firstImage: string) {
   return new URL(firstImage, import.meta.url).href
 }
@@ -45,6 +47,18 @@ import { ref, computed } from 'vue'
 
 import { NCarousel, NCarouselItem } from 'naive-ui'
 
+// 在setup上下文中获取Store实例
+const playerAppearanceStore = usePlayerAppearanceStore()
+const playlistStore = usePlaylistStore()
+// 使用 storeToRefs 解构出所需的响应式属性
+const {
+  player_background_model_num,
+  player_collapsed_action_bar_of_Immersion_model,
+  player_collapsed_album,
+} = storeToRefs(playerAppearanceStore)
+
+const { playlist_MediaFiles_temporary_carousel } = storeToRefs(playlistStore)
+
 const directionRef = ref('vertical')
 const placementRef = ref('right')
 
@@ -65,10 +79,10 @@ const nextSlideStyle = computed(() => {
     vertical
     align="center"
     :style="{
-      marginTop: store_player_appearance.player_background_model_num === 0 ? '0px' : '100px',
-      opacity: store_player_appearance.player_background_model_num === 0 ? 1 : 0,
-      position: store_player_appearance.player_background_model_num === 0 ? 'relative' : 'absolute',
-      left: store_player_appearance.player_background_model_num === 0 ? '0' : '-100%',
+      marginTop: player_background_model_num === 0 ? '0px' : '100px',
+      opacity: player_background_model_num === 0 ? 1 : 0,
+      position: player_background_model_num === 0 ? 'relative' : 'absolute',
+      left: player_background_model_num === 0 ? '0' : '-100%',
       transition: 'margin 0.4s, opacity 0.8s',
     }"
     style="margin-right: 1vw"
@@ -95,13 +109,13 @@ const nextSlideStyle = computed(() => {
           0 0 12px rgba(0, 0, 0, 0.2);
       "
       :style="{
-        marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model
+        marginTop: player_collapsed_action_bar_of_Immersion_model
           ? 'calc(28vh - 182px)'
           : 'calc(28vh - 182px)',
         transition: 'margin 0.4s, height 0.4s',
         backgroundImage:
-          !usePlaylistStore().playlist_MediaFiles_temporary_carousel ||
-          usePlaylistStore().playlist_MediaFiles_temporary_carousel.length === 0
+          !playlist_MediaFiles_temporary_carousel ||
+          playlist_MediaFiles_temporary_carousel.length === 0
             ? `url(${error_album})`
             : 'none',
         backgroundRepeat: 'no-repeat',
@@ -109,7 +123,7 @@ const nextSlideStyle = computed(() => {
       }"
     >
       <n-carousel-item
-        v-for="(item, index) in usePlaylistStore().playlist_MediaFiles_temporary_carousel"
+        v-for="(item, index) in playlist_MediaFiles_temporary_carousel"
         :key="index"
         style="width: 55vh; height: 55vh"
       >
@@ -161,7 +175,7 @@ const nextSlideStyle = computed(() => {
       </div>
     </n-space>
     <!--  -->
-    <n-space vertical v-if="!store_player_appearance.player_collapsed_album">
+    <n-space vertical v-if="!player_collapsed_album">
       <n-space justify="end" style="width: 55vh; margin-top: -29px">
         <n-space>
           {{ store_player_audio_logic.current_play_time }}

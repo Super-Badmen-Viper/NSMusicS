@@ -5,6 +5,7 @@ import { ChevronLeft16Filled, ChevronRight16Filled } from '@vicons/fluent'
 import { ref, onMounted, computed } from 'vue'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+import { storeToRefs } from 'pinia'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 
 ////// scrollbar of playlist_view
@@ -26,15 +27,15 @@ const errorHandled = ref(new Map())
 
 // 创建包装方法以便在模板中使用
 const openDragSort = () => {
-  usePlaylistStore().menu_item_open_drag_sort()
+  playlistStore.menu_item_open_drag_sort()
 }
 
 const setMenuItemId = (id) => {
-  usePlaylistStore().playlist_Menu_Item_Id = id
+  playlist_Menu_Item_Id.value = id
 }
 
 const closeDragSort = () => {
-  usePlaylistStore().playlist_DragSort_Model = false
+  playlist_DragSort_Model.value = false
 }
 const handleImageError = async (item: any) => {
   let result_src = error_album
@@ -97,17 +98,16 @@ async function update_playlist_addMediaFile(id: any, playlist_id: any) {
 }
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'))
 function menu_item_remove_to_playlist_current() {
-  usePlaylistStore().playlist_MediaFiles_temporary =
-    usePlaylistStore().playlist_MediaFiles_temporary.filter(
-      (mediaFile: Media_File) => mediaFile.id !== usePlaylistStore().playlist_Menu_Item_Id
+  playlist_MediaFiles_temporary.value = playlist_MediaFiles_temporary.value.filter(
+    (mediaFile: Media_File) => mediaFile.id !== playlist_Menu_Item_Id.value
+  )
+
+  playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =
+    playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.filter(
+      (mediaId: string) => mediaId !== playlist_Menu_Item_Id.value
     )
 
-  usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds =
-    usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.filter(
-      (mediaId: string) => mediaId !== usePlaylistStore().playlist_Menu_Item_Id
-    )
-
-  usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+  playlist_MediaFiles_temporary.value.forEach((item: any, index: number) => {
     item.absoluteIndex = index
   })
 
@@ -116,29 +116,27 @@ function menu_item_remove_to_playlist_current() {
   contextmenu.value.hide()
 }
 function menu_item_move_to_playlist_start() {
-  const item: Media_File | undefined = usePlaylistStore().playlist_MediaFiles_temporary.find(
-    (mediaFile: Media_File) => mediaFile.id === usePlaylistStore().playlist_Menu_Item_Id
+  const item: Media_File | undefined = playlist_MediaFiles_temporary.value.find(
+    (mediaFile: Media_File) => mediaFile.id === playlist_Menu_Item_Id.value
   )
   if (item != undefined && item != 'undefined') {
-    const index = usePlaylistStore().playlist_MediaFiles_temporary.findIndex(
+    const index = playlist_MediaFiles_temporary.value.findIndex(
       (mediaFile: Media_File) => mediaFile.id === item.id
     )
     if (index !== -1) {
-      usePlaylistStore().playlist_MediaFiles_temporary.splice(index, 1)
+      playlist_MediaFiles_temporary.value.splice(index, 1)
     }
 
-    const mediaIdIndex = usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.indexOf(
-      item.id
-    )
+    const mediaIdIndex = playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.indexOf(item.id)
     if (mediaIdIndex !== -1) {
-      usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.splice(mediaIdIndex, 1)
+      playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.splice(mediaIdIndex, 1)
     }
 
-    usePlaylistStore().playlist_MediaFiles_temporary.unshift(item)
+    playlist_MediaFiles_temporary.value.unshift(item)
 
-    usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.unshift(item.id)
+    playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.unshift(item.id)
 
-    usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+    playlist_MediaFiles_temporary.value.forEach((item: any, index: number) => {
       item.absoluteIndex = index
     })
 
@@ -148,29 +146,27 @@ function menu_item_move_to_playlist_start() {
   }
 }
 function menu_item_move_to_playlist_end() {
-  const item: Media_File | undefined = usePlaylistStore().playlist_MediaFiles_temporary.find(
-    (mediaFile: Media_File) => mediaFile.id === usePlaylistStore().playlist_Menu_Item_Id
+  const item: Media_File | undefined = playlist_MediaFiles_temporary.value.find(
+    (mediaFile: Media_File) => mediaFile.id === playlist_Menu_Item_Id.value
   )
   if (item != undefined && item != 'undefined') {
-    const index = usePlaylistStore().playlist_MediaFiles_temporary.findIndex(
+    const index = playlist_MediaFiles_temporary.value.findIndex(
       (mediaFile: Media_File) => mediaFile.id === item.id
     )
     if (index !== -1) {
-      usePlaylistStore().playlist_MediaFiles_temporary.splice(index, 1)
+      playlist_MediaFiles_temporary.value.splice(index, 1)
     }
 
-    const mediaIdIndex = usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.indexOf(
-      item.id
-    )
+    const mediaIdIndex = playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.indexOf(item.id)
     if (mediaIdIndex !== -1) {
-      usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.splice(mediaIdIndex, 1)
+      playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.splice(mediaIdIndex, 1)
     }
 
-    usePlaylistStore().playlist_MediaFiles_temporary.push(item)
+    playlist_MediaFiles_temporary.value.push(item)
 
-    usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.push(item.id)
+    playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.push(item.id)
 
-    usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+    playlist_MediaFiles_temporary.value.forEach((item: any, index: number) => {
       item.absoluteIndex = index
     })
 
@@ -181,19 +177,17 @@ function menu_item_move_to_playlist_end() {
 }
 //////
 function onChange() {
-  usePlaylistStore().playlist_MediaFiles_temporary_Sort_Items.forEach(
-    (item: any, index: number) => {
-      item.absoluteIndex = index + usePlaylistStore().playlist_Sort_StartIndex
-    }
-  )
-  usePlaylistStore().menu_item_reinsert_drag_sort()
+  playlist_MediaFiles_temporary_Sort_Items.value.forEach((item: any, index: number) => {
+    item.absoluteIndex = index + playlistStore.playlist_Sort_StartIndex
+  })
+  playlistStore.menu_item_reinsert_drag_sort()
 }
 
 //////
 const isScrolling = ref(false)
 const onScrollEnd = async () => {
   if (isScrolling.value) return
-  if (usePlaylistStore().playlist_MediaFiles_temporary.length < 30) return
+  if (playlist_MediaFiles_temporary.value.length < 30) return
   isScrolling.value = true
   if (store_server_user_model.model_server_type_of_web) {
     if (!store_server_user_model.random_play_model) {
@@ -235,27 +229,38 @@ const onScrollEnd = async () => {
 }
 
 const handleDoubleTap = (item: any, index: number) => {
-  usePlaylistStore().handleItemDbClick(item, index)
+  playlistStore.handleItemDbClick(item, index)
 }
 
 onMounted(() => {
-  usePlaylistStore().playlist_DragSort_Model = false
+  playlistStore.playlist_DragSort_Model = false
 })
+
+//// 在setup上下文中获取Store实例
+const playlistStore = usePlaylistStore()
+//// 使用 storeToRefs 解构出所需的响应式属性
+const {
+  playlist_names_ALLLists,
+  playlist_Menu_Item_Id,
+  playlist_DragSort_Model,
+  playlist_MediaFiles_temporary,
+  playlist_MediaFiles_temporary_Sort_Items,
+} = storeToRefs(playlistStore)
 </script>
 <template>
   <n-space vertical :size="12">
     <div class="dynamic-scroller-demo-playlist">
       <v-contextmenu
-        v-if="!usePlaylistStore().playlist_DragSort_Model"
+        v-if="!playlist_DragSort_Model"
         ref="contextmenu"
         class="v-contextmenu-item v-contextmenu-item--hover"
         style="z-index: 9999; position: absolute"
       >
         <v-contextmenu-submenu :title="menu_item_add_to_songlist">
           <v-contextmenu-item
-            v-for="n in usePlaylistStore().playlist_names_ALLLists"
+            v-for="n in playlist_names_ALLLists"
             :key="n.value"
-            @click="update_playlist_addMediaFile(usePlaylistStore().playlist_Menu_Item_Id, n.value)"
+            @click="update_playlist_addMediaFile(playlist_Menu_Item_Id, n.value)"
           >
             {{ n.label }}
           </v-contextmenu-item>
@@ -277,13 +282,13 @@ onMounted(() => {
         </v-contextmenu-item>
       </v-contextmenu>
       <DynamicScroller
-        v-if="!usePlaylistStore().playlist_DragSort_Model"
+        v-if="!playlist_DragSort_Model"
         class="table-playlist"
         ref="scrollbar"
         :style="{
           width: store_system_configs_info.window_state_miniplayer_playlist ? '280px' : '488px',
         }"
-        :items="usePlaylistStore().playlist_MediaFiles_temporary"
+        :items="playlist_MediaFiles_temporary"
         key-field="play_id"
         :minItemSize="50"
         @scroll-end="onScrollEnd"
@@ -297,7 +302,7 @@ onMounted(() => {
             class="message_playlist"
             v-contextmenu:contextmenu
             @contextmenu.prevent="setMenuItemId(item.id)"
-            @dblclick="usePlaylistStore().handleItemDbClick(item, index)"
+            @dblclick="playlistStore.handleItemDbClick(item, index)"
           >
             <!--            v-hammer:doubletap="() => handleDoubleTap(item, index)"-->
             <div
@@ -400,7 +405,7 @@ onMounted(() => {
           </DynamicScrollerItem>
         </template>
       </DynamicScroller>
-      <n-space v-if="usePlaylistStore().playlist_DragSort_Model">
+      <n-space v-if="playlist_DragSort_Model">
         <n-space style="height: calc(100vh - 212px)" vertical justify="space-between">
           <div></div>
           <n-button style="border-radius: 8px" @click="closeDragSort">
@@ -418,10 +423,10 @@ onMounted(() => {
           }"
           style="position: absolute; overflow-y: auto; overflow-x: hidden"
           @update="onChange"
-          v-model="usePlaylistStore().playlist_MediaFiles_temporary_Sort_Items"
+          v-model="playlist_MediaFiles_temporary_Sort_Items"
         >
           <div
-            v-for="(item, index) in usePlaylistStore().playlist_MediaFiles_temporary_Sort_Items"
+            v-for="(item, index) in playlist_MediaFiles_temporary_Sort_Items"
             :key="item.id"
             class="message_playlist"
           >

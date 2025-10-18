@@ -29,11 +29,12 @@ import Bar_Music_Player from '@/views/view_app/components/player_bar/Bar_Music_P
 import Bar_Music_PlayList from '@/views/view_app/drawer/View_Player_PlayList.vue'
 import View_Screen_Music_Player from '@/views/view_app/page/page_player/View_Screen_Music_Player.vue'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
+import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_player_sound_effects } from '@/views/view_app/page/page_player/store/store_player_sound_effects'
 import { store_player_sound_speed } from '@/views/view_app/page/page_player/store/store_player_sound_speed'
 import { store_player_sound_more } from '@/views/view_app/page/page_player/store/store_player_sound_more'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+import { storeToRefs } from 'pinia'
 import { store_server_login_logic } from '@/views/view_server/page_login/store/store_server_login_logic'
 import { store_server_model_statistics } from '@/data/data_stores/server_api_stores/server_api_core/model/model_statistics'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
@@ -57,17 +58,26 @@ import { store_player_tag_modify } from '@/views/view_app/page/page_player/store
 ////// BrowserWindow
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 let mobile_model = false
+// 在setup上下文中获取Store实例
+const playerAppearanceStore = usePlayerAppearanceStore()
+// 使用 storeToRefs 解构出所需的响应式属性
+const {
+  player_show,
+  player_show_hight_animation_value,
+  player_collapsed_action_bar_of_Immersion_model,
+} = storeToRefs(playerAppearanceStore)
+
 window.addEventListener('resize', () => {
   store_system_configs_info.window_innerWidth = window.innerWidth
   store_system_configs_info.window_innerHeight = window.innerHeight
 
   mobile_model = window.innerWidth / window.innerHeight < 0.5
 
-  store_player_appearance.player_lyric_fontSize_Num =
-    store_player_appearance.player_use_lyric_skip_forward
+  playerAppearanceStore.player_lyric_fontSize_Num =
+    playerAppearanceStore.player_use_lyric_skip_forward
       ? 36 + Math.floor((window.innerHeight - 880) / 200) * 6
       : 33 + Math.floor((window.innerHeight - 880) / 200) * 6
-  store_player_appearance.player_lyric_fontSize = `${store_player_appearance.player_lyric_fontSize_Num}px`
+  playerAppearanceStore.player_lyric_fontSize = `${player_lyric_fontSize_Num.value}px`
 })
 
 ////// i18n auto lang
@@ -154,24 +164,25 @@ function create_menuOptions_appBar() {
 
 ////// player view
 async function get_playerbar_to_switch_playerview(value) {
-  store_player_appearance.player_show_complete = false
+  const playerAppearanceStore = usePlayerAppearanceStore()
+  playerAppearanceStore.player_show_complete = false
   if (store_router_data_logic.clear_Memory_Model) {
     store_router_data_logic.clear_Files_temporary() // Memory Model
   }
   if (value === 0) {
-    store_player_appearance.player_show = true
+    playerAppearanceStore.player_show = true
     if (store_router_data_logic.clear_Memory_Model) {
       store_system_configs_info.app_view_bar_show = false
     }
   }
   setTimeout(() => {
-    store_player_appearance.player_show_hight_animation_value = value
+    playerAppearanceStore.player_show_hight_animation_value = value
     setTimeout(() => {
       if (value === 0) {
         store_system_configs_info.theme_app = darkTheme
       } else {
         store_system_configs_info.theme_app = store_system_configs_info.theme
-        store_player_appearance.player_show = false
+        playerAppearanceStore.player_show = false
         if (store_router_data_logic.clear_Memory_Model) {
           store_system_configs_info.app_view_bar_show = true
         }
@@ -182,7 +193,7 @@ async function get_playerbar_to_switch_playerview(value) {
     if (value !== 0) {
       await handleMenuSelection()
     }
-    store_player_appearance.player_show_complete = true
+    playerAppearanceStore.player_show_complete = true
     if (isElectron) {
       ipcRenderer.send('window-gc')
     }
@@ -824,15 +835,20 @@ const Init_page_artistlists_statistic_Data = () => {
     id: 'artist_list_all_PlayList',
   })
 }
+// 在setup上下文中获取Store实例
+const playlistStore = usePlaylistStore()
+// 使用 storeToRefs 解构出所需的响应式属性
+const { playlist_show, playlist_names_StartUpdate } = storeToRefs(playlistStore)
+
 ///// view of playlist
 watch(
-  () => usePlaylistStore().playlist_names_StartUpdate,
+  () => playlist_names_StartUpdate.value,
   (newValue) => {
     if (newValue) {
       Init_page_songlists_statistic_Data()
       Init_page_cuelists_statistic_Data()
-      usePlaylistStore().playlist_names_StartUpdate = false
-      console.log('usePlaylistStore().playlist_names_StartUpdate')
+      playlist_names_StartUpdate.value = false
+      console.log('playlist_names_StartUpdate.value')
     }
   }
 )
@@ -950,7 +966,7 @@ function fullScreen() {
               :width="166"
               style="border-radius: 0 20px 20px 0"
               :style="{
-                zIndex: store_player_appearance.player_show ? 200 : 208,
+                zIndex: player_show ? 200 : 208,
               }"
             >
               <n-flex vertical justify="center">
@@ -1204,7 +1220,7 @@ function fullScreen() {
                             store_system_configs_info.window_state_miniplayer =
                               !store_system_configs_info.window_state_miniplayer
                             //await ipcRenderer.invoke('get-window-state-miniplayer');
-                            store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false
+                            player_collapsed_action_bar_of_Immersion_model = false
                             //
                             store_system_configs_info.window_full = false
                             store_system_configs_info.window_max = false
@@ -1311,12 +1327,9 @@ function fullScreen() {
           <n-config-provider :theme="store_system_configs_info.theme_app" style="z-index: 203">
             <View_Screen_Music_Player
               class="view_music_player"
-              v-if="
-                store_player_appearance.player_show &&
-                !store_system_configs_info.window_state_miniplayer
-              "
+              v-if="player_show && !store_system_configs_info.window_state_miniplayer"
               :style="{
-                height: `calc(100vh - ${store_player_appearance.player_show_hight_animation_value}vh)`,
+                height: `calc(100vh - ${player_show_hight_animation_value}vh)`,
               }"
             >
             </View_Screen_Music_Player>
@@ -1362,8 +1375,8 @@ function fullScreen() {
     <n-config-provider :theme="darkTheme">
       <!-- right drwaer of music_playlist -->
       <n-drawer
-        :show="usePlaylistStore().playlist_show"
-        @update:show="(value) => (usePlaylistStore().playlist_show = value)"
+        :show="playlist_show"
+        @update:show="(value) => (playlist_show = value)"
         :width="520"
         z-index="100"
         style="

@@ -31,6 +31,7 @@ import { ref, watch, watchEffect, onMounted, computed, h } from 'vue'
 import { onBeforeUnmount } from 'vue'
 
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+import { storeToRefs } from 'pinia'
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
@@ -83,7 +84,7 @@ function load_lyrics() {
         }
       )
     }
-    handleAuto_fontSize(store_player_appearance.player_lyric_fontSize_Num)
+    handleAuto_fontSize(player_lyric_fontSize_Num)
     begin_lyrics_animation()
     try {
       setTimeout(() => {
@@ -147,17 +148,17 @@ function begin_lyrics_animation() {
         handleClear_Lyric_Color()
         lyrics_list_whell.value = false
         store_player_audio_logic.player_slider_click = false
-        const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info')
-        const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active')
-        let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2)
+        const itemElements = scrollbar.value?.$el.querySelectorAll('.lyrics_info') || []
+        const itemElements_active =
+          scrollbar.value?.$el.querySelectorAll('.lyrics_text_active') || []
+        let color_hidden = player_lyric_color.slice(0, -2)
         const index =
           store_player_view.currentScrollIndex +
           store_player_audio_info.this_audio_lyrics_info_line_num
         scrollToItem(index)
         for (let i = index - 16; i <= index + 16; i++) {
           const colorValue = Math.max(
-            store_player_appearance.player_lyric_color_hidden_value -
-              (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient,
+            player_lyric_color_hidden_value - (index - i) * player_lyric_color_hidden_coefficient,
             0
           )
           if (i < index) {
@@ -200,7 +201,7 @@ const handleItemDbClick = async (index: any) => {
 
   handleLeave_Refresh_Lyric_Color()
 }
-const scrollbar = ref(null)
+const scrollbar = ref<any>(null)
 const perviousIndex = ref(0)
 const scrollToItem = (index: number) => {
   if (!scrollbar.value) {
@@ -216,10 +217,10 @@ const scrollToItem = (index: number) => {
   const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active')
   itemElements_active[index].style.fontSize =
     !store_system_configs_info.window_state_miniplayer_desktop_lyric ? '20px' : '26px'
-  itemElements_active[index].style.fontWeight = store_player_appearance.player_lyric_fontWeight
+  itemElements_active[index].style.fontWeight = player_lyric_fontWeight
 
   const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info')
-  itemElements[index].style.color = store_player_appearance.player_lyric_colorHover
+  itemElements[index].style.color = player_lyric_colorHover
   itemElements[index].style.filter = 'blur(0px)'
   itemElements[index].style.textShadow = '0 0 1px White'
   itemElements[index].style.transition = 'color 0.5s, transform 0.5s'
@@ -238,12 +239,11 @@ const scrollToItem = (index: number) => {
   // 设置前后16列的颜色
   handleLeave_Refresh_Lyric_Color()
   // 设置perviousIndex.value列的颜色
-  let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2)
+  let color_hidden = player_lyric_color.slice(0, -2)
   for (let i = index - 16; i <= index + 16; i++) {
     if (i < index) {
       const colorValue = Math.max(
-        store_player_appearance.player_lyric_color_hidden_value -
-          (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient,
+        player_lyric_color_hidden_value - (index - i) * player_lyric_color_hidden_coefficient,
         0
       )
       itemElements[i].style.color =
@@ -254,8 +254,7 @@ const scrollToItem = (index: number) => {
       itemElements_active[i].style.fontWeight = 400
     } else if (i != index) {
       const colorValue = Math.max(
-        store_player_appearance.player_lyric_color_hidden_value -
-          (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient,
+        player_lyric_color_hidden_value - (index - i) * player_lyric_color_hidden_coefficient,
         0
       )
       itemElements[i].style.color =
@@ -281,6 +280,8 @@ const scrollToItem = (index: number) => {
 
 const lastIndex = ref(-1)
 const startByteAnimations = (index: number, num: number) => {
+  if (!scrollbar.value) return
+
   const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active')
   let position_i_length = store_player_audio_info.this_audio_lyrics_info_byte_time.reduce(
     (acc: any, curr: any) => {
@@ -366,11 +367,10 @@ const startByteAnimations = (index: number, num: number) => {
   }
 
   try {
-    let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2)
+    let color_hidden = player_lyric_color.slice(0, -2)
     for (let i = 0; i < position_i_start; i++) {
       const colorValue = Math.max(
-        store_player_appearance.player_lyric_color_hidden_value -
-          (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient,
+        player_lyric_color_hidden_value - (index - i) * player_lyric_color_hidden_coefficient,
         0
       )
       itemElements_active[i].style.color =
@@ -385,8 +385,7 @@ const startByteAnimations = (index: number, num: number) => {
     }
     for (let i = position_i_end; i <= position_i_length; i++) {
       const colorValue = Math.max(
-        store_player_appearance.player_lyric_color_hidden_value -
-          (i - index) * store_player_appearance.player_lyric_color_hidden_coefficient,
+        player_lyric_color_hidden_value - (i - index) * player_lyric_color_hidden_coefficient,
         0
       )
       itemElements_active[i].style.color =
@@ -401,13 +400,14 @@ const startByteAnimations = (index: number, num: number) => {
     }
   } catch {}
 }
-let intervals = []
+let intervals: any[] = []
 const lyrics_list_whell = ref(false)
 const handleWheel = (event: any) => {
   handleClear_Lyric_Color()
 }
 function handleClear_Lyric_Color() {
   lyrics_list_whell.value = true
+  if (!scrollbar.value) return
   const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info')
   for (let i = 0; i < itemElements.length; i++) {
     itemElements[i].style.color = '#FFFFFF99'
@@ -418,15 +418,16 @@ function handleClear_Lyric_Color() {
 }
 const handleLeave_Refresh_Lyric_Color = () => {
   lyrics_list_whell.value = false
+  if (!scrollbar.value) return
   const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info')
   let lyric_bottom_hidden_num = 10
-  let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2)
+  let color_hidden = player_lyric_color.slice(0, -2)
   for (let i = perviousIndex.value - 16; i <= perviousIndex.value + 16; i++) {
     if (i < perviousIndex.value) {
       const colorValue = Math.max(
-        store_player_appearance.player_lyric_color_hidden_value +
+        player_lyric_color_hidden_value +
           lyric_bottom_hidden_num -
-          (perviousIndex.value - i) * store_player_appearance.player_lyric_color_hidden_coefficient,
+          (perviousIndex.value - i) * player_lyric_color_hidden_coefficient,
         0
       )
       try {
@@ -435,9 +436,9 @@ const handleLeave_Refresh_Lyric_Color = () => {
       } catch {}
     } else {
       const colorValue = Math.max(
-        store_player_appearance.player_lyric_color_hidden_value +
+        player_lyric_color_hidden_value +
           lyric_bottom_hidden_num -
-          (i - perviousIndex.value) * store_player_appearance.player_lyric_color_hidden_coefficient,
+          (i - perviousIndex.value) * player_lyric_color_hidden_coefficient,
         0
       )
       try {
@@ -448,8 +449,9 @@ const handleLeave_Refresh_Lyric_Color = () => {
   }
 }
 const handleAuto_fontSize = (value: number) => {
+  if (!scrollbar.value) return
   const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active')
-  itemElements_active.forEach((itemElement) => {
+  itemElements_active.forEach((itemElement: any) => {
     itemElement.style.fontSize = !store_system_configs_info.window_state_miniplayer_desktop_lyric
       ? '20px'
       : '26px'
@@ -457,13 +459,13 @@ const handleAuto_fontSize = (value: number) => {
   })
   let marginTop = 6 + Math.floor((window.innerHeight - 880) / 200) * 0.5
   const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info')
-  itemElements.forEach((itemElement) => {
+  itemElements.forEach((itemElement: any) => {
     itemElement.style.marginTop = marginTop
     itemElement.style.lineHeight = marginTop * 2 * 0.1
   })
 }
 watch(
-  () => store_player_appearance.player_lyric_fontSize_Num,
+  () => player_lyric_fontSize_Num,
   (newValue) => {
     handleLeave_Refresh_Lyric_Color()
     handleAuto_fontSize(newValue)
@@ -472,10 +474,10 @@ watch(
 
 ////// player_configs bind theme_all
 function init_player_theme() {
-  if (store_player_appearance.player_background_model_num === 0) {
-    store_player_appearance.player_show_of_control_info = false
+  if (player_background_model_num.value === 0) {
+    player_show_of_control_info.value = false
   } else {
-    store_player_appearance.player_show_of_control_info = true
+    player_show_of_control_info.value = true
   }
 }
 
@@ -499,7 +501,7 @@ const unwatch_player_collapsed = watchEffect(() => {
 })
 
 ////// Animation lottie Load // lottie-web will cause memory leaks，so replace lottie-player_configs
-import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
+import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
@@ -512,6 +514,21 @@ import { store_player_tag_modify } from '@/views/view_app/page/page_player/store
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
+
+// 在setup上下文中获取Store实例
+const playerAppearanceStore = usePlayerAppearanceStore()
+// 使用 storeToRefs 解构出所需的响应式属性
+const {
+  player_lyric_fontSize_Num,
+  player_lyric_fontWeight,
+  player_lyric_color,
+  player_lyric_colorHover,
+  player_lyric_color_hidden_value,
+  player_lyric_color_hidden_coefficient,
+  player_background_model_num,
+  player_show_of_control_info,
+  player_collapsed_action_bar_of_Immersion_model,
+} = storeToRefs(playerAppearanceStore)
 
 ///
 const show_mini_album_model = ref(false)
@@ -933,7 +950,7 @@ onBeforeUnmount(() => {
                             collapsed_action_bar = true
                             await ipcRenderer.invoke('window-state-miniplayer-show')
                             await ipcRenderer.invoke('window-state-miniplayer-show')
-                            store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false
+                            usePlayerAppearanceStore().player_collapsed_action_bar_of_Immersion_model = false
                           }
                         "
                       >
@@ -1256,7 +1273,7 @@ onBeforeUnmount(() => {
                             collapsed_action_bar = true
                             await ipcRenderer.invoke('window-state-miniplayer-show')
                             await ipcRenderer.invoke('window-state-miniplayer-show')
-                            store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false
+                            usePlayerAppearanceStore().player_collapsed_action_bar_of_Immersion_model = false
                             ///
                             show_more_options = !show_more_options
                           }
@@ -1284,7 +1301,7 @@ onBeforeUnmount(() => {
                             collapsed_action_bar = true
                             await ipcRenderer.invoke('window-state-miniplayer-show')
                             await ipcRenderer.invoke('window-state-miniplayer-show')
-                            store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false
+                            usePlayerAppearanceStore().player_collapsed_action_bar_of_Immersion_model = false
                             ///
                             store_system_configs_info.window_state_miniplayer_playlist =
                               !store_system_configs_info.window_state_miniplayer_playlist

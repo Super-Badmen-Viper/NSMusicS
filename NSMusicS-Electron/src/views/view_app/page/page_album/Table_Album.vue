@@ -38,10 +38,11 @@ import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_sto
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+import { storeToRefs } from 'pinia'
 
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
-import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
+import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 ////// right menu
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
@@ -571,7 +572,7 @@ onMounted(() => {
         store_server_users.server_select_kind === 'emby')
     ) {
       /// 兼容行为：打开指定艺术家，直接跳转乐曲页面，路由刷新到专辑页面需要清空数据
-      store_player_appearance.player_mode_of_medialist_from_external_import = true
+      usePlayerAppearanceStore().player_mode_of_medialist_from_external_import = true
       store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
     }
   }
@@ -648,7 +649,7 @@ const handleItemClick_artist = (artist_id: string) => {
 }
 const Open_this_album_MediaList_click = (album_id: string) => {
   if (store_server_user_model.model_server_type_of_web) {
-    store_player_appearance.player_mode_of_medialist_from_external_import = false
+    usePlayerAppearanceStore().player_mode_of_medialist_from_external_import = false
     store_general_fetch_media_list.set_album_id(album_id)
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
   }
@@ -850,11 +851,9 @@ async function update_playlist_addAlbum(id: any, playlist_id: any) {
   }
 }
 async function menu_item_add_to_playlist_end() {
-  await store_general_fetch_media_list.fetchData_Media_Find_This_Album(
-    usePlaylistStore().playlist_Menu_Item_Id
-  )
+  await store_general_fetch_media_list.fetchData_Media_Find_This_Album(playlist_Menu_Item_Id.value)
   const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-    (item: Media_File) => item.album_id === usePlaylistStore().playlist_Menu_Item_Id
+    (item: Media_File) => item.album_id === playlist_Menu_Item_Id.value
   )
 
   store_view_media_page_info.media_Files_temporary = []
@@ -873,16 +872,14 @@ async function menu_item_add_to_playlist_end() {
   contextmenu.value.hide()
 }
 async function menu_item_add_to_playlist_next() {
-  await store_general_fetch_media_list.fetchData_Media_Find_This_Album(
-    usePlaylistStore().playlist_Menu_Item_Id
-  )
+  await store_general_fetch_media_list.fetchData_Media_Find_This_Album(playlist_Menu_Item_Id.value)
   const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-    (item: Media_File) => item.album_id === usePlaylistStore().playlist_Menu_Item_Id
+    (item: Media_File) => item.album_id === playlist_Menu_Item_Id.value
   )
 
   store_view_media_page_info.media_Files_temporary = []
 
-  const index = usePlaylistStore().playlist_MediaFiles_temporary.findIndex(
+  const index = playlistStore.playlist_MediaFiles_temporary.findIndex(
     (item: any) => item.id === store_player_audio_info.this_audio_song_id
   )
 
@@ -910,7 +907,7 @@ async function menu_item_add_to_playlist_next() {
 function menu_item_edit_selected_media_tags() {
   store_player_tag_modify.player_show_tag_kind = 'album'
   const item: Album | undefined = store_view_album_page_info.album_Files_temporary.find(
-    (album: Album) => album.id === usePlaylistStore().playlist_Menu_Item_Id
+    (album: Album) => album.id === playlist_Menu_Item_Id.value
   )
   if (item != undefined && item != 'undefined') {
     store_player_tag_modify.player_current_album_id = item.id
@@ -1002,6 +999,14 @@ onBeforeUnmount(() => {
   dynamicScroller.value = null
   store_general_fetch_album_list.set_artist_id('')
 })
+// 在setup上下文中获取Store实例
+const playlistStore = usePlaylistStore()
+// 使用 storeToRefs 解构出所需的响应式属性
+const { 
+  playlist_names_ALLLists, 
+  playlist_Menu_Item_Id, 
+  playlist_Menu_Item 
+} = storeToRefs(playlistStore)
 </script>
 <template>
   <n-space vertical :size="12">
@@ -1450,8 +1455,8 @@ onBeforeUnmount(() => {
             v-contextmenu:contextmenu
             @contextmenu.prevent="
               () => {
-                usePlaylistStore().playlist_Menu_Item_Id = item.id
-                usePlaylistStore().playlist_Menu_Item = item
+                playlist_Menu_Item_Id = item.id
+                playlist_Menu_Item = item
               }
             "
           >
@@ -1617,9 +1622,9 @@ onBeforeUnmount(() => {
       >
         <v-contextmenu-submenu :title="menu_item_add_to_songlist">
           <v-contextmenu-item
-            v-for="n in usePlaylistStore().playlist_names_ALLLists"
+            v-for="n in playlist_names_ALLLists"
             :key="n.value"
-            @click="update_playlist_addAlbum(usePlaylistStore().playlist_Menu_Item_Id, n.value)"
+            @click="update_playlist_addAlbum(playlist_Menu_Item_Id, n.value)"
           >
             {{ n.label }}
           </v-contextmenu-item>
@@ -1633,7 +1638,20 @@ onBeforeUnmount(() => {
           "
           @click="
             () => {
-              handleItemClick_album(usePlaylistStore().playlist_Menu_Item.name)
+              if (store_server_user_model.model_server_type_of_local) {
+                handleItemClick_album(playlist_Menu_Item.name)
+              } else if (store_server_user_model.model_server_type_of_web) {
+                if (
+                  store_server_users.server_select_kind === 'jellyfin' ||
+                  store_server_users.server_select_kind === 'emby'
+                ) {
+                  handleItemClick_album(playlist_Menu_Item.name)
+                } else if (store_server_users.server_select_kind === 'ninesong') {
+                  handleItemClick_album(playlist_Menu_Item.name)
+                } else {
+                  handleItemClick_album(playlist_Menu_Item.album)
+                }
+              }
             }
           "
         >
@@ -1643,17 +1661,17 @@ onBeforeUnmount(() => {
           @click="
             () => {
               if (store_server_user_model.model_server_type_of_local) {
-                handleItemClick_artist(usePlaylistStore().playlist_Menu_Item.artist_id)
+                handleItemClick_artist(playlist_Menu_Item.artist_id)
               } else if (store_server_user_model.model_server_type_of_web) {
                 if (
                   store_server_users.server_select_kind === 'jellyfin' ||
                   store_server_users.server_select_kind === 'emby'
                 ) {
-                  handleItemClick_artist(usePlaylistStore().playlist_Menu_Item.artist_id)
+                  handleItemClick_artist(playlist_Menu_Item.artist_id)
                 } else if (store_server_users.server_select_kind === 'ninesong') {
-                  handleItemClick_artist(usePlaylistStore().playlist_Menu_Item.artist_id)
+                  handleItemClick_artist(playlist_Menu_Item.artist_id)
                 } else {
-                  handleItemClick_artist(usePlaylistStore().playlist_Menu_Item.artist)
+                  handleItemClick_artist(playlist_Menu_Item.artist)
                 }
               }
             }

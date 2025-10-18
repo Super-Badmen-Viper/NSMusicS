@@ -3,7 +3,7 @@ import { darkTheme, lightTheme } from 'naive-ui'
 import { Read_LocalSqlite_System_Configs } from '@/data/data_repository/system_repository/Read_LocalSqlite_System_Configs'
 import { Get_LocalSqlite_PlaylistInfo } from '@/data/data_repository/app_repository/LocalSqlite_Get_PlaylistInfo'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
+import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
@@ -232,34 +232,35 @@ export const store_system_configs_load = reactive({
 
       try {
         /// player_Configs_For_UI
-        store_player_appearance.player_collapsed_album =
+        const playerAppearanceStore = usePlayerAppearanceStore()
+        playerAppearanceStore.player_collapsed_album =
           '' + system_Configs_Read.player_Configs_of_UI.value['player_collapsed_album'] === 'true'
-        store_player_appearance.player_collapsed_skin =
+        playerAppearanceStore.player_collapsed_skin =
           '' + system_Configs_Read.player_Configs_of_UI.value['player_collapsed_skin'] === 'true'
-        store_player_appearance.player_lyric_fontSize =
+        playerAppearanceStore.player_lyric_fontSize =
           '' + system_Configs_Read.player_Configs_of_UI.value['player_lyric_fontSize']
         if (
-          store_player_appearance.player_lyric_fontSize != undefined &&
-          store_player_appearance.player_lyric_fontSize.length > 0
+          playerAppearanceStore.player_lyric_fontSize != undefined &&
+          playerAppearanceStore.player_lyric_fontSize.length > 0
         ) {
-          store_player_appearance.player_lyric_fontSize_Num = Number(
-            store_player_appearance.player_lyric_fontSize.replace('px', '')
+          playerAppearanceStore.player_lyric_fontSize_Num = Number(
+            playerAppearanceStore.player_lyric_fontSize.replace('px', '')
           )
         }
-        store_player_appearance.player_lyric_fontWeight =
+        playerAppearanceStore.player_lyric_fontWeight =
           '' + system_Configs_Read.player_Configs_of_UI.value['player_lyric_fontWeight']
-        store_player_appearance.player_lyric_color =
+        playerAppearanceStore.player_lyric_color =
           '' + system_Configs_Read.player_Configs_of_UI.value['player_lyric_color']
-        store_player_appearance.player_theme_Styles_Selected = Number(
+        playerAppearanceStore.player_theme_Styles_Selected = Number(
           '' + system_Configs_Read.player_Configs_of_UI.value['player_theme_Styles_Selected']
         )
-        if (store_player_appearance.player_theme_Styles_Selected === 5) {
-          store_player_appearance.player_theme_Styles_Selected = 0
+        if (playerAppearanceStore.player_theme_Styles_Selected === 5) {
+          playerAppearanceStore.player_theme_Styles_Selected = 0
         }
-        store_player_appearance.player_background_model_num = Number(
+        playerAppearanceStore.player_background_model_num = Number(
           '' + system_Configs_Read.player_Configs_of_UI.value['player_background_model_num']
         )
-        store_player_appearance.player_use_lottie_animation =
+        playerAppearanceStore.player_use_lottie_animation =
           '' + system_Configs_Read.player_Configs_of_UI.value['player_use_lottie_animation'] ===
           'true'
         if (
@@ -268,27 +269,27 @@ export const store_system_configs_load = reactive({
           '' + system_Configs_Read.player_Configs_of_UI.value['player_use_lyric_skip_forward'] ===
             'false'
         ) {
-          store_player_appearance.player_use_lyric_skip_forward =
+          playerAppearanceStore.player_use_lyric_skip_forward =
             '' + system_Configs_Read.player_Configs_of_UI.value['player_use_lyric_skip_forward'] ===
             'true'
         } else {
-          store_player_appearance.player_use_lyric_skip_forward = false
+          playerAppearanceStore.player_use_lyric_skip_forward = false
         }
-        store_player_appearance.player_use_background_filter_blur =
+        playerAppearanceStore.player_use_background_filter_blur =
           '' +
             system_Configs_Read.player_Configs_of_UI.value['player_use_background_filter_blur'] ===
           'true'
-        store_player_appearance.player_use_background_automatic_rotation =
+        playerAppearanceStore.player_use_background_automatic_rotation =
           '' +
             system_Configs_Read.player_Configs_of_UI.value[
               'player_use_background_automatic_rotation'
             ] ===
           'true'
-        store_player_appearance.player_use_background_repeat_fill =
+        playerAppearanceStore.player_use_background_repeat_fill =
           '' +
             system_Configs_Read.player_Configs_of_UI.value['player_use_background_repeat_fill'] ===
           'true'
-        store_player_appearance.player_use_playbar_auto_hide =
+        playerAppearanceStore.player_use_playbar_auto_hide =
           '' + system_Configs_Read.player_Configs_of_UI.value['player_use_playbar_auto_hide'] ===
           'true'
             ? true
@@ -346,13 +347,13 @@ export const store_system_configs_load = reactive({
           )
         }
         //
-        store_player_appearance.player_mode_of_lock_playlist =
+        playerAppearanceStore.player_mode_of_lock_playlist =
           '' +
             system_Configs_Read.player_Configs_of_Audio_Info.value[
               'player_mode_of_lock_playlist'
             ] ===
           'true'
-        store_player_appearance.player_mode_of_medialist_from_external_import =
+        playerAppearanceStore.player_mode_of_medialist_from_external_import =
           '' +
             system_Configs_Read.player_Configs_of_Audio_Info.value[
               'player_mode_of_medialist_from_external_import'

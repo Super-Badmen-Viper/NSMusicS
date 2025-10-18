@@ -6,7 +6,7 @@ import { store_router_history_data_of_album } from '@/router/router_store/store_
 import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
-import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
+import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
@@ -29,8 +29,8 @@ export const store_general_fetch_album_list = reactive({
         let db: any = null
         let moment = require('moment')
         // clear RouterView of vue-virtual-scroller data
-        if (store_player_appearance.player_mode_of_medialist_from_external_import) {
-          store_player_appearance.player_mode_of_medialist_from_external_import = false
+        if (usePlayerAppearanceStore().player_mode_of_medialist_from_external_import) {
+          usePlayerAppearanceStore().player_mode_of_medialist_from_external_import = false
         } else {
           store_router_data_logic.clear_Files_temporary()
           store_router_data_info.router_select = 'album'
@@ -297,7 +297,7 @@ export const store_general_fetch_album_list = reactive({
     }
   },
   async fetchData_This_Album_MediaList(album_id: any) {
-    store_player_appearance.player_mode_of_medialist_from_external_import = true
+    usePlayerAppearanceStore().player_mode_of_medialist_from_external_import = true
 
     store_view_media_page_logic.page_songlists_keywordFilter = `WHERE album_id = '${album_id}'`
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
@@ -317,7 +317,7 @@ export const store_general_fetch_album_list = reactive({
     }
 
     if (usePlaylistStore().playlist_MediaFiles_temporary.length > 0) {
-      store_player_appearance.player_mode_of_lock_playlist = false
+      usePlayerAppearanceStore().player_mode_of_lock_playlist = false
       const media_file = usePlaylistStore().playlist_MediaFiles_temporary[0]
       await store_player_audio_logic.update_current_media_info(media_file, media_file.absoluteIndex)
       //
@@ -360,7 +360,7 @@ export const store_general_fetch_album_list = reactive({
     this._end = 30
     await this.fetchData_Album_of_server_web()
 
-    if (store_player_appearance.player_mode_of_medialist_from_external_import) {
+    if (usePlayerAppearanceStore().player_mode_of_medialist_from_external_import) {
       store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
     }
   },

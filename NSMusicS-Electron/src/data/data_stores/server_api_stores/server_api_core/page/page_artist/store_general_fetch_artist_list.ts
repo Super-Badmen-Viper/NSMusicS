@@ -6,7 +6,7 @@ import { store_router_history_data_of_artist } from '@/router/router_store/store
 import { store_view_artist_page_logic } from '@/views/view_app/page/page_artist/store/store_view_artist_page_logic'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
-import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
+import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
@@ -262,7 +262,7 @@ export const store_general_fetch_artist_list = reactive({
       store_server_users.server_select_kind != 'jellyfin' ||
       store_server_users.server_select_kind != 'emby'
     ) {
-      store_player_appearance.player_mode_of_medialist_from_external_import = true
+      usePlayerAppearanceStore().player_mode_of_medialist_from_external_import = true
     }
 
     store_view_media_page_logic.page_songlists_keywordFilter = `WHERE artist_id = '${artist_id}'`
@@ -280,7 +280,7 @@ export const store_general_fetch_artist_list = reactive({
     store_router_data_info.router_select_model_artist = true
 
     if (usePlaylistStore().playlist_MediaFiles_temporary.length > 0) {
-      store_player_appearance.player_mode_of_lock_playlist = false
+      usePlayerAppearanceStore().player_mode_of_lock_playlist = false
       const media_file = usePlaylistStore().playlist_MediaFiles_temporary[0]
       await store_player_audio_logic.update_current_media_info(media_file, media_file.absoluteIndex)
       //
@@ -306,7 +306,7 @@ export const store_general_fetch_artist_list = reactive({
     this._end = 30
     await this.fetchData_Artist_of_server_web()
 
-    if (store_player_appearance.player_mode_of_medialist_from_external_import) {
+    if (usePlayerAppearanceStore().player_mode_of_medialist_from_external_import) {
       store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
     }
   },

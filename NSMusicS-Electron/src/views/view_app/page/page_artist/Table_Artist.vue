@@ -36,6 +36,7 @@ import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { store_local_data_set_artistInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_artistInfo'
 
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+import { storeToRefs } from 'pinia'
 
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
@@ -49,7 +50,7 @@ import { store_player_tag_modify } from '@/views/view_app/page/page_player/store
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
-import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
+import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
 import { debounce } from 'lodash'
 import { MultipleStopOutlined } from '@vicons/material'
@@ -515,7 +516,7 @@ const Open_this_artist_all_artist_list_click = (artist_id: string) => {
     store_router_data_logic.get_album_list_of_artist_id_by_artist_info(artist_id)
   } else {
     // Jellyfin 有相当一部分flac媒体无法识别为专辑
-    store_player_appearance.player_mode_of_medialist_from_external_import = false
+    usePlayerAppearanceStore().player_mode_of_medialist_from_external_import = false
     store_view_media_page_logic.page_songlists_keyword = artist_id
     store_router_data_info.router.push('media')
   }
@@ -713,11 +714,9 @@ async function update_playlist_addArtist(id: any, playlist_id: any) {
   }
 }
 async function menu_item_add_to_playlist_end() {
-  await store_general_fetch_media_list.fetchData_Media_Find_This_Artist(
-    usePlaylistStore().playlist_Menu_Item_Id
-  )
+  await store_general_fetch_media_list.fetchData_Media_Find_This_Artist(playlist_Menu_Item_Id.value)
   const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-    (item: Media_File) => item.artist_id === usePlaylistStore().playlist_Menu_Item_Id
+    (item: Media_File) => item.artist_id === playlist_Menu_Item_Id.value
   )
 
   store_view_media_page_info.media_Files_temporary = []
@@ -736,11 +735,9 @@ async function menu_item_add_to_playlist_end() {
   contextmenu.value.hide()
 }
 async function menu_item_add_to_playlist_next() {
-  await store_general_fetch_media_list.fetchData_Media_Find_This_Artist(
-    usePlaylistStore().playlist_Menu_Item_Id
-  )
+  await store_general_fetch_media_list.fetchData_Media_Find_This_Artist(playlist_Menu_Item_Id.value)
   const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-    (item: Media_File) => item.artist_id === usePlaylistStore().playlist_Menu_Item_Id
+    (item: Media_File) => item.artist_id === playlist_Menu_Item_Id.value
   )
 
   store_view_media_page_info.media_Files_temporary = []
@@ -773,7 +770,7 @@ async function menu_item_add_to_playlist_next() {
 function menu_item_edit_selected_media_tags() {
   store_player_tag_modify.player_show_tag_kind = 'artist'
   const item: Album | undefined = store_view_artist_page_info.artist_Files_temporary.find(
-    (artist: Album) => artist.id === usePlaylistStore().playlist_Menu_Item_Id
+    (artist: Album) => artist.id === playlist_Menu_Item_Id.value
   )
   if (item != undefined && item != 'undefined') {
     store_player_tag_modify.player_current_artist_id = item.id
@@ -842,6 +839,11 @@ onBeforeUnmount(() => {
   stopWatching_conditionCount()
   dynamicScroller.value = null
 })
+
+// 在setup上下文中获取Store实例
+const playlistStore = usePlaylistStore()
+// 使用 storeToRefs 解构出所需的响应式属性
+const { playlist_names_ALLLists, playlist_Menu_Item_Id } = storeToRefs(playlistStore)
 </script>
 <template>
   <n-space vertical :size="12">
@@ -1397,9 +1399,9 @@ onBeforeUnmount(() => {
       >
         <v-contextmenu-submenu :title="menu_item_add_to_songlist">
           <v-contextmenu-item
-            v-for="n in usePlaylistStore().playlist_names_ALLLists"
+            v-for="n in playlist_names_ALLLists"
             :key="n.value"
-            @click="update_playlist_addArtist(usePlaylistStore().playlist_Menu_Item_Id, n.value)"
+            @click="update_playlist_addArtist(playlist_Menu_Item_Id, n.value)"
           >
             {{ n.label }}
           </v-contextmenu-item>

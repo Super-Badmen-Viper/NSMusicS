@@ -1,6 +1,6 @@
 import { reactive, watch } from 'vue'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
-import { store_player_appearance } from './store_player_appearance'
+import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_system_configs_load } from '@/data/data_stores/local_system_stores/store_system_configs_load'
 import { store_local_data_set_albumInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_albumInfo'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
@@ -238,7 +238,7 @@ watch(
         if (!store_system_configs_load.app_configs_loading) {
           store_player_audio_info.this_audio_restart_play = true
         }
-        if (!store_player_appearance.player_mode_of_lock_playlist) {
+        if (!usePlayerAppearanceStore().player_mode_of_lock_playlist) {
           if (!store_system_configs_load.app_configs_loading) {
             if (!usePlaylistStore().playlist_show) {
               if (usePlaylistStore().media_page_handleItemDbClick) {

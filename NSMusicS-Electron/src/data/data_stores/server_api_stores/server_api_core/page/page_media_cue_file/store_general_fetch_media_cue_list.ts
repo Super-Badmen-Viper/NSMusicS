@@ -1,5 +1,5 @@
 import { reactive, watch } from 'vue'
-import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
+import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { store_view_media_cue_page_info } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_info'
 import { store_view_media_cue_page_logic } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_logic'
@@ -226,7 +226,7 @@ export const store_general_fetch_media_cue_list = reactive({
 
       await this.fetchData_Media_of_server_web(false)
 
-      if (store_player_appearance.player_mode_of_medialist_from_external_import) {
+      if (usePlayerAppearanceStore().player_mode_of_medialist_from_external_import) {
         this.fetchData_Media_of_server_web_clear_search_parms()
       }
     } catch (error) {

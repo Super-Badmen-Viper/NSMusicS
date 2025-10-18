@@ -29,7 +29,7 @@ import { store_general_fetch_media_list } from '@/data/data_stores/server_api_st
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
-import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
+import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
@@ -206,7 +206,7 @@ const Get_this_album_info = (item: any, list_name: string): string => {
 
 const Open_this_album_MediaList_click = (item: any, list_name: string) => {
   if (store_server_user_model.model_server_type_of_web) {
-    store_player_appearance.player_mode_of_medialist_from_external_import = false
+    usePlayerAppearanceStore().player_mode_of_medialist_from_external_import = false
     if (store_server_users.server_select_kind === 'emby' && list_name != 'recently_added') {
       return
     }
@@ -239,7 +239,7 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
       }
       await store_player_audio_logic.update_current_media_info(item, 0)
       usePlaylistStore().media_page_handleItemDbClick = true
-      store_player_appearance.player_mode_of_lock_playlist = false
+      usePlayerAppearanceStore().player_mode_of_lock_playlist = false
       store_player_audio_info.this_audio_restart_play = true
       //
       store_general_fetch_player_list.fetchData_PlayList(false)
@@ -257,7 +257,7 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
       }
       await store_player_audio_logic.update_current_media_info(item, '1-1')
       usePlaylistStore().media_page_handleItemDbClick = true
-      store_player_appearance.player_mode_of_lock_playlist = false
+      usePlayerAppearanceStore().player_mode_of_lock_playlist = false
       store_player_audio_info.this_audio_restart_play = true
       //
       store_general_fetch_player_list.fetchData_PlayList(true)
@@ -367,6 +367,7 @@ async function add_to_playlist(next: boolean) {
     recently_added_contextmenu_of_emby.value = false
 
     if (is_web_local || is_emby_recently_added) {
+      store_general_fetch_media_list._media_id = ''
       await store_general_fetch_media_list.fetchData_Media_Find_This_Album(itemId)
       matchingItems = store_view_media_page_info.media_Files_temporary.filter(
         (item: Media_File) => item.album_id === itemId
@@ -490,6 +491,14 @@ const home_Files_temporary_type_options = ref([
 function change_home_Files_temporary_type() {
   store_general_fetch_home_list.fetchData_Home()
 }
+
+import { storeToRefs } from 'pinia'
+const playlistStore = usePlaylistStore()
+const { 
+  playlist_names_ALLLists, 
+  playlist_Menu_Item_Id, 
+  playlist_Menu_Item 
+} = storeToRefs(playlistStore)
 </script>
 
 <template>
@@ -619,8 +628,8 @@ function change_home_Files_temporary_type() {
             v-contextmenu:contextmenu
             @contextmenu.prevent="
               () => {
-                usePlaylistStore().playlist_Menu_Item = item
-                usePlaylistStore().playlist_Menu_Item_Id = item.id
+                playlist_Menu_Item = item
+                playlist_Menu_Item_Id = item.id
               }
             "
           >
@@ -821,8 +830,8 @@ function change_home_Files_temporary_type() {
             v-contextmenu:contextmenu
             @contextmenu.prevent="
               () => {
-                usePlaylistStore().playlist_Menu_Item = item
-                usePlaylistStore().playlist_Menu_Item_Id = item.id
+                playlist_Menu_Item = item
+                playlist_Menu_Item_Id = item.id
               }
             "
           >
@@ -1023,8 +1032,8 @@ function change_home_Files_temporary_type() {
             v-contextmenu:contextmenu
             @contextmenu.prevent="
               () => {
-                usePlaylistStore().playlist_Menu_Item = item
-                usePlaylistStore().playlist_Menu_Item_Id = item.id
+                playlist_Menu_Item = item
+                playlist_Menu_Item_Id = item.id
                 recently_added_contextmenu_of_emby = true
               }
             "
@@ -1226,8 +1235,8 @@ function change_home_Files_temporary_type() {
             v-contextmenu:contextmenu
             @contextmenu.prevent="
               () => {
-                usePlaylistStore().playlist_Menu_Item = item
-                usePlaylistStore().playlist_Menu_Item_Id = item.id
+                playlist_Menu_Item = item
+                playlist_Menu_Item_Id = item.id
               }
             "
           >
@@ -1354,9 +1363,9 @@ function change_home_Files_temporary_type() {
     >
       <v-contextmenu-submenu :title="menu_item_add_to_songlist">
         <v-contextmenu-item
-          v-for="n in usePlaylistStore().playlist_names_ALLLists"
+          v-for="n in playlist_names_ALLLists"
           :key="n.value"
-          @click="update_playlist_addAlbum(usePlaylistStore().playlist_Menu_Item_Id, n.value)"
+          @click="update_playlist_addAlbum(playlist_Menu_Item_Id, n.value)"
         >
           {{ n.label }}
         </v-contextmenu-item>

@@ -169,7 +169,7 @@ export const usePlayerAudioStore = defineStore('player-audio', () => {
   // 计算属性
   const player_lyric_fontSizeComputed = computed(() => {
     const playerAppearanceStore = usePlayerAppearanceStore()
-    return playerAppearanceStore.player_lyric_fontSize_Num.value + 'px'
+    return playerAppearanceStore.player_lyric_fontSize_Num + 'px'
   })
 
   // 方法定义
@@ -596,7 +596,7 @@ export const usePlayerAudioStore = defineStore('player-audio', () => {
             this_audio_restart_play.value = true
           }
           const playerAppearanceStore = usePlayerAppearanceStore()
-          if (!playerAppearanceStore.player_mode_of_lock_playlist.value) {
+          if (!playerAppearanceStore.player_mode_of_lock_playlist) {
             if (!store_system_configs_load.app_configs_loading) {
               const playlistStore = usePlaylistStore()
               if (!playlistStore.playlist_show.value) {

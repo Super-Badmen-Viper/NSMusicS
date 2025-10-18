@@ -9,8 +9,21 @@ const { t } = useI18n({
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { ref, onMounted, computed } from 'vue'
 import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
-import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
+import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
+import { storeToRefs } from 'pinia'
+
+// 在setup上下文中获取Store实例
+const playerAppearanceStore = usePlayerAppearanceStore()
+// 使用 storeToRefs 解构出所需的响应式属性
+const {
+  player_use_lottie_animation,
+  player_use_background_filter_blur,
+  player_use_background_automatic_rotation,
+  player_use_background_repeat_fill,
+  player_use_playbar_auto_hide,
+} = storeToRefs(playerAppearanceStore)
+
 const theme_value = ref('lightTheme')
 const theme_options = ref([
   {
@@ -460,7 +473,7 @@ import { openLink } from '@/utils/electron/openLink'
             }}</span>
           </div>
         </n-space>
-        <n-switch v-model:value="store_player_appearance.player_use_lottie_animation"> </n-switch>
+        <n-switch v-model:value="player_use_lottie_animation"> </n-switch>
       </n-space>
       <n-space justify="space-between" align="center">
         <n-space vertical>
@@ -475,7 +488,7 @@ import { openLink } from '@/utils/electron/openLink'
             }}</span>
           </div>
         </n-space>
-        <n-switch v-model:value="store_player_appearance.player_use_background_filter_blur" />
+        <n-switch v-model:value="player_use_background_filter_blur" />
       </n-space>
       <n-space justify="space-between" align="center">
         <n-space vertical>
@@ -488,9 +501,7 @@ import { openLink } from '@/utils/electron/openLink'
             }}</span>
           </div>
         </n-space>
-        <n-switch
-          v-model:value="store_player_appearance.player_use_background_automatic_rotation"
-        />
+        <n-switch v-model:value="player_use_background_automatic_rotation" />
       </n-space>
       <n-space justify="space-between" align="center">
         <n-space vertical>
@@ -511,7 +522,7 @@ import { openLink } from '@/utils/electron/openLink'
             }}</span>
           </div>
         </n-space>
-        <n-switch v-model:value="store_player_appearance.player_use_background_repeat_fill" />
+        <n-switch v-model:value="player_use_background_repeat_fill" />
       </n-space>
       <n-space justify="space-between" align="center">
         <n-space vertical>
@@ -524,10 +535,8 @@ import { openLink } from '@/utils/electron/openLink'
             }}</span>
           </div>
         </n-space>
-        <n-switch v-model:value="store_player_appearance.player_use_playbar_auto_hide" />
+        <n-switch v-model:value="player_use_playbar_auto_hide" />
       </n-space>
     </n-space>
   </n-scrollbar>
 </template>
-
-<style scoped></style>

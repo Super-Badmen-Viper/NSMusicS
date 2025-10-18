@@ -123,6 +123,12 @@ onMounted(() => {
 ////// dynamicScroller of albumlist_view
 import { store_general_fetch_home_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_home/store_general_fetch_home_list'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+import { storeToRefs } from 'pinia'
+
+// 在setup上下文中获取Store实例
+const playlistStore = usePlaylistStore()
+// 使用 storeToRefs 解构出所需的响应式属性
+const { playlist_names_ALLLists, playlist_Menu_Item_Id } = storeToRefs(playlistStore)
 
 const dynamicScroller_maximum_playback = ref(null)
 let offset_maximum_playback = 0
@@ -216,7 +222,7 @@ const scrollTo_recently_played = (value: number) => {
 ////// go to media_view
 const Open_this_album_MediaList_click = (item: any, list_name: string) => {
   if (store_server_user_model.model_server_type_of_web) {
-    store_player_appearance.player_mode_of_medialist_from_external_import = false
+    usePlayerAppearanceStore().player_mode_of_medialist_from_external_import = false
     if (store_server_users.server_select_kind === 'emby') {
       if (list_name != 'recently_added') {
         return
@@ -315,7 +321,7 @@ import { store_general_fetch_media_list } from '@/data/data_stores/server_api_st
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
 import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
-import { store_player_appearance } from '@/views/view_app/page/page_player/store/store_player_appearance'
+import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
@@ -1687,9 +1693,9 @@ onBeforeUnmount(() => {
     >
       <v-contextmenu-submenu :title="menu_item_add_to_songlist">
         <v-contextmenu-item
-          v-for="n in usePlaylistStore().playlist_names_ALLLists"
+          v-for="n in playlist_names_ALLLists"
           :key="n.value"
-          @click="update_playlist_addAlbum(usePlaylistStore().playlist_Menu_Item_Id, n.value)"
+          @click="update_playlist_addAlbum(playlist_Menu_Item_Id, n.value)"
         >
           {{ n.label }}
         </v-contextmenu-item>
