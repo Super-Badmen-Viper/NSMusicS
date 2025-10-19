@@ -1,13 +1,15 @@
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 
 export class Audio_howler {
   public howl: any
   public isPlaying: boolean
   public isDuration: number | undefined
+  private playerSettingStore: any
   constructor() {
     this.howl = null
     this.isPlaying = false
+    this.playerSettingStore = usePlayerSettingStore()
   }
   IsPlaying() {
     try {
@@ -83,7 +85,7 @@ export class Audio_howler {
       const getAudioDevices = async () => {
         await getAudioDevice()
           .then((dev) => {
-            store_player_audio_logic.player_device_kind = dev.map((d) => ({
+            this.playerSettingStore.player_device_kind = dev.map((d) => ({
               label: d.label,
               value: d.deviceId,
             }))

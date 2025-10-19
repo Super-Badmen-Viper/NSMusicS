@@ -15,10 +15,10 @@ import { store_system_configs_save } from '@/data/data_stores/local_system_store
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { Media_Retrieval_ApiService_of_ND } from '../services_normal/media_retrieval/index_service'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 
-import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
+import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
 
 export class Get_Navidrome_Temp_Data_To_LocalSqlite {
@@ -34,6 +34,10 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
   private artist_Lists_ApiWebService_of_ND = new Artist_Lists_ApiWebService_of_ND(
     store_server_users.server_config_of_current_user_of_sqlite?.url + '/api'
   )
+
+  private playlistStore = usePlaylistStore()
+  private playerSettingStore = usePlayerSettingStore()
+  private playerAudioStore = usePlayerAudioStore()
 
   public async get_home_list(url: string, username: string, token: string, salt: string) {
     await this.get_home_list_of_maximum_playback(url, username, token, salt)
@@ -343,7 +347,7 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
           console.error('警告，获取的Media项存在重复，服务端的查询业务存在问题')
         }
       } else {
-        const existingSong = usePlaylistStore().playlist_MediaFiles_temporary.find(
+        const existingSong = this.playlistStore.playlist_MediaFiles_temporary.find(
           (item) => item.id === songlist[0].id
         )
         if (existingSong) {
@@ -362,7 +366,7 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
       const last_index =
         store_general_fetch_media_list._load_model === 'search'
           ? store_view_media_page_info.media_Files_temporary.length
-          : usePlaylistStore().playlist_MediaFiles_temporary.length
+          : this.playlistStore.playlist_MediaFiles_temporary.length
       store_view_media_page_info.media_File_metadata = []
       songlist.map(async (song: any, index: number) => {
         const lyrics = this.convertToLRC(song.lyrics)
@@ -445,14 +449,14 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
           store_view_media_page_info.media_File_metadata.push(song)
           store_view_media_page_info.media_Files_temporary.push(newsong)
         } else {
-          usePlaylistStore().playlist_MediaFiles_temporary.push({
+          this.playlistStore.playlist_MediaFiles_temporary.push({
             ...newsong,
             play_id: newsong.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
           })
         }
       })
       if (store_general_fetch_media_list._load_model === 'play') {
-        usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds =
+        this.playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =
           store_view_media_page_info.media_Files_temporary.map((item) => item.id)
         store_system_configs_save.save_system_playlist_item_id_config()
       }
@@ -710,27 +714,27 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
             '&v=1.12.0&c=nsmusics&f=json&id=' +
             song.id,
         }
-        usePlaylistStore().playlist_MediaFiles_temporary.push({
+        this.playlistStore.playlist_MediaFiles_temporary.push({
           ...new_song,
           play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
         })
         if (!store_server_user_model.random_play_model_search) {
           if (index === songlist.length - 1) {
-            const index = store_server_user_model.random_play_model_add
-              ? usePlaylistStore().playlist_MediaFiles_temporary.length - size
+            const index_num = store_server_user_model.random_play_model_add
+              ? this.playlistStore.playlist_MediaFiles_temporary.length - size
               : 0
-            const media_file = usePlaylistStore().playlist_MediaFiles_temporary[index]
-            await store_player_audio_logic.update_current_media_info(media_file, index)
-            usePlaylistStore().media_page_handleItemDbClick = false
-            store_player_audio_info.this_audio_restart_play = true
+            const media_file = this.playlistStore.playlist_MediaFiles_temporary[index_num]
+            await this.playerSettingStore.update_current_media_info(media_file, index_num)
+            this.playlistStore.media_page_handleItemDbClick = false
+            this.playerAudioStore.this_audio_restart_play = true
             //
             store_server_user_model.random_play_model_add = false
           }
         }
       })
 
-      usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds =
-        usePlaylistStore().playlist_MediaFiles_temporary.map((item) => item.id)
+      this.playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =
+        this.playlistStore.playlist_MediaFiles_temporary.map((item) => item.id)
       store_system_configs_save.save_system_playlist_item_id_config()
     }
   }

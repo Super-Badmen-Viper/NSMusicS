@@ -4,7 +4,7 @@ import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/s
 import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { Items_ApiService_of_Je } from '../services_web/Items/index_service'
 import { Artists_ApiService_of_Je } from '../services_web/Artists/index_service'
@@ -21,6 +21,9 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
   private artists_ApiService_of_Je = new Artists_ApiService_of_Je(
     store_server_users.server_config_of_current_user_of_sqlite?.url
   )
+
+  private playlistStore = usePlaylistStore()
+  private playerSettingStore = usePlayerSettingStore()
 
   public async get_home_list(parentId: string) {
     await this.get_home_list_of_maximum_playback(parentId)
@@ -430,7 +433,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
               console.error('警告，获取的Media项存在重复，服务端的查询业务存在问题')
             }
           } else {
-            const existingSong = usePlaylistStore().playlist_MediaFiles_temporary.find(
+            const existingSong = this.playlistStore.playlist_MediaFiles_temporary.find(
               (item) => item.id === songlist[0].id
             )
             if (existingSong) {
@@ -447,7 +450,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
         const last_index =
           store_general_fetch_media_list._load_model === 'search'
             ? store_view_media_page_info.media_Files_temporary.length
-            : usePlaylistStore().playlist_MediaFiles_temporary.length
+            : this.playlistStore.playlist_MediaFiles_temporary.length
         store_view_media_page_info.media_File_metadata = []
         await Promise.all(
           songlist.map(async (song: any, index: number) => {
@@ -482,7 +485,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
               absoluteIndex: index + 1 + last_index,
               favorite: song.UserData.IsFavorite,
               rating: 0,
-              duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.RunTimeTicks),
+              duration_txt: this.playerSettingStore.formatTime_RunTimeTicks(song.RunTimeTicks),
               id: song.Id,
               title: song.Name,
               path: blobUrl,
@@ -536,7 +539,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
               store_view_media_page_info.media_File_metadata.push(song)
               store_view_media_page_info.media_Files_temporary.push(newsong)
             } else {
-              usePlaylistStore().playlist_MediaFiles_temporary.push({
+              this.playlistStore.playlist_MediaFiles_temporary.push({
                 ...newsong,
                 play_id: newsong.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
               })
@@ -544,7 +547,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
           })
         )
         if (store_general_fetch_media_list._load_model === 'play') {
-          usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds =
+          this.playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =
             store_view_media_page_info.media_Files_temporary.map((item) => item.id)
           store_system_configs_save.save_system_playlist_item_id_config()
         }
@@ -583,7 +586,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
         const last_index =
           store_general_fetch_media_list._load_model === 'search'
             ? store_view_media_page_info.media_Files_temporary.length
-            : usePlaylistStore().playlist_MediaFiles_temporary.length
+            : this.playlistStore.playlist_MediaFiles_temporary.length
         store_view_media_page_info.media_File_metadata = []
         await Promise.all(
           songlist.map(async (song: any, index: number) => {
@@ -618,7 +621,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
               absoluteIndex: index + 1 + last_index,
               favorite: song.UserData.IsFavorite,
               rating: 0,
-              duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.RunTimeTicks),
+              duration_txt: this.playerSettingStore.formatTime_RunTimeTicks(song.RunTimeTicks),
               id: song.Id,
               title: song.Name,
               path: blobUrl,
@@ -672,7 +675,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
               store_view_media_page_info.media_File_metadata.push(song)
               store_view_media_page_info.media_Files_temporary.push(newsong)
             } else {
-              usePlaylistStore().playlist_MediaFiles_temporary.push({
+              this.playlistStore.playlist_MediaFiles_temporary.push({
                 ...newsong,
                 play_id: newsong.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
               })
@@ -680,7 +683,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
           })
         )
         if (store_general_fetch_media_list._load_model === 'play') {
-          usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds =
+          this.playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =
             store_view_media_page_info.media_Files_temporary.map((item) => item.id)
           store_system_configs_save.save_system_playlist_item_id_config()
         }
@@ -727,7 +730,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
               console.error('警告，获取的Media项存在重复，服务端的查询业务存在问题')
             }
           } else {
-            const existingSong = usePlaylistStore().playlist_MediaFiles_temporary.find(
+            const existingSong = this.playlistStore.playlist_MediaFiles_temporary.find(
               (item) => item.id === songlist[0].id
             )
             if (existingSong) {
@@ -744,7 +747,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
         const last_index =
           store_general_fetch_media_list._load_model === 'search'
             ? store_view_media_page_info.media_Files_temporary.length
-            : usePlaylistStore().playlist_MediaFiles_temporary.length
+            : this.playlistStore.playlist_MediaFiles_temporary.length
         store_view_media_page_info.media_File_metadata = []
         await Promise.all(
           songlist.map(async (song: any, index: number) => {
@@ -779,7 +782,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
               absoluteIndex: index + 1 + last_index,
               favorite: song.UserData.IsFavorite,
               rating: 0,
-              duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.RunTimeTicks),
+              duration_txt: this.playerSettingStore.formatTime_RunTimeTicks(song.RunTimeTicks),
               id: song.Id,
               title: song.Name,
               path: blobUrl,
@@ -833,7 +836,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
               store_view_media_page_info.media_File_metadata.push(song)
               store_view_media_page_info.media_Files_temporary.push(newsong)
             } else {
-              usePlaylistStore().playlist_MediaFiles_temporary.push({
+              this.playlistStore.playlist_MediaFiles_temporary.push({
                 ...newsong,
                 play_id: newsong.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
               })
@@ -841,7 +844,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
           })
         )
         if (store_general_fetch_media_list._load_model === 'play') {
-          usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds =
+          this.playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =
             store_view_media_page_info.media_Files_temporary.map((item) => item.id)
           store_system_configs_save.save_system_playlist_item_id_config()
         }
@@ -855,7 +858,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
         const last_index =
           store_general_fetch_media_list._load_model === 'search'
             ? store_view_media_page_info.media_Files_temporary.length
-            : usePlaylistStore().playlist_MediaFiles_temporary.length
+            : this.playlistStore.playlist_MediaFiles_temporary.length
         store_view_media_page_info.media_File_metadata = []
         await Promise.all(
           songlist.map(async (song: any, index: number) => {
@@ -890,7 +893,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
               absoluteIndex: index + 1 + last_index,
               favorite: song.UserData.IsFavorite,
               rating: 0,
-              duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.RunTimeTicks),
+              duration_txt: this.playerSettingStore.formatTime_RunTimeTicks(song.RunTimeTicks),
               id: song.Id,
               title: song.Name,
               path: blobUrl,
@@ -944,7 +947,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
               store_view_media_page_info.media_File_metadata.push(song)
               store_view_media_page_info.media_Files_temporary.push(newsong)
             } else {
-              usePlaylistStore().playlist_MediaFiles_temporary.push({
+              this.playlistStore.playlist_MediaFiles_temporary.push({
                 ...newsong,
                 play_id: newsong.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
               })
@@ -952,7 +955,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
           })
         )
         if (store_general_fetch_media_list._load_model === 'play') {
-          usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds =
+          this.playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =
             store_view_media_page_info.media_Files_temporary.map((item) => item.id)
           store_system_configs_save.save_system_playlist_item_id_config()
         }
@@ -1033,7 +1036,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
                 console.error('警告，获取的Media项存在重复，服务端的查询业务存在问题')
               }
             } else {
-              const existingSong = usePlaylistStore().playlist_MediaFiles_temporary.find(
+              const existingSong = this.playlistStore.playlist_MediaFiles_temporary.find(
                 (item) => item.id === songlist[0].id
               )
               if (existingSong) {
@@ -1054,7 +1057,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
         const last_index =
           store_general_fetch_media_list._load_model === 'search'
             ? store_view_media_page_info.media_Files_temporary.length
-            : usePlaylistStore().playlist_MediaFiles_temporary.length
+            : this.playlistStore.playlist_MediaFiles_temporary.length
         store_view_media_page_info.media_File_metadata = []
         await Promise.all(
           songlist.map(async (song: any, index: number) => {
@@ -1089,7 +1092,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
               absoluteIndex: index + 1 + last_index,
               favorite: song.UserData.IsFavorite,
               rating: 0,
-              duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.RunTimeTicks),
+              duration_txt: this.playerSettingStore.formatTime_RunTimeTicks(song.RunTimeTicks),
               id: song.Id,
               title: song.Name,
               path: blobUrl,
@@ -1143,7 +1146,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
               store_view_media_page_info.media_File_metadata.push(song)
               store_view_media_page_info.media_Files_temporary.push(newsong)
             } else {
-              usePlaylistStore().playlist_MediaFiles_temporary.push({
+              this.playlistStore.playlist_MediaFiles_temporary.push({
                 ...newsong,
                 play_id: newsong.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
               })
@@ -1151,7 +1154,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
           })
         )
         if (store_general_fetch_media_list._load_model === 'play') {
-          usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds =
+          this.playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =
             store_view_media_page_info.media_Files_temporary.map((item) => item.id)
           store_system_configs_save.save_system_playlist_item_id_config()
         }
@@ -1602,8 +1605,8 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
     )
     if (response_playlists != undefined) {
       playlists = response_playlists.data.Items
-      usePlaylistStore().playlist_names_ALLLists = []
-      usePlaylistStore().playlist_tracks_temporary_of_ALLLists = []
+      this.playlistStore.playlist_names_ALLLists = []
+      this.playlistStore.playlist_tracks_temporary_of_ALLLists = []
     }
     if (playlists != null) {
       for (const playlist of playlists) {
@@ -1628,11 +1631,11 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
           }
           playlist_tracks.push(sqlite_song)
         }
-        usePlaylistStore().playlist_names_ALLLists.push({
+        this.playlistStore.playlist_names_ALLLists.push({
           label: playlist.Name,
           value: playlist.Id,
         })
-        usePlaylistStore().playlist_tracks_temporary_of_ALLLists.push({
+        this.playlistStore.playlist_tracks_temporary_of_ALLLists.push({
           playlist: {
             label: playlist.Name,
             value: playlist.Id,

@@ -4,7 +4,7 @@ import { store_server_user_model } from '@/data/data_stores/server_configs_store
 import { store_server_data_set_mediaInfo } from '@/data/data_stores/server_api_stores/server_api_core/annotation/store_server_data_set_mediaInfo'
 import { store_server_users } from '../../server_configs_stores/store_server_users'
 import { store_server_data_set_media_cueInfo } from '@/data/data_stores/server_api_stores/server_api_core/annotation/store_server_data_set_media_cueInfo'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 
 export const store_local_data_set_mediaInfo = reactive({
   Set_MediaInfo_To_Favorite(id: string, value: boolean) {
@@ -25,9 +25,10 @@ export const store_local_data_set_mediaInfo = reactive({
     const set_MediaInfo_To_LocalSqlite = new Set_LocalSqlite_MediaInfo()
     set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_PlayCount_of_Media_File_Local(item_id)
     if (store_server_user_model.model_select === 'server') {
+      const playerSettingStore = usePlayerSettingStore()
       if (
         store_server_users.server_select_kind === 'ninesong' &&
-        store_player_audio_logic.player_model_cue
+        playerSettingStore.player_model_cue
       ) {
         store_server_data_set_media_cueInfo.Set_MediaInfo_To_PlayCount_of_Media_File_Server(item_id)
       } else {

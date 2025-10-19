@@ -22,7 +22,6 @@ import { Icon } from '@vicons/utils'
 import { computed, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { type InputInst, NButton, NIcon, useMessage, useThemeVars } from 'naive-ui'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
 import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
@@ -39,14 +38,22 @@ import { store_view_media_page_info } from '@/views/view_app/page/page_media/sto
 
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { storeToRefs } from 'pinia'
+import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
+import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
-import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 ////// right menu
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
+
+// 在顶层获取 Store 实例
+const playlistStore = usePlaylistStore()
+const playerAudioStore = usePlayerAudioStore()
+const playerAppearanceStore = usePlayerAppearanceStore()
+const playerSettingStore = usePlayerSettingStore()
 
 const { t } = useI18n({
   inheritLocale: true,
@@ -61,7 +68,6 @@ const gridItems = ref(5)
 const itemSecondarySize = ref(185)
 import error_album from '@/assets/img/error_album.jpg'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
 import { debounce } from 'lodash'
@@ -572,7 +578,7 @@ onMounted(() => {
         store_server_users.server_select_kind === 'emby')
     ) {
       /// 兼容行为：打开指定艺术家，直接跳转乐曲页面，路由刷新到专辑页面需要清空数据
-      usePlayerAppearanceStore().player_mode_of_medialist_from_external_import = true
+      playerAppearanceStore.player_mode_of_medialist_from_external_import = true
       store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
     }
   }
@@ -649,7 +655,7 @@ const handleItemClick_artist = (artist_id: string) => {
 }
 const Open_this_album_MediaList_click = (album_id: string) => {
   if (store_server_user_model.model_server_type_of_web) {
-    usePlayerAppearanceStore().player_mode_of_medialist_from_external_import = false
+    playerAppearanceStore.player_mode_of_medialist_from_external_import = false
     store_general_fetch_media_list.set_album_id(album_id)
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
   }
@@ -665,7 +671,7 @@ const Play_this_album_MediaList_click = async (album_id: string) => {
   console.log('play_this_album_click：' + album_id)
   await store_general_fetch_album_list.fetchData_This_Album_MediaList(album_id)
 
-  usePlaylistStore().reset_carousel()
+  playlistStore.reset_carousel()
 }
 
 const handleItemClick_Favorite = (id: any, favorite: boolean) => {
@@ -861,11 +867,11 @@ async function menu_item_add_to_playlist_end() {
   for (let item of matchingItems) {
     const newItem: any = JSON.parse(JSON.stringify(item))
     newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
-    usePlaylistStore().playlist_MediaFiles_temporary.push(newItem)
-    usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id)
+    playlistStore.playlist_MediaFiles_temporary.push(newItem)
+    playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id)
   }
 
-  usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+  playlistStore.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
     item.absoluteIndex = index
   })
   store_system_configs_save.save_system_playlist_item_id_config()
@@ -880,22 +886,22 @@ async function menu_item_add_to_playlist_next() {
   store_view_media_page_info.media_Files_temporary = []
 
   const index = playlistStore.playlist_MediaFiles_temporary.findIndex(
-    (item: any) => item.id === store_player_audio_info.this_audio_song_id
+    (item: any) => item.id === playerAudioStore.this_audio_song_id
   )
 
   if (index !== -1) {
     matchingItems.forEach((item: Media_File, i: number) => {
       const newItem = JSON.parse(JSON.stringify(item))
       newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
-      usePlaylistStore().playlist_MediaFiles_temporary.splice(index + 1 + i, 0, newItem)
-      usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.splice(
+      playlistStore.playlist_MediaFiles_temporary.splice(index + 1 + i, 0, newItem)
+      playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.splice(
         index + 1 + i,
         0,
         newItem.id
       )
     })
 
-    usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+    playlistStore.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
       item.absoluteIndex = index
     })
     store_system_configs_save.save_system_playlist_item_id_config()
@@ -980,11 +986,11 @@ onMounted(() => {
   }
 })
 const stopWatching_boolHandleItemClick_Played = watch(
-  () => store_player_audio_logic.boolHandleItemClick_Played,
+  () => playerSettingStore.boolHandleItemClick_Played,
   (newValue, oldValue) => {
     if (newValue && newValue !== oldValue) {
       Refresh_page_albumlists_statistic()
-      store_player_audio_logic.boolHandleItemClick_Played = false
+      playerSettingStore.boolHandleItemClick_Played = false
     }
   },
   { immediate: true }
@@ -999,14 +1005,19 @@ onBeforeUnmount(() => {
   dynamicScroller.value = null
   store_general_fetch_album_list.set_artist_id('')
 })
-// 在setup上下文中获取Store实例
-const playlistStore = usePlaylistStore()
 // 使用 storeToRefs 解构出所需的响应式属性
 const { 
   playlist_names_ALLLists, 
   playlist_Menu_Item_Id, 
   playlist_Menu_Item 
 } = storeToRefs(playlistStore)
+
+const { 
+  page_top_album_name,
+  page_top_album_image_url,
+  this_audio_artist_id,
+  page_top_album_id
+} = storeToRefs(playerAudioStore)
 </script>
 <template>
   <n-space vertical :size="12">
@@ -1341,7 +1352,7 @@ const {
                   object-fit: cover;
                   object-position: center;
                 "
-                :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                :src="getAssetImage(playerAudioStore.page_top_album_image_url)"
                 alt=""
               />
             </div>
@@ -1362,7 +1373,7 @@ const {
                       {{ $t('entity.album_other') }}
                     </div>
                     <div
-                      v-if="store_player_audio_info.page_top_album_name.length > 0"
+                      v-if="page_top_album_name.length > 0"
                       style="font-size: 32px; font-weight: 600; margin-top: -2px"
                     >
                       {{ ' : ' }}
@@ -1385,14 +1396,14 @@ const {
                       @click="
                         () => {
                           if (store_server_user_model.model_server_type_of_local) {
-                            handleItemClick_album(store_player_audio_info.page_top_album_id)
+                            handleItemClick_album(playerAudioStore.page_top_album_id)
                           } else if (store_server_user_model.model_server_type_of_web) {
-                            handleItemClick_album(store_player_audio_info.page_top_album_name)
+                            handleItemClick_album(playerAudioStore.page_top_album_name)
                           }
                         }
                       "
                     >
-                      {{ store_player_audio_info.page_top_album_name }}
+                      {{ page_top_album_name }}
                     </div>
                   </n-space>
                   <n-space align="center" style="margin-top: 2px; margin-left: 11px">
@@ -1436,7 +1447,7 @@ const {
                     object-fit: cover;
                     margin-left: -3px;
                   "
-                  :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                  :src="getAssetImage(page_top_album_image_url)"
                   alt=""
                 />
               </template>
@@ -1489,7 +1500,7 @@ const {
                       @click="
                         () => {
                           Play_this_album_MediaList_click(item.id)
-                          store_player_audio_info.this_audio_artist_id = item.artist_id
+                          playerAudioStore.this_audio_artist_id = item.artist_id
                         }
                       "
                     >
@@ -1586,7 +1597,7 @@ const {
                         {{ artist.ArtistName + '&nbsp' }}
                       </span>
                     </template>
-                    <template v-for="artist in item.artist?.split(/[\/|｜、]/) ?? item.artist">
+                    <template v-else v-for="artist in item.artist?.split(/[\/|｜、]/) ?? item.artist">
                       <span
                         @click="
                           () => {

@@ -42,10 +42,14 @@ const { t } = useI18n({
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { storeToRefs } from 'pinia'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
+import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 
 // 在setup上下文中获取Store实例
 const playerAppearanceStore = usePlayerAppearanceStore()
 const playlistStore = usePlaylistStore()
+const playerAudioStore = usePlayerAudioStore()
+const playerSettingStore = usePlayerSettingStore()
 // 使用 storeToRefs 解构出所需的响应式属性
 const {
   player_show,
@@ -57,6 +61,38 @@ const {
   player_mode_of_lock_playlist,
 } = storeToRefs(playerAppearanceStore)
 const { playlist_show, playlist_MediaFiles_temporary } = storeToRefs(playlistStore)
+const {
+  this_audio_song_id,
+  this_audio_file_path,
+  this_audio_song_name,
+  this_audio_artist_name,
+  this_audio_album_name,
+  this_audio_album_id,
+  this_audio_song_rating,
+  this_audio_song_favorite,
+  page_top_album_image_url,
+  this_audio_cue_track_current_indexes,
+  this_audio_song_suffix,
+  this_audio_song_encoding_format,
+  this_audio_restart_play,
+} = storeToRefs(playerAudioStore)
+const {
+  slider_singleValue,
+  drawer_order_show,
+  drawer_order_height,
+  drawer_volume_show,
+  play_volume,
+  current_play_time,
+  total_play_time,
+  marks_slider_singleValue,
+  play_order,
+  orderToolShow,
+  voiceToolShow,
+  player_back_ChevronDouble,
+  orderPanelWidath,
+  orderButonWidath,
+  drawer_theme_show,
+} = storeToRefs(playerSettingStore)
 
 import { useMessage } from 'naive-ui'
 const message = useMessage()
@@ -85,18 +121,17 @@ const handleImageError = async (event) => {
     }
     ///
     const item: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find(
-      (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
+      (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
     )
     if (item != undefined && item != 'undefined') {
       item.medium_image_url = result_src
     }
-    store_player_audio_info.page_top_album_image_url = result_src
+    playerAudioStore.page_top_album_image_url = result_src
   } else {
-    store_player_audio_info.page_top_album_image_url = error_album
+    playerAudioStore.page_top_album_image_url = error_album
   }
 }
 import { debounce } from 'lodash'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 
 ////// open view musicplayer
 import shrink_up_arrow from '@/assets/svg/shrink_up_arrow.svg'
@@ -117,18 +152,18 @@ const click_back_svg = () => {
     player_show_hight_animation_value.value =
       player_show_hight_animation_value.value === 0 ? 670 : 0
     get_playerbar_to_switch_playerview(player_show_hight_animation_value.value)
-    store_player_audio_logic.player_back_ChevronDouble =
+    playerSettingStore.player_back_ChevronDouble =
       player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow
   }
-  usePlaylistStore().reset_carousel()
+  playlistStore.reset_carousel()
 }
 watch(
-  () => player_show_click.value,
+  () => player_show_click,
   (newValue) => {
     if (newValue) {
       player_show_hight_animation_value.value = 670
       get_playerbar_to_switch_playerview(player_show_hight_animation_value.value)
-      store_player_audio_logic.player_back_ChevronDouble =
+      playerSettingStore.player_back_ChevronDouble =
         player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow
 
       player_show_click.value = false
@@ -140,7 +175,7 @@ watch(
 const timer_this_audio_restart_play = ref()
 const lastTriggerValue = ref(null) // 延迟触发：接收大量数据时，仅触发最后一个值
 watch(
-  () => store_player_audio_info.this_audio_restart_play,
+  () => playerAudioStore.this_audio_restart_play,
   (newValue) => {
     if (newValue) {
       lastTriggerValue.value = newValue // 更新最后一个触发的值
@@ -150,27 +185,27 @@ watch(
         if (newValue === lastTriggerValue.value) {
           // 检查最后一个触发的值是否与当前触发的值相等
           handleAudioFilePathChange()
-          store_player_audio_info.this_audio_restart_play = false
+          playerAudioStore.this_audio_restart_play = false
         }
       }, 200)
     }
   }
 )
 const handleAudioFilePathChange = async () => {
-  if (store_player_audio_logic.this_audio_initial_trigger) {
-    store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(
-      await store_player_audio_logic.player.getDuration()
+  if (playerSettingStore.this_audio_initial_trigger) {
+    playerSettingStore.current_play_time = playerSettingStore.formatTime(
+      await playerSettingStore.player.getDuration()
     )
-    store_player_audio_logic.player_slider_currentTime_added_value = 0
+    playerSettingStore.player_slider_currentTime_added_value = 0
     this_audio_buffer_file.value = null
-    store_player_audio_logic.player_no_progress_jump = false
-    store_player_audio_logic.player.isPlaying = false
+    playerSettingStore.player_no_progress_jump = false
+    playerSettingStore.player.isPlaying = false
 
     await Init_Audio_Player()
   }
-  store_player_audio_logic.this_audio_initial_trigger = true
+  playerSettingStore.this_audio_initial_trigger = true
 }
-const this_audio_buffer_file = ref()
+const this_audio_buffer_file = ref(Math.random().toString(36).substring(7))
 const timer_this_audio_player = ref() // 延迟触发：接收大量数据时，仅触发最后一个值
 import { Howl } from '@/utils/howler/howlerLoader'
 import { clearCache } from '@/utils/electron/webFrame'
@@ -187,70 +222,70 @@ watch(
 const Play_This_Audio_Path = () => {
   clearTimeout(timer_this_audio_player.value)
   timer_this_audio_player.value = setTimeout(async () => {
-    if (store_player_audio_info.this_audio_file_path.length > 0) {
-      store_player_audio_logic.player_slider_currentTime_added_value = 0
-      if (store_player_audio_logic.player_select === 'mpv') {
-        if (store_player_audio_logic.player === null) {
-          store_player_audio_logic.player = new Audio_node_mpv()
+    if (playerAudioStore.this_audio_file_path.length > 0) {
+      playerSettingStore.player_slider_currentTime_added_value = 0
+      if (playerSettingStore.player_select === 'mpv') {
+        if (playerSettingStore.player === null) {
+          playerSettingStore.player = new Audio_node_mpv()
         }
         const audio_url =
-          store_player_audio_info.this_audio_file_path.indexOf('play_component_type') >= 0
-            ? store_player_audio_info.this_audio_file_path
+          playerAudioStore.this_audio_file_path.indexOf('play_component_type') >= 0
+            ? playerAudioStore.this_audio_file_path
             : store_server_user_model.model_server_type_of_web &&
                 store_server_users.server_select_kind === 'ninesong'
-              ? store_player_audio_info.this_audio_file_path +
+              ? playerAudioStore.this_audio_file_path +
                 '&play_component_type=' +
-                store_player_audio_logic.player_select
-              : store_player_audio_info.this_audio_file_path
+                playerSettingStore.player_select
+              : playerAudioStore.this_audio_file_path
         if (store_server_user_model.model_server_type_of_web) {
           if (store_server_users.server_select_kind === 'ninesong') {
-            if (store_player_audio_info.this_audio_song_suffix === 'm4a') {
-              if (store_player_audio_info.this_audio_song_encoding_format === 'alac') {
-                if (store_player_audio_logic.player_select === 'web') {
+            if (playerAudioStore.this_audio_song_suffix === 'm4a') {
+              if (playerAudioStore.this_audio_song_encoding_format === 'alac') {
+                if (playerSettingStore.player_select === 'web') {
                   message.success(t('setting.transcode'), { duration: 10000 })
                 }
               }
             }
           }
         }
-        await store_player_audio_logic.player.load(audio_url)
-      } else if (store_player_audio_logic.player_select === 'web') {
+        await playerSettingStore.player.load(audio_url)
+      } else if (playerSettingStore.player_select === 'web') {
         await init_player_howler()
       }
-      store_player_audio_logic.player.isPlaying = true
-      store_player_audio_logic.player_save_new_data = true
-      store_player_audio_logic.player_is_play_ended = false
-      store_player_audio_logic.player_no_progress_jump = true
+      playerSettingStore.player.isPlaying = true
+      playerSettingStore.player_save_new_data = true
+      playerSettingStore.player_is_play_ended = false
+      playerSettingStore.player_no_progress_jump = true
       //
       clearInterval(timer)
       timer = setInterval(synchronize_playback_time, 200)
-      await store_player_audio_logic.player.play()
-      if (!store_player_audio_logic.player_model_cue) {
+      await playerSettingStore.player.play()
+      if (!playerSettingStore.player_model_cue) {
         if (
-          store_player_audio_logic.slider_init_singleValue != 0 &&
-          store_player_audio_logic.player_init_play
+          playerSettingStore.slider_init_singleValue != 0 &&
+          playerSettingStore.player_init_play
         ) {
-          if (store_player_audio_logic.player_select === 'mpv') {
-            store_player_audio_logic.play_go_duration(
-              store_player_audio_logic.slider_init_singleValue,
+          if (playerSettingStore.player_select === 'mpv') {
+            playerSettingStore.play_go_duration(
+              playerSettingStore.slider_init_singleValue,
               true
             )
-            store_player_audio_logic.slider_init_singleValue = 0
+            playerSettingStore.slider_init_singleValue = 0
           }
         } else {
           // init play logic
-          store_player_audio_logic.slider_init_singleValue = 0
-          store_player_audio_logic.play_go_duration(
-            store_player_audio_logic.slider_init_singleValue,
+          playerSettingStore.slider_init_singleValue = 0
+          playerSettingStore.play_go_duration(
+            playerSettingStore.slider_init_singleValue,
             true
           )
         }
       } else {
-        if (store_player_audio_info.this_audio_cue_track_current_indexes.length > 0) {
-          const track_str = store_player_audio_info.this_audio_cue_track_current_indexes[0].TIME
+        if (playerAudioStore.this_audio_cue_track_current_indexes.length > 0) {
+          const track_str = playerAudioStore.this_audio_cue_track_current_indexes[0].TIME
           if (track_str.length > 0) {
-            const track_time = store_player_audio_logic.formatStrTime(track_str)
-            store_player_audio_logic.player.setCurrentTime(track_time / 1000)
+            const track_time = playerSettingStore.formatStrTime(track_str)
+            playerSettingStore.player.setCurrentTime(track_time / 1000)
           }
         }
       }
@@ -259,122 +294,122 @@ const Play_This_Audio_Path = () => {
   }, 400)
 }
 const init_player_howler = async () => {
-  if (store_player_audio_logic.player.howl != null) {
-    await store_player_audio_logic.player.howl.unload()
+  if (playerSettingStore.player.howl != null) {
+    await playerSettingStore.player.howl.unload()
   }
   let media_kind = ''
   if (store_server_user_model.model_server_type_of_local) {
-    media_kind = store_player_audio_info.this_audio_file_path.split('.').pop()
+    media_kind = playerAudioStore.this_audio_file_path.split('.').pop()
   } else if (store_server_user_model.model_server_type_of_web) {
     media_kind = 'mp3'
   }
-  store_player_audio_logic.player = new Audio_howler()
+  playerSettingStore.player = new Audio_howler()
   const audio_url =
-    store_player_audio_info.this_audio_file_path.indexOf('play_component_type') >= 0
-      ? store_player_audio_info.this_audio_file_path
+    playerAudioStore.this_audio_file_path.indexOf('play_component_type') >= 0
+      ? playerAudioStore.this_audio_file_path
       : store_server_user_model.model_server_type_of_web &&
           store_server_users.server_select_kind === 'ninesong'
-        ? store_player_audio_info.this_audio_file_path +
+        ? playerAudioStore.this_audio_file_path +
           '&play_component_type=' +
-          store_player_audio_logic.player_select
-        : store_player_audio_info.this_audio_file_path
+          playerSettingStore.player_select
+        : playerAudioStore.this_audio_file_path
   if (store_server_user_model.model_server_type_of_web) {
     if (store_server_users.server_select_kind === 'ninesong') {
-      if (store_player_audio_info.this_audio_song_suffix === 'm4a') {
-        if (store_player_audio_info.this_audio_song_encoding_format === 'alac') {
-          if (store_player_audio_logic.player_select === 'web') {
+      if (playerAudioStore.this_audio_song_suffix === 'm4a') {
+        if (playerAudioStore.this_audio_song_encoding_format === 'alac') {
+          if (playerSettingStore.player_select === 'web') {
             message.success(t('setting.transcode'), { duration: 10000 })
           }
         }
       }
     }
   }
-  store_player_audio_logic.player.howl = new Howl({
+  playerSettingStore.player.howl = new Howl({
     src: [audio_url],
-    format: store_player_audio_logic.player_dolby ? ['dolby', media_kind] : [],
+    format: playerSettingStore.player_dolby ? ['dolby', media_kind] : [],
     autoplay: true,
     html5: true,
     loop: false,
     onplay: async () => {
-      store_player_audio_logic.player.howl.fade(
+      playerSettingStore.player.howl.fade(
         0,
-        Number(store_player_audio_logic.play_volume),
-        store_player_audio_logic.player_fade_value
+        Number(playerSettingStore.play_volume),
+        playerSettingStore.player_fade_value
       )
-      store_player_audio_logic.player.isPlaying = true
+      playerSettingStore.player.isPlaying = true
       if (isElectron) {
         await ipcRenderer.invoke('i18n-tray-music-pause', true)
       }
 
       if (
-        store_player_audio_logic.player_device_select != undefined &&
-        store_player_audio_logic.player_device_select.length > 0
+        playerSettingStore.player_device_select != undefined &&
+        playerSettingStore.player_device_select.length > 0
       ) {
-        const audioElement = store_player_audio_logic.player.howl._sounds[0]._node
+        const audioElement = playerSettingStore.player.howl._sounds[0]._node
         if (typeof audioElement.setSinkId === 'function') {
           audioElement
-            .setSinkId(store_player_audio_logic.player_device_select)
+            .setSinkId(playerSettingStore.player_device_select)
             .then(async () => {
-              await store_player_audio_logic.player.getDevices()
+              await playerSettingStore.player.getDevices()
               console.log('Audio output successfully redirected.')
             })
             .catch((error) => {
               console.error('Failed to redirect audio output:', error)
-              store_player_audio_logic.player_device_select = 'default'
+              playerSettingStore.player_device_select = 'default'
             })
         }
       }
 
       if (
-        store_player_audio_logic.slider_init_singleValue != 0 &&
-        store_player_audio_logic.player_init_play
+        playerSettingStore.slider_init_singleValue != 0 &&
+        playerSettingStore.player_init_play
       ) {
-        store_player_audio_logic.play_go_duration(
-          store_player_audio_logic.slider_init_singleValue,
+        playerSettingStore.play_go_duration(
+          playerSettingStore.slider_init_singleValue,
           true
         )
-        store_player_audio_logic.slider_init_singleValue = 0
-        store_player_audio_logic.player.pause()
+        playerSettingStore.slider_init_singleValue = 0
+        playerSettingStore.player.pause()
       }
     },
     onpause: async () => {
-      store_player_audio_logic.player.isPlaying = false
+      playerSettingStore.player.isPlaying = false
       if (isElectron) {
         await ipcRenderer.invoke('i18n-tray-music-pause', false)
       }
     },
     onstop: async () => {
-      store_player_audio_logic.player.isPlaying = false
+      playerSettingStore.player.isPlaying = false
       if (isElectron) {
         await ipcRenderer.invoke('i18n-tray-music-pause', false)
       }
     },
     onend: async () => {
-      store_player_audio_logic.player.howl.fade(
-        Number(store_player_audio_logic.play_volume),
+      playerSettingStore.player.howl.fade(
+        Number(playerSettingStore.play_volume),
         0,
-        store_player_audio_logic.player_fade_value
+        playerSettingStore.player_fade_value
       )
       setTimeout(async () => {
-        store_player_audio_logic.player.isPlaying = false
-        if (store_player_audio_logic.player_no_progress_jump) {
-          store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(
-            store_player_audio_logic.player.getDuration()
+        playerSettingStore.player.isPlaying = false
+        if (playerSettingStore.player_no_progress_jump) {
+          playerSettingStore.current_play_time = playerSettingStore.formatTime(
+            playerSettingStore.player.getDuration()
           )
-          store_player_audio_logic.player_slider_currentTime_added_value = 0
+          playerSettingStore.player_slider_currentTime_added_value = 0
           this_audio_buffer_file.value = null
           clearInterval(timer)
 
-          store_player_audio_logic.player_no_progress_jump = false
+          playerSettingStore.player_no_progress_jump = false
 
-          store_player_audio_logic.player.isPlaying = false
-          store_player_audio_logic.player_is_play_ended = true
+          playerSettingStore.player.isPlaying = false
+          playerSettingStore.player_is_play_ended = true
         }
         Play_Media_Switching()
-      }, store_player_audio_logic.player_fade_value)
+      }, playerSettingStore.player_fade_value)
     },
     onloaderror: (id: any, error: any) => {
-      store_player_audio_logic.player.isPlaying = false
+      playerSettingStore.player.isPlaying = false
     },
   })
 }
@@ -382,7 +417,7 @@ const init_player_howler = async () => {
 const Set_MediaInfo_To_PlayCount = debounce(async (event, args) => {
   /// media、media_cue
   store_local_data_set_mediaInfo.Set_MediaInfo_To_PlayCount_of_Media_File(
-    store_player_audio_info.this_audio_song_id
+    playerAudioStore.this_audio_song_id
   )
   /// album、artist
   if (
@@ -392,28 +427,28 @@ const Set_MediaInfo_To_PlayCount = debounce(async (event, args) => {
     if (
       store_general_fetch_media_list._album_id != undefined &&
       store_general_fetch_media_list._album_id.length > 0 &&
-      store_general_fetch_media_list._album_id === store_player_audio_info.this_audio_album_id
+      store_general_fetch_media_list._album_id === playerAudioStore.this_audio_album_id
     ) {
       if (
-        store_player_audio_info.this_audio_song_id ===
+        playerAudioStore.this_audio_song_id ===
         playlist_MediaFiles_temporary.value[playlist_MediaFiles_temporary.value.length - 1]
       ) {
         store_server_data_set_albumInfo.Set_AlbumInfo_To_PlayCompleteCount_of_Album_Server(
-          store_player_audio_info.this_audio_album_id
+          playerAudioStore.this_audio_album_id
         )
       }
     }
     if (
       store_general_fetch_media_list._artist_id != undefined &&
       store_general_fetch_media_list._artist_id.length > 0 &&
-      store_general_fetch_media_list._artist_id === store_player_audio_info.this_audio_artist_id
+      store_general_fetch_media_list._artist_id === playerAudioStore.this_audio_artist_id
     ) {
       if (
-        store_player_audio_info.this_audio_song_id ===
+        playerAudioStore.this_audio_song_id ===
         playlist_MediaFiles_temporary.value[playlist_MediaFiles_temporary.value.length - 1]
       ) {
         store_server_data_set_artistInfo.Set_ArtistInfo_To_PlayCompleteCount_of_Artist_Server(
-          store_player_audio_info.this_audio_artist_id
+          playerAudioStore.this_audio_artist_id
         )
       }
     }
@@ -428,31 +463,31 @@ const Set_MediaInfo_To_PlayCount = debounce(async (event, args) => {
         item.song_count = store_view_media_page_info.media_recently_count + ' *'
       }
     })
-    store_player_audio_logic.boolHandleItemClick_Played = true
+    playerSettingStore.boolHandleItemClick_Played = true
   }
 }, 1000)
 
 const handleMpvStopped = debounce(async (event, args) => {
-  store_player_audio_logic.player_is_play_ended = true
+  playerSettingStore.player_is_play_ended = true
   let index = playlist_MediaFiles_temporary.value.findIndex(
-    (item: any) => item.play_id === store_player_audio_info.this_audio_play_id
+    (item: any) => item.play_id === playerAudioStore.this_audio_play_id
   )
   let last_play = index >= playlist_MediaFiles_temporary.value.length - 1
-  if (last_play && store_player_audio_logic.play_order === 'playback-1') {
-    await store_player_audio_logic.player.pause()
+  if (last_play && playerSettingStore.play_order === 'playback-1') {
+    await playerSettingStore.player.pause()
   } else {
-    store_player_audio_logic.player.isPlaying = false
-    if (store_player_audio_logic.player_no_progress_jump) {
-      store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(
-        store_player_audio_logic.player.getDuration()
+    playerSettingStore.player.isPlaying = false
+    if (playerSettingStore.player_no_progress_jump) {
+      playerSettingStore.current_play_time = playerSettingStore.formatTime(
+        playerSettingStore.player.getDuration()
       )
-      store_player_audio_logic.player_slider_currentTime_added_value = 0
+      playerSettingStore.player_slider_currentTime_added_value = 0
       this_audio_buffer_file.value = null
       clearInterval(timer)
 
-      store_player_audio_logic.player_no_progress_jump = false
+      playerSettingStore.player_no_progress_jump = false
 
-      store_player_audio_logic.player.isPlaying = false
+      playerSettingStore.player.isPlaying = false
     }
     Play_Media_Switching()
   }
@@ -464,54 +499,54 @@ if (isElectron) {
 ///
 onMounted(async () => {
   timer = setInterval(synchronize_playback_time, 200)
-  await store_player_audio_logic.player.IsPlaying()
-  await store_player_audio_logic.player.setVolume(Number(store_player_audio_logic.play_volume))
+  await playerSettingStore.player.IsPlaying()
+  await playerSettingStore.player.setVolume(Number(playerSettingStore.play_volume))
 })
 const Init_Audio_Player = async () => {
-  if (store_player_audio_info.this_audio_file_path.length > 0) {
-    if (store_player_audio_logic.player_init_play) {
+  if (playerAudioStore.this_audio_file_path.length > 0) {
+    if (playerSettingStore.player_init_play) {
       Play_This_Audio_Path()
-      store_player_audio_logic.player_init_play = false
+      playerSettingStore.player_init_play = false
     }
-    if (!store_player_audio_logic.player.isPlaying) {
+    if (!playerSettingStore.player.isPlaying) {
       if (this_audio_buffer_file.value === null) {
         this_audio_buffer_file.value = Math.random().toString(36).substring(7)
       } else {
-        store_player_audio_logic.player.isPlaying = true
-        if (store_player_audio_logic.player_select === 'mpv') {
-          if (!store_player_audio_logic.player.isPlaying) Play_This_Audio_Path()
+        playerSettingStore.player.isPlaying = true
+        if (playerSettingStore.player_select === 'mpv') {
+          if (!playerSettingStore.player.isPlaying) Play_This_Audio_Path()
           else {
             // if(isElectron) {
-            //   await ipcRenderer.invoke('mpv-startFadeIn', store_player_audio_logic.play_volume)
+            //   await ipcRenderer.invoke('mpv-startFadeIn', playerSettingStore.play_volume)
             // }
-            await store_player_audio_logic.player.play()
+            await playerSettingStore.player.play()
           }
-        } else if (store_player_audio_logic.player_select === 'web') {
-          if (store_player_audio_logic.player.howl == null) Play_This_Audio_Path()
+        } else if (playerSettingStore.player_select === 'web') {
+          if (playerSettingStore.player.howl == null) Play_This_Audio_Path()
           else {
-            store_player_audio_logic.player.howl.fade(
-              Number(store_player_audio_logic.play_volume),
+            playerSettingStore.player.howl.fade(
+              Number(playerSettingStore.play_volume),
               0,
-              store_player_audio_logic.player_fade_value
+              playerSettingStore.player_fade_value
             )
-            await store_player_audio_logic.player.play()
+            await playerSettingStore.player.play()
           }
         }
       }
     } else {
-      store_player_audio_logic.player.isPlaying = false
-      if (store_player_audio_logic.player_select === 'mpv') {
+      playerSettingStore.player.isPlaying = false
+      if (playerSettingStore.player_select === 'mpv') {
         // if(isElectron) {
-        //   await ipcRenderer.invoke('mpv-startFadeOut', store_player_audio_logic.play_volume)
+        //   await ipcRenderer.invoke('mpv-startFadeOut', playerSettingStore.play_volume)
         // }
-        await store_player_audio_logic.player.pause()
-      } else if (store_player_audio_logic.player_select === 'web') {
-        store_player_audio_logic.player.howl.fade(
-          Number(store_player_audio_logic.play_volume),
+        await playerSettingStore.player.pause()
+      } else if (playerSettingStore.player_select === 'web') {
+        playerSettingStore.player.howl.fade(
+          Number(playerSettingStore.play_volume),
           0,
-          store_player_audio_logic.player_fade_value
+          playerSettingStore.player_fade_value
         )
-        await store_player_audio_logic.player.pause()
+        await playerSettingStore.player.pause()
       }
     }
   }
@@ -520,17 +555,17 @@ const Init_Audio_Player = async () => {
 if (isElectron) {
   ipcRenderer.on('tray-music-pause', Init_Audio_Player)
   ipcRenderer.on('tray-music-order', (event, order) => {
-    store_player_audio_logic.play_order = order
+    playerSettingStore.play_order = order
   })
 }
 watch(
-  () => store_player_audio_logic.player_state_play_click,
+  () => playerSettingStore.player_state_play_click,
   (newValue) => {
     Init_Audio_Player()
   }
 )
 watch(
-  () => store_player_audio_logic.player_click_state_of_play_skip_back,
+  () => playerSettingStore.player_click_state_of_play_skip_back,
   (newValue) => {
     debounce(async (event, args) => {
       ;(await play_skip_back_click(), 300)
@@ -538,7 +573,7 @@ watch(
   }
 )
 watch(
-  () => store_player_audio_logic.player_click_state_of_play_skip_forward,
+  () => playerSettingStore.player_click_state_of_play_skip_forward,
   (newValue) => {
     debounce(async (event, args) => {
       ;(await play_skip_forward_click(), 300)
@@ -557,11 +592,11 @@ watch(
 //   }
 // }
 // watch(
-//   () => store_player_audio_info.this_audio_Index_of_play_list_carousel,
+//   () => playerAudioStore.this_audio_Index_of_play_list_carousel,
 //   cooldownDebounce(async (newValue, oldValue) => {
-//     if (store_player_audio_info.play_list_carousel_model) {
+//     if (playerAudioStore.play_list_carousel_model) {
 
-//         (item) => item.path === store_player_audio_info.this_audio_file_path
+//         (item) => item.path === playerAudioStore.this_audio_file_path
 //       )
 //       if (newValue !== index) {
 //         if (
@@ -590,22 +625,22 @@ watch(
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 const backpanel_order_leave = () => {
   if (!player_show.value) {
-    // store_player_audio_logic.drawer_order_show = false;
+    // playerSettingStore.drawer_order_show = false;
   }
 }
 const backpanel_order_click = () => {
   const orders = ['playback-1', 'playback-2', 'playback-3', 'playback-4']
-  if (!store_player_audio_logic.play_order) {
-    store_player_audio_logic.play_order = orders[0]
+  if (!playerSettingStore.play_order) {
+    playerSettingStore.play_order = orders[0]
   } else {
-    const currentIndex = orders.indexOf(store_player_audio_logic.play_order)
+    const currentIndex = orders.indexOf(playerSettingStore.play_order)
     const nextIndex = (currentIndex + 1) % orders.length
-    store_player_audio_logic.play_order = orders[nextIndex]
+    playerSettingStore.play_order = orders[nextIndex]
   }
   if (isElectron) {
-    ipcRenderer.invoke('i18n-tray-music-order', store_player_audio_logic.play_order)
+    ipcRenderer.invoke('i18n-tray-music-order', playerSettingStore.play_order)
   }
-  switch (store_player_audio_logic.play_order) {
+  switch (playerSettingStore.play_order) {
     case 'playback-1':
       message.success(t('nsmusics.siderbar_player.playback_1'))
       break
@@ -627,19 +662,19 @@ async function Play_Media_Order(model_num: string, increased: number) {
   let last_index = playlist_MediaFiles_temporary.value.length
   if (last_index > 0) {
     let index = playlist_MediaFiles_temporary.value.findIndex(
-      (item: any) => item.play_id === store_player_audio_info.this_audio_play_id
+      (item: any) => item.play_id === playerAudioStore.this_audio_play_id
     )
     if (index === -1) {
       index = playlist_MediaFiles_temporary.value.findIndex(
-        (item: any) => item.id === store_player_audio_info.this_audio_song_id
+        (item: any) => item.id === playerAudioStore.this_audio_song_id
       )
     }
 
     let stop_play = false
 
-    if (store_player_audio_logic.player_is_play_ended) {
+    if (playerSettingStore.player_is_play_ended) {
       await store_server_data_set_mediaInfo.Set_MediaInfo_To_PlayCompleteCount_of_Media_File_Server(
-        store_player_audio_info.this_audio_song_id
+        playerAudioStore.this_audio_song_id
       )
     }
 
@@ -647,9 +682,9 @@ async function Play_Media_Order(model_num: string, increased: number) {
       if (model_num === 'playback-1') {
         index += increased
         if (index >= last_index) {
-          if (store_player_audio_logic.player_is_play_ended) {
+          if (playerSettingStore.player_is_play_ended) {
             stop_play = true
-            store_player_audio_logic.player_is_play_ended = false
+            playerSettingStore.player_is_play_ended = false
           } else {
             index = 0
           }
@@ -705,11 +740,11 @@ async function Play_Media_Order(model_num: string, increased: number) {
               store_general_fetch_media_list._load_model = 'search'
 
               const media_file = playlist_MediaFiles_temporary.value[index]
-              await store_player_audio_logic.update_current_media_info(media_file, index)
+              await playerSettingStore.update_current_media_info(media_file, index)
               console.log(media_file)
 
               playlistStore.media_page_handleItemDbClick = false
-              store_player_audio_info.this_audio_restart_play = true
+              playerAudioStore.this_audio_restart_play = true
             }
           } else if (index < 0) {
             index = last_index - 1
@@ -729,11 +764,11 @@ async function Play_Media_Order(model_num: string, increased: number) {
             }
           }
           const media_file = playlist_MediaFiles_temporary.value[index]
-          await store_player_audio_logic.update_current_media_info(media_file, index)
+          await playerSettingStore.update_current_media_info(media_file, index)
           console.log(media_file)
 
           playlistStore.media_page_handleItemDbClick = false
-          store_player_audio_info.this_audio_restart_play = true
+          playerAudioStore.this_audio_restart_play = true
         }
       }
     }
@@ -741,7 +776,7 @@ async function Play_Media_Order(model_num: string, increased: number) {
 }
 async function begin_random_play_model() {
   playlist_MediaFiles_temporary.value = []
-  store_player_audio_logic.play_order = 'playback-4'
+  playerSettingStore.play_order = 'playback-4'
   if (store_server_users.server_select_kind === 'ninesong') {
     let get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
     await get_NineSong_Temp_Data_To_LocalSqlite.get_random_song_list(
@@ -763,59 +798,59 @@ async function begin_random_play_model() {
   }
   ///
   const media_file = playlist_MediaFiles_temporary.value[0]
-  await store_player_audio_logic.update_current_media_info(media_file, 0)
+  await playerSettingStore.update_current_media_info(media_file, 0)
   console.log(media_file)
   ///
   playlistStore.media_page_handleItemDbClick = false
-  store_player_audio_info.this_audio_restart_play = true
+  playerAudioStore.this_audio_restart_play = true
 }
 
 ////// player_configs player_button middle area
 const play_skip_back_click = async () => {
-  if (store_player_audio_logic.player_model_cue) {
+  if (playerSettingStore.player_model_cue) {
     if (play_skip_cue_order(-1, false, undefined, undefined)) {
       return
     }
   }
   ///
-  store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(
-    await store_player_audio_logic.player.getDuration()
+  playerSettingStore.current_play_time = playerSettingStore.formatTime(
+    await playerSettingStore.player.getDuration()
   )
-  store_player_audio_logic.player_slider_currentTime_added_value = 0
+  playerSettingStore.player_slider_currentTime_added_value = 0
   this_audio_buffer_file.value = null
   clearInterval(timer)
 
-  store_player_audio_logic.player_no_progress_jump = false
+  playerSettingStore.player_no_progress_jump = false
 
-  store_player_audio_logic.player.isPlaying = false
-  Play_Media_Order(store_player_audio_logic.play_order, -1)
+  playerSettingStore.player.isPlaying = false
+  Play_Media_Order(playerSettingStore.play_order, -1)
 
   player_mode_of_lock_playlist.value = true
 }
 const play_skip_forward_click = async () => {
-  if (store_player_audio_logic.player_model_cue) {
+  if (playerSettingStore.player_model_cue) {
     if (play_skip_cue_order(1, false, undefined, undefined)) {
       return
     }
   }
   ///
-  store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(
-    await store_player_audio_logic.player.getDuration()
+  playerSettingStore.current_play_time = playerSettingStore.formatTime(
+    await playerSettingStore.player.getDuration()
   )
-  store_player_audio_logic.player_slider_currentTime_added_value = 0
+  playerSettingStore.player_slider_currentTime_added_value = 0
   this_audio_buffer_file.value = null
   clearInterval(timer)
 
-  store_player_audio_logic.player_no_progress_jump = false
+  playerSettingStore.player_no_progress_jump = false
 
-  store_player_audio_logic.player.isPlaying = false
-  Play_Media_Order(store_player_audio_logic.play_order, 1)
+  playerSettingStore.player.isPlaying = false
+  Play_Media_Order(playerSettingStore.play_order, 1)
 
   player_mode_of_lock_playlist.value = true
 }
 //
 watch(
-  () => store_player_audio_logic.player_model_cue,
+  () => playerSettingStore.player_model_cue,
   (newValue) => {
     if (newValue) {
       message.success(t('ButtonStart') + 'CUE ' + t('nsmusics.view_page.disk') + t('Play'))
@@ -827,18 +862,18 @@ watch(
 )
 //
 const updateMarks = (newMarks: Record<number, string>) => {
-  store_player_audio_logic.marks_slider_singleValue = {
-    ...store_player_audio_logic.marks_slider_singleValue,
+  playerSettingStore.marks_slider_singleValue = {
+    ...playerSettingStore.marks_slider_singleValue,
     ...newMarks,
   }
 }
 const deleteMark = (position: number) => {
-  const newMarks = { ...store_player_audio_logic.marks_slider_singleValue }
+  const newMarks = { ...playerSettingStore.marks_slider_singleValue }
   delete newMarks[position]
-  store_player_audio_logic.marks_slider_singleValue = newMarks
+  playerSettingStore.marks_slider_singleValue = newMarks
 }
 const clearMarks = () => {
-  store_player_audio_logic.marks_slider_singleValue = {}
+  playerSettingStore.marks_slider_singleValue = {}
 }
 let media_cue_temp = undefined
 function play_skip_cue_order(
@@ -849,18 +884,18 @@ function play_skip_cue_order(
 ) {
   let media_file = undefined
   let index_num = 0
-  const index = store_player_audio_info.this_audio_cue_track_current_no + increased
+  const index = playerAudioStore.this_audio_cue_track_current_no + increased
   if (index < 0) {
-    store_player_audio_info.this_audio_cue_track_current_no = 0
-    store_player_audio_info.this_audio_cue_track_current_indexes = []
-    store_player_audio_info.this_audio_cue_tracks = []
+    playerAudioStore.this_audio_cue_track_current_no = 0
+    playerAudioStore.this_audio_cue_track_current_indexes = []
+    playerAudioStore.this_audio_cue_tracks = []
     return false
   }
   for (let i = 0; i < store_view_media_cue_page_info.media_Files_temporary.length; i++) {
     const media_cue = store_view_media_cue_page_info.media_Files_temporary[i]
     if (
       media_cue != undefined &&
-      media_cue.path === store_player_audio_info.this_audio_file_path &&
+      media_cue.path === playerAudioStore.this_audio_file_path &&
       media_cue.cue_tracks != undefined
     ) {
       if (index <= media_cue.cue_tracks.length) {
@@ -871,9 +906,9 @@ function play_skip_cue_order(
     }
   }
   if (media_file === undefined) {
-    store_player_audio_info.this_audio_cue_track_current_no = 0
-    store_player_audio_info.this_audio_cue_track_current_indexes = []
-    store_player_audio_info.this_audio_cue_tracks = []
+    playerAudioStore.this_audio_cue_track_current_no = 0
+    playerAudioStore.this_audio_cue_track_current_indexes = []
+    playerAudioStore.this_audio_cue_tracks = []
     return false
   }
   if (find_model) {
@@ -885,16 +920,16 @@ function play_skip_cue_order(
       for (let i = media_file.cue_tracks.length - 1; i >= 0; i--) {
         const track = media_file.cue_tracks[i]
         const current_cue_time =
-          store_player_audio_logic.formatStrTime(track.INDEXES[0].TIME) / 1000
+          playerSettingStore.formatStrTime(track.INDEXES[0].TIME) / 1000
         if (currentTime > current_cue_time && !find_result) {
-          store_player_audio_info.this_audio_song_name = track.Title
-          if (store_player_audio_info.this_audio_song_name.length === 0) {
-            store_player_audio_info.this_audio_song_name = index_num + ':' + media_file.title
+          playerAudioStore.this_audio_song_name = track.Title
+          if (playerAudioStore.this_audio_song_name.length === 0) {
+            playerAudioStore.this_audio_song_name = index_num + ':' + media_file.title
           }
-          store_player_audio_info.this_audio_artist_name = track.Performer
-          store_player_audio_info.this_audio_album_name = media_file.title
+          playerAudioStore.this_audio_artist_name = track.Performer
+          playerAudioStore.this_audio_album_name = media_file.title
           //
-          store_player_audio_info.this_audio_cue_track_current_no = i
+          playerAudioStore.this_audio_cue_track_current_no = i
           //
           find_result = true
           //
@@ -912,30 +947,30 @@ function play_skip_cue_order(
   } else {
     ///
     if (media_file.cue_tracks === undefined) {
-      store_player_audio_info.this_audio_cue_track_current_no = 0
-      store_player_audio_info.this_audio_cue_track_current_indexes = []
-      store_player_audio_info.this_audio_cue_tracks = []
-      store_player_audio_logic.player_model_cue = false
+      playerAudioStore.this_audio_cue_track_current_no = 0
+      playerAudioStore.this_audio_cue_track_current_indexes = []
+      playerAudioStore.this_audio_cue_tracks = []
+      playerSettingStore.player_model_cue = false
     } else {
-      store_player_audio_info.this_audio_cue_track_current_no = index_num
-      store_player_audio_info.this_audio_cue_track_current_indexes =
+      playerAudioStore.this_audio_cue_track_current_no = index_num
+      playerAudioStore.this_audio_cue_track_current_indexes =
         media_file.cue_tracks[index_num - 1].INDEXES
       ///
-      store_player_audio_info.this_audio_song_name = media_file.cue_tracks[index_num - 1].Title
-      if (store_player_audio_info.this_audio_song_name.length === 0) {
-        store_player_audio_info.this_audio_song_name = index_num + ':' + media_file.title
+      playerAudioStore.this_audio_song_name = media_file.cue_tracks[index_num - 1].Title
+      if (playerAudioStore.this_audio_song_name.length === 0) {
+        playerAudioStore.this_audio_song_name = index_num + ':' + media_file.title
       }
-      store_player_audio_info.this_audio_artist_name =
+      playerAudioStore.this_audio_artist_name =
         media_file.cue_tracks[index_num - 1].Performer
-      store_player_audio_info.this_audio_album_name = media_file.title
+      playerAudioStore.this_audio_album_name = media_file.title
       ///
-      store_player_audio_logic.player_model_cue = true
+      playerSettingStore.player_model_cue = true
     }
-    if (store_player_audio_info.this_audio_cue_track_current_indexes.length > 0) {
-      const track_str = store_player_audio_info.this_audio_cue_track_current_indexes[0].TIME
+    if (playerAudioStore.this_audio_cue_track_current_indexes.length > 0) {
+      const track_str = playerAudioStore.this_audio_cue_track_current_indexes[0].TIME
       if (track_str.length > 0) {
-        const track_time = store_player_audio_logic.formatStrTime(track_str)
-        store_player_audio_logic.player.setCurrentTime(track_time / 1000)
+        const track_time = playerSettingStore.formatStrTime(track_str)
+        playerSettingStore.player.setCurrentTime(track_time / 1000)
       }
     }
   }
@@ -944,13 +979,13 @@ function play_skip_cue_order(
 }
 import { Retrieval_ApiService_of_NineSong } from '@/data/data_configs/ninesong_api/services_web/Scene/Music/Retrieval/index_service'
 watch(
-  () => store_player_audio_info.this_audio_cue_track_current_no,
+  () => playerAudioStore.this_audio_cue_track_current_no,
   async (newValue) => {
     const retrieval = new Retrieval_ApiService_of_NineSong(store_server_login_info.server_url)
     if (
       store_server_user_model.model_server_type_of_web &&
       store_server_users.server_select_kind === 'ninesong' &&
-      store_player_audio_logic.player_model_cue
+      playerSettingStore.player_model_cue
     ) {
       if (media_cue_temp != undefined) {
         const lyrics_search = await retrieval.getLyrics_filter(
@@ -959,9 +994,9 @@ watch(
           ''
         )
         if (lyrics_search != undefined && lyrics_search.length > 0) {
-          await store_player_audio_info.set_lyric(lyrics_search)
+          await playerAudioStore.set_lyric(lyrics_search)
         } else {
-          await store_player_audio_info.set_lyric('')
+          await playerAudioStore.set_lyric('')
         }
       }
     }
@@ -984,59 +1019,59 @@ if (isElectron) {
 }
 
 const Play_Media_Switching = async () => {
-  store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(
-    await store_player_audio_logic.player.getDuration()
+  playerSettingStore.current_play_time = playerSettingStore.formatTime(
+    await playerSettingStore.player.getDuration()
   )
-  store_player_audio_logic.player_slider_currentTime_added_value = 0
+  playerSettingStore.player_slider_currentTime_added_value = 0
   this_audio_buffer_file.value = null
   clearInterval(timer)
 
-  store_player_audio_logic.player_no_progress_jump = false
+  playerSettingStore.player_no_progress_jump = false
 
-  store_player_audio_logic.player.isPlaying = false
-  store_player_audio_logic.player_is_play_ended = true
+  playerSettingStore.player.isPlaying = false
+  playerSettingStore.player_is_play_ended = true
 
-  if (store_player_audio_logic.play_order === 'playback-3') {
-    Play_Media_Order(store_player_audio_logic.play_order, 0)
+  if (playerSettingStore.play_order === 'playback-3') {
+    Play_Media_Order(playerSettingStore.play_order, 0)
   } else {
-    Play_Media_Order(store_player_audio_logic.play_order, 1)
+    Play_Media_Order(playerSettingStore.play_order, 1)
   }
 }
 
 ////// player_configs slider formatTime area
 watch(
-  () => store_player_audio_logic.slider_init_singleValue,
+  () => playerSettingStore.slider_init_singleValue,
   (newValue, oldValue) => {
     if (newValue !== oldValue && newValue > 0) {
-      store_player_audio_logic.slider_singleValue = newValue
+      playerSettingStore.slider_singleValue = newValue
     }
   }
 )
 const set_slider_singleValue = async () => {
-  if (!store_player_audio_logic.player_range_duration_isDragging) {
-    const currentTime = await store_player_audio_logic.player.getCurrentTime()
-    const duration = await store_player_audio_logic.player.getDuration()
+  if (!playerSettingStore.player_range_duration_isDragging) {
+    const currentTime = await playerSettingStore.player.getCurrentTime()
+    const duration = await playerSettingStore.player.getDuration()
     const calculatedValue =
-      ((currentTime + store_player_audio_logic.player_slider_currentTime_added_value) / duration) *
+      ((currentTime + playerSettingStore.player_slider_currentTime_added_value) / duration) *
       100
-    store_player_audio_logic.slider_singleValue = Number(calculatedValue.toFixed(2))
-    if (store_player_audio_logic.player_model_cue) {
+    playerSettingStore.slider_singleValue = Number(calculatedValue.toFixed(2))
+    if (playerSettingStore.player_model_cue) {
       play_skip_cue_order(0, true, currentTime, duration)
     }
   }
 }
 const get_current_play_time = async () => {
   if (
-    (await store_player_audio_logic.player.getCurrentTime()) +
-      store_player_audio_logic.player_slider_currentTime_added_value <=
-    (await store_player_audio_logic.player.getDuration())
+    (await playerSettingStore.player.getCurrentTime()) +
+      playerSettingStore.player_slider_currentTime_added_value <=
+    (await playerSettingStore.player.getDuration())
   ) {
-    store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(
-      (await store_player_audio_logic.player.getCurrentTime()) +
-        store_player_audio_logic.player_slider_currentTime_added_value
+    playerSettingStore.current_play_time = playerSettingStore.formatTime(
+      (await playerSettingStore.player.getCurrentTime()) +
+        playerSettingStore.player_slider_currentTime_added_value
     )
-    store_player_audio_logic.total_play_time = store_player_audio_logic.formatTime(
-      await store_player_audio_logic.player.getDuration()
+    playerSettingStore.total_play_time = playerSettingStore.formatTime(
+      await playerSettingStore.player.getDuration()
     )
   }
 }
@@ -1044,15 +1079,15 @@ const synchronize_playback_time = () => {
   try {
     set_slider_singleValue()
     get_current_play_time()
-    store_player_audio_logic.player.setVolume(Number(store_player_audio_logic.play_volume))
+    playerSettingStore.player.setVolume(Number(playerSettingStore.play_volume))
   } catch {}
 }
 let timer: string | number | NodeJS.Timeout | undefined
 watch(
-  () => store_player_audio_logic.player_go_lyric_line_index_of_audio_play_progress,
+  () => playerSettingStore.player_go_lyric_line_index_of_audio_play_progress,
   () => {
-    store_player_audio_logic.play_go_duration(
-      store_player_audio_logic.player_go_lyric_line_index_of_audio_play_progress,
+    playerSettingStore.play_go_duration(
+      playerSettingStore.player_go_lyric_line_index_of_audio_play_progress,
       false
     )
   }
@@ -1084,14 +1119,12 @@ const handleMouseMove = () => {
     if (player_use_playbar_auto_hide.value) {
       player_collapsed_action_bar_of_Immersion_model.value = true
     }
-    store_player_audio_logic.drawer_order_show = false
-    store_player_audio_logic.drawer_volume_show = false
+    playerSettingStore.drawer_order_show = false
+    playerSettingStore.drawer_volume_show = false
   }
 }
 
 ////// changed_data write to sqlite
-import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
 import { store_player_sound_effects } from '@/views/view_app/page/page_player/store/store_player_sound_effects'
 import { store_player_sound_speed } from '@/views/view_app/page/page_player/store/store_player_sound_speed'
 import { store_player_sound_more } from '@/views/view_app/page/page_player/store/store_player_sound_more'
@@ -1113,7 +1146,7 @@ import { store_view_media_cue_page_info } from '@/views/view_app/page/page_media
 const handleItemClick_Favorite = (id, favorite) => {
   if (id != null && id.length > 0 && id != 'undefined') {
     store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id, favorite)
-    store_player_audio_info.this_audio_song_favorite = !favorite
+    playerAudioStore.this_audio_song_favorite = !favorite
 
     store_view_media_page_logic.page_songlists_statistic.forEach((item: any) => {
       if (item.id === 'song_list_love') {
@@ -1121,13 +1154,13 @@ const handleItemClick_Favorite = (id, favorite) => {
         item.song_count = store_view_media_page_info.media_starred_count + ' *'
       }
     })
-    store_player_audio_logic.boolHandleItemClick_Favorite = true
+    playerSettingStore.boolHandleItemClick_Favorite = true
 
     const item_file: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find(
-      (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
+      (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
     )
     const item_playlist: Media_File | undefined = playlist_MediaFiles_temporary.value.find(
-      (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
+      (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
     )
     if (item_file !== undefined) item_file.favorite = !favorite
     if (item_playlist !== undefined) item_playlist.favorite = !favorite
@@ -1135,13 +1168,13 @@ const handleItemClick_Favorite = (id, favorite) => {
 }
 const handleItemClick_Rating = (id, rating) => {
   store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, rating)
-  store_player_audio_info.this_audio_song_rating = rating
+  playerAudioStore.this_audio_song_rating = rating
 
   const item_file: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find(
-    (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
+    (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
   )
   const item_playlist: Media_File | undefined = playlist_MediaFiles_temporary.value.find(
-    (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
+    (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
   )
   if (item_file !== undefined) item_file.rating = rating
   if (item_playlist !== undefined) item_playlist.rating = rating
@@ -1149,19 +1182,19 @@ const handleItemClick_Rating = (id, rating) => {
 
 /////// emits audio_info of songlist_view_list
 const handleItemClick_title = (title) => {
-  if (!store_player_audio_logic.player_model_cue) {
+  if (!playerSettingStore.player_model_cue) {
     store_router_data_info.router_click = false
     store_view_media_page_logic.page_songlists_bool_show_search_area = true
     store_view_media_page_logic.page_songlists_input_search_Value = title
     store_view_media_page_logic.get_page_songlists_keyword(title)
     player_show_hight_animation_value.value = 670
     get_playerbar_to_switch_playerview(player_show_hight_animation_value.value)
-    store_player_audio_logic.player_back_ChevronDouble =
+    playerSettingStore.player_back_ChevronDouble =
       player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow
   }
 }
 const handleItemClick_artist = (artist) => {
-  if (!store_player_audio_logic.player_model_cue) {
+  if (!playerSettingStore.player_model_cue) {
     store_router_data_info.router_click = false
     if (
       store_server_user_model.model_server_type_of_local ||
@@ -1181,7 +1214,7 @@ const handleItemClick_artist = (artist) => {
       }
       player_show_hight_animation_value.value = 670
       get_playerbar_to_switch_playerview(player_show_hight_animation_value.value)
-      store_player_audio_logic.player_back_ChevronDouble =
+      playerSettingStore.player_back_ChevronDouble =
         player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow
     } else {
       message.warning(
@@ -1191,7 +1224,7 @@ const handleItemClick_artist = (artist) => {
   }
 }
 const handleItemClick_album = (album) => {
-  if (!store_player_audio_logic.player_model_cue) {
+  if (!playerSettingStore.player_model_cue) {
     store_router_data_info.router_click = false
     if (
       store_server_user_model.model_server_type_of_local ||
@@ -1211,7 +1244,7 @@ const handleItemClick_album = (album) => {
       }
       player_show_hight_animation_value.value = 670
       get_playerbar_to_switch_playerview(player_show_hight_animation_value.value)
-      store_player_audio_logic.player_back_ChevronDouble =
+      playerSettingStore.player_back_ChevronDouble =
         player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow
     } else {
       message.warning(
@@ -1227,38 +1260,38 @@ onBeforeUnmount(() => {
 })
 //
 watch(
-  () => store_player_audio_logic.player_click_state_of_order,
+  () => playerSettingStore.player_click_state_of_order,
   (newValue) => {
     if (newValue) {
       backpanel_order_click()
-      store_player_audio_logic.player_click_state_of_order = false
+      playerSettingStore.player_click_state_of_order = false
     }
   }
 )
 watch(
-  () => store_player_audio_logic.player_click_state_of_play_skip_back,
+  () => playerSettingStore.player_click_state_of_play_skip_back,
   (newValue) => {
     if (newValue) {
       play_skip_back_click()
-      store_player_audio_logic.player_click_state_of_play_skip_back = false
+      playerSettingStore.player_click_state_of_play_skip_back = false
     }
   }
 )
 watch(
-  () => store_player_audio_logic.player_click_state_of_play,
+  () => playerSettingStore.player_click_state_of_play,
   (newValue) => {
     if (newValue) {
       Init_Audio_Player()
-      store_player_audio_logic.player_click_state_of_play = false
+      playerSettingStore.player_click_state_of_play = false
     }
   }
 )
 watch(
-  () => store_player_audio_logic.player_click_state_of_play_skip_forward,
+  () => playerSettingStore.player_click_state_of_play_skip_forward,
   (newValue) => {
     if (newValue) {
       play_skip_forward_click()
-      store_player_audio_logic.player_click_state_of_play_skip_forward = false
+      playerSettingStore.player_click_state_of_play_skip_forward = false
     }
   }
 )
@@ -1266,7 +1299,7 @@ watch(
   () => store_server_user_model.random_play_model,
   (newValue) => {
     if (newValue) {
-      store_player_audio_logic.play_order = 'playback-4'
+      playerSettingStore.play_order = 'playback-4'
       message.success(t('ButtonStart') + t('Shuffle'))
     } else {
       store_server_user_model.random_play_model_search = false
@@ -1317,7 +1350,7 @@ watch(
             <div class="button_open_player_view">
               <img
                 class="back_svg"
-                :src="getAssetImage(store_player_audio_logic.player_back_ChevronDouble)"
+                :src="getAssetImage(player_back_ChevronDouble)"
                 @click="click_back_svg"
                 @mouseover="hover_back_img"
                 @mouseout="leave_back_svg"
@@ -1327,7 +1360,7 @@ watch(
                 class="back_img"
                 style="object-fit: cover"
                 :style="{ filter: 'blur(' + back_filter_blurValue + 'px)' }"
-                :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                :src="getAssetImage(page_top_album_image_url)"
                 @error="handleImageError"
                 @click="click_back_svg"
                 @mouseover="hover_back_img"
@@ -1342,15 +1375,15 @@ watch(
             <n-ellipsis>
               <span
                 id="bar_song_name"
-                @click="handleItemClick_title(store_player_audio_info.this_audio_song_name)"
+                @click="handleItemClick_title(this_audio_song_name)"
               >
-                {{ store_player_audio_info.this_audio_song_name }}
+                {{ this_audio_song_name }}
               </span>
               <span style="font-size: 16px"> - </span>
               <template
-                v-for="artist in store_player_audio_info.this_audio_artist_name.split(
+                v-for="artist in this_audio_artist_name.split(
                   /[\/|｜、]/
-                ) ?? store_player_audio_info.this_audio_artist_name"
+                ) ?? this_audio_artist_name"
               >
                 <span id="bar_artist_name_part" @click="handleItemClick_artist(artist)">{{
                   artist + '&nbsp'
@@ -1365,13 +1398,13 @@ watch(
                 @click="
                   () => {
                     if (store_server_user_model.model_server_type_of_local) {
-                      handleItemClick_album(store_player_audio_info.this_audio_album_id)
+                      handleItemClick_album(this_audio_album_id)
                     } else if (store_server_user_model.model_server_type_of_web) {
-                      handleItemClick_album(store_player_audio_info.this_audio_album_name)
+                      handleItemClick_album(this_audio_album_name)
                     }
                   }
                 "
-                >{{ store_player_audio_info.this_audio_album_name }}</span
+                >{{ this_audio_album_name }}</span
               >
             </n-ellipsis>
           </n-space>
@@ -1406,7 +1439,7 @@ watch(
           }"
           justify="center"
         >
-          <n-tooltip v-if="store_player_audio_logic.orderToolShow" trigger="hover" placement="top">
+          <n-tooltip v-if="orderToolShow" trigger="hover" placement="top">
             <template #trigger>
               <n-badge
                 v-if="store_server_user_model.random_play_model"
@@ -1420,30 +1453,30 @@ watch(
                   size="small"
                   @click="
                     () => {
-                      store_player_audio_logic.drawer_order_show =
-                        !store_player_audio_logic.drawer_order_show
+                      drawer_order_show.value =
+                        !drawer_order_show.value
                     }
                   "
                 >
                   <template #icon>
-                    <n-icon :size="26" v-if="store_player_audio_logic.play_order === 'playback-1'">
+                    <n-icon :size="26" v-if="play_order === 'playback-1'">
                       <ArrowAutofitDown24Regular />
                     </n-icon>
                     <n-icon
                       :size="26"
-                      v-else-if="store_player_audio_logic.play_order === 'playback-2'"
+                      v-else-if="play_order === 'playback-2'"
                     >
                       <ArrowRepeatAll16Regular />
                     </n-icon>
                     <n-icon
                       :size="26"
-                      v-else-if="store_player_audio_logic.play_order === 'playback-3'"
+                      v-else-if="play_order === 'playback-3'"
                     >
                       <RepeatOneRound />
                     </n-icon>
                     <n-icon
                       :size="20"
-                      v-else-if="store_player_audio_logic.play_order === 'playback-4'"
+                      v-else-if="play_order === 'playback-4'"
                     >
                       <Random />
                     </n-icon>
@@ -1457,30 +1490,30 @@ watch(
                 size="small"
                 @click="
                   () => {
-                    store_player_audio_logic.drawer_order_show =
-                      !store_player_audio_logic.drawer_order_show
+                    drawer_order_show.value =
+                      !drawer_order_show.value
                   }
                 "
               >
                 <template #icon>
-                  <n-icon :size="26" v-if="store_player_audio_logic.play_order === 'playback-1'">
+                  <n-icon :size="26" v-if="play_order === 'playback-1'">
                     <ArrowAutofitDown24Regular />
                   </n-icon>
                   <n-icon
                     :size="26"
-                    v-else-if="store_player_audio_logic.play_order === 'playback-2'"
+                    v-else-if="play_order === 'playback-2'"
                   >
                     <ArrowRepeatAll16Regular />
                   </n-icon>
                   <n-icon
                     :size="26"
-                    v-else-if="store_player_audio_logic.play_order === 'playback-3'"
+                    v-else-if="play_order === 'playback-3'"
                   >
                     <RepeatOneRound />
                   </n-icon>
                   <n-icon
                     :size="20"
-                    v-else-if="store_player_audio_logic.play_order === 'playback-4'"
+                    v-else-if="play_order === 'playback-4'"
                   >
                     <Random />
                   </n-icon>
@@ -1491,7 +1524,7 @@ watch(
           </n-tooltip>
           <n-badge
             v-if="
-              !store_player_audio_logic.orderToolShow && store_server_user_model.random_play_model
+              !orderToolShow && store_server_user_model.random_play_model
             "
             dot
             :value="store_server_user_model.random_play_model"
@@ -1503,22 +1536,22 @@ watch(
               size="small"
               @click="
                 () => {
-                  store_player_audio_logic.drawer_order_show =
-                    !store_player_audio_logic.drawer_order_show
+                  drawer_order_show.value =
+                    !drawer_order_show.value
                 }
               "
             >
               <template #icon>
-                <n-icon :size="26" v-if="store_player_audio_logic.play_order === 'playback-1'">
+                <n-icon :size="26" v-if="play_order === 'playback-1'">
                   <ArrowAutofitDown24Regular />
                 </n-icon>
-                <n-icon :size="26" v-else-if="store_player_audio_logic.play_order === 'playback-2'">
+                <n-icon :size="26" v-else-if="play_order === 'playback-2'">
                   <ArrowRepeatAll16Regular />
                 </n-icon>
-                <n-icon :size="26" v-else-if="store_player_audio_logic.play_order === 'playback-3'">
+                <n-icon :size="26" v-else-if="play_order === 'playback-3'">
                   <RepeatOneRound />
                 </n-icon>
-                <n-icon :size="20" v-else-if="store_player_audio_logic.play_order === 'playback-4'">
+                <n-icon :size="20" v-else-if="play_order === 'playback-4'">
                   <Random />
                 </n-icon>
               </template>
@@ -1526,29 +1559,29 @@ watch(
           </n-badge>
           <n-button
             v-if="
-              !store_player_audio_logic.orderToolShow && !store_server_user_model.random_play_model
+              !orderToolShow && !store_server_user_model.random_play_model
             "
             quaternary
             round
             size="small"
             @click="
               () => {
-                store_player_audio_logic.drawer_order_show =
-                  !store_player_audio_logic.drawer_order_show
+                drawer_order_show.value =
+                  !drawer_order_show.value
               }
             "
           >
             <template #icon>
-              <n-icon :size="26" v-if="store_player_audio_logic.play_order === 'playback-1'">
+              <n-icon :size="26" v-if="play_order === 'playback-1'">
                 <ArrowAutofitDown24Regular />
               </n-icon>
-              <n-icon :size="26" v-else-if="store_player_audio_logic.play_order === 'playback-2'">
+              <n-icon :size="26" v-else-if="play_order === 'playback-2'">
                 <ArrowRepeatAll16Regular />
               </n-icon>
-              <n-icon :size="26" v-else-if="store_player_audio_logic.play_order === 'playback-3'">
+              <n-icon :size="26" v-else-if="play_order === 'playback-3'">
                 <RepeatOneRound />
               </n-icon>
-              <n-icon :size="20" v-else-if="store_player_audio_logic.play_order === 'playback-4'">
+              <n-icon :size="20" v-else-if="play_order === 'playback-4'">
                 <Random />
               </n-icon>
             </template>
@@ -1567,7 +1600,7 @@ watch(
             <template #trigger>
               <n-button quaternary round @click="Init_Audio_Player">
                 <template #icon>
-                  <n-icon v-if="store_player_audio_logic.player.isPlaying" :size="36"
+                  <n-icon v-if="playerSettingStore.player.isPlaying" :size="36"
                     ><Pause
                   /></n-icon>
                   <n-icon v-else :size="36"><Play /></n-icon>
@@ -1586,7 +1619,7 @@ watch(
             </template>
             {{ $t('player.next') }}
           </n-tooltip>
-          <n-tooltip v-if="store_player_audio_logic.voiceToolShow" trigger="hover" placement="top">
+          <n-tooltip v-if="voiceToolShow" trigger="hover" placement="top">
             <template #trigger>
               <n-button
                 quaternary
@@ -1594,8 +1627,8 @@ watch(
                 size="small"
                 @click="
                   () => {
-                    store_player_audio_logic.drawer_volume_show =
-                      !store_player_audio_logic.drawer_volume_show
+                    drawer_volume_show.value =
+                      !drawer_volume_show.value
                   }
                 "
               >
@@ -1607,14 +1640,14 @@ watch(
             {{ $t('HeaderAudioSettings') }}
           </n-tooltip>
           <n-button
-            v-if="!store_player_audio_logic.voiceToolShow"
+            v-if="!voiceToolShow"
             quaternary
             round
             size="small"
             @click="
               () => {
-                store_player_audio_logic.drawer_volume_show =
-                  !store_player_audio_logic.drawer_volume_show
+                drawer_volume_show.value =
+                  !drawer_volume_show.value
               }
             "
           >
@@ -1640,7 +1673,7 @@ watch(
           justify="center"
         >
           <n-space style="width: 46px" justify="end">
-            {{ store_player_audio_logic.current_play_time }}
+            {{ current_play_time }}
           </n-space>
           <n-config-provider :theme="null">
             <n-slider
@@ -1651,47 +1684,47 @@ watch(
                 transition: margin 0.4s;
                 margin-top: 2px;
               "
-              v-model:value="store_player_audio_logic.slider_singleValue"
-              :marks="store_player_audio_logic.marks_slider_singleValue"
+              v-model:value="slider_singleValue"
+              :marks="marks_slider_singleValue"
               :min="0"
               :max="100"
               :keyboard="true"
               :format-tooltip="
                 (value) => {
-                  return store_player_audio_logic.formatTime(
-                    (value / 100) * store_player_audio_logic.player.isDuration
+                  return playerSettingStore.formatTime(
+                    (value / 100) * playerSettingStore.player.isDuration
                   )
                 }
               "
               :on-dragend="
                 () => {
                   if (
-                    store_player_audio_logic.slider_singleValue >= 99.5 ||
-                    store_player_audio_logic.slider_singleValue == 0
+                    slider_singleValue >= 99.5 ||
+                    slider_singleValue == 0
                   ) {
-                    store_player_audio_logic.player_is_play_ended = true
-                    store_player_audio_logic.play_go_duration(
-                      store_player_audio_logic.slider_singleValue,
+                    playerSettingStore.player_is_play_ended = true
+                    playerSettingStore.play_go_duration(
+                      slider_singleValue,
                       true
                     )
                   }
-                  store_player_audio_logic.player_range_duration_isDragging = false
+                  playerSettingStore.player_range_duration_isDragging = false
                 }
               "
               @click="
                 () => {
-                  store_player_audio_logic.play_go_duration(
-                    store_player_audio_logic.slider_singleValue,
+                  playerSettingStore.play_go_duration(
+                    slider_singleValue,
                     true
                   )
                 }
               "
-              @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
-              @mouseup="store_player_audio_logic.player_range_duration_isDragging = false"
+              @mousedown="playerSettingStore.player_range_duration_isDragging = true"
+              @mouseup="playerSettingStore.player_range_duration_isDragging = false"
             />
           </n-config-provider>
           <n-space style="width: 46px">
-            {{ store_player_audio_logic.total_play_time }}
+            {{ total_play_time }}
           </n-space>
         </n-space>
         <!-- grid_Middle_drwaer_area -->
@@ -1699,15 +1732,15 @@ watch(
           <div
             id="backpanel_order"
             :style="{
-              minWidth: store_player_audio_logic.orderPanelWidath + 'px',
+              minWidth: orderPanelWidath + 'px',
             }"
             @mouseleave="backpanel_order_leave"
           ></div>
           <n-drawer
-            v-model:show="store_player_audio_logic.drawer_order_show"
+            v-model:show="drawer_order_show"
             placement="bottom"
             to="#backpanel_order"
-            v-model:height="store_player_audio_logic.drawer_order_height"
+            v-model:height="drawer_order_height"
             show-mask="transparent"
             style="border-radius: 10px"
           >
@@ -1717,13 +1750,13 @@ watch(
                   quaternary
                   @click="
                     () => {
-                      store_player_audio_logic.play_order = 'playback-1'
-                      store_player_audio_logic.drawer_order_show = false
+                      play_order.value = 'playback-1'
+                      drawer_order_show.value = false
                       store_server_user_model.random_play_model = false
                     }
                   "
                   :style="{
-                    minWidth: store_player_audio_logic.orderButonWidath + 'px',
+                    minWidth: orderButonWidath + 'px',
                     display: 'flex',
                     justifyContent: 'flex-start',
                   }"
@@ -1740,13 +1773,13 @@ watch(
                   quaternary
                   @click="
                     () => {
-                      store_player_audio_logic.play_order = 'playback-2'
-                      store_player_audio_logic.drawer_order_show = false
+                      play_order.value = 'playback-2'
+                      drawer_order_show.value = false
                       store_server_user_model.random_play_model = false
                     }
                   "
                   :style="{
-                    minWidth: store_player_audio_logic.orderButonWidath + 'px',
+                    minWidth: orderButonWidath + 'px',
                     display: 'flex',
                     justifyContent: 'flex-start',
                   }"
@@ -1763,13 +1796,13 @@ watch(
                   quaternary
                   @click="
                     () => {
-                      store_player_audio_logic.play_order = 'playback-3'
-                      store_player_audio_logic.drawer_order_show = false
+                      play_order.value = 'playback-3'
+                      drawer_order_show.value = false
                       store_server_user_model.random_play_model = false
                     }
                   "
                   :style="{
-                    minWidth: store_player_audio_logic.orderButonWidath + 'px',
+                    minWidth: orderButonWidath + 'px',
                     display: 'flex',
                     justifyContent: 'flex-start',
                   }"
@@ -1786,13 +1819,13 @@ watch(
                   quaternary
                   @click="
                     () => {
-                      store_player_audio_logic.play_order = 'playback-4'
-                      store_player_audio_logic.drawer_order_show = false
+                      playerSettingStore.play_order = 'playback-4'
+                      playerSettingStore.drawer_order_show = false
                       store_server_user_model.random_play_model = false
                     }
                   "
                   :style="{
-                    minWidth: store_player_audio_logic.orderButonWidath + 'px',
+                    minWidth: orderButonWidath + 'px',
                     display: 'flex',
                     justifyContent: 'flex-start',
                   }"
@@ -1825,16 +1858,16 @@ watch(
                   quaternary
                   @click="
                     async () => {
-                      store_player_audio_logic.play_order = 'playback-2'
-                      // 刷新store_player_audio_logic.play_order响应式状态
-                      store_player_audio_logic.play_order = 'playback-4'
-                      store_player_audio_logic.drawer_order_show = false
+                      play_order.value = 'playback-2'
+                      // 刷新play_order响应式状态
+                      play_order.value = 'playback-4'
+                      drawer_order_show.value = false
                       store_server_user_model.random_play_model = true
                       await begin_random_play_model()
                     }
                   "
                   :style="{
-                    minWidth: store_player_audio_logic.orderButonWidath + 'px',
+                    minWidth: orderButonWidath + 'px',
                     display: 'flex',
                     justifyContent: 'flex-start',
                   }"
@@ -1854,7 +1887,7 @@ watch(
         <n-config-provider :theme="null">
           <div id="backpanel_voice"></div>
           <n-drawer
-            v-model:show="store_player_audio_logic.drawer_volume_show"
+            v-model:show="drawer_volume_show"
             placement="bottom"
             :width="77"
             :height="236"
@@ -1867,13 +1900,13 @@ watch(
                 <n-slider
                   style="height: 158px; border-radius: 10px; margin-top: 6px"
                   vertical
-                  v-model:value="store_player_audio_logic.play_volume"
+                  v-model:value="play_volume"
                   :min="0"
                   :max="100"
                   :keyboard="true"
                   :tooltip="false"
                 />
-                <n-text>{{ store_player_audio_logic.play_volume }}</n-text>
+                <n-text>{{ play_volume }}</n-text>
               </n-space>
             </n-drawer-content>
           </n-drawer>
@@ -1946,10 +1979,10 @@ watch(
                 <n-rate
                   clearable
                   size="small"
-                  v-model:value="store_player_audio_info.this_audio_song_rating"
+                  v-model:value="this_audio_song_rating"
                   @update:value="
                     (value: number) =>
-                      handleItemClick_Rating(store_player_audio_info.this_audio_song_id, value)
+                      handleItemClick_Rating(playerAudioStore.this_audio_song_id, value)
                   "
                 />
               </template>
@@ -1973,8 +2006,7 @@ watch(
                   size="tiny"
                   text
                   @click="
-                    store_player_audio_logic.drawer_theme_show =
-                      !store_player_audio_logic.drawer_theme_show
+                    drawer_theme_show = !drawer_theme_show
                   "
                 >
                   <template #icon>
@@ -2009,13 +2041,13 @@ watch(
                   @click="
                     () => {
                       store_player_tag_modify.player_current_media_path =
-                        store_player_audio_info.this_audio_file_path
+                        playerAudioStore.this_audio_file_path
                       store_player_tag_modify.player_current_media_id =
-                        store_player_audio_info.this_audio_song_id
+                        playerAudioStore.this_audio_song_id
                       store_player_tag_modify.player_current_album_id =
-                        store_player_audio_info.this_audio_album_id
+                        playerAudioStore.this_audio_album_id
                       store_player_tag_modify.player_current_artist_id =
-                        store_player_audio_info.this_audio_artist_id
+                        playerAudioStore.this_audio_artist_id
                       //
                       store_player_tag_modify.player_show_tag_modify =
                         !store_player_tag_modify.player_show_tag_modify
@@ -2038,14 +2070,14 @@ watch(
                   text
                   @click="
                     handleItemClick_Favorite(
-                      store_player_audio_info.this_audio_song_id,
-                      store_player_audio_info.this_audio_song_favorite
+                      playerAudioStore.this_audio_song_id,
+                      playerAudioStore.this_audio_song_favorite
                     )
                   "
                 >
                   <template #icon>
                     <n-icon
-                      v-if="store_player_audio_info.this_audio_song_favorite"
+                      v-if="playerAudioStore.this_audio_song_favorite"
                       :size="
                         (store_server_users.server_select_kind != 'jellyfin' &&
                           store_server_users.server_select_kind != 'emby') ||

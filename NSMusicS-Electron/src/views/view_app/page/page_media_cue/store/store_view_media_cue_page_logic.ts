@@ -197,8 +197,9 @@ export const store_view_media_cue_page_logic = reactive({
   },
   async get_page_songlists_selected(newValue: any) {
     this.page_songlists_selected = newValue
-    if (usePlayerAppearanceStore().player_mode_of_medialist_from_external_import) {
-      usePlayerAppearanceStore().player_mode_of_medialist_from_external_import = false
+    const playerAppearanceStore = usePlayerAppearanceStore()
+    if (playerAppearanceStore.player_mode_of_medialist_from_external_import) {
+      playerAppearanceStore.player_mode_of_medialist_from_external_import = false
     } else {
       if (store_view_media_cue_page_logic.list_selected_Hand_click) {
         store_view_media_cue_page_logic.page_songlists_keywordFilter = ''

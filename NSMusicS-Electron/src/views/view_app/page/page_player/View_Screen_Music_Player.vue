@@ -45,11 +45,15 @@ const computed_i18n_Label_ViewSetConfig_Cover_6 = computed(() =>
 // audio_class & player_bar & player_view
 import { store_player_view } from '@/views/view_app/page/page_player/store/store_player_view'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
+import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
+
+const playerSettingStore = usePlayerSettingStore()
 
 // 在setup上下文中获取Store实例
 const playerAppearanceStore = usePlayerAppearanceStore()
 const playlistStore = usePlaylistStore()
+const playerAudioStore = usePlayerAudioStore()
 // 使用 storeToRefs 解构出所需的响应式属性
 const {
   player_show,
@@ -81,13 +85,33 @@ const {
 
 const { playlist_MediaFiles_temporary_carousel } = storeToRefs(playlistStore)
 
+const {
+  this_audio_song_name,
+  this_audio_artist_name,
+  this_audio_album_name,
+  page_top_album_image_url,
+  this_audio_lyrics_info_line_font,
+  this_audio_Index_of_play_list_carousel,
+  play_list_carousel_model,
+  this_audio_lyrics_loaded_complete,
+  this_audio_lyrics_string,
+  this_audio_lyrics_null,
+  this_audio_lyrics_info_line_time,
+  this_audio_cue_track_current_indexes,
+  this_audio_lyrics_info_byte_time,
+  page_top_vinyl_image_url,
+  this_audio_lyrics_info_line_num,
+  this_audio_lyrics_info_byte_model,
+  this_audio_lyrics_info_byte_font,
+} = storeToRefs(playerAudioStore)
+
 ////// lyircs load
 let unwatch = watch(
-  () => store_player_audio_info.this_audio_lyrics_loaded_complete,
+  () => this_audio_lyrics_loaded_complete.value,
   (newValue) => {
     if (newValue) {
       load_lyrics()
-      store_player_audio_logic.player_slider_click = true
+      playerSettingStore.player_slider_click = true
       scrollToItem(0)
     }
   }
@@ -97,12 +121,12 @@ onMounted(() => {
   init_player_theme()
 })
 function load_lyrics() {
-  if (store_player_audio_info.this_audio_lyrics_string.length > 0) {
-    if (store_player_audio_info.this_audio_lyrics_null) {
-      store_player_audio_info.this_audio_lyrics_info_line_font.forEach(
+  if (this_audio_lyrics_string.value.length > 0) {
+    if (this_audio_lyrics_null.value) {
+      this_audio_lyrics_info_line_font.value.forEach(
         (item: any, index: number) => {
           if ((item != null || item != 'undefined' || item != '') && item === '未找到可用歌词') {
-            store_player_audio_info.this_audio_lyrics_info_line_font[index] =
+            this_audio_lyrics_info_line_font.value[index] =
               computed_i18n_Label_Lyric_Not_Find.value
           }
         }
@@ -125,52 +149,52 @@ function begin_lyrics_animation() {
     setTimeout(() => {
       clearInterval(lyrics_animation)
       lyrics_animation = setInterval(async () => {
-        for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_line_time.length; i++) {
+        for (let i = 0; i < this_audio_lyrics_info_line_time.value.length; i++) {
           if (
-            store_player_audio_logic.player !== null &&
-            (await store_player_audio_logic.player.getCurrentTime()) !== undefined &&
-            (await store_player_audio_logic.player.getCurrentTime()) !== null
+            playerSettingStore.player !== null &&
+            (await playerSettingStore.player.getCurrentTime()) !== undefined &&
+            (await playerSettingStore.player.getCurrentTime()) !== null
           ) {
-            let currentTime = (await store_player_audio_logic.player.getCurrentTime()) * 1000
+            let currentTime = (await playerSettingStore.player.getCurrentTime()) * 1000
             ///
-            if (store_player_audio_logic.player_model_cue) {
-              if (store_player_audio_info.this_audio_cue_track_current_indexes.length > 0) {
+            if (playerSettingStore.player_model_cue) {
+              if (this_audio_cue_track_current_indexes.value.length > 0) {
                 const track_str =
-                  store_player_audio_info.this_audio_cue_track_current_indexes[0].TIME
+                  this_audio_cue_track_current_indexes.value[0].TIME
                 if (track_str.length > 0) {
-                  currentTime = currentTime - store_player_audio_logic.formatStrTime(track_str)
+                  currentTime = currentTime - playerSettingStore.formatStrTime(track_str)
                 }
               }
             }
             ///
-            if (currentTime <= store_player_audio_info.this_audio_lyrics_info_line_time[0]) {
+            if (currentTime <= this_audio_lyrics_info_line_time.value[0]) {
               if (
                 !lyrics_list_whell.value &&
                 (isFirstRun || store_player_view.currentScrollIndex !== 0)
               ) {
                 store_player_view.currentScrollIndex = 0
-                scrollToItem(store_player_audio_info.this_audio_lyrics_info_line_num)
+                scrollToItem(this_audio_lyrics_info_line_num.value)
               }
               break
-            } else if (currentTime >= store_player_audio_info.this_audio_lyrics_info_line_time[i]) {
-              if (i === store_player_audio_info.this_audio_lyrics_info_line_time.length - 1) {
+            } else if (currentTime >= this_audio_lyrics_info_line_time.value[i]) {
+              if (i === playerAudioStore.this_audio_lyrics_info_line_time.length - 1) {
                 if (
                   !lyrics_list_whell.value &&
                   (isFirstRun || store_player_view.currentScrollIndex !== i)
                 ) {
                   store_player_view.currentScrollIndex = i
-                  scrollToItem(i + store_player_audio_info.this_audio_lyrics_info_line_num)
+                  scrollToItem(i + this_audio_lyrics_info_line_num.value)
                 }
                 break
               } else if (
-                currentTime < store_player_audio_info.this_audio_lyrics_info_line_time[i + 1]
+                currentTime < this_audio_lyrics_info_line_time.value[i + 1]
               ) {
                 if (
                   !lyrics_list_whell.value &&
                   (isFirstRun || store_player_view.currentScrollIndex !== i)
                 ) {
                   store_player_view.currentScrollIndex = i
-                  scrollToItem(i + store_player_audio_info.this_audio_lyrics_info_line_num)
+                  scrollToItem(i + this_audio_lyrics_info_line_num.value)
                 }
                 break
               }
@@ -180,17 +204,17 @@ function begin_lyrics_animation() {
         if (isFirstRun) {
           isFirstRun = false
         }
-        if (store_player_audio_logic.player_slider_click) {
+        if (playerSettingStore.player_slider_click) {
           handleClear_Lyric_Color()
           lyrics_list_whell.value = false
-          store_player_audio_logic.player_slider_click = false
+          playerSettingStore.player_slider_click = false
           if (scrollbar.value) {
             const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info')
             const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active')
             let color_hidden = player_lyric_color.value.slice(0, -2)
             const index =
               store_player_view.currentScrollIndex +
-              store_player_audio_info.this_audio_lyrics_info_line_num
+              this_audio_lyrics_info_line_num.value
             scrollToItem(index)
             for (let i = index - 16; i <= index + 16; i++) {
               const colorValue = Math.max(
@@ -225,29 +249,29 @@ function begin_lyrics_animation() {
 }
 let lyrics_animation: string | number | NodeJS.Timeout | undefined
 const handleItemDbClick = async (index: any) => {
-  if (index < store_player_audio_info.this_audio_lyrics_info_line_num) return
+  if (index < this_audio_lyrics_info_line_num.value) return
   if (
     index >
-    store_player_audio_info.this_audio_lyrics_info_line_font.length -
-      store_player_audio_info.this_audio_lyrics_info_line_num -
+    this_audio_lyrics_info_line_font.value.length -
+      this_audio_lyrics_info_line_num.value -
       1
   )
     return
   const time =
-    store_player_audio_info.this_audio_lyrics_info_line_time[
-      index - store_player_audio_info.this_audio_lyrics_info_line_num
+    this_audio_lyrics_info_line_time.value[
+      index - this_audio_lyrics_info_line_num.value
     ]
-  if (time >= (await store_player_audio_logic.player.getDuration()) * 1000) return
+  if (time >= (await playerSettingStore.player.getDuration()) * 1000) return
   if (time < 0) return
-  if (!store_player_audio_logic.player_model_cue) {
-    store_player_audio_logic.player_go_lyric_line_index_of_audio_play_progress = time
+  if (!playerSettingStore.player_model_cue) {
+    playerSettingStore.player_go_lyric_line_index_of_audio_play_progress = time
   } else {
-    if (store_player_audio_info.this_audio_cue_track_current_indexes.length > 0) {
-      const track_str = store_player_audio_info.this_audio_cue_track_current_indexes[0].TIME
+    if (this_audio_cue_track_current_indexes.value.length > 0) {
+      const track_str = this_audio_cue_track_current_indexes.value[0].TIME
       if (track_str.length > 0) {
-        let track_time = store_player_audio_logic.formatStrTime(track_str)
+        let track_time = playerSettingStore.formatStrTime(track_str)
         track_time = time + track_time
-        store_player_audio_logic.player.setCurrentTime(track_time / 1000)
+        playerSettingStore.player.setCurrentTime(track_time / 1000)
       }
     }
   }
@@ -328,11 +352,11 @@ const scrollToItem = (index: number) => {
     perviousIndex.value = index
 
     if (isFirstRun) {
-      store_player_audio_logic.player_slider_click = true
+      playerSettingStore.player_slider_click = true
     }
 
-    // if(store_player_audio_info.this_audio_lyrics_info_byte_model) {
-    //   if(store_player_audio_logic.player.isPlaying) {
+    // if(playerAudioStore.this_audio_lyrics_info_byte_model) {
+    //   if(playerSettingStore.player.isPlaying) {
     //     startByteAnimations(index, 0)
     //   }
     // }
@@ -344,18 +368,18 @@ const startByteAnimations = (index: number, num: number) => {
   try {
     if (!scrollbar.value) return
     const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active')
-    let position_i_length = store_player_audio_info.this_audio_lyrics_info_byte_time.reduce(
+    let position_i_length = this_audio_lyrics_info_byte_time.value.reduce(
       (acc: any, curr: any) => {
         return acc + curr.length
       },
       0
     )
-    let position_i_start = store_player_audio_info.this_audio_lyrics_info_byte_time
+    let position_i_start = this_audio_lyrics_info_byte_time.value
       .slice(0, index)
       .reduce((acc: any, curr: any) => {
         return acc + curr.length
       }, 0)
-    let position_i_end = store_player_audio_info.this_audio_lyrics_info_byte_time
+    let position_i_end = this_audio_lyrics_info_byte_time.value
       .slice(0, index + 1)
       .reduce((acc: any, curr: any) => {
         return acc + curr.length
@@ -400,7 +424,7 @@ const startByteAnimations = (index: number, num: number) => {
 
     for (let i = position_i_start; i < position_i_end; i++) {
       const byteTime =
-        store_player_audio_info.this_audio_lyrics_info_byte_time[index][i - position_i_start]
+        playerAudioStore.this_audio_lyrics_info_byte_time[index][i - position_i_start]
       const [startMs, durationMs] = byteTime.split(',').map(Number)
       const start = startMs / 1000
       const duration = durationMs / 1000
@@ -543,7 +567,7 @@ const handleAuto_fontSize = (value: number) => {
   } catch {}
 }
 watch(
-  () => player_lyric_fontSize_Num.value,
+  () => player_lyric_fontSize_Num,
   (newValue) => {
     handleLeave_Refresh_Lyric_Color()
     handleAuto_fontSize(newValue)
@@ -673,7 +697,7 @@ const player_theme_set_theme = (index: number) => {
     player_collapsed_skin.value = player_theme_0_bind_style.value.normalStyle.player_collapsed_skin
 
     const index_lyric =
-      store_player_view.currentScrollIndex + store_player_audio_info.this_audio_lyrics_info_line_num
+      store_player_view.currentScrollIndex + playerAudioStore.this_audio_lyrics_info_line_num
     const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info')
     if (!player_collapsed_album.value) {
       itemElements[index_lyric].style.transformOrigin = 'left center'
@@ -719,7 +743,7 @@ const handleMouseMove = () => {
   }, 1000)
 }
 const unwatch_player_collapsed = watchEffect(() => {
-  if (!usePlayerAppearanceStore().player_collapsed_action_bar_of_Immersion_model) {
+  if (!playerAppearanceStore.player_collapsed_action_bar_of_Immersion_model) {
     clearInterval(timer_auto_hidden)
   }
 })
@@ -727,7 +751,6 @@ const unwatch_player_collapsed = watchEffect(() => {
 ////// Animation lottie Load // lottie-web will cause memory leaks，so replace lottie-player_configs
 import '@lottiefiles/lottie-player'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
-import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import Table_Album_Model_1_AlbumScroll from '@/views/view_app/page/page_player/components/Table_Album_Model_1_AlbumScroll.vue'
@@ -744,35 +767,35 @@ const animationInstance_model_1_wave = ref<any>(null)
 const animationInstance_model_2_wave = ref<any>(null)
 const animationInstance_model_5_wave = ref<any>(null)
 let unwatch_animationInstance = watch(
-  () => store_player_audio_logic.player.isPlaying,
+  () => playerSettingStore.player.isPlaying,
   (newValue) => {
-    if (usePlayerAppearanceStore().player_use_lottie_animation) {
+    if (playerAppearanceStore.player_use_lottie_animation) {
       if (newValue) {
-        if (usePlayerAppearanceStore().player_background_model_num === 1) {
+        if (playerAppearanceStore.player_background_model_num === 1) {
           animationInstance_model_1_spectrum.value.play()
           animationInstance_model_1_wave.value.play()
         }
-        if (usePlayerAppearanceStore().player_background_model_num === 2) {
+        if (playerAppearanceStore.player_background_model_num === 2) {
           animationInstance_model_2_wave.value.play()
         }
-        if (usePlayerAppearanceStore().player_background_model_num === 4) {
+        if (playerAppearanceStore.player_background_model_num === 4) {
           animationInstance_model_1_spectrum_copy.value.play()
         }
-        if (usePlayerAppearanceStore().player_background_model_num === 5) {
+        if (playerAppearanceStore.player_background_model_num === 5) {
           animationInstance_model_5_wave.value.play()
         }
       } else {
-        if (usePlayerAppearanceStore().player_background_model_num === 1) {
+        if (playerAppearanceStore.player_background_model_num === 1) {
           animationInstance_model_1_spectrum.value.pause()
           animationInstance_model_1_wave.value.pause()
         }
-        if (usePlayerAppearanceStore().player_background_model_num === 2) {
+        if (playerAppearanceStore.player_background_model_num === 2) {
           animationInstance_model_2_wave.value.pause()
         }
-        if (usePlayerAppearanceStore().player_background_model_num === 4) {
+        if (playerAppearanceStore.player_background_model_num === 4) {
           animationInstance_model_1_spectrum_copy.value.pause()
         }
-        if (usePlayerAppearanceStore().player_background_model_num === 5) {
+        if (playerAppearanceStore.player_background_model_num === 5) {
           animationInstance_model_5_wave.value.pause()
         }
       }
@@ -780,25 +803,25 @@ let unwatch_animationInstance = watch(
   }
 )
 let unwatch_player_background_model_num = watch(
-  () => store_player_audio_info.player_background_model_num,
+  () => player_background_model_num.value,
   (newValue) => {
-    if (usePlayerAppearanceStore().player_use_lottie_animation) {
-      if (usePlayerAppearanceStore().player_background_model_num === 0) {
+    if (playerAppearanceStore.player_use_lottie_animation) {
+      if (playerAppearanceStore.player_background_model_num === 0) {
         animationInstance_model_1_spectrum.value.pause()
         animationInstance_model_1_wave.value.pause()
         animationInstance_model_2_wave.value.pause()
       }
-      if (usePlayerAppearanceStore().player_background_model_num === 1) {
+      if (playerAppearanceStore.player_background_model_num === 1) {
         animationInstance_model_2_wave.value.pause()
       }
-      if (usePlayerAppearanceStore().player_background_model_num === 2) {
+      if (playerAppearanceStore.player_background_model_num === 2) {
         animationInstance_model_1_spectrum.value.pause()
         animationInstance_model_1_wave.value.pause()
       }
-      if (usePlayerAppearanceStore().player_background_model_num === 4) {
+      if (playerAppearanceStore.player_background_model_num === 4) {
         animationInstance_model_1_spectrum_copy.value.pause()
       }
-      if (usePlayerAppearanceStore().player_background_model_num === 5) {
+      if (playerAppearanceStore.player_background_model_num === 5) {
         animationInstance_model_5_wave.value.pause()
       }
     }
@@ -813,7 +836,7 @@ onBeforeUnmount(() => {
 
   unwatch_animationInstance()
   unwatch_player_background_model_num()
-  if (usePlayerAppearanceStore().player_use_lottie_animation) {
+  if (playerAppearanceStore.player_use_lottie_animation) {
     animationInstance_model_1_spectrum.value.destroy()
     animationInstance_model_1_spectrum_copy.value.destroy()
     animationInstance_model_1_wave.value.destroy()
@@ -823,7 +846,7 @@ onBeforeUnmount(() => {
   clear_lottie_animationInstance.value = true
 
   unwatch_player_collapsed()
-  usePlayerAppearanceStore().player_collapsed_action_bar_of_Immersion_model = false
+  playerAppearanceStore.player_collapsed_action_bar_of_Immersion_model = false
 })
 </script>
 
@@ -836,7 +859,7 @@ onBeforeUnmount(() => {
         v-if="player_collapsed_skin"
         id="player_bg_zindex_0"
         :style="{
-          backgroundImage: `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`,
+          backgroundImage: `url(${getAssetImage(page_top_album_image_url)})`,
           filter: player_use_background_filter_blur
             ? 'brightness(46%) blur(40px)'
             : 'brightness(46%) blur(0px)',
@@ -867,7 +890,7 @@ onBeforeUnmount(() => {
           object-position: center;
           filter: brightness(46%) blur(0px);
         "
-        :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+        :src="getAssetImage(page_top_album_image_url)"
         alt=""
       />
       <div
@@ -886,7 +909,7 @@ onBeforeUnmount(() => {
     <n-config-provider :theme="darkTheme">
       <!-- right drwaer of Player_theme -->
       <n-drawer
-        v-model:show="store_player_audio_logic.drawer_theme_show"
+        v-model:show="playerSettingStore.drawer_theme_show"
         :width="420"
         style="
           border-radius: 12px 0 0 12px;
@@ -897,7 +920,7 @@ onBeforeUnmount(() => {
           height: 680px;
         "
       >
-        <n-drawer-content v-if="store_player_audio_logic.drawer_theme_show">
+        <n-drawer-content v-if="playerSettingStore.drawer_theme_show">
           <template #default>
             <n-space vertical align="center">
               <n-space vertical style="width: 380px">
@@ -1083,10 +1106,10 @@ onBeforeUnmount(() => {
                       v-model:value="player_use_lyric_skip_forward"
                       @update:value="
                         () => {
-                          store_player_audio_logic.player_slider_click = true
+                          playerSettingStore.player_slider_click = true
                           const index =
                             store_player_view.currentScrollIndex +
-                            store_player_audio_info.this_audio_lyrics_info_line_num
+                            playerAudioStore.this_audio_lyrics_info_line_num
                           scrollToItem(index - 3)
                           scrollToItem(index)
                         }
@@ -1356,7 +1379,7 @@ onBeforeUnmount(() => {
                   vertical
                   align="end"
                   :class="{
-                    'scroll-enabled': store_player_audio_logic.player.isPlaying,
+                    'scroll-enabled': playerSettingStore.player.isPlaying,
                   }"
                   :style="{
                     marginTop: player_use_lyric_skip_forward ? '0px' : '40px',
@@ -1368,12 +1391,12 @@ onBeforeUnmount(() => {
                   <Table_Album_Model_1_AlbumScroll
                     @mouseover="
                       () => {
-                        store_player_audio_info.play_list_carousel_model = true
+                        play_list_carousel_model.value = true
                       }
                     "
                     @mouseleave="
                       () => {
-                        store_player_audio_info.play_list_carousel_model = false
+                        play_list_carousel_model.value = false
                       }
                     "
                   />
@@ -1397,7 +1420,7 @@ onBeforeUnmount(() => {
                       :class="{
                         animate__rotate_slower_paused:
                           player_background_model_num !== 1 ||
-                          !store_player_audio_logic.player.isPlaying,
+                          !playerSettingStore.player.isPlaying,
                       }"
                       v-if="!clear_lottie_animationInstance && player_use_lottie_animation"
                       autoplay
@@ -1405,7 +1428,7 @@ onBeforeUnmount(() => {
                       mode="normal"
                       :src="JSON.parse(JSON.stringify(Animation_1715591164841))"
                       :style="{
-                        '--background-image': `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`,
+                        '--background-image': `url(${getAssetImage(page_top_album_image_url)})`,
                       }"
                       style="width: 66vh; height: 66vh; margin-top: calc(22vh - 186px)"
                     >
@@ -1423,7 +1446,7 @@ onBeforeUnmount(() => {
                         text-align: center;
                       "
                     >
-                      {{ store_player_audio_info.this_audio_song_name }}
+                      {{ this_audio_song_name }}
                     </div>
                     <div
                       style="
@@ -1439,8 +1462,8 @@ onBeforeUnmount(() => {
                         text-align: center;
                       "
                     >
-                      {{ store_player_audio_info.this_audio_artist_name }} -
-                      {{ store_player_audio_info.this_audio_album_name }}
+                      {{ this_audio_artist_name }} -
+                      {{ this_audio_album_name }}
                     </div>
                     <lottie-player
                       ref="animationInstance_model_1_spectrum"
@@ -1453,7 +1476,7 @@ onBeforeUnmount(() => {
                     />
                     <n-space align="center" justify="center" v-if="!player_collapsed_album">
                       <n-space style="width: 46px; margin-right: -10px">
-                        {{ store_player_audio_logic.current_play_time }}
+                        {{ playerSettingStore.current_play_time }}
                       </n-space>
                       <n-slider
                         style="
@@ -1472,50 +1495,50 @@ onBeforeUnmount(() => {
                           --n-dot-width: 8px;
                           border-radius: 10px;
                         "
-                        v-model:value="store_player_audio_logic.slider_singleValue"
+                        v-model:value="playerSettingStore.slider_singleValue"
                         :min="0"
                         :max="100"
                         :format-tooltip="
                           (value) => {
-                            return store_player_audio_logic.formatTime(
-                              (value / 100) * store_player_audio_logic.player.isDuration
+                            return playerSettingStore.formatTime(
+                              (value / 100) * playerSettingStore.player.isDuration
                             )
                           }
                         "
                         :on-dragend="
                           () => {
                             if (
-                              store_player_audio_logic.slider_singleValue >= 99.5 ||
-                              store_player_audio_logic.slider_singleValue == 0
+                              playerSettingStore.slider_singleValue >= 99.5 ||
+                              playerSettingStore.slider_singleValue == 0
                             ) {
-                              store_player_audio_logic.player_is_play_ended = true
-                              store_player_audio_logic.play_go_duration(
-                                store_player_audio_logic.slider_singleValue,
+                              playerSettingStore.player_is_play_ended = true
+                              playerSettingStore.play_go_duration(
+                                playerSettingStore.slider_singleValue,
                                 true
                               )
                             }
-                            store_player_audio_logic.player_range_duration_isDragging = false
+                            playerSettingStore.player_range_duration_isDragging = false
                           }
                         "
                         @click="
                           () => {
-                            store_player_audio_logic.play_go_duration(
-                              store_player_audio_logic.slider_singleValue,
+                            playerSettingStore.play_go_duration(
+                              playerSettingStore.slider_singleValue,
                               true
                             )
                           }
                         "
                         @mousedown="
-                          store_player_audio_logic.player_range_duration_isDragging = true
+                          playerSettingStore.player_range_duration_isDragging = true
                         "
-                        @mouseup="store_player_audio_logic.player_range_duration_isDragging = false"
+                        @mouseup="playerSettingStore.player_range_duration_isDragging = false"
                       >
                         <template #thumb>
                           <n-icon-wrapper color="white" :size="12" />
                         </template>
                       </n-slider>
                       <n-space style="width: 46px">
-                        {{ store_player_audio_logic.total_play_time }}
+                        {{ playerSettingStore.total_play_time }}
                       </n-space>
                     </n-space>
                   </n-flex>
@@ -1535,7 +1558,7 @@ onBeforeUnmount(() => {
                       opacity: player_background_model_num === 2 ? 1 : 0,
                       left:
                         player_background_model_num === 2
-                          ? store_player_audio_logic.player.isPlaying
+                          ? playerSettingStore.player.isPlaying
                             ? '0'
                             : '10%'
                           : '-100%',
@@ -1548,7 +1571,7 @@ onBeforeUnmount(() => {
                       :class="{
                         animate__rotate_fast_paused:
                           player_background_model_num !== 2 ||
-                          !store_player_audio_logic.player.isPlaying,
+                          !playerSettingStore.player.isPlaying,
                       }"
                       v-if="!clear_lottie_animationInstance && player_use_lottie_animation"
                       speed="0.8"
@@ -1566,11 +1589,11 @@ onBeforeUnmount(() => {
                           opacity 0.4s;
                       "
                       :style="{
-                        '--background-image': `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`,
-                        marginLeft: store_player_audio_logic.player.isPlaying
+                        '--background-image': `url(${getAssetImage(page_top_album_image_url)})`,
+                        marginLeft: playerSettingStore.player.isPlaying
                           ? 'calc(-56vh)'
                           : 'calc(-70vh)',
-                        opacity: store_player_audio_logic.player.isPlaying ? 1 : 0,
+                        opacity: playerSettingStore.player.isPlaying ? 1 : 0,
                       }"
                     />
                     <div
@@ -1591,7 +1614,7 @@ onBeforeUnmount(() => {
                         transition: margin 0.4s;
                       "
                       :style="{
-                        marginLeft: store_player_audio_logic.player.isPlaying
+                        marginLeft: playerSettingStore.player.isPlaying
                           ? 'calc(-47vh)'
                           : 'calc(-61vh)',
                       }"
@@ -1629,7 +1652,7 @@ onBeforeUnmount(() => {
                             /* 圆形洞的大小 */ black 3.2% /* 遮罩其余部分 */
                           );
                         "
-                        :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                        :src="getAssetImage(page_top_album_image_url)"
                         alt=""
                       />
                       <div
@@ -1646,10 +1669,10 @@ onBeforeUnmount(() => {
                             opacity 0.4s;
                         "
                         :style="{
-                          right: store_player_audio_logic.player.isPlaying
+                          right: playerSettingStore.player.isPlaying
                             ? 'calc(-1.5vh)'
                             : 'calc(12vh)',
-                          opacity: store_player_audio_logic.player.isPlaying ? 1 : 0,
+                          opacity: playerSettingStore.player.isPlaying ? 1 : 0,
                         }"
                       ></div>
                       <div
@@ -1666,10 +1689,10 @@ onBeforeUnmount(() => {
                             opacity 0.4s;
                         "
                         :style="{
-                          right: store_player_audio_logic.player.isPlaying
+                          right: playerSettingStore.player.isPlaying
                             ? 'calc(-1vh)'
                             : 'calc(13vh)',
-                          opacity: store_player_audio_logic.player.isPlaying ? 1 : 0,
+                          opacity: playerSettingStore.player.isPlaying ? 1 : 0,
                         }"
                       ></div>
                     </div>
@@ -1687,7 +1710,7 @@ onBeforeUnmount(() => {
                         text-align: left;
                       "
                     >
-                      {{ store_player_audio_info.this_audio_song_name }}
+                      {{ this_audio_song_name }}
                     </div>
                     <div
                       style="
@@ -1703,8 +1726,8 @@ onBeforeUnmount(() => {
                         text-align: left;
                       "
                     >
-                      {{ store_player_audio_info.this_audio_artist_name }} -
-                      {{ store_player_audio_info.this_audio_album_name }}
+                      {{ this_audio_artist_name }} -
+                      {{ this_audio_album_name }}
                     </div>
                     <n-slider
                       style="
@@ -1717,41 +1740,41 @@ onBeforeUnmount(() => {
                         margin-left: calc(-74vh);
                         border-radius: 10px;
                       "
-                      v-model:value="store_player_audio_logic.slider_singleValue"
+                      v-model:value="playerSettingStore.slider_singleValue"
                       :min="0"
                       :max="100"
                       :format-tooltip="
                         (value) => {
-                          return store_player_audio_logic.formatTime(
-                            (value / 100) * store_player_audio_logic.player.isDuration
+                          return playerSettingStore.formatTime(
+                            (value / 100) * playerSettingStore.player.isDuration
                           )
                         }
                       "
                       :on-dragend="
                         () => {
                           if (
-                            store_player_audio_logic.slider_singleValue >= 99.5 ||
-                            store_player_audio_logic.slider_singleValue === 0
+                            playerSettingStore.slider_singleValue >= 99.5 ||
+                            playerSettingStore.slider_singleValue === 0
                           ) {
-                            store_player_audio_logic.player_is_play_ended = true
-                            store_player_audio_logic.play_go_duration(
-                              store_player_audio_logic.slider_singleValue,
+                            playerSettingStore.player_is_play_ended = true
+                            playerSettingStore.play_go_duration(
+                              playerSettingStore.slider_singleValue,
                               true
                             )
                           }
-                          store_player_audio_logic.player_range_duration_isDragging = false
+                          playerSettingStore.player_range_duration_isDragging = false
                         }
                       "
                       @click="
                         () => {
-                          store_player_audio_logic.play_go_duration(
-                            store_player_audio_logic.slider_singleValue,
+                          playerSettingStore.play_go_duration(
+                            playerSettingStore.slider_singleValue,
                             true
                           )
                         }
                       "
-                      @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
-                      @mouseup="store_player_audio_logic.player_range_duration_isDragging = false"
+                      @mousedown="playerSettingStore.player_range_duration_isDragging = true"
+                      @mouseup="playerSettingStore.player_range_duration_isDragging = false"
                     >
                       <template #thumb>
                         <n-icon-wrapper color="white" :size="12" />
@@ -1765,8 +1788,8 @@ onBeforeUnmount(() => {
                         margin-left: calc(-74vh);
                       "
                     >
-                      {{ store_player_audio_logic.current_play_time }} &nbsp;:&nbsp;
-                      {{ store_player_audio_logic.total_play_time }}
+                      {{ playerSettingStore.current_play_time }} &nbsp;:&nbsp;
+                      {{ playerSettingStore.total_play_time }}
                     </div>
                   </n-space>
                 </n-space>
@@ -1822,15 +1845,15 @@ onBeforeUnmount(() => {
                         }"
                         v-for="(
                           item, index
-                        ) in store_player_audio_info.this_audio_lyrics_info_line_font"
+                        ) in this_audio_lyrics_info_line_font"
                         @click="handleItemDbClick(index)"
                       >
                         <div class="lyrics_text_active">
                           {{ item }}
                         </div>
-                        <!--                        v-if="!store_player_audio_info.this_audio_lyrics_info_byte_model"-->
+                        <!--                        v-if="!this_audio_lyrics_info_byte_model"-->
                         <!--                        <div v-else-->
-                        <!--                          v-for="(byte, num) in store_player_audio_info.this_audio_lyrics_info_byte_font[index]"-->
+                        <!--                          v-for="(byte, num) in this_audio_lyrics_info_byte_font[index]"-->
                         <!--                          class="lyrics_text_active"-->
                         <!--                          style="padding-left: 0;margin-right: 1px;"-->
                         <!--                        >-->
@@ -1860,12 +1883,12 @@ onBeforeUnmount(() => {
               align="center"
               @mouseover="
                 () => {
-                  store_player_audio_info.play_list_carousel_model = true
+                  play_list_carousel_model.value = true
                 }
               "
               @mouseleave="
                 () => {
-                  store_player_audio_info.play_list_carousel_model = false
+                  play_list_carousel_model.value = false
                 }
               "
             >
@@ -1873,7 +1896,7 @@ onBeforeUnmount(() => {
                 effect="card"
                 :show-arrow="false"
                 :show-dots="false"
-                :current-index="store_player_audio_info.this_audio_Index_of_play_list_carousel"
+                :current-index="this_audio_Index_of_play_list_carousel"
                 direction="horizontal"
                 dot-placement="bottom"
                 :prev-slide-style="{
@@ -1918,7 +1941,7 @@ onBeforeUnmount(() => {
                     text-align: center;
                   "
                 >
-                  {{ store_player_audio_info.this_audio_song_name }}
+                  {{ this_audio_song_name }}
                 </div>
                 <div
                   style="
@@ -1933,8 +1956,8 @@ onBeforeUnmount(() => {
                     text-align: center;
                   "
                 >
-                  {{ store_player_audio_info.this_audio_artist_name }} -
-                  {{ store_player_audio_info.this_audio_album_name }}
+                  {{ this_audio_artist_name }} -
+                  {{ this_audio_album_name }}
                 </div>
               </n-space>
               <!--  -->
@@ -1955,7 +1978,7 @@ onBeforeUnmount(() => {
                 v-if="false"
               >
                 <n-space style="width: 46px; margin-right: -10px; color: #ffffff99">
-                  {{ store_player_audio_logic.current_play_time }}
+                  {{ playerSettingStore.current_play_time }}
                 </n-space>
                 <n-slider
                   style="
@@ -1966,48 +1989,48 @@ onBeforeUnmount(() => {
                     --n-handle-size: 20px;
                     border-radius: 10px;
                   "
-                  v-model:value="store_player_audio_logic.slider_singleValue"
+                  v-model:value="playerSettingStore.slider_singleValue"
                   :min="0"
                   :max="100"
                   :format-tooltip="
                     (value) => {
-                      return store_player_audio_logic.formatTime(
-                        (value / 100) * store_player_audio_logic.player.isDuration
+                      return playerSettingStore.formatTime(
+                        (value / 100) * playerSettingStore.player.isDuration
                       )
                     }
                   "
                   :on-dragend="
                     () => {
                       if (
-                        store_player_audio_logic.slider_singleValue >= 99.5 ||
-                        store_player_audio_logic.slider_singleValue == 0
+                        playerSettingStore.slider_singleValue >= 99.5 ||
+                        playerSettingStore.slider_singleValue == 0
                       ) {
-                        store_player_audio_logic.player_is_play_ended = true
-                        store_player_audio_logic.play_go_duration(
-                          store_player_audio_logic.slider_singleValue,
+                        playerSettingStore.player_is_play_ended = true
+                        playerSettingStore.play_go_duration(
+                          playerSettingStore.slider_singleValue,
                           true
                         )
                       }
-                      store_player_audio_logic.player_range_duration_isDragging = false
+                      playerSettingStore.player_range_duration_isDragging = false
                     }
                   "
                   @click="
                     () => {
-                      store_player_audio_logic.play_go_duration(
-                        store_player_audio_logic.slider_singleValue,
+                      playerSettingStore.play_go_duration(
+                        playerSettingStore.slider_singleValue,
                         true
                       )
                     }
                   "
-                  @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
-                  @mouseup="store_player_audio_logic.player_range_duration_isDragging = false"
+                  @mousedown="playerSettingStore.player_range_duration_isDragging = true"
+                  @mouseup="playerSettingStore.player_range_duration_isDragging = false"
                 >
                   <template #thumb>
                     <n-icon-wrapper color="white" :size="12" />
                   </template>
                 </n-slider>
                 <n-space style="width: 46px; color: #ffffff99">
-                  {{ store_player_audio_logic.total_play_time }}
+                  {{ playerSettingStore.total_play_time }}
                 </n-space>
               </n-space>
               <!--  -->
@@ -2030,7 +2053,7 @@ onBeforeUnmount(() => {
                 }"
               >
                 <n-carousel-item
-                  v-for="(item, index) in store_player_audio_info.this_audio_lyrics_info_line_font"
+                  v-for="(item, index) in this_audio_lyrics_info_line_font"
                   @click="handleItemDbClick(index)"
                   style="width: 50vh; height: 10vh"
                 >
@@ -2076,7 +2099,7 @@ onBeforeUnmount(() => {
               class="animate__rotate_fast_model_6"
               :class="{
                 animate__rotate_fast_model_6_paused:
-                  player_background_model_num !== 5 || !store_player_audio_logic.player.isPlaying,
+                  player_background_model_num !== 5 || !playerSettingStore.player.isPlaying,
               }"
               v-if="!clear_lottie_animationInstance && player_use_lottie_animation"
               speed="0.8"
@@ -2092,8 +2115,8 @@ onBeforeUnmount(() => {
                 margin-top: -7vw;
               "
               :style="{
-                '--background-image': `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`,
-                opacity: store_player_audio_logic.player.isPlaying ? 0.8 : 0.2,
+                '--background-image': `url(${getAssetImage(page_top_album_image_url)})`,
+                opacity: playerSettingStore.player.isPlaying ? 0.8 : 0.2,
                 right: '23vw',
                 transition: 'right 0.6s, top 0.6s, zIndex 0.6s, transform 0.6s, opacity 0.4s',
               }"
@@ -2102,7 +2125,7 @@ onBeforeUnmount(() => {
               class="animate__rotate_fast_model_6"
               :class="{
                 animate__rotate_fast_model_6_paused:
-                  player_background_model_num !== 5 || !store_player_audio_logic.player.isPlaying,
+                  player_background_model_num !== 5 || !playerSettingStore.player.isPlaying,
               }"
               style="
                 width: calc(40vw);
@@ -2118,7 +2141,7 @@ onBeforeUnmount(() => {
                 transition: margin 0.4s;
               "
               :style="{
-                backgroundImage: `url(${getAssetImage(store_player_audio_info.page_top_vinyl_image_url)})`,
+                backgroundImage: `url(${getAssetImage(page_top_vinyl_image_url.value)})`,
                 backgroundSize: '105%',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center',

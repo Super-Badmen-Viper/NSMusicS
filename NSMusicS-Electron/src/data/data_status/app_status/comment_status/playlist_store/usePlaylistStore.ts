@@ -17,14 +17,15 @@ interface Play_List {
 
 // 导入依赖
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
-import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
+import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { usePlayerSettingStore } from '../player_store/usePlayerSettingStore'
 import { Get_LocalSqlite_PlaylistInfo } from '@/data/data_repository/app_repository/LocalSqlite_Get_PlaylistInfo'
 import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
 import { store_general_fetch_media_list } from '../../../../data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
 import { store_general_fetch_media_cue_list } from '../../../../data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list'
+import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 
 export const usePlaylistStore = defineStore('playlist', () => {
   // 外观状态
@@ -62,7 +63,7 @@ export const usePlaylistStore = defineStore('playlist', () => {
     const item: Media_File | undefined = playlist_MediaFiles_temporary.value.find(
       (mediaFile: Media_File) => mediaFile.id === playlist_Menu_Item_Id.value
     )
-    if (item != undefined && item != 'undefined') {
+    if (item !== undefined && item !== null) {
       const index = playlist_MediaFiles_temporary.value.findIndex(
         (mediaFile: Media_File) => mediaFile.id === item.id
       )
@@ -108,15 +109,16 @@ export const usePlaylistStore = defineStore('playlist', () => {
   }
 
   function reset_carousel() {
+    const playerAudioStore = usePlayerAudioStore()
     const hasSameAbsoluteIndex = playlist_MediaFiles_temporary_carousel.value.some(
-      (item: Media_File) => item.path === store_player_audio_info.this_audio_file_path
+      (item: Media_File) => item.path === playerAudioStore.this_audio_file_path
     )
     if (hasSameAbsoluteIndex) {
       return
     }
     if (playlist_MediaFiles_temporary.value.length > 1) {
-      if (!isNaN(store_player_audio_info.this_audio_Index_of_play_list)) {
-        const startIndex = Math.max(store_player_audio_info.this_audio_Index_of_play_list - 14, 0)
+      if (!isNaN(playerAudioStore.this_audio_Index_of_play_list)) {
+        const startIndex = Math.max(playerAudioStore.this_audio_Index_of_play_list - 14, 0)
         const endIndex = Math.min(startIndex + 30, playlist_MediaFiles_temporary.value.length)
         playlist_MediaFiles_temporary_carousel.value = playlist_MediaFiles_temporary.value.slice(
           startIndex,
@@ -128,13 +130,13 @@ export const usePlaylistStore = defineStore('playlist', () => {
           30
         )
       }
-      store_player_audio_info.set_carousel_index()
+      playerAudioStore.set_carousel_index()
     } else if (playlist_MediaFiles_temporary.value.length === 1) {
       playlist_MediaFiles_temporary_carousel.value = [
         playlist_MediaFiles_temporary.value[0],
         playlist_MediaFiles_temporary.value[0],
       ]
-      store_player_audio_info.set_carousel_index()
+      playerAudioStore.set_carousel_index()
     }
   }
 
@@ -177,15 +179,17 @@ export const usePlaylistStore = defineStore('playlist', () => {
         }
       })
     }
-    await store_player_audio_logic.update_current_media_info(media_file, index)
+    const playerSettingStore = usePlayerSettingStore()
+    await playerSettingStore.update_current_media_info(media_file, index)
     media_page_handleItemDbClick.value = false
-    store_player_audio_info.this_audio_restart_play = true
+    const playerAudioStore = usePlayerAudioStore()
+    playerAudioStore.this_audio_restart_play = true
   }
 
   // 监听器
   watch(
     () => {
-      playlist_show.value
+      playlist_show
     },
     (newValue) => {
       if (newValue) {
@@ -204,7 +208,7 @@ export const usePlaylistStore = defineStore('playlist', () => {
   )
 
   watch(
-    () => playlist_MediaFiles_temporary.value,
+    () => playlist_MediaFiles_temporary,
     async () => {
       reset_carousel()
       store_system_configs_save.save_system_playlist_item_id_config()
@@ -213,7 +217,7 @@ export const usePlaylistStore = defineStore('playlist', () => {
   )
 
   watch(
-    () => playlist_MediaFiles_temporary_Sort_Items.value,
+    () => playlist_MediaFiles_temporary_Sort_Items,
     async () => {
       store_system_configs_save.save_system_playlist_item_id_config()
     },

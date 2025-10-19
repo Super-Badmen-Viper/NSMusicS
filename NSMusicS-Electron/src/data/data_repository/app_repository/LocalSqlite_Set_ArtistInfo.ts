@@ -1,6 +1,6 @@
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { isElectron } from '@/utils/electron/isElectron'
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 
 export class Set_LocalSqlite_ArtistInfo {
   private getUniqueId(db: any) {

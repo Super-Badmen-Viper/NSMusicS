@@ -66,7 +66,7 @@ import { useI18n } from 'vue-i18n'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_local_db_info } from '@/data/data_stores/local_app_stores/store_local_db_info'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
-import { isElectron } from '@/utils/electron/isElectron'
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 const { t } = useI18n({
   inheritLocale: true,

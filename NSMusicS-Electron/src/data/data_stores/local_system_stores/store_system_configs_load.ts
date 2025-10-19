@@ -4,8 +4,8 @@ import { Read_LocalSqlite_System_Configs } from '@/data/data_repository/system_r
 import { Get_LocalSqlite_PlaylistInfo } from '@/data/data_repository/app_repository/LocalSqlite_Get_PlaylistInfo'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
-import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
@@ -22,7 +22,7 @@ import { store_system_configs_save } from '@/data/data_stores/local_system_store
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 import shrink_up_arrow from '@/assets/svg/shrink_up_arrow.svg'
 import { store_local_db_info } from '@/data/data_stores/local_app_stores/store_local_db_info'
-import { isElectron } from '@/utils/electron/isElectron'
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 import { store_server_auth_token } from '@/data/data_stores/server_api_stores/server_api_auth/auth_token'
 import { store_server_model_statistics } from '@/data/data_stores/server_api_stores/server_api_core/model/model_statistics'
@@ -31,6 +31,11 @@ import { Audio_howler } from '@/data/data_models/app_models/song_Audio_Out/Audio
 export const store_system_configs_load = reactive({
   app_configs_loading: false,
   async load_app_config() {
+    const playerAppearanceStore = usePlayerAppearanceStore()
+    const playerAudioStore = usePlayerAudioStore()
+    const playerSettingStore = usePlayerSettingStore()
+    const playlistStore = usePlaylistStore()
+
     this.app_configs_loading = true
     try {
       /// system configs
@@ -138,9 +143,9 @@ export const store_system_configs_load = reactive({
         if (store_system_configs_info.lang === 'null') {
           store_system_configs_info.lang = 'en'
         }
-        store_player_audio_logic.orderPanelWidath =
-          store_player_audio_logic.langWidths[store_system_configs_info.lang.toString()]
-        store_player_audio_logic.orderButonWidath = store_player_audio_logic.orderPanelWidath - 14
+        playerSettingStore.orderPanelWidath =
+          playerSettingStore.langWidths[store_system_configs_info.lang.toString()]
+        playerSettingStore.orderButonWidath = playerSettingStore.orderPanelWidath - 14
         // store_system_configs_info.app_view_left_menu_collapsed = '' + system_Configs_Read.app_Configs.value['app_view_left_menu_collapsed'] === 'true'
         store_system_configs_info.app_view_left_menu_collapsed = true
         store_system_configs_info.menuOptions_selectd_model_1 =
@@ -232,7 +237,6 @@ export const store_system_configs_load = reactive({
 
       try {
         /// player_Configs_For_UI
-        const playerAppearanceStore = usePlayerAppearanceStore()
         playerAppearanceStore.player_collapsed_album =
           '' + system_Configs_Read.player_Configs_of_UI.value['player_collapsed_album'] === 'true'
         playerAppearanceStore.player_collapsed_skin =
@@ -299,40 +303,40 @@ export const store_system_configs_load = reactive({
         /// player_Configs_of_Audio_Info
         // Golang // NineSong流媒体模块未完成开发前，不开放回放功能(恢复上次播放数据)
         if (isElectron) {
-          store_player_audio_info.this_audio_file_path =
+          playerAudioStore.this_audio_file_path =
             '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_path']
-          store_player_audio_info.this_audio_file_medium_image_url = ''
-          // store_player_audio_info.this_audio_file_medium_image_url = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_medium_image_url']
-          await store_player_audio_info.set_lyric(
+          playerAudioStore.this_audio_file_medium_image_url = ''
+          // playerAudioStore.this_audio_file_medium_image_url = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_medium_image_url']
+          await playerAudioStore.set_lyric(
             '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_lyric']
           )
-          store_player_audio_info.this_audio_artist_id =
+          playerAudioStore.this_audio_artist_id =
             '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_artist_id']
-          store_player_audio_info.this_audio_artist_name =
+          playerAudioStore.this_audio_artist_name =
             '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_artist_name']
-          store_player_audio_info.this_audio_song_name =
+          playerAudioStore.this_audio_song_name =
             '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_song_name']
-          store_player_audio_info.this_audio_song_id =
+          playerAudioStore.this_audio_song_id =
             '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_song_id']
-          store_player_audio_info.this_audio_song_favorite =
+          playerAudioStore.this_audio_song_favorite =
             '' +
               system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_song_favorite'] ===
             'true'
-          store_player_audio_info.this_audio_song_rating = Number(
+          playerAudioStore.this_audio_song_rating = Number(
             '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_song_rating']
           )
-          store_player_audio_info.this_audio_album_name =
+          playerAudioStore.this_audio_album_name =
             '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_name']
-          store_player_audio_info.this_audio_album_id =
+          playerAudioStore.this_audio_album_id =
             '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_id']
-          store_player_audio_info.this_audio_album_favorite =
+          playerAudioStore.this_audio_album_favorite =
             '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_favorite']
           //
-          store_player_audio_info.page_top_album_image_url =
+          playerAudioStore.page_top_album_image_url =
             '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_image_url']
-          store_player_audio_info.page_top_album_id =
+          playerAudioStore.page_top_album_id =
             '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_id']
-          store_player_audio_info.page_top_album_name =
+          playerAudioStore.page_top_album_name =
             '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_name']
           //
           store_general_fetch_player_list._artist_id =
@@ -342,7 +346,7 @@ export const store_system_configs_load = reactive({
           store_general_fetch_player_list._album_artist_id =
             '' + system_Configs_Read.player_Configs_of_Audio_Info.value['playlist_album_artist_id']
           //
-          store_player_audio_logic.slider_init_singleValue = Number(
+          playerSettingStore.slider_init_singleValue = Number(
             '' + system_Configs_Read.player_Configs_of_Audio_Info.value['slider_singleValue']
           )
         }
@@ -481,147 +485,147 @@ export const store_system_configs_load = reactive({
 
       try {
         /// playlist configs
-        await usePlaylistStore().reset_data()
+        await playlistStore.reset_data()
         /// player
-        store_player_audio_logic.play_order =
+        playerSettingStore.play_order =
           '' + system_Configs_Read.app_Configs.value['play_order']
-        store_player_audio_logic.play_volume = Number(
+        playerSettingStore.play_volume = Number(
           '' + system_Configs_Read.app_Configs.value['play_volume']
         )
         if (
-          store_player_audio_logic.play_volume === 0 ||
-          store_player_audio_logic.play_volume === undefined
+          playerSettingStore.play_volume === 0 ||
+          playerSettingStore.play_volume === undefined
         ) {
-          store_player_audio_logic.play_volume = 100
+          playerSettingStore.play_volume = 100
         }
       } catch (e) {
         console.error(e)
       }
 
       //
-      store_player_audio_logic.player_select = ''
+      playerSettingStore.player_select = ''
       if (isElectron) {
         try {
           if (
             '' + system_Configs_Read.app_Configs.value['player_select'] === null ||
             '' + system_Configs_Read.app_Configs.value['player_select'].length < 0
           ) {
-            store_player_audio_logic.player_select = 'web'
-            store_player_audio_logic.player_fade_value = 2000
+            playerSettingStore.player_select = 'web'
+            playerSettingStore.player_fade_value = 2000
           } else {
             if (process.platform != 'linux') {
               if ('' + system_Configs_Read.app_Configs.value['player_select'] === 'mpv') {
-                store_player_audio_logic.player_select = 'mpv'
+                playerSettingStore.player_select = 'mpv'
               } else if ('' + system_Configs_Read.app_Configs.value['player_select'] === 'web') {
-                store_player_audio_logic.player_select = 'web'
+                playerSettingStore.player_select = 'web'
               } else {
-                store_player_audio_logic.player_select = 'web'
+                playerSettingStore.player_select = 'web'
               }
             } else {
-              store_player_audio_logic.player_select = 'web'
-              store_player_audio_logic.player_fade_value = 2000
+              playerSettingStore.player_select = 'web'
+              playerSettingStore.player_fade_value = 2000
             }
           }
         } catch {
-          store_player_audio_logic.player_select = 'web'
-          store_player_audio_logic.player_fade_value = 2000
+          playerSettingStore.player_select = 'web'
+          playerSettingStore.player_fade_value = 2000
         }
       } else {
-        store_player_audio_logic.player_select = 'web'
-        store_player_audio_logic.player_fade_value = 2000
+        playerSettingStore.player_select = 'web'
+        playerSettingStore.player_fade_value = 2000
       }
       //
-      store_player_audio_logic.player_fade_value = Number(
+      playerSettingStore.player_fade_value = Number(
         '' + system_Configs_Read.app_Configs.value['player_fade_value']
       )
-      if (store_player_audio_logic.player_fade_value === null) {
-        store_player_audio_logic.player_fade_value = 2000
+      if (playerSettingStore.player_fade_value === null) {
+        playerSettingStore.player_fade_value = 2000
       }
       try {
-        store_player_audio_logic.player_dolby =
+        playerSettingStore.player_dolby =
           '' + system_Configs_Read.app_Configs.value['player_dolby'] === 'true'
-        store_player_audio_logic.player_audio_channel =
+        playerSettingStore.player_audio_channel =
           '' + system_Configs_Read.app_Configs.value['player_audio_channel']
-        store_player_audio_logic.player_samp_value = Number(
+        playerSettingStore.player_samp_value = Number(
           '' + system_Configs_Read.app_Configs.value['player_samp_value']
         )
-        store_player_audio_logic.player_gaplessAudio =
+        playerSettingStore.player_gaplessAudio =
           '' + system_Configs_Read.app_Configs.value['player_gaplessAudio']
-        store_player_audio_logic.player_audioExclusiveMode =
+        playerSettingStore.player_audioExclusiveMode =
           '' + system_Configs_Read.app_Configs.value['player_audioExclusiveMode'] === 'true'
-        store_player_audio_logic.player_replayGainMode =
+        playerSettingStore.player_replayGainMode =
           '' + system_Configs_Read.app_Configs.value['player_replayGainMode']
-        store_player_audio_logic.player_replayGainPreamp = Number(
+        playerSettingStore.player_replayGainPreamp = Number(
           '' + system_Configs_Read.app_Configs.value['player_replayGainPreamp']
         )
-        store_player_audio_logic.player_replayGainClip =
+        playerSettingStore.player_replayGainClip =
           '' + system_Configs_Read.app_Configs.value['player_replayGainClip'] === 'true'
-        store_player_audio_logic.player_replayGainFallback = Number(
+        playerSettingStore.player_replayGainFallback = Number(
           '' + system_Configs_Read.app_Configs.value['player_replayGainFallback']
         )
-        store_player_audio_logic.player_mpvExtraParameters =
+        playerSettingStore.player_mpvExtraParameters =
           '' + system_Configs_Read.app_Configs.value['player_mpvExtraParameters']
         //
         let state_player_device_select = false
-        store_player_audio_logic.player_device_select = ''
+        playerSettingStore.player_device_select = ''
         const player_device_select =
           '' + system_Configs_Read.app_Configs.value['player_device_select']
         if (player_device_select != undefined && player_device_select != 'default') {
           if (player_device_select.trim().length > 0)
-            store_player_audio_logic.player_device_select = player_device_select
+            playerSettingStore.player_device_select = player_device_select
           else state_player_device_select = true
         } else state_player_device_select = true
         if (state_player_device_select) {
-          if (store_player_audio_logic.player === undefined) {
-            store_player_audio_logic.player = new Audio_howler()
+          if (playerSettingStore.player === undefined) {
+            playerSettingStore.player = new Audio_howler()
           }
-          await store_player_audio_logic.player.getDevices()
-          if (store_player_audio_logic.player_device_kind != undefined) {
-            if (store_player_audio_logic.player_device_kind.length > 0) {
-              store_player_audio_logic.player_device_select =
-                store_player_audio_logic.player_device_kind[0].value
+          await playerSettingStore.player.getDevices()
+          if (playerSettingStore.player_device_kind != undefined) {
+            if (playerSettingStore.player_device_kind.length > 0) {
+              playerSettingStore.player_device_select =
+                playerSettingStore.player_device_kind[0].value
             }
           }
         }
       } catch {
-        store_player_audio_logic.player_dolby = true
-        store_player_audio_logic.player_audio_channel = '5.1'
-        store_player_audio_logic.player_samp_value = 48000
-        store_player_audio_logic.player_gaplessAudio = 'weak'
-        store_player_audio_logic.player_audioExclusiveMode = false
-        store_player_audio_logic.player_replayGainMode = 'no'
-        store_player_audio_logic.player_replayGainPreamp = 0
-        store_player_audio_logic.player_replayGainClip = false
-        store_player_audio_logic.player_replayGainFallback = 0
-        store_player_audio_logic.player_mpvExtraParameters = ''
+        playerSettingStore.player_dolby = true
+        playerSettingStore.player_audio_channel = '5.1'
+        playerSettingStore.player_samp_value = 48000
+        playerSettingStore.player_gaplessAudio = 'weak'
+        playerSettingStore.player_audioExclusiveMode = false
+        playerSettingStore.player_replayGainMode = 'no'
+        playerSettingStore.player_replayGainPreamp = 0
+        playerSettingStore.player_replayGainClip = false
+        playerSettingStore.player_replayGainFallback = 0
+        playerSettingStore.player_mpvExtraParameters = ''
       }
-      if (store_player_audio_logic.player_audio_channel.length < 0) {
-        store_player_audio_logic.player_audio_channel = '5.1'
+      if (playerSettingStore.player_audio_channel.length < 0) {
+        playerSettingStore.player_audio_channel = '5.1'
       }
 
       /// playlist media_file_id_of_list
       try {
         // Golang // NineSong流媒体模块未完成开发前，不开放回放功能(恢复上次播放数据)
         if (isElectron) {
-          usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds =
+          playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =
             system_Configs_Read.playlist_File_Configs.value
           const get_PlaylistInfo_From_LocalSqlite = new Get_LocalSqlite_PlaylistInfo()
           if (store_server_user_model.model_server_type_of_local) {
-            usePlaylistStore().playlist_MediaFiles_temporary =
+            playlistStore.playlist_MediaFiles_temporary =
               get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Media_File_Id_of_list(
-                usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds
+                playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds
               )
           } else if (store_server_user_model.model_server_type_of_web) {
-            usePlaylistStore().playlist_MediaFiles_temporary =
+            playlistStore.playlist_MediaFiles_temporary =
               get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Media_File_of_list()
           }
           // Get Play_Id
-          const media_file = usePlaylistStore().playlist_MediaFiles_temporary.find(
-            (row) => row.id === store_player_audio_info.this_audio_song_id
+          const media_file = playlistStore.playlist_MediaFiles_temporary.find(
+            (row) => row.id === playerAudioStore.this_audio_song_id
           )
           if (media_file) {
-            store_player_audio_info.this_audio_play_id = media_file.play_id
-            store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url
+            playerAudioStore.this_audio_play_id = media_file.play_id
+            playerAudioStore.this_audio_file_medium_image_url = media_file.medium_image_url
           }
         }
         // init_server_token
@@ -630,7 +634,7 @@ export const store_system_configs_load = reactive({
       } catch (e) {
         console.error(e)
       }
-      store_player_audio_info.this_audio_Index_of_play_list = Number(
+      playerAudioStore.this_audio_Index_of_play_list = Number(
         '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_Index_of_play_list']
       )
 
@@ -687,11 +691,11 @@ export const store_system_configs_load = reactive({
       }
 
       // init image
-      store_player_audio_logic.player_back_ChevronDouble = shrink_up_arrow
+      playerSettingStore.player_back_ChevronDouble = shrink_up_arrow
 
-      // await store_player_audio_logic.player.pause();
+      // await playerSettingStore.player.pause();
       if (store_server_user_model.model_server_type_of_web) {
-        store_player_audio_logic.this_audio_initial_trigger = true
+        playerSettingStore.this_audio_initial_trigger = true
       }
     } catch (e) {
       console.error(e)

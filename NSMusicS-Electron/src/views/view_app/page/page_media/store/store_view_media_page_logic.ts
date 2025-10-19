@@ -134,7 +134,7 @@ export const store_view_media_page_logic = reactive({
 
     if (store_server_user_model.model_select === 'server') {
       store_view_media_page_info.media_Files_selected.forEach((media: any) => {
-        store_server_data_set_mediaInfo.Set_MediaInfo_To_Favorite(media.id, false)
+        store_server_data_set_mediaInfo.Set_MediaInfo_To_Favorite_Server(media.id, false)
       })
     }
   },
@@ -148,7 +148,7 @@ export const store_view_media_page_logic = reactive({
 
     if (store_server_user_model.model_select === 'server') {
       store_view_media_page_info.media_Files_selected.forEach((media: any) => {
-        store_server_data_set_mediaInfo.Set_MediaInfo_To_Favorite(media.id, true)
+        store_server_data_set_mediaInfo.Set_MediaInfo_To_Favorite_Server(media.id, true)
       })
     }
   },

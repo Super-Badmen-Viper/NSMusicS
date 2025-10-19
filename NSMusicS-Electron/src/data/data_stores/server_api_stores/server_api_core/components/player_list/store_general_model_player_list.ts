@@ -42,20 +42,21 @@ export const store_general_model_player_list = reactive({
       0,
       'admin'
     )
-    usePlaylistStore().playlist_tracks_temporary_of_ALLLists.push({
+    const playlistStore = usePlaylistStore()
+    playlistStore.playlist_tracks_temporary_of_ALLLists.push({
       playlist: playlist,
       playlist_tracks: [],
     })
-    usePlaylistStore().playlist_names_ALLLists = []
-    usePlaylistStore().playlist_tracks_temporary_of_ALLLists.forEach((item: any) => {
+    playlistStore.playlist_names_ALLLists = []
+    playlistStore.playlist_tracks_temporary_of_ALLLists.forEach((item: any) => {
       if (item.playlist && item.playlist.name && item.playlist.id) {
-        usePlaylistStore().playlist_names_ALLLists.push({
+        playlistStore.playlist_names_ALLLists.push({
           label: item.playlist.name,
           value: item.playlist.id,
         })
       }
     })
-    usePlaylistStore().playlist_names_StartUpdate = true
+    playlistStore.playlist_names_StartUpdate = true
   },
   async get_playlist_tracks_temporary_update(value: any) {
     store_local_data_set_playlistInfo.Set_PlaylistInfo_To_Update_SetPlaylist(
@@ -67,16 +68,17 @@ export const store_general_model_player_list = reactive({
       0,
       'admin'
     )
-    const index = usePlaylistStore().playlist_tracks_temporary_of_ALLLists.findIndex(
+    const playlistStore = usePlaylistStore()
+    const index = playlistStore.playlist_tracks_temporary_of_ALLLists.findIndex(
       (list: any) => list.playlist.id === value.id
     )
     if (index >= 0) {
-      usePlaylistStore().playlist_tracks_temporary_of_ALLLists[index].playlist.name = value.name
-      usePlaylistStore().playlist_names_StartUpdate = true
-      usePlaylistStore().playlist_names_ALLLists = []
-      usePlaylistStore().playlist_tracks_temporary_of_ALLLists.forEach((item: any) => {
+      playlistStore.playlist_tracks_temporary_of_ALLLists[index].playlist.name = value.name
+      playlistStore.playlist_names_StartUpdate = true
+      playlistStore.playlist_names_ALLLists = []
+      playlistStore.playlist_tracks_temporary_of_ALLLists.forEach((item: any) => {
         if (item.playlist && item.playlist.name && item.playlist.id) {
-          usePlaylistStore().playlist_names_ALLLists.push({
+          playlistStore.playlist_names_ALLLists.push({
             label: item.playlist.name,
             value: item.playlist.id,
           })
@@ -86,16 +88,17 @@ export const store_general_model_player_list = reactive({
   },
   async get_playlist_tracks_temporary_delete(value: any) {
     store_local_data_set_playlistInfo.Set_PlaylistInfo_To_Update_DeletePlaylist(value)
-    const index = usePlaylistStore().playlist_tracks_temporary_of_ALLLists.findIndex(
+    const playlistStore = usePlaylistStore()
+    const index = playlistStore.playlist_tracks_temporary_of_ALLLists.findIndex(
       (list: any) => list.playlist.id === value
     )
     if (index >= 0) {
-      usePlaylistStore().playlist_tracks_temporary_of_ALLLists.splice(index, 1)
-      usePlaylistStore().playlist_names_StartUpdate = true
-      usePlaylistStore().playlist_names_ALLLists = []
-      usePlaylistStore().playlist_tracks_temporary_of_ALLLists.forEach((item: any) => {
+      playlistStore.playlist_tracks_temporary_of_ALLLists.splice(index, 1)
+      playlistStore.playlist_names_StartUpdate = true
+      playlistStore.playlist_names_ALLLists = []
+      playlistStore.playlist_tracks_temporary_of_ALLLists.forEach((item: any) => {
         if (item.playlist && item.playlist.name && item.playlist.id) {
-          usePlaylistStore().playlist_names_ALLLists.push({
+          playlistStore.playlist_names_ALLLists.push({
             label: item.playlist.name,
             value: item.playlist.id,
           })
@@ -104,8 +107,9 @@ export const store_general_model_player_list = reactive({
     }
   },
   async get_playlist_tracks_temporary_update_media_file() {
-    usePlaylistStore().playlist_names_ALLLists = []
-    usePlaylistStore().playlist_tracks_temporary_of_ALLLists = []
+    const playlistStore = usePlaylistStore()
+    playlistStore.playlist_names_ALLLists = []
+    playlistStore.playlist_tracks_temporary_of_ALLLists = []
     if (
       store_server_user_model.model_server_type_of_local ||
       (store_server_users.server_select_kind === 'navidrome' &&
@@ -113,11 +117,11 @@ export const store_general_model_player_list = reactive({
     ) {
       const get_PlaylistInfo_From_LocalSqlite = new Get_LocalSqlite_PlaylistInfo()
       get_PlaylistInfo_From_LocalSqlite.Get_Playlist().forEach((item: Play_List) => {
-        usePlaylistStore().playlist_names_ALLLists.push({
+        playlistStore.playlist_names_ALLLists.push({
           label: item.name,
           value: item.id,
         })
-        usePlaylistStore().playlist_tracks_temporary_of_ALLLists.push({
+        playlistStore.playlist_tracks_temporary_of_ALLLists.push({
           playlist: item,
           playlist_tracks: get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Tracks(item.id),
         })
@@ -137,11 +141,11 @@ export const store_general_model_player_list = reactive({
         const playlists = response_playlists.data.Items
         if (playlists != null) {
           for (const playlist of playlists) {
-            usePlaylistStore().playlist_names_ALLLists.push({
+            playlistStore.playlist_names_ALLLists.push({
               label: playlist.Name,
               value: playlist.Id,
             })
-            usePlaylistStore().playlist_tracks_temporary_of_ALLLists.push({
+            playlistStore.playlist_tracks_temporary_of_ALLLists.push({
               playlist: {
                 label: playlist.Name,
                 value: playlist.Id,
@@ -172,16 +176,16 @@ export const store_general_model_player_list = reactive({
         const getPlaylists_all = await playlist_ApiService_of_NineSong.getPlaylists()
         if (getPlaylists_all != undefined) {
           playlists = getPlaylists_all['ninesong-response']['playlists']
-          usePlaylistStore().playlist_names_ALLLists = []
-          usePlaylistStore().playlist_tracks_temporary_of_ALLLists = []
+          playlistStore.playlist_names_ALLLists = []
+          playlistStore.playlist_tracks_temporary_of_ALLLists = []
         }
         if (playlists != null) {
           for (const playlist of playlists) {
-            usePlaylistStore().playlist_names_ALLLists.push({
+            playlistStore.playlist_names_ALLLists.push({
               label: playlist.Name,
               value: playlist.ID,
             })
-            usePlaylistStore().playlist_tracks_temporary_of_ALLLists.push({
+            playlistStore.playlist_tracks_temporary_of_ALLLists.push({
               playlist: {
                 label: playlist.Name,
                 value: playlist.ID,

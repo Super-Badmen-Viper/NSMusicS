@@ -8,10 +8,31 @@ const { t } = useI18n({
 ////// this_view views_components
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { ref, onMounted, computed } from 'vue'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
+
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 import { storeToRefs } from 'pinia'
+
+// 在setup上下文中获取Store实例
+const playerSettingStore = usePlayerSettingStore()
+// 使用 storeToRefs 解构出所需的响应式属性
+const {
+  player_select,
+  player_kind,
+  player_device_select,
+  player_fade_value,
+  player_mpvExtraParameters,
+  player_audio_channel,
+  player_samp_value,
+  player_gaplessAudio,
+  player_audioExclusiveMode,
+  player_replayGainMode,
+  player_replayGainPreamp,
+  player_replayGainClip,
+  player_replayGainFallback,
+  player_dolby
+} = storeToRefs(playerSettingStore)
 
 // 在setup上下文中获取Store实例
 const playerAppearanceStore = usePlayerAppearanceStore()
@@ -41,7 +62,7 @@ onMounted(() => {
 })
 
 /////// 设置：播放
-const player_fade_model_options_selected = ref<{ label: any; value: any }>()
+const player_fade_model_options_selected = ref<string>()
 const player_fade_model_options = ref([
   {
     label: computed(() => t('setting.playbackStyle_optionNormal')),
@@ -54,31 +75,31 @@ const player_fade_model_options = ref([
 ])
 const update_player_fade_model_options_selected = () => {
   if (player_fade_model_options_selected.value === 'playbackStyle_optionNormal') {
-    store_player_audio_logic.player_fade_value = 0
+    playerSettingStore.player_fade_value = 0
   } else if (player_fade_model_options_selected.value === 'playbackStyle_optionCrossFade') {
-    store_player_audio_logic.player_fade_value = 2000
+    playerSettingStore.player_fade_value = 2000
   }
 }
 const update_player_fade_value = () => {
-  if (store_player_audio_logic.player_fade_value != 0) {
+  if (playerSettingStore.player_fade_value != 0) {
     player_fade_model_options_selected.value = 'playbackStyle_optionCrossFade'
   } else {
     player_fade_model_options_selected.value = 'playbackStyle_optionNormal'
   }
 }
 const update_player_dolby = () => {
-  if (store_player_audio_logic.player_dolby) {
-    store_player_audio_logic.player_select = 'web'
+  if (playerSettingStore.player_dolby) {
+    playerSettingStore.player_select = 'web'
   }
 }
 const update_player_samp_value = (value: any) => {
-  store_player_audio_logic.player_samp_value = value
+  playerSettingStore.player_samp_value = value
 }
 const computed_i18n_Label_mpvExtraParameters = computed(
   () => t('setting.mpvExtraParameters_help') + ':\n--gapless-audio=weak\n--prefetch-playlist=yes'
 )
 const update_player_mpvExtraParameters = (value: any) => {
-  store_player_audio_logic.player_mpvExtraParameters = value
+  playerSettingStore.player_mpvExtraParameters = value
 }
 const player_gaplessAudio_kind = ref([
   { label: computed(() => t('common.no')), value: 'no' },
@@ -136,26 +157,26 @@ const player_replayGainMode_kind = ref([
   { label: computed(() => t('common.none')), value: 'no' },
 ])
 onMounted(() => {
-  if (store_player_audio_logic.player_fade_value > 0) {
+  if (playerSettingStore.player_fade_value > 0) {
     player_fade_model_options_selected.value = player_fade_model_options.value[1].value
   } else {
     player_fade_model_options_selected.value = player_fade_model_options.value[0].value
   }
   //
-  if (store_player_audio_logic.player_gaplessAudio === 'no') {
-    store_player_audio_logic.player_gaplessAudio = player_gaplessAudio_kind.value[0].value
-  } else if (store_player_audio_logic.player_gaplessAudio === 'yes') {
-    store_player_audio_logic.player_gaplessAudio = player_gaplessAudio_kind.value[1].value
+  if (playerSettingStore.player_gaplessAudio === 'no') {
+    playerSettingStore.player_gaplessAudio = player_gaplessAudio_kind.value[0].value
+  } else if (playerSettingStore.player_gaplessAudio === 'yes') {
+    playerSettingStore.player_gaplessAudio = player_gaplessAudio_kind.value[1].value
   } else {
-    store_player_audio_logic.player_gaplessAudio = player_gaplessAudio_kind.value[2].value
+    playerSettingStore.player_gaplessAudio = player_gaplessAudio_kind.value[2].value
   }
   //
-  if (store_player_audio_logic.player_replayGainMode === 'track') {
-    store_player_audio_logic.player_replayGainMode = player_replayGainMode_kind.value[0].value
-  } else if (store_player_audio_logic.player_replayGainMode === 'album') {
-    store_player_audio_logic.player_replayGainMode = player_replayGainMode_kind.value[1].value
+  if (playerSettingStore.player_replayGainMode === 'track') {
+    playerSettingStore.player_replayGainMode = player_replayGainMode_kind.value[0].value
+  } else if (playerSettingStore.player_replayGainMode === 'album') {
+    playerSettingStore.player_replayGainMode = player_replayGainMode_kind.value[1].value
   } else {
-    store_player_audio_logic.player_replayGainMode = player_replayGainMode_kind.value[2].value
+    playerSettingStore.player_replayGainMode = player_replayGainMode_kind.value[2].value
   }
 })
 
@@ -181,8 +202,8 @@ import { openLink } from '@/utils/electron/openLink'
           </div>
         </n-space>
         <n-select
-          v-model:value="store_player_audio_logic.player_select"
-          :options="store_player_audio_logic.player_kind"
+          v-model:value="player_select"
+          :options="player_kind"
           :disabled="
             store_system_configs_info.desktop_system_kind === 'linux' ||
             store_system_configs_info.desktop_system_kind === 'docker'
@@ -207,9 +228,9 @@ import { openLink } from '@/utils/electron/openLink'
           </div>
         </n-space>
         <n-select
-          v-model:value="store_player_audio_logic.player_device_select"
-          :options="store_player_audio_logic.player_device_kind"
-          :disabled="store_player_audio_logic.player_select === 'mpv'"
+          v-model:value="player_device_select"
+          :options="player_device_kind"
+          :disabled="player_select === 'mpv'"
           placeholder="not enabled"
           :reset-menu-on-options-change="false"
           style="width: 207px; margin-top: -4px"
@@ -228,7 +249,7 @@ import { openLink } from '@/utils/electron/openLink'
           v-model:value="player_fade_model_options_selected"
           :options="player_fade_model_options"
           @update:value="update_player_fade_model_options_selected"
-          :disabled="store_player_audio_logic.player_select === 'mpv'"
+          :disabled="player_select === 'mpv'"
           placeholder="not enabled"
           :reset-menu-on-options-change="false"
           style="width: 207px; margin-top: -4px"
@@ -244,9 +265,9 @@ import { openLink } from '@/utils/electron/openLink'
         <n-input-group style="width: 207px; margin-top: -4px">
           <n-input
             clearable
-            v-model:value="store_player_audio_logic.player_fade_value"
+            v-model:value="player_fade_value"
             @update:value="update_player_fade_value"
-            :disabled="store_player_audio_logic.player_select === 'mpv'"
+            :disabled="player_select === 'mpv'"
           />
           <n-input-group-label>ms</n-input-group-label>
         </n-input-group>
@@ -277,7 +298,7 @@ import { openLink } from '@/utils/electron/openLink'
         </n-space>
         <n-input
           style="width: 207px; margin-top: -4px"
-          :value="store_player_audio_logic.player_mpvExtraParameters"
+          :value="player_mpvExtraParameters"
           @update:value="update_player_mpvExtraParameters"
           type="textarea"
           :placeholder="computed_i18n_Label_mpvExtraParameters"
@@ -295,9 +316,9 @@ import { openLink } from '@/utils/electron/openLink'
           </div>
         </n-space>
         <n-select
-          v-model:value="store_player_audio_logic.player_audio_channel"
+          v-model:value="player_audio_channel"
           :options="player_audio_channel_kind"
-          :disabled="store_player_audio_logic.player_select != 'mpv'"
+          :disabled="player_select != 'mpv'"
           placeholder="not enabled"
           :reset-menu-on-options-change="false"
           style="width: 207px; margin-top: -4px"
@@ -315,9 +336,9 @@ import { openLink } from '@/utils/electron/openLink'
           <n-input-group style="width: 207px; margin-top: -4px">
             <n-input
               clearable
-              :disabled="store_player_audio_logic.player_select != 'mpv'"
+              :disabled="player_select != 'mpv'"
               default-value="48000"
-              :value="store_player_audio_logic.player_samp_value"
+              :value="player_samp_value"
               @update:value="update_player_samp_value"
             />
             <n-input-group-label>Hz</n-input-group-label>
@@ -332,9 +353,9 @@ import { openLink } from '@/utils/electron/openLink'
           </div>
         </n-space>
         <n-select
-          v-model:value="store_player_audio_logic.player_gaplessAudio"
+          v-model:value="player_gaplessAudio"
           :options="player_gaplessAudio_kind"
-          :disabled="store_player_audio_logic.player_select != 'mpv'"
+          :disabled="player_select != 'mpv'"
           placeholder="not enabled"
           :reset-menu-on-options-change="false"
           style="width: 207px; margin-top: -4px"
@@ -350,8 +371,8 @@ import { openLink } from '@/utils/electron/openLink'
           </div>
         </n-space>
         <n-switch
-          :disabled="store_player_audio_logic.player_select != 'mpv'"
-          v-model:value="store_player_audio_logic.player_audioExclusiveMode"
+          :disabled="player_select != 'mpv'"
+          v-model:value="player_audioExclusiveMode"
         >
         </n-switch>
       </n-space>
@@ -363,9 +384,9 @@ import { openLink } from '@/utils/electron/openLink'
           </div>
         </n-space>
         <n-select
-          v-model:value="store_player_audio_logic.player_replayGainMode"
+          v-model:value="player_replayGainMode"
           :options="player_replayGainMode_kind"
-          :disabled="store_player_audio_logic.player_select != 'mpv'"
+          :disabled="player_select != 'mpv'"
           placeholder="not enabled"
           :reset-menu-on-options-change="false"
           style="width: 207px; margin-top: -4px"
@@ -383,9 +404,9 @@ import { openLink } from '@/utils/electron/openLink'
         <n-input-group style="width: 207px; margin-top: -4px">
           <n-input
             clearable
-            :disabled="store_player_audio_logic.player_select != 'mpv'"
+            :disabled="player_select != 'mpv'"
             default-value="48000"
-            v-model:value="store_player_audio_logic.player_replayGainPreamp"
+            v-model:value="player_replayGainPreamp"
           />
         </n-input-group>
       </n-space>
@@ -399,8 +420,8 @@ import { openLink } from '@/utils/electron/openLink'
           </div>
         </n-space>
         <n-switch
-          :disabled="store_player_audio_logic.player_select != 'mpv'"
-          v-model:value="store_player_audio_logic.player_replayGainClip"
+          :disabled="player_select != 'mpv'"
+          v-model:value="player_replayGainClip"
         >
         </n-switch>
       </n-space>
@@ -416,9 +437,9 @@ import { openLink } from '@/utils/electron/openLink'
         <n-input-group style="width: 207px; margin-top: -4px">
           <n-input
             clearable
-            :disabled="store_player_audio_logic.player_select != 'mpv'"
+            :disabled="player_select != 'mpv'"
             default-value="48000"
-            v-model:value="store_player_audio_logic.player_replayGainFallback"
+            v-model:value="player_replayGainFallback"
           />
         </n-input-group>
       </n-space>
@@ -442,8 +463,8 @@ import { openLink } from '@/utils/electron/openLink'
           </div>
         </n-space>
         <n-switch
-          :disabled="store_player_audio_logic.player_select != 'web'"
-          v-model:value="store_player_audio_logic.player_dolby"
+          :disabled="player_select != 'web'"
+          v-model:value="player_dolby"
           @update:value="update_player_dolby"
         >
         </n-switch>

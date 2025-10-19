@@ -3,7 +3,7 @@ import { ref, watch } from 'vue'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { Audio_node_mpv } from '@/data/data_models/app_models/song_Audio_Out/Audio_node_mpv'
 import { Audio_howler } from '@/data/data_models/app_models/song_Audio_Out/Audio_howler'
-import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
+import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
 import { store_player_view } from '@/views/view_app/page/page_player/store/store_player_view'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
@@ -23,10 +23,10 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
   const player_init_play = ref(false)
   
   // Player configuration
-  const player_kind = [
+  const player_kind = ref([
     { label: 'mpv', value: 'mpv' },
     { label: 'web', value: 'web' },
-  ]
+  ])
   const player_select = ref('web')
   const player_device_kind = ref<string[]>([])
   const player_device_select = ref('default')
@@ -181,14 +181,14 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
 
     // 注意，此时currentTime将从0开始，需要计算附加值
     if (silder_path) {
-      let newTime = (Number(slider_value) / 100) * (await player.value.getDuration())
+      const newTime = (Number(slider_value) / 100) * (await player.value.getDuration())
       if (Number(slider_value) !== 0 && Number(slider_value) !== 100) {
         player.value.setCurrentTime(newTime)
       } else {
         player.value.setCurrentTime(0)
       }
     } else {
-      let newTime = Number(slider_value) / 1000
+      const newTime = Number(slider_value) / 1000
       if (Number(slider_value) !== 0 && Number(slider_value) !== 100) {
         player.value.setCurrentTime(newTime)
       } else {
@@ -202,61 +202,62 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
   async function update_current_media_info(media_file: any, index: any) {
     const cue_page_play = typeof index != 'number'
     let index_num = !cue_page_play ? index : index != undefined ? Number(index.split('-')[1]) : 0
+    const playerAudioStore = usePlayerAudioStore()
     // cue
     if (cue_page_play) {
       if (index_num === undefined || media_file.cue_tracks === undefined) {
-        store_player_audio_info.this_audio_cue_track_current_no = 0
-        store_player_audio_info.this_audio_cue_track_current_indexes = []
-        store_player_audio_info.this_audio_cue_tracks = []
+        playerAudioStore.this_audio_cue_track_current_no = 0
+        playerAudioStore.this_audio_cue_track_current_indexes = []
+        playerAudioStore.this_audio_cue_tracks = []
         player_model_cue.value = false
       } else {
         index_num = index_num <= 0 ? 1 : index_num
-        store_player_audio_info.this_audio_cue_track_current_no = index_num
-        store_player_audio_info.this_audio_cue_track_current_indexes = media_file.cue_tracks[index_num - 1].INDEXES
+        playerAudioStore.this_audio_cue_track_current_no = index_num
+        playerAudioStore.this_audio_cue_track_current_indexes = media_file.cue_tracks[index_num - 1].INDEXES
         player_model_cue.value = true
       }
     } else {
-      store_player_audio_info.this_audio_cue_track_current_no = 0
-      store_player_audio_info.this_audio_cue_track_current_indexes = []
-      store_player_audio_info.this_audio_cue_tracks = []
+      playerAudioStore.this_audio_cue_track_current_no = 0
+      playerAudioStore.this_audio_cue_track_current_indexes = []
+      playerAudioStore.this_audio_cue_tracks = []
       player_model_cue.value = false
     }
     // normally
     if (!player_model_cue.value) {
       /// load : normally play info
-      store_player_audio_info.this_audio_song_name = media_file.title ?? ''
-      store_player_audio_info.this_audio_album_name = media_file.album ?? ''
-      store_player_audio_info.this_audio_artist_name = media_file.artist ?? ''
+      playerAudioStore.this_audio_song_name = media_file.title ?? ''
+      playerAudioStore.this_audio_album_name = media_file.album ?? ''
+      playerAudioStore.this_audio_artist_name = media_file.artist ?? ''
       /// clean : cue play info
-      store_player_audio_info.this_audio_cue_track_current_no = 0
-      store_player_audio_info.this_audio_cue_track_current_indexes = []
-      store_player_audio_info.this_audio_cue_tracks = []
+      playerAudioStore.this_audio_cue_track_current_no = 0
+      playerAudioStore.this_audio_cue_track_current_indexes = []
+      playerAudioStore.this_audio_cue_tracks = []
       player_model_cue.value = false
     } else {
       index_num = index_num <= 0 ? 1 : index_num
       /// load : cue play info
-      store_player_audio_info.this_audio_song_name = media_file.cue_tracks[index_num - 1].Title
-      if (store_player_audio_info.this_audio_song_name.length === 0) {
-        store_player_audio_info.this_audio_song_name = index_num + ':' + media_file.title
+      playerAudioStore.this_audio_song_name = media_file.cue_tracks[index_num - 1].Title
+      if (playerAudioStore.this_audio_song_name.length === 0) {
+        playerAudioStore.this_audio_song_name = index_num + ':' + media_file.title
       }
-      store_player_audio_info.this_audio_artist_name = media_file.cue_tracks[index_num - 1].Performer
-      store_player_audio_info.this_audio_album_name = media_file.title
+      playerAudioStore.this_audio_artist_name = media_file.cue_tracks[index_num - 1].Performer
+      playerAudioStore.this_audio_album_name = media_file.title
       /// load : cue play init
-      store_player_audio_info.this_audio_cue_track_current_no = index_num
-      store_player_audio_info.this_audio_cue_track_current_indexes = media_file.cue_tracks[index_num - 1].INDEXES
+      playerAudioStore.this_audio_cue_track_current_no = index_num
+      playerAudioStore.this_audio_cue_track_current_indexes = media_file.cue_tracks[index_num - 1].INDEXES
       player_model_cue.value = true
     }
-    store_player_audio_info.this_audio_play_id = media_file.play_id ?? media_file.id ?? ''
-    store_player_audio_info.this_audio_file_path = media_file.path ?? ''
-    store_player_audio_info.this_audio_song_encoding_format = media_file.encoding_format ?? ''
-    store_player_audio_info.this_audio_song_suffix = media_file.suffix ?? ''
-    store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url ?? error_album
-    store_player_audio_info.this_audio_artist_id = media_file.artist_id ?? ''
-    store_player_audio_info.this_audio_song_id = media_file.id ?? ''
-    store_player_audio_info.this_audio_song_rating = media_file.rating ?? 0
-    store_player_audio_info.this_audio_song_favorite = media_file.favorite ?? false
-    store_player_audio_info.this_audio_album_id = media_file.album_id ?? ''
-    store_player_audio_info.this_audio_Index_of_play_list = index_num != undefined ? index_num : 0
+    playerAudioStore.this_audio_play_id = media_file.play_id ?? media_file.id ?? ''
+    playerAudioStore.this_audio_file_path = media_file.path ?? ''
+    playerAudioStore.this_audio_song_encoding_format = media_file.encoding_format ?? ''
+    playerAudioStore.this_audio_song_suffix = media_file.suffix ?? ''
+    playerAudioStore.this_audio_file_medium_image_url = media_file.medium_image_url ?? error_album
+    playerAudioStore.this_audio_artist_id = media_file.artist_id ?? ''
+    playerAudioStore.this_audio_song_id = media_file.id ?? ''
+    playerAudioStore.this_audio_song_rating = media_file.rating ?? 0
+    playerAudioStore.this_audio_song_favorite = media_file.favorite ?? false
+    playerAudioStore.this_audio_album_id = media_file.album_id ?? ''
+    playerAudioStore.this_audio_Index_of_play_list = index_num != undefined ? index_num : 0
     //
     store_player_tag_modify.player_current_media_starred = media_file.favorite ?? false
     store_player_tag_modify.player_current_media_playCount = media_file.play_count ?? 0
@@ -266,13 +267,14 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
   }
 
   async function update_current_lyrics(media_file: any) {
+    const playerAudioStore = usePlayerAudioStore()
     if (store_server_user_model.model_server_type_of_web) {
       if (store_server_users.server_select_kind === 'ninesong') {
         const retrieval = new Retrieval_ApiService_of_NineSong(store_server_login_info.server_url)
         if (!player_model_cue.value) {
           const lyrics = await retrieval.getLyrics_id(media_file.id)
           if (lyrics != undefined && lyrics.length > 0) {
-            await store_player_audio_info.set_lyric(lyrics)
+            await playerAudioStore.set_lyric(lyrics)
           } else {
             const lyrics_search = await retrieval.getLyrics_filter(
               media_file.artist,
@@ -280,21 +282,21 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
               ''
             )
             if (lyrics_search != undefined && lyrics_search.length > 0) {
-              await store_player_audio_info.set_lyric(lyrics_search)
+              await playerAudioStore.set_lyric(lyrics_search)
             } else {
-              await store_player_audio_info.set_lyric('')
+              await playerAudioStore.set_lyric('')
             }
           }
         } else {
           const lyrics_search = await retrieval.getLyrics_filter(
-            store_player_audio_info.this_audio_artist_name,
-            store_player_audio_info.this_audio_song_name,
+            playerAudioStore.this_audio_artist_name,
+            playerAudioStore.this_audio_song_name,
             ''
           )
           if (lyrics_search != undefined && lyrics_search.length > 0) {
-            await store_player_audio_info.set_lyric(lyrics_search)
+            await playerAudioStore.set_lyric(lyrics_search)
           } else {
-            await store_player_audio_info.set_lyric('')
+            await playerAudioStore.set_lyric('')
           }
         }
       } else if (
@@ -323,15 +325,15 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
             console.error('Failed to fetch lyrics:', error)
             lyrics = []
           }
-          await store_player_audio_info.set_lyric(lyrics.length > 0 ? lyrics : '')
+          await playerAudioStore.set_lyric(lyrics.length > 0 ? lyrics : '')
         } catch {
-          await store_player_audio_info.set_lyric(media_file.lyrics)
+          await playerAudioStore.set_lyric(media_file.lyrics)
         }
       } else if (store_server_users.server_select_kind === 'navidrome') {
-        await store_player_audio_info.set_lyric(media_file.lyrics)
+        await playerAudioStore.set_lyric(media_file.lyrics)
       }
     } else if (store_server_user_model.model_server_type_of_local) {
-      await store_player_audio_info.set_lyric(media_file.lyrics)
+      await playerAudioStore.set_lyric(media_file.lyrics)
     }
   }
 
@@ -357,7 +359,8 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
 
   // Watchers
   watch(player_select, async (newValue) => {
-    await store_player_audio_info.reset_data()
+    const playerAudioStore = usePlayerAudioStore()
+    await playerAudioStore.reset_data()
     if (isElectron) {
       if (player_select.value === 'mpv') {
         // init

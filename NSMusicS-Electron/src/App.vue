@@ -60,6 +60,10 @@ import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 let mobile_model = false
 // 在setup上下文中获取Store实例
 const playerAppearanceStore = usePlayerAppearanceStore()
+const playlistStore = usePlaylistStore()
+import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
+const playerAudioStore = usePlayerAudioStore()
+const playerSettingStore = usePlayerSettingStore()
 // 使用 storeToRefs 解构出所需的响应式属性
 const {
   player_show,
@@ -164,7 +168,6 @@ function create_menuOptions_appBar() {
 
 ////// player view
 async function get_playerbar_to_switch_playerview(value) {
-  const playerAppearanceStore = usePlayerAppearanceStore()
   playerAppearanceStore.player_show_complete = false
   if (store_router_data_logic.clear_Memory_Model) {
     store_router_data_logic.clear_Files_temporary() // Memory Model
@@ -340,7 +343,7 @@ provide('get_playerbar_to_switch_playerview', get_playerbar_to_switch_playerview
 store_router_data_info.router = useRouter()
 import routers from './router'
 import { store_system_configs_update } from '@/data/data_stores/local_system_stores/store_system_configs_update'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
@@ -523,7 +526,7 @@ const Init_page_songlists_statistic_Data = () => {
     id: 'song_list_all_PlayList',
   })
   //////
-  usePlaylistStore().playlist_tracks_temporary_of_ALLLists.forEach((item: any) => {
+  playlistStore.playlist_tracks_temporary_of_ALLLists.forEach((item: any) => {
     const temp_playlist: Play_List = {
       label: item.playlist.name,
       value: item.playlist.id,
@@ -835,9 +838,7 @@ const Init_page_artistlists_statistic_Data = () => {
     id: 'artist_list_all_PlayList',
   })
 }
-// 在setup上下文中获取Store实例
-const playlistStore = usePlaylistStore()
-// 使用 storeToRefs 解构出所需的响应式属性
+
 const { playlist_show, playlist_names_StartUpdate } = storeToRefs(playlistStore)
 
 ///// view of playlist
@@ -891,7 +892,7 @@ onMounted(async () => {
           t('nsmusics.siderbar_player.playback_3'),
           t('nsmusics.siderbar_player.playback_4'),
         ])
-        await ipcRenderer.invoke('i18n-tray-music-order', store_player_audio_logic.play_order)
+        await ipcRenderer.invoke('i18n-tray-music-order', playerSettingStore.play_order)
       } catch (e) {
         console.log(e)
       }
@@ -899,7 +900,7 @@ onMounted(async () => {
   } catch (e) {
     console.error(e)
   }
-  store_player_audio_logic.player_init_play = true
+  playerSettingStore.player_init_play = true
   store_router_data_info.router_click = false
 })
 watch(

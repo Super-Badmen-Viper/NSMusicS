@@ -2,7 +2,7 @@ import moment from 'moment/moment'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import error_album from '@/assets/img/error_album.jpg'
-import { isElectron } from '@/utils/electron/isElectron'
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 
 export class Get_LocalSqlite_HomeDataInfos {
   public Get_Annotation_Album_Maximum_Playback() {

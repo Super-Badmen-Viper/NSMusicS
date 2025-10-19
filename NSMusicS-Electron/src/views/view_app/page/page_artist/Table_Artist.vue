@@ -20,7 +20,7 @@ import { computed, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { type InputInst, NButton, NIcon, useMessage, useThemeVars } from 'naive-ui'
 import { Icon } from '@vicons/utils'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
+import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
 import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
 import { store_view_artist_page_logic } from '@/views/view_app/page/page_artist/store/store_view_artist_page_logic'
 import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
@@ -47,7 +47,7 @@ import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_sto
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_general_fetch_album_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_album/store_general_fetch_album_list'
 import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
@@ -516,7 +516,7 @@ const Open_this_artist_all_artist_list_click = (artist_id: string) => {
     store_router_data_logic.get_album_list_of_artist_id_by_artist_info(artist_id)
   } else {
     // Jellyfin 有相当一部分flac媒体无法识别为专辑
-    usePlayerAppearanceStore().player_mode_of_medialist_from_external_import = false
+    playerAppearanceStore.player_mode_of_medialist_from_external_import = false
     store_view_media_page_logic.page_songlists_keyword = artist_id
     store_router_data_info.router.push('media')
   }
@@ -531,7 +531,7 @@ const Play_this_artist_all_media_list_click = async (artist_id: string) => {
   }
   console.log('play_this_artist_song_list：' + artist_id)
   await store_general_fetch_artist_list.fetchData_This_Artist_MediaList(artist_id)
-  usePlaylistStore().reset_carousel()
+  playlistStore.reset_carousel()
 }
 
 const handleItemClick_Favorite = (id: any, favorite: boolean) => {
@@ -724,11 +724,11 @@ async function menu_item_add_to_playlist_end() {
   for (let item of matchingItems) {
     const newItem: any = JSON.parse(JSON.stringify(item))
     newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
-    usePlaylistStore().playlist_MediaFiles_temporary.push(newItem)
-    usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id)
+    playlistStore.playlist_MediaFiles_temporary.push(newItem)
+    playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id)
   }
 
-  usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+  playlistStore.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
     item.absoluteIndex = index
   })
   store_system_configs_save.save_system_playlist_item_id_config()
@@ -742,23 +742,23 @@ async function menu_item_add_to_playlist_next() {
 
   store_view_media_page_info.media_Files_temporary = []
 
-  const index = usePlaylistStore().playlist_MediaFiles_temporary.findIndex(
-    (item: any) => item.id === store_player_audio_info.this_audio_song_id
+  const index = playlistStore.playlist_MediaFiles_temporary.findIndex(
+    (item: any) => item.id === playerAudioStore.this_audio_song_id
   )
 
   if (index !== -1) {
     matchingItems.forEach((item: Media_File, i: number) => {
       const newItem = JSON.parse(JSON.stringify(item))
       newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
-      usePlaylistStore().playlist_MediaFiles_temporary.splice(index + 1 + i, 0, newItem)
-      usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.splice(
+      playlistStore.playlist_MediaFiles_temporary.splice(index + 1 + i, 0, newItem)
+      playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.splice(
         index + 1 + i,
         0,
         newItem.id
       )
     })
 
-    usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+    playlistStore.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
       item.absoluteIndex = index
     })
     store_system_configs_save.save_system_playlist_item_id_config()
@@ -817,11 +817,11 @@ onMounted(() => {
   Refresh_page_artistlists_statistic()
 })
 const stopWatching_boolHandleItemClick_Played = watch(
-  () => store_player_audio_logic.boolHandleItemClick_Played,
+  () => usePlayerSettingStore().boolHandleItemClick_Played,
   (newValue, oldValue) => {
     if (newValue && newValue !== oldValue) {
       Refresh_page_artistlists_statistic()
-      store_player_audio_logic.boolHandleItemClick_Played = false
+      usePlayerSettingStore().boolHandleItemClick_Played = false
     }
   },
   { immediate: true }
@@ -842,8 +842,15 @@ onBeforeUnmount(() => {
 
 // 在setup上下文中获取Store实例
 const playlistStore = usePlaylistStore()
+const playerAudioStore = usePlayerAudioStore()
+const playerAppearanceStore = usePlayerAppearanceStore()
 // 使用 storeToRefs 解构出所需的响应式属性
 const { playlist_names_ALLLists, playlist_Menu_Item_Id } = storeToRefs(playlistStore)
+const { 
+  page_top_album_image_url, 
+  this_audio_artist_name,
+  this_audio_song_id
+} = storeToRefs(playerAudioStore)
 </script>
 <template>
   <n-space vertical :size="12">
@@ -1108,7 +1115,7 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id } = storeToRefs(playlistS
                   object-fit: cover;
                   object-position: center;
                 "
-                :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                :src="getAssetImage(page_top_album_image_url)"
                 alt=""
               />
             </div>
@@ -1129,7 +1136,7 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id } = storeToRefs(playlistS
                       {{ $t('entity.artist_other') }}
                     </div>
                     <div
-                      v-if="store_player_audio_info.this_audio_artist_name.length > 0"
+                      v-if="this_audio_artist_name.length > 0"
                       style="font-size: 32px; font-weight: 600; margin-top: -2px"
                     >
                       {{ ' : ' }}
@@ -1150,7 +1157,7 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id } = storeToRefs(playlistS
                         text-overflow: ellipsis;
                       "
                     >
-                      {{ store_player_audio_info.this_audio_artist_name }}
+                      {{ this_audio_artist_name }}
                     </div>
                   </n-space>
                   <n-space align="center" style="margin-top: 2px; margin-left: 11px">
@@ -1194,7 +1201,7 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id } = storeToRefs(playlistS
                     object-fit: cover;
                     margin-left: -3px;
                   "
-                  :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                  :src="getAssetImage(page_top_album_image_url)"
                   alt=""
                 />
               </template>
@@ -1212,8 +1219,8 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id } = storeToRefs(playlistS
             v-contextmenu:contextmenu
             @contextmenu.prevent="
               () => {
-                usePlaylistStore().playlist_Menu_Item = item
-                usePlaylistStore().playlist_Menu_Item_Id = item.id
+                playlistStore.playlist_Menu_Item = item
+                playlistStore.playlist_Menu_Item_Id = item.id
               }
             "
           >

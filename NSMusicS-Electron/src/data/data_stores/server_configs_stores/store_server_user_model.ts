@@ -4,12 +4,12 @@ import { store_router_data_info } from '@/router/router_store/store_router_data_
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
-import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
+import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 
 import { store_system_configs_load } from '@/data/data_stores/local_system_stores/store_system_configs_load'
 import { User_Authorization_ApiWebService_of_ND } from '@/data/data_configs/navidrome_api/services_web/user_authorization/index_service'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
@@ -67,7 +67,8 @@ export const store_server_user_model = reactive({
     this.playlist_tracks = 'playlist_tracks'
 
     store_server_user_model.model_server_type_of_local_server_download = false
-    store_player_audio_logic.drawer_order_height = 160
+    const playerSettingStore = usePlayerSettingStore()
+    playerSettingStore.drawer_order_height = 160
 
     store_server_user_model.model_select = 'local'
     await this.switchToMode()
@@ -80,13 +81,14 @@ export const store_server_user_model = reactive({
     this.playlist = 'server_playlist'
     this.playlist_tracks = 'server_playlist_tracks'
 
+    const playerSettingStore = usePlayerSettingStore()
     if (
       store_server_users.server_select_kind != 'jellyfin' &&
       store_server_users.server_select_kind != 'emby'
     ) {
-      store_player_audio_logic.drawer_order_height = 198
+      playerSettingStore.drawer_order_height = 198
     } else {
-      store_player_audio_logic.drawer_order_height = 160
+      playerSettingStore.drawer_order_height = 160
     }
 
     store_server_user_model.model_select = 'server'
@@ -96,13 +98,14 @@ export const store_server_user_model = reactive({
     if (!store_system_configs_load.app_configs_loading) {
       store_server_user_model.random_play_model = false
       // Refresh Current AudioInfo
-      await store_player_audio_info.reset_data()
+      const playerAudioStore = usePlayerAudioStore()
+      await playerAudioStore.reset_data()
       store_general_fetch_player_list._totalCount = 0
       store_view_media_page_logic.page_songlists_keywordFilter = ''
       store_view_media_page_logic.page_songlists_selected = 'song_list_all'
       store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
       store_view_artist_page_logic.page_artistlists_selected = 'artist_list_all'
-      if (store_player_audio_logic.player_select === 'mpv') {
+      if (playerSettingStore.player_select === 'mpv') {
         if (isElectron) {
           await ipcRenderer.invoke('mpv-stopped')
         } else {
@@ -135,12 +138,14 @@ export const store_server_user_model = reactive({
         ]
       }
       //
+      const playlistStore = usePlaylistStore()
+      const playerSettingStore = usePlayerSettingStore()
       try {
-        await store_player_audio_logic.init_player()
+        await playerSettingStore.init_player()
       } catch {}
       // Refresh Playlist(Local / Server)
-      await usePlaylistStore().reset_data()
-      usePlaylistStore().playlist_MediaFiles_temporary = []
+      await playlistStore.reset_data()
+      playlistStore.playlist_MediaFiles_temporary = []
       // Refresh Router Data
       store_router_data_logic.reset_data()
       //

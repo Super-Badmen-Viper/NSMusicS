@@ -1,10 +1,10 @@
 import { reactive } from 'vue'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
-import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
+import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
 
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { Users_ApiService_of_Je } from '@/data/data_configs/jellyfin_api/services_web/Users/index_service'
 import { Library_ApiService_of_Je } from '@/data/data_configs/jellyfin_api/services_web/Library/index_service'
 import { store_server_navidrome_userdata_logic } from '../../server_configs_stores/server_data_select/server_navidrome_user_data/store_server_navidrome_userdata_logic'
@@ -137,22 +137,24 @@ export const store_server_auth_token = reactive({
       return `${url}${separator}${tokenName}=${newToken}`
     }
 
+    const playerAudioStore = usePlayerAudioStore()
     // 更新 this_audio_file_path
-    if (store_player_audio_info.this_audio_file_path) {
-      store_player_audio_info.this_audio_file_path = updateUrl(
-        store_player_audio_info.this_audio_file_path
+    if (playerAudioStore.this_audio_file_path) {
+      playerAudioStore.this_audio_file_path = updateUrl(
+        playerAudioStore.this_audio_file_path
       )
     }
-
     // 更新 this_audio_file_medium_image_url
-    if (store_player_audio_info.this_audio_file_medium_image_url) {
-      store_player_audio_info.this_audio_file_medium_image_url = updateUrl(
-        store_player_audio_info.this_audio_file_medium_image_url
+    if (playerAudioStore.this_audio_file_medium_image_url) {
+      playerAudioStore.this_audio_file_medium_image_url = updateUrl(
+        playerAudioStore.this_audio_file_medium_image_url
       )
     }
 
+    const playlistStore = usePlaylistStore()
+    const playerSettingStore = usePlayerSettingStore()
     // 更新 playlist_MediaFiles_temporary
-    usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any) => {
+    playlistStore.playlist_MediaFiles_temporary.forEach((item: any) => {
       if (item.medium_image_url) {
         item.medium_image_url = updateUrl(item.medium_image_url)
       }
@@ -160,7 +162,7 @@ export const store_server_auth_token = reactive({
         item.path = updateUrl(item.path)
       }
       if (item.duration) {
-        item.duration_txt = store_player_audio_logic.formatTime_RunTimeTicks(item.duration)
+        item.duration_txt = playerSettingStore.formatTime_RunTimeTicks(item.duration)
       }
     })
   },

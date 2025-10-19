@@ -1,30 +1,32 @@
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 
 export class Audio_node_mpv {
   public isPlaying: boolean
   public isDuration: number | undefined
   public isCurrentTime: number | undefined
+  private playerSettingStore: any
   constructor() {
     this.isPlaying = false
+    this.playerSettingStore = usePlayerSettingStore()
   }
   async load(path: string) {
     try {
-      if (isElectron) {
-        await ipcRenderer.invoke('mpv-fade', store_player_audio_logic.player_fade_value)
-        if (store_player_audio_logic.player_samp_value < 8000) {
-          store_player_audio_logic.player_samp_value = 48000
+      if (isElectron && ipcRenderer) {
+        await ipcRenderer.invoke('mpv-fade', this.playerSettingStore.player_fade_value)
+        if (this.playerSettingStore.player_samp_value < 8000) {
+          this.playerSettingStore.player_samp_value = 48000
         }
         await ipcRenderer.invoke('mpv-parameters', {
-          player_audio_channel: store_player_audio_logic.player_audio_channel,
-          player_samp_value: store_player_audio_logic.player_samp_value,
-          player_gaplessAudio: store_player_audio_logic.player_gaplessAudio,
-          player_audioExclusiveMode: store_player_audio_logic.player_audioExclusiveMode,
-          player_replayGainMode: store_player_audio_logic.player_replayGainMode,
-          player_replayGainPreamp: store_player_audio_logic.player_replayGainPreamp,
-          player_replayGainClip: store_player_audio_logic.player_replayGainClip,
-          player_replayGainFallback: store_player_audio_logic.player_replayGainFallback,
-          player_mpvExtraParameters: store_player_audio_logic.player_mpvExtraParameters,
+          player_audio_channel: this.playerSettingStore.player_audio_channel,
+          player_samp_value: this.playerSettingStore.player_samp_value,
+          player_gaplessAudio: this.playerSettingStore.player_gaplessAudio,
+          player_audioExclusiveMode: this.playerSettingStore.player_audioExclusiveMode,
+          player_replayGainMode: this.playerSettingStore.player_replayGainMode,
+          player_replayGainPreamp: this.playerSettingStore.player_replayGainPreamp,
+          player_replayGainClip: this.playerSettingStore.player_replayGainClip,
+          player_replayGainFallback: this.playerSettingStore.player_replayGainFallback,
+          player_mpvExtraParameters: this.playerSettingStore.player_mpvExtraParameters,
         })
         await ipcRenderer.invoke('mpv-load', path)
       } else {
@@ -33,25 +35,25 @@ export class Audio_node_mpv {
       this.isPlaying = true
     } catch {
       // 重新加载node-mpv，这玩意挺不稳重的
-      await store_player_audio_logic.init_player()
+      await this.playerSettingStore.init_player()
     }
 
     try {
-      if (isElectron) {
+      if (isElectron && ipcRenderer) {
         await ipcRenderer.invoke('i18n-tray-music-pause', true)
       }
     } catch {}
   }
   async IsPlaying() {
     try {
-      if (isElectron) {
+      if (isElectron && ipcRenderer) {
         this.isPlaying = await ipcRenderer.invoke('mpv-isPlaying')
       }
     } catch {}
   }
   async play() {
     try {
-      if (isElectron) {
+      if (isElectron && ipcRenderer) {
         await ipcRenderer.invoke('mpv-play')
       }
       this.isPlaying = true
@@ -60,14 +62,14 @@ export class Audio_node_mpv {
     }
 
     try {
-      if (isElectron) {
+      if (isElectron && ipcRenderer) {
         await ipcRenderer.invoke('i18n-tray-music-pause', true)
       }
     } catch {}
   }
   async pause() {
     try {
-      if (isElectron) {
+      if (isElectron && ipcRenderer) {
         await ipcRenderer.invoke('mpv-pause')
       }
       this.isPlaying = false
@@ -76,14 +78,14 @@ export class Audio_node_mpv {
     }
 
     try {
-      if (isElectron) {
+      if (isElectron && ipcRenderer) {
         await ipcRenderer.invoke('i18n-tray-music-pause', false)
       }
     } catch {}
   }
   async getDuration(): Promise<number | undefined> {
     try {
-      if (isElectron) {
+      if (isElectron && ipcRenderer) {
         const temp = await ipcRenderer.invoke('mpv-get-duration')
         this.isDuration = temp >= 0 ? temp : 0
       } else {
@@ -94,9 +96,9 @@ export class Audio_node_mpv {
       return this.isDuration
     }
   }
-  async getCurrentTime(): Promise<number> {
+  async getCurrentTime(): Promise<number | undefined> {
     try {
-      if (isElectron) {
+      if (isElectron && ipcRenderer) {
         const temp = await ipcRenderer.invoke('mpv-get-time-pos')
         this.isCurrentTime = temp >= 0 ? temp : this.isCurrentTime
       } else {
@@ -109,14 +111,14 @@ export class Audio_node_mpv {
   }
   async setCurrentTime(time: number) {
     try {
-      if (isElectron) {
+      if (isElectron && ipcRenderer) {
         await ipcRenderer.invoke('mpv-set-time-pos', time)
       }
     } catch {}
   }
   async setVolume(volume: number) {
     try {
-      if (isElectron) {
+      if (isElectron && ipcRenderer) {
         await ipcRenderer.invoke('mpv-set-volume', volume)
       }
     } catch {}

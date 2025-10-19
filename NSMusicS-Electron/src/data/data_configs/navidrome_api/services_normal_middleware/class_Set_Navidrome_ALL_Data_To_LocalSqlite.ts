@@ -12,9 +12,10 @@ import { store_server_user_model } from '@/data/data_stores/server_configs_store
 
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { isElectron } from '@/utils/electron/isElectron'
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 
 export class Set_Navidrome_ALL_Data_To_LocalSqlite {
+  private playlistStore = usePlaylistStore()
   private getUniqueId(db: any, table: any, id_name: any) {
     if (isElectron) {
       const { v4: uuidv4 } = require('uuid')
@@ -562,7 +563,7 @@ export class Set_Navidrome_ALL_Data_To_LocalSqlite {
 
       db.exec('DELETE FROM server_playlist')
       db.exec('DELETE FROM server_playlist_tracks')
-      usePlaylistStore().playlist_tracks_temporary_of_ALLLists = []
+      playlistStore.playlist_tracks_temporary_of_ALLLists = []
       if (playlists != null) {
         for (const playlist of playlists) {
           const sqlite_playlists = {
@@ -604,7 +605,7 @@ export class Set_Navidrome_ALL_Data_To_LocalSqlite {
             playlist_tracks.push(sqlite_song)
             this.insertData(db, 'server_playlist_tracks', sqlite_song)
           }
-          usePlaylistStore().playlist_tracks_temporary_of_ALLLists.push({
+          playlistStore.playlist_tracks_temporary_of_ALLLists.push({
             playlist: {
               label: playlist.name,
               value: playlist.id,
@@ -628,11 +629,11 @@ export class Set_Navidrome_ALL_Data_To_LocalSqlite {
         }
       }
       db.close()
-      usePlaylistStore().playlist_names_StartUpdate = true
-      usePlaylistStore().playlist_names_ALLLists = []
-      usePlaylistStore().playlist_tracks_temporary_of_ALLLists.forEach((item: any) => {
+      playlistStore.playlist_names_StartUpdate = true
+      playlistStore.playlist_names_ALLLists = []
+      playlistStore.playlist_tracks_temporary_of_ALLLists.forEach((item: any) => {
         if (item.playlist && item.playlist.name && item.playlist.id) {
-          usePlaylistStore().playlist_names_ALLLists.push({
+          playlistStore.playlist_names_ALLLists.push({
             label: item.playlist.name,
             value: item.playlist.id,
           })

@@ -59,11 +59,11 @@ import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 
 ////// lyircs load
 let unwatch = watch(
-  () => store_player_audio_info.this_audio_lyrics_loaded_complete,
+  () => playerAudioStore.this_audio_lyrics_loaded_complete,
   (newValue) => {
     if (newValue) {
       load_lyrics()
-      store_player_audio_logic.player_slider_click = true
+      playerSettingStore.player_slider_click = true
       scrollToItem(0)
     }
   }
@@ -73,12 +73,12 @@ onMounted(() => {
   init_player_theme()
 })
 function load_lyrics() {
-  if (store_player_audio_info.this_audio_lyrics_string.length > 0) {
-    if (store_player_audio_info.this_audio_lyrics_null) {
-      store_player_audio_info.this_audio_lyrics_info_line_font.forEach(
+  if (playerAudioStore.this_audio_lyrics_string.length > 0) {
+    if (playerAudioStore.this_audio_lyrics_null) {
+      playerAudioStore.this_audio_lyrics_info_line_font.forEach(
         (item: any, index: number) => {
           if ((item != null || item != 'undefined' || item != '') && item === '未找到可用歌词') {
-            store_player_audio_info.this_audio_lyrics_info_line_font[index] =
+            playerAudioStore.this_audio_lyrics_info_line_font[index] =
               computed_i18n_Label_Lyric_Not_Find.value
           }
         }
@@ -100,41 +100,41 @@ function begin_lyrics_animation() {
   setTimeout(() => {
     clearInterval(lyrics_animation)
     lyrics_animation = setInterval(async () => {
-      for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_line_time.length; i++) {
+      for (let i = 0; i < playerAudioStore.this_audio_lyrics_info_line_time.length; i++) {
         if (
-          store_player_audio_logic.player !== null &&
-          (await store_player_audio_logic.player.getCurrentTime()) !== undefined &&
-          (await store_player_audio_logic.player.getCurrentTime()) !== null
+          playerSettingStore.player !== null &&
+          (await playerSettingStore.player.getCurrentTime()) !== undefined &&
+          (await playerSettingStore.player.getCurrentTime()) !== null
         ) {
-          let currentTime = (await store_player_audio_logic.player.getCurrentTime()) * 1000
-          if (currentTime <= store_player_audio_info.this_audio_lyrics_info_line_time[0]) {
+          let currentTime = (await playerSettingStore.player.getCurrentTime()) * 1000
+          if (currentTime <= playerAudioStore.this_audio_lyrics_info_line_time[0]) {
             if (
               !lyrics_list_whell.value &&
               (isFirstRun || store_player_view.currentScrollIndex !== 0)
             ) {
               store_player_view.currentScrollIndex = 0
-              scrollToItem(store_player_audio_info.this_audio_lyrics_info_line_num)
+              scrollToItem(playerAudioStore.this_audio_lyrics_info_line_num)
             }
             break
-          } else if (currentTime >= store_player_audio_info.this_audio_lyrics_info_line_time[i]) {
-            if (i === store_player_audio_info.this_audio_lyrics_info_line_time.length - 1) {
+          } else if (currentTime >= playerAudioStore.this_audio_lyrics_info_line_time[i]) {
+            if (i === playerAudioStore.this_audio_lyrics_info_line_time.length - 1) {
               if (
                 !lyrics_list_whell.value &&
                 (isFirstRun || store_player_view.currentScrollIndex !== i)
               ) {
                 store_player_view.currentScrollIndex = i
-                scrollToItem(i + store_player_audio_info.this_audio_lyrics_info_line_num)
+                scrollToItem(i + playerAudioStore.this_audio_lyrics_info_line_num)
               }
               break
             } else if (
-              currentTime < store_player_audio_info.this_audio_lyrics_info_line_time[i + 1]
+              currentTime < playerAudioStore.this_audio_lyrics_info_line_time[i + 1]
             ) {
               if (
                 !lyrics_list_whell.value &&
                 (isFirstRun || store_player_view.currentScrollIndex !== i)
               ) {
                 store_player_view.currentScrollIndex = i
-                scrollToItem(i + store_player_audio_info.this_audio_lyrics_info_line_num)
+                scrollToItem(i + playerAudioStore.this_audio_lyrics_info_line_num)
               }
               break
             }
@@ -144,17 +144,17 @@ function begin_lyrics_animation() {
       if (isFirstRun) {
         isFirstRun = false
       }
-      if (store_player_audio_logic.player_slider_click) {
+      if (playerSettingStore.player_slider_click) {
         handleClear_Lyric_Color()
         lyrics_list_whell.value = false
-        store_player_audio_logic.player_slider_click = false
+        playerSettingStore.player_slider_click = false
         const itemElements = scrollbar.value?.$el.querySelectorAll('.lyrics_info') || []
         const itemElements_active =
           scrollbar.value?.$el.querySelectorAll('.lyrics_text_active') || []
         let color_hidden = player_lyric_color.slice(0, -2)
         const index =
           store_player_view.currentScrollIndex +
-          store_player_audio_info.this_audio_lyrics_info_line_num
+          playerAudioStore.this_audio_lyrics_info_line_num
         scrollToItem(index)
         for (let i = index - 16; i <= index + 16; i++) {
           const colorValue = Math.max(
@@ -182,21 +182,21 @@ function begin_lyrics_animation() {
 }
 let lyrics_animation: string | number | NodeJS.Timeout | undefined
 const handleItemDbClick = async (index: any) => {
-  if (index < store_player_audio_info.this_audio_lyrics_info_line_num) return
+  if (index < playerAudioStore.this_audio_lyrics_info_line_num) return
   if (
     index >
-    store_player_audio_info.this_audio_lyrics_info_line_font.length -
-      store_player_audio_info.this_audio_lyrics_info_line_num -
+    playerAudioStore.this_audio_lyrics_info_line_font.length -
+      playerAudioStore.this_audio_lyrics_info_line_num -
       1
   )
     return
   const time =
-    store_player_audio_info.this_audio_lyrics_info_line_time[
-      index - store_player_audio_info.this_audio_lyrics_info_line_num
+    playerAudioStore.this_audio_lyrics_info_line_time[
+      index - playerAudioStore.this_audio_lyrics_info_line_num
     ]
-  if (time >= (await store_player_audio_logic.player.getDuration()) * 1000) return
+  if (time >= (await playerSettingStore.player.getDuration()) * 1000) return
   if (time < 0) return
-  store_player_audio_logic.player_go_lyric_line_index_of_audio_play_progress = time
+  playerSettingStore.player_go_lyric_line_index_of_audio_play_progress = time
   store_player_view.currentScrollIndex = index
 
   handleLeave_Refresh_Lyric_Color()
@@ -268,11 +268,11 @@ const scrollToItem = (index: number) => {
   perviousIndex.value = index
 
   if (isFirstRun) {
-    store_player_audio_logic.player_slider_click = true
+    playerSettingStore.player_slider_click = true
   }
 
-  // if(store_player_audio_info.this_audio_lyrics_info_byte_model) {
-  //   if(store_player_audio_logic.player.isPlaying) {
+  // if(playerAudioStore.this_audio_lyrics_info_byte_model) {
+  //   if(playerSettingStore.player.isPlaying) {
   //     startByteAnimations(index, 0)
   //   }
   // }
@@ -283,18 +283,18 @@ const startByteAnimations = (index: number, num: number) => {
   if (!scrollbar.value) return
 
   const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active')
-  let position_i_length = store_player_audio_info.this_audio_lyrics_info_byte_time.reduce(
+  let position_i_length = playerAudioStore.this_audio_lyrics_info_byte_time.reduce(
     (acc: any, curr: any) => {
       return acc + curr.length
     },
     0
   )
-  let position_i_start = store_player_audio_info.this_audio_lyrics_info_byte_time
+  let position_i_start = playerAudioStore.this_audio_lyrics_info_byte_time
     .slice(0, index)
     .reduce((acc: any, curr: any) => {
       return acc + curr.length
     }, 0)
-  let position_i_end = store_player_audio_info.this_audio_lyrics_info_byte_time
+  let position_i_end = playerAudioStore.this_audio_lyrics_info_byte_time
     .slice(0, index + 1)
     .reduce((acc: any, curr: any) => {
       return acc + curr.length
@@ -337,7 +337,7 @@ const startByteAnimations = (index: number, num: number) => {
 
   for (let i = position_i_start; i < position_i_end; i++) {
     const byteTime =
-      store_player_audio_info.this_audio_lyrics_info_byte_time[index][i - position_i_start]
+      playerAudioStore.this_audio_lyrics_info_byte_time[index][i - position_i_start]
     const [startMs, durationMs] = byteTime.split(',').map(Number)
     const start = startMs / 1000
     const duration = durationMs / 1000
@@ -502,8 +502,10 @@ const unwatch_player_collapsed = watchEffect(() => {
 
 ////// Animation lottie Load // lottie-web will cause memory leaks，so replace lottie-player_configs
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
-import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
+import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
+
+const playerSettingStore = usePlayerSettingStore()
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { Pause, Play, PlayBack, PlayForward, VolumeMedium } from '@vicons/ionicons5'
@@ -517,6 +519,8 @@ import { store_view_media_page_info } from '@/views/view_app/page/page_media/sto
 
 // 在setup上下文中获取Store实例
 const playerAppearanceStore = usePlayerAppearanceStore()
+const playerAudioStore = usePlayerAudioStore()
+const playlistStore = usePlaylistStore()
 // 使用 storeToRefs 解构出所需的响应式属性
 const {
   player_lyric_fontSize_Num,
@@ -529,6 +533,19 @@ const {
   player_show_of_control_info,
   player_collapsed_action_bar_of_Immersion_model,
 } = storeToRefs(playerAppearanceStore)
+
+const {
+  this_audio_song_name,
+  this_audio_artist_name,
+  this_audio_album_name,
+  this_audio_song_rating,
+  page_top_album_image_url,
+  this_audio_lyrics_info_line_font,
+  this_audio_song_id,
+  this_audio_song_favorite,
+  this_audio_lyrics_info_byte_model,
+  this_audio_lyrics_info_byte_font,
+} = storeToRefs(playerAudioStore)
 
 ///
 const show_mini_album_model = ref(false)
@@ -543,7 +560,7 @@ const show_more_options = ref(false)
 const handleItemClick_Favorite = (id: any, favorite: boolean) => {
   if (id != null && id.length > 0 && id != 'undefined') {
     store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id, favorite)
-    store_player_audio_info.this_audio_song_favorite = !favorite
+    playerAudioStore.this_audio_song_favorite = !favorite
 
     store_view_media_page_logic.page_songlists_statistic.forEach((item: any) => {
       if (item.id === 'song_list_love') {
@@ -551,14 +568,14 @@ const handleItemClick_Favorite = (id: any, favorite: boolean) => {
         item.song_count = store_view_media_page_info.media_starred_count + ' *'
       }
     })
-    store_player_audio_logic.boolHandleItemClick_Favorite = true
+    playerSettingStore.boolHandleItemClick_Favorite = true
 
     const item_file: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find(
-      (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
+      (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
     )
     const item_playlist: Media_File | undefined =
-      usePlaylistStore().playlist_MediaFiles_temporary.find(
-        (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
+      playlistStore.playlist_MediaFiles_temporary.find(
+        (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
       )
     if (item_file !== undefined) item_file.favorite = !favorite
     if (item_playlist !== undefined) item_playlist.favorite = !favorite
@@ -566,14 +583,14 @@ const handleItemClick_Favorite = (id: any, favorite: boolean) => {
 }
 const handleItemClick_Rating = (id: any, rating: any) => {
   store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, rating)
-  store_player_audio_info.this_audio_song_rating = rating
+  playerAudioStore.this_audio_song_rating = rating
 
   const item_file: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find(
-    (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
+    (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
   )
   const item_playlist: Media_File | undefined =
-    usePlaylistStore().playlist_MediaFiles_temporary.find(
-      (mediaFile: Media_File) => mediaFile.id === store_player_audio_info.this_audio_song_id
+    playlistStore.playlist_MediaFiles_temporary.find(
+      (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
     )
   if (item_file !== undefined) item_file.rating = rating
   if (item_playlist !== undefined) item_playlist.rating = rating
@@ -624,7 +641,7 @@ onBeforeUnmount(() => {
         :style="{
           width: !store_system_configs_info.window_state_miniplayer_album ? '200vh' : '100vw',
           height: !store_system_configs_info.window_state_miniplayer_album ? '200vh' : '100vh',
-          backgroundImage: `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`,
+          backgroundImage: `url(${getAssetImage(page_top_album_image_url)})`,
           filter: !store_system_configs_info.window_state_miniplayer_album
             ? 'brightness(46%) blur(40px)'
             : collapsed_action_bar
@@ -792,7 +809,7 @@ onBeforeUnmount(() => {
                     <img
                       class="back_img"
                       style="object-fit: cover"
-                      :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                      :src="getAssetImage(page_top_album_image_url)"
                       @mouseover="hover_back_img"
                       @mouseout="leave_back_svg"
                     />
@@ -812,20 +829,20 @@ onBeforeUnmount(() => {
                     }"
                     style="color: white"
                   >
-                    <span id="bar_so_name">{{ store_player_audio_info.this_audio_song_name }}</span>
+                    <span id="bar_so_name">{{ this_audio_song_name }}</span>
                   </n-ellipsis>
                 </n-space>
                 <n-space style="margin-top: -2px">
                   <n-ellipsis style="width: 250px; color: #929292">
                     <template
-                      v-for="artist in store_player_audio_info.this_audio_artist_name.split(
+                      v-for="artist in this_audio_artist_name.split(
                         /[\/|｜、]/
                       )"
                     >
                       <span id="bar_ar_name_part">{{ artist + '&nbsp' }}</span>
                     </template>
                     <span id="bar_al_name">{{
-                      '—&nbsp' + store_player_audio_info.this_audio_album_name
+                      '—&nbsp' + this_audio_album_name
                     }}</span>
                   </n-ellipsis>
                 </n-space>
@@ -905,15 +922,15 @@ onBeforeUnmount(() => {
                       }"
                       v-for="(
                         item, index
-                      ) in store_player_audio_info.this_audio_lyrics_info_line_font"
+                      ) in this_audio_lyrics_info_line_font"
                       @click="handleItemDbClick(index)"
                     >
                       <div class="lyrics_text_active">
                         {{ item }}
                       </div>
-                      <!--                        v-if="!store_player_audio_info.this_audio_lyrics_info_byte_model"-->
+                      <!--                        v-if="!this_audio_lyrics_info_byte_model"-->
                       <!--                        <div v-else-->
-                      <!--                          v-for="(byte, num) in store_player_audio_info.this_audio_lyrics_info_byte_font[index]"-->
+                      <!--                          v-for="(byte, num) in this_audio_lyrics_info_byte_font[index]"-->
                       <!--                          class="lyrics_text_active"-->
                       <!--                          style="padding-left: 0;margin-right: 1px;"-->
                       <!--                        >-->
@@ -950,7 +967,7 @@ onBeforeUnmount(() => {
                             collapsed_action_bar = true
                             await ipcRenderer.invoke('window-state-miniplayer-show')
                             await ipcRenderer.invoke('window-state-miniplayer-show')
-                            usePlayerAppearanceStore().player_collapsed_action_bar_of_Immersion_model = false
+                            playerAppearanceStore.player_collapsed_action_bar_of_Immersion_model = false
                           }
                         "
                       >
@@ -966,21 +983,21 @@ onBeforeUnmount(() => {
                   <n-space>
                     <n-ellipsis style="color: white; width: 250px">
                       <span id="bar_so_name">{{
-                        store_player_audio_info.this_audio_song_name
+                        this_audio_song_name
                       }}</span>
                     </n-ellipsis>
                   </n-space>
                   <n-space style="margin-top: -2px">
                     <n-ellipsis style="width: 250px; color: #929292">
                       <template
-                        v-for="artist in store_player_audio_info.this_audio_artist_name.split(
+                        v-for="artist in this_audio_artist_name.split(
                           /[\/|｜、]/
                         )"
                       >
                         <span id="bar_ar_name_part">{{ artist + '&nbsp' }}</span>
                       </template>
                       <span id="bar_al_name">{{
-                        '—&nbsp' + store_player_audio_info.this_audio_album_name
+                        '—&nbsp' + this_audio_album_name
                       }}</span>
                     </n-ellipsis>
                   </n-space>
@@ -1015,7 +1032,7 @@ onBeforeUnmount(() => {
                   }"
                   style="width: 32px; font-size: 12px"
                 >
-                  {{ store_player_audio_logic.current_play_time }}
+                  {{ playerSettingStore.current_play_time }}
                 </n-space>
                 <n-slider
                   style="
@@ -1026,41 +1043,41 @@ onBeforeUnmount(() => {
                     --n-handle-size: 20px;
                     border-radius: 20px;
                   "
-                  v-model:value="store_player_audio_logic.slider_singleValue"
+                  v-model:value="playerSettingStore.slider_singleValue"
                   :min="0"
                   :max="100"
                   :format-tooltip="
                     (value) => {
-                      return store_player_audio_logic.formatTime(
-                        (value / 100) * store_player_audio_logic.player.isDuration
+                      return playerSettingStore.formatTime(
+                        (value / 100) * playerSettingStore.player.isDuration
                       )
                     }
                   "
                   :on-dragend="
                     () => {
                       if (
-                        store_player_audio_logic.slider_singleValue >= 99.5 ||
-                        store_player_audio_logic.slider_singleValue == 0
+                        playerSettingStore.slider_singleValue >= 99.5 ||
+                        playerSettingStore.slider_singleValue == 0
                       ) {
-                        store_player_audio_logic.player_is_play_ended = true
-                        store_player_audio_logic.play_go_duration(
-                          store_player_audio_logic.slider_singleValue,
+                        playerSettingStore.player_is_play_ended = true
+                        playerSettingStore.play_go_duration(
+                          playerSettingStore.slider_singleValue,
                           true
                         )
                       }
-                      store_player_audio_logic.player_range_duration_isDragging = false
+                      playerSettingStore.player_range_duration_isDragging = false
                     }
                   "
                   @click="
                     () => {
-                      store_player_audio_logic.play_go_duration(
-                        store_player_audio_logic.slider_singleValue,
+                      playerSettingStore.play_go_duration(
+                        playerSettingStore.slider_singleValue,
                         true
                       )
                     }
                   "
-                  @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
-                  @mouseup="store_player_audio_logic.player_range_duration_isDragging = false"
+                  @mousedown="playerSettingStore.player_range_duration_isDragging = true"
+                  @mouseup="playerSettingStore.player_range_duration_isDragging = false"
                 >
                   <template #thumb>
                     <n-icon-wrapper color="white" :size="12" />
@@ -1074,7 +1091,7 @@ onBeforeUnmount(() => {
                   }"
                   style="width: 32px; font-size: 12px"
                 >
-                  {{ store_player_audio_logic.total_play_time }}
+                  {{ playerSettingStore.total_play_time }}
                 </n-space>
               </n-space>
               <!-- Button -->
@@ -1210,8 +1227,8 @@ onBeforeUnmount(() => {
                         quaternary
                         size="small"
                         @click="
-                          store_player_audio_logic.player_click_state_of_play_skip_back =
-                            !store_player_audio_logic.player_click_state_of_play_skip_back
+                          playerSettingStore.player_click_state_of_play_skip_back =
+                            !playerSettingStore.player_click_state_of_play_skip_back
                         "
                       >
                         <template #icon>
@@ -1226,13 +1243,13 @@ onBeforeUnmount(() => {
                       <n-button
                         quaternary
                         @click="
-                          store_player_audio_logic.player_state_play_click =
-                            !store_player_audio_logic.player_state_play_click
+                          playerSettingStore.player_state_play_click =
+                            !playerSettingStore.player_state_play_click
                         "
                         style="margin-top: -1.5px; margin-left: -10px; margin-right: -10px"
                       >
                         <template #icon>
-                          <n-icon v-if="store_player_audio_logic.player.isPlaying" :size="28"
+                          <n-icon v-if="playerSettingStore.player.isPlaying" :size="28"
                             ><Pause
                           /></n-icon>
                           <n-icon v-else :size="28"><Play /></n-icon>
@@ -1247,8 +1264,8 @@ onBeforeUnmount(() => {
                         quaternary
                         size="small"
                         @click="
-                          store_player_audio_logic.player_click_state_of_play_skip_forward =
-                            !store_player_audio_logic.player_click_state_of_play_skip_forward
+                          playerSettingStore.player_click_state_of_play_skip_forward =
+                            !playerSettingStore.player_click_state_of_play_skip_forward
                         "
                       >
                         <template #icon>
@@ -1273,7 +1290,7 @@ onBeforeUnmount(() => {
                             collapsed_action_bar = true
                             await ipcRenderer.invoke('window-state-miniplayer-show')
                             await ipcRenderer.invoke('window-state-miniplayer-show')
-                            usePlayerAppearanceStore().player_collapsed_action_bar_of_Immersion_model = false
+                            playerAppearanceStore.player_collapsed_action_bar_of_Immersion_model = false
                             ///
                             show_more_options = !show_more_options
                           }
@@ -1301,7 +1318,7 @@ onBeforeUnmount(() => {
                             collapsed_action_bar = true
                             await ipcRenderer.invoke('window-state-miniplayer-show')
                             await ipcRenderer.invoke('window-state-miniplayer-show')
-                            usePlayerAppearanceStore().player_collapsed_action_bar_of_Immersion_model = false
+                            playerAppearanceStore.player_collapsed_action_bar_of_Immersion_model = false
                             ///
                             store_system_configs_info.window_state_miniplayer_playlist =
                               !store_system_configs_info.window_state_miniplayer_playlist
@@ -1361,11 +1378,11 @@ onBeforeUnmount(() => {
                         <n-rate
                           clearable
                           size="small"
-                          v-model:value="store_player_audio_info.this_audio_song_rating"
+                          v-model:value="this_audio_song_rating"
                           @update:value="
                             (value: number) =>
                               handleItemClick_Rating(
-                                store_player_audio_info.this_audio_song_id,
+                                this_audio_song_id,
                                 value
                               )
                           "
@@ -1380,14 +1397,14 @@ onBeforeUnmount(() => {
                           text
                           @click="
                             handleItemClick_Favorite(
-                              store_player_audio_info.this_audio_song_id,
-                              store_player_audio_info.this_audio_song_favorite
+                              this_audio_song_id,
+                              this_audio_song_favorite
                             )
                           "
                         >
                           <template #icon>
                             <n-icon
-                              v-if="store_player_audio_info.this_audio_song_favorite"
+                              v-if="this_audio_song_favorite"
                               :size="
                                 (store_server_users.server_select_kind != 'jellyfin' &&
                                   store_server_users.server_select_kind != 'emby') ||

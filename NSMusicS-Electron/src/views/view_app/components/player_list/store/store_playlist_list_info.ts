@@ -1,6 +1,6 @@
 import { reactive, watch } from 'vue'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
-import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
+import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
 
 export const store_playlist_list_info = reactive({
   playlist_names_ALLLists: [],
@@ -76,16 +76,17 @@ export const store_playlist_list_info = reactive({
   },
 
   reset_carousel() {
+    const playerAudioStore = usePlayerAudioStore()
     const hasSameAbsoluteIndex =
       store_playlist_list_info.playlist_MediaFiles_temporary_carousel.some(
-        (item) => item.path === store_player_audio_info.this_audio_file_path
+        (item) => item.path === playerAudioStore.this_audio_file_path
       )
     if (hasSameAbsoluteIndex) {
       return
     }
     if (store_playlist_list_info.playlist_MediaFiles_temporary.length > 1) {
-      if (!isNaN(store_player_audio_info.this_audio_Index_of_play_list)) {
-        const startIndex = Math.max(store_player_audio_info.this_audio_Index_of_play_list - 14, 0)
+      if (!isNaN(playerAudioStore.this_audio_Index_of_play_list)) {
+        const startIndex = Math.max(playerAudioStore.this_audio_Index_of_play_list - 14, 0)
         const endIndex = Math.min(
           startIndex + 30,
           store_playlist_list_info.playlist_MediaFiles_temporary.length
@@ -97,14 +98,14 @@ export const store_playlist_list_info = reactive({
           store_playlist_list_info.playlist_MediaFiles_temporary.slice(0, 30)
       }
       //
-      store_player_audio_info.set_carousel_index()
+      playerAudioStore.set_carousel_index()
     } else if (store_playlist_list_info.playlist_MediaFiles_temporary.length === 1) {
       store_playlist_list_info.playlist_MediaFiles_temporary_carousel = [
         store_playlist_list_info.playlist_MediaFiles_temporary[0],
         store_playlist_list_info.playlist_MediaFiles_temporary[0],
       ]
       //
-      store_player_audio_info.set_carousel_index()
+      playerAudioStore.set_carousel_index()
     }
   },
 })

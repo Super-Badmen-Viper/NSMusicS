@@ -15,8 +15,8 @@ import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/p
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 import error_album from '@/assets/img/error_album.jpg'
-import { isElectron } from '@/utils/electron/isElectron'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
 import { Get_Jellyfin_Temp_Data_To_LocalSqlite } from '@/data/data_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite'
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
@@ -29,8 +29,9 @@ export const store_general_fetch_album_list = reactive({
         let db: any = null
         let moment = require('moment')
         // clear RouterView of vue-virtual-scroller data
-        if (usePlayerAppearanceStore().player_mode_of_medialist_from_external_import) {
-          usePlayerAppearanceStore().player_mode_of_medialist_from_external_import = false
+        const playerAppearanceStore = usePlayerAppearanceStore()
+        if (playerAppearanceStore.player_mode_of_medialist_from_external_import) {
+          playerAppearanceStore.player_mode_of_medialist_from_external_import = false
         } else {
           store_router_data_logic.clear_Files_temporary()
           store_router_data_info.router_select = 'album'
@@ -297,7 +298,8 @@ export const store_general_fetch_album_list = reactive({
     }
   },
   async fetchData_This_Album_MediaList(album_id: any) {
-    usePlayerAppearanceStore().player_mode_of_medialist_from_external_import = true
+    const playerAppearanceStore = usePlayerAppearanceStore()
+    playerAppearanceStore.player_mode_of_medialist_from_external_import = true
 
     store_view_media_page_logic.page_songlists_keywordFilter = `WHERE album_id = '${album_id}'`
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
@@ -316,12 +318,14 @@ export const store_general_fetch_album_list = reactive({
       // home-page-album 传入则不需要指定album模式
     }
 
-    if (usePlaylistStore().playlist_MediaFiles_temporary.length > 0) {
-      usePlayerAppearanceStore().player_mode_of_lock_playlist = false
-      const media_file = usePlaylistStore().playlist_MediaFiles_temporary[0]
-      await store_player_audio_logic.update_current_media_info(media_file, media_file.absoluteIndex)
+    const playlistStore = usePlaylistStore()
+    if (playlistStore.playlist_MediaFiles_temporary.length > 0) {
+      playerAppearanceStore.player_mode_of_lock_playlist = false
+      const media_file = playlistStore.playlist_MediaFiles_temporary[0]
+      const playerSettingStore = usePlayerSettingStore()
+      await playerSettingStore.update_current_media_info(media_file, media_file.absoluteIndex)
       //
-      usePlaylistStore().media_page_handleItemDbClick = false
+      playlistStore.media_page_handleItemDbClick = false
     }
   },
   removeCondition(filter, condition) {
@@ -360,7 +364,8 @@ export const store_general_fetch_album_list = reactive({
     this._end = 30
     await this.fetchData_Album_of_server_web()
 
-    if (usePlayerAppearanceStore().player_mode_of_medialist_from_external_import) {
+    const playerAppearanceStore = usePlayerAppearanceStore()
+    if (playerAppearanceStore.player_mode_of_medialist_from_external_import) {
       store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
     }
   },

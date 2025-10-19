@@ -2,12 +2,12 @@ import { reactive, ref } from 'vue'
 import { App_Configs } from '@/data/data_models/app_models/app_Configs/class_App_Configs'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { Write_LocalSqlite_System_Configs } from '@/data/data_repository/system_repository/Write_LocalSqlite_System_Configs'
 import { Player_Configs_of_UI } from '@/data/data_models/app_models/app_Configs/class_Player_Configs_of_UI'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { Player_Configs_of_Audio_Info } from '@/data/data_models/app_models/app_Configs/class_Player_Configs_of_Audio_Info'
-import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
+import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
@@ -18,7 +18,7 @@ import { store_view_album_page_info } from '@/views/view_app/page/page_album/sto
 import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
-import { isElectron } from '@/utils/electron/isElectron'
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { store_local_db_info } from '@/data/data_stores/local_app_stores/store_local_db_info'
 import axios from 'axios'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
@@ -34,6 +34,7 @@ export const store_system_configs_save = reactive({
     return id
   },
   async save_system_config_of_App_Configs() {
+    const playerSettingStore = usePlayerSettingStore()
     if (!store_system_configs_load.app_configs_loading) {
       const app_Configs = ref(
         new App_Configs({
@@ -63,8 +64,8 @@ export const store_system_configs_save = reactive({
           server_select_kind: String(store_server_users.server_select_kind),
           username: String(store_server_user_model.username),
           password: String(store_server_user_model.password),
-          play_order: String(store_player_audio_logic.play_order),
-          play_volume: String(store_player_audio_logic.play_volume),
+          play_order: String(playerSettingStore.play_order),
+          play_volume: String(playerSettingStore.play_volume),
           model_server_type_of_web: String(store_server_user_model.model_server_type_of_web),
           model_server_type_of_local: String(store_server_user_model.model_server_type_of_local),
           model_server_type_of_local_server_download: String(
@@ -82,19 +83,19 @@ export const store_system_configs_save = reactive({
           page_songlists_filter_year: String(
             store_view_media_page_logic.page_songlists_filter_year
           ),
-          player_select: String(store_player_audio_logic.player_select),
-          player_fade_value: String(store_player_audio_logic.player_fade_value),
-          player_dolby: String(store_player_audio_logic.player_dolby),
-          player_samp_value: String(store_player_audio_logic.player_samp_value),
-          player_gaplessAudio: String(store_player_audio_logic.player_gaplessAudio),
-          player_audioExclusiveMode: String(store_player_audio_logic.player_audioExclusiveMode),
-          player_replayGainMode: String(store_player_audio_logic.player_replayGainMode),
-          player_replayGainPreamp: String(store_player_audio_logic.player_replayGainPreamp),
-          player_replayGainClip: String(store_player_audio_logic.player_replayGainClip),
-          player_replayGainFallback: String(store_player_audio_logic.player_replayGainFallback),
-          player_mpvExtraParameters: String(store_player_audio_logic.player_mpvExtraParameters),
-          player_audio_channel: String(store_player_audio_logic.player_audio_channel),
-          player_device_select: String(store_player_audio_logic.player_device_select),
+          player_select: String(playerSettingStore.player_select),
+          player_fade_value: String(playerSettingStore.player_fade_value),
+          player_dolby: String(playerSettingStore.player_dolby),
+          player_samp_value: String(playerSettingStore.player_samp_value),
+          player_gaplessAudio: String(playerSettingStore.player_gaplessAudio),
+          player_audioExclusiveMode: String(playerSettingStore.player_audioExclusiveMode),
+          player_replayGainMode: String(playerSettingStore.player_replayGainMode),
+          player_replayGainPreamp: String(playerSettingStore.player_replayGainPreamp),
+          player_replayGainClip: String(playerSettingStore.player_replayGainClip),
+          player_replayGainFallback: String(playerSettingStore.player_replayGainFallback),
+          player_mpvExtraParameters: String(playerSettingStore.player_mpvExtraParameters),
+          player_audio_channel: String(playerSettingStore.player_audio_channel),
+          player_device_select: String(playerSettingStore.player_device_select),
         })
       )
       if (isElectron) {
@@ -242,32 +243,34 @@ export const store_system_configs_save = reactive({
     }
   },
   async save_system_config_of_Player_Configs_of_Audio_Info() {
-    let player_Configs_of_Audio_Info = null
+    const playerSettingStore = usePlayerSettingStore()
     const playerAppearanceStore = usePlayerAppearanceStore()
+    const playerAudioStore = usePlayerAudioStore()
+    let player_Configs_of_Audio_Info = null
     player_Configs_of_Audio_Info = ref(
       new Player_Configs_of_Audio_Info({
-        this_audio_file_path: String(store_player_audio_info.this_audio_file_path),
+        this_audio_file_path: String(playerAudioStore.this_audio_file_path),
         this_audio_file_medium_image_url: String(
-          store_player_audio_info.this_audio_file_medium_image_url
+          playerAudioStore.this_audio_file_medium_image_url
         ),
-        this_audio_file_lyric: String(store_player_audio_info.this_audio_lyrics_string),
-        this_audio_artist_name: String(store_player_audio_info.this_audio_artist_name),
-        this_audio_artist_id: String(store_player_audio_info.this_audio_artist_id),
-        this_audio_song_name: String(store_player_audio_info.this_audio_song_name),
-        this_audio_song_id: String(store_player_audio_info.this_audio_song_id),
-        this_audio_song_rating: String(store_player_audio_info.this_audio_song_rating),
-        this_audio_song_favorite: String(store_player_audio_info.this_audio_song_favorite),
-        this_audio_album_name: String(store_player_audio_info.this_audio_album_name),
-        this_audio_album_id: String(store_player_audio_info.this_audio_album_id),
+        this_audio_file_lyric: String(playerAudioStore.this_audio_lyrics_string),
+        this_audio_artist_name: String(playerAudioStore.this_audio_artist_name),
+        this_audio_artist_id: String(playerAudioStore.this_audio_artist_id),
+        this_audio_song_name: String(playerAudioStore.this_audio_song_name),
+        this_audio_song_id: String(playerAudioStore.this_audio_song_id),
+        this_audio_song_rating: String(playerAudioStore.this_audio_song_rating),
+        this_audio_song_favorite: String(playerAudioStore.this_audio_song_favorite),
+        this_audio_album_name: String(playerAudioStore.this_audio_album_name),
+        this_audio_album_id: String(playerAudioStore.this_audio_album_id),
         this_audio_Index_of_play_list: String(
-          store_player_audio_info.this_audio_Index_of_play_list
+          playerAudioStore.this_audio_Index_of_play_list
         ),
 
-        page_top_album_image_url: String(store_player_audio_info.page_top_album_image_url),
-        page_top_album_id: String(store_player_audio_info.page_top_album_id),
-        page_top_album_name: String(store_player_audio_info.page_top_album_name),
+        page_top_album_image_url: String(playerAudioStore.page_top_album_image_url),
+        page_top_album_id: String(playerAudioStore.page_top_album_id),
+        page_top_album_name: String(playerAudioStore.page_top_album_name),
 
-        slider_singleValue: String(store_player_audio_logic.slider_singleValue),
+        slider_singleValue: String(playerSettingStore.slider_singleValue),
 
         playlist_artist_id: String(store_general_fetch_player_list._artist_id),
         playlist_album_id: String(store_general_fetch_player_list._album_id),
@@ -319,6 +322,7 @@ export const store_system_configs_save = reactive({
     }
   },
   async save_system_playlist_item_id_config() {
+    const playlistStore = usePlaylistStore()
     if (isElectron) {
       try {
         let db: any = null
@@ -330,7 +334,7 @@ export const store_system_configs_save = reactive({
           const system_Configs_Write = new Write_LocalSqlite_System_Configs()
           system_Configs_Write.system_playlist_item_id_config(
             db,
-            usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds
+            playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds
           )
         } else {
           db = require('better-sqlite3')(store_system_configs_info.navidrome_db)
@@ -340,7 +344,7 @@ export const store_system_configs_save = reactive({
           const system_Configs_Write = new Write_LocalSqlite_System_Configs()
           system_Configs_Write.system_playlist_item_config(
             db,
-            usePlaylistStore().playlist_MediaFiles_temporary
+            playlistStore.playlist_MediaFiles_temporary
           )
         }
         await this.save_system_config_of_App_Configs()
@@ -370,7 +374,7 @@ export const store_system_configs_save = reactive({
         'cue_track_count',
         'cue_track_show',
       ])
-      const data = usePlaylistStore()
+      const data = playlistStore
         .playlist_MediaFiles_temporary.filter((item) => item.id && !excludedFields.has('id'))
         .map((item, index) => ({
           ID: this.generateMockObjectId(),

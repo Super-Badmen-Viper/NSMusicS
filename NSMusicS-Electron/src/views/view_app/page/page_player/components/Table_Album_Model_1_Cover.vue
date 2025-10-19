@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
+import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { RepeatOneRound } from '@vicons/material'
+
+const playerSettingStore = usePlayerSettingStore()
 import { Random } from '@vicons/fa'
 import {
   Pause,
@@ -19,6 +21,7 @@ import { storeToRefs } from 'pinia'
 
 // 在setup上下文中获取Store实例
 const playerAppearanceStore = usePlayerAppearanceStore()
+const playerAudioStore = usePlayerAudioStore()
 // 使用 storeToRefs 解构出所需的响应式属性
 const {
   player_background_model_num,
@@ -27,6 +30,13 @@ const {
   player_show_complete,
   player_show_click,
 } = storeToRefs(playerAppearanceStore)
+
+const {
+  page_top_album_image_url,
+  this_audio_song_name,
+  this_audio_artist_name,
+  this_audio_album_name
+} = storeToRefs(playerAudioStore)
 
 function getAssetImage(firstImage: string) {
   return new URL(firstImage, import.meta.url).href
@@ -63,7 +73,7 @@ function getAssetImage(firstImage: string) {
           0 0 12px rgba(0, 0, 0, 0.2),
           0 0 12px rgba(0, 0, 0, 0.2);
       "
-      :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+      :src="getAssetImage(page_top_album_image_url)"
       alt=""
     />
     <n-space vertical style="width: 55vh">
@@ -80,7 +90,7 @@ function getAssetImage(firstImage: string) {
           text-align: left;
         "
       >
-        {{ store_player_audio_info.this_audio_song_name }}
+        {{ this_audio_song_name }}
       </div>
       <div
         style="
@@ -95,19 +105,19 @@ function getAssetImage(firstImage: string) {
           text-align: left;
         "
       >
-        {{ store_player_audio_info.this_audio_artist_name }} -
-        {{ store_player_audio_info.this_audio_album_name }}
+        {{ this_audio_artist_name }} -
+        {{ this_audio_album_name }}
       </div>
     </n-space>
     <!--  -->
     <n-space vertical v-if="!player_collapsed_album">
       <n-space justify="end" style="width: 55vh; margin-top: -29px">
         <n-space>
-          {{ store_player_audio_logic.current_play_time }}
+          {{ playerSettingStore.current_play_time }}
         </n-space>
         :
         <n-space>
-          {{ store_player_audio_logic.total_play_time }}
+          {{ playerSettingStore.total_play_time }}
         </n-space>
       </n-space>
       <n-slider
@@ -120,41 +130,41 @@ function getAssetImage(firstImage: string) {
           margin-top: -12px;
           border-radius: 10px;
         "
-        v-model:value="store_player_audio_logic.slider_singleValue"
+        v-model:value="playerSettingStore.slider_singleValue"
         :min="0"
         :max="100"
         :format-tooltip="
           (value) => {
-            return store_player_audio_logic.formatTime(
-              (value / 100) * store_player_audio_logic.player.isDuration
+            return playerSettingStore.formatTime(
+              (value / 100) * playerSettingStore.player.isDuration
             )
           }
         "
         :on-dragend="
           () => {
             if (
-              store_player_audio_logic.slider_singleValue >= 99.5 ||
-              store_player_audio_logic.slider_singleValue == 0
+              playerSettingStore.slider_singleValue >= 99.5 ||
+              playerSettingStore.slider_singleValue == 0
             ) {
-              store_player_audio_logic.player_is_play_ended = true
-              store_player_audio_logic.play_go_duration(
-                store_player_audio_logic.slider_singleValue,
+              playerSettingStore.player_is_play_ended = true
+              playerSettingStore.play_go_duration(
+                playerSettingStore.slider_singleValue,
                 true
               )
             }
-            store_player_audio_logic.player_range_duration_isDragging = false
+            playerSettingStore.player_range_duration_isDragging = false
           }
         "
         @click="
           () => {
-            store_player_audio_logic.play_go_duration(
-              store_player_audio_logic.slider_singleValue,
+            playerSettingStore.play_go_duration(
+              playerSettingStore.slider_singleValue,
               true
             )
           }
         "
-        @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
-        @mouseup="store_player_audio_logic.player_range_duration_isDragging = false"
+        @mousedown="playerSettingStore.player_range_duration_isDragging = true"
+        @mouseup="playerSettingStore.player_range_duration_isDragging = false"
       >
         <template #thumb>
           <n-icon-wrapper color="white" :size="12" />
@@ -184,18 +194,18 @@ function getAssetImage(firstImage: string) {
         size="small"
         @click="
           () => {
-            if (store_player_audio_logic.play_order != 'playback-4') {
-              store_player_audio_logic.play_order = 'playback-4'
+            if (playerSettingStore.play_order != 'playback-4') {
+              playerSettingStore.play_order = 'playback-4'
             } else {
-              store_player_audio_logic.play_order = 'playback-1'
+              playerSettingStore.play_order = 'playback-1'
             }
           }
         "
-        @mouseover="store_player_audio_logic.drawer_order_show = true"
+        @mouseover="playerSettingStore.drawer_order_show = true"
       >
         <template #icon>
           <n-icon :size="20">
-            <Random color="#42d883" v-if="store_player_audio_logic.play_order === 'playback-4'" />
+            <Random color="#42d883" v-if="playerSettingStore.play_order === 'playback-4'" />
             <Random v-else />
           </n-icon>
         </template>
@@ -204,7 +214,7 @@ function getAssetImage(firstImage: string) {
         quaternary
         round
         size="small"
-        @click="store_player_audio_logic.player_click_state_of_play_skip_back = true"
+        @click="playerSettingStore.player_click_state_of_play_skip_back = true"
       >
         <template #icon>
           <n-icon :size="26"><PlayBack /></n-icon>
@@ -223,10 +233,10 @@ function getAssetImage(firstImage: string) {
         <n-button
           quaternary
           round
-          @click="store_player_audio_logic.player_click_state_of_play = true"
+          @click="playerSettingStore.player_click_state_of_play = true"
         >
           <template #icon>
-            <n-icon v-if="store_player_audio_logic.player.isPlaying" :size="36"><Pause /></n-icon>
+            <n-icon v-if="playerSettingStore.player.isPlaying" :size="36"><Pause /></n-icon>
             <n-icon v-else :size="36"><Play /></n-icon>
           </template>
         </n-button>
@@ -235,7 +245,7 @@ function getAssetImage(firstImage: string) {
         quaternary
         round
         size="small"
-        @click="store_player_audio_logic.player_click_state_of_play_skip_forward = true"
+        @click="playerSettingStore.player_click_state_of_play_skip_forward = true"
       >
         <template #icon>
           <n-icon :size="26"><PlayForward /></n-icon>
@@ -247,35 +257,35 @@ function getAssetImage(firstImage: string) {
         size="small"
         @click="
           () => {
-            const play_order = store_player_audio_logic.play_order
+            const play_order = playerSettingStore.play_order
             if (play_order === 'playback-4') {
-              store_player_audio_logic.play_order = 'playback-1'
+              playerSettingStore.play_order = 'playback-1'
             } else if (play_order === 'playback-1') {
-              store_player_audio_logic.play_order = 'playback-2'
+              playerSettingStore.play_order = 'playback-2'
             } else if (play_order === 'playback-2') {
-              store_player_audio_logic.play_order = 'playback-3'
+              playerSettingStore.play_order = 'playback-3'
             } else if (play_order === 'playback-3') {
-              store_player_audio_logic.play_order = 'playback-1'
+              playerSettingStore.play_order = 'playback-1'
             }
           }
         "
-        @mouseover="store_player_audio_logic.drawer_order_show = true"
+        @mouseover="playerSettingStore.drawer_order_show = true"
       >
         <template #icon>
           <n-icon :size="26">
             <ArrowRepeatAll16Regular
               v-if="
-                store_player_audio_logic.play_order !== 'playback-2' &&
-                store_player_audio_logic.play_order !== 'playback-3'
+                playerSettingStore.play_order !== 'playback-2' &&
+                playerSettingStore.play_order !== 'playback-3'
               "
             />
             <ArrowRepeatAll16Regular
               color="#42d883"
-              v-else-if="store_player_audio_logic.play_order === 'playback-2'"
+              v-else-if="playerSettingStore.play_order === 'playback-2'"
             />
             <RepeatOneRound
               color="#42d883"
-              v-else-if="store_player_audio_logic.play_order === 'playback-3'"
+              v-else-if="playerSettingStore.play_order === 'playback-3'"
             />
           </n-icon>
         </template>
@@ -286,16 +296,16 @@ function getAssetImage(firstImage: string) {
         size="small"
         @click="
           () => {
-            if (store_player_audio_logic.play_volume === 0) {
-              store_player_audio_logic.play_volume = 100
+            if (playerSettingStore.play_volume === 0) {
+              playerSettingStore.play_volume = 100
             } else {
-              store_player_audio_logic.play_volume = 0
+              playerSettingStore.play_volume = 0
             }
           }
         "
       >
         <template #icon>
-          <n-icon :size="26" v-if="store_player_audio_logic.play_volume != 0"
+          <n-icon :size="26" v-if="playerSettingStore.play_volume != 0"
             ><VolumeMedium
           /></n-icon>
           <n-icon :size="26" v-else><VolumeOff /></n-icon>
@@ -312,7 +322,7 @@ function getAssetImage(firstImage: string) {
           --n-rail-height: 4px;
           --n-handle-size: 8px;
         "
-        v-model:value="store_player_audio_logic.play_volume"
+        v-model:value="playerSettingStore.play_volume"
         :min="0"
         :max="100"
         :keyboard="true"

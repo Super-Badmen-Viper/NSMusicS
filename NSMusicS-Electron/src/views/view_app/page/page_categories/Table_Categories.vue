@@ -127,8 +127,11 @@ import { storeToRefs } from 'pinia'
 
 // 在setup上下文中获取Store实例
 const playlistStore = usePlaylistStore()
+const playerAudioStore = usePlayerAudioStore()
+const playerAppearanceStore = usePlayerAppearanceStore()
 // 使用 storeToRefs 解构出所需的响应式属性
 const { playlist_names_ALLLists, playlist_Menu_Item_Id } = storeToRefs(playlistStore)
+const { this_audio_song_id } = storeToRefs(playerAudioStore)
 
 const dynamicScroller_maximum_playback = ref(null)
 let offset_maximum_playback = 0
@@ -222,7 +225,7 @@ const scrollTo_recently_played = (value: number) => {
 ////// go to media_view
 const Open_this_album_MediaList_click = (item: any, list_name: string) => {
   if (store_server_user_model.model_server_type_of_web) {
-    usePlayerAppearanceStore().player_mode_of_medialist_from_external_import = false
+    playerAppearanceStore.player_mode_of_medialist_from_external_import = false
     if (store_server_users.server_select_kind === 'emby') {
       if (list_name != 'recently_added') {
         return
@@ -242,7 +245,7 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
   }
   console.log('play_this_album_click：' + temp_id)
   await store_general_fetch_album_list.fetchData_This_Album_MediaList(temp_id)
-  usePlaylistStore().reset_carousel()
+  playlistStore.reset_carousel()
 }
 const Get_this_album_info = (item: any, list_name: string): string => {
   let temp_id = item.id
@@ -320,7 +323,7 @@ import { useMessage } from 'naive-ui'
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
-import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
+import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
@@ -389,16 +392,16 @@ async function menu_item_add_to_playlist_end() {
   let matchingItems = []
   if (result_album) {
     await store_general_fetch_media_list.fetchData_Media_Find_This_Album(
-      usePlaylistStore().playlist_Menu_Item_Id
+      playlistStore.playlist_Menu_Item_Id
     )
     matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-      (item: Media_File) => item.album_id === usePlaylistStore().playlist_Menu_Item_Id
+      (item: Media_File) => item.album_id === playlistStore.playlist_Menu_Item_Id
     )
   } else {
-    store_general_fetch_media_list._media_id = usePlaylistStore().playlist_Menu_Item_Id
+    store_general_fetch_media_list._media_id = playlistStore.playlist_Menu_Item_Id
     await store_general_fetch_media_list.fetchData_Media()
     matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-      (item: Media_File) => item.id === usePlaylistStore().playlist_Menu_Item_Id
+      (item: Media_File) => item.id === playlistStore.playlist_Menu_Item_Id
     )
   }
   ///
@@ -406,11 +409,11 @@ async function menu_item_add_to_playlist_end() {
   for (let item of matchingItems) {
     const newItem: any = JSON.parse(JSON.stringify(item))
     newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
-    usePlaylistStore().playlist_MediaFiles_temporary.push(newItem)
-    usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id)
+    playlistStore.playlist_MediaFiles_temporary.push(newItem)
+    playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id)
   }
   ///
-  usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+  playlistStore.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
     item.absoluteIndex = index
   })
   store_system_configs_save.save_system_playlist_item_id_config()
@@ -435,28 +438,28 @@ async function menu_item_add_to_playlist_next() {
   let matchingItems = []
   if (result_album) {
     await store_general_fetch_media_list.fetchData_Media_Find_This_Album(
-      usePlaylistStore().playlist_Menu_Item_Id
+      playlistStore.playlist_Menu_Item_Id
     )
     matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-      (item: Media_File) => item.album_id === usePlaylistStore().playlist_Menu_Item_Id
+      (item: Media_File) => item.album_id === playlistStore.playlist_Menu_Item_Id
     )
   } else {
-    store_general_fetch_media_list._media_id = usePlaylistStore().playlist_Menu_Item_Id
+    store_general_fetch_media_list._media_id = playlistStore.playlist_Menu_Item_Id
     await store_general_fetch_media_list.fetchData_Media()
     matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-      (item: Media_File) => item.id === usePlaylistStore().playlist_Menu_Item_Id
+      (item: Media_File) => item.id === playlistStore.playlist_Menu_Item_Id
     )
   }
   store_view_media_page_info.media_Files_temporary = []
-  const index = usePlaylistStore().playlist_MediaFiles_temporary.findIndex(
-    (item: any) => item.id === store_player_audio_info.this_audio_song_id
+  const index = playlistStore.playlist_MediaFiles_temporary.findIndex(
+    (item: any) => item.id === playerAudioStore.this_audio_song_id
   )
   if (index !== -1) {
     matchingItems.forEach((item: Media_File, i: number) => {
       const newItem = JSON.parse(JSON.stringify(item))
       newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
-      usePlaylistStore().playlist_MediaFiles_temporary.splice(index + 1 + i, 0, newItem)
-      usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.splice(
+      playlistStore.playlist_MediaFiles_temporary.splice(index + 1 + i, 0, newItem)
+      playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.splice(
         index + 1 + i,
         0,
         newItem.id
@@ -465,7 +468,7 @@ async function menu_item_add_to_playlist_next() {
   } else {
     console.error('Current audio song not found in playlist')
   }
-  usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+  playlistStore.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
     item.absoluteIndex = index
   })
   store_system_configs_save.save_system_playlist_item_id_config()
@@ -493,9 +496,9 @@ onBeforeUnmount(() => {
         v-contextmenu:contextmenu
         @contextmenu.prevent="
           () => {
-            usePlaylistStore().playlist_Menu_Item =
+            playlistStore.playlist_Menu_Item =
               store_view_home_page_info.home_selected_top_album
-            usePlaylistStore().playlist_Menu_Item_Id =
+            playlistStore.playlist_Menu_Item_Id =
               store_view_home_page_info.home_selected_top_album?.id
           }
         "
@@ -756,8 +759,8 @@ onBeforeUnmount(() => {
             v-contextmenu:contextmenu
             @contextmenu.prevent="
               () => {
-                usePlaylistStore().playlist_Menu_Item = item
-                usePlaylistStore().playlist_Menu_Item_Id = item.id
+                playlistStore.playlist_Menu_Item = item
+                playlistStore.playlist_Menu_Item_Id = item.id
               }
             "
           >
@@ -874,6 +877,7 @@ onBeforeUnmount(() => {
                           width: 28px;
                           height: 28px;
                           cursor: pointer;
+                          margin-right: 8px;
                         "
                       >
                         <icon
@@ -1011,8 +1015,8 @@ onBeforeUnmount(() => {
             v-contextmenu:contextmenu
             @contextmenu.prevent="
               () => {
-                usePlaylistStore().playlist_Menu_Item = item
-                usePlaylistStore().playlist_Menu_Item_Id = item.id
+                playlistStore.playlist_Menu_Item = item
+                playlistStore.playlist_Menu_Item_Id = item.id
               }
             "
           >
@@ -1129,6 +1133,7 @@ onBeforeUnmount(() => {
                           width: 28px;
                           height: 28px;
                           cursor: pointer;
+                          margin-right: 8px;
                         "
                       >
                         <icon
@@ -1265,8 +1270,426 @@ onBeforeUnmount(() => {
             v-contextmenu:contextmenu
             @contextmenu.prevent="
               () => {
-                usePlaylistStore().playlist_Menu_Item = item
-                usePlaylistStore().playlist_Menu_Item_Id = item.id
+                playlistStore.playlist_Menu_Item = item
+                playlistStore.playlist_Menu_Item_Id = item.id
+              }
+            "
+          >
+            <div :key="item.id" class="album">
+              <div
+                :style="{
+                  width: item_album_image + 'px',
+                  height: item_album_image + 'px',
+                  position: 'relative',
+                }"
+              >
+                <img
+                  :src="item.medium_image_url"
+                  @error="handleImageError(item)"
+                  style="objectfit: cover; objectposition: center; border: 1.5px solid #ffffff20"
+                  :style="{
+                    width: item_album_image + 'px',
+                    height: item_album_image + 'px',
+                    borderRadius: '6px',
+                  }"
+                  alt=""
+                />
+                <div
+                  class="hover-overlay"
+                  @dblclick="Open_this_album_MediaList_click(item, 'recently_added')"
+                >
+                  <div class="hover-content">
+                    <button
+                      class="play_this_album"
+                      @click="
+                        async () => {
+                          await Play_this_album_MediaList_click(item, 'recently_added')
+                        }
+                      "
+                      style="
+                        border: 0;
+                        background-color: transparent;
+                        width: 50px;
+                        height: 50px;
+                        cursor: pointer;
+                      "
+                    >
+                      <icon :size="42" color="#FFFFFF" style="margin-left: -2px; margin-top: 3px"
+                        ><PlayCircle24Regular
+                      /></icon>
+                    </button>
+                    <div
+                      class="hover_buttons_top"
+                      v-if="
+                        (store_server_users.server_select_kind != 'jellyfin' &&
+                          store_server_users.server_select_kind != 'emby') ||
+                        store_server_user_model.model_server_type_of_local
+                      "
+                    >
+                      <rate
+                        class="viaSlot"
+                        style="margin-right: 8px"
+                        :length="5"
+                        v-model="item.rating"
+                        @before-rate="
+                          (value) => {
+                            if (item.rating == 1) {
+                              before_rating = true
+                            }
+                          }
+                        "
+                        @after-rate="
+                          (value) => {
+                            if (item.rating == 1 && before_rating == true) {
+                              after_rating = true
+                              before_rating = false
+                            }
+                            handleItemClick_Rating(item.id + '-' + value)
+                            if (after_rating) {
+                              item.rating = 0
+                              after_rating = false
+                            }
+                          }
+                        "
+                      />
+                    </div>
+                    <div class="hover_buttons_bottom">
+                      <button
+                        v-if="
+                          store_server_user_model.model_server_type_of_local ||
+                          store_server_users.server_select_kind != 'jellyfin'
+                        "
+                        class="open_this_artist"
+                        @click="Open_this_album_MediaList_click(item, 'recently_added')"
+                        style="
+                          border: 0;
+                          background-color: transparent;
+                          width: 28px;
+                          height: 28px;
+                          cursor: pointer;
+                        "
+                      >
+                        <icon :size="20" color="#FFFFFF" style="margin-left: -2px; margin-top: 3px"
+                          ><Open28Filled
+                        /></icon>
+                      </button>
+                      <button
+                        class="love_this_album"
+                        @click="
+                          () => {
+                            handleItemClick_Favorite(item.id, item.favorite)
+                            item.favorite = !item.favorite
+                          }
+                        "
+                        style="
+                          border: 0;
+                          background-color: transparent;
+                          width: 28px;
+                          height: 28px;
+                          cursor: pointer;
+                          margin-right: 8px;
+                        "
+                      >
+                        <icon
+                          v-if="item.favorite"
+                          :size="20"
+                          color="red"
+                          style="margin-left: -2px; margin-top: 3px"
+                          ><Heart28Filled
+                        /></icon>
+                        <icon
+                          v-else
+                          :size="20"
+                          color="#FFFFFF"
+                          style="margin-left: -2px; margin-top: 3px"
+                          ><Heart24Regular
+                        /></icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div :style="{ width: item_album_image + 'px' }">
+                <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
+                  <div>
+                    <span
+                      id="home_item_img_album_name"
+                      :style="{ maxWidth: item_album_txt + 'px' }"
+                      style="font-weight: 600"
+                    >
+                      {{ item.name }}
+                    </span>
+                  </div>
+                  <div>
+                    <span
+                      id="home_item_img_artist_name"
+                      :style="{ maxWidth: item_album_txt + 'px' }"
+                    >
+                      {{ item.artist }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </DynamicScrollerItem>
+        </template>
+      </DynamicScroller>
+    </n-space>
+
+    <n-space vertical style="margin-left: 8px">
+      <n-space
+        justify="space-between"
+        align="center"
+        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)' }"
+      >
+        <n-space align="center">
+          <span style="font-size: 16px; font-weight: 600">
+            {{
+              $t('page.home.recentlyPlayed') +
+              ' : ' +
+              (store_server_users.server_select_kind === 'jellyfin'
+                ? $t('entity.track_other')
+                : $t('entity.album_other'))
+            }}
+          </span>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button
+                quaternary
+                @click="
+                  () => {
+                    store_general_fetch_home_list.fetchData_Home_of_recently_played()
+                    dynamicScroller_recently_played.$el.scrollLeft = 0
+                    offset_recently_played = 0
+                  }
+                "
+              >
+                <template #icon>
+                  <n-icon :size="20"><ArrowReset24Filled /></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('common.refresh') }}
+          </n-tooltip>
+          <n-space
+            v-if="store_view_home_page_info.home_Files_temporary_recently_played.length === 0"
+            style="margin-top: 2px"
+          >
+            {{ $t('None') + $t('Play') + $t('Data') }}
+          </n-space>
+        </n-space>
+        <n-space>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary @click="scrollTo_recently_played(-1)">
+                <n-icon size="20" :depth="2">
+                  <ChevronLeft16Filled />
+                </n-icon>
+              </n-button>
+            </template>
+            {{ $t('common.backward') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary @click="scrollTo_recently_played(1)">
+                <n-icon size="20" :depth="2">
+                  <ChevronRight16Filled />
+                </n-icon>
+              </n-button>
+            </template>
+            {{ $t('common.forward') }}
+          </n-tooltip>
+        </n-space>
+      </n-space>
+      <DynamicScroller
+        class="home-wall"
+        ref="dynamicScroller_recently_played"
+        v-if="store_view_home_page_info.home_Files_temporary_recently_played.length != 0"
+        :style="{
+          width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)',
+          height: item_album_image + 60 + 'px',
+        }"
+        :items="store_view_home_page_info.home_Files_temporary_recently_played"
+        :itemSize="itemSize"
+        :minItemSize="itemSize"
+        :emit-update="true"
+        direction="horizontal"
+      >
+        <template #default="{ item, index, active }">
+          <DynamicScrollerItem
+            :item="item"
+            :active="active"
+            :data-index="index"
+            :data-active="active"
+            v-contextmenu:contextmenu
+            @contextmenu.prevent="
+              () => {
+                playlistStore.playlist_Menu_Item = item
+                playlistStore.playlist_Menu_Item_Id = item.id
+              }
+            "
+          >
+            <div :key="item.id" class="album">
+              <div
+                :style="{
+                  width: item_album_image + 'px',
+                  height: item_album_image + 'px',
+                  position: 'relative',
+                }"
+              >
+                <img
+                  :src="item.medium_image_url"
+                  @error="handleImageError(item)"
+                  style="objectfit: cover; objectposition: center; border: 1.5px solid #ffffff20"
+                  :style="{
+                    width: item_album_image + 'px',
+                    height: item_album_image + 'px',
+                    borderRadius: '6px',
+                  }"
+                  alt=""
+                />
+                <div
+                  class="hover-overlay"
+                  @dblclick="Open_this_album_MediaList_click(item, 'recently_played')"
+                >
+                  <div class="hover-content">
+                    <button
+                      class="play_this_album"
+                      @click="
+                        async () => {
+                          await Play_this_album_MediaList_click(item, 'recently_played')
+                        }
+                      "
+                      style="
+                        border: 0;
+                        background-color: transparent;
+                        width: 50px;
+                        height: 50px;
+                        cursor: pointer;
+                      "
+                    >
+                      <icon :size="42" color="#FFFFFF" style="margin-left: -2px; margin-top: 3px"
+                        ><PlayCircle24Regular
+                      /></icon>
+                    </button>
+                    <div
+                      class="hover_buttons_top"
+                      v-if="
+                        (store_server_users.server_select_kind != 'jellyfin' &&
+                          store_server_users.server_select_kind != 'emby') ||
+                        store_server_user_model.model_server_type_of_local
+                      "
+                    >
+                      <rate
+                        class="viaSlot"
+                        style="margin-right: 8px"
+                        :length="5"
+                        v-model="item.rating"
+                        @before-rate="
+                          (value) => {
+                            if (item.rating == 1) {
+                              before_rating = true
+                            }
+                          }
+                        "
+                        @after-rate="
+                          (value) => {
+                            if (item.rating == 1 && before_rating == true) {
+                              after_rating = true
+                              before_rating = false
+                            }
+                            handleItemClick_Rating(item.id + '-' + value)
+                            if (after_rating) {
+                              item.rating = 0
+                              after_rating = false
+                            }
+                          }
+                        "
+                      />
+                    </div>
+                    <div class="hover_buttons_bottom">
+                      <button
+                        v-if="
+                          store_server_user_model.model_server_type_of_local ||
+                          (store_server_users.server_select_kind != 'jellyfin' &&
+                            store_server_users.server_select_kind != 'emby')
+                        "
+                        class="open_this_artist"
+                        @click="Open_this_album_MediaList_click(item, 'recently_played')"
+                        style="
+                          border: 0;
+                          background-color: transparent;
+                          width: 28px;
+                          height: 28px;
+                          cursor: pointer;
+                        "
+                      >
+                        <icon :size="20" color="#FFFFFF" style="margin-left: -2px; margin-top: 3px"
+                          ><Open28Filled
+                        /></icon>
+                      </button>
+                      <button
+                        class="love_this_album"
+                        @click="
+                          () => {
+                            handleItemClick_Favorite(item.id, item.favorite)
+                            item.favorite = !item.favorite
+                          }
+                        "
+                        style="
+                          border: 0;
+                          background-color: transparent;
+                          width: 28px;
+                          height: 28px;
+                          cursor: pointer;
+                          margin-right: 8px;
+                        "
+                      >
+                        <icon
+                          v-if="item.favorite"
+                          :size="20"
+                          color="red"
+                          style="margin-left: -2px; margin-top: 3px"
+                          ><Heart28Filled
+                        /></icon>
+                        <icon
+                          v-else
+                          :size="20"
+                          color="#FFFFFF"
+                          style="margin-left: -2px; margin-top: 3px"
+                          ><Heart24Regular
+                        /></icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div :style="{ width: item_album_image + 'px' }">
+                <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
+                  <div>
+                    <span
+                      id="home_item_img_album_name"
+                      :style="{ maxWidth: item_album_txt + 'px' }"
+                      style="font-weight: 600"
+                    >
+                      {{ item.name }}
+                    </span>
+                  </div>
+                  <div>
+                    <span
+                      id="home_item_img_artist_name"
+                      :style="{ maxWidth: item_album_txt + 'px' }"
+                    >
+                      {{ item.artist }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            v-contextmenu:contextmenu
+            @contextmenu.prevent="
+              () => {
+                playlistStore.playlist_Menu_Item = item
+                playlistStore.playlist_Menu_Item_Id = item.id
                 recently_added_contextmenu_of_emby = true
               }
             "
@@ -1520,8 +1943,8 @@ onBeforeUnmount(() => {
             v-contextmenu:contextmenu
             @contextmenu.prevent="
               () => {
-                usePlaylistStore().playlist_Menu_Item = item
-                usePlaylistStore().playlist_Menu_Item_Id = item.id
+                playlistStore.playlist_Menu_Item = item
+                playlistStore.playlist_Menu_Item_Id = item.id
               }
             "
           >

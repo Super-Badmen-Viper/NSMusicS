@@ -9,7 +9,7 @@ import { store_server_users } from '@/data/data_stores/server_configs_stores/sto
 import { store_general_fetch_album_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_album/store_general_fetch_album_list'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 import error_album from '@/assets/img/error_album.jpg'
-import { isElectron } from '@/utils/electron/isElectron'
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
@@ -226,7 +226,8 @@ export const store_general_fetch_media_cue_list = reactive({
 
       await this.fetchData_Media_of_server_web(false)
 
-      if (usePlayerAppearanceStore().player_mode_of_medialist_from_external_import) {
+      const playerAppearanceStore = usePlayerAppearanceStore()
+      if (playerAppearanceStore.player_mode_of_medialist_from_external_import) {
         this.fetchData_Media_of_server_web_clear_search_parms()
       }
     } catch (error) {
@@ -362,8 +363,9 @@ export const store_general_fetch_media_cue_list = reactive({
     }
   },
   fetchData_Media_of_data_synchronization_to_playlist() {
+    const playlistStore = usePlaylistStore()
     store_view_media_cue_page_info.media_Files_temporary.forEach((row) => {
-      const existingIndex = usePlaylistStore().playlist_MediaFiles_temporary.findIndex(
+      const existingIndex = playlistStore.playlist_MediaFiles_temporary.findIndex(
         (item) => item.id === row.id
       )
       if (existingIndex === -1) {
@@ -371,7 +373,7 @@ export const store_general_fetch_media_cue_list = reactive({
           ...row,
           play_id: row.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
         }
-        usePlaylistStore().playlist_MediaFiles_temporary.push(newRow)
+        playlistStore.playlist_MediaFiles_temporary.push(newRow)
       }
     })
   },

@@ -3,7 +3,7 @@ import { ChevronLeft16Filled, ChevronRight16Filled } from '@vicons/fluent'
 
 ////// this_view views_components of navie ui
 import { ref, onMounted, computed } from 'vue'
-import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
+import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { storeToRefs } from 'pinia'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
@@ -14,7 +14,7 @@ onMounted(() => {
   try {
     if (scrollbar !== null) {
       setTimeout(() => {
-        scrollbar.value.scrollToItem(store_player_audio_info.this_audio_Index_of_play_list)
+        scrollbar.value.scrollToItem(this_audio_Index_of_play_list.value)
       }, 100)
     }
   } catch {}
@@ -233,11 +233,12 @@ const handleDoubleTap = (item: any, index: number) => {
 }
 
 onMounted(() => {
-  playlistStore.playlist_DragSort_Model = false
+  playlist_DragSort_Model.value = false
 })
 
 //// 在setup上下文中获取Store实例
 const playlistStore = usePlaylistStore()
+const playerAudioStore = usePlayerAudioStore()
 //// 使用 storeToRefs 解构出所需的响应式属性
 const {
   playlist_names_ALLLists,
@@ -246,6 +247,7 @@ const {
   playlist_MediaFiles_temporary,
   playlist_MediaFiles_temporary_Sort_Items,
 } = storeToRefs(playlistStore)
+const { this_audio_Index_of_play_list } = storeToRefs(playerAudioStore)
 </script>
 <template>
   <n-space vertical :size="12">

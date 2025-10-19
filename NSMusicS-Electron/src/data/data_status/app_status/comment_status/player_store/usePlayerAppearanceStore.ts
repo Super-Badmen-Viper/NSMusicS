@@ -34,7 +34,7 @@ export const usePlayerAppearanceStore = defineStore('player-appearance', () => {
 
   // 监听器
   watch(
-    () => player_show.value,
+    () => player_show,
     (newValue) => {
       if (!newValue) {
         player_show_of_control_info.value = true
@@ -43,70 +43,70 @@ export const usePlayerAppearanceStore = defineStore('player-appearance', () => {
   )
 
   watch(
-    () => player_collapsed_album.value,
+    () => player_collapsed_album,
     () => {
       store_system_configs_save.save_system_config_of_Player_Configs_of_UI()
     }
   )
 
   watch(
-    () => player_collapsed_skin.value,
+    () => player_collapsed_skin,
     () => {
       store_system_configs_save.save_system_config_of_Player_Configs_of_UI()
     }
   )
 
   watch(
-    () => player_lyric_fontSize.value,
+    () => player_lyric_fontSize,
     () => {
       store_system_configs_save.save_system_config_of_Player_Configs_of_UI()
     }
   )
 
   watch(
-    () => player_lyric_fontSize_Num.value,
+    () => player_lyric_fontSize_Num,
     (newValue) => {
       player_lyric_fontSize.value = newValue + 'px'
     }
   )
 
   watch(
-    () => player_lyric_fontWeight.value,
+    () => player_lyric_fontWeight,
     () => {
       store_system_configs_save.save_system_config_of_Player_Configs_of_UI()
     }
   )
 
   watch(
-    () => player_lyric_color.value,
+    () => player_lyric_color,
     () => {
       store_system_configs_save.save_system_config_of_Player_Configs_of_UI()
     }
   )
 
   watch(
-    () => player_theme_Styles_Selected.value,
+    () => player_theme_Styles_Selected,
     () => {
       store_system_configs_save.save_system_config_of_Player_Configs_of_UI()
     }
   )
 
   watch(
-    () => player_background_model_num.value,
+    () => player_background_model_num,
     () => {
       store_system_configs_save.save_system_config_of_Player_Configs_of_UI()
     }
   )
 
   watch(
-    () => player_use_lottie_animation.value,
+    () => player_use_lottie_animation,
     () => {
       store_system_configs_save.save_system_config_of_Player_Configs_of_UI()
     }
   )
 
   watch(
-    () => player_use_lyric_skip_forward.value,
+    () => player_use_lyric_skip_forward,
     () => {
       player_lyric_fontSize_Num.value = player_use_lyric_skip_forward.value
         ? 36 + Math.floor((window.innerHeight - 880) / 200) * 6
@@ -116,28 +116,28 @@ export const usePlayerAppearanceStore = defineStore('player-appearance', () => {
   )
 
   watch(
-    () => player_use_background_filter_blur.value,
+    () => player_use_background_filter_blur,
     () => {
       store_system_configs_save.save_system_config_of_Player_Configs_of_UI()
     }
   )
 
   watch(
-    () => player_use_background_automatic_rotation.value,
+    () => player_use_background_automatic_rotation,
     () => {
       store_system_configs_save.save_system_config_of_Player_Configs_of_UI()
     }
   )
 
   watch(
-    () => player_use_background_repeat_fill.value,
+    () => player_use_background_repeat_fill,
     () => {
       store_system_configs_save.save_system_config_of_Player_Configs_of_UI()
     }
   )
 
   watch(
-    () => player_use_playbar_auto_hide.value,
+    () => player_use_playbar_auto_hide,
     (newValue) => {
       player_collapsed_action_bar_of_Immersion_model.value = newValue
       store_system_configs_save.save_system_config_of_Player_Configs_of_UI()

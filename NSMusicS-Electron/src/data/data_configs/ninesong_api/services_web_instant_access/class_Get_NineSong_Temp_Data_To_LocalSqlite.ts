@@ -5,10 +5,10 @@ import { store_view_media_page_info } from '@/views/view_app/page/page_media/sto
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 
-import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
+import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 
@@ -37,6 +37,10 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
   private homeApi = new Home_ApiService_of_NineSong(store_server_login_info.server_url)
   private playlistApi = new Playlist_ApiService_of_NineSong(store_server_login_info.server_url)
   private recommendApi = new Recommend_ApiService_of_NineSong(store_server_login_info.server_url)
+
+  private playlistStore = usePlaylistStore()
+  private playerSettingStore = usePlayerSettingStore()
+  private playerAudioStore = usePlayerAudioStore()
 
   public async get_home_list(url: string) {
     await this.get_home_list_of_maximum_playback(url, false)
@@ -368,7 +372,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
         const targetArray =
           store_general_fetch_media_list._load_model === 'search'
             ? store_view_media_page_info.media_Files_temporary
-            : usePlaylistStore().playlist_MediaFiles_temporary
+            : this.playlistStore.playlist_MediaFiles_temporary
         const existingIds = new Set(targetArray.map((item) => item.id))
         song_list = song_list.filter((song) => {
           if (existingIds.has(song.ID)) {
@@ -390,7 +394,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       const last_index = !metadata_model
         ? store_general_fetch_media_list._load_model === 'search'
           ? store_view_media_page_info.media_Files_temporary.length
-          : usePlaylistStore().playlist_MediaFiles_temporary.length
+          : this.playlistStore.playlist_MediaFiles_temporary.length
         : store_view_tag_page_info.tag_LibraryItems_temporary.length
       store_view_media_page_info.media_File_metadata = []
       song_list.map(async (song: any, index: number) => {
@@ -400,7 +404,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
             store_view_media_page_info.media_File_metadata.push(song)
             store_view_media_page_info.media_Files_temporary.push(new_song)
           } else {
-            usePlaylistStore().playlist_MediaFiles_temporary.push({
+            this.playlistStore.playlist_MediaFiles_temporary.push({
               ...new_song,
               play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
             })
@@ -416,7 +420,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       })
       if (!metadata_model) {
         if (store_general_fetch_media_list._load_model === 'play') {
-          usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds =
+          this.playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =
             store_view_media_page_info.media_Files_temporary.map((item) => item.id)
           store_system_configs_save.save_system_playlist_item_id_config()
         }
@@ -506,7 +510,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
         const targetArray =
           store_general_fetch_media_list._load_model === 'search'
             ? store_view_media_page_info.media_Files_temporary
-            : usePlaylistStore().playlist_MediaFiles_temporary
+            : this.playlistStore.playlist_MediaFiles_temporary
         const existingIds = new Set(targetArray.map((item) => item.id))
         song_list = song_list.filter((song) => {
           if (existingIds.has(song.ID)) {
@@ -528,7 +532,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       const last_index = !metadata_model
         ? store_general_fetch_media_list._load_model === 'search'
           ? store_view_media_page_info.media_Files_temporary.length
-          : usePlaylistStore().playlist_MediaFiles_temporary.length
+          : this.playlistStore.playlist_MediaFiles_temporary.length
         : store_view_tag_page_info.tag_LibraryItems_temporary.length
       store_view_media_page_info.media_File_metadata = []
       song_list.map(async (song: any, index: number) => {
@@ -538,7 +542,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
             store_view_media_cue_page_info.media_File_metadata.push(song)
             store_view_media_cue_page_info.media_Files_temporary.push(new_song)
           } else {
-            usePlaylistStore().playlist_MediaFiles_temporary.push({
+            this.playlistStore.playlist_MediaFiles_temporary.push({
               ...new_song,
               play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
             })
@@ -554,7 +558,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       })
       if (!metadata_model) {
         if (store_general_fetch_media_list._load_model === 'play') {
-          usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds =
+          this.playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =
             store_view_media_cue_page_info.media_Files_temporary.map((item) => item.id)
         }
       }
@@ -622,7 +626,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
         const targetArray =
           store_general_fetch_media_list._load_model === 'search'
             ? store_view_media_page_info.media_Files_temporary
-            : usePlaylistStore().playlist_MediaFiles_temporary
+            : this.playlistStore.playlist_MediaFiles_temporary
         const existingIds = new Set(targetArray.map((item) => item.id))
         album_list = album_list.filter((album) => {
           if (existingIds.has(album.ID)) {
@@ -708,7 +712,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
         const targetArray =
           store_general_fetch_media_list._load_model === 'search'
             ? store_view_media_page_info.media_Files_temporary
-            : usePlaylistStore().playlist_MediaFiles_temporary
+            : this.playlistStore.playlist_MediaFiles_temporary
         const existingIds = new Set(targetArray.map((item) => item.id))
         artist_list = artist_list.filter((artist) => {
           if (existingIds.has(artist.ID)) {
@@ -751,27 +755,27 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       const last_index = 0
       song_list.map(async (song: any, index: number) => {
         const new_song = this.mapMedia_Random(song, url, index, last_index)
-        usePlaylistStore().playlist_MediaFiles_temporary.push({
+        this.playlistStore.playlist_MediaFiles_temporary.push({
           ...new_song,
           play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
         })
         if (!store_server_user_model.random_play_model_search) {
           if (index === song_list.length - 1) {
-            const index = store_server_user_model.random_play_model_add
-              ? usePlaylistStore().playlist_MediaFiles_temporary.length - _end
+            const index_num = store_server_user_model.random_play_model_add
+              ? this.playlistStore.playlist_MediaFiles_temporary.length - _end
               : 0
-            const media_file = usePlaylistStore().playlist_MediaFiles_temporary[index]
-            await store_player_audio_logic.update_current_media_info(media_file, index)
-            usePlaylistStore().media_page_handleItemDbClick = false
-            store_player_audio_info.this_audio_restart_play = true
+            const media_file = this.playlistStore.playlist_MediaFiles_temporary[index_num]
+            await this.playerSettingStore.update_current_media_info(media_file, index_num)
+            this.playlistStore.media_page_handleItemDbClick = false
+            this.playerAudioStore.this_audio_restart_play = true
             //
             store_server_user_model.random_play_model_add = false
           }
         }
       })
 
-      usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds =
-        usePlaylistStore().playlist_MediaFiles_temporary.map((item) => item.id)
+      this.playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =
+        this.playlistStore.playlist_MediaFiles_temporary.map((item) => item.id)
       store_system_configs_save.save_system_playlist_item_id_config()
     }
   }
@@ -828,16 +832,16 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     const getPlaylists_all = await this.playlistApi.getPlaylists()
     if (getPlaylists_all != undefined) {
       playlists = getPlaylists_all['ninesong-response']['playlists']
-      usePlaylistStore().playlist_names_ALLLists = []
-      usePlaylistStore().playlist_tracks_temporary_of_ALLLists = []
+      this.playlistStore.playlist_names_ALLLists = []
+      this.playlistStore.playlist_tracks_temporary_of_ALLLists = []
     }
     if (playlists != null) {
       for (const playlist of playlists) {
-        usePlaylistStore().playlist_names_ALLLists.push({
+        this.playlistStore.playlist_names_ALLLists.push({
           label: playlist.Name,
           value: playlist.ID,
         })
-        usePlaylistStore().playlist_tracks_temporary_of_ALLLists.push({
+        this.playlistStore.playlist_tracks_temporary_of_ALLLists.push({
           playlist: {
             label: playlist.Name,
             value: playlist.ID,
@@ -1003,7 +1007,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       play_date: song.PlayDate,
       play_complete_count: song.PlayCompleteCount,
       rating: song.Rating,
-      duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.Duration),
+      duration_txt: this.playerSettingStore.formatTime_RunTimeTicks(song.Duration),
       id: song.ID,
       title: song.Title,
       path:
@@ -1077,7 +1081,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       play_date: song.PlayDate,
       play_complete_count: song.PlayCompleteCount,
       rating: song.Rating,
-      duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.Duration),
+      duration_txt: this.playerSettingStore.formatTime_RunTimeTicks(song.Duration),
       id: song.ID,
       title: song.Title,
       path:
@@ -1151,7 +1155,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       play_date: song.PlayDate,
       play_complete_count: song.PlayCompleteCount,
       rating: song.Rating,
-      duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.CueDuration),
+      duration_txt: this.playerSettingStore.formatTime_RunTimeTicks(song.CueDuration),
       id: song.ID,
       title: song.Title,
       path:
@@ -1224,7 +1228,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       play_date: song.PlayDate,
       play_complete_count: song.PlayCompleteCount,
       rating: song.Rating,
-      duration_txt: store_player_audio_logic.formatTime_RunTimeTicks(song.Duration),
+      duration_txt: this.playerSettingStore.formatTime_RunTimeTicks(song.Duration),
       id: song.ID,
       title: song.Title,
       path:

@@ -1,5 +1,5 @@
 import { Jellyfin_Api_Services_Web } from '../Jellyfin_Api_Services_Web'
-import { isElectron } from '@/utils/electron/isElectron'
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import axios from 'axios'
 
 export class Users_ApiService_of_Je extends Jellyfin_Api_Services_Web {

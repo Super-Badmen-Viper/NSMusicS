@@ -28,7 +28,7 @@ import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/p
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
-import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
+import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
@@ -38,7 +38,7 @@ import error_album from '@/assets/img/error_album.jpg'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { store_general_fetch_artist_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_artist/store_general_fetch_artist_list'
 import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 
 import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list'
 
@@ -206,7 +206,7 @@ const Get_this_album_info = (item: any, list_name: string): string => {
 
 const Open_this_album_MediaList_click = (item: any, list_name: string) => {
   if (store_server_user_model.model_server_type_of_web) {
-    usePlayerAppearanceStore().player_mode_of_medialist_from_external_import = false
+    playerAppearanceStore.player_mode_of_medialist_from_external_import = false
     if (store_server_users.server_select_kind === 'emby' && list_name != 'recently_added') {
       return
     }
@@ -237,33 +237,33 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
         store_general_fetch_media_list.fetchData_Media_of_data_synchronization_to_playlist()
         store_server_user_model.random_play_model = false
       }
-      await store_player_audio_logic.update_current_media_info(item, 0)
-      usePlaylistStore().media_page_handleItemDbClick = true
-      usePlayerAppearanceStore().player_mode_of_lock_playlist = false
-      store_player_audio_info.this_audio_restart_play = true
+      await playerSettingStore.update_current_media_info(item, 0)
+      playlistStore.media_page_handleItemDbClick = true
+      playerAppearanceStore.player_mode_of_lock_playlist = false
+      playerAudioStore.this_audio_restart_play = true
       //
       store_general_fetch_player_list.fetchData_PlayList(false)
       ////
-      usePlaylistStore().playlist_MediaFiles_temporary = []
-      usePlaylistStore().playlist_MediaFiles_temporary.push({
+      playlistStore.playlist_MediaFiles_temporary = []
+      playlistStore.playlist_MediaFiles_temporary.push({
         ...item,
         play_id: item.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
       })
-      usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.push(item.id)
+      playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.push(item.id)
     } else if (store_view_home_page_info.home_Files_temporary_type_select === 'media_cue') {
       if (store_server_user_model.model_server_type_of_web) {
         store_general_fetch_media_cue_list.fetchData_Media_of_data_synchronization_to_playlist()
         store_server_user_model.random_play_model = false
       }
-      await store_player_audio_logic.update_current_media_info(item, '1-1')
-      usePlaylistStore().media_page_handleItemDbClick = true
-      usePlayerAppearanceStore().player_mode_of_lock_playlist = false
-      store_player_audio_info.this_audio_restart_play = true
+      await playerSettingStore.update_current_media_info(item, '1-1')
+      playlistStore.media_page_handleItemDbClick = true
+      playerAppearanceStore.player_mode_of_lock_playlist = false
+      playerAudioStore.this_audio_restart_play = true
       //
       store_general_fetch_player_list.fetchData_PlayList(true)
     }
     if (store_view_home_page_info.home_Files_temporary_type_select != 'album') {
-      usePlaylistStore().reset_carousel()
+      playlistStore.reset_carousel()
       return
     }
   }
@@ -276,7 +276,7 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
   }
   console.log('play_this_item_click：' + temp_id)
   await store_general_fetch_album_list.fetchData_This_Album_MediaList(temp_id)
-  usePlaylistStore().reset_carousel()
+  playlistStore.reset_carousel()
 }
 
 const Play_Next_album_MediaList_click = (value: number) => {
@@ -336,7 +336,7 @@ async function update_playlist_addAlbum(id: any, playlist_id: any) {
 
 async function add_to_playlist(next: boolean) {
   let matchingItems = []
-  const itemId = usePlaylistStore().playlist_Menu_Item_Id
+  const itemId = playlistStore.playlist_Menu_Item_Id
   // 兼容性代码，需要优化
   if (
     store_server_user_model.model_server_type_of_web &&
@@ -389,12 +389,12 @@ async function add_to_playlist(next: boolean) {
   })
 
   if (next) {
-    const index = usePlaylistStore().playlist_MediaFiles_temporary.findIndex(
-      (item: any) => item.id === store_player_audio_info.this_audio_song_id
+    const index = playlistStore.playlist_MediaFiles_temporary.findIndex(
+      (item: any) => item.id === playerAudioStore.this_audio_song_id
     )
     if (index !== -1) {
-      usePlaylistStore().playlist_MediaFiles_temporary.splice(index + 1, 0, ...newItems)
-      usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.splice(
+      playlistStore.playlist_MediaFiles_temporary.splice(index + 1, 0, ...newItems)
+      playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.splice(
         index + 1,
         0,
         ...newItems.map((i) => i.id)
@@ -403,11 +403,11 @@ async function add_to_playlist(next: boolean) {
       console.error('Current audio song not found in playlist')
     }
   } else {
-    usePlaylistStore().playlist_MediaFiles_temporary.push(...newItems)
-    usePlaylistStore().playlist_datas_CurrentPlayList_ALLMediaIds.push(...newItems.map((i) => i.id))
+    playlistStore.playlist_MediaFiles_temporary.push(...newItems)
+    playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.push(...newItems.map((i) => i.id))
   }
 
-  usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+  playlistStore.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
     item.absoluteIndex = index
   })
   store_system_configs_save.save_system_playlist_item_id_config()
@@ -494,6 +494,10 @@ function change_home_Files_temporary_type() {
 
 import { storeToRefs } from 'pinia'
 const playlistStore = usePlaylistStore()
+const playerAudioStore = usePlayerAudioStore()
+const playerAppearanceStore = usePlayerAppearanceStore()
+const playerSettingStore = usePlayerSettingStore()
+
 const { 
   playlist_names_ALLLists, 
   playlist_Menu_Item_Id, 

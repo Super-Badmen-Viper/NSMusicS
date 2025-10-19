@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { store_player_audio_info } from '@/views/view_app/page/page_player/store/store_player_audio_info'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { NSlider } from 'naive-ui'
+
+const playerSettingStore = usePlayerSettingStore()
 
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { storeToRefs } from 'pinia'
@@ -17,6 +19,7 @@ import { NCarousel, NCarouselItem } from 'naive-ui'
 // 在setup上下文中获取Store实例
 const playerAppearanceStore = usePlayerAppearanceStore()
 const playlistStore = usePlaylistStore()
+const playerAudioStore = usePlayerAudioStore()
 // 使用 storeToRefs 解构出所需的响应式属性
 const {
   player_background_model_num,
@@ -25,6 +28,14 @@ const {
 } = storeToRefs(playerAppearanceStore)
 
 const { playlist_MediaFiles_temporary_carousel } = storeToRefs(playlistStore)
+
+const {
+  this_audio_Index_of_play_list_carousel,
+  page_top_album_image_url,
+  this_audio_song_name,
+  this_audio_artist_name,
+  this_audio_album_name
+} = storeToRefs(playerAudioStore)
 
 const directionRef = ref('vertical')
 const placementRef = ref('right')
@@ -58,7 +69,7 @@ const nextSlideStyle = computed(() => {
       effect="card"
       :show-dots="false"
       show-arrow
-      :current-index="store_player_audio_info.this_audio_Index_of_play_list_carousel"
+      :current-index="this_audio_Index_of_play_list_carousel"
       :direction="directionRef"
       :dot-placement="placementRef"
       centered-slides
@@ -99,8 +110,8 @@ const nextSlideStyle = computed(() => {
               z-index: 1;
             "
             :src="
-              index === store_player_audio_info.this_audio_Index_of_play_list_carousel
-                ? getAssetImage(store_player_audio_info.page_top_album_image_url)
+              index === this_audio_Index_of_play_list_carousel
+                ? getAssetImage(page_top_album_image_url)
                 : getAssetImage(item.medium_image_url)
             "
             :alt="`Carousel Image ${index + 1}`"
@@ -122,7 +133,7 @@ const nextSlideStyle = computed(() => {
           text-align: left;
         "
       >
-        {{ store_player_audio_info.this_audio_song_name }}
+        {{ this_audio_song_name }}
       </div>
       <div
         style="
@@ -137,19 +148,19 @@ const nextSlideStyle = computed(() => {
           text-align: left;
         "
       >
-        {{ store_player_audio_info.this_audio_artist_name }} -
-        {{ store_player_audio_info.this_audio_album_name }}
+        {{ this_audio_artist_name }} -
+        {{ this_audio_album_name }}
       </div>
     </n-space>
     <!--  -->
     <n-space vertical v-if="!player_collapsed_album">
       <n-space justify="end" style="width: 55vh; margin-top: -29px">
         <n-space>
-          {{ store_player_audio_logic.current_play_time }}
+          {{ playerSettingStore.current_play_time }}
         </n-space>
         :
         <n-space>
-          {{ store_player_audio_logic.total_play_time }}
+          {{ playerSettingStore.total_play_time }}
         </n-space>
       </n-space>
       <n-slider
@@ -162,41 +173,41 @@ const nextSlideStyle = computed(() => {
           margin-top: -12px;
           border-radius: 10px;
         "
-        v-model:value="store_player_audio_logic.slider_singleValue"
+        v-model:value="playerSettingStore.slider_singleValue"
         :min="0"
         :max="100"
         :format-tooltip="
           (value) => {
-            return store_player_audio_logic.formatTime(
-              (value / 100) * store_player_audio_logic.player.isDuration
+            return playerSettingStore.formatTime(
+              (value / 100) * playerSettingStore.player.isDuration
             )
           }
         "
         :on-dragend="
           () => {
             if (
-              store_player_audio_logic.slider_singleValue >= 99.5 ||
-              store_player_audio_logic.slider_singleValue == 0
+              playerSettingStore.slider_singleValue >= 99.5 ||
+              playerSettingStore.slider_singleValue == 0
             ) {
-              store_player_audio_logic.player_is_play_ended = true
-              store_player_audio_logic.play_go_duration(
-                store_player_audio_logic.slider_singleValue,
+              playerSettingStore.player_is_play_ended = true
+              playerSettingStore.play_go_duration(
+                playerSettingStore.slider_singleValue,
                 true
               )
             }
-            store_player_audio_logic.player_range_duration_isDragging = false
+            playerSettingStore.player_range_duration_isDragging = false
           }
         "
         @click="
           () => {
-            store_player_audio_logic.play_go_duration(
-              store_player_audio_logic.slider_singleValue,
+            playerSettingStore.play_go_duration(
+              playerSettingStore.slider_singleValue,
               true
             )
           }
         "
-        @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
-        @mouseup="store_player_audio_logic.player_range_duration_isDragging = false"
+        @mousedown="playerSettingStore.player_range_duration_isDragging = true"
+        @mouseup="playerSettingStore.player_range_duration_isDragging = false"
       >
         <template #thumb>
           <n-icon-wrapper color="white" :size="12" />

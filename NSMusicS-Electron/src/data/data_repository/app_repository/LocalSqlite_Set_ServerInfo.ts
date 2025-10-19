@@ -1,5 +1,5 @@
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { isElectron } from '@/utils/electron/isElectron'
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 
 export class Set_LocalSqlite_ServerInfo {
   private getUniqueId(db: any) {

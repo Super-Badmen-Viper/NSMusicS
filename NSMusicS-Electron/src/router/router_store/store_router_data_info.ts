@@ -34,7 +34,8 @@ export const store_router_data_info = reactive({
 watch(
   () => store_router_data_info.router_select,
   async (newValue) => {
-    if (!usePlaylistStore().playlist_show) {
+    const playlistStore = usePlaylistStore()
+    if (!playlistStore.playlist_show) {
       store_router_data_info.router_select = newValue
       if (newValue === 'home') {
         await store_general_fetch_home_list.fetchData_Home()

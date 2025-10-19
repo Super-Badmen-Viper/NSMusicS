@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 //////
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
-import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 
 // 导入 storeToRefs
 import { storeToRefs } from 'pinia'
@@ -233,7 +232,7 @@ import { openLink } from '@/utils/electron/openLink'
               v-model:value="player_fade_model_options_selected"
               :options="player_fade_model_options"
               @update:value="update_player_fade_model_options_selected"
-              :disabled="store_player_audio_logic.player_select === 'mpv'"
+              :disabled="player_select === 'mpv'"
               placeholder="not enabled"
               :reset-menu-on-options-change="false"
               style="width: 207px; margin-top: -4px"
@@ -395,7 +394,7 @@ import { openLink } from '@/utils/electron/openLink'
             <n-input-group style="width: 207px; margin-top: -4px">
               <n-input
                 clearable
-                :disabled="store_player_audio_logic.player_select != 'mpv'"
+                :disabled="player_select != 'mpv'"
                 default-value="48000"
                 v-model:value="player_replayGainPreamp"
               />
@@ -413,7 +412,7 @@ import { openLink } from '@/utils/electron/openLink'
               </div>
             </n-space>
             <n-switch
-              :disabled="store_player_audio_logic.player_select != 'mpv'"
+              :disabled="player_select != 'mpv'"
               v-model:value="player_replayGainClip"
             >
             </n-switch>
@@ -432,7 +431,7 @@ import { openLink } from '@/utils/electron/openLink'
             <n-input-group style="width: 207px; margin-top: -4px">
               <n-input
                 clearable
-                :disabled="store_player_audio_logic.player_select != 'mpv'"
+                :disabled="player_select != 'mpv'"
                 default-value="48000"
                 v-model:value="player_replayGainFallback"
               />

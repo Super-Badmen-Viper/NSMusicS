@@ -108,7 +108,7 @@ export class Audio_ApiService_of_Je extends Jellyfin_Api_Services_Web {
     }
 
     // 尝试解析歌词
-    let result = this.getFirstLyricsExtradata(response1.data)
+    const result = this.getFirstLyricsExtradata(response1.data)
     if (result !== null) {
       return { Lyrics: result }
     }

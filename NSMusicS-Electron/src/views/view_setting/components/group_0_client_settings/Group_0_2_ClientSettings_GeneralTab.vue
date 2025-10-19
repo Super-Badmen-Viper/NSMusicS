@@ -29,8 +29,10 @@ const computed_i18n_Label_SidebarConfiguration_15 = computed(() =>
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { ref, onMounted, computed } from 'vue'
 import { NButton } from 'naive-ui'
-import { store_player_audio_logic } from '@/views/view_app/page/page_player/store/store_player_audio_logic'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { store_system_configs_theme } from '@/data/data_stores/local_system_stores/store_system_configs_theme'
+
+const playerSettingStore = usePlayerSettingStore()
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 const theme_value = ref('lightTheme')
 const theme_options = ref([
@@ -141,26 +143,26 @@ const player_replayGainMode_kind = ref([
   { label: computed(() => t('common.none')), value: 'no' },
 ])
 onMounted(() => {
-  if (store_player_audio_logic.player_fade_value > 0) {
+  if (playerSettingStore.player_fade_value > 0) {
     player_fade_model_options_selected.value = player_fade_model_options.value[1].value
   } else {
     player_fade_model_options_selected.value = player_fade_model_options.value[0].value
   }
   //
-  if (store_player_audio_logic.player_gaplessAudio === 'no') {
-    store_player_audio_logic.player_gaplessAudio = player_gaplessAudio_kind.value[0].value
-  } else if (store_player_audio_logic.player_gaplessAudio === 'yes') {
-    store_player_audio_logic.player_gaplessAudio = player_gaplessAudio_kind.value[1].value
+  if (playerSettingStore.player_gaplessAudio === 'no') {
+    playerSettingStore.player_gaplessAudio = player_gaplessAudio_kind.value[0].value
+  } else if (playerSettingStore.player_gaplessAudio === 'yes') {
+    playerSettingStore.player_gaplessAudio = player_gaplessAudio_kind.value[1].value
   } else {
-    store_player_audio_logic.player_gaplessAudio = player_gaplessAudio_kind.value[2].value
+    playerSettingStore.player_gaplessAudio = player_gaplessAudio_kind.value[2].value
   }
   //
-  if (store_player_audio_logic.player_replayGainMode === 'track') {
-    store_player_audio_logic.player_replayGainMode = player_replayGainMode_kind.value[0].value
-  } else if (store_player_audio_logic.player_replayGainMode === 'album') {
-    store_player_audio_logic.player_replayGainMode = player_replayGainMode_kind.value[1].value
+  if (playerSettingStore.player_replayGainMode === 'track') {
+    playerSettingStore.player_replayGainMode = player_replayGainMode_kind.value[0].value
+  } else if (playerSettingStore.player_replayGainMode === 'album') {
+    playerSettingStore.player_replayGainMode = player_replayGainMode_kind.value[1].value
   } else {
-    store_player_audio_logic.player_replayGainMode = player_replayGainMode_kind.value[2].value
+    playerSettingStore.player_replayGainMode = player_replayGainMode_kind.value[2].value
   }
 })
 </script>
@@ -189,10 +191,10 @@ onMounted(() => {
           @update:value="
             () => {
               store_system_configs_info.lang = $i18n.locale
-              store_player_audio_logic.orderPanelWidath =
-                store_player_audio_logic.langWidths[store_system_configs_info.lang.toString()]
-              store_player_audio_logic.orderButonWidath =
-                store_player_audio_logic.orderPanelWidath - 14
+              playerSettingStore.orderPanelWidath =
+                playerSettingStore.langWidths[store_system_configs_info.lang.toString()]
+              playerSettingStore.orderButonWidath =
+                playerSettingStore.orderPanelWidath - 14
               if (isElectron) {
                 ipcRenderer.invoke('i18n-tray-label-menu', [
                   t('player.play'),
@@ -263,7 +265,7 @@ onMounted(() => {
         <n-switch
           v-model:value="store_router_data_logic.clear_Memory_Model"
           @update:value="store_router_data_logic.get_clear_Memory_Model"
-          :disabled="store_player_audio_logic.player_select === 'web'"
+          :disabled="playerSettingStore.player_select === 'web'"
         >
         </n-switch>
       </n-space>
@@ -281,7 +283,7 @@ onMounted(() => {
         <n-switch
           v-model:value="store_router_data_logic.clear_Equilibrium_Model"
           @update:value="store_router_data_logic.get_clear_Equilibrium_Model"
-          :disabled="store_player_audio_logic.player_select === 'web'"
+          :disabled="playerSettingStore.player_select === 'web'"
         >
         </n-switch>
       </n-space>

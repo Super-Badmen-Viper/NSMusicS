@@ -14,7 +14,7 @@ import { store_server_users } from '@/data/data_stores/server_configs_stores/sto
 import { store_general_fetch_album_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_album/store_general_fetch_album_list'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 import error_album from '@/assets/img/error_album.jpg'
-import { isElectron } from '@/utils/electron/isElectron'
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { Get_Jellyfin_Temp_Data_To_LocalSqlite } from '@/data/data_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite'
 
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
@@ -35,8 +35,9 @@ export const store_general_fetch_media_list = reactive({
         if (isElectron) {
           let db: any = null
           // clear RouterView of vue-virtual-scroller data
-          if (usePlayerAppearanceStore().player_mode_of_medialist_from_external_import) {
-            // usePlayerAppearanceStore().player_mode_of_medialist_from_external_import = false;
+          const playerAppearanceStore = usePlayerAppearanceStore()
+          if (playerAppearanceStore.player_mode_of_medialist_from_external_import) {
+            // playerAppearanceStore.player_mode_of_medialist_from_external_import = false;
           } else {
             store_router_data_logic.clear_Files_temporary()
             store_router_data_info.router_select = 'media'
@@ -50,7 +51,8 @@ export const store_general_fetch_media_list = reactive({
             let stmt_media_file_string = ''
 
             // Init media_model data
-            usePlaylistStore().playlist_names_StartUpdate = true
+            const playlistStore = usePlaylistStore()
+            playlistStore.playlist_names_StartUpdate = true
 
             // load media_Files_temporary data
             if (store_router_history_data_of_media.router_history_model_of_Media === 0) {
@@ -270,13 +272,13 @@ export const store_general_fetch_media_list = reactive({
                 ) {
                   return order_play_date.includes(item.id)
                 } else {
-                  const index = usePlaylistStore().playlist_tracks_temporary_of_ALLLists.findIndex(
+                  const index = playlistStore.playlist_tracks_temporary_of_ALLLists.findIndex(
                     (list: any) =>
                       list.playlist.id === store_view_media_page_logic.page_songlists_selected
                   )
                   let playlistTracks: any[] = []
                   if (index >= 0) {
-                    playlistTracks = usePlaylistStore().playlist_tracks_temporary_of_ALLLists[
+                    playlistTracks = playlistStore.playlist_tracks_temporary_of_ALLLists[
                       index
                     ].playlist_tracks.map((track) => track.media_file_id)
                   }
@@ -527,7 +529,8 @@ export const store_general_fetch_media_list = reactive({
 
       await this.fetchData_Media_of_server_web(false)
 
-      if (usePlayerAppearanceStore().player_mode_of_medialist_from_external_import) {
+      const playerAppearanceStore = usePlayerAppearanceStore()
+      if (playerAppearanceStore.player_mode_of_medialist_from_external_import) {
         this.fetchData_Media_of_server_web_clear_search_parms()
       }
     } catch (error) {
@@ -774,8 +777,9 @@ export const store_general_fetch_media_list = reactive({
     }
   },
   fetchData_Media_of_data_synchronization_to_playlist() {
+    const playlistStore = usePlaylistStore()
     store_view_media_page_info.media_Files_temporary.forEach((row) => {
-      const existingIndex = usePlaylistStore().playlist_MediaFiles_temporary.findIndex(
+      const existingIndex = playlistStore.playlist_MediaFiles_temporary.findIndex(
         (item) => item.id === row.id
       )
       if (existingIndex === -1) {
@@ -783,7 +787,7 @@ export const store_general_fetch_media_list = reactive({
           ...row,
           play_id: row.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
         }
-        usePlaylistStore().playlist_MediaFiles_temporary.push(newRow)
+        playlistStore.playlist_MediaFiles_temporary.push(newRow)
       }
     })
   },

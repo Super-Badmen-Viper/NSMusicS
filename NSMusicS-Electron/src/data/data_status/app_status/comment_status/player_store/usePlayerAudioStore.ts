@@ -1,25 +1,23 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
-// 类型断言以避免TypeScript错误
-const store_view_media_page_info = require('@/views/view_app/page/page_media/store/store_view_media_page_info').store_view_media_page_info
+import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { usePlayerAppearanceStore } from './usePlayerAppearanceStore'
-const store_system_configs_load = require('@/data/data_stores/local_system_stores/store_system_configs_load').store_system_configs_load
-const store_local_data_set_albumInfo = require('@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_albumInfo').store_local_data_set_albumInfo
+import { store_system_configs_load } from '@/data/data_stores/local_system_stores/store_system_configs_load'
+import { store_local_data_set_albumInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_albumInfo'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
-const store_general_fetch_player_list = require('@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list').store_general_fetch_player_list
-const store_player_tag_modify = require('@/views/view_app/page/page_player/store/store_player_tag_modify').store_player_tag_modify
+import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
+import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
 // 图片导入使用类型断言
-const error_album: string = require('@/assets/img/error_album.jpg')
-import { isElectron } from '@/utils/electron/isElectron'
-const ipcRenderer: any = isElectron ? require('electron').ipcRenderer : null
-const store_server_user_model = require('@/data/data_stores/server_configs_stores/store_server_user_model').store_server_user_model
-const Get_LocalSqlite_AnnotationInfo = require('@/data/data_repository/app_repository/LocalSqlite_Get_AnnotationInfo').Get_LocalSqlite_AnnotationInfo
-const store_view_album_page_info = require('@/views/view_app/page/page_album/store/store_view_album_page_info').store_view_album_page_info
-const store_player_audio_logic = require('@/views/view_app/page/page_player/store/store_player_audio_logic').store_player_audio_logic
-const store_view_album_page_logic = require('@/views/view_app/page/page_album/store/store_view_album_page_logic').store_view_album_page_logic
-const store_local_data_set_artistInfo = require('@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_artistInfo').store_local_data_set_artistInfo
-const store_view_artist_page_info = require('@/views/view_app/page/page_artist/store/store_view_artist_page_info').store_view_artist_page_info
-const vinyl: string = require('@/assets/img/vinyl.jpg')
+import error_album from '@/assets/img/error_album.jpg'
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
+import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { Get_LocalSqlite_AnnotationInfo } from '@/data/data_repository/app_repository/LocalSqlite_Get_AnnotationInfo'
+import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
+import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
+import { store_local_data_set_artistInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_artistInfo'
+import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
+import vinyl from '@/assets/img/vinyl.jpg'
 
 export const usePlayerAudioStore = defineStore('playerAudio', () => {
   // State using refs
@@ -167,9 +165,10 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
           }
         }
       } catch {}
-    }
+    })
 
     this_audio_lyrics_info_byte_model.value = false
+
     if (
       this_audio_lyrics_info_line_font.value &&
       this_audio_lyrics_info_line_font.value.length > 0
@@ -222,7 +221,8 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
   }
 
   const set_carousel_index = async () => {
-    const index = usePlaylistStore().playlist_MediaFiles_temporary_carousel.findIndex(
+    const playlistStore = usePlaylistStore()
+    const index = playlistStore.playlist_MediaFiles_temporary_carousel.findIndex(
       (item: any) => item.path === this_audio_file_path.value
     )
     this_audio_Index_of_play_list_carousel.value = index != -1 ? index : 0
@@ -236,6 +236,8 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
       store_player_tag_modify.player_current_media_id = this_audio_song_id.value
       store_player_tag_modify.player_current_media_path = this_audio_file_path.value
 
+      const playlistStore = usePlaylistStore()
+
       if (
         store_view_media_page_info.media_Files_temporary != undefined &&
         store_view_media_page_info.media_Files_temporary.length != 0
@@ -243,10 +245,11 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
         if (!store_system_configs_load.app_configs_loading) {
           this_audio_restart_play.value = true
         }
-        if (!usePlayerAppearanceStore().player_mode_of_lock_playlist) {
+        const playerAppearanceStore = usePlayerAppearanceStore()
+        if (!playerAppearanceStore.player_mode_of_lock_playlist) {
           if (!store_system_configs_load.app_configs_loading) {
-            if (!usePlaylistStore().playlist_show) {
-              if (usePlaylistStore().media_page_handleItemDbClick) {
+            if (!playlistStore.playlist_show) {
+              if (playlistStore.media_page_handleItemDbClick) {
                 if (!store_server_user_model.random_play_model) {
                   store_general_fetch_player_list.fetchData_PlayList(false)
                 }
@@ -258,7 +261,7 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
       store_view_media_page_info.media_Files_temporary.forEach((item: any) => {
         item.playing = item.id === this_audio_song_id.value
       })
-      usePlaylistStore().playlist_MediaFiles_temporary.forEach((item: any) => {
+      playlistStore.playlist_MediaFiles_temporary.forEach((item: any) => {
         item.playing = item.id === this_audio_song_id.value
       })
 
@@ -342,7 +345,8 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
           item.song_count = store_view_album_page_info.album_recently_count + ' *'
         }
       })
-      store_player_audio_logic.boolHandleItemClick_Played = true
+      const playerSettingStore = usePlayerSettingStore()
+      playerSettingStore.boolHandleItemClick_Played = true
     }
   })
 
@@ -354,12 +358,14 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
       const get_LocalSqlite_AnnotationInfo = new Get_LocalSqlite_AnnotationInfo()
       store_view_artist_page_info.artist_recently_count =
         get_LocalSqlite_AnnotationInfo.Get_Annotation_ItemInfo_Play_Count('artist')
-      store_player_audio_logic.boolHandleItemClick_Played = true
+      const playerSettingStore = usePlayerSettingStore()
+      playerSettingStore.boolHandleItemClick_Played = true
     }
   })
 
   watch(this_audio_Index_of_play_list, (newValue) => {
-    usePlaylistStore().reset_carousel()
+    const playlistStore = usePlaylistStore()
+    playlistStore.reset_carousel()
   })
 
   // Expose state and actions

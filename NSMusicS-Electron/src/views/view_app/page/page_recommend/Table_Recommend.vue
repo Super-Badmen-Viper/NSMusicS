@@ -34,6 +34,7 @@ import { store_view_recommend_page_info } from '@/views/view_app/page/page_recom
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+const playlistStore = usePlaylistStore()
 
 echarts.use([TooltipComponent, VisualMapComponent, CanvasRenderer])
 
@@ -658,8 +659,8 @@ const { t } = useI18n({
                 class="message"
                 @dblclick="
                   () => {
-                    usePlaylistStore().handleItemDbClick(item, index)
-                    usePlaylistStore().playlist_MediaFiles_temporary =
+                    playlistStore.handleItemDbClick(item, index)
+                    playlistStore.playlist_MediaFiles_temporary =
                       store_view_recommend_page_info.recommend_MediaFiles_temporary
                   }
                 "
