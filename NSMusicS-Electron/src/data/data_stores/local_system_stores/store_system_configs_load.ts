@@ -11,7 +11,7 @@ import { store_server_users } from '@/data/data_stores/server_configs_stores/sto
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
-import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
+import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
@@ -61,10 +61,11 @@ export const store_system_configs_load = reactive({
           '' + system_Configs_Read.app_Configs.value['authorization_of_nd']
         store_server_user_model.client_unique_id =
           '' + system_Configs_Read.app_Configs.value['client_unique_id']
+        const pageAlbumStore = usePageAlbumStore()
         store_view_media_page_info.media_page_sizes = Number(
           '' + system_Configs_Read.app_Configs.value['media_page_sizes']
         )
-        store_view_album_page_info.album_page_sizes = Number(
+        pageAlbumStore.album_page_sizes = Number(
           '' + system_Configs_Read.app_Configs.value['album_page_sizes']
         )
         store_view_artist_page_info.artist_page_sizes = Number(

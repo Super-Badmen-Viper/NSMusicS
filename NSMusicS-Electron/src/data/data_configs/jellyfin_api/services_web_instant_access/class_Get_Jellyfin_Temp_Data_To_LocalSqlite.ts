@@ -1,7 +1,7 @@
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_view_home_page_info } from '@/views/view_app/page/page_home/store/store_view_home_page_info'
 import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
-import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
+import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
@@ -24,6 +24,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
 
   private playlistStore = usePlaylistStore()
   private playerSettingStore = usePlayerSettingStore()
+  private pageAlbumStore = usePageAlbumStore()
 
   public async get_home_list(parentId: string) {
     await this.get_home_list_of_maximum_playback(parentId)
@@ -1200,14 +1201,14 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
       )
       if (list != undefined) {
         albumlist = list.Items
-        store_view_album_page_info.album_item_count = list.TotalRecordCount
+        this.pageAlbumStore.album_item_count = list.TotalRecordCount
       }
       if (Array.isArray(albumlist) && albumlist.length > 0) {
         if (sortBy === 'DatePlayed') {
           albumlist = albumlist.filter((album) => album.UserData.PlayCount > 0)
         }
-        const last_index = store_view_album_page_info.album_Files_temporary.length
-        store_view_album_page_info.album_File_metadata = []
+        const last_index = this.pageAlbumStore.album_Files_temporary.length
+        this.pageAlbumStore.album_File_metadata = []
         albumlist.map(async (album: any, index: number) => {
           const medium_image_url =
             album.Id != undefined
@@ -1233,8 +1234,8 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
                   '&api_key=' +
                   store_server_user_model.authorization_of_Je
               : undefined
-          store_view_album_page_info.album_File_metadata.push(album)
-          store_view_album_page_info.album_Files_temporary.push({
+          this.pageAlbumStore.album_File_metadata.push(album)
+          this.pageAlbumStore.album_Files_temporary.push({
             absoluteIndex: index + 1 + last_index,
             favorite: album.UserData.IsFavorite,
             rating: 0,
@@ -1311,14 +1312,14 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
       )
       if (list != undefined) {
         albumlist = list.Items
-        store_view_album_page_info.album_item_count = list.TotalRecordCount
+        this.pageAlbumStore.album_item_count = list.TotalRecordCount
       }
       if (Array.isArray(albumlist) && albumlist.length > 0) {
         if (sortBy === 'DatePlayed') {
           albumlist = albumlist.filter((album) => album.UserData.PlayCount > 0)
         }
-        const last_index = store_view_album_page_info.album_Files_temporary.length
-        store_view_album_page_info.album_File_metadata = []
+        const last_index = this.pageAlbumStore.album_Files_temporary.length
+        this.pageAlbumStore.album_File_metadata = []
         albumlist.map(async (album: any, index: number) => {
           const medium_image_url =
             album.Id != undefined
@@ -1340,8 +1341,8 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
                   '&api_key=' +
                   store_server_user_model.authorization_of_Je
               : undefined
-          store_view_album_page_info.album_File_metadata.push(album)
-          store_view_album_page_info.album_Files_temporary.push({
+          this.pageAlbumStore.album_File_metadata.push(album)
+          this.pageAlbumStore.album_Files_temporary.push({
             absoluteIndex: index + 1 + last_index,
             favorite: album.UserData.IsFavorite,
             rating: 0,
@@ -1522,7 +1523,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
         '',
         ''
       )
-      store_view_album_page_info.album_item_count = list_album.TotalRecordCount
+      this.pageAlbumStore.album_item_count = list_album.TotalRecordCount
       //
       const list_artist = await this.artists_ApiService_of_Je.getArtists_List_Quick(
         store_server_user_model.userid_of_Je,
@@ -1570,7 +1571,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
         '',
         'IsFavorite'
       )
-      store_view_album_page_info.album_starred_count = list_album.TotalRecordCount
+      this.pageAlbumStore.album_starred_count = list_album.TotalRecordCount
       //
       const list_artist = await this.artists_ApiService_of_Je.getArtists_List_Quick_Filters(
         store_server_user_model.userid_of_Je,
@@ -1690,7 +1691,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
     store_view_media_page_info.media_recently_count = 0
   }
   public async get_count_of_recently_album() {
-    store_view_album_page_info.album_recently_count = 0
+    this.pageAlbumStore.album_recently_count = 0
   }
   public async get_count_of_recently_artist() {
     store_view_artist_page_info.artist_recently_count = 0

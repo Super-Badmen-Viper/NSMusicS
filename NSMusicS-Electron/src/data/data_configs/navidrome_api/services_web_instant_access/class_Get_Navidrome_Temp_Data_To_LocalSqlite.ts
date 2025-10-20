@@ -2,7 +2,7 @@ import { store_server_users } from '@/data/data_stores/server_configs_stores/sto
 import { store_view_home_page_info } from '@/views/view_app/page/page_home/store/store_view_home_page_info'
 import { Home_Lists_ApiWebService_of_ND } from '../services_web/page_lists/home_lists/index_service'
 import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
-import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
+import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { Media_library_scanning_ApiService_of_ND } from '../services_normal/media_library_scanning/index_service'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { Artist_Lists_ApiWebService_of_ND } from '../services_web/page_lists/artist_lists/index_service'
@@ -38,6 +38,7 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
   private playlistStore = usePlaylistStore()
   private playerSettingStore = usePlayerSettingStore()
   private playerAudioStore = usePlayerAudioStore()
+  private pageAlbumStore = usePageAlbumStore()
 
   public async get_home_list(url: string, username: string, token: string, salt: string) {
     await this.get_home_list_of_maximum_playback(url, username, token, salt)
@@ -488,11 +489,11 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
       if (_sort === 'playDate') {
         albumlist = albumlist.filter((album) => album.playCount > 0)
       }
-      const last_index = store_view_album_page_info.album_Files_temporary.length
-      store_view_album_page_info.album_File_metadata = []
+      const last_index = this.pageAlbumStore.album_Files_temporary.length
+      this.pageAlbumStore.album_File_metadata = []
       albumlist.map(async (album: any, index: number) => {
-        store_view_album_page_info.album_File_metadata.push(album)
-        store_view_album_page_info.album_Files_temporary.push({
+        this.pageAlbumStore.album_File_metadata.push(album)
+        this.pageAlbumStore.album_Files_temporary.push({
           absoluteIndex: index + 1 + last_index,
           favorite: album.starred,
           rating: album.rating,
@@ -837,7 +838,7 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
           (total, item) => total + item.artist.length,
           0
         )
-        store_view_album_page_info.album_item_count = list.reduce((sum, index) => {
+        this.pageAlbumStore.album_item_count = list.reduce((sum, index) => {
           return (
             sum +
             index.artist.reduce((artistSum, artist) => {
@@ -863,7 +864,7 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
       if (starred2_song != undefined)
         store_view_media_page_info.media_starred_count = starred2_song.length || 0
       if (starred2_album != undefined)
-        store_view_album_page_info.album_starred_count = starred2_album.length || 0
+        this.pageAlbumStore.album_starred_count = starred2_album.length || 0
       if (starred2_artist != undefined)
         store_view_artist_page_info.artist_starred_count = starred2_artist.length || 0
     } catch {}

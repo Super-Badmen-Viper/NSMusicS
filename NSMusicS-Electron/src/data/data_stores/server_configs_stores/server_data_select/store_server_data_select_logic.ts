@@ -6,7 +6,7 @@ import { store_server_jellyfin_userdata_logic } from './server_jellyfin_user_dat
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { store_server_ninesong_userdata_logic } from './server_ninesong_user_data/store_server_ninesong_userdata_logic'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
-import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
+import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { store_view_artist_page_logic } from '@/views/view_app/page/page_artist/store/store_view_artist_page_logic'
 
 export const store_server_data_select_logic = reactive({
@@ -88,8 +88,9 @@ export const store_server_data_select_logic = reactive({
 
   /// app login and get token
   async update_server_config_of_current_user_of_sqlite(value: any, type: string) {
+    const pageAlbumStore = usePageAlbumStore()
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
-    store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
+    pageAlbumStore.page_albumlists_selected = 'album_list_all'
     store_view_artist_page_logic.page_artistlists_selected = 'artist_list_all'
     //
     if (type === 'ninesong') {

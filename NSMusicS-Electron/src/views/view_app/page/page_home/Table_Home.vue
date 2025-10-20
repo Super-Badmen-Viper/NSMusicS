@@ -37,7 +37,6 @@ import { store_general_model_player_list } from '@/data/data_stores/server_api_s
 import error_album from '@/assets/img/error_album.jpg'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { store_general_fetch_artist_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_artist/store_general_fetch_artist_list'
-import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
 import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 
 import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list'
@@ -227,7 +226,7 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
         store_general_fetch_media_list.set_artist_id(item.id)
         store_view_media_page_logic.page_songlists_selected = 'song_list_all'
         store_general_fetch_album_list.set_artist_id(item.id)
-        store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
+        pageAlbumStore.page_albumlists_selected = 'album_list_all'
         store_server_user_model.random_play_model = false
       }
       console.log('play_this_artist_song_list：' + item.id)

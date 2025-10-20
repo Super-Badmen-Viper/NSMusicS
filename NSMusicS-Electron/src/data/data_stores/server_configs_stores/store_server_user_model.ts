@@ -12,7 +12,7 @@ import { User_Authorization_ApiWebService_of_ND } from '@/data/data_configs/navi
 import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
-import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
+import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { store_view_artist_page_logic } from '@/views/view_app/page/page_artist/store/store_view_artist_page_logic'
 import { store_server_auth_token } from '@/data/data_stores/server_api_stores/server_api_auth/auth_token'
 import { Auth_Token_ApiService_of_NineSong } from '@/data/data_configs/ninesong_api/services_web/Auth/Auth_Token/index_service'
@@ -103,7 +103,7 @@ export const store_server_user_model = reactive({
       store_general_fetch_player_list._totalCount = 0
       store_view_media_page_logic.page_songlists_keywordFilter = ''
       store_view_media_page_logic.page_songlists_selected = 'song_list_all'
-      store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
+      pageAlbumStore.page_albumlists_selected = 'album_list_all'
       store_view_artist_page_logic.page_artistlists_selected = 'artist_list_all'
       if (playerSettingStore.player_select === 'mpv') {
         if (isElectron) {

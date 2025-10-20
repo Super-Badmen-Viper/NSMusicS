@@ -1,6 +1,6 @@
 import { store_view_home_page_info } from '@/views/view_app/page/page_home/store/store_view_home_page_info'
 import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
-import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
+import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
@@ -41,6 +41,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
   private playlistStore = usePlaylistStore()
   private playerSettingStore = usePlayerSettingStore()
   private playerAudioStore = usePlayerAudioStore()
+  private pageAlbumStore = usePageAlbumStore()
 
   public async get_home_list(url: string) {
     await this.get_home_list_of_maximum_playback(url, false)
@@ -642,13 +643,13 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
         album_list = album_list.filter((album) => album.PlayCount > 0)
       }
       const last_index = !metadata_model
-        ? store_view_album_page_info.album_Files_temporary.length
+        ? this.pageAlbumStore.album_Files_temporary.length
         : store_view_tag_page_info.tag_LibraryItems_temporary.length
-      store_view_album_page_info.album_File_metadata = []
+      this.pageAlbumStore.album_File_metadata = []
       album_list.map(async (album: any, index: number) => {
         if (!metadata_model) {
-          store_view_album_page_info.album_File_metadata.push(album)
-          store_view_album_page_info.album_Files_temporary.push(
+          this.pageAlbumStore.album_File_metadata.push(album)
+          this.pageAlbumStore.album_Files_temporary.push(
             this.mapAlbum(album, url, index, last_index)
           )
         } else {
@@ -803,9 +804,9 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     try {
       const counts = await this.albumsApi.getAlbumCounts()
       const response = counts['ninesong-response']['albums']
-      store_view_album_page_info.album_item_count = response.total
-      store_view_album_page_info.album_starred_count = response.starred
-      store_view_album_page_info.album_recently_count = response.recent_play
+      this.pageAlbumStore.album_item_count = response.total
+      this.pageAlbumStore.album_starred_count = response.starred
+      this.pageAlbumStore.album_recently_count = response.recent_play
     } catch {}
   }
   public async get_count_of_artist() {

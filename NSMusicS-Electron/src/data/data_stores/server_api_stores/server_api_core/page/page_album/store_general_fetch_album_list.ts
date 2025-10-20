@@ -3,9 +3,8 @@ import { store_router_data_logic } from '@/router/router_store/store_router_data
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { store_router_history_data_of_album } from '@/router/router_store/store_router_history_data_of_album'
-import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
-import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
+import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
@@ -24,6 +23,7 @@ import { store_server_login_info } from '@/views/view_server/page_login/store/st
 
 export const store_general_fetch_album_list = reactive({
   async fetchData_Album() {
+    const pageAlbumStore = usePageAlbumStore()
     if (store_server_user_model.model_server_type_of_local) {
       if (isElectron) {
         let db: any = null
@@ -48,34 +48,34 @@ export const store_general_fetch_album_list = reactive({
           // load album_Files_temporary data
           if (store_router_history_data_of_album.router_history_model_of_Album === 0) {
             const sortKey =
-              store_view_album_page_logic.page_albumlists_options_Sort_key.length > 0 &&
-              store_view_album_page_logic.page_albumlists_options_Sort_key[0].order !== 'default'
-                ? store_view_album_page_logic.page_albumlists_options_Sort_key[0].columnKey
+              pageAlbumStore.page_albumlists_options_Sort_key.length > 0 &&
+              pageAlbumStore.page_albumlists_options_Sort_key[0].order !== 'default'
+                ? pageAlbumStore.page_albumlists_options_Sort_key[0].columnKey
                 : 'id'
             const sortOrder =
-              store_view_album_page_logic.page_albumlists_options_Sort_key.length > 0 &&
-              store_view_album_page_logic.page_albumlists_options_Sort_key[0].order !== 'default'
-                ? store_view_album_page_logic.page_albumlists_options_Sort_key[0].order.replace(
+              pageAlbumStore.page_albumlists_options_Sort_key.length > 0 &&
+              pageAlbumStore.page_albumlists_options_Sort_key[0].order !== 'default'
+                ? pageAlbumStore.page_albumlists_options_Sort_key[0].order.replace(
                     'end',
                     ''
                   )
                 : ''
             let keywordFilter =
-              store_view_album_page_logic.page_albumlists_keyword.length > 0
-                ? `WHERE id LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%' 
-                        OR name LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%' 
-                        OR artist LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%' 
-                        OR artist_id LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%' 
-                        OR created_at LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%'`
+              pageAlbumStore.page_albumlists_keyword.length > 0
+                ? `WHERE id LIKE '%${pageAlbumStore.page_albumlists_keyword}%' 
+                        OR name LIKE '%${pageAlbumStore.page_albumlists_keyword}%' 
+                        OR artist LIKE '%${pageAlbumStore.page_albumlists_keyword}%' 
+                        OR artist_id LIKE '%${pageAlbumStore.page_albumlists_keyword}%' 
+                        OR created_at LIKE '%${pageAlbumStore.page_albumlists_keyword}%'`
                 : ''
             if (store_router_data_info.find_album_model) {
-              if (store_view_album_page_logic.page_albumlists_get_keyword_model_num != 1)
-                keywordFilter = `WHERE artist_id = '${store_view_album_page_logic.page_albumlists_keyword}'`
+              if (pageAlbumStore.page_albumlists_get_keyword_model_num != 1)
+                keywordFilter = `WHERE artist_id = '${pageAlbumStore.page_albumlists_keyword}'`
               else
-                keywordFilter = `WHERE created_at LIKE '${store_view_album_page_logic.page_albumlists_keyword}'`
+                keywordFilter = `WHERE created_at LIKE '${pageAlbumStore.page_albumlists_keyword}'`
               store_router_data_info.find_album_model = false
             } else {
-              if (store_view_album_page_logic.page_albumlists_get_keyword_model_num != 0) {
+              if (pageAlbumStore.page_albumlists_get_keyword_model_num != 0) {
                 if (keywordFilter.length > 0) {
                   keywordFilter = keywordFilter
                     .replace('LIKE', '=')
@@ -85,13 +85,13 @@ export const store_general_fetch_album_list = reactive({
               }
             }
             if (
-              store_view_album_page_logic.page_albumlists_filter_year != 0 &&
-              store_view_album_page_logic.page_albumlists_filter_year != undefined &&
-              store_view_album_page_logic.page_albumlists_filter_year != 'undefined'
+              pageAlbumStore.page_albumlists_filter_year != 0 &&
+              pageAlbumStore.page_albumlists_filter_year != undefined &&
+              pageAlbumStore.page_albumlists_filter_year != 'undefined'
             ) {
               keywordFilter = this.addCondition(
                 keywordFilter,
-                `min_year = ${store_view_album_page_logic.page_albumlists_filter_year}`
+                `min_year = ${pageAlbumStore.page_albumlists_filter_year}`
               )
             }
             stmt_album_string = `SELECT *
@@ -99,35 +99,35 @@ export const store_general_fetch_album_list = reactive({
                                              ORDER BY ${sortKey} ${sortOrder}`
             stmt_album = db.prepare(stmt_album_string)
             //////
-            if (!store_view_album_page_logic.page_albumlists_filter_model) {
+            if (!pageAlbumStore.page_albumlists_filter_model) {
               if (
                 store_router_history_data_of_album.router_select_history_date_of_Album &&
-                store_view_album_page_logic.page_albumlists_keyword_reset
+                pageAlbumStore.page_albumlists_keyword_reset
               ) {
                 store_router_history_data_of_album.remove_router_history_of_Album(
                   store_router_history_data_of_album.router_select_history_date_of_Album.id
                 ) // 若存在新操作，则覆盖后续的路由
-                store_view_album_page_logic.page_albumlists_keyword_reset = false
+                pageAlbumStore.page_albumlists_keyword_reset = false
               }
               const routerDate: Interface_View_Router_Date = {
                 id: 0,
                 menu_select_active_key: 'album',
                 router_name: 'album',
                 router_select: 'album',
-                page_lists_keyword: store_view_album_page_logic.page_albumlists_keyword,
+                page_lists_keyword: pageAlbumStore.page_albumlists_keyword,
                 stmt_string: stmt_album_string,
-                page_lists_selected: store_view_album_page_logic.page_albumlists_selected,
+                page_lists_selected: pageAlbumStore.page_albumlists_selected,
                 columnKey:
-                  store_view_album_page_logic.page_albumlists_options_Sort_key.length > 0 &&
-                  store_view_album_page_logic.page_albumlists_options_Sort_key[0].order !==
+                  pageAlbumStore.page_albumlists_options_Sort_key.length > 0 &&
+                  pageAlbumStore.page_albumlists_options_Sort_key[0].order !==
                     'default'
-                    ? store_view_album_page_logic.page_albumlists_options_Sort_key[0].columnKey
+                    ? pageAlbumStore.page_albumlists_options_Sort_key[0].columnKey
                     : 'id',
                 order:
-                  store_view_album_page_logic.page_albumlists_options_Sort_key.length > 0 &&
-                  store_view_album_page_logic.page_albumlists_options_Sort_key[0].order !==
+                  pageAlbumStore.page_albumlists_options_Sort_key.length > 0 &&
+                  pageAlbumStore.page_albumlists_options_Sort_key[0].order !==
                     'default'
-                    ? store_view_album_page_logic.page_albumlists_options_Sort_key[0].order.replace(
+                    ? pageAlbumStore.page_albumlists_options_Sort_key[0].order.replace(
                         'end',
                         ''
                       )
@@ -142,11 +142,11 @@ export const store_general_fetch_album_list = reactive({
             if (store_router_history_data_of_album.router_select_history_date_of_Album) {
               store_router_data_info.router.push('album')
               store_router_data_info.router_select = 'album'
-              store_view_album_page_logic.page_albumlists_keyword =
+              pageAlbumStore.page_albumlists_keyword =
                 store_router_history_data_of_album.router_select_history_date_of_Album.page_lists_keyword
-              store_view_album_page_logic.page_albumlists_selected =
+              pageAlbumStore.page_albumlists_selected =
                 store_router_history_data_of_album.router_select_history_date_of_Album.page_lists_selected
-              store_view_album_page_logic.page_albumlists_options_Sort_key = [
+              pageAlbumStore.page_albumlists_options_Sort_key = [
                 {
                   columnKey:
                     store_router_history_data_of_album.router_select_history_date_of_Album
@@ -163,7 +163,7 @@ export const store_general_fetch_album_list = reactive({
             }
             store_router_history_data_of_album.router_history_model_of_Album = 0
           }
-          store_view_album_page_info.album_Files_temporary = []
+          pageAlbumStore.album_Files_temporary = []
           const rows = stmt_album.all()
           rows.forEach((row: Album) => {
             if (row.medium_image_url == null || row.medium_image_url.length == 0) {
@@ -199,7 +199,7 @@ export const store_general_fetch_album_list = reactive({
             row.created_time = row.created_at
               ? moment(row.created_at, moment.ISO_8601).format('YYYY-MM-DD')
               : ''
-            store_view_album_page_info.album_Files_temporary.push(row)
+            pageAlbumStore.album_Files_temporary.push(row)
           })
           rows.length = 0
           moment = null
@@ -211,10 +211,10 @@ export const store_general_fetch_album_list = reactive({
                           AND item_type = 'album'
                     `)
           const annotations = stmt_album_Annotation_Starred_Items.all()
-          for (let i = 0; i < store_view_album_page_info.album_Files_temporary.length; i++) {
-            store_view_album_page_info.album_Files_temporary[i].favorite = !!annotations.some(
+          for (let i = 0; i < pageAlbumStore.album_Files_temporary.length; i++) {
+            pageAlbumStore.album_Files_temporary[i].favorite = !!annotations.some(
               (annotation: { item_id: string }) =>
-                annotation.item_id === store_view_album_page_info.album_Files_temporary[i].id
+                annotation.item_id === pageAlbumStore.album_Files_temporary[i].id
             )
           }
           ////// find rating for album_Files_temporary
@@ -225,8 +225,8 @@ export const store_general_fetch_album_list = reactive({
                           AND item_type = 'album'
                     `)
           const annotations_rating = stmt_album_Annotation_Rating_Items.all()
-          for (let i = 0; i < store_view_album_page_info.album_Files_temporary.length; i++) {
-            const albumFile = store_view_album_page_info.album_Files_temporary[i]
+          for (let i = 0; i < pageAlbumStore.album_Files_temporary.length; i++) {
+            const albumFile = pageAlbumStore.album_Files_temporary[i]
             const matchingAnnotation = annotations_rating.find(
               (annotation: { item_id: string; rating: number }) =>
                 annotation.item_id === albumFile.id
@@ -236,7 +236,7 @@ export const store_general_fetch_album_list = reactive({
           }
           ////// filter selected_list for album_Files_temporary
           let order_play_date: any[] = []
-          if (store_view_album_page_logic.page_albumlists_selected === 'album_list_recently') {
+          if (pageAlbumStore.page_albumlists_selected === 'album_list_recently') {
             order_play_date = db
               .prepare(
                 `
@@ -250,38 +250,38 @@ export const store_general_fetch_album_list = reactive({
               .all()
               .map((annotation: any) => annotation.item_id)
           }
-          store_view_album_page_info.album_Files_temporary =
-            store_view_album_page_info.album_Files_temporary.filter((item: any) => {
-              if (store_view_album_page_logic.page_albumlists_selected === 'album_list_all') {
+          pageAlbumStore.album_Files_temporary =
+            pageAlbumStore.album_Files_temporary.filter((item: any) => {
+              if (pageAlbumStore.page_albumlists_selected === 'album_list_all') {
                 return true
               } else if (
-                store_view_album_page_logic.page_albumlists_selected === 'album_list_love'
+                pageAlbumStore.page_albumlists_selected === 'album_list_love'
               ) {
                 return annotations.some(
                   (annotation: { item_id: string }) => annotation.item_id === item.id
                 )
               } else if (
-                store_view_album_page_logic.page_albumlists_selected === 'album_list_recently'
+                pageAlbumStore.page_albumlists_selected === 'album_list_recently'
               ) {
                 return order_play_date.includes(item.id)
               } else if (
-                store_view_album_page_logic.page_albumlists_selected === 'album_list_all_PlayList'
+                pageAlbumStore.page_albumlists_selected === 'album_list_all_PlayList'
               ) {
                 return true
               }
             })
-          if (store_view_album_page_logic.page_albumlists_selected === 'album_list_recently') {
-            const new_sort: Album[] = store_view_album_page_info.album_Files_temporary.slice()
-            store_view_album_page_info.album_Files_temporary = []
+          if (pageAlbumStore.page_albumlists_selected === 'album_list_recently') {
+            const new_sort: Album[] = pageAlbumStore.album_Files_temporary.slice()
+            pageAlbumStore.album_Files_temporary = []
             order_play_date.forEach((id) => {
               const index = new_sort.findIndex((item) => item.id === id)
               if (index !== -1) {
-                store_view_album_page_info.album_Files_temporary.push(new_sort[index])
+                pageAlbumStore.album_Files_temporary.push(new_sort[index])
                 new_sort.splice(index, 1)
               }
             })
           }
-          store_view_album_page_info.album_Files_temporary.forEach((item: any, index: number) => {
+          pageAlbumStore.album_Files_temporary.forEach((item: any, index: number) => {
             item.absoluteIndex = index + 1
           })
         } catch (err: any) {
@@ -293,7 +293,8 @@ export const store_general_fetch_album_list = reactive({
         }
       }
     } else if (store_server_user_model.model_server_type_of_web) {
-      store_view_album_page_info.album_Files_temporary = []
+      const pageAlbumStore = usePageAlbumStore()
+      pageAlbumStore.album_Files_temporary = []
       await this.fetchData_Album_of_server_web_start()
     }
   },
@@ -359,7 +360,8 @@ export const store_general_fetch_album_list = reactive({
     store_general_fetch_player_list._artist_id = id
   },
   async fetchData_Album_of_server_web_start() {
-    store_view_album_page_info.album_Files_temporary = []
+    const pageAlbumStore = usePageAlbumStore()
+    pageAlbumStore.album_Files_temporary = []
     this._start = 0
     this._end = 30
     await this.fetchData_Album_of_server_web()
@@ -376,18 +378,19 @@ export const store_general_fetch_album_list = reactive({
   },
   async fetchData_Album_of_server_web() {
     try {
-      const _search = store_view_album_page_logic.page_albumlists_keyword
-      const selected = store_view_album_page_logic.page_albumlists_selected
+      const pageAlbumStore = usePageAlbumStore()
+      const _search = pageAlbumStore.page_albumlists_keyword
+      const selected = pageAlbumStore.page_albumlists_selected
 
       let _sort =
-        store_view_album_page_logic.page_albumlists_options_Sort_key.length > 0 &&
-        store_view_album_page_logic.page_albumlists_options_Sort_key[0].order !== 'default'
-          ? store_view_album_page_logic.page_albumlists_options_Sort_key[0].columnKey
+        pageAlbumStore.page_albumlists_options_Sort_key.length > 0 &&
+        pageAlbumStore.page_albumlists_options_Sort_key[0].order !== 'default'
+          ? pageAlbumStore.page_albumlists_options_Sort_key[0].columnKey
           : 'id'
       let _order =
-        store_view_album_page_logic.page_albumlists_options_Sort_key.length > 0 &&
-        store_view_album_page_logic.page_albumlists_options_Sort_key[0].order !== 'default'
-          ? store_view_album_page_logic.page_albumlists_options_Sort_key[0].order.replace('end', '')
+        pageAlbumStore.page_albumlists_options_Sort_key.length > 0 &&
+        pageAlbumStore.page_albumlists_options_Sort_key[0].order !== 'default'
+          ? pageAlbumStore.page_albumlists_options_Sort_key[0].order.replace('end', '')
           : 'ASC'
 
       let _starred = ''
@@ -454,8 +457,8 @@ export const store_general_fetch_album_list = reactive({
               'Primary,Backdrop,Thumb',
               'true',
               '1',
-              store_view_album_page_logic.page_albumlists_filter_year > 0
-                ? store_view_album_page_logic.page_albumlists_filter_year
+              pageAlbumStore.page_albumlists_filter_year > 0
+                ? pageAlbumStore.page_albumlists_filter_year
                 : '',
               filter
             )
@@ -481,14 +484,14 @@ export const store_general_fetch_album_list = reactive({
             String(this._end),
             _sort,
             _order,
-            store_view_album_page_logic.page_albumlists_multi_sort,
+            pageAlbumStore.page_albumlists_multi_sort,
             _starred,
             _search,
-            store_view_album_page_logic.page_albumlists_filter_year > 0
-              ? store_view_album_page_logic.page_albumlists_filter_year
+            pageAlbumStore.page_albumlists_filter_year > 0
+              ? pageAlbumStore.page_albumlists_filter_year
               : '',
-            store_view_album_page_logic.page_albumlists_filter_year > 0
-              ? store_view_album_page_logic.page_albumlists_filter_year
+            pageAlbumStore.page_albumlists_filter_year > 0
+              ? pageAlbumStore.page_albumlists_filter_year
               : '',
             this._artist_id
           )

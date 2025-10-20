@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-// 使用 require 导入无法直接使用 ES6 导入的模块
-const store_general_fetch_charts_list = require('@/data/data_stores/server_api_stores/server_api_core/page/page_charts/store_general_fetch_charts_list').store_general_fetch_charts_list
+import { store_general_fetch_charts_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_charts/store_general_fetch_charts_list'
 
 export const usePageChartsStore = defineStore('pageCharts', () => {
   // 从 store_view_charts_page_info.ts 合并的状态

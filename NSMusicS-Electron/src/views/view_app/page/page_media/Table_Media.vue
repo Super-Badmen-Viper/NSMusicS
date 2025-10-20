@@ -718,7 +718,7 @@ const Open_this_artist_all_artist_list_click = (artist_id: string) => {
     store_general_fetch_media_list.set_artist_id(artist_id)
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
     store_general_fetch_album_list.set_artist_id(artist_id)
-    store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
+    pageAlbumStore.page_albumlists_selected = 'album_list_all'
   }
   if (
     (store_server_users.server_select_kind != 'jellyfin' &&
@@ -825,7 +825,6 @@ import { store_general_fetch_player_list } from '@/data/data_stores/server_api_s
 import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
 import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
-import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'

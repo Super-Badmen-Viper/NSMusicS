@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 import { store_router_history_data_of_artist } from '@/router/router_store/store_router_history_data_of_artist'
-// 使用 require 导入无法直接使用 ES6 导入的模块
-const store_general_fetch_artist_list = require('@/data/data_stores/server_api_stores/server_api_core/page/page_artist/store_general_fetch_artist_list').store_general_fetch_artist_list
+import { store_general_fetch_artist_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_artist/store_general_fetch_artist_list'
 
 export const usePageArtistStore = defineStore('pageArtist', () => {
   // 从 store_view_artist_page_info.ts 合并的状态
@@ -27,7 +26,7 @@ export const usePageArtistStore = defineStore('pageArtist', () => {
 
   // 从 store_view_artist_page_logic.ts 合并的 watch 监听器
   watch(
-    () => page_artistlists_options_Sort_key,
+    page_artistlists_options_Sort_key,
     (newValue) => {
       if (newValue != null) {
         page_artistlists_keyword.value = ''
@@ -40,11 +39,11 @@ export const usePageArtistStore = defineStore('pageArtist', () => {
   )
 
   watch(
-    () => page_artistlists_keyword,
+    page_artistlists_keyword,
     (newValue) => {
       page_artistlists_multi_sort.value = ''
       // 使用局部变量存储字符串值，避免重复访问 .value
-      let keyword = newValue.value
+      let keyword = page_artistlists_keyword.value
       if (keyword.indexOf('accurate_search') > 0) {
         keyword = keyword.replace('accurate_search', '')
         if (keyword.indexOf('__title__') > 0) {
@@ -70,7 +69,7 @@ export const usePageArtistStore = defineStore('pageArtist', () => {
   )
 
   watch(
-    () => page_artistlists_selected,
+    page_artistlists_selected,
     (newValue) => {
       console.log('page_artistlists_selected：' + newValue)
       store_general_fetch_artist_list.fetchData_Artist()
@@ -78,7 +77,7 @@ export const usePageArtistStore = defineStore('pageArtist', () => {
   )
 
   watch(
-    () => list_data_StartUpdate,
+    list_data_StartUpdate,
     (newValue) => {
       if (newValue) {
         page_artistlists_keyword.value = ''
@@ -99,7 +98,7 @@ export const usePageArtistStore = defineStore('pageArtist', () => {
   )
 
   watch(
-    () => page_artistlists_multi_sort,
+    page_artistlists_multi_sort,
     (newValue) => {
       store_general_fetch_artist_list.fetchData_Artist_of_server_web_start()
     }

@@ -12,9 +12,8 @@ import error_album from '@/assets/img/error_album.jpg'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { Get_LocalSqlite_AnnotationInfo } from '@/data/data_repository/app_repository/LocalSqlite_Get_AnnotationInfo'
-import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
 import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
-import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
+import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { store_local_data_set_artistInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_artistInfo'
 import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
 import vinyl from '@/assets/img/vinyl.jpg'
@@ -337,12 +336,13 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
     store_local_data_set_albumInfo.Set_AlbumInfo_To_PlayCount_of_Album(newValue)
 
     if (store_server_user_model.model_server_type_of_local) {
+      const pageAlbumStore = usePageAlbumStore()
       const get_LocalSqlite_AnnotationInfo = new Get_LocalSqlite_AnnotationInfo()
-      store_view_album_page_info.album_recently_count =
+      pageAlbumStore.album_recently_count =
         get_LocalSqlite_AnnotationInfo.Get_Annotation_ItemInfo_Play_Count('album')
-      store_view_album_page_logic.page_albumlists_statistic.forEach((item: any) => {
+      pageAlbumStore.page_albumlists_statistic.forEach((item: any) => {
         if (item.id === 'album_list_recently') {
-          item.song_count = store_view_album_page_info.album_recently_count + ' *'
+          item.song_count = pageAlbumStore.album_recently_count + ' *'
         }
       })
       const playerSettingStore = usePlayerSettingStore()

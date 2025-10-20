@@ -1,9 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
-// 使用 require 方式导入无法直接用 ES6 import 的模块
-const error_album = require('@/assets/img/error_album.jpg')
-const store_general_fetch_home_list = require('@/data/data_stores/server_api_stores/server_api_core/page/page_home/store_general_fetch_home_list')
-const store_view_media_page_logic = require('@/views/view_app/page/page_media/store/store_view_media_page_logic')
+import error_album from '@/assets/img/error_album.jpg'
+import { store_general_fetch_home_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_home/store_general_fetch_home_list'
+import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 
 // 定义专辑类型接口
 interface AlbumType {
@@ -26,7 +25,7 @@ export const usePageHomeStore = defineStore('pageHome', () => {
 
   // 监听逻辑（从 store_view_home_page_info.ts 合并）
   watch(
-    () => home_selected_top_album,
+    home_selected_top_album,
     (newValue) => {
       if (newValue && home_selected_top_album.value != undefined) {
         if (home_selected_top_album.value.medium_image_url){
@@ -42,12 +41,11 @@ export const usePageHomeStore = defineStore('pageHome', () => {
 
   // 监听逻辑（从 store_view_home_page_logic.ts 合并）
   watch(
-    () => list_data_StartUpdate,
+    list_data_StartUpdate,
     (newValue) => {
       if (newValue) {
-        // 使用 .default 访问 CommonJS 模块的默认导出
-        store_general_fetch_home_list.default.fetchData_Home()
-        store_view_media_page_logic.default.list_selected_Hand_click = true
+        store_general_fetch_home_list.fetchData_Home()
+        store_view_media_page_logic.list_selected_Hand_click = true
         console.log('store_view_home_page_logic.list_data_StartUpdate')
         
         list_data_StartUpdate.value = false

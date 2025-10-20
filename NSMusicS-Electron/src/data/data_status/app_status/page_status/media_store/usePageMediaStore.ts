@@ -1,19 +1,18 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
-// 使用 require 方式导入无法直接用 ES6 import 的模块
-const Set_LocalSqlite_LibraryInfo = require('@/data/data_repository/app_repository/LocalSqlite_Set_LibraryInfo')
-const store_router_history_data_of_media = require('@/router/router_store/store_router_history_data_of_media')
-const store_general_fetch_media_list = require('@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list')
-const store_router_data_info = require('@/router/router_store/store_router_data_info')
-const store_system_configs_save = require('@/data/data_stores/local_system_stores/store_system_configs_save')
-const store_local_data_set_annotionInfo = require('@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_annotionInfo')
-const store_local_data_set_playlistInfo = require('@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_playlistInfo')
-const store_server_user_model = require('@/data/data_stores/server_configs_stores/store_server_user_model')
-const store_server_data_set_playlistInfo = require('@/data/data_stores/server_api_stores/server_api_core/annotation/store_server_data_set_playlistInfo')
-const store_server_data_set_mediaInfo = require('@/data/data_stores/server_api_stores/server_api_core/annotation/store_server_data_set_mediaInfo')
-const usePlayerAppearanceStore = require('@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore')
-const store_server_users = require('@/data/data_stores/server_configs_stores/store_server_users')
-const store_general_model_player_list = require('@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list')
+import { Set_LocalSqlite_LibraryInfo } from '@/data/data_repository/app_repository/LocalSqlite_Set_LibraryInfo'
+import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
+import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
+import { store_router_data_info } from '@/router/router_store/store_router_data_info'
+import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
+import { store_local_data_set_annotionInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_annotionInfo'
+import { store_local_data_set_playlistInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_playlistInfo'
+import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { store_server_data_set_playlistInfo } from '@/data/data_stores/server_api_stores/server_api_core/annotation/store_server_data_set_playlistInfo'
+import { store_server_data_set_mediaInfo } from '@/data/data_stores/server_api_stores/server_api_core/annotation/store_server_data_set_mediaInfo'
+import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
+import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
+import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
 
 // 定义媒体文件类型接口
 interface Media_File {
@@ -114,14 +113,14 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
 
   const get_selected_playlist_add_MediaFile = async (value: any) => {
     console.log('selected_playlist_addMediaFile', value)
-    store_local_data_set_playlistInfo.default.Set_Selected_MediaInfo_Add_Selected_Playlist(
+    store_local_data_set_playlistInfo.Set_Selected_MediaInfo_Add_Selected_Playlist(
           media_Files_selected.value.map((file: any) => file.id),
           value
         )
-        store_general_model_player_list.default.get_playlist_tracks_temporary_update_media_file()
+        store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
 
-        if (store_server_user_model.default.model_select === 'server') {
-          await store_server_data_set_playlistInfo.default.Set_Selected_MediaInfo_Add_Selected_Playlist(
+        if (store_server_user_model.model_select === 'server') {
+          await store_server_data_set_playlistInfo.Set_Selected_MediaInfo_Add_Selected_Playlist(
             media_Files_selected.value.map((file: any) => file.id),
             value
           )
@@ -130,15 +129,15 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
 
   const get_selected_playlist_delete_MediaFile = async (value: any) => {
     console.log('selected_playlist_deleteMediaFile', value)
-    store_local_data_set_playlistInfo.default.Set_Selected_MediaInfo_Delete_Selected_Playlist(
+    store_local_data_set_playlistInfo.Set_Selected_MediaInfo_Delete_Selected_Playlist(
           media_Files_selected.value.map((file: any) => file.id),
           value
         )
-        store_general_model_player_list.default.get_playlist_tracks_temporary_update_media_file()
+        store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
 
-        if (store_server_user_model.default.model_select === 'server') {
-          await store_server_data_set_playlistInfo.default.Set_Selected_MediaInfo_Delete_Selected_Playlist(
-            store_server_users.default.server_select_kind === 'emby'
+        if (store_server_user_model.model_select === 'server') {
+          await store_server_data_set_playlistInfo.Set_Selected_MediaInfo_Delete_Selected_Playlist(
+            store_server_users.server_select_kind === 'emby'
               ? media_Files_selected.value.map((file: any) => file.order_title)
               : media_Files_selected.value.map((file: any) => file.id),
             value
@@ -148,30 +147,30 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
 
   const get_selected_lovelist_add_MediaFile = (value: any) => {
     console.log('selected_lovelist_addMediaFile', value)
-    store_local_data_set_annotionInfo.default.Set_MediaInfo_Add_Selected_Favorite(
+    store_local_data_set_annotionInfo.Set_MediaInfo_Add_Selected_Favorite(
           media_Files_selected.value.map((file: any) => file.id),
           true
         )
-        store_general_model_player_list.default.get_playlist_tracks_temporary_update_media_file()
+        store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
 
-        if (store_server_user_model.default.model_select === 'server') {
+        if (store_server_user_model.model_select === 'server') {
           media_Files_selected.value.forEach((media: any) => {
-            store_server_data_set_mediaInfo.default.Set_MediaInfo_To_Favorite_Server(media.id, false)
+            store_server_data_set_mediaInfo.Set_MediaInfo_To_Favorite_Server(media.id, false)
           })
         }
   }
 
   const get_selected_lovelist_delete_MediaFile = (value: any) => {
     console.log('selected_lovelist_deleteMediaFile', value)
-    store_local_data_set_annotionInfo.default.Set_MediaInfo_Delete_Selected_Favorite(
+    store_local_data_set_annotionInfo.Set_MediaInfo_Delete_Selected_Favorite(
           media_Files_selected.value.map((file: any) => file.id),
           value
         )
-        store_general_model_player_list.default.get_playlist_tracks_temporary_update_media_file()
+        store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
 
-        if (store_server_user_model.default.model_select === 'server') {
+        if (store_server_user_model.model_select === 'server') {
           media_Files_selected.value.forEach((media: any) => {
-            store_server_data_set_mediaInfo.default.Set_MediaInfo_To_Favorite_Server(media.id, true)
+            store_server_data_set_mediaInfo.Set_MediaInfo_To_Favorite_Server(media.id, true)
           })
         }
   }
@@ -187,11 +186,11 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
 
   const get_selected_recentlist_deletet_MediaFile = (value: any) => {
     console.log('selected_recentlist_deletetMediaFile', value)
-    store_local_data_set_annotionInfo.default.Set_MediaInfo_To_Selected_PlayCount_of_Delete(
+    store_local_data_set_annotionInfo.Set_MediaInfo_To_Selected_PlayCount_of_Delete(
         media_Files_selected.value.map((file: any) => file.id),
         value
       )
-      store_general_model_player_list.default.get_playlist_tracks_temporary_update_media_file()
+      store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
   }
 
   const get_page_songlists_keyword = async (newValue: any) => {
@@ -225,7 +224,7 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
       store_router_data_info.router.push('media')
     }
     // 使用 .default 访问 CommonJS 模块的默认导出
-    await store_general_fetch_media_list.default.fetchData_Media()
+    await store_general_fetch_media_list.fetchData_Media()
   }
 
   const get_page_songlists_selected = async (newValue: any) => {
@@ -238,28 +237,28 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
       }
       list_selected_Hand_click.value = false
       console.log('page_songlists_selected：' + newValue)
-      await store_general_fetch_media_list.default.fetchData_Media()
-      await store_system_configs_save.default.save_system_config_of_Player_Configs_of_Audio_Info()
+      await store_general_fetch_media_list.fetchData_Media()
+      await store_system_configs_save.save_system_config_of_Player_Configs_of_Audio_Info()
       page_songlists_keyword.value = ''
     }
   }
 
   // 监听逻辑（从 store_view_media_page_logic.ts 合并）
   watch(
-    () => page_songlists_options_Sort_key,
+    page_songlists_options_Sort_key,
     async (newValue) => {
       if (newValue != null && list_options_Hand_Sort.value) {
         list_options_Hand_Sort.value = false
-        store_router_history_data_of_media.default.fix_router_history_of_Media_scroller_value(
-          store_router_history_data_of_media.default.router_history_model_of_Media_scroller_value
+        store_router_history_data_of_media.fix_router_history_of_Media_scroller_value(
+          store_router_history_data_of_media.router_history_model_of_Media_scroller_value
         ) // 保留此滚轮值(上次浏览位置)
-        await store_general_fetch_media_list.default.fetchData_Media()
+        await store_general_fetch_media_list.fetchData_Media()
       }
     }
   )
 
   watch(
-    () => list_data_StartUpdate,
+    list_data_StartUpdate,
     async (newValue) => {
       if (newValue) {
         page_songlists_keyword.value = ''
@@ -267,13 +266,13 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
           page_songlists_keywordFilter.value = ''
         }
         store_router_data_info.find_music_model = false
-        await store_general_fetch_media_list.default.fetchData_Media()
+        await store_general_fetch_media_list.fetchData_Media()
 
-        store_router_history_data_of_media.default.router_history_datas_of_Media = []
-        if (store_router_history_data_of_media.default.router_select_history_date_of_Media) {
-          store_router_history_data_of_media.default.router_select_history_date_of_Media.id = 1
-          store_router_history_data_of_media.default.router_history_datas_of_Media.push(
-            store_router_history_data_of_media.default.router_select_history_date_of_Media
+        store_router_history_data_of_media.router_history_datas_of_Media = []
+        if (store_router_history_data_of_media.router_select_history_date_of_Media) {
+          store_router_history_data_of_media.router_select_history_date_of_Media.id = 1
+          store_router_history_data_of_media.router_history_datas_of_Media.push(
+            store_router_history_data_of_media.router_select_history_date_of_Media
           )
         }
 
@@ -284,10 +283,10 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
   )
 
   watch(
-    () => page_songlists_filter_path_folder,
+    page_songlists_filter_path_folder,
     async (newValue) => {
       page_songlists_filter_model.value = page_songlists_filter_path_folder.value !== ''
-      await store_system_configs_save.default.save_system_config_of_App_Configs()
+      await store_system_configs_save.save_system_config_of_App_Configs()
       page_songlists_keywordFilter.value = ''
       list_selected_Hand_click.value = false
       await store_general_fetch_media_list.fetchData_Media()
@@ -295,9 +294,9 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
   )
 
   watch(
-    () => page_songlists_multi_sort,
+    page_songlists_multi_sort,
     async (newValue) => {
-      await store_general_fetch_media_list.default.fetchData_Media_of_server_web_start()
+      await store_general_fetch_media_list.fetchData_Media_of_server_web_start()
     }
   )
 

@@ -1,6 +1,6 @@
 import { reactive } from 'vue'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
-import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
+import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
@@ -12,6 +12,7 @@ import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/nines
 
 export const store_server_model_statistics = reactive({
   async get_page_top_info() {
+    const pageAlbumStore = usePageAlbumStore()
     try {
       if (store_server_user_model.model_server_type_of_local) {
         if (isElectron) {
@@ -54,7 +55,7 @@ export const store_server_model_statistics = reactive({
 
             // 2.2 专辑收藏统计
             try {
-              store_view_album_page_info.album_starred_count = getCount(`
+              pageAlbumStore.album_starred_count = getCount(`
                                 SELECT COUNT(DISTINCT a.item_id) AS count
                                 FROM ${store_server_user_model.annotation} AS a
                                     JOIN ${store_server_user_model.media_file} AS m
@@ -94,7 +95,7 @@ export const store_server_model_statistics = reactive({
 
             // 2.5 专辑总数统计
             try {
-              store_view_album_page_info.album_item_count = getCount(`
+              pageAlbumStore.album_item_count = getCount(`
                                 SELECT COUNT(*) AS count
                                 FROM ${store_server_user_model.album}
                             `)
@@ -128,7 +129,7 @@ export const store_server_model_statistics = reactive({
 
             // 2.8 专辑播放记录统计
             try {
-              store_view_album_page_info.album_recently_count = getCount(`
+              pageAlbumStore.album_recently_count = getCount(`
                                 SELECT COUNT(*) AS count
                                 FROM ${store_server_user_model.annotation} AS a
                                 JOIN ${store_server_user_model.album} AS al ON a.item_id = al.id

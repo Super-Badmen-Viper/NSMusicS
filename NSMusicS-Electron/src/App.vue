@@ -39,7 +39,6 @@ import { store_server_login_logic } from '@/views/view_server/page_login/store/s
 import { store_server_model_statistics } from '@/data/data_stores/server_api_stores/server_api_core/model/model_statistics'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
-import { store_view_album_page_logic } from '@/views/view_app/page/page_album/store/store_view_album_page_logic'
 import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
 import { store_view_artist_page_logic } from '@/views/view_app/page/page_artist/store/store_view_artist_page_logic'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
@@ -345,7 +344,7 @@ import routers from './router'
 import { store_system_configs_update } from '@/data/data_stores/local_system_stores/store_system_configs_update'
 import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
-import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
+import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 routers.beforeEach((to, from, next) => {
   if (to.name !== from.name) {
@@ -642,9 +641,10 @@ const Init_page_cuelists_statistic_Data = () => {
 }
 ////// view of album
 const Init_page_albumlists_statistic_Data = () => {
-  store_view_album_page_logic.page_albumlists_options = []
-  store_view_album_page_logic.page_albumlists_statistic = []
-  store_view_album_page_logic.page_albumlists = []
+  const pageAlbumStore = usePageAlbumStore()
+  pageAlbumStore.page_albumlists_options = []
+  pageAlbumStore.page_albumlists_statistic = []
+  pageAlbumStore.page_albumlists = []
   //////
   const temp_Play_List_ALL: Play_List = {
     label: computed(() => t('nsmusics.view_page.allAlbum')),
@@ -653,7 +653,7 @@ const Init_page_albumlists_statistic_Data = () => {
     name: computed(() => t('nsmusics.view_page.allAlbum')),
     comment: computed(() => t('nsmusics.view_page.allAlbum')),
     duration: 0,
-    song_count: store_view_album_page_info.album_item_count + ' *',
+    song_count: pageAlbumStore.album_item_count + ' *',
     public: 0,
     created_at: '',
     updated_at: '',
@@ -664,13 +664,13 @@ const Init_page_albumlists_statistic_Data = () => {
     evaluated_at: '',
     owner_id: '',
   }
-  store_view_album_page_logic.page_albumlists_options.push(temp_Play_List_ALL)
-  store_view_album_page_logic.page_albumlists_statistic.push({
+  pageAlbumStore.page_albumlists_options.push(temp_Play_List_ALL)
+  pageAlbumStore.page_albumlists_statistic.push({
     label: temp_Play_List_ALL.label,
     album_count: temp_Play_List_ALL.song_count.toString(),
     id: temp_Play_List_ALL.id,
   })
-  store_view_album_page_logic.page_albumlists.push(temp_Play_List_ALL)
+  pageAlbumStore.page_albumlists.push(temp_Play_List_ALL)
   //////
   const temp_Play_List_Love: Play_List = {
     label: computed(() => t('nsmusics.view_page.loveAlbum')),
@@ -679,7 +679,7 @@ const Init_page_albumlists_statistic_Data = () => {
     name: computed(() => t('nsmusics.view_page.loveAlbum')),
     comment: computed(() => t('nsmusics.view_page.loveAlbum')),
     duration: 0,
-    song_count: store_view_album_page_info.album_starred_count + ' *',
+    song_count: pageAlbumStore.album_starred_count + ' *',
     public: 0,
     created_at: '',
     updated_at: '',
@@ -690,13 +690,13 @@ const Init_page_albumlists_statistic_Data = () => {
     evaluated_at: '',
     owner_id: '',
   }
-  store_view_album_page_logic.page_albumlists_options.push(temp_Play_List_Love)
-  store_view_album_page_logic.page_albumlists_statistic.push({
+  pageAlbumStore.page_albumlists_options.push(temp_Play_List_Love)
+  pageAlbumStore.page_albumlists_statistic.push({
     label: temp_Play_List_Love.label,
     album_count: temp_Play_List_Love.song_count.toString(),
     id: temp_Play_List_Love.id,
   })
-  store_view_album_page_logic.page_albumlists.push(temp_Play_List_Love)
+  pageAlbumStore.page_albumlists.push(temp_Play_List_Love)
   //////
   if (
     (store_server_users.server_select_kind != 'jellyfin' &&
@@ -711,8 +711,8 @@ const Init_page_albumlists_statistic_Data = () => {
       comment: computed(() => t('nsmusics.view_page.recentPlay')),
       duration: 0,
       song_count:
-        store_view_album_page_info.album_recently_count > 0
-          ? store_view_album_page_info.album_recently_count
+        pageAlbumStore.album_recently_count > 0
+          ? pageAlbumStore.album_recently_count
           : '*' + ' *',
       public: 0,
       created_at: '',
@@ -724,16 +724,15 @@ const Init_page_albumlists_statistic_Data = () => {
       evaluated_at: '',
       owner_id: '',
     }
-    store_view_album_page_logic.page_albumlists_options.push(temp_Play_List_Recently)
-    store_view_album_page_logic.page_albumlists_statistic.push({
+    pageAlbumStore.page_albumlists_options.push(temp_Play_List_Recently)
+    pageAlbumStore.page_albumlists_statistic.push({
       label: temp_Play_List_Recently.label,
       album_count: temp_Play_List_Recently.song_count.toString(),
       id: temp_Play_List_Recently.id,
     })
-    store_view_album_page_logic.page_albumlists.push(temp_Play_List_Recently)
+    pageAlbumStore.page_albumlists.push(temp_Play_List_Recently)
   }
-  //////
-  store_view_album_page_logic.page_albumlists_statistic.push({
+  pageAlbumStore.page_albumlists_statistic.push({
     label: computed(() => t('entity.playlist_other')),
     album_count: store_view_media_page_info.media_playlist_count + ' *',
     id: 'album_list_all_PlayList',

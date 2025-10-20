@@ -14,7 +14,7 @@ import { store_server_users } from '@/data/data_stores/server_configs_stores/sto
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
-import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
+import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
@@ -35,6 +35,7 @@ export const store_system_configs_save = reactive({
   },
   async save_system_config_of_App_Configs() {
     const playerSettingStore = usePlayerSettingStore()
+    const pageAlbumStore = usePageAlbumStore()
     if (!store_system_configs_load.app_configs_loading) {
       const app_Configs = ref(
         new App_Configs({
@@ -74,7 +75,7 @@ export const store_system_configs_save = reactive({
           authorization_of_nd: String(store_server_user_model.authorization_of_nd),
           client_unique_id: String(store_server_user_model.client_unique_id),
           media_page_sizes: String(store_view_media_page_info.media_page_sizes),
-          album_page_sizes: String(store_view_album_page_info.album_page_sizes),
+          album_page_sizes: String(pageAlbumStore.album_page_sizes),
           artist_page_sizes: String(store_view_artist_page_info.artist_page_sizes),
           clear_Memory_Model: String(store_router_data_logic.clear_Memory_Model),
           clear_Equilibrium_Model: String(store_router_data_logic.clear_Equilibrium_Model),

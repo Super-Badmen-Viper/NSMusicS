@@ -9,7 +9,7 @@ const { t } = useI18n({
 import { useMessage } from 'naive-ui'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
-import { store_view_album_page_info } from '@/views/view_app/page/page_album/store/store_view_album_page_info'
+import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 const message = useMessage()
@@ -160,7 +160,8 @@ async function save_edit_tag() {
           const save_tag = JSON.parse(
             JSON.stringify(store_player_tag_modify.player_current_album_tag)
           )
-          const item: Album | undefined = store_view_album_page_info.album_Files_temporary.find(
+          const pageAlbumStore = usePageAlbumStore()
+          const item: Album | undefined = pageAlbumStore.album_Files_temporary.find(
             (album: Album) => album.id === store_player_tag_modify.player_current_album_id
           )
           item.name = Array.isArray(save_tag.title)

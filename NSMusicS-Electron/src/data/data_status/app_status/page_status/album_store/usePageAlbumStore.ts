@@ -2,12 +2,10 @@ import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 import { store_router_history_data_of_album } from '@/router/router_store/store_router_history_data_of_album'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
-// 使用 require 导入无法直接使用 ES6 导入的模块
-const store_general_fetch_album_list = require('@/data/data_stores/server_api_stores/server_api_core/page/page_album/store_general_fetch_album_list').store_general_fetch_album_list
-const store_system_configs_save = require('@/data/data_stores/local_system_stores/store_system_configs_save').store_system_configs_save
+import { store_general_fetch_album_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_album/store_general_fetch_album_list'
+import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 
 export const usePageAlbumStore = defineStore('pageAlbum', () => {
-  // 从 store_view_album_page_info.ts 合并的状态
   const album_File_metadata = ref<any[]>([])
   const album_Files_temporary = ref<any[]>([])
   const album_page_sizes = ref<number>(15)
@@ -15,7 +13,6 @@ export const usePageAlbumStore = defineStore('pageAlbum', () => {
   const album_starred_count = ref<number>(0)
   const album_recently_count = ref<number>(0)
 
-  // 从 store_view_album_page_logic.ts 合并的状态
   const list_data_StartUpdate = ref<boolean>(false)
   const page_albumlists_options = ref<any[]>([])
   const page_albumlists_statistic = ref<any[]>([])
@@ -30,9 +27,8 @@ export const usePageAlbumStore = defineStore('pageAlbum', () => {
   const page_albumlists_filter_model = ref<boolean>(false)
   const page_albumlists_filter_year = ref<number>(0)
 
-  // 从 store_view_album_page_logic.ts 合并的 watch 监听器
   watch(
-    () => page_albumlists_options_Sort_key,
+    page_albumlists_options_Sort_key,
     async (newValue) => {
       if (newValue != null) {
         if (
@@ -50,7 +46,7 @@ export const usePageAlbumStore = defineStore('pageAlbum', () => {
   )
 
   watch(
-    () => page_albumlists_keyword,
+    page_albumlists_keyword,
     (newValue) => {
       page_albumlists_multi_sort.value = ''
       let search = page_albumlists_keyword.value
@@ -78,7 +74,7 @@ export const usePageAlbumStore = defineStore('pageAlbum', () => {
   )
 
   watch(
-    () => page_albumlists_selected,
+    page_albumlists_selected,
     (newValue) => {
       console.log('page_albumlists_selected：' + newValue)
       store_general_fetch_album_list.fetchData_Album()
@@ -86,7 +82,7 @@ export const usePageAlbumStore = defineStore('pageAlbum', () => {
   )
 
   watch(
-    () => list_data_StartUpdate,
+    list_data_StartUpdate,
     (newValue) => {
       if (newValue) {
         page_albumlists_keyword.value = ''
@@ -107,7 +103,7 @@ export const usePageAlbumStore = defineStore('pageAlbum', () => {
   )
 
   watch(
-    () => page_albumlists_filter_year,
+    page_albumlists_filter_year,
     async (newValue) => {
       page_albumlists_filter_model.value = page_albumlists_filter_year.value !== 0
       store_system_configs_save.save_system_config_of_App_Configs()
@@ -117,15 +113,13 @@ export const usePageAlbumStore = defineStore('pageAlbum', () => {
   )
 
   watch(
-    () => page_albumlists_multi_sort,
+    page_albumlists_multi_sort,
     async (newValue) => {
       store_general_fetch_album_list.fetchData_Album_of_server_web_start()
     }
   )
 
-  // 导出所有状态
   return {
-    // 从 store_view_album_page_info.ts 导出的状态
     album_File_metadata,
     album_Files_temporary,
     album_page_sizes,
@@ -133,7 +127,6 @@ export const usePageAlbumStore = defineStore('pageAlbum', () => {
     album_starred_count,
     album_recently_count,
     
-    // 从 store_view_album_page_logic.ts 导出的状态
     list_data_StartUpdate,
     page_albumlists_options,
     page_albumlists_statistic,
