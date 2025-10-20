@@ -11,9 +11,8 @@ import { store_system_configs_load } from '@/data/data_stores/local_system_store
 import { User_Authorization_ApiWebService_of_ND } from '@/data/data_configs/navidrome_api/services_web/user_authorization/index_service'
 import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
-import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
-import { store_view_artist_page_logic } from '@/views/view_app/page/page_artist/store/store_view_artist_page_logic'
+import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
 import { store_server_auth_token } from '@/data/data_stores/server_api_stores/server_api_auth/auth_token'
 import { Auth_Token_ApiService_of_NineSong } from '@/data/data_configs/ninesong_api/services_web/Auth/Auth_Token/index_service'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
@@ -97,14 +96,17 @@ export const store_server_user_model = reactive({
   async switchToMode() {
     if (!store_system_configs_load.app_configs_loading) {
       store_server_user_model.random_play_model = false
-      // Refresh Current AudioInfo
       const playerAudioStore = usePlayerAudioStore()
       await playerAudioStore.reset_data()
       store_general_fetch_player_list._totalCount = 0
-      store_view_media_page_logic.page_songlists_keywordFilter = ''
-      store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+      const pageMediaStore = usePageMediaStore()
+      pageMediaStore.page_songlists_keywordFilter = ''
+      pageMediaStore.page_songlists_selected = 'song_list_all'
+      const pageAlbumStore = usePageAlbumStore()
       pageAlbumStore.page_albumlists_selected = 'album_list_all'
-      store_view_artist_page_logic.page_artistlists_selected = 'artist_list_all'
+      const pageArtistStore = usePageArtistStore()
+      pageArtistStore.page_artistlists_selected = 'artist_list_all'
+      const playerSettingStore = usePlayerSettingStore()
       if (playerSettingStore.player_select === 'mpv') {
         if (isElectron) {
           await ipcRenderer.invoke('mpv-stopped')
@@ -130,16 +132,15 @@ export const store_server_user_model = reactive({
         store_router_data_info.store_router_history_data_of_local = true
         store_router_data_info.store_router_history_data_of_web = false
         //
-        store_view_media_page_logic.page_songlists_options_Sort_key = [
+        const pageMediaStore = usePageMediaStore()
+        pageMediaStore.page_songlists_options_Sort_key = [
           {
             columnKey: String('id'),
             order: String('ascend'),
           },
         ]
       }
-      //
       const playlistStore = usePlaylistStore()
-      const playerSettingStore = usePlayerSettingStore()
       try {
         await playerSettingStore.init_player()
       } catch {}

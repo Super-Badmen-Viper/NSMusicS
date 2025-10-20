@@ -1,7 +1,7 @@
 import { reactive } from 'vue'
-import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
-import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
+import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
@@ -12,7 +12,9 @@ import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/nines
 
 export const store_server_model_statistics = reactive({
   async get_page_top_info() {
+    const pageMediaStore = usePageMediaStore()
     const pageAlbumStore = usePageAlbumStore()
+    const pageArtistStore = usePageArtistStore()
     try {
       if (store_server_user_model.model_server_type_of_local) {
         if (isElectron) {
@@ -40,7 +42,7 @@ export const store_server_model_statistics = reactive({
             // 2. 查询有效的标记记录（每个查询都有唯一错误标签）
             // 2.1 媒体收藏统计
             try {
-              store_view_media_page_info.media_starred_count = getCount(`
+              pageMediaStore.media_starred_count = getCount(`
                                 SELECT COUNT(DISTINCT a.item_id) AS count
                                 FROM ${store_server_user_model.annotation} AS a
                                     JOIN ${store_server_user_model.media_file} AS m
@@ -70,7 +72,7 @@ export const store_server_model_statistics = reactive({
 
             // 2.3 艺术家收藏统计
             try {
-              store_view_artist_page_info.artist_starred_count = getCount(`
+              pageArtistStore.artist_starred_count = getCount(`
                                 SELECT COUNT(DISTINCT a.item_id) AS count
                                 FROM ${store_server_user_model.annotation} AS a
                                     JOIN ${store_server_user_model.artist} AS ar
@@ -85,7 +87,7 @@ export const store_server_model_statistics = reactive({
 
             // 2.4 媒体总数统计
             try {
-              store_view_media_page_info.media_item_count = getCount(`
+              pageMediaStore.media_item_count = getCount(`
                                 SELECT COUNT(*) AS count
                                 FROM ${store_server_user_model.media_file}
                             `)
@@ -105,7 +107,7 @@ export const store_server_model_statistics = reactive({
 
             // 2.6 艺术家总数统计
             try {
-              store_view_artist_page_info.artist_item_count = getCount(`
+              pageArtistStore.artist_item_count = getCount(`
                                 SELECT COUNT(*) AS count
                                 FROM ${store_server_user_model.artist}
                             `)
@@ -115,7 +117,7 @@ export const store_server_model_statistics = reactive({
 
             // 2.7 媒体播放记录统计
             try {
-              store_view_media_page_info.media_recently_count = getCount(`
+              pageMediaStore.media_recently_count = getCount(`
                                 SELECT COUNT(*) AS count
                                 FROM ${store_server_user_model.annotation} AS a
                                 JOIN ${store_server_user_model.media_file} AS m ON a.item_id = m.id
@@ -143,7 +145,7 @@ export const store_server_model_statistics = reactive({
 
             // 2.9 艺术家播放记录统计
             try {
-              store_view_artist_page_info.artist_recently_count = getCount(`
+              pageArtistStore.artist_recently_count = getCount(`
                                 SELECT COUNT(*) AS count
                                 FROM ${store_server_user_model.annotation} AS a
                                 JOIN ${store_server_user_model.artist} AS ar ON a.item_id = ar.id
@@ -157,7 +159,7 @@ export const store_server_model_statistics = reactive({
 
             // 2.10 播放列表统计
             try {
-              store_view_media_page_info.media_playlist_count = getCount(`
+              pageMediaStore.media_playlist_count = getCount(`
                                 SELECT COUNT(*) AS count
                                 FROM ${store_server_user_model.playlist}
                             `)

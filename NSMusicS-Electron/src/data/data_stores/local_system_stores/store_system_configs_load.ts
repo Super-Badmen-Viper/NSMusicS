@@ -9,10 +9,9 @@ import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_sta
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
-import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
-import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
-import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
+import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
@@ -61,14 +60,16 @@ export const store_system_configs_load = reactive({
           '' + system_Configs_Read.app_Configs.value['authorization_of_nd']
         store_server_user_model.client_unique_id =
           '' + system_Configs_Read.app_Configs.value['client_unique_id']
+        const pageMediaStore = usePageMediaStore()
         const pageAlbumStore = usePageAlbumStore()
-        store_view_media_page_info.media_page_sizes = Number(
+        const pageArtistStore = usePageArtistStore()
+        pageMediaStore.media_page_sizes = Number(
           '' + system_Configs_Read.app_Configs.value['media_page_sizes']
         )
         pageAlbumStore.album_page_sizes = Number(
           '' + system_Configs_Read.app_Configs.value['album_page_sizes']
         )
-        store_view_artist_page_info.artist_page_sizes = Number(
+        pageArtistStore.artist_page_sizes = Number(
           '' + system_Configs_Read.app_Configs.value['artist_page_sizes']
         )
         ////// clear_UserExperience_Model
@@ -166,7 +167,6 @@ export const store_system_configs_load = reactive({
           store_system_configs_info.menuOptions_selectd_model_3 = true
           store_system_configs_info.menuOptions_selectd_model_4 = true
         }
-        // store_view_media_page_logic.page_songlists_filter_year = Number('' + system_Configs_Read.app_Configs.value['page_songlists_filter_year'])
         /// library_Config
         store_server_user_model.library_path =
           '' + system_Configs_Read.library_Configs.value['library']
@@ -466,10 +466,9 @@ export const store_system_configs_load = reactive({
         }
 
         /// view_router_history
-        // init media page router_app histtory
-        store_view_media_page_logic.page_songlists_keywordFilter = ''
-        // await store_general_fetch_media_list.fetchData_Media()
-        store_view_media_page_logic.page_songlists_selected =
+        const pageMediaStore = usePageMediaStore()
+        pageMediaStore.page_songlists_keywordFilter = ''
+        pageMediaStore.page_songlists_selected =
           '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_songlists_selected']
         //
         store_router_history_data_of_media.router_select_history_date_of_Media =

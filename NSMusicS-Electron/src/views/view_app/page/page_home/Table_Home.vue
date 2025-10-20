@@ -26,11 +26,10 @@ import { store_system_configs_save } from '@/data/data_stores/local_system_store
 
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
-import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
 import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
-import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
 
@@ -43,9 +42,12 @@ import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_ap
 
 import { useI18n } from 'vue-i18n'
 import { store_view_recommend_page_info } from '@/views/view_app/page/page_recommend/store/store_view_recommend_page_info'
+
 const { t } = useI18n({ inheritLocale: true })
 const message = useMessage()
 const themeVars = useThemeVars()
+
+const pageMediaStore = usePageMediaStore()
 
 const item_album = ref(160)
 const item_album_image = ref(item_album.value - 20)
@@ -224,7 +226,7 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
     if (store_view_home_page_info.home_Files_temporary_type_select === 'artist') {
       if (store_server_user_model.model_server_type_of_web) {
         store_general_fetch_media_list.set_artist_id(item.id)
-        store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+        pageMediaStore.page_songlists_selected = 'song_list_all'
         store_general_fetch_album_list.set_artist_id(item.id)
         pageAlbumStore.page_albumlists_selected = 'album_list_all'
         store_server_user_model.random_play_model = false
@@ -270,7 +272,7 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
   const temp_id = Get_this_album_info(item, list_name)
   if (store_server_user_model.model_server_type_of_web) {
     store_general_fetch_media_list.set_album_id(item.id)
-    store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+    pageMediaStore.page_songlists_selected = 'song_list_all'
     store_server_user_model.random_play_model = false
   }
   console.log('play_this_item_click：' + temp_id)
@@ -313,10 +315,10 @@ async function update_playlist_addAlbum(id: any, playlist_id: any) {
 
     if (is_web_local || is_emby_recently_added) {
       await store_general_fetch_media_list.fetchData_Media_Find_This_Album(id)
-      const matchingIds = store_view_media_page_info.media_Files_temporary
+      const matchingIds = pageMediaStore.media_Files_temporary
         .filter((item: Media_File) => item.album_id === id)
         .map((item: Media_File) => item.id)
-      store_view_media_page_info.media_Files_temporary = []
+      pageMediaStore.media_Files_temporary = []
       for (const item_id of matchingIds) {
         await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(
           item_id,
@@ -344,7 +346,7 @@ async function add_to_playlist(next: boolean) {
   ) {
     if (store_view_home_page_info.home_Files_temporary_type_select === 'artist') {
       await store_general_fetch_media_list.fetchData_Media_Find_This_Artist(itemId)
-      matchingItems = store_view_media_page_info.media_Files_temporary.filter(
+      matchingItems = pageMediaStore.media_Files_temporary.filter(
         (item: Media_File) => item.artist_id === itemId
       )
     } else if (store_view_home_page_info.home_Files_temporary_type_select === 'media') {
@@ -368,19 +370,19 @@ async function add_to_playlist(next: boolean) {
     if (is_web_local || is_emby_recently_added) {
       store_general_fetch_media_list._media_id = ''
       await store_general_fetch_media_list.fetchData_Media_Find_This_Album(itemId)
-      matchingItems = store_view_media_page_info.media_Files_temporary.filter(
+      matchingItems = pageMediaStore.media_Files_temporary.filter(
         (item: Media_File) => item.album_id === itemId
       )
     } else {
       store_general_fetch_media_list._media_id = itemId
       await store_general_fetch_media_list.fetchData_Media()
-      matchingItems = store_view_media_page_info.media_Files_temporary.filter(
+      matchingItems = pageMediaStore.media_Files_temporary.filter(
         (item: Media_File) => item.id === itemId
       )
     }
   }
 
-  store_view_media_page_info.media_Files_temporary = []
+  pageMediaStore.media_Files_temporary = []
   const newItems = matchingItems.map((item: any) => {
     const newItem = JSON.parse(JSON.stringify(item))
     newItem.play_id = newItem.id + 'copy&' + (Math.floor(Math.random() * 90000) + 10000)

@@ -1,15 +1,13 @@
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_view_home_page_info } from '@/views/view_app/page/page_home/store/store_view_home_page_info'
-import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
+import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
-import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { Items_ApiService_of_Je } from '../services_web/Items/index_service'
 import { Artists_ApiService_of_Je } from '../services_web/Artists/index_service'
-import axios from 'axios'
-import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
@@ -25,6 +23,8 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
   private playlistStore = usePlaylistStore()
   private playerSettingStore = usePlayerSettingStore()
   private pageAlbumStore = usePageAlbumStore()
+  private pageArtistStore = usePageArtistStore()
+  private pageMediaStore = usePageMediaStore()
 
   public async get_home_list(parentId: string) {
     await this.get_home_list_of_maximum_playback(parentId)
@@ -427,7 +427,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
         ///
         if (Array.isArray(songlist) && songlist.length > 0) {
           if (store_general_fetch_media_list._load_model === 'search') {
-            const existingSong = store_view_media_page_info.media_Files_temporary.find(
+            const existingSong = this.pageMediaStore.media_Files_temporary.find(
               (item) => item.id === songlist[0].id
             )
             if (existingSong) {
@@ -450,9 +450,9 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
       if (Array.isArray(songlist) && songlist.length > 0) {
         const last_index =
           store_general_fetch_media_list._load_model === 'search'
-            ? store_view_media_page_info.media_Files_temporary.length
+            ? this.pageMediaStore.media_Files_temporary.length
             : this.playlistStore.playlist_MediaFiles_temporary.length
-        store_view_media_page_info.media_File_metadata = []
+        this.pageMediaStore.media_File_metadata = []
         await Promise.all(
           songlist.map(async (song: any, index: number) => {
             const medium_image_url =
@@ -537,8 +537,8 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
               medium_image_url: medium_image_url,
             }
             if (store_general_fetch_media_list._load_model === 'search') {
-              store_view_media_page_info.media_File_metadata.push(song)
-              store_view_media_page_info.media_Files_temporary.push(newsong)
+              this.pageMediaStore.media_File_metadata.push(song)
+              this.pageMediaStore.media_Files_temporary.push(newsong)
             } else {
               this.playlistStore.playlist_MediaFiles_temporary.push({
                 ...newsong,
@@ -549,7 +549,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
         )
         if (store_general_fetch_media_list._load_model === 'play') {
           this.playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =
-            store_view_media_page_info.media_Files_temporary.map((item) => item.id)
+            this.pageMediaStore.media_Files_temporary.map((item) => item.id)
           store_system_configs_save.save_system_playlist_item_id_config()
         }
       }
@@ -586,9 +586,9 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
       if (Array.isArray(songlist) && songlist.length > 0) {
         const last_index =
           store_general_fetch_media_list._load_model === 'search'
-            ? store_view_media_page_info.media_Files_temporary.length
+            ? this.pageMediaStore.media_Files_temporary.length
             : this.playlistStore.playlist_MediaFiles_temporary.length
-        store_view_media_page_info.media_File_metadata = []
+        this.pageMediaStore.media_File_metadata = []
         await Promise.all(
           songlist.map(async (song: any, index: number) => {
             const medium_image_url =
@@ -673,8 +673,8 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
               medium_image_url: medium_image_url,
             }
             if (store_general_fetch_media_list._load_model === 'search') {
-              store_view_media_page_info.media_File_metadata.push(song)
-              store_view_media_page_info.media_Files_temporary.push(newsong)
+              this.pageMediaStore.media_File_metadata.push(song)
+              this.pageMediaStore.media_Files_temporary.push(newsong)
             } else {
               this.playlistStore.playlist_MediaFiles_temporary.push({
                 ...newsong,
@@ -685,7 +685,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
         )
         if (store_general_fetch_media_list._load_model === 'play') {
           this.playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =
-            store_view_media_page_info.media_Files_temporary.map((item) => item.id)
+            this.pageMediaStore.media_Files_temporary.map((item) => item.id)
           store_system_configs_save.save_system_playlist_item_id_config()
         }
       }
@@ -724,7 +724,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
         ///
         if (Array.isArray(songlist) && songlist.length > 0) {
           if (store_general_fetch_media_list._load_model === 'search') {
-            const existingSong = store_view_media_page_info.media_Files_temporary.find(
+            const existingSong = this.pageMediaStore.media_Files_temporary.find(
               (item) => item.id === songlist[0].id
             )
             if (existingSong) {
@@ -747,9 +747,9 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
       if (Array.isArray(songlist) && songlist.length > 0) {
         const last_index =
           store_general_fetch_media_list._load_model === 'search'
-            ? store_view_media_page_info.media_Files_temporary.length
+            ? this.pageMediaStore.media_Files_temporary.length
             : this.playlistStore.playlist_MediaFiles_temporary.length
-        store_view_media_page_info.media_File_metadata = []
+        this.pageMediaStore.media_File_metadata = []
         await Promise.all(
           songlist.map(async (song: any, index: number) => {
             const medium_image_url =
@@ -834,8 +834,8 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
               medium_image_url: medium_image_url,
             }
             if (store_general_fetch_media_list._load_model === 'search') {
-              store_view_media_page_info.media_File_metadata.push(song)
-              store_view_media_page_info.media_Files_temporary.push(newsong)
+              this.pageMediaStore.media_File_metadata.push(song)
+              this.pageMediaStore.media_Files_temporary.push(newsong)
             } else {
               this.playlistStore.playlist_MediaFiles_temporary.push({
                 ...newsong,
@@ -846,7 +846,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
         )
         if (store_general_fetch_media_list._load_model === 'play') {
           this.playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =
-            store_view_media_page_info.media_Files_temporary.map((item) => item.id)
+            this.pageMediaStore.media_Files_temporary.map((item) => item.id)
           store_system_configs_save.save_system_playlist_item_id_config()
         }
         ///
@@ -858,9 +858,9 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
       if (Array.isArray(songlist) && songlist.length > 0) {
         const last_index =
           store_general_fetch_media_list._load_model === 'search'
-            ? store_view_media_page_info.media_Files_temporary.length
+            ? this.pageMediaStore.media_Files_temporary.length
             : this.playlistStore.playlist_MediaFiles_temporary.length
-        store_view_media_page_info.media_File_metadata = []
+        this.pageMediaStore.media_File_metadata = []
         await Promise.all(
           songlist.map(async (song: any, index: number) => {
             const medium_image_url =
@@ -945,8 +945,8 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
               medium_image_url: medium_image_url,
             }
             if (store_general_fetch_media_list._load_model === 'search') {
-              store_view_media_page_info.media_File_metadata.push(song)
-              store_view_media_page_info.media_Files_temporary.push(newsong)
+              this.pageMediaStore.media_File_metadata.push(song)
+              this.pageMediaStore.media_Files_temporary.push(newsong)
             } else {
               this.playlistStore.playlist_MediaFiles_temporary.push({
                 ...newsong,
@@ -957,7 +957,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
         )
         if (store_general_fetch_media_list._load_model === 'play') {
           this.playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =
-            store_view_media_page_info.media_Files_temporary.map((item) => item.id)
+            this.pageMediaStore.media_Files_temporary.map((item) => item.id)
           store_system_configs_save.save_system_playlist_item_id_config()
         }
       }
@@ -1022,15 +1022,15 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
           songlist = Array.isArray(response_playlMedias.data.Items)
             ? response_playlMedias.data.Items
             : []
-          if (store_view_media_page_info.media_Files_temporary.length > 0 && songlist.length > 0) {
-            if (store_view_media_page_info.media_Files_temporary[0].id === songlist[0].Id) {
+          if (this.pageMediaStore.media_Files_temporary.length > 0 && songlist.length > 0) {
+            if (this.pageMediaStore.media_Files_temporary[0].id === songlist[0].Id) {
               songlist = []
             }
           }
           ///
           if (Array.isArray(songlist) && songlist.length > 0) {
             if (store_general_fetch_media_list._load_model === 'search') {
-              const existingSong = store_view_media_page_info.media_Files_temporary.find(
+              const existingSong = this.pageMediaStore.media_Files_temporary.find(
                 (item) => item.id === songlist[0].id
               )
               if (existingSong) {
@@ -1057,9 +1057,9 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
         }
         const last_index =
           store_general_fetch_media_list._load_model === 'search'
-            ? store_view_media_page_info.media_Files_temporary.length
+            ? this.pageMediaStore.media_Files_temporary.length
             : this.playlistStore.playlist_MediaFiles_temporary.length
-        store_view_media_page_info.media_File_metadata = []
+        this.pageMediaStore.media_File_metadata = []
         await Promise.all(
           songlist.map(async (song: any, index: number) => {
             const medium_image_url =
@@ -1144,8 +1144,8 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
               medium_image_url: medium_image_url,
             }
             if (store_general_fetch_media_list._load_model === 'search') {
-              store_view_media_page_info.media_File_metadata.push(song)
-              store_view_media_page_info.media_Files_temporary.push(newsong)
+              this.pageMediaStore.media_File_metadata.push(song)
+              this.pageMediaStore.media_Files_temporary.push(newsong)
             } else {
               this.playlistStore.playlist_MediaFiles_temporary.push({
                 ...newsong,
@@ -1156,7 +1156,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
         )
         if (store_general_fetch_media_list._load_model === 'play') {
           this.playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =
-            store_view_media_page_info.media_Files_temporary.map((item) => item.id)
+            this.pageMediaStore.media_Files_temporary.map((item) => item.id)
           store_system_configs_save.save_system_playlist_item_id_config()
         }
       }
@@ -1427,14 +1427,14 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
       )
       if (list != undefined) {
         artistlist = list.Items
-        store_view_artist_page_info.artist_item_count = list.TotalRecordCount
+        this.pageArtistStore.artist_item_count = list.TotalRecordCount
       }
       if (Array.isArray(artistlist) && artistlist.length > 0) {
         if (sortBy === 'DatePlayed') {
           artistlist = artistlist.filter((artist) => artist.UserData.PlayCount > 0)
         }
-        const last_index = store_view_artist_page_info.artist_Files_temporary.length
-        store_view_artist_page_info.artist_File_metadata = []
+        const last_index = this.pageArtistStore.artist_Files_temporary.length
+        this.pageArtistStore.artist_File_metadata = []
         artistlist.map(async (artist: any, index: number) => {
           const medium_image_url =
             artist.Id != undefined
@@ -1454,8 +1454,8 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
                   '&api_key=' +
                   store_server_user_model.authorization_of_Je
               : undefined
-          store_view_artist_page_info.artist_File_metadata.push(artist)
-          store_view_artist_page_info.artist_Files_temporary.push({
+          this.pageArtistStore.artist_File_metadata.push(artist)
+          this.pageArtistStore.artist_Files_temporary.push({
             absoluteIndex: index + 1 + last_index,
             favorite: artist.UserData.IsFavorite,
             rating: 0,
@@ -1500,8 +1500,8 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
         '',
         ''
       )
-      store_view_media_page_info.media_starred_count = list_audio.TotalRecordCount
-      store_view_media_page_info.media_item_count = list_audio.TotalRecordCount
+      this.pageMediaStore.media_starred_count = list_audio.TotalRecordCount
+      this.pageMediaStore.media_item_count = list_audio.TotalRecordCount
     } catch {}
   }
   public async get_count_of_artist_album() {
@@ -1531,7 +1531,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
         'Artist',
         'true'
       )
-      store_view_artist_page_info.artist_item_count = list_artist.TotalRecordCount
+      this.pageArtistStore.artist_item_count = list_artist.TotalRecordCount
     } catch {}
   }
   /// starred count
@@ -1553,7 +1553,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
         '',
         'IsFavorite'
       )
-      store_view_media_page_info.media_starred_count = list_audio.TotalRecordCount
+      this.pageMediaStore.media_starred_count = list_audio.TotalRecordCount
       //
       const list_album = await this.items_ApiService_of_Je.getItems_List(
         store_server_user_model.userid_of_Je,
@@ -1578,7 +1578,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
         store_server_user_model.parentid_of_Je_Music,
         'IsFavorite'
       )
-      store_view_artist_page_info.artist_starred_count = list_artist.TotalRecordCount
+      this.pageArtistStore.artist_starred_count = list_artist.TotalRecordCount
     } catch {}
   }
   /// playlist count
@@ -1591,7 +1591,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
           '/Items?IncludeItemTypes=Playlist&Recursive=true&api_key=' +
           store_server_user_model.authorization_of_Je
       )
-      store_view_media_page_info.media_playlist_count = response.data.TotalRecordCount
+      this.pageMediaStore.media_playlist_count = response.data.TotalRecordCount
     } catch {}
   }
 
@@ -1657,7 +1657,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
           },
           playlist_tracks: playlist_tracks,
         })
-        const isDuplicate = store_view_media_page_logic.page_songlists.some(
+        const isDuplicate = this.pageMediaStore.page_songlists.some(
           (item: Play_List) => item.id === playlist.Id
         )
         if (!isDuplicate) {
@@ -1679,8 +1679,8 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
             evaluated_at: '',
             owner_id: store_server_user_model.userid_of_Je,
           }
-          store_view_media_page_logic.page_songlists_options.push(temp_playlist)
-          store_view_media_page_logic.page_songlists.push(temp_playlist)
+          this.pageMediaStore.page_songlists_options.push(temp_playlist)
+          this.pageMediaStore.page_songlists.push(temp_playlist)
         }
       }
     }
@@ -1688,12 +1688,12 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
 
   /// recently count
   public async get_count_of_recently_media() {
-    store_view_media_page_info.media_recently_count = 0
+    this.pageMediaStore.media_recently_count = 0
   }
   public async get_count_of_recently_album() {
     this.pageAlbumStore.album_recently_count = 0
   }
   public async get_count_of_recently_artist() {
-    store_view_artist_page_info.artist_recently_count = 0
+    this.pageArtistStore.artist_recently_count = 0
   }
 }

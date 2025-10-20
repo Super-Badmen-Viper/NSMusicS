@@ -1,10 +1,10 @@
 import { reactive, watch } from 'vue'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
-import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { Browsing_ApiService_of_ND } from '@/data/data_configs/navidrome_api/services_normal/browsing/index_service'
-import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
+import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 
 export const store_player_tag_modify = reactive({
@@ -101,8 +101,9 @@ watch(
               }
               /// server_configs_stores model | database server_media_file
               else {
-                const item: Media_File | undefined =
-                  store_view_media_page_info.media_Files_temporary.find(
+                const pageMediaStore = usePageMediaStore()
+              const item: Media_File | undefined =
+                  pageMediaStore.media_Files_temporary.find(
                     (mediaFile: Media_File) =>
                       mediaFile.path === store_player_tag_modify.player_current_media_path
                   )
@@ -176,8 +177,9 @@ watch(
             store_player_tag_modify.player_current_album_id = item.id
             store_player_tag_modify.player_current_album_starred = item.starred || false
           } else if (store_player_tag_modify.player_show_tag_kind === 'artist') {
+            const pageArtistStore = usePageArtistStore()
             const item: Artist | undefined =
-              store_view_artist_page_info.artist_Files_temporary.find(
+              pageArtistStore.artist_Files_temporary.find(
                 (artist: Artist) => artist.id === store_player_tag_modify.player_current_artist_id
               )
             ///
@@ -195,14 +197,15 @@ watch(
         } else if (store_server_user_model.model_server_type_of_web) {
           /// show(no modify) web media_file_metadata
           if (store_player_tag_modify.player_show_tag_kind === 'media') {
+            const pageMediaStore = usePageMediaStore()
             if (
-              store_view_media_page_info.media_File_metadata != undefined &&
-              store_view_media_page_info.media_File_metadata.length > 0 &&
+              pageMediaStore.media_File_metadata != undefined &&
+              pageMediaStore.media_File_metadata.length > 0 &&
               store_player_tag_modify.player_current_media_id.length > 0
             ) {
               if (store_server_users.server_select_kind === 'ninesong') {
                 const item: Media_File | undefined =
-                  store_view_media_page_info.media_File_metadata.find(
+                  pageMediaStore.media_File_metadata.find(
                     (mediaFile: any) =>
                       mediaFile.ID === store_player_tag_modify.player_current_media_id
                   )
@@ -218,7 +221,7 @@ watch(
                 }
               } else {
                 const item: Media_File | undefined =
-                  store_view_media_page_info.media_File_metadata.find(
+                  pageMediaStore.media_File_metadata.find(
                     (mediaFile: any) =>
                       mediaFile.id === store_player_tag_modify.player_current_media_id
                   )

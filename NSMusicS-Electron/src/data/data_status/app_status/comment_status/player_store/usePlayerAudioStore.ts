@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
-import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { usePlayerAppearanceStore } from './usePlayerAppearanceStore'
 import { store_system_configs_load } from '@/data/data_stores/local_system_stores/store_system_configs_load'
 import { store_local_data_set_albumInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_albumInfo'
@@ -15,10 +15,11 @@ import { Get_LocalSqlite_AnnotationInfo } from '@/data/data_repository/app_repos
 import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { store_local_data_set_artistInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_artistInfo'
-import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
+import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
 import vinyl from '@/assets/img/vinyl.jpg'
 
 export const usePlayerAudioStore = defineStore('playerAudio', () => {
+  const pageMediaStore = usePageMediaStore()
   // State using refs
   const this_audio_file_path = ref('')
   const this_audio_file_medium_image_url = ref('')
@@ -238,8 +239,8 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
       const playlistStore = usePlaylistStore()
 
       if (
-        store_view_media_page_info.media_Files_temporary != undefined &&
-        store_view_media_page_info.media_Files_temporary.length != 0
+        pageMediaStore.media_Files_temporary != undefined &&
+        pageMediaStore.media_Files_temporary.length != 0
       ) {
         if (!store_system_configs_load.app_configs_loading) {
           this_audio_restart_play.value = true
@@ -257,7 +258,7 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
           }
         }
       }
-      store_view_media_page_info.media_Files_temporary.forEach((item: any) => {
+      pageMediaStore.media_Files_temporary.forEach((item: any) => {
         item.playing = item.id === this_audio_song_id.value
       })
       playlistStore.playlist_MediaFiles_temporary.forEach((item: any) => {
@@ -308,7 +309,7 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
   watch(this_audio_song_rating, (newValue) => {
     console.log('this_audio_song_rating：' + newValue)
 
-    store_view_media_page_info.media_Files_temporary.forEach((item: any) => {
+    pageMediaStore.media_Files_temporary.forEach((item: any) => {
       if (item.id === this_audio_song_id.value)
         item.rating = this_audio_song_rating.value
     })
@@ -317,7 +318,7 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
   watch(this_audio_song_favorite, (newValue) => {
     console.log('this_audio_song_favorite：' + newValue)
 
-    store_view_media_page_info.media_Files_temporary.forEach((item: any) => {
+    pageMediaStore.media_Files_temporary.forEach((item: any) => {
       if (item.id === this_audio_song_id.value)
         item.favorite = this_audio_song_favorite.value
     })
@@ -356,7 +357,8 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
     )
     if (store_server_user_model.model_server_type_of_local) {
       const get_LocalSqlite_AnnotationInfo = new Get_LocalSqlite_AnnotationInfo()
-      store_view_artist_page_info.artist_recently_count =
+      const pageArtistStore = usePageArtistStore()
+      pageArtistStore.artist_recently_count =
         get_LocalSqlite_AnnotationInfo.Get_Annotation_ItemInfo_Play_Count('artist')
       const playerSettingStore = usePlayerSettingStore()
       playerSettingStore.boolHandleItemClick_Played = true

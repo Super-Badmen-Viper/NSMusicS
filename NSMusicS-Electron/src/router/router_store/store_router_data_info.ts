@@ -8,7 +8,7 @@ import { store_system_configs_info } from '@/data/data_stores/local_system_store
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
 import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list'
-import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { store_view_media_cue_page_logic } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_logic'
 
@@ -51,8 +51,9 @@ watch(
         await store_general_fetch_media_cue_list.fetchData_Media()
       } else if (newValue === 'media') {
         if (store_router_data_info.router_click) {
-          store_view_media_page_logic.page_songlists_keyword = ''
-          store_view_media_page_logic.page_songlists_keywordFilter = ''
+          const pageMediaStore = usePageMediaStore()
+          pageMediaStore.page_songlists_keyword = ''
+          pageMediaStore.page_songlists_keywordFilter = ''
           //
           store_general_fetch_media_list._artist_id = ''
           store_general_fetch_media_list._album_id = ''

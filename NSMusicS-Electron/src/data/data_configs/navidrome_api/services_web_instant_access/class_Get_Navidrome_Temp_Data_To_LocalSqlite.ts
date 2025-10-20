@@ -1,10 +1,10 @@
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_view_home_page_info } from '@/views/view_app/page/page_home/store/store_view_home_page_info'
 import { Home_Lists_ApiWebService_of_ND } from '../services_web/page_lists/home_lists/index_service'
-import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
+import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { Media_library_scanning_ApiService_of_ND } from '../services_normal/media_library_scanning/index_service'
-import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { Artist_Lists_ApiWebService_of_ND } from '../services_web/page_lists/artist_lists/index_service'
 import { Album_Lists_ApiWebService_of_ND } from '../services_web/page_lists/album_lists/index_service'
 import { Media_Lists_ApiWebService_of_ND } from '../services_web/page_lists/song_lists/index_service'
@@ -39,6 +39,8 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
   private playerSettingStore = usePlayerSettingStore()
   private playerAudioStore = usePlayerAudioStore()
   private pageAlbumStore = usePageAlbumStore()
+  private pageArtistStore = usePageArtistStore()
+  private pageMediaStore = usePageMediaStore()
 
   public async get_home_list(url: string, username: string, token: string, salt: string) {
     await this.get_home_list_of_maximum_playback(url, username, token, salt)
@@ -341,7 +343,7 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
     ///
     if (Array.isArray(songlist) && songlist.length > 0) {
       if (store_general_fetch_media_list._load_model === 'search') {
-        const existingSong = store_view_media_page_info.media_Files_temporary.find(
+        const existingSong = this.pageMediaStore.media_Files_temporary.find(
           (item) => item.id === songlist[0].id
         )
         if (existingSong) {
@@ -366,9 +368,9 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
       store_general_fetch_player_list._totalCount = totalCount
       const last_index =
         store_general_fetch_media_list._load_model === 'search'
-          ? store_view_media_page_info.media_Files_temporary.length
+          ? this.pageMediaStore.media_Files_temporary.length
           : this.playlistStore.playlist_MediaFiles_temporary.length
-      store_view_media_page_info.media_File_metadata = []
+      this.pageMediaStore.media_File_metadata = []
       songlist.map(async (song: any, index: number) => {
         const lyrics = this.convertToLRC(song.lyrics)
         if (playlist_id !== '') {
@@ -447,8 +449,8 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
             song.id,
         }
         if (store_general_fetch_media_list._load_model === 'search') {
-          store_view_media_page_info.media_File_metadata.push(song)
-          store_view_media_page_info.media_Files_temporary.push(newsong)
+          this.pageMediaStore.media_File_metadata.push(song)
+          this.pageMediaStore.media_Files_temporary.push(newsong)
         } else {
           this.playlistStore.playlist_MediaFiles_temporary.push({
             ...newsong,
@@ -458,7 +460,7 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
       })
       if (store_general_fetch_media_list._load_model === 'play') {
         this.playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =
-          store_view_media_page_info.media_Files_temporary.map((item) => item.id)
+          this.pageMediaStore.media_Files_temporary.map((item) => item.id)
         store_system_configs_save.save_system_playlist_item_id_config()
       }
     }
@@ -571,11 +573,11 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
       if (_sort === 'playDate') {
         artistlist = artistlist.filter((artist) => artist.playCount > 0)
       }
-      const last_index = store_view_artist_page_info.artist_Files_temporary.length
-      store_view_artist_page_info.artist_File_metadata = []
+      const last_index = this.pageArtistStore.artist_Files_temporary.length
+      this.pageArtistStore.artist_File_metadata = []
       artistlist.map(async (artist: any, index: number) => {
-        store_view_artist_page_info.artist_File_metadata.push(artist)
-        store_view_artist_page_info.artist_Files_temporary.push({
+        this.pageArtistStore.artist_File_metadata.push(artist)
+        this.pageArtistStore.artist_Files_temporary.push({
           absoluteIndex: index + 1 + last_index,
           favorite: artist.starred,
           rating: artist.rating,
@@ -818,7 +820,7 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
         token,
         salt
       )
-      store_view_media_page_info.media_item_count = Number(
+      this.pageMediaStore.media_item_count = Number(
         getScanStatus['subsonic-response']['scanStatus']['count']
       )
     } catch {}
@@ -834,7 +836,7 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
       const getArtists_ALL = await browsing_ApiService_of_ND.getArtists_ALL(username, token, salt)
       const list = getArtists_ALL['subsonic-response']['artists']['index']
       if (list != undefined && Array.isArray(list)) {
-        store_view_artist_page_info.artist_item_count = list.reduce(
+        this.pageArtistStore.artist_item_count = list.reduce(
           (total, item) => total + item.artist.length,
           0
         )
@@ -862,11 +864,11 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
       const starred2_album = getStarred2_all['subsonic-response']['starred2']['album']
       const starred2_song = getStarred2_all['subsonic-response']['starred2']['song']
       if (starred2_song != undefined)
-        store_view_media_page_info.media_starred_count = starred2_song.length || 0
+        this.pageMediaStore.media_starred_count = starred2_song.length || 0
       if (starred2_album != undefined)
         this.pageAlbumStore.album_starred_count = starred2_album.length || 0
       if (starred2_artist != undefined)
-        store_view_artist_page_info.artist_starred_count = starred2_artist.length || 0
+        this.pageArtistStore.artist_starred_count = starred2_artist.length || 0
     } catch {}
   }
   /// playlist count
@@ -880,7 +882,7 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
       )
       const playlists = getPlaylists_all['subsonic-response']['playlists']['playlist']
       if (playlists != undefined)
-        store_view_media_page_info.media_playlist_count = playlists.length || 0
+        this.pageMediaStore.media_playlist_count = playlists.length || 0
     } catch {}
   }
 }

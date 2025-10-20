@@ -280,6 +280,7 @@ async function update_server_setUser(
 /// app select
 // 在<script setup>顶层获取Store实例
 const playerAudioStore = usePlayerAudioStore()
+const pageMediaStore = usePageMediaStore()
 
 async function update_server_config_of_current_user_of_sqlite(value: any, select_change: any) {
   if (select_change) {
@@ -330,23 +331,23 @@ async function update_server_config_of_current_user_of_sqlite(value: any, select
   playerSettingStore.play_order = 'playback-2'
   // Refresh page_songlists_options_Sort_key
   if (store_server_user_model.model_server_type_of_web) {
-    store_view_media_page_logic.list_options_Hand_Sort = true
+    pageMediaStore.list_options_Hand_Sort = true
     if (store_server_users.server_select_kind === 'ninesong') {
-      store_view_media_page_logic.page_songlists_options_Sort_key = [
+      pageMediaStore.page_songlists_options_Sort_key = [
         {
           columnKey: String('_id'),
           order: state_Sort.Ascend,
         },
       ]
     } else if (store_server_users.server_select_kind === 'navidrome') {
-      store_view_media_page_logic.page_songlists_options_Sort_key = [
+      pageMediaStore.page_songlists_options_Sort_key = [
         {
           columnKey: String('id'),
           order: state_Sort.Ascend,
         },
       ]
     } else {
-      store_view_media_page_logic.page_songlists_options_Sort_key = [
+      pageMediaStore.page_songlists_options_Sort_key = [
         {
           columnKey: String('SortName'),
           order: state_Sort.Ascend,
@@ -354,7 +355,7 @@ async function update_server_config_of_current_user_of_sqlite(value: any, select
       ]
     }
   } else if (store_server_user_model.model_server_type_of_local) {
-    store_view_media_page_logic.page_songlists_options_Sort_key = [
+    pageMediaStore.page_songlists_options_Sort_key = [
       {
         columnKey: String('id'),
         order: state_Sort.Ascend,
@@ -539,7 +540,7 @@ import { store_local_data_select_logic } from '@/data/data_stores/local_app_stor
 import { Library_ApiService_of_Je } from '@/data/data_configs/jellyfin_api/services_web/Library/index_service'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
-import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 </script>
 
 <template>

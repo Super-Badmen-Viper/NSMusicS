@@ -21,8 +21,7 @@ import { type InputInst, NButton, NIcon, useMessage, useThemeVars } from 'naive-
 import { Icon } from '@vicons/utils'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
-import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
-import { store_view_artist_page_logic } from '@/views/view_app/page/page_artist/store/store_view_artist_page_logic'
+import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 import { store_router_history_data_of_artist } from '@/router/router_store/store_router_history_data_of_artist'
 import { store_general_fetch_artist_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_artist/store_general_fetch_artist_list'
@@ -37,14 +36,14 @@ import { store_local_data_set_artistInfo } from '@/data/data_stores/local_app_st
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { storeToRefs } from 'pinia'
 
-import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
-import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 ////// right menu
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_general_fetch_album_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_album/store_general_fetch_album_list'
+import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
 import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
@@ -57,6 +56,14 @@ import { MultipleStopOutlined } from '@vicons/material'
 const { t } = useI18n({
   inheritLocale: true,
 })
+
+const pageMediaStore = usePageMediaStore()
+const pageArtistStore = usePageArtistStore()
+const {
+  page_artistlists_multi_sort,
+  page_artistlists_selected,
+  page_artistlists_options
+} = storeToRefs(pageArtistStore)
 
 ////// artistlist_view page_layout gridItems
 const item_artist = ref(170)
@@ -141,7 +148,7 @@ const updateGridItems = () => {
 }
 onMounted(() => {
   updateGridItems()
-  input_search_Value.value = store_view_artist_page_logic.page_artistlists_keyword
+  input_search_Value.value = pageArtistStore.page_artistlists_keyword
   if (input_search_Value.value.length > 0) {
     bool_show_search_area.value = true
     bool_input_search = true
@@ -241,20 +248,20 @@ if (
 let Select_Sort_Model = false
 const options_Sort = computed(() => {
   if (
-    store_view_artist_page_logic.page_artistlists_options_Sort_key != null &&
-    store_view_artist_page_logic.page_artistlists_options_Sort_key.length > 0
+    pageArtistStore.page_artistlists_options_Sort_key != null &&
+    pageArtistStore.page_artistlists_options_Sort_key.length > 0
   ) {
     options_Sort_key.value.forEach((element) => {
       if (
-        element.key === store_view_artist_page_logic.page_artistlists_options_Sort_key[0].columnKey
+        element.key === pageArtistStore.page_artistlists_options_Sort_key[0].columnKey
       )
         if (
-          store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order ===
+          pageArtistStore.page_artistlists_options_Sort_key[0].order ===
           state_Sort.Ascend
         )
           element.state_Sort = state_Sort.Ascend
         else if (
-          store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order ===
+          pageArtistStore.page_artistlists_options_Sort_key[0].order ===
           state_Sort.Descend
         )
           element.state_Sort = state_Sort.Descend
@@ -285,7 +292,7 @@ const options_Sort = computed(() => {
   })
 })
 const handleSelect_Sort = (key: string | number) => {
-  store_view_artist_page_logic.page_artistlists_multi_sort = ''
+  pageArtistStore.page_artistlists_multi_sort = ''
   updateSortConditions()
   //
   let _state_Sort_: state_Sort = state_Sort.Default
@@ -312,7 +319,7 @@ const handleSelect_Sort = (key: string | number) => {
       _state_Sort_ = state_Sort.Descend
       break
   }
-  store_view_artist_page_logic.page_artistlists_options_Sort_key = [
+  pageArtistStore.page_artistlists_options_Sort_key = [
     {
       columnKey: String(key),
       order: _state_Sort_,
@@ -320,14 +327,14 @@ const handleSelect_Sort = (key: string | number) => {
   ]
 
   const sortKey =
-    store_view_artist_page_logic.page_artistlists_options_Sort_key.length > 0 &&
-    store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order !== 'default'
-      ? store_view_artist_page_logic.page_artistlists_options_Sort_key[0].columnKey
+    pageArtistStore.page_artistlists_options_Sort_key.length > 0 &&
+    pageArtistStore.page_artistlists_options_Sort_key[0].order !== 'default'
+      ? pageArtistStore.page_artistlists_options_Sort_key[0].columnKey
       : 'id'
   const sortOrder =
-    store_view_artist_page_logic.page_artistlists_options_Sort_key.length > 0 &&
-    store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order !== 'default'
-      ? store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order.replace('end', '')
+    pageArtistStore.page_artistlists_options_Sort_key.length > 0 &&
+    pageArtistStore.page_artistlists_options_Sort_key[0].order !== 'default'
+      ? pageArtistStore.page_artistlists_options_Sort_key[0].order.replace('end', '')
       : ''
   Select_Sort_Model = !(
     (sortKey === '_id' || sortKey === 'id') &&
@@ -345,13 +352,13 @@ const show_search_area = () => {
     bool_show_search_area.value = false
     input_search_InstRef.value?.clear()
     if (bool_input_search) {
-      // store_view_artist_page_logic.list_data_StartUpdate = true
+      // pageArtistStore.list_data_StartUpdate = true
       back_search_default()
       bool_input_search = false
       scrollTo(0)
     }
     input_search_InstRef.value?.clear()
-    store_view_artist_page_logic.page_artistlists_keyword = ''
+    pageArtistStore.page_artistlists_keyword = ''
     click_search()
   } else {
     bool_show_search_area.value = true
@@ -368,13 +375,13 @@ const input_search_Value = ref()
 let bool_input_search = false
 const click_search = () => {
   if (input_search_Value.value) {
-    store_view_artist_page_logic.page_artistlists_keyword = input_search_Value.value.toLowerCase()
+    pageArtistStore.page_artistlists_keyword = input_search_Value.value.toLowerCase()
     bool_input_search = true
     options_Sort_key.value.forEach((element) => {
       element.state_Sort = state_Sort.Default
     })
   } else {
-    store_view_artist_page_logic.list_data_StartUpdate = true
+    pageArtistStore.list_data_StartUpdate = true
     bool_input_search = false
     back_search_default()
   }
@@ -386,14 +393,14 @@ const back_search_default = () => {
       if (options_Sort_key.value[i].key === options_Sort_key_Default_key.value) {
         const sortersArray: { columnKey: string; order: string }[] = []
         if (options_Sort_key.value[i].state_Sort === 'default') {
-          store_view_artist_page_logic.page_artistlists_options_Sort_key = null
+          pageArtistStore.page_artistlists_options_Sort_key = null
         } else {
           const sorter = {
             columnKey: options_Sort_key.value[i].key,
             order: options_Sort_key.value[i].state_Sort,
           }
           sortersArray.push(sorter)
-          store_view_artist_page_logic.page_artistlists_options_Sort_key = sortersArray
+          pageArtistStore.page_artistlists_options_Sort_key = sortersArray
         }
         break
       }
@@ -483,10 +490,10 @@ onMounted(() => {
 ////// select Dtatsource of artistlists
 const breadcrumbItems = ref('所有歌手')
 const page_artistlists_handleselected_updatevalue = (value: any) => {
-  store_view_artist_page_logic.page_artistlists_selected = value
+  pageArtistStore.page_artistlists_selected = value
   console.log('selected_value_for_artistlistall：' + value)
   breadcrumbItems.value =
-    store_view_artist_page_logic.page_artistlists_options.find((option) => option.value === value)
+    pageArtistStore.page_artistlists_options.find((option) => option.value === value)
       ?.label || ''
 }
 
@@ -502,7 +509,7 @@ const get_router_history_model_next = () => {
 const Open_this_artist_all_artist_list_click = (artist_id: string) => {
   if (store_server_user_model.model_server_type_of_web) {
     store_general_fetch_media_list.set_artist_id(artist_id)
-    store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+    pageMediaStore.page_songlists_selected = 'song_list_all'
     store_general_fetch_album_list.set_artist_id(artist_id)
     pageAlbumStore.page_albumlists_selected = 'album_list_all'
   }
@@ -514,16 +521,15 @@ const Open_this_artist_all_artist_list_click = (artist_id: string) => {
     console.log('artist_list_of_artist_id_artist_click：' + artist_id)
     store_router_data_logic.get_album_list_of_artist_id_by_artist_info(artist_id)
   } else {
-    // Jellyfin 有相当一部分flac媒体无法识别为专辑
     playerAppearanceStore.player_mode_of_medialist_from_external_import = false
-    store_view_media_page_logic.page_songlists_keyword = artist_id
+    pageMediaStore.page_songlists_keyword = artist_id
     store_router_data_info.router.push('media')
   }
 }
 const Play_this_artist_all_media_list_click = async (artist_id: string) => {
   if (store_server_user_model.model_server_type_of_web) {
     store_general_fetch_media_list.set_artist_id(artist_id)
-    store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+    pageMediaStore.page_songlists_selected = 'song_list_all'
     store_general_fetch_album_list.set_artist_id(artist_id)
     pageAlbumStore.page_albumlists_selected = 'album_list_all'
     store_server_user_model.random_play_model = false
@@ -537,8 +543,8 @@ const handleItemClick_Favorite = (id: any, favorite: boolean) => {
   store_local_data_set_artistInfo.Set_ArtistInfo_To_Favorite(id, favorite)
   page_artistlists_statistic.value.forEach((item: any) => {
     if (item.id === 'artist_list_love') {
-      store_view_artist_page_info.artist_starred_count += !favorite ? 1 : -1
-      item.artist_count = store_view_artist_page_info.artist_starred_count + ' *'
+      artist_starred_count.value += !favorite ? 1 : -1
+      item.artist_count = artist_starred_count.value + ' *'
     }
   })
 }
@@ -632,7 +638,7 @@ const generateSortQuery = () => {
   return validConditions.map((condition) => `sort=${condition.key}:${condition.order}`).join('&')
 }
 const updateStoreSortParam = () => {
-  store_view_artist_page_logic.page_artistlists_multi_sort = generateSortQuery()
+  pageArtistStore.page_artistlists_multi_sort = generateSortQuery()
 }
 const handleKeyChange = (value: string, index: number) => {
   sortConditions.value[index].key = value
@@ -663,7 +669,7 @@ const parseSortQuery = (query: string): SortCondition[] => {
   return conditions
 }
 const updateSortConditions = () => {
-  const storedQuery = store_view_artist_page_logic.page_artistlists_multi_sort
+  const storedQuery = pageArtistStore.page_artistlists_multi_sort
 
   if (storedQuery) {
     // 解析存储的排序条件
@@ -695,12 +701,12 @@ async function update_playlist_addArtist(id: any, playlist_id: any) {
   try {
     await store_general_fetch_media_list.fetchData_Media_Find_This_Artist(id)
     const matchingIds: string[] = []
-    store_view_media_page_info.media_Files_temporary.forEach((item: Media_File) => {
+    pageMediaStore.media_Files_temporary.forEach((item: Media_File) => {
       if (item.artist_id === id) {
         matchingIds.push(item.id)
       }
     })
-    store_view_media_page_info.media_Files_temporary = []
+    pageMediaStore.media_Files_temporary = []
     for (let item_id of matchingIds) {
       ////
       await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(item_id, playlist_id)
@@ -714,11 +720,11 @@ async function update_playlist_addArtist(id: any, playlist_id: any) {
 }
 async function menu_item_add_to_playlist_end() {
   await store_general_fetch_media_list.fetchData_Media_Find_This_Artist(playlist_Menu_Item_Id.value)
-  const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
+  const matchingItems = pageMediaStore.media_Files_temporary.filter(
     (item: Media_File) => item.artist_id === playlist_Menu_Item_Id.value
   )
 
-  store_view_media_page_info.media_Files_temporary = []
+  pageMediaStore.media_Files_temporary = []
 
   for (let item of matchingItems) {
     const newItem: any = JSON.parse(JSON.stringify(item))
@@ -735,11 +741,11 @@ async function menu_item_add_to_playlist_end() {
 }
 async function menu_item_add_to_playlist_next() {
   await store_general_fetch_media_list.fetchData_Media_Find_This_Artist(playlist_Menu_Item_Id.value)
-  const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
+  const matchingItems = pageMediaStore.media_Files_temporary.filter(
     (item: Media_File) => item.artist_id === playlist_Menu_Item_Id.value
   )
 
-  store_view_media_page_info.media_Files_temporary = []
+  pageMediaStore.media_Files_temporary = []
 
   const index = playlistStore.playlist_MediaFiles_temporary.findIndex(
     (item: any) => item.id === playerAudioStore.this_audio_song_id
@@ -768,7 +774,7 @@ async function menu_item_add_to_playlist_next() {
 }
 function menu_item_edit_selected_media_tags() {
   store_player_tag_modify.player_show_tag_kind = 'artist'
-  const item: Album | undefined = store_view_artist_page_info.artist_Files_temporary.find(
+  const item: Album | undefined = artist_Files_temporary.value.find(
     (artist: Album) => artist.id === playlist_Menu_Item_Id.value
   )
   if (item != undefined && item != 'undefined') {
@@ -804,11 +810,11 @@ const page_artistlists_statistic = ref<
 >([])
 function Refresh_page_artistlists_statistic() {
   page_artistlists_statistic.value = []
-  store_view_artist_page_logic.page_artistlists_statistic.forEach((item: any, index: number) => {
+  pageArtistStore.page_artistlists_statistic.forEach((item: any, index: number) => {
     page_artistlists_statistic.value.push({
-      label: store_view_artist_page_logic.page_artistlists_statistic[index].label,
-      artist_count: store_view_artist_page_logic.page_artistlists_statistic[index].artist_count,
-      id: store_view_artist_page_logic.page_artistlists_statistic[index].id,
+      label: pageArtistStore.page_artistlists_statistic[index].label,
+      artist_count: pageArtistStore.page_artistlists_statistic[index].artist_count,
+      id: pageArtistStore.page_artistlists_statistic[index].id,
     })
   })
 }
@@ -843,6 +849,7 @@ onBeforeUnmount(() => {
 const playlistStore = usePlaylistStore()
 const playerAudioStore = usePlayerAudioStore()
 const playerAppearanceStore = usePlayerAppearanceStore()
+const pageAlbumStore = usePageAlbumStore()
 // 使用 storeToRefs 解构出所需的响应式属性
 const { playlist_names_ALLLists, playlist_Menu_Item_Id } = storeToRefs(playlistStore)
 const { 
@@ -850,6 +857,7 @@ const {
   this_audio_artist_name,
   this_audio_song_id
 } = storeToRefs(playerAudioStore)
+const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistStore)
 </script>
 <template>
   <n-space vertical :size="12">
@@ -897,7 +905,7 @@ const {
               store_server_users.server_select_kind != 'emby' &&
               !(
                 store_server_user_model.model_server_type_of_web &&
-                store_view_artist_page_logic.page_artistlists_selected === 'artist_list_recently'
+                pageArtistStore.page_artistlists_selected === 'artist_list_recently'
               )
             "
             trigger="click"
@@ -934,7 +942,7 @@ const {
           >
             <template #trigger>
               <n-badge
-                v-if="store_view_artist_page_logic.page_artistlists_multi_sort.length > 0"
+                v-if="page_artistlists_multi_sort.length > 0"
                 dot
                 value="1"
                 :offset="[-18, 5]"
@@ -967,7 +975,7 @@ const {
                 </span>
               </n-space>
               <n-space justify="space-between" align="center" style="margin-bottom: 10px">
-                {{ store_view_artist_page_logic.page_artistlists_multi_sort }}
+                {{ pageArtistStore.page_artistlists_multi_sort }}
               </n-space>
               <n-space vertical size="large" style="width: 400px; margin-bottom: 12px">
                 <n-space justify="space-between" v-for="(_, index) in sortConditions" :key="index">
@@ -999,7 +1007,7 @@ const {
                     strong
                     @click="
                       () => {
-                        store_view_artist_page_logic.page_artistlists_multi_sort = ''
+                        pageArtistStore.page_artistlists_multi_sort = ''
                         updateSortConditions()
                       }
                     "
@@ -1054,8 +1062,8 @@ const {
               <template #trigger>
                 <n-select
                   size="small"
-                  :value="store_view_artist_page_logic.page_artistlists_selected"
-                  :options="store_view_artist_page_logic.page_artistlists_options"
+                  :value="page_artistlists_selected"
+                  :options="page_artistlists_options"
                   style="width: 181px"
                   @update:value="page_artistlists_handleselected_updatevalue"
                 />
@@ -1072,7 +1080,7 @@ const {
           width: 'calc(100vw - ' + (collapsed_width - 35) + 'px)',
           height: show_top_selectedlist ? 'calc(100vh - 236px)' : 'calc(100vh - 194px)',
         }"
-        :items="store_view_artist_page_info.artist_Files_temporary"
+        :items="artist_Files_temporary"
         :itemSize="itemSize"
         :minItemSize="itemSize"
         :grid-items="gridItems"
@@ -1166,8 +1174,8 @@ const {
                     <n-tooltip trigger="hover" placement="top">
                       <template #trigger>
                         <n-select
-                          :value="store_view_artist_page_logic.page_artistlists_selected"
-                          :options="store_view_artist_page_logic.page_artistlists_options"
+                          :value="page_artistlists_selected"
+                          :options="page_artistlists_options"
                           style="width: 166px"
                           @update:value="page_artistlists_handleselected_updatevalue"
                         />

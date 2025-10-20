@@ -514,13 +514,13 @@ import { store_server_users } from '@/data/data_stores/server_configs_stores/sto
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
-import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
-import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 
 // 在setup上下文中获取Store实例
 const playerAppearanceStore = usePlayerAppearanceStore()
 const playerAudioStore = usePlayerAudioStore()
 const playlistStore = usePlaylistStore()
+const pageMediaStore = usePageMediaStore()
 // 使用 storeToRefs 解构出所需的响应式属性
 const {
   player_lyric_fontSize_Num,
@@ -562,15 +562,15 @@ const handleItemClick_Favorite = (id: any, favorite: boolean) => {
     store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id, favorite)
     playerAudioStore.this_audio_song_favorite = !favorite
 
-    store_view_media_page_logic.page_songlists_statistic.forEach((item: any) => {
+    pageMediaStore.page_songlists_statistic.forEach((item: any) => {
       if (item.id === 'song_list_love') {
-        store_view_media_page_info.media_starred_count += !favorite ? 1 : -1
-        item.song_count = store_view_media_page_info.media_starred_count + ' *'
+        pageMediaStore.media_starred_count += !favorite ? 1 : -1
+        item.song_count = pageMediaStore.media_starred_count + ' *'
       }
     })
     playerSettingStore.boolHandleItemClick_Favorite = true
 
-    const item_file: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find(
+    const item_file: Media_File | undefined = pageMediaStore.media_Files_temporary.find(
       (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
     )
     const item_playlist: Media_File | undefined =
@@ -585,7 +585,7 @@ const handleItemClick_Rating = (id: any, rating: any) => {
   store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, rating)
   playerAudioStore.this_audio_song_rating = rating
 
-  const item_file: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find(
+  const item_file: Media_File | undefined = pageMediaStore.media_Files_temporary.find(
     (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
   )
   const item_playlist: Media_File | undefined =

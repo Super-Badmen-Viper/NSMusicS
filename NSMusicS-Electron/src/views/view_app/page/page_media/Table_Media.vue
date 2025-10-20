@@ -301,17 +301,17 @@ if (
 let Select_Sort_Model = false
 let options_Sort = computed(() => {
   if (
-    store_view_media_page_logic.page_songlists_options_Sort_key != null &&
-    store_view_media_page_logic.page_songlists_options_Sort_key.length > 0
+    pageMediaStore.page_songlists_options_Sort_key != null &&
+    pageMediaStore.page_songlists_options_Sort_key.length > 0
   ) {
     options_Sort_key.value.forEach((element) => {
-      if (element.key === store_view_media_page_logic.page_songlists_options_Sort_key[0].columnKey)
+      if (element.key === pageMediaStore.page_songlists_options_Sort_key[0].columnKey)
         if (
-          store_view_media_page_logic.page_songlists_options_Sort_key[0].order === state_Sort.Ascend
+          pageMediaStore.page_songlists_options_Sort_key[0].order === state_Sort.Ascend
         )
           element.state_Sort = state_Sort.Ascend
         else if (
-          store_view_media_page_logic.page_songlists_options_Sort_key[0].order ===
+          pageMediaStore.page_songlists_options_Sort_key[0].order ===
           state_Sort.Descend
         )
           element.state_Sort = state_Sort.Descend
@@ -342,7 +342,7 @@ let options_Sort = computed(() => {
   })
 })
 const handleSelect_Sort = (key: string | number) => {
-  store_view_media_page_logic.page_songlists_multi_sort = ''
+  pageMediaStore.page_songlists_multi_sort = ''
   updateSortConditions()
   //
   let _state_Sort_: state_Sort = state_Sort.Default
@@ -369,8 +369,8 @@ const handleSelect_Sort = (key: string | number) => {
       _state_Sort_ = state_Sort.Descend
       break
   }
-  store_view_media_page_logic.list_options_Hand_Sort = true
-  store_view_media_page_logic.page_songlists_options_Sort_key = [
+  pageMediaStore.list_options_Hand_Sort = true
+  pageMediaStore.page_songlists_options_Sort_key = [
     {
       columnKey: String(key),
       order: _state_Sort_,
@@ -378,15 +378,15 @@ const handleSelect_Sort = (key: string | number) => {
   ]
 
   const sortKey =
-    store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 &&
-    store_view_media_page_logic.page_songlists_options_Sort_key[0].columnKey !== '_id' &&
-    store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default'
-      ? store_view_media_page_logic.page_songlists_options_Sort_key[0].columnKey
+    pageMediaStore.page_songlists_options_Sort_key.length > 0 &&
+    pageMediaStore.page_songlists_options_Sort_key[0].columnKey !== '_id' &&
+    pageMediaStore.page_songlists_options_Sort_key[0].order !== 'default'
+      ? pageMediaStore.page_songlists_options_Sort_key[0].columnKey
       : 'id'
   const sortOrder =
-    store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 &&
-    store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default'
-      ? store_view_media_page_logic.page_songlists_options_Sort_key[0].order.replace('end', '')
+    pageMediaStore.page_songlists_options_Sort_key.length > 0 &&
+    pageMediaStore.page_songlists_options_Sort_key[0].order !== 'default'
+      ? pageMediaStore.page_songlists_options_Sort_key[0].order.replace('end', '')
       : ''
   Select_Sort_Model = !(
     (sortKey === '_id' || sortKey === 'id') &&
@@ -399,11 +399,10 @@ const options_Sort_key_Default_key = ref()
 const options_Sort_key_Default = ref<SortItem[]>()
 // lineItems Search(filter)
 const show_search_area = () => {
-  if (store_view_media_page_logic.page_songlists_bool_show_search_area) {
-    store_view_media_page_logic.page_songlists_bool_show_search_area = false
+  if (pageMediaStore.page_songlists_bool_show_search_area) {
+    pageMediaStore.page_songlists_bool_show_search_area = false
     input_search_InstRef.value?.clear()
     if (bool_input_search) {
-      // store_view_media_page_logic.list_data_StartUpdate = true
       back_search_default()
       bool_input_search = false
       scrollTo(0)
@@ -412,10 +411,10 @@ const show_search_area = () => {
       store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
     }
     input_search_InstRef.value?.clear()
-    store_view_media_page_logic.page_songlists_keywordFilter = ''
+    pageMediaStore.page_songlists_keywordFilter = ''
     click_search()
   } else {
-    store_view_media_page_logic.page_songlists_bool_show_search_area = true
+    pageMediaStore.page_songlists_bool_show_search_area = true
     options_Sort_key_Default.value = options_Sort_key.value.slice()
     options_Sort_key.value.forEach((element) => {
       //保存 sort key
@@ -426,17 +425,17 @@ const show_search_area = () => {
 const input_search_InstRef = ref()
 let bool_input_search = false
 const click_search = () => {
-  if (store_view_media_page_logic.page_songlists_input_search_Value) {
+  if (pageMediaStore.page_songlists_input_search_Value) {
     const page_songlists_keyword =
-      store_view_media_page_logic.page_songlists_input_search_Value.toLowerCase()
-    store_view_media_page_logic.get_page_songlists_keyword(page_songlists_keyword)
+      pageMediaStore.page_songlists_input_search_Value.toLowerCase()
+    pageMediaStore.get_page_songlists_keyword(page_songlists_keyword)
     bool_input_search = true
     options_Sort_key.value.forEach((element) => {
       element.state_Sort = state_Sort.Default
     })
   } else {
-    store_view_media_page_logic.page_songlists_keywordFilter = ''
-    store_view_media_page_logic.list_data_StartUpdate = true
+    pageMediaStore.page_songlists_keywordFilter = ''
+    pageMediaStore.list_data_StartUpdate = true
     bool_input_search = false
     back_search_default()
     ///
@@ -452,16 +451,16 @@ const back_search_default = () => {
       if (options_Sort_key.value[i].key === options_Sort_key_Default_key.value) {
         const sortersArray: { columnKey: string; order: string }[] = []
         if (options_Sort_key.value[i].state_Sort === 'default') {
-          store_view_media_page_logic.list_options_Hand_Sort = true
-          store_view_media_page_logic.page_songlists_options_Sort_key = null
+          pageMediaStore.list_options_Hand_Sort = true
+          pageMediaStore.page_songlists_options_Sort_key = null
         } else {
           const sorter = {
             columnKey: options_Sort_key.value[i].key,
             order: options_Sort_key.value[i].state_Sort,
           }
           sortersArray.push(sorter)
-          store_view_media_page_logic.list_options_Hand_Sort = true
-          store_view_media_page_logic.page_songlists_options_Sort_key = sortersArray
+          pageMediaStore.list_options_Hand_Sort = true
+          pageMediaStore.page_songlists_options_Sort_key = sortersArray
         }
         break
       }
@@ -471,8 +470,8 @@ const back_search_default = () => {
 onMounted(() => {
   // local
   if (store_server_user_model.model_server_type_of_local) {
-    if (store_view_media_page_logic.page_songlists_keywordFilter.length > 0) {
-      store_view_media_page_logic.page_songlists_bool_show_search_area = true
+    if (pageMediaStore.page_songlists_keywordFilter.length > 0) {
+      pageMediaStore.page_songlists_bool_show_search_area = true
       bool_input_search = true
       return
     }
@@ -481,18 +480,18 @@ onMounted(() => {
   const { _artist_id, _album_id, _album_artist_id } = store_general_fetch_media_list
   const hasMediaId = _artist_id.length > 0 || _album_id.length > 0 || _album_artist_id.length > 0
   if (hasMediaId) {
-    store_view_media_page_logic.page_songlists_input_search_Value =
+    pageMediaStore.page_songlists_input_search_Value =
       _album_id.length > 0 ? _album_id : _artist_id.length > 0 ? _artist_id : _album_artist_id
 
-    store_view_media_page_logic.page_songlists_bool_show_search_area = true
+    pageMediaStore.page_songlists_bool_show_search_area = true
     bool_input_search = true
   } else {
-    store_view_media_page_logic.page_songlists_input_search_Value =
-      store_view_media_page_logic.page_songlists_keyword
+    pageMediaStore.page_songlists_input_search_Value =
+      pageMediaStore.page_songlists_keyword
 
     const shouldShowSearch =
-      store_view_media_page_logic.page_songlists_input_search_Value.length > 0
-    store_view_media_page_logic.page_songlists_bool_show_search_area = shouldShowSearch
+      pageMediaStore.page_songlists_input_search_Value.length > 0
+    pageMediaStore.page_songlists_bool_show_search_area = shouldShowSearch
     bool_input_search = shouldShowSearch
   }
 })
@@ -577,20 +576,20 @@ const page_songlists_handleselected_updatevalue = async (value: any) => {
       store_server_users.server_select_kind === 'emby')
   ) {
     store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
-    store_view_media_page_logic.page_songlists_keyword = ''
+    pageMediaStore.page_songlists_keyword = ''
     input_search_InstRef.value?.clear()
-    store_view_media_page_logic.page_songlists_bool_show_search_area = false
+    pageMediaStore.page_songlists_bool_show_search_area = false
   }
   /// navidrome/app
-  store_view_media_page_logic.set_media_Files_selected_all(false)
-  store_view_media_page_logic.list_selected_Hand_click = true
-  await store_view_media_page_logic.get_page_songlists_selected(value)
+  pageMediaStore.set_media_Files_selected_all(false)
+  pageMediaStore.list_selected_Hand_click = true
+  await pageMediaStore.get_page_songlists_selected(value)
   console.log('selected_value_for_songlistall：' + value)
   breadcrumbItems.value =
-    store_view_media_page_logic.page_songlists_options.find((option) => option.value === value)
+    pageMediaStore.page_songlists_options.find((option) => option.value === value)
       ?.label || ''
   bool_start_play.value = true
-  store_view_media_page_logic.set_media_Files_selected_all(false)
+  pageMediaStore.set_media_Files_selected_all(false)
 }
 
 ////// router_app history
@@ -627,16 +626,16 @@ const handleItemDbClick = async (media_file: any, index: number) => {
 const handleItemClick_title = (title: string) => {
   if (store_server_user_model.model_server_type_of_local) {
     click_count = 0
-    store_view_media_page_logic.page_songlists_input_search_Value = title //+'accurate_search'+'__title__'
-    store_view_media_page_logic.get_page_songlists_keyword(title)
-    store_view_media_page_logic.page_songlists_bool_show_search_area = false
+    pageMediaStore.page_songlists_input_search_Value = title
+    pageMediaStore.get_page_songlists_keyword(title)
+    pageMediaStore.page_songlists_bool_show_search_area = false
     show_search_area()
     click_search()
     scrollTo(0)
   } else if (store_server_user_model.model_server_type_of_web) {
-    store_view_media_page_logic.page_songlists_bool_show_search_area = true
-    store_view_media_page_logic.page_songlists_input_search_Value = title
-    store_view_media_page_logic.get_page_songlists_keyword(title)
+    pageMediaStore.page_songlists_bool_show_search_area = true
+    pageMediaStore.page_songlists_input_search_Value = title
+    pageMediaStore.get_page_songlists_keyword(title)
   }
 }
 const handleItemClick_artist = async (artist: string) => {
@@ -647,26 +646,26 @@ const handleItemClick_artist = async (artist: string) => {
   ) {
     click_count = 0
     if (store_server_user_model.model_server_type_of_local) {
-      store_view_media_page_logic.page_songlists_input_search_Value = artist //+'accurate_search'+'__artist__'//artist不参与精确搜索
-      store_view_media_page_logic.get_page_songlists_keyword(artist)
-      store_view_media_page_logic.page_songlists_bool_show_search_area = false
+      pageMediaStore.page_songlists_input_search_Value = artist
+      pageMediaStore.get_page_songlists_keyword(artist)
+      pageMediaStore.page_songlists_bool_show_search_area = false
       show_search_area()
       click_search()
       scrollTo(0)
     } else if (store_server_user_model.model_server_type_of_web) {
       store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
-      store_view_media_page_logic.page_songlists_bool_show_search_area = true
-      store_view_media_page_logic.page_songlists_input_search_Value = artist
-      store_view_media_page_logic.get_page_songlists_keyword(artist)
+      pageMediaStore.page_songlists_bool_show_search_area = true
+      pageMediaStore.page_songlists_input_search_Value = artist
+      pageMediaStore.get_page_songlists_keyword(artist)
     }
   } else if (
     store_server_users.server_select_kind === 'ninesong' &&
     store_server_user_model.model_server_type_of_web
   ) {
     store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
-    store_view_media_page_logic.page_songlists_bool_show_search_area = true
-    store_view_media_page_logic.page_songlists_input_search_Value = artist
-    // store_view_media_page_logic.get_page_songlists_keyword(artist)
+    pageMediaStore.page_songlists_bool_show_search_area = true
+    pageMediaStore.page_songlists_input_search_Value = artist
+    // pageMediaStore.get_page_songlists_keyword(artist)
     store_general_fetch_media_list.set_artist_id(artist)
     await store_general_fetch_media_list.fetchData_Media()
   } else {
@@ -683,28 +682,28 @@ const handleItemClick_album = async (album_id: string) => {
   ) {
     click_count = 0
     if (store_server_user_model.model_server_type_of_local) {
-      store_view_media_page_logic.page_songlists_input_search_Value =
+      pageMediaStore.page_songlists_input_search_Value =
         album_id + 'accurate_search' + '__album__'
-      store_view_media_page_logic.get_page_songlists_keyword(
+      pageMediaStore.get_page_songlists_keyword(
         album_id + 'accurate_search' + '__album__'
       )
-      store_view_media_page_logic.page_songlists_bool_show_search_area = false
+      pageMediaStore.page_songlists_bool_show_search_area = false
       show_search_area()
       click_search()
       scrollTo(0)
     } else if (store_server_user_model.model_server_type_of_web) {
       store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
-      store_view_media_page_logic.page_songlists_bool_show_search_area = true
-      store_view_media_page_logic.page_songlists_input_search_Value = album_id
-      store_view_media_page_logic.get_page_songlists_keyword(album_id)
+      pageMediaStore.page_songlists_bool_show_search_area = true
+      pageMediaStore.page_songlists_input_search_Value = album_id
+      pageMediaStore.get_page_songlists_keyword(album_id)
     }
   } else if (
     store_server_users.server_select_kind === 'ninesong' &&
     store_server_user_model.model_server_type_of_web
   ) {
     store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
-    store_view_media_page_logic.page_songlists_bool_show_search_area = true
-    store_view_media_page_logic.page_songlists_input_search_Value = album_id
+    pageMediaStore.page_songlists_bool_show_search_area = true
+    pageMediaStore.page_songlists_input_search_Value = album_id
     store_general_fetch_media_list.set_album_id(album_id)
     await store_general_fetch_media_list.fetchData_Media()
   } else {
@@ -716,7 +715,7 @@ const handleItemClick_album = async (album_id: string) => {
 const Open_this_artist_all_artist_list_click = (artist_id: string) => {
   if (store_server_user_model.model_server_type_of_web) {
     store_general_fetch_media_list.set_artist_id(artist_id)
-    store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+    pageMediaStore.page_songlists_selected = 'song_list_all'
     store_general_fetch_album_list.set_artist_id(artist_id)
     pageAlbumStore.page_albumlists_selected = 'album_list_all'
   }
@@ -728,9 +727,8 @@ const Open_this_artist_all_artist_list_click = (artist_id: string) => {
     console.log('artist_list_of_artist_id_artist_click：' + artist_id)
     store_router_data_logic.get_album_list_of_artist_id_by_artist_info(artist_id)
   } else {
-    // Jellyfin 有相当一部分flac媒体无法识别为专辑
     playerAppearanceStore.player_mode_of_medialist_from_external_import = false
-    store_view_media_page_logic.page_songlists_keyword = artist_id
+    pageMediaStore.page_songlists_keyword = artist_id
     store_router_data_info.router.push('media')
   }
 }
@@ -741,8 +739,8 @@ const handleItemClick_Favorite = (id: any, favorite: boolean) => {
   store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id, favorite)
   page_songlists_statistic.value.forEach((item: any) => {
     if (item.id === 'song_list_love') {
-      store_view_media_page_info.media_starred_count += !favorite ? 1 : -1
-      item.song_count = store_view_media_page_info.media_starred_count + ' *'
+      pageMediaStore.media_starred_count += !favorite ? 1 : -1
+      item.song_count = pageMediaStore.media_starred_count + ' *'
     }
   })
   if (id === playerAudioStore.this_audio_song_id) {
@@ -761,7 +759,7 @@ let before_rating = false
 let after_rating = false
 const handleItemClick_Rating = (id_rating: any) => {
   click_count = 0
-  const rating_item: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find(
+  const rating_item: Media_File | undefined = pageMediaStore.media_Files_temporary.find(
     (mediaFile: Media_File) => mediaFile.id === playlist_Menu_Item_Id
   )
   if (rating_item != undefined) {
@@ -802,8 +800,8 @@ const message = useMessage()
 const themeVars = useThemeVars()
 /// add playlist
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
-import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
+
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
@@ -817,6 +815,7 @@ import { store_system_configs_save } from '@/data/data_stores/local_system_store
 // 在顶层获取 Store 实例
 const playerAppearanceStore = usePlayerAppearanceStore()
 const playerSettingStore = usePlayerSettingStore()
+const pageMediaStore = usePageMediaStore()
 
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
@@ -849,6 +848,22 @@ const {
   this_audio_song_name,
   page_top_album_image_url
 } = storeToRefs(playerAudioStore)
+
+const {
+  page_songlists_bool_show_search_area,
+  page_songlists_input_search_Value,
+  page_songlists_multi_sort,
+  page_songlists_filter_model,
+  page_songlists_filter_year,
+  page_songlists_suffix,
+  page_songlists_library_path,
+  page_songlists_library_folder_path,
+  page_songlists_bitrate_range,
+  page_songlists_selected,
+  page_songlists_options,
+  media_Files_selected,
+  media_Files_temporary
+} = storeToRefs(pageMediaStore)
 
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
@@ -894,7 +909,7 @@ async function update_playlist_addPlaylist() {
             playlist_set_of_addPlaylist_of_public.value
         )
         //
-        store_view_media_page_info.media_playlist_count++
+        pageMediaStore.media_playlist_count++
       }
     } else {
       store_general_model_player_list.get_playlist_tracks_temporary_add(
@@ -904,7 +919,7 @@ async function update_playlist_addPlaylist() {
 
     page_songlists_statistic.value.forEach((item: any) => {
       if (item.id === 'song_list_all_PlayList') {
-        item.song_count = store_view_media_page_info.media_playlist_count + ' *'
+        item.song_count = pageMediaStore.media_playlist_count + ' *'
       }
     })
   } catch (e) {
@@ -966,12 +981,12 @@ async function update_playlist_deletePlaylist() {
             playlist_update_emit_id.value
           )
         if (result !== undefined) {
-          store_view_media_page_info.media_playlist_count--
+          pageMediaStore.media_playlist_count--
         }
       }
       page_songlists_statistic.value.forEach((item: any) => {
         if (item.id === 'song_list_all_PlayList') {
-          item.song_count = store_view_media_page_info.media_playlist_count + ' *'
+          item.song_count = pageMediaStore.media_playlist_count + ' *'
         }
       })
     }
@@ -991,10 +1006,10 @@ async function update_playlist_addMediaFile(id: any, playlist_id: any) {
 }
 async function update_playlist_deleteMediaFile(id: any) {
   try {
-    if (store_view_media_page_logic.page_songlists_selected === 'song_list_all') {
-    } else if (store_view_media_page_logic.page_songlists_selected === 'song_list_love') {
+    if (pageMediaStore.page_songlists_selected === 'song_list_all') {
+    } else if (pageMediaStore.page_songlists_selected === 'song_list_love') {
       await store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id, true)
-    } else if (store_view_media_page_logic.page_songlists_selected === 'song_list_recently') {
+    } else if (pageMediaStore.page_songlists_selected === 'song_list_recently') {
     } else {
       if (
         store_server_users.server_select_kind === 'jellyfin' ||
@@ -1002,17 +1017,17 @@ async function update_playlist_deleteMediaFile(id: any) {
       ) {
         await store_local_data_set_mediaInfo.Set_MediaInfo_Delete_Selected_Playlist(
           playlist_Menu_Item_IndexId.value,
-          store_view_media_page_logic.page_songlists_selected
+          pageMediaStore.page_songlists_selected
         )
       } else {
         await store_local_data_set_mediaInfo.Set_MediaInfo_Delete_Selected_Playlist(
           id,
-          store_view_media_page_logic.page_songlists_selected
+          pageMediaStore.page_songlists_selected
         )
       }
     }
-    store_view_media_page_info.media_Files_temporary =
-      store_view_media_page_info.media_Files_temporary.filter((media: any) => media.id !== id)
+    pageMediaStore.media_Files_temporary =
+      pageMediaStore.media_Files_temporary.filter((media: any) => media.id !== id)
     message.success(t('common.delete'))
     store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
   } catch (e) {
@@ -1022,55 +1037,55 @@ async function update_playlist_deleteMediaFile(id: any) {
 /// update selected media_file
 const Type_Selected_Media_File_To_Playlist = ref(false)
 async function update_playlist_addMediaFile_selected(playlist_id: any) {
-  await store_view_media_page_logic.get_selected_playlist_add_MediaFile(playlist_id)
+  await pageMediaStore.get_selected_playlist_add_MediaFile(playlist_id)
   message.success(t('common.add'))
   Type_Selected_Media_File_To_Playlist.value = false
   click_open_bulk_operation()
 }
 async function update_lovelist_addMediaFile_selected() {
-  store_view_media_page_logic.get_selected_lovelist_add_MediaFile(true)
+  pageMediaStore.get_selected_lovelist_add_MediaFile(true)
   message.success(t('common.add'))
   Type_Selected_Media_File_To_Playlist.value = false
   click_open_bulk_operation()
 }
 async function update_button_deleteMediaFile_selected() {
-  if (store_view_media_page_logic.page_songlists_selected === 'song_list_all') {
+  if (pageMediaStore.page_songlists_selected === 'song_list_all') {
     await update_locallist_deleteMediaFile_selected(
-      store_view_media_page_logic.page_songlists_selected
+      pageMediaStore.page_songlists_selected
     )
-  } else if (store_view_media_page_logic.page_songlists_selected === 'song_list_love') {
+  } else if (pageMediaStore.page_songlists_selected === 'song_list_love') {
     await update_lovelist_deleteMediaFile_selected(
-      store_view_media_page_logic.page_songlists_selected
+      pageMediaStore.page_songlists_selected
     )
-  } else if (store_view_media_page_logic.page_songlists_selected !== 'song_list_all') {
+  } else if (pageMediaStore.page_songlists_selected !== 'song_list_all') {
     await update_playlist_deleteMediaFile_selected(
-      store_view_media_page_logic.page_songlists_selected
+      pageMediaStore.page_songlists_selected
     )
   }
-  store_view_media_page_info.media_Files_temporary =
-    store_view_media_page_info.media_Files_temporary.filter(
+  pageMediaStore.media_Files_temporary =
+    pageMediaStore.media_Files_temporary.filter(
       (file) =>
-        !store_view_media_page_info.media_Files_selected.some((selected) => selected.id === file.id)
+        !pageMediaStore.media_Files_selected.some((selected) => selected.id === file.id)
     )
   message.success(t('common.delete'))
 }
 async function update_playlist_deleteMediaFile_selected(playlist_id: any) {
-  await store_view_media_page_logic.get_selected_playlist_delete_MediaFile(playlist_id)
+  await pageMediaStore.get_selected_playlist_delete_MediaFile(playlist_id)
   Type_Selected_Media_File_To_Playlist.value = false
   click_open_bulk_operation()
 }
 async function update_locallist_deleteMediaFile_selected(playlist_id: any) {
-  store_view_media_page_logic.get_selected_locallist_delete_MediaFile(playlist_id)
+  pageMediaStore.get_selected_locallist_delete_MediaFile(playlist_id)
   Type_Selected_Media_File_To_Playlist.value = false
   click_open_bulk_operation()
 }
 async function update_lovelist_deleteMediaFile_selected(playlist_id: any) {
-  store_view_media_page_logic.get_selected_lovelist_delete_MediaFile(playlist_id)
+  pageMediaStore.get_selected_lovelist_delete_MediaFile(playlist_id)
   Type_Selected_Media_File_To_Playlist.value = false
   click_open_bulk_operation()
 }
 async function update_recentlist_deletetMediaFile_selected(playlist_id: any) {
-  store_view_media_page_logic.get_selected_recentlist_deletet_MediaFile(playlist_id)
+  pageMediaStore.get_selected_recentlist_deletet_MediaFile(playlist_id)
   Type_Selected_Media_File_To_Playlist.value = false
   click_open_bulk_operation()
 }
@@ -1158,7 +1173,7 @@ const generateSortQuery = () => {
   return validConditions.map((condition) => `sort=${condition.key}:${condition.order}`).join('&')
 }
 const updateStoreSortParam = () => {
-  store_view_media_page_logic.page_songlists_multi_sort = generateSortQuery()
+  pageMediaStore.page_songlists_multi_sort = generateSortQuery()
   store_general_fetch_media_list.fetchData_Media_of_server_web_start()
 }
 const handleKeyChange = (value: string, index: number) => {
@@ -1190,7 +1205,7 @@ const parseSortQuery = (query: string): SortCondition[] => {
   return conditions
 }
 const updateSortConditions = () => {
-  const storedQuery = store_view_media_page_logic.page_songlists_multi_sort
+  const storedQuery = pageMediaStore.page_songlists_multi_sort
 
   if (storedQuery) {
     // 解析存储的排序条件
@@ -1215,16 +1230,16 @@ onMounted(() => {
 
 ////// bulk_operation and select_line
 const click_select_MediaList_ALL_Line = () => {
-  if (store_view_media_page_info.media_Files_selected.length == 0) {
-    store_view_media_page_logic.set_media_Files_selected_all(true)
+  if (pageMediaStore.media_Files_selected.length == 0) {
+    pageMediaStore.set_media_Files_selected_all(true)
   } else {
-    store_view_media_page_logic.set_media_Files_selected_all(false)
+    pageMediaStore.set_media_Files_selected_all(false)
   }
 }
 const click_open_bulk_operation = () => {
   if (bool_start_play.value == true) {
     bool_start_play.value = false
-    store_view_media_page_logic.set_media_Files_selected_all(false)
+    pageMediaStore.set_media_Files_selected_all(false)
   } else {
     bool_start_play.value = true
   }
@@ -1282,7 +1297,7 @@ const begin_select_MediaList_ALL_Line_of_playback = (key: string | number) => {
   } else {
     playerSettingStore.play_order = 'playback-4'
   }
-  const mediaFiles = store_view_media_page_info.media_Files_temporary
+  const mediaFiles = pageMediaStore.media_Files_temporary
   if (mediaFiles.length > 0) {
     let index
     if (key === 'options_dropdown_play_mode_1' || key === 'options_dropdown_play_mode_2') {
@@ -1317,16 +1332,16 @@ async function begin_random_play_model() {
         ''
       )
     } else {
-      store_view_media_page_logic.list_options_Hand_Sort = false
+      pageMediaStore.list_options_Hand_Sort = false
       if (store_server_users.server_select_kind === 'jellyfin') {
-        store_view_media_page_logic.page_songlists_options_Sort_key = [
+        pageMediaStore.page_songlists_options_Sort_key = [
           {
             columnKey: String('Random,SortName'),
             order: state_Sort.Ascend,
           },
         ]
       } else if (store_server_users.server_select_kind === 'emby') {
-        store_view_media_page_logic.page_songlists_options_Sort_key = [
+        pageMediaStore.page_songlists_options_Sort_key = [
           {
             columnKey: String('Random'),
             order: state_Sort.Ascend,
@@ -1336,25 +1351,25 @@ async function begin_random_play_model() {
       await page_songlists_handleselected_updatevalue('song_list_all')
       // await store_general_fetch_media_list.fetchData_Media()
       scrollTo(0)
-      if (store_view_media_page_info.media_Files_temporary.length > 0) {
+      if (pageMediaStore.media_Files_temporary.length > 0) {
         click_count = 2
         bool_start_play.value = true
-        await handleItemDbClick(store_view_media_page_info.media_Files_temporary[0], 0)
+        await handleItemDbClick(pageMediaStore.media_Files_temporary[0], 0)
       }
     }
     store_server_user_model.random_play_model = true
   } else {
     store_server_user_model.random_play_model = false
-    store_view_media_page_logic.list_options_Hand_Sort = true
+    pageMediaStore.list_options_Hand_Sort = true
     if (store_server_users.server_select_kind === 'ninesong') {
-      store_view_media_page_logic.page_songlists_options_Sort_key = [
+      pageMediaStore.page_songlists_options_Sort_key = [
         {
           columnKey: String('_id'),
           order: state_Sort.Ascend,
         },
       ]
     } else if (store_server_users.server_select_kind === 'navidrome') {
-      store_view_media_page_logic.page_songlists_options_Sort_key = [
+      pageMediaStore.page_songlists_options_Sort_key = [
         {
           columnKey: String('id'),
           order: state_Sort.Ascend,
@@ -1374,7 +1389,7 @@ async function begin_random_play_model() {
 const contextmenu = ref(null as any)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'))
 function menu_item_add_to_playlist_end() {
-  const item: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find(
+  const item: Media_File | undefined = pageMediaStore.media_Files_temporary.find(
     (mediaFile: Media_File) => mediaFile.id === playlist_Menu_Item_Id
   )
   if (item != undefined && item != 'undefined') {
@@ -1393,7 +1408,7 @@ function menu_item_add_to_playlist_end() {
   }
 }
 function menu_item_add_to_playlist_next() {
-  const item: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find(
+  const item: Media_File | undefined = pageMediaStore.media_Files_temporary.find(
     (mediaFile: Media_File) => mediaFile.id === playlist_Menu_Item_Id
   )
   if (item != undefined && item != 'undefined') {
@@ -1418,7 +1433,7 @@ function menu_item_add_to_playlist_next() {
 }
 function menu_item_edit_selected_media_tags() {
   store_player_tag_modify.player_show_tag_kind = 'media'
-  const item: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find(
+  const item: Media_File | undefined = pageMediaStore.media_Files_temporary.find(
     (mediaFile: Media_File) => mediaFile.id === playlist_Menu_Item_Id
   )
   if (item != undefined && item != 'undefined') {
@@ -1459,16 +1474,16 @@ const onRefreshSharp = debounce(async (event, args) => {
       store_general_fetch_media_list.set_artist_id('')
     }
     store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
-    store_view_media_page_logic.page_songlists_keyword = ''
+    pageMediaStore.page_songlists_keyword = ''
     input_search_InstRef.value?.clear()
-    store_view_media_page_logic.page_songlists_keywordFilter = ''
-    store_view_media_page_logic.page_songlists_bool_show_search_area = false
+    pageMediaStore.page_songlists_keywordFilter = ''
+    pageMediaStore.page_songlists_bool_show_search_area = false
     store_general_fetch_media_list.fetchData_Media_of_server_web_start()
   } else if (store_server_user_model.model_server_type_of_local) {
-    store_view_media_page_logic.page_songlists_bool_show_search_area = true
+    pageMediaStore.page_songlists_bool_show_search_area = true
     show_search_area()
-    store_view_media_page_logic.page_songlists_keywordFilter = ''
-    store_view_media_page_logic.list_selected_Hand_click = false
+    pageMediaStore.page_songlists_keywordFilter = ''
+    pageMediaStore.list_selected_Hand_click = false
     // store_general_fetch_media_list.fetchData_Media()
   }
 }, 500)
@@ -1482,11 +1497,11 @@ const page_songlists_statistic = ref<
 >([])
 function Refresh_page_songlists_statistic() {
   page_songlists_statistic.value = []
-  store_view_media_page_logic.page_songlists_statistic.forEach((item: any, index: number) => {
+  pageMediaStore.page_songlists_statistic.forEach((item: any, index: number) => {
     page_songlists_statistic.value.push({
-      label: store_view_media_page_logic.page_songlists_statistic[index].label,
-      song_count: store_view_media_page_logic.page_songlists_statistic[index].song_count,
-      id: store_view_media_page_logic.page_songlists_statistic[index].id,
+      label: pageMediaStore.page_songlists_statistic[index].label,
+      song_count: pageMediaStore.page_songlists_statistic[index].song_count,
+      id: pageMediaStore.page_songlists_statistic[index].id,
     })
   })
 }
@@ -1557,29 +1572,29 @@ onMounted(async () => {
     }))
   }
   ///
-  store_view_media_page_logic.page_songlists_filter_year = 0
-  store_view_media_page_logic.page_songlists_bitrate_range = [0, 0]
-  store_view_media_page_logic.page_songlists_library_path = ''
-  store_view_media_page_logic.page_songlists_library_folder_path = ''
-  store_view_media_page_logic.page_songlists_suffix = ''
-  store_view_media_page_logic.page_songlists_filter_model = false
+  pageMediaStore.page_songlists_filter_year = 0
+  pageMediaStore.page_songlists_bitrate_range = [0, 0]
+  pageMediaStore.page_songlists_library_path = ''
+  pageMediaStore.page_songlists_library_folder_path = ''
+  pageMediaStore.page_songlists_suffix = ''
+  pageMediaStore.page_songlists_filter_model = false
 })
 async function filter_media_folder_path() {
-  store_view_media_page_logic.page_songlists_keywordFilter = ''
-  store_view_media_page_logic.list_selected_Hand_click = false
+  pageMediaStore.page_songlists_keywordFilter = ''
+  pageMediaStore.list_selected_Hand_click = false
   //
-  store_view_media_page_logic.page_songlists_filter_model =
-    store_view_media_page_logic.page_songlists_filter_year != 0 ||
-    store_view_media_page_logic.page_songlists_bitrate_range[0] != 0 ||
-    store_view_media_page_logic.page_songlists_bitrate_range[1] != 0 ||
-    store_view_media_page_logic.page_songlists_library_path.length > 0 ||
-    store_view_media_page_logic.page_songlists_suffix.length > 0
+  pageMediaStore.page_songlists_filter_model =
+    pageMediaStore.page_songlists_filter_year != 0 ||
+    pageMediaStore.page_songlists_bitrate_range[0] != 0 ||
+    pageMediaStore.page_songlists_bitrate_range[1] != 0 ||
+    pageMediaStore.page_songlists_library_path.length > 0 ||
+    pageMediaStore.page_songlists_suffix.length > 0
   //
   await store_general_fetch_media_list.fetchData_Media()
 }
 async function find_server_folder_path(path: string) {
   if (path === undefined || path === '') {
-    path = store_view_media_page_logic.page_songlists_library_path
+    path = pageMediaStore.page_songlists_library_path
   }
   const result = await folder_Entity_ApiService_of_NineSong.browseFolder_Entity(path)
   if (result) {
@@ -1589,7 +1604,7 @@ async function find_server_folder_path(path: string) {
     }))
     browseFolderPathOptions.value.unshift({
       label: '...',
-      value: store_view_media_page_logic.page_songlists_library_path,
+      value: pageMediaStore.page_songlists_library_path,
     })
   }
 }
@@ -1619,7 +1634,7 @@ onBeforeUnmount(() => {
                   circle
                   @click="
                     () => {
-                      store_view_media_page_logic.page_songlists_bool_show_search_area = true
+                      pageMediaStore.page_songlists_bool_show_search_area = true
                       store_general_fetch_media_list.set_album_id('')
                       store_general_fetch_media_list.set_artist_id('')
                       show_search_area()
@@ -1660,14 +1675,14 @@ onBeforeUnmount(() => {
           <n-tooltip
             trigger="hover"
             placement="top"
-            v-if="store_view_media_page_logic.page_songlists_bool_show_search_area"
+            v-if="page_songlists_bool_show_search_area"
           >
             <template #trigger>
               <n-input-group style="width: 144px">
                 <n-input
                   style="width: 144px"
                   ref="input_search_InstRef"
-                  v-model:value="store_view_media_page_logic.page_songlists_input_search_Value"
+                  v-model:value="page_songlists_input_search_Value"
                   @keydown.enter="click_search"
                 />
               </n-input-group>
@@ -1729,7 +1744,7 @@ onBeforeUnmount(() => {
           >
             <template #trigger>
               <n-badge
-                v-if="store_view_media_page_logic.page_songlists_multi_sort.length > 0"
+               v-if="page_songlists_multi_sort.length > 0"
                 dot
                 value="1"
                 :offset="[-18, 3]"
@@ -1762,7 +1777,7 @@ onBeforeUnmount(() => {
                 </span>
               </n-space>
               <n-space justify="space-between" align="center" style="margin-bottom: 10px">
-                {{ store_view_media_page_logic.page_songlists_multi_sort }}
+                {{ page_songlists_multi_sort }}
               </n-space>
               <n-space
                 vertical
@@ -1799,7 +1814,7 @@ onBeforeUnmount(() => {
                     strong
                     @click="
                       () => {
-                        store_view_media_page_logic.page_songlists_multi_sort = ''
+                        pageMediaStore.page_songlists_multi_sort = ''
                         updateSortConditions()
                       }
                     "
@@ -1825,7 +1840,7 @@ onBeforeUnmount(() => {
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-badge
-                v-if="store_view_media_page_logic.page_songlists_filter_model"
+                v-if="page_songlists_filter_model"
                 :offset="[-17, 3]"
                 dot
                 style="margin-left: -10px; margin-right: -10px"
@@ -1866,7 +1881,7 @@ onBeforeUnmount(() => {
                         clearable
                         placeholder=""
                         style="width: 200px"
-                        v-model:value="store_view_media_page_logic.page_songlists_filter_year"
+                        v-model:value="page_songlists_filter_year"
                         @update:value="filter_media_folder_path"
                       />
                       <n-button
@@ -1874,7 +1889,7 @@ onBeforeUnmount(() => {
                         secondary
                         @click="
                           () => {
-                            store_view_media_page_logic.page_songlists_filter_year = 0
+                            pageMediaStore.page_songlists_filter_year = 0
                             filter_media_folder_path()
                           }
                         "
@@ -1896,7 +1911,7 @@ onBeforeUnmount(() => {
                     }}</span>
                     <n-space vertical>
                       <n-select
-                        v-model:value="store_view_media_page_logic.page_songlists_suffix"
+                        v-model:value="page_songlists_suffix"
                         :options="audioSuffixOptions"
                         placement="bottom"
                         style="width: 200px"
@@ -1907,7 +1922,7 @@ onBeforeUnmount(() => {
                         secondary
                         @click="
                           () => {
-                            store_view_media_page_logic.page_songlists_suffix = ''
+                            pageMediaStore.page_songlists_suffix = ''
                             filter_media_folder_path()
                           }
                         "
@@ -1931,7 +1946,7 @@ onBeforeUnmount(() => {
                     }}</span>
                     <n-space vertical>
                       <n-select
-                        v-model:value="store_view_media_page_logic.page_songlists_library_path"
+                        v-model:value="page_songlists_library_path"
                         :options="browseFolderOptions"
                         placement="bottom"
                         style="width: 200px"
@@ -1942,8 +1957,8 @@ onBeforeUnmount(() => {
                         secondary
                         @click="
                           () => {
-                            store_view_media_page_logic.page_songlists_library_path = ''
-                            store_view_media_page_logic.page_songlists_library_folder_path = ''
+                            pageMediaStore.page_songlists_library_path = ''
+                            pageMediaStore.page_songlists_library_folder_path = ''
                             filter_media_folder_path()
                           }
                         "
@@ -1966,17 +1981,17 @@ onBeforeUnmount(() => {
                     <n-space vertical>
                       <n-select
                         :disabled="
-                          store_view_media_page_logic.page_songlists_library_path.length === 0
+                          page_songlists_library_path.length === 0
                         "
                         v-model:value="
-                          store_view_media_page_logic.page_songlists_library_folder_path
+                          page_songlists_library_folder_path
                         "
                         :options="browseFolderPathOptions"
                         placement="bottom"
                         style="width: 200px"
                         @click="
                           find_server_folder_path(
-                            store_view_media_page_logic.page_songlists_library_folder_path
+                            pageMediaStore.page_songlists_library_folder_path
                           )
                         "
                         @update:value="filter_media_folder_path"
@@ -1986,7 +2001,7 @@ onBeforeUnmount(() => {
                         secondary
                         @click="
                           () => {
-                            store_view_media_page_logic.page_songlists_library_folder_path = ''
+                            pageMediaStore.page_songlists_library_folder_path = ''
                             filter_media_folder_path()
                           }
                         "
@@ -2010,7 +2025,7 @@ onBeforeUnmount(() => {
                     }}</span>
                     <n-space vertical>
                       <n-input-number
-                        v-model:value="store_view_media_page_logic.page_songlists_bitrate_range[0]"
+                        v-model:value="page_songlists_bitrate_range[0]"
                         :step="100"
                         clearable
                         placeholder=""
@@ -2022,7 +2037,7 @@ onBeforeUnmount(() => {
                         secondary
                         @click="
                           () => {
-                            store_view_media_page_logic.page_songlists_bitrate_range[0] = 0
+                            pageMediaStore.page_songlists_bitrate_range[0] = 0
                             filter_media_folder_path()
                           }
                         "
@@ -2044,7 +2059,7 @@ onBeforeUnmount(() => {
                     }}</span>
                     <n-space vertical>
                       <n-input-number
-                        v-model:value="store_view_media_page_logic.page_songlists_bitrate_range[1]"
+                        v-model:value="page_songlists_bitrate_range[1]"
                         :step="1000"
                         clearable
                         placeholder=""
@@ -2056,7 +2071,7 @@ onBeforeUnmount(() => {
                         secondary
                         @click="
                           () => {
-                            store_view_media_page_logic.page_songlists_bitrate_range[1] = 0
+                            pageMediaStore.page_songlists_bitrate_range[1] = 0
                             filter_media_folder_path()
                           }
                         "
@@ -2071,12 +2086,12 @@ onBeforeUnmount(() => {
           </n-modal>
 
           <n-divider
-            v-if="store_view_media_page_logic.page_songlists_selected !== 'song_list_recently'"
+            v-if="page_songlists_selected !== 'song_list_recently'"
             vertical
             style="width: 2px; height: 20px; margin-top: -4px"
           />
           <n-tooltip
-            v-if="store_view_media_page_logic.page_songlists_selected !== 'song_list_recently'"
+            v-if="page_songlists_selected !== 'song_list_recently'"
             trigger="hover"
             placement="top"
           >
@@ -2122,9 +2137,9 @@ onBeforeUnmount(() => {
               v-if="
                 store_server_user_model.model_select !== 'server' ||
                 (store_server_user_model.model_select === 'server' &&
-                  store_view_media_page_logic.page_songlists_selected !== 'song_list_all') ||
+                  pageMediaStore.page_songlists_selected !== 'song_list_all') ||
                 (store_server_user_model.model_select === 'server' &&
-                  store_view_media_page_logic.page_songlists_selected !== 'song_list_all' &&
+                  pageMediaStore.page_songlists_selected !== 'song_list_all' &&
                   !store_server_user_model.model_server_type_of_web)
               "
             >
@@ -2141,7 +2156,7 @@ onBeforeUnmount(() => {
               {{
                 $t('nsmusics.view_page.selectedMedia') +
                 ' ' +
-                store_view_media_page_info.media_Files_selected.length
+                media_Files_selected.length
               }}
               *
             </n-p>
@@ -2268,8 +2283,8 @@ onBeforeUnmount(() => {
               <template #trigger>
                 <n-select
                   size="small"
-                  :value="store_view_media_page_logic.page_songlists_selected"
-                  :options="store_view_media_page_logic.page_songlists_options"
+                  :value="page_songlists_selected"
+                  :options="page_songlists_options"
                   style="width: 181px"
                   @update:value="page_songlists_handleselected_updatevalue"
                 />
@@ -2322,7 +2337,7 @@ onBeforeUnmount(() => {
           width: 'calc(100vw - ' + (collapsed_width - 35) + 'px)',
           height: show_top_selectedlist ? 'calc(100vh - 236px)' : 'calc(100vh - 194px)',
         }"
-        :items="store_view_media_page_info.media_Files_temporary"
+        :items="media_Files_temporary"
         :minItemSize="50"
         :emit-update="true"
         key-field="absoluteIndex"
@@ -2414,8 +2429,8 @@ onBeforeUnmount(() => {
                     <n-tooltip trigger="hover" placement="top">
                       <template #trigger>
                         <n-select
-                          :value="store_view_media_page_logic.page_songlists_selected"
-                          :options="store_view_media_page_logic.page_songlists_options"
+                          :value="page_songlists_selected"
+                          :options="page_songlists_options"
                           style="width: 166px"
                           @update:value="page_songlists_handleselected_updatevalue"
                         />
@@ -2518,7 +2533,7 @@ onBeforeUnmount(() => {
                 @change="
                   (event) => {
                     item.selected = event.target.checked
-                    store_view_media_page_logic.set_media_Files_selected(item)
+                    pageMediaStore.set_media_Files_selected(item)
                   }
                 "
               />
@@ -2812,9 +2827,9 @@ onBeforeUnmount(() => {
         />
         <v-contextmenu-item
           v-if="
-            store_view_media_page_logic.page_songlists_selected !== 'song_list_all' &&
-            store_view_media_page_logic.page_songlists_selected !== 'song_list_love' &&
-            store_view_media_page_logic.page_songlists_selected !== 'song_list_recently'
+            pageMediaStore.page_songlists_selected !== 'song_list_all' &&
+            pageMediaStore.page_songlists_selected !== 'song_list_love' &&
+            pageMediaStore.page_songlists_selected !== 'song_list_recently'
           "
           @click="update_playlist_deleteMediaFile(playlist_Menu_Item_Id)"
         >
@@ -3022,7 +3037,7 @@ onBeforeUnmount(() => {
           <span style="font-size: 20px; font-weight: 600">{{
             $t('nsmusics.view_page.selectedMedia') +
             ' ' +
-            store_view_media_page_info.media_Files_selected.length +
+            media_Files_selected.length +
             ' * ' +
             $t('form.addToPlaylist.title')
           }}</span>

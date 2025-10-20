@@ -8,14 +8,13 @@ import { Player_Configs_of_UI } from '@/data/data_models/app_models/app_Configs/
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { Player_Configs_of_Audio_Info } from '@/data/data_models/app_models/app_Configs/class_Player_Configs_of_Audio_Info'
 import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
-import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
-import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
-import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
+import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
@@ -34,8 +33,10 @@ export const store_system_configs_save = reactive({
     return id
   },
   async save_system_config_of_App_Configs() {
+    const pageMediaStore = usePageMediaStore()
     const playerSettingStore = usePlayerSettingStore()
     const pageAlbumStore = usePageAlbumStore()
+    const pageArtistStore = usePageArtistStore()
     if (!store_system_configs_load.app_configs_loading) {
       const app_Configs = ref(
         new App_Configs({
@@ -74,15 +75,15 @@ export const store_system_configs_save = reactive({
           ),
           authorization_of_nd: String(store_server_user_model.authorization_of_nd),
           client_unique_id: String(store_server_user_model.client_unique_id),
-          media_page_sizes: String(store_view_media_page_info.media_page_sizes),
+          media_page_sizes: String(pageMediaStore.media_page_sizes),
           album_page_sizes: String(pageAlbumStore.album_page_sizes),
-          artist_page_sizes: String(store_view_artist_page_info.artist_page_sizes),
+          artist_page_sizes: String(pageArtistStore.artist_page_sizes),
           clear_Memory_Model: String(store_router_data_logic.clear_Memory_Model),
           clear_Equilibrium_Model: String(store_router_data_logic.clear_Equilibrium_Model),
           clear_UserExperience_Model: String(store_router_data_logic.clear_UserExperience_Model),
           theme_auto_system: String(store_system_configs_info.theme_auto_system),
           page_songlists_filter_year: String(
-            store_view_media_page_logic.page_songlists_filter_year
+            pageMediaStore.page_songlists_filter_year
           ),
           player_select: String(playerSettingStore.player_select),
           player_fade_value: String(playerSettingStore.player_fade_value),
@@ -247,6 +248,7 @@ export const store_system_configs_save = reactive({
     const playerSettingStore = usePlayerSettingStore()
     const playerAppearanceStore = usePlayerAppearanceStore()
     const playerAudioStore = usePlayerAudioStore()
+    const pageMediaStore = usePageMediaStore()
     let player_Configs_of_Audio_Info = null
     player_Configs_of_Audio_Info = ref(
       new Player_Configs_of_Audio_Info({
@@ -277,7 +279,7 @@ export const store_system_configs_save = reactive({
         playlist_album_id: String(store_general_fetch_player_list._album_id),
         playlist_album_artist_id: String(store_general_fetch_player_list._album_artist_id),
 
-        page_songlists_selected: String(store_view_media_page_logic.page_songlists_selected),
+        page_songlists_selected: String(pageMediaStore.page_songlists_selected),
 
         player_mode_of_lock_playlist: String(playerAppearanceStore.player_mode_of_lock_playlist),
         player_mode_of_medialist_from_external_import: String(

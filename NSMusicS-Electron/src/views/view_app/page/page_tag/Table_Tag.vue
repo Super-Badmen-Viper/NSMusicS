@@ -20,7 +20,8 @@ const themeVars = useThemeVars()
 import { useI18n } from 'vue-i18n'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
-import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
+import { storeToRefs } from 'pinia'
 import { Folder_Entity_ApiService_of_NineSong } from '@/data/data_configs/ninesong_api/services_web/Folder_Entity/index_service'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
@@ -28,6 +29,12 @@ import { store_view_tag_page_info } from '@/views/view_app/page/page_tag/store/s
 const { t } = useI18n({
   inheritLocale: true,
 })
+
+const pageMediaStore = usePageMediaStore()
+const {
+  page_songlists_library_path,
+  page_songlists_library_folder_path
+} = storeToRefs(pageMediaStore)
 
 ///
 const browseFolderOptions = ref([])
@@ -45,8 +52,8 @@ onMounted(async () => {
     }))
   }
   ///
-  store_view_media_page_logic.page_songlists_library_path = ''
-  store_view_media_page_logic.page_songlists_library_folder_path = ''
+  pageMediaStore.page_songlists_library_path = ''
+  pageMediaStore.page_songlists_library_folder_path = ''
   ///
   store_view_tag_page_info.tag_metadata_find_model = true
   ///
@@ -56,8 +63,8 @@ onMounted(async () => {
 })
 onBeforeUnmount(() => {
   store_view_tag_page_info.tag_metadata_find_model = false
-  store_view_media_page_logic.page_songlists_library_path = ''
-  store_view_media_page_logic.page_songlists_library_folder_path = ''
+  pageMediaStore.page_songlists_library_path = ''
+  pageMediaStore.page_songlists_library_folder_path = ''
   ///
   store_view_tag_page_info.tag_LibraryItems_metadata = []
   store_view_tag_page_info.tag_LibraryItems_temporary = []
@@ -80,7 +87,7 @@ async function filter_media_folder_path() {
 }
 async function find_server_folder_path(path: string) {
   if (path === undefined || path === '') {
-    path = store_view_media_page_logic.page_songlists_library_path
+    path = pageMediaStore.page_songlists_library_path
   }
   const result = await folder_Entity_ApiService_of_NineSong.browseFolder_Entity(path)
   if (result) {
@@ -90,7 +97,7 @@ async function find_server_folder_path(path: string) {
     }))
     browseFolderPathOptions.value.unshift({
       label: '...',
-      value: store_view_media_page_logic.page_songlists_library_path,
+      value: pageMediaStore.page_songlists_library_path,
     })
   }
 }
@@ -221,7 +228,7 @@ const tag_type_options = ref([
                 <span style="font-size: 14px; font-weight: 600">{{ $t('HeaderLibraries') }}</span>
                 <n-space vertical>
                   <n-select
-                    v-model:value="store_view_media_page_logic.page_songlists_library_path"
+                    v-model:value="page_songlists_library_path"
                     :options="browseFolderOptions"
                     placement="bottom"
                     style="width: 170px"
@@ -232,8 +239,8 @@ const tag_type_options = ref([
                     secondary
                     @click="
                       () => {
-                        store_view_media_page_logic.page_songlists_library_path = ''
-                        store_view_media_page_logic.page_songlists_library_folder_path = ''
+                        pageMediaStore.page_songlists_library_path = ''
+                        pageMediaStore.page_songlists_library_folder_path = ''
                         filter_media_folder_path()
                       }
                     "
@@ -255,14 +262,14 @@ const tag_type_options = ref([
                 }}</span>
                 <n-space vertical>
                   <n-select
-                    :disabled="store_view_media_page_logic.page_songlists_library_path.length === 0"
-                    v-model:value="store_view_media_page_logic.page_songlists_library_folder_path"
+                    :disabled="page_songlists_library_path.length === 0"
+                    v-model:value="page_songlists_library_folder_path"
                     :options="browseFolderPathOptions"
                     placement="bottom"
                     style="width: 170px"
                     @click="
                       find_server_folder_path(
-                        store_view_media_page_logic.page_songlists_library_folder_path
+                        pageMediaStore.page_songlists_library_folder_path
                       )
                     "
                     @update:value="filter_media_folder_path"
@@ -272,7 +279,7 @@ const tag_type_options = ref([
                     secondary
                     @click="
                       () => {
-                        store_view_media_page_logic.page_songlists_library_folder_path = ''
+                        pageMediaStore.page_songlists_library_folder_path = ''
                         filter_media_folder_path()
                       }
                     "

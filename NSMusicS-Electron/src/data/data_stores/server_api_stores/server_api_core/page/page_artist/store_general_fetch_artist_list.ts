@@ -3,12 +3,10 @@ import { store_router_data_logic } from '@/router/router_store/store_router_data
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { store_router_history_data_of_artist } from '@/router/router_store/store_router_history_data_of_artist'
-import { store_view_artist_page_logic } from '@/views/view_app/page/page_artist/store/store_view_artist_page_logic'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
-import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
+import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
-import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
-import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 
@@ -27,6 +25,7 @@ import { store_server_login_info } from '@/views/view_server/page_login/store/st
 
 export const store_general_fetch_artist_list = reactive({
   async fetchData_Artist() {
+    const pageArtistStore = usePageArtistStore()
     // clear RouterView of vue-virtual-scroller data
     store_router_data_logic.clear_Files_temporary()
     store_router_data_info.router_select = 'artist'
@@ -44,22 +43,22 @@ export const store_general_fetch_artist_list = reactive({
           // load artist_Files_temporary data
           if (store_router_history_data_of_artist.router_history_model_of_Artist === 0) {
             const sortKey =
-              store_view_artist_page_logic.page_artistlists_options_Sort_key.length > 0 &&
-              store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order !== 'default'
-                ? store_view_artist_page_logic.page_artistlists_options_Sort_key[0].columnKey
+              pageArtistStore.page_artistlists_options_Sort_key.length > 0 &&
+              pageArtistStore.page_artistlists_options_Sort_key[0].order !== 'default'
+                ? pageArtistStore.page_artistlists_options_Sort_key[0].columnKey
                 : 'id'
             const sortOrder =
-              store_view_artist_page_logic.page_artistlists_options_Sort_key.length > 0 &&
-              store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order !== 'default'
-                ? store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order.replace(
+              pageArtistStore.page_artistlists_options_Sort_key.length > 0 &&
+              pageArtistStore.page_artistlists_options_Sort_key[0].order !== 'default'
+                ? pageArtistStore.page_artistlists_options_Sort_key[0].order.replace(
                     'end',
                     ''
                   )
                 : ''
             const keywordFilter =
-              store_view_artist_page_logic.page_artistlists_keyword.length > 0
-                ? `WHERE name LIKE '%${store_view_artist_page_logic.page_artistlists_keyword}%' 
-                OR external_info_updated_at LIKE '%${store_view_artist_page_logic.page_artistlists_keyword}%'`
+              pageArtistStore.page_artistlists_keyword.length > 0
+                ? `WHERE name LIKE '%${pageArtistStore.page_artistlists_keyword}%' 
+                OR external_info_updated_at LIKE '%${pageArtistStore.page_artistlists_keyword}%'`
                 : ''
             stmt_artist_string = `SELECT *
                                               FROM ${store_server_user_model.artist} ${keywordFilter}
@@ -68,32 +67,32 @@ export const store_general_fetch_artist_list = reactive({
             //////
             if (
               store_router_history_data_of_artist.router_select_history_date_of_Artist &&
-              store_view_artist_page_logic.page_artistlists_keyword_reset
+              pageArtistStore.page_artistlists_keyword_reset
             ) {
               store_router_history_data_of_artist.remove_router_history_of_Artist(
                 store_router_history_data_of_artist.router_select_history_date_of_Artist.id
               ) // 若存在新操作，则覆盖后续的路由
-              store_view_artist_page_logic.page_artistlists_keyword_reset = false
+              pageArtistStore.page_artistlists_keyword_reset = false
             }
             const routerDate: Interface_View_Router_Date = {
               id: 0,
               menu_select_active_key: 'artist',
               router_name: 'artist',
               router_select: 'artist',
-              page_lists_keyword: store_view_artist_page_logic.page_artistlists_keyword,
+              page_lists_keyword: pageArtistStore.page_artistlists_keyword,
               stmt_string: stmt_artist_string,
-              page_lists_selected: store_view_artist_page_logic.page_artistlists_selected,
+              page_lists_selected: pageArtistStore.page_artistlists_selected,
               columnKey:
-                store_view_artist_page_logic.page_artistlists_options_Sort_key.length > 0 &&
-                store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order !==
+                pageArtistStore.page_artistlists_options_Sort_key.length > 0 &&
+                pageArtistStore.page_artistlists_options_Sort_key[0].order !==
                   'default'
-                  ? store_view_artist_page_logic.page_artistlists_options_Sort_key[0].columnKey
+                  ? pageArtistStore.page_artistlists_options_Sort_key[0].columnKey
                   : 'id',
               order:
-                store_view_artist_page_logic.page_artistlists_options_Sort_key.length > 0 &&
-                store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order !==
+                pageArtistStore.page_artistlists_options_Sort_key.length > 0 &&
+                pageArtistStore.page_artistlists_options_Sort_key[0].order !==
                   'default'
-                  ? store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order.replace(
+                  ? pageArtistStore.page_artistlists_options_Sort_key[0].order.replace(
                       'end',
                       ''
                     )
@@ -107,11 +106,11 @@ export const store_general_fetch_artist_list = reactive({
             if (store_router_history_data_of_artist.router_select_history_date_of_Artist) {
               store_router_data_info.router.push('artist')
               store_router_data_info.router_select_model_artist = true
-              store_view_artist_page_logic.page_artistlists_keyword =
+              pageArtistStore.page_artistlists_keyword =
                 store_router_history_data_of_artist.router_select_history_date_of_Artist.page_lists_keyword
-              store_view_artist_page_logic.page_artistlists_selected =
+              pageArtistStore.page_artistlists_selected =
                 store_router_history_data_of_artist.router_select_history_date_of_Artist.page_lists_selected
-              store_view_artist_page_logic.page_artistlists_options_Sort_key = [
+              pageArtistStore.page_artistlists_options_Sort_key = [
                 {
                   columnKey:
                     store_router_history_data_of_artist.router_select_history_date_of_Artist
@@ -131,7 +130,7 @@ export const store_general_fetch_artist_list = reactive({
           const stmt_media_file = db.prepare(`SELECT *
                                                         FROM ${store_server_user_model.media_file}`)
           const pathfiles = stmt_media_file.all()
-          store_view_artist_page_info.artist_Files_temporary = []
+          pageArtistStore.artist_Files_temporary = []
           const rows = stmt_artist.all()
           rows.forEach((row: Artist) => {
             for (let j = 0; j < pathfiles.length; j++) {
@@ -157,7 +156,7 @@ export const store_general_fetch_artist_list = reactive({
                 row.medium_image_url = error_album
               }
             }
-            store_view_artist_page_info.artist_Files_temporary.push(row)
+            pageArtistStore.artist_Files_temporary.push(row)
           })
           rows.length = 0
           ////// find favorite for artist_Files_temporary
@@ -168,10 +167,10 @@ export const store_general_fetch_artist_list = reactive({
                           AND item_type = 'artist'
                     `)
           const annotations = stmt_artist_Annotation_Starred_Items.all()
-          for (let i = 0; i < store_view_artist_page_info.artist_Files_temporary.length; i++) {
-            store_view_artist_page_info.artist_Files_temporary[i].favorite = !!annotations.some(
+          for (let i = 0; i < pageArtistStore.artist_Files_temporary.length; i++) {
+            pageArtistStore.artist_Files_temporary[i].favorite = !!annotations.some(
               (annotation: { item_id: string }) =>
-                annotation.item_id === store_view_artist_page_info.artist_Files_temporary[i].id
+                annotation.item_id === pageArtistStore.artist_Files_temporary[i].id
             )
           }
           ////// find rating for artist_Files_temporary
@@ -182,8 +181,8 @@ export const store_general_fetch_artist_list = reactive({
                           AND item_type = 'artist'
                     `)
           const annotations_rating = stmt_artist_Annotation_Rating_Items.all()
-          for (let i = 0; i < store_view_artist_page_info.artist_Files_temporary.length; i++) {
-            const artistFile = store_view_artist_page_info.artist_Files_temporary[i]
+          for (let i = 0; i < pageArtistStore.artist_Files_temporary.length; i++) {
+            const artistFile = pageArtistStore.artist_Files_temporary[i]
             const matchingAnnotation = annotations_rating.find(
               (annotation: { item_id: string; rating: number }) =>
                 annotation.item_id === artistFile.id
@@ -193,7 +192,7 @@ export const store_general_fetch_artist_list = reactive({
           }
           ////// filter selected_list for artist_Files_temporary
           let order_play_date: any[] = []
-          if (store_view_artist_page_logic.page_artistlists_selected === 'artist_list_recently') {
+          if (pageArtistStore.page_artistlists_selected === 'artist_list_recently') {
             order_play_date = db
               .prepare(
                 `
@@ -207,39 +206,39 @@ export const store_general_fetch_artist_list = reactive({
               .all()
               .map((annotation: any) => annotation.item_id)
           }
-          store_view_artist_page_info.artist_Files_temporary =
-            store_view_artist_page_info.artist_Files_temporary.filter((item: any) => {
-              if (store_view_artist_page_logic.page_artistlists_selected === 'artist_list_all') {
+          pageArtistStore.artist_Files_temporary =
+            pageArtistStore.artist_Files_temporary.filter((item: any) => {
+              if (pageArtistStore.page_artistlists_selected === 'artist_list_all') {
                 return true
               } else if (
-                store_view_artist_page_logic.page_artistlists_selected === 'artist_list_love'
+                pageArtistStore.page_artistlists_selected === 'artist_list_love'
               ) {
                 return annotations.some(
                   (annotation: { item_id: string }) => annotation.item_id === item.id
                 )
               } else if (
-                store_view_artist_page_logic.page_artistlists_selected === 'artist_list_recently'
+                pageArtistStore.page_artistlists_selected === 'artist_list_recently'
               ) {
                 return order_play_date.includes(item.id)
               } else if (
-                store_view_artist_page_logic.page_artistlists_selected ===
+                pageArtistStore.page_artistlists_selected ===
                 'artist_list_all_PlayList'
               ) {
                 return true
               }
             })
-          if (store_view_artist_page_logic.page_artistlists_selected === 'artist_list_recently') {
-            const new_sort: Artist[] = store_view_artist_page_info.artist_Files_temporary.slice()
-            store_view_artist_page_info.artist_Files_temporary = []
+          if (pageArtistStore.page_artistlists_selected === 'artist_list_recently') {
+            const new_sort: Artist[] = pageArtistStore.artist_Files_temporary.slice()
+            pageArtistStore.artist_Files_temporary = []
             order_play_date.forEach((id) => {
               const index = new_sort.findIndex((item) => item.id === id)
               if (index !== -1) {
-                store_view_artist_page_info.artist_Files_temporary.push(new_sort[index])
+                pageArtistStore.artist_Files_temporary.push(new_sort[index])
                 new_sort.splice(index, 1)
               }
             })
           }
-          // store_view_artist_page_info.artist_Files_temporary.forEach((item: any, index: number) => {
+          // pageArtistStore.artist_Files_temporary.forEach((item: any, index: number) => {
           //   item.absoluteIndex = index + 1;
           // });
         } catch (err: any) {
@@ -253,11 +252,13 @@ export const store_general_fetch_artist_list = reactive({
         // other
       }
     } else if (store_server_user_model.model_server_type_of_web) {
-      store_view_artist_page_info.artist_Files_temporary = []
+      const pageArtistStore = usePageArtistStore()
+      pageArtistStore.artist_Files_temporary = []
       await this.fetchData_Artist_of_server_web_start()
     }
   },
   async fetchData_This_Artist_MediaList(artist_id: any) {
+    const pageArtistStore = usePageArtistStore()
     const playerAppearanceStore = usePlayerAppearanceStore()
     if (
       store_server_users.server_select_kind != 'jellyfin' ||
@@ -266,9 +267,10 @@ export const store_general_fetch_artist_list = reactive({
       playerAppearanceStore.player_mode_of_medialist_from_external_import = true
     }
 
-    store_view_media_page_logic.page_songlists_keywordFilter = `WHERE artist_id = '${artist_id}'`
-    store_view_media_page_logic.page_songlists_selected = 'song_list_all'
-    store_view_media_page_info.media_Files_temporary = []
+    const pageMediaStore = usePageMediaStore()
+    pageMediaStore.page_songlists_keywordFilter = `WHERE artist_id = '${artist_id}'`
+    pageMediaStore.page_songlists_selected = 'song_list_all'
+    pageMediaStore.media_Files_temporary = []
 
     store_router_data_info.find_music_model = false
     store_router_data_info.find_album_model = false
@@ -296,7 +298,7 @@ export const store_general_fetch_artist_list = reactive({
     )
     if (store_server_user_model.model_server_type_of_local) {
       const get_LocalSqlite_AnnotationInfo = new Get_LocalSqlite_AnnotationInfo()
-      store_view_artist_page_info.artist_recently_count =
+      pageArtistStore.artist_recently_count =
         get_LocalSqlite_AnnotationInfo.Get_Annotation_ItemInfo_Play_Count('artist')
       playerSettingStore.boolHandleItemClick_Played = true
     }
@@ -305,7 +307,8 @@ export const store_general_fetch_artist_list = reactive({
   _start: 0,
   _end: 100,
   async fetchData_Artist_of_server_web_start() {
-    store_view_artist_page_info.artist_Files_temporary = []
+    const pageArtistStore = usePageArtistStore()
+    pageArtistStore.artist_Files_temporary = []
     this._start = 0
     this._end = 30
     await this.fetchData_Artist_of_server_web()
@@ -322,18 +325,19 @@ export const store_general_fetch_artist_list = reactive({
   },
   async fetchData_Artist_of_server_web() {
     try {
-      const _search = store_view_artist_page_logic.page_artistlists_keyword
-      const selected = store_view_artist_page_logic.page_artistlists_selected
+      const pageArtistStore = usePageArtistStore()
+      const _search = pageArtistStore.page_artistlists_keyword
+      const selected = pageArtistStore.page_artistlists_selected
 
       let _sort =
-        store_view_artist_page_logic.page_artistlists_options_Sort_key.length > 0 &&
-        store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order !== 'default'
-          ? store_view_artist_page_logic.page_artistlists_options_Sort_key[0].columnKey
+        pageArtistStore.page_artistlists_options_Sort_key.length > 0 &&
+        pageArtistStore.page_artistlists_options_Sort_key[0].order !== 'default'
+          ? pageArtistStore.page_artistlists_options_Sort_key[0].columnKey
           : 'id'
       let _order =
-        store_view_artist_page_logic.page_artistlists_options_Sort_key.length > 0 &&
-        store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order !== 'default'
-          ? store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order.replace(
+        pageArtistStore.page_artistlists_options_Sort_key.length > 0 &&
+        pageArtistStore.page_artistlists_options_Sort_key[0].order !== 'default'
+          ? pageArtistStore.page_artistlists_options_Sort_key[0].order.replace(
               'end',
               ''
             )
@@ -409,7 +413,7 @@ export const store_general_fetch_artist_list = reactive({
             String(this._end),
             _sort,
             _order,
-            store_view_artist_page_logic.page_artistlists_multi_sort,
+            pageArtistStore.page_artistlists_multi_sort,
             _starred,
             _search
           )

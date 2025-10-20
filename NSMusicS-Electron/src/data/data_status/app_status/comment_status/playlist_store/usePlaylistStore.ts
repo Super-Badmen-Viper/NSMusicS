@@ -19,7 +19,7 @@ interface Play_List {
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
-import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { usePlayerSettingStore } from '../player_store/usePlayerSettingStore'
 import { Get_LocalSqlite_PlaylistInfo } from '@/data/data_repository/app_repository/LocalSqlite_Get_PlaylistInfo'
 import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
@@ -28,6 +28,7 @@ import { store_general_fetch_media_cue_list } from '../../../../data_stores/serv
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 
 export const usePlaylistStore = defineStore('playlist', () => {
+  const pageMediaStore = usePageMediaStore()
   // 外观状态
   const playlist_show = ref(false)
   const playlist_use_model = ref('media')
@@ -169,13 +170,13 @@ export const usePlaylistStore = defineStore('playlist', () => {
     if (store_server_user_model.model_server_type_of_web) {
       // Data synchronization
       playlist_MediaFiles_temporary.value.forEach((row: Media_File) => {
-        const existingIndex = store_view_media_page_info.media_Files_temporary.findIndex(
+        const existingIndex = pageMediaStore.media_Files_temporary.findIndex(
           (item: Media_File) => item.id === row.id
         )
         if (existingIndex === -1) {
           const newRow = { ...row }
           delete newRow.play_id
-          store_view_media_page_info.media_Files_temporary.push(newRow)
+          pageMediaStore.media_Files_temporary.push(newRow)
         }
       })
     }

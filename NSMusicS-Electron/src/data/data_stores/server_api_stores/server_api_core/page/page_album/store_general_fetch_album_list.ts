@@ -6,8 +6,7 @@ import { store_router_history_data_of_album } from '@/router/router_store/store_
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
-import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
-import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 
@@ -293,7 +292,6 @@ export const store_general_fetch_album_list = reactive({
         }
       }
     } else if (store_server_user_model.model_server_type_of_web) {
-      const pageAlbumStore = usePageAlbumStore()
       pageAlbumStore.album_Files_temporary = []
       await this.fetchData_Album_of_server_web_start()
     }
@@ -302,9 +300,10 @@ export const store_general_fetch_album_list = reactive({
     const playerAppearanceStore = usePlayerAppearanceStore()
     playerAppearanceStore.player_mode_of_medialist_from_external_import = true
 
-    store_view_media_page_logic.page_songlists_keywordFilter = `WHERE album_id = '${album_id}'`
-    store_view_media_page_logic.page_songlists_selected = 'song_list_all'
-    store_view_media_page_info.media_Files_temporary = []
+    const pageMediaStore = usePageMediaStore()
+    pageMediaStore.page_songlists_keywordFilter = `WHERE album_id = '${album_id}'`
+    pageMediaStore.page_songlists_selected = 'song_list_all'
+    pageMediaStore.media_Files_temporary = []
 
     store_router_data_info.find_music_model = true
     store_router_data_info.find_album_model = false

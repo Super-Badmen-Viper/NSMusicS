@@ -1883,12 +1883,12 @@ onBeforeUnmount(() => {
               align="center"
               @mouseover="
                 () => {
-                  play_list_carousel_model.value = true
+                  play_list_carousel_model = true
                 }
               "
               @mouseleave="
                 () => {
-                  play_list_carousel_model.value = false
+                  play_list_carousel_model = false
                 }
               "
             >

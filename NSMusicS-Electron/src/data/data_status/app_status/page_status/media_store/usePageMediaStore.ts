@@ -27,7 +27,6 @@ interface Media_File {
 }
 
 export const usePageMediaStore = defineStore('pageMedia', () => {
-  // 状态定义（从 store_view_media_page_info.ts 合并）
   const media_File_metadata = ref<any[]>([])
   const media_Files_temporary = ref<any[]>([])
   const media_Files_selected = ref<any[]>([])
@@ -37,7 +36,6 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
   const media_recently_count = ref(0)
   const media_playlist_count = ref(0)
 
-  // 逻辑状态（从 store_view_media_page_logic.ts 合并）
   const list_data_StartUpdate = ref(false)
   const list_data_Hand_Search = ref(false)
   const list_options_Hand_Sort = ref(false)
@@ -63,7 +61,6 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
   const page_songlists_input_search_Value = ref('')
   const page_songlists_random_play = ref(false)
 
-  // 方法定义（从 store_view_media_page_logic.ts 合并）
   const get_duration_formatTime = (currentTime: number): string => {
     const minutes = Math.floor(currentTime / 60)
     const seconds = Math.floor(currentTime % 60)
@@ -223,14 +220,14 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
     if (store_router_data_info.router) {
       store_router_data_info.router.push('media')
     }
-    // 使用 .default 访问 CommonJS 模块的默认导出
     await store_general_fetch_media_list.fetchData_Media()
   }
 
   const get_page_songlists_selected = async (newValue: any) => {
     page_songlists_selected.value = newValue
-    if (usePlayerAppearanceStore.default().player_mode_of_medialist_from_external_import) {
-      usePlayerAppearanceStore.default().player_mode_of_medialist_from_external_import = false
+    const playerAppearanceStore = usePlayerAppearanceStore()
+    if (playerAppearanceStore.player_mode_of_medialist_from_external_import) {
+      playerAppearanceStore.player_mode_of_medialist_from_external_import = false
     } else {
       if (list_selected_Hand_click.value) {
         page_songlists_keywordFilter.value = ''
@@ -243,7 +240,7 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
     }
   }
 
-  // 监听逻辑（从 store_view_media_page_logic.ts 合并）
+  // 监听逻辑
   watch(
     page_songlists_options_Sort_key,
     async (newValue) => {
@@ -277,7 +274,7 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
         }
 
         list_data_StartUpdate.value = false
-        console.log('store_view_media_page_logic.list_data_StartUpdate')
+        console.log('list_data_StartUpdate')
       }
     }
   )
@@ -302,7 +299,6 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
 
   // 返回状态和方法
   return {
-    // 从 store_view_media_page_info.ts 返回的状态
     media_File_metadata,
     media_Files_temporary,
     media_Files_selected,
@@ -312,7 +308,6 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
     media_recently_count,
     media_playlist_count,
     
-    // 从 store_view_media_page_logic.ts 返回的状态
     list_data_StartUpdate,
     list_data_Hand_Search,
     list_options_Hand_Sort,
@@ -338,7 +333,6 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
     page_songlists_input_search_Value,
     page_songlists_random_play,
     
-    // 返回方法
     get_duration_formatTime,
     set_media_Files_selected,
     set_media_Files_selected_all,

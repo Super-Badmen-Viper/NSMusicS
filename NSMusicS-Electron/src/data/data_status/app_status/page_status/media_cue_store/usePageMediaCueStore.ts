@@ -174,7 +174,7 @@ export const usePageMediaCueStore = defineStore('pageMediaCue', () => {
 
   const get_selected_locallist_delete_MediaFile = (value: any) => {
     console.log('selected_locallist_deleteMediaFile', value)
-    const set_LibraryInfo_To_LocalSqlite = new Set_LocalSqlite_LibraryInfo.default()
+    const set_LibraryInfo_To_LocalSqlite = new Set_LocalSqlite_LibraryInfo()
     set_LibraryInfo_To_LocalSqlite.Set_LibraryInfo_Delete_Selected_Playlist(
       media_Files_selected.value.map((file: any) => file.id)
     )
@@ -227,7 +227,7 @@ export const usePageMediaCueStore = defineStore('pageMediaCue', () => {
 
   const get_page_songlists_selected = async (newValue: any) => {
     page_songlists_selected.value = newValue
-    const playerAppearanceStore = usePlayerAppearanceStore.default()
+    const playerAppearanceStore = usePlayerAppearanceStore()
     
     if (playerAppearanceStore.player_mode_of_medialist_from_external_import) {
       playerAppearanceStore.player_mode_of_medialist_from_external_import = false

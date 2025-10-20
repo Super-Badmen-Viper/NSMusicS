@@ -7,7 +7,6 @@ import { NSlider } from 'naive-ui'
 const playerSettingStore = usePlayerSettingStore()
 
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
-import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
 import { storeToRefs } from 'pinia'
 
 function getAssetImage(firstImage: string) {

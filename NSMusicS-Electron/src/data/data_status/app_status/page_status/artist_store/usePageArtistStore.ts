@@ -4,7 +4,6 @@ import { store_router_history_data_of_artist } from '@/router/router_store/store
 import { store_general_fetch_artist_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_artist/store_general_fetch_artist_list'
 
 export const usePageArtistStore = defineStore('pageArtist', () => {
-  // 从 store_view_artist_page_info.ts 合并的状态
   const artist_File_metadata = ref<any[]>([])
   const artist_Files_temporary = ref<any[]>([])
   const artist_page_sizes = ref<number>(15)
@@ -12,7 +11,6 @@ export const usePageArtistStore = defineStore('pageArtist', () => {
   const artist_starred_count = ref<number>(0)
   const artist_recently_count = ref<number>(0)
 
-  // 从 store_view_artist_page_logic.ts 合并的状态
   const list_data_StartUpdate = ref<boolean>(false)
   const page_artistlists_options = ref<any[]>([])
   const page_artistlists_statistic = ref<any[]>([])
@@ -24,7 +22,6 @@ export const usePageArtistStore = defineStore('pageArtist', () => {
   const page_artistlists_options_Sort_key = ref<any[]>([])
   const page_artistlists_multi_sort = ref<string>('')
 
-  // 从 store_view_artist_page_logic.ts 合并的 watch 监听器
   watch(
     page_artistlists_options_Sort_key,
     (newValue) => {
@@ -104,9 +101,7 @@ export const usePageArtistStore = defineStore('pageArtist', () => {
     }
   )
 
-  // 导出所有状态
   return {
-    // 从 store_view_artist_page_info.ts 导出的状态
     artist_File_metadata,
     artist_Files_temporary,
     artist_page_sizes,
@@ -114,7 +109,6 @@ export const usePageArtistStore = defineStore('pageArtist', () => {
     artist_starred_count,
     artist_recently_count,
     
-    // 从 store_view_artist_page_logic.ts 导出的状态
     list_data_StartUpdate,
     page_artistlists_options,
     page_artistlists_statistic,

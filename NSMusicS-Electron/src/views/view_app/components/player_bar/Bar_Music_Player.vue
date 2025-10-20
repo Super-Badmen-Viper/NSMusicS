@@ -33,7 +33,7 @@ import { useI18n } from 'vue-i18n'
 import { store_server_data_set_mediaInfo } from '@/data/data_stores/server_api_stores/server_api_core/annotation/store_server_data_set_mediaInfo'
 import { store_server_data_set_albumInfo } from '@/data/data_stores/server_api_stores/server_api_core/annotation/store_server_data_set_albumInfo'
 import { store_server_data_set_artistInfo } from '@/data/data_stores/server_api_stores/server_api_core/annotation/store_server_data_set_artistInfo'
-import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 const { t } = useI18n({
   inheritLocale: true,
@@ -50,6 +50,7 @@ const playerAppearanceStore = usePlayerAppearanceStore()
 const playlistStore = usePlaylistStore()
 const playerAudioStore = usePlayerAudioStore()
 const playerSettingStore = usePlayerSettingStore()
+const pageMediaStore = usePageMediaStore()
 // 使用 storeToRefs 解构出所需的响应式属性
 const {
   player_show,
@@ -120,7 +121,7 @@ const handleImageError = async (event) => {
       event.target.src = result_src
     }
     ///
-    const item: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find(
+    const item: Media_File | undefined = pageMediaStore.media_Files_temporary.find(
       (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
     )
     if (item != undefined && item != 'undefined') {
@@ -456,11 +457,11 @@ const Set_MediaInfo_To_PlayCount = debounce(async (event, args) => {
   ///
   if (store_server_user_model.model_server_type_of_local) {
     let get_LocalSqlite_AnnotationInfo = new Get_LocalSqlite_AnnotationInfo()
-    store_view_media_page_info.media_recently_count =
+    pageMediaStore.media_recently_count =
       get_LocalSqlite_AnnotationInfo.Get_Annotation_ItemInfo_Play_Count('media_file')
-    store_view_media_page_logic.page_songlists_statistic.forEach((item: any) => {
+    pageMediaStore.page_songlists_statistic.forEach((item: any) => {
       if (item.id === 'song_list_recently') {
-        item.song_count = store_view_media_page_info.media_recently_count + ' *'
+        item.song_count = pageMediaStore.media_recently_count + ' *'
       }
     })
     playerSettingStore.boolHandleItemClick_Played = true
@@ -1128,7 +1129,6 @@ const handleMouseMove = () => {
 import { store_player_sound_effects } from '@/views/view_app/page/page_player/store/store_player_sound_effects'
 import { store_player_sound_speed } from '@/views/view_app/page/page_player/store/store_player_sound_speed'
 import { store_player_sound_more } from '@/views/view_app/page/page_player/store/store_player_sound_more'
-import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
 
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
@@ -1148,15 +1148,15 @@ const handleItemClick_Favorite = (id, favorite) => {
     store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id, favorite)
     playerAudioStore.this_audio_song_favorite = !favorite
 
-    store_view_media_page_logic.page_songlists_statistic.forEach((item: any) => {
+    pageMediaStore.page_songlists_statistic.forEach((item: any) => {
       if (item.id === 'song_list_love') {
-        store_view_media_page_info.media_starred_count += !favorite ? 1 : -1
-        item.song_count = store_view_media_page_info.media_starred_count + ' *'
+        pageMediaStore.media_starred_count += !favorite ? 1 : -1
+        item.song_count = pageMediaStore.media_starred_count + ' *'
       }
     })
     playerSettingStore.boolHandleItemClick_Favorite = true
 
-    const item_file: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find(
+    const item_file: Media_File | undefined = pageMediaStore.media_Files_temporary.find(
       (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
     )
     const item_playlist: Media_File | undefined = playlist_MediaFiles_temporary.value.find(
@@ -1170,7 +1170,7 @@ const handleItemClick_Rating = (id, rating) => {
   store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, rating)
   playerAudioStore.this_audio_song_rating = rating
 
-  const item_file: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find(
+  const item_file: Media_File | undefined = pageMediaStore.media_Files_temporary.find(
     (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
   )
   const item_playlist: Media_File | undefined = playlist_MediaFiles_temporary.value.find(
@@ -1184,9 +1184,9 @@ const handleItemClick_Rating = (id, rating) => {
 const handleItemClick_title = (title) => {
   if (!playerSettingStore.player_model_cue) {
     store_router_data_info.router_click = false
-    store_view_media_page_logic.page_songlists_bool_show_search_area = true
-    store_view_media_page_logic.page_songlists_input_search_Value = title
-    store_view_media_page_logic.get_page_songlists_keyword(title)
+    pageMediaStore.page_songlists_bool_show_search_area = true
+    pageMediaStore.page_songlists_input_search_Value = title
+    pageMediaStore.get_page_songlists_keyword(title)
     player_show_hight_animation_value.value = 670
     get_playerbar_to_switch_playerview(player_show_hight_animation_value.value)
     playerSettingStore.player_back_ChevronDouble =
@@ -1203,14 +1203,14 @@ const handleItemClick_artist = (artist) => {
       (store_server_users.server_select_kind === 'ninesong' &&
         store_server_user_model.model_server_type_of_web)
     ) {
-      store_view_media_page_logic.page_songlists_bool_show_search_area = true
-      store_view_media_page_logic.page_songlists_input_search_Value = artist
+      pageMediaStore.page_songlists_bool_show_search_area = true
+      pageMediaStore.page_songlists_input_search_Value = artist
       if (store_server_user_model.model_server_type_of_local) {
-        store_view_media_page_logic.get_page_songlists_keyword(
+        pageMediaStore.get_page_songlists_keyword(
           artist + 'accurate_search' + '__artist__'
         )
       } else if (store_server_user_model.model_server_type_of_web) {
-        store_view_media_page_logic.get_page_songlists_keyword(artist)
+        pageMediaStore.get_page_songlists_keyword(artist)
       }
       player_show_hight_animation_value.value = 670
       get_playerbar_to_switch_playerview(player_show_hight_animation_value.value)
@@ -1233,14 +1233,14 @@ const handleItemClick_album = (album) => {
       (store_server_users.server_select_kind === 'ninesong' &&
         store_server_user_model.model_server_type_of_web)
     ) {
-      store_view_media_page_logic.page_songlists_bool_show_search_area = true
-      store_view_media_page_logic.page_songlists_input_search_Value = album
+      pageMediaStore.page_songlists_bool_show_search_area = true
+      pageMediaStore.page_songlists_input_search_Value = album
       if (store_server_user_model.model_server_type_of_local) {
-        store_view_media_page_logic.get_page_songlists_keyword(
+        pageMediaStore.get_page_songlists_keyword(
           album + 'accurate_search' + '__album__'
         )
       } else if (store_server_user_model.model_server_type_of_web) {
-        store_view_media_page_logic.get_page_songlists_keyword(album)
+        pageMediaStore.get_page_songlists_keyword(album)
       }
       player_show_hight_animation_value.value = 670
       get_playerbar_to_switch_playerview(player_show_hight_animation_value.value)

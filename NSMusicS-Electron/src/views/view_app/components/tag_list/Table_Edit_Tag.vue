@@ -8,11 +8,14 @@ const { t } = useI18n({
 })
 import { useMessage } from 'naive-ui'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
-import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
+import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 const message = useMessage()
+const pageMediaStore = usePageMediaStore()
+const pageAlbumStore = usePageAlbumStore()
+const pageArtistStore = usePageArtistStore()
 
 async function save_edit_tag() {
   try {
@@ -94,7 +97,7 @@ async function save_edit_tag() {
             JSON.stringify(store_player_tag_modify.player_current_media_tag)
           )
           const item: Media_File | undefined =
-            store_view_media_page_info.media_Files_temporary.find(
+            pageMediaStore.media_Files_temporary.find(
               (mediaFile: Media_File) =>
                 mediaFile.path === store_player_tag_modify.player_current_media_path
             )
@@ -160,7 +163,6 @@ async function save_edit_tag() {
           const save_tag = JSON.parse(
             JSON.stringify(store_player_tag_modify.player_current_album_tag)
           )
-          const pageAlbumStore = usePageAlbumStore()
           const item: Album | undefined = pageAlbumStore.album_Files_temporary.find(
             (album: Album) => album.id === store_player_tag_modify.player_current_album_id
           )
@@ -204,7 +206,7 @@ async function save_edit_tag() {
           const save_tag = JSON.parse(
             JSON.stringify(store_player_tag_modify.player_current_artist_tag)
           )
-          const item: Artist | undefined = store_view_artist_page_info.artist_Files_temporary.find(
+          const item: Artist | undefined = pageArtistStore.artist_Files_temporary.find(
             (artist: Artist) => artist.id === store_player_tag_modify.player_current_artist_id
           )
           item.name = Array.isArray(save_tag.artist)

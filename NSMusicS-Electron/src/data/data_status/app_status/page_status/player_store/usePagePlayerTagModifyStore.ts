@@ -2,10 +2,10 @@ import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
-import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { Browsing_ApiService_of_ND } from '@/data/data_configs/navidrome_api/services_normal/browsing/index_service'
-import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
+import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
 import { isElectron, ipcRenderer } from '@/utils/electron/isElectron'
 
 // 定义类型接口
@@ -48,6 +48,7 @@ interface ArtistTag {
 }
 
 export const usePagePlayerTagModifyStore = defineStore('pagePlayerTagModify', () => {
+  const pageMediaStore = usePageMediaStore()
   // 使用 ref 替代 reactive 定义所有状态
   const player_show_tag_modify = ref(false)
   const player_show_tag_kind = ref('media')
@@ -142,7 +143,7 @@ export const usePagePlayerTagModifyStore = defineStore('pagePlayerTagModify', ()
                 }
                 /// server_configs_stores model | database server_media_file
                 else {
-                  const item: any = store_view_media_page_info.media_Files_temporary.find(
+                  const item: any = pageMediaStore.media_Files_temporary.find(
                     (mediaFile: any) =>
                       mediaFile.path === player_current_media_path.value
                   )
@@ -215,7 +216,8 @@ export const usePagePlayerTagModifyStore = defineStore('pagePlayerTagModify', ()
               player_current_album_id.value = item.id
               player_current_album_starred.value = item.starred || false
             } else if (player_show_tag_kind.value === 'artist') {
-              const item: any = store_view_artist_page_info.artist_Files_temporary.find(
+              const pageArtistStore = usePageArtistStore()
+              const item: any = pageArtistStore.artist_Files_temporary.find(
                 (artist: any) => artist.id === player_current_artist_id.value
               )
               ///
@@ -234,13 +236,13 @@ export const usePagePlayerTagModifyStore = defineStore('pagePlayerTagModify', ()
             /// show(no modify) web media_file_metadata
             if (player_show_tag_kind.value === 'media') {
               if (
-                store_view_media_page_info.media_File_metadata != undefined &&
-                store_view_media_page_info.media_File_metadata.length > 0 &&
+                pageMediaStore.media_File_metadata != undefined &&
+                pageMediaStore.media_File_metadata.length > 0 &&
                 player_current_media_id.value.length > 0
               ) {
                 let item: any;
                 if (store_server_users.server_select_kind === 'ninesong') {
-                  item = store_view_media_page_info.media_File_metadata.find(
+                  item = pageMediaStore.media_File_metadata.find(
                     (mediaFile: any) =>
                       mediaFile.ID === player_current_media_id.value
                   )
@@ -255,7 +257,7 @@ export const usePagePlayerTagModifyStore = defineStore('pagePlayerTagModify', ()
                     isCompilation: item?.Compilation,
                   }
                 } else {
-                  item = store_view_media_page_info.media_File_metadata.find(
+                  item = pageMediaStore.media_File_metadata.find(
                     (mediaFile: any) =>
                       mediaFile.id === player_current_media_id.value
                   )

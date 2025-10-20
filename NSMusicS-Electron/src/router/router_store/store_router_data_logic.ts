@@ -1,11 +1,9 @@
 import { reactive } from 'vue'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_view_home_page_info } from '@/views/view_app/page/page_home/store/store_view_home_page_info'
-import { store_view_media_page_info } from '@/views/view_app/page/page_media/store/store_view_media_page_info'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
-import { store_view_artist_page_info } from '@/views/view_app/page/page_artist/store/store_view_artist_page_info'
-import { store_view_media_page_logic } from '@/views/view_app/page/page_media/store/store_view_media_page_logic'
-import { store_view_artist_page_logic } from '@/views/view_app/page/page_artist/store/store_view_artist_page_logic'
+import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
 import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
 import { store_router_history_data_of_album } from '@/router/router_store/store_router_history_data_of_album'
 import { store_router_history_data_of_artist } from '@/router/router_store/store_router_history_data_of_artist'
@@ -14,14 +12,16 @@ import { store_server_user_model } from '@/data/data_stores/server_configs_store
 
 export const store_router_data_logic = reactive({
   reset_data() {
+    const pageMediaStore = usePageMediaStore()
     const pageAlbumStore = usePageAlbumStore()
-    store_view_media_page_logic.page_songlists_keywordFilter = ''
-    store_view_media_page_logic.page_songlists_multi_sort = ''
-    store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+    const pageArtistStore = usePageArtistStore()
+    pageMediaStore.page_songlists_keywordFilter = ''
+    pageMediaStore.page_songlists_multi_sort = ''
+    pageMediaStore.page_songlists_selected = 'song_list_all'
     pageAlbumStore.page_albumlists_keyword = ''
     pageAlbumStore.page_albumlists_selected = 'album_list_all'
-    store_view_artist_page_logic.page_artistlists_keyword = ''
-    store_view_artist_page_logic.page_artistlists_selected = 'artist_list_all'
+    pageArtistStore.page_artistlists_keyword = ''
+    pageArtistStore.page_artistlists_selected = 'artist_list_all'
     store_router_history_data_of_media.router_history_datas_of_Media = []
     store_router_history_data_of_album.router_history_datas_of_Album = []
     store_router_history_data_of_artist.router_history_datas_of_Artist = []
@@ -65,109 +65,126 @@ export const store_router_data_logic = reactive({
   },
 
   clear_Files_temporary() {
+    const pageMediaStore = usePageMediaStore()
     const pageAlbumStore = usePageAlbumStore()
+    const pageArtistStore = usePageArtistStore()
     store_view_home_page_info.home_Files_temporary_maximum_playback = []
     store_view_home_page_info.home_Files_temporary_random_search = []
     store_view_home_page_info.home_Files_temporary_recently_added = []
     store_view_home_page_info.home_Files_temporary_recently_played = []
-    store_view_media_page_info.media_Files_temporary = []
+    pageMediaStore.media_Files_temporary = []
     pageAlbumStore.album_Files_temporary = []
-    store_view_artist_page_info.artist_Files_temporary = []
+    pageArtistStore.artist_Files_temporary = []
   },
   clear_Files_temporary_except_home() {
+    const pageMediaStore = usePageMediaStore()
     const pageAlbumStore = usePageAlbumStore()
+    const pageArtistStore = usePageArtistStore()
     store_router_data_info.router_select = 'home'
-    store_view_media_page_info.media_Files_temporary = []
+    pageMediaStore.media_Files_temporary = []
     pageAlbumStore.album_Files_temporary = []
-    store_view_artist_page_info.artist_Files_temporary = []
+    pageArtistStore.artist_Files_temporary = []
   },
   clear_Files_temporary_except_categories() {
+    const pageMediaStore = usePageMediaStore()
     const pageAlbumStore = usePageAlbumStore()
+    const pageArtistStore = usePageArtistStore()
     store_router_data_info.router_select = 'categories'
-    store_view_media_page_info.media_Files_temporary = []
+    pageMediaStore.media_Files_temporary = []
     pageAlbumStore.album_Files_temporary = []
-    store_view_artist_page_info.artist_Files_temporary = []
+    pageArtistStore.artist_Files_temporary = []
   },
   clear_Files_temporary_except_charts() {
     const pageAlbumStore = usePageAlbumStore()
+    const pageArtistStore = usePageArtistStore()
     store_router_data_info.router_select = 'charts'
     store_view_home_page_info.home_Files_temporary_maximum_playback = []
     store_view_home_page_info.home_Files_temporary_random_search = []
     store_view_home_page_info.home_Files_temporary_recently_added = []
     store_view_home_page_info.home_Files_temporary_recently_played = []
     pageAlbumStore.album_Files_temporary = []
-    store_view_artist_page_info.artist_Files_temporary = []
+    pageArtistStore.artist_Files_temporary = []
   },
   clear_Files_temporary_except_recommend() {
     const pageAlbumStore = usePageAlbumStore()
+    const pageArtistStore = usePageArtistStore()
     store_router_data_info.router_select = 'recommend'
     store_view_home_page_info.home_Files_temporary_maximum_playback = []
     store_view_home_page_info.home_Files_temporary_random_search = []
     store_view_home_page_info.home_Files_temporary_recently_added = []
     store_view_home_page_info.home_Files_temporary_recently_played = []
     pageAlbumStore.album_Files_temporary = []
-    store_view_artist_page_info.artist_Files_temporary = []
+    pageArtistStore.artist_Files_temporary = []
   },
   clear_Files_temporary_except_tag() {
     const pageAlbumStore = usePageAlbumStore()
+    const pageArtistStore = usePageArtistStore()
     store_router_data_info.router_select = 'tag'
     store_view_home_page_info.home_Files_temporary_maximum_playback = []
     store_view_home_page_info.home_Files_temporary_random_search = []
     store_view_home_page_info.home_Files_temporary_recently_added = []
     store_view_home_page_info.home_Files_temporary_recently_played = []
     pageAlbumStore.album_Files_temporary = []
-    store_view_artist_page_info.artist_Files_temporary = []
+    pageArtistStore.artist_Files_temporary = []
   },
   clear_Files_temporary_except_media_cue() {
+    const pageMediaStore = usePageMediaStore()
     const pageAlbumStore = usePageAlbumStore()
+    const pageArtistStore = usePageArtistStore()
     store_router_data_info.router_select = 'media_cue'
-    store_view_media_page_info.media_Files_temporary = []
+    pageMediaStore.media_Files_temporary = []
     pageAlbumStore.album_Files_temporary = []
-    store_view_artist_page_info.artist_Files_temporary = []
+    pageArtistStore.artist_Files_temporary = []
   },
   clear_Files_temporary_except_album() {
+    const pageMediaStore = usePageMediaStore()
+    const pageArtistStore = usePageArtistStore()
     store_router_data_info.router_select = 'album'
     store_view_home_page_info.home_Files_temporary_maximum_playback = []
     store_view_home_page_info.home_Files_temporary_random_search = []
     store_view_home_page_info.home_Files_temporary_recently_added = []
     store_view_home_page_info.home_Files_temporary_recently_played = []
-    store_view_media_page_info.media_Files_temporary = []
-    store_view_artist_page_info.artist_Files_temporary = []
+    pageMediaStore.media_Files_temporary = []
+    pageArtistStore.artist_Files_temporary = []
   },
   clear_Files_temporary_except_media() {
+    const pageMediaStore = usePageMediaStore()
     const pageAlbumStore = usePageAlbumStore()
+    const pageArtistStore = usePageArtistStore()
     store_router_data_info.router_select = 'media'
     store_view_home_page_info.home_Files_temporary_maximum_playback = []
     store_view_home_page_info.home_Files_temporary_random_search = []
     store_view_home_page_info.home_Files_temporary_recently_added = []
     store_view_home_page_info.home_Files_temporary_recently_played = []
     pageAlbumStore.album_Files_temporary = []
-    store_view_artist_page_info.artist_Files_temporary = []
+    pageArtistStore.artist_Files_temporary = []
   },
   clear_Files_temporary_except_artist() {
+    const pageMediaStore = usePageMediaStore()
     const pageAlbumStore = usePageAlbumStore()
     store_router_data_info.router_select = 'artist'
     store_view_home_page_info.home_Files_temporary_maximum_playback = []
     store_view_home_page_info.home_Files_temporary_random_search = []
     store_view_home_page_info.home_Files_temporary_recently_added = []
     store_view_home_page_info.home_Files_temporary_recently_played = []
-    store_view_media_page_info.media_Files_temporary = []
+    pageMediaStore.media_Files_temporary = []
     pageAlbumStore.album_Files_temporary = []
   },
 
   get_media_list_of_album_id_by_album_info(value: any) {
+    const pageMediaStore = usePageMediaStore()
     store_router_data_info.router.push('media')
     if (store_server_user_model.model_server_type_of_local) {
-      store_view_media_page_logic.list_data_Hand_Search = true
-      store_view_media_page_logic.list_selected_Hand_click = false
+      pageMediaStore.list_data_Hand_Search = true
+      pageMediaStore.list_selected_Hand_click = false
       // open media_files model，keywords set
-      store_view_media_page_logic.page_songlists_keywordFilter = `WHERE album_id = '${value}'`
-      store_view_media_page_logic.page_songlists_get_keyword_model_num = 3
+      pageMediaStore.page_songlists_keywordFilter = `WHERE album_id = '${value}'`
+      pageMediaStore.page_songlists_get_keyword_model_num = 3
       store_router_data_info.find_music_model = true
       console.log('get_media_list_of_album_model：' + value)
-      store_view_media_page_logic.page_songlists_input_search_Value = value
+      pageMediaStore.page_songlists_input_search_Value = value
     }
-    store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+    pageMediaStore.page_songlists_selected = 'song_list_all'
   },
   get_album_list_of_artist_id_by_artist_info(value: any) {
     const pageAlbumStore = usePageAlbumStore()
