@@ -7,6 +7,6 @@ export const usePagePlayerSoundSpeedStore = defineStore('pagePlayerSoundSpeed', 
 
   // 返回状态
   return {
-    player_show_sound_speed
+    player_show_sound_speed,
   }
 })

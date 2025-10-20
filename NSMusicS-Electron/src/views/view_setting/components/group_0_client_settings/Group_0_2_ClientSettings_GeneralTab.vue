@@ -193,8 +193,7 @@ onMounted(() => {
               store_system_configs_info.lang = $i18n.locale
               playerSettingStore.orderPanelWidath =
                 playerSettingStore.langWidths[store_system_configs_info.lang.toString()]
-              playerSettingStore.orderButonWidath =
-                playerSettingStore.orderPanelWidath - 14
+              playerSettingStore.orderButonWidath = playerSettingStore.orderPanelWidath - 14
               if (isElectron) {
                 ipcRenderer.invoke('i18n-tray-label-menu', [
                   t('player.play'),

@@ -881,8 +881,7 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite {
         salt
       )
       const playlists = getPlaylists_all['subsonic-response']['playlists']['playlist']
-      if (playlists != undefined)
-        this.pageMediaStore.media_playlist_count = playlists.length || 0
+      if (playlists != undefined) this.pageMediaStore.media_playlist_count = playlists.length || 0
     } catch {}
   }
 }

@@ -411,10 +411,7 @@ import { openLink } from '@/utils/electron/openLink'
                 }}</span>
               </div>
             </n-space>
-            <n-switch
-              :disabled="player_select != 'mpv'"
-              v-model:value="player_replayGainClip"
-            >
+            <n-switch :disabled="player_select != 'mpv'" v-model:value="player_replayGainClip">
             </n-switch>
           </n-space>
           <n-space justify="space-between" align="center" style="margin-left: 30px">

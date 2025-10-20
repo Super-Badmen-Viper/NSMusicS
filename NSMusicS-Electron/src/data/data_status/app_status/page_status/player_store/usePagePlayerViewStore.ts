@@ -7,6 +7,6 @@ export const usePagePlayerViewStore = defineStore('pagePlayerView', () => {
 
   // 返回状态
   return {
-    currentScrollIndex
+    currentScrollIndex,
   }
 })

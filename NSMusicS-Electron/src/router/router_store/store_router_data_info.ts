@@ -68,6 +68,7 @@ watch(
         }
       } else if (newValue === 'album') {
         if (store_router_data_info.router_click) {
+          const pageAlbumStore = usePageAlbumStore()
           pageAlbumStore.page_albumlists_keyword = ''
         }
         await store_general_fetch_album_list.fetchData_Album()

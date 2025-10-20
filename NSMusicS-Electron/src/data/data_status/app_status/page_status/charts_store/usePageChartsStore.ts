@@ -63,8 +63,8 @@ export const usePageChartsStore = defineStore('pageCharts', () => {
     charts_artist_metadata,
     charts_media_cue_metadata,
     charts_data_temporary,
-    
+
     // 从 store_view_charts_page_logic.ts 导出的方法
-    fetchData_Charts
+    fetchData_Charts,
   }
 })

@@ -59,11 +59,8 @@ const { t } = useI18n({
 
 const pageMediaStore = usePageMediaStore()
 const pageArtistStore = usePageArtistStore()
-const {
-  page_artistlists_multi_sort,
-  page_artistlists_selected,
-  page_artistlists_options
-} = storeToRefs(pageArtistStore)
+const { page_artistlists_multi_sort, page_artistlists_selected, page_artistlists_options } =
+  storeToRefs(pageArtistStore)
 
 ////// artistlist_view page_layout gridItems
 const item_artist = ref(170)
@@ -252,18 +249,10 @@ const options_Sort = computed(() => {
     pageArtistStore.page_artistlists_options_Sort_key.length > 0
   ) {
     options_Sort_key.value.forEach((element) => {
-      if (
-        element.key === pageArtistStore.page_artistlists_options_Sort_key[0].columnKey
-      )
-        if (
-          pageArtistStore.page_artistlists_options_Sort_key[0].order ===
-          state_Sort.Ascend
-        )
+      if (element.key === pageArtistStore.page_artistlists_options_Sort_key[0].columnKey)
+        if (pageArtistStore.page_artistlists_options_Sort_key[0].order === state_Sort.Ascend)
           element.state_Sort = state_Sort.Ascend
-        else if (
-          pageArtistStore.page_artistlists_options_Sort_key[0].order ===
-          state_Sort.Descend
-        )
+        else if (pageArtistStore.page_artistlists_options_Sort_key[0].order === state_Sort.Descend)
           element.state_Sort = state_Sort.Descend
     })
   }
@@ -493,8 +482,7 @@ const page_artistlists_handleselected_updatevalue = (value: any) => {
   pageArtistStore.page_artistlists_selected = value
   console.log('selected_value_for_artistlistall：' + value)
   breadcrumbItems.value =
-    pageArtistStore.page_artistlists_options.find((option) => option.value === value)
-      ?.label || ''
+    pageArtistStore.page_artistlists_options.find((option) => option.value === value)?.label || ''
 }
 
 ////// router_app history
@@ -756,11 +744,7 @@ async function menu_item_add_to_playlist_next() {
       const newItem = JSON.parse(JSON.stringify(item))
       newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
       playlistStore.playlist_MediaFiles_temporary.splice(index + 1 + i, 0, newItem)
-      playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.splice(
-        index + 1 + i,
-        0,
-        newItem.id
-      )
+      playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.splice(index + 1 + i, 0, newItem.id)
     })
 
     playlistStore.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
@@ -852,11 +836,8 @@ const playerAppearanceStore = usePlayerAppearanceStore()
 const pageAlbumStore = usePageAlbumStore()
 // 使用 storeToRefs 解构出所需的响应式属性
 const { playlist_names_ALLLists, playlist_Menu_Item_Id } = storeToRefs(playlistStore)
-const { 
-  page_top_album_image_url, 
-  this_audio_artist_name,
-  this_audio_song_id
-} = storeToRefs(playerAudioStore)
+const { page_top_album_image_url, this_audio_artist_name, this_audio_song_id } =
+  storeToRefs(playerAudioStore)
 const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistStore)
 </script>
 <template>

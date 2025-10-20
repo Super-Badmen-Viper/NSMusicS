@@ -475,8 +475,7 @@ const handleItemDbClick = async (media_file: any, index: any) => {
           if (playerAudioStore.this_audio_song_name.length === 0) {
             playerAudioStore.this_audio_song_name = index_num + ':' + media_file.title
           }
-          playerAudioStore.this_audio_artist_name =
-            media_file.cue_tracks[index_num - 1].Performer
+          playerAudioStore.this_audio_artist_name = media_file.cue_tracks[index_num - 1].Performer
           playerAudioStore.this_audio_album_name = media_file.title
           ///
           playerSettingStore.player_model_cue = true
@@ -595,10 +594,9 @@ const handleItemClick_Favorite = (id: any, favorite: boolean) => {
   if (id === playerAudioStore.this_audio_song_id) {
     playerAudioStore.this_audio_song_favorite = !favorite
     //
-    const item_playlist: Media_File | undefined =
-      playlistStore.playlist_MediaFiles_temporary.find(
-        (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
-      )
+    const item_playlist: Media_File | undefined = playlistStore.playlist_MediaFiles_temporary.find(
+      (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
+    )
     if (item_playlist !== undefined) {
       item_playlist.favorite = !favorite
     }

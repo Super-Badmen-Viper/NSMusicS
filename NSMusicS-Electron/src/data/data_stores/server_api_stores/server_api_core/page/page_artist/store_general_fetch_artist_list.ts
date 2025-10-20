@@ -50,10 +50,7 @@ export const store_general_fetch_artist_list = reactive({
             const sortOrder =
               pageArtistStore.page_artistlists_options_Sort_key.length > 0 &&
               pageArtistStore.page_artistlists_options_Sort_key[0].order !== 'default'
-                ? pageArtistStore.page_artistlists_options_Sort_key[0].order.replace(
-                    'end',
-                    ''
-                  )
+                ? pageArtistStore.page_artistlists_options_Sort_key[0].order.replace('end', '')
                 : ''
             const keywordFilter =
               pageArtistStore.page_artistlists_keyword.length > 0
@@ -84,18 +81,13 @@ export const store_general_fetch_artist_list = reactive({
               page_lists_selected: pageArtistStore.page_artistlists_selected,
               columnKey:
                 pageArtistStore.page_artistlists_options_Sort_key.length > 0 &&
-                pageArtistStore.page_artistlists_options_Sort_key[0].order !==
-                  'default'
+                pageArtistStore.page_artistlists_options_Sort_key[0].order !== 'default'
                   ? pageArtistStore.page_artistlists_options_Sort_key[0].columnKey
                   : 'id',
               order:
                 pageArtistStore.page_artistlists_options_Sort_key.length > 0 &&
-                pageArtistStore.page_artistlists_options_Sort_key[0].order !==
-                  'default'
-                  ? pageArtistStore.page_artistlists_options_Sort_key[0].order.replace(
-                      'end',
-                      ''
-                    )
+                pageArtistStore.page_artistlists_options_Sort_key[0].order !== 'default'
+                  ? pageArtistStore.page_artistlists_options_Sort_key[0].order.replace('end', '')
                   : '',
               page_lists_scrollindex:
                 store_router_history_data_of_artist.router_history_model_of_Artist_scroller_value,
@@ -206,27 +198,21 @@ export const store_general_fetch_artist_list = reactive({
               .all()
               .map((annotation: any) => annotation.item_id)
           }
-          pageArtistStore.artist_Files_temporary =
-            pageArtistStore.artist_Files_temporary.filter((item: any) => {
+          pageArtistStore.artist_Files_temporary = pageArtistStore.artist_Files_temporary.filter(
+            (item: any) => {
               if (pageArtistStore.page_artistlists_selected === 'artist_list_all') {
                 return true
-              } else if (
-                pageArtistStore.page_artistlists_selected === 'artist_list_love'
-              ) {
+              } else if (pageArtistStore.page_artistlists_selected === 'artist_list_love') {
                 return annotations.some(
                   (annotation: { item_id: string }) => annotation.item_id === item.id
                 )
-              } else if (
-                pageArtistStore.page_artistlists_selected === 'artist_list_recently'
-              ) {
+              } else if (pageArtistStore.page_artistlists_selected === 'artist_list_recently') {
                 return order_play_date.includes(item.id)
-              } else if (
-                pageArtistStore.page_artistlists_selected ===
-                'artist_list_all_PlayList'
-              ) {
+              } else if (pageArtistStore.page_artistlists_selected === 'artist_list_all_PlayList') {
                 return true
               }
-            })
+            }
+          )
           if (pageArtistStore.page_artistlists_selected === 'artist_list_recently') {
             const new_sort: Artist[] = pageArtistStore.artist_Files_temporary.slice()
             pageArtistStore.artist_Files_temporary = []
@@ -282,7 +268,6 @@ export const store_general_fetch_artist_list = reactive({
 
     store_router_data_info.router_select_model_artist = true
 
-
     const playerSettingStore = usePlayerSettingStore()
     const playlistStore = usePlaylistStore()
     if (playlistStore.playlist_MediaFiles_temporary.length > 0) {
@@ -337,10 +322,7 @@ export const store_general_fetch_artist_list = reactive({
       let _order =
         pageArtistStore.page_artistlists_options_Sort_key.length > 0 &&
         pageArtistStore.page_artistlists_options_Sort_key[0].order !== 'default'
-          ? pageArtistStore.page_artistlists_options_Sort_key[0].order.replace(
-              'end',
-              ''
-            )
+          ? pageArtistStore.page_artistlists_options_Sort_key[0].order.replace('end', '')
           : 'ASC'
 
       let _starred = ''

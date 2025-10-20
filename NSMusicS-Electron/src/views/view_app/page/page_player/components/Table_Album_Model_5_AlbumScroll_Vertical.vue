@@ -34,7 +34,7 @@ const {
   page_top_album_image_url,
   this_audio_song_name,
   this_audio_artist_name,
-  this_audio_album_name
+  this_audio_album_name,
 } = storeToRefs(playerAudioStore)
 
 const directionRef = ref('vertical')
@@ -190,20 +190,14 @@ const nextSlideStyle = computed(() => {
               playerSettingStore.slider_singleValue == 0
             ) {
               playerSettingStore.player_is_play_ended = true
-              playerSettingStore.play_go_duration(
-                playerSettingStore.slider_singleValue,
-                true
-              )
+              playerSettingStore.play_go_duration(playerSettingStore.slider_singleValue, true)
             }
             playerSettingStore.player_range_duration_isDragging = false
           }
         "
         @click="
           () => {
-            playerSettingStore.play_go_duration(
-              playerSettingStore.slider_singleValue,
-              true
-            )
+            playerSettingStore.play_go_duration(playerSettingStore.slider_singleValue, true)
           }
         "
         @mousedown="playerSettingStore.player_range_duration_isDragging = true"

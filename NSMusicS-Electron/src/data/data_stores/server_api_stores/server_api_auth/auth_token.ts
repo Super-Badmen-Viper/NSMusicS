@@ -140,9 +140,7 @@ export const store_server_auth_token = reactive({
     const playerAudioStore = usePlayerAudioStore()
     // 更新 this_audio_file_path
     if (playerAudioStore.this_audio_file_path) {
-      playerAudioStore.this_audio_file_path = updateUrl(
-        playerAudioStore.this_audio_file_path
-      )
+      playerAudioStore.this_audio_file_path = updateUrl(playerAudioStore.this_audio_file_path)
     }
     // 更新 this_audio_file_medium_image_url
     if (playerAudioStore.this_audio_file_medium_image_url) {

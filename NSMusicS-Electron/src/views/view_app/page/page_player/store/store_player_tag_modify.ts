@@ -102,11 +102,10 @@ watch(
               /// server_configs_stores model | database server_media_file
               else {
                 const pageMediaStore = usePageMediaStore()
-              const item: Media_File | undefined =
-                  pageMediaStore.media_Files_temporary.find(
-                    (mediaFile: Media_File) =>
-                      mediaFile.path === store_player_tag_modify.player_current_media_path
-                  )
+                const item: Media_File | undefined = pageMediaStore.media_Files_temporary.find(
+                  (mediaFile: Media_File) =>
+                    mediaFile.path === store_player_tag_modify.player_current_media_path
+                )
                 const albumArtistsStr = Array.isArray(item.albumArtists)
                   ? item.albumArtists.join('、')
                   : item.albumArtists || ''
@@ -178,10 +177,9 @@ watch(
             store_player_tag_modify.player_current_album_starred = item.starred || false
           } else if (store_player_tag_modify.player_show_tag_kind === 'artist') {
             const pageArtistStore = usePageArtistStore()
-            const item: Artist | undefined =
-              pageArtistStore.artist_Files_temporary.find(
-                (artist: Artist) => artist.id === store_player_tag_modify.player_current_artist_id
-              )
+            const item: Artist | undefined = pageArtistStore.artist_Files_temporary.find(
+              (artist: Artist) => artist.id === store_player_tag_modify.player_current_artist_id
+            )
             ///
             const artistStr = Array.isArray(item.name) ? item.name.join('、') : item.name || ''
             const genresStr = Array.isArray(item.genres)
@@ -204,11 +202,10 @@ watch(
               store_player_tag_modify.player_current_media_id.length > 0
             ) {
               if (store_server_users.server_select_kind === 'ninesong') {
-                const item: Media_File | undefined =
-                  pageMediaStore.media_File_metadata.find(
-                    (mediaFile: any) =>
-                      mediaFile.ID === store_player_tag_modify.player_current_media_id
-                  )
+                const item: Media_File | undefined = pageMediaStore.media_File_metadata.find(
+                  (mediaFile: any) =>
+                    mediaFile.ID === store_player_tag_modify.player_current_media_id
+                )
                 store_player_tag_modify.player_current_media_tag = {
                   title: item?.Title,
                   albumArtists: item?.AlbumArtist,
@@ -220,11 +217,10 @@ watch(
                   isCompilation: item?.Compilation,
                 }
               } else {
-                const item: Media_File | undefined =
-                  pageMediaStore.media_File_metadata.find(
-                    (mediaFile: any) =>
-                      mediaFile.id === store_player_tag_modify.player_current_media_id
-                  )
+                const item: Media_File | undefined = pageMediaStore.media_File_metadata.find(
+                  (mediaFile: any) =>
+                    mediaFile.id === store_player_tag_modify.player_current_media_id
+                )
                 const albumArtistsStr = Array.isArray(item.albumArtist)
                   ? item.albumArtists.join('、')
                   : item.albumArtists || ''

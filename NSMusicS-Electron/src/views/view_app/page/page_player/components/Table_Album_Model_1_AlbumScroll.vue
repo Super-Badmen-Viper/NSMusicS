@@ -30,10 +30,9 @@ const handleImageError = async (event) => {
       event.target.src = result_src
     }
     ///
-    const scroll_item: Media_File | undefined =
-      playlistStore.playlist_MediaFiles_temporary.find(
-        (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
-      )
+    const scroll_item: Media_File | undefined = playlistStore.playlist_MediaFiles_temporary.find(
+      (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
+    )
     if (scroll_item != undefined && scroll_item != 'undefined') {
       scroll_item.medium_image_url = result_src
     }
@@ -61,12 +60,12 @@ const {
 
 const { playlist_MediaFiles_temporary_carousel } = storeToRefs(playlistStore)
 
-const { 
+const {
   this_audio_Index_of_play_list_carousel,
   page_top_album_image_url,
   this_audio_song_name,
   this_audio_artist_name,
-  this_audio_album_name
+  this_audio_album_name,
 } = storeToRefs(playerAudioStore)
 
 const directionRef = ref('vertical')
@@ -222,20 +221,14 @@ const nextSlideStyle = computed(() => {
               playerSettingStore.slider_singleValue == 0
             ) {
               playerSettingStore.player_is_play_ended = true
-              playerSettingStore.play_go_duration(
-                playerSettingStore.slider_singleValue,
-                true
-              )
+              playerSettingStore.play_go_duration(playerSettingStore.slider_singleValue, true)
             }
             playerSettingStore.player_range_duration_isDragging = false
           }
         "
         @click="
           () => {
-            playerSettingStore.play_go_duration(
-              playerSettingStore.slider_singleValue,
-              true
-            )
+            playerSettingStore.play_go_duration(playerSettingStore.slider_singleValue, true)
           }
         "
         @mousedown="playerSettingStore.player_range_duration_isDragging = true"

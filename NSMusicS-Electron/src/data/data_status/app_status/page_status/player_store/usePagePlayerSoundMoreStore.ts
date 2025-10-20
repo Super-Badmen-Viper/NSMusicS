@@ -7,6 +7,6 @@ export const usePagePlayerSoundMoreStore = defineStore('pagePlayerSoundMore', ()
 
   // 返回状态
   return {
-    player_show_sound_more
+    player_show_sound_more,
   }
 })

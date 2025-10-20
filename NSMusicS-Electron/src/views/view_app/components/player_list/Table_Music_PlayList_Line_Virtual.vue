@@ -292,7 +292,7 @@ const { this_audio_Index_of_play_list } = storeToRefs(playerAudioStore)
         }"
         :items="playlist_MediaFiles_temporary"
         key-field="play_id"
-        :minItemSize="50"
+        :minItemSize="store_system_configs_info.window_state_miniplayer_playlist ? 46 : 70"
         @scroll-end="onScrollEnd"
       >
         <template #default="{ item, index, active }">
@@ -544,7 +544,7 @@ const { this_audio_Index_of_play_list } = storeToRefs(playerAudioStore)
 .message_playlist {
   display: flex;
   align-items: left;
-  height: 73px;
+  height: auto;
 }
 .message_playlist:nth-child(1) {
   margin-top: 10px;

@@ -136,7 +136,7 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
       this_audio_lyrics_string.value = newValue
     }
     this_audio_lyrics_loaded_complete.value = false
-    
+
     // Split lyrics
     this_audio_lyrics_info_line_font.value = []
     for (let i = 0; i < this_audio_lyrics_info_line_num.value; i++) {
@@ -185,18 +185,15 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
           })
           for (let i = 0; i < timeFontPairs.length; i++) {
             let [startMs, durationMs, unknown] = timeFontPairs[i][0] as number[]
-            const nextStartMs = i < timeFontPairs.length - 1 ? (timeFontPairs[i + 1][0] as number[])[0] : Infinity
+            const nextStartMs =
+              i < timeFontPairs.length - 1 ? (timeFontPairs[i + 1][0] as number[])[0] : Infinity
 
             if (nextStartMs < startMs + durationMs) {
               durationMs = 100
             }
 
-            this_audio_lyrics_info_byte_time.value[index].push(
-        `${startMs},${durationMs}`
-      );
-      this_audio_lyrics_info_byte_font.value[index].push(
-        timeFontPairs[i][1]
-      )
+            this_audio_lyrics_info_byte_time.value[index].push(`${startMs},${durationMs}`)
+            this_audio_lyrics_info_byte_font.value[index].push(timeFontPairs[i][1])
           }
 
           this_audio_lyrics_info_byte_model.value = true
@@ -269,9 +266,7 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
         if (isElectron) {
           ipcRenderer.invoke(
             'i18n-tray-label-musicIcon',
-            String(this_audio_song_name.value) +
-              ' - ' +
-              this_audio_artist_name.value
+            String(this_audio_song_name.value) + ' - ' + this_audio_artist_name.value
           )
         }
       } catch (e) {
@@ -310,8 +305,7 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
     console.log('this_audio_song_rating：' + newValue)
 
     pageMediaStore.media_Files_temporary.forEach((item: any) => {
-      if (item.id === this_audio_song_id.value)
-        item.rating = this_audio_song_rating.value
+      if (item.id === this_audio_song_id.value) item.rating = this_audio_song_rating.value
     })
   })
 
@@ -319,8 +313,7 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
     console.log('this_audio_song_favorite：' + newValue)
 
     pageMediaStore.media_Files_temporary.forEach((item: any) => {
-      if (item.id === this_audio_song_id.value)
-        item.favorite = this_audio_song_favorite.value
+      if (item.id === this_audio_song_id.value) item.favorite = this_audio_song_favorite.value
     })
   })
 
@@ -413,10 +406,10 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
     this_audio_lyrics_info_byte_font,
     this_audio_lyrics_info_byte_time,
     this_audio_lyrics_info_line_num,
-    
+
     // Actions
     reset_data,
     set_lyric,
-    set_carousel_index
+    set_carousel_index,
   }
 })

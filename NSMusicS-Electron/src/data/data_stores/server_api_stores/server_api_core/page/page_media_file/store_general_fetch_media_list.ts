@@ -58,18 +58,14 @@ export const store_general_fetch_media_list = reactive({
             if (store_router_history_data_of_media.router_history_model_of_Media === 0) {
               const sortKey =
                 pageMediaStore.page_songlists_options_Sort_key.length > 0 &&
-                pageMediaStore.page_songlists_options_Sort_key[0].columnKey !==
-                  '_id' &&
+                pageMediaStore.page_songlists_options_Sort_key[0].columnKey !== '_id' &&
                 pageMediaStore.page_songlists_options_Sort_key[0].order !== 'default'
                   ? pageMediaStore.page_songlists_options_Sort_key[0].columnKey
                   : 'id'
               const sortOrder =
                 pageMediaStore.page_songlists_options_Sort_key.length > 0 &&
                 pageMediaStore.page_songlists_options_Sort_key[0].order !== 'default'
-                  ? pageMediaStore.page_songlists_options_Sort_key[0].order.replace(
-                      'end',
-                      ''
-                    )
+                  ? pageMediaStore.page_songlists_options_Sort_key[0].order.replace('end', '')
                   : ''
               if (pageMediaStore.page_songlists_keywordFilter.length === 0) {
                 // 1. 处理 year 条件
@@ -126,26 +122,19 @@ export const store_general_fetch_media_list = reactive({
                   router_name: 'media',
                   router_select: 'media',
                   page_lists_keyword: pageMediaStore.page_songlists_keyword,
-                  page_songlists_keywordFilter:
-                    pageMediaStore.page_songlists_keywordFilter,
+                  page_songlists_keywordFilter: pageMediaStore.page_songlists_keywordFilter,
                   stmt_string: stmt_media_file_string,
                   page_lists_selected: pageMediaStore.page_songlists_selected,
                   columnKey:
                     pageMediaStore.page_songlists_options_Sort_key.length > 0 &&
-                    pageMediaStore.page_songlists_options_Sort_key[0].columnKey !==
-                      '_id' &&
-                    pageMediaStore.page_songlists_options_Sort_key[0].order !==
-                      'default'
+                    pageMediaStore.page_songlists_options_Sort_key[0].columnKey !== '_id' &&
+                    pageMediaStore.page_songlists_options_Sort_key[0].order !== 'default'
                       ? pageMediaStore.page_songlists_options_Sort_key[0].columnKey
                       : 'id',
                   order:
                     pageMediaStore.page_songlists_options_Sort_key.length > 0 &&
-                    pageMediaStore.page_songlists_options_Sort_key[0].order !==
-                      'default'
-                      ? pageMediaStore.page_songlists_options_Sort_key[0].order.replace(
-                          'end',
-                          ''
-                        )
+                    pageMediaStore.page_songlists_options_Sort_key[0].order !== 'default'
+                      ? pageMediaStore.page_songlists_options_Sort_key[0].order.replace('end', '')
                       : '',
                   page_lists_scrollindex:
                     store_router_history_data_of_media.router_history_model_of_Media_scroller_value,
@@ -255,26 +244,19 @@ export const store_general_fetch_media_list = reactive({
                 .all()
                 .map((annotation: any) => annotation.item_id)
             }
-            pageMediaStore.media_Files_temporary =
-              pageMediaStore.media_Files_temporary.filter((item: any) => {
+            pageMediaStore.media_Files_temporary = pageMediaStore.media_Files_temporary.filter(
+              (item: any) => {
                 if (pageMediaStore.list_data_Hand_Search) {
                   return true
-                } else if (
-                  pageMediaStore.page_songlists_selected === 'song_list_all'
-                ) {
+                } else if (pageMediaStore.page_songlists_selected === 'song_list_all') {
                   return true
-                } else if (
-                  pageMediaStore.page_songlists_selected === 'song_list_love'
-                ) {
+                } else if (pageMediaStore.page_songlists_selected === 'song_list_love') {
                   return annotations.some((annotation: any) => annotation.item_id === item.id)
-                } else if (
-                  pageMediaStore.page_songlists_selected === 'song_list_recently'
-                ) {
+                } else if (pageMediaStore.page_songlists_selected === 'song_list_recently') {
                   return order_play_date.includes(item.id)
                 } else {
                   const index = playlistStore.playlist_tracks_temporary_of_ALLLists.findIndex(
-                    (list: any) =>
-                      list.playlist.id === pageMediaStore.page_songlists_selected
+                    (list: any) => list.playlist.id === pageMediaStore.page_songlists_selected
                   )
                   let playlistTracks: any[] = []
                   if (index >= 0) {
@@ -284,11 +266,11 @@ export const store_general_fetch_media_list = reactive({
                   }
                   return playlistTracks.includes(item.id)
                 }
-              })
+              }
+            )
             pageMediaStore.list_data_Hand_Search = false
             if (pageMediaStore.page_songlists_selected === 'song_list_recently') {
-              const new_sort: Media_File[] =
-                pageMediaStore.media_Files_temporary.slice()
+              const new_sort: Media_File[] = pageMediaStore.media_Files_temporary.slice()
               pageMediaStore.media_Files_temporary = []
               order_play_date.forEach((id) => {
                 const index = new_sort.findIndex((item) => item.id === id)
@@ -594,8 +576,7 @@ export const store_general_fetch_media_list = reactive({
     const pageMediaStore = usePageMediaStore()
     try {
       const _search =
-        (pageMediaStore.page_songlists_keywordFilter || '').match(/%([^%]+)%/)?.[1] ||
-        ''
+        (pageMediaStore.page_songlists_keywordFilter || '').match(/%([^%]+)%/)?.[1] || ''
       const selected = pageMediaStore.page_songlists_selected
 
       let _sort =

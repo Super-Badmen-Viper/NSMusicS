@@ -24,14 +24,30 @@ function getAssetImage(firstImage: string) {
 }
 
 ////// navie ui views_components
-// app theme
 import { darkTheme, NAvatar, NConfigProvider, NIcon, NSlider, NSpace, NText } from 'naive-ui'
-// vue3 function
 import { ref, watch, watchEffect, onMounted, computed, h } from 'vue'
 import { onBeforeUnmount } from 'vue'
 
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { storeToRefs } from 'pinia'
+import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
+import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
+
+import { store_player_view } from '@/views/view_app/page/page_player/store/store_player_view'
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
+import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
+import { Pause, Play, PlayBack, PlayForward, VolumeMedium } from '@vicons/ionicons5'
+import Bar_Music_PlayList from '@/views/view_app/drawer/View_Player_PlayList.vue'
+import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
+import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
+import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
+import { store_player_sound_effects } from '@/views/view_app/page/page_player/store/store_player_sound_effects'
+import { store_player_sound_speed } from '@/views/view_app/page/page_player/store/store_player_sound_speed'
+import { store_player_sound_more } from '@/views/view_app/page/page_player/store/store_player_sound_more'
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
@@ -53,11 +69,39 @@ const computed_i18n_Label_ViewSetConfig_Cover_4 = computed(() =>
 )
 const computed_i18n_Label_Lyric_Not_Find = computed(() => t('HeaderNoLyrics'))
 
-// audio_class & player_bar & player_view
-import { store_player_view } from '@/views/view_app/page/page_player/store/store_player_view'
-import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
+const playerSettingStore = usePlayerSettingStore()
+const playerAppearanceStore = usePlayerAppearanceStore()
+const playerAudioStore = usePlayerAudioStore()
+const playlistStore = usePlaylistStore()
+const pageMediaStore = usePageMediaStore()
 
-////// lyircs load
+const {
+  player_lyric_fontSize_Num,
+  player_lyric_fontWeight,
+  player_lyric_color,
+  player_lyric_colorHover,
+  player_lyric_color_hidden_value,
+  player_lyric_color_hidden_coefficient,
+  player_background_model_num,
+  player_show_of_control_info,
+  player_collapsed_action_bar_of_Immersion_model,
+} = storeToRefs(playerAppearanceStore)
+
+const {
+  this_audio_song_name,
+  this_audio_artist_name,
+  this_audio_album_name,
+  this_audio_song_rating,
+  page_top_album_image_url,
+  this_audio_lyrics_info_line_font,
+  this_audio_song_id,
+  this_audio_song_favorite,
+  this_audio_lyrics_info_byte_model,
+  this_audio_lyrics_info_byte_font,
+} = storeToRefs(playerAudioStore)
+
+const { slider_singleValue, current_play_time, total_play_time } = storeToRefs(playerSettingStore)
+
 let unwatch = watch(
   () => playerAudioStore.this_audio_lyrics_loaded_complete,
   (newValue) => {
@@ -75,14 +119,12 @@ onMounted(() => {
 function load_lyrics() {
   if (playerAudioStore.this_audio_lyrics_string.length > 0) {
     if (playerAudioStore.this_audio_lyrics_null) {
-      playerAudioStore.this_audio_lyrics_info_line_font.forEach(
-        (item: any, index: number) => {
-          if ((item != null || item != 'undefined' || item != '') && item === '未找到可用歌词') {
-            playerAudioStore.this_audio_lyrics_info_line_font[index] =
-              computed_i18n_Label_Lyric_Not_Find.value
-          }
+      playerAudioStore.this_audio_lyrics_info_line_font.forEach((item: any, index: number) => {
+        if ((item != null || item != 'undefined' || item != '') && item === '未找到可用歌词') {
+          playerAudioStore.this_audio_lyrics_info_line_font[index] =
+            computed_i18n_Label_Lyric_Not_Find.value
         }
-      )
+      })
     }
     handleAuto_fontSize(player_lyric_fontSize_Num)
     begin_lyrics_animation()
@@ -126,9 +168,7 @@ function begin_lyrics_animation() {
                 scrollToItem(i + playerAudioStore.this_audio_lyrics_info_line_num)
               }
               break
-            } else if (
-              currentTime < playerAudioStore.this_audio_lyrics_info_line_time[i + 1]
-            ) {
+            } else if (currentTime < playerAudioStore.this_audio_lyrics_info_line_time[i + 1]) {
               if (
                 !lyrics_list_whell.value &&
                 (isFirstRun || store_player_view.currentScrollIndex !== i)
@@ -151,14 +191,14 @@ function begin_lyrics_animation() {
         const itemElements = scrollbar.value?.$el.querySelectorAll('.lyrics_info') || []
         const itemElements_active =
           scrollbar.value?.$el.querySelectorAll('.lyrics_text_active') || []
-        let color_hidden = player_lyric_color.slice(0, -2)
+        let color_hidden = playerAppearanceStore.player_lyric_color.slice(0, -2)
         const index =
-          store_player_view.currentScrollIndex +
-          playerAudioStore.this_audio_lyrics_info_line_num
+          store_player_view.currentScrollIndex + playerAudioStore.this_audio_lyrics_info_line_num
         scrollToItem(index)
         for (let i = index - 16; i <= index + 16; i++) {
           const colorValue = Math.max(
-            player_lyric_color_hidden_value - (index - i) * player_lyric_color_hidden_coefficient,
+            playerAppearanceStore.player_lyric_color_hidden_value -
+              (index - i) * playerAppearanceStore.player_lyric_color_hidden_coefficient,
             0
           )
           if (i < index) {
@@ -217,10 +257,10 @@ const scrollToItem = (index: number) => {
   const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active')
   itemElements_active[index].style.fontSize =
     !store_system_configs_info.window_state_miniplayer_desktop_lyric ? '20px' : '26px'
-  itemElements_active[index].style.fontWeight = player_lyric_fontWeight
+  itemElements_active[index].style.fontWeight = playerAppearanceStore.player_lyric_fontWeight
 
   const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info')
-  itemElements[index].style.color = player_lyric_colorHover
+  itemElements[index].style.color = playerAppearanceStore.player_lyric_colorHover
   itemElements[index].style.filter = 'blur(0px)'
   itemElements[index].style.textShadow = '0 0 1px White'
   itemElements[index].style.transition = 'color 0.5s, transform 0.5s'
@@ -238,12 +278,12 @@ const scrollToItem = (index: number) => {
   else itemElements[index].scrollIntoView({ block: 'center', behavior: 'smooth' })
   // 设置前后16列的颜色
   handleLeave_Refresh_Lyric_Color()
-  // 设置perviousIndex.value列的颜色
-  let color_hidden = player_lyric_color.slice(0, -2)
+  let color_hidden = playerAppearanceStore.player_lyric_color.slice(0, -2)
   for (let i = index - 16; i <= index + 16; i++) {
     if (i < index) {
       const colorValue = Math.max(
-        player_lyric_color_hidden_value - (index - i) * player_lyric_color_hidden_coefficient,
+        playerAppearanceStore.player_lyric_color_hidden_value -
+          (index - i) * playerAppearanceStore.player_lyric_color_hidden_coefficient,
         0
       )
       itemElements[i].style.color =
@@ -254,7 +294,8 @@ const scrollToItem = (index: number) => {
       itemElements_active[i].style.fontWeight = 400
     } else if (i != index) {
       const colorValue = Math.max(
-        player_lyric_color_hidden_value - (index - i) * player_lyric_color_hidden_coefficient,
+        playerAppearanceStore.player_lyric_color_hidden_value -
+          (index - i) * playerAppearanceStore.player_lyric_color_hidden_coefficient,
         0
       )
       itemElements[i].style.color =
@@ -336,8 +377,7 @@ const startByteAnimations = (index: number, num: number) => {
   }
 
   for (let i = position_i_start; i < position_i_end; i++) {
-    const byteTime =
-      playerAudioStore.this_audio_lyrics_info_byte_time[index][i - position_i_start]
+    const byteTime = playerAudioStore.this_audio_lyrics_info_byte_time[index][i - position_i_start]
     const [startMs, durationMs] = byteTime.split(',').map(Number)
     const start = startMs / 1000
     const duration = durationMs / 1000
@@ -367,10 +407,11 @@ const startByteAnimations = (index: number, num: number) => {
   }
 
   try {
-    let color_hidden = player_lyric_color.slice(0, -2)
+    let color_hidden = playerAppearanceStore.player_lyric_color.slice(0, -2)
     for (let i = 0; i < position_i_start; i++) {
       const colorValue = Math.max(
-        player_lyric_color_hidden_value - (index - i) * player_lyric_color_hidden_coefficient,
+        playerAppearanceStore.player_lyric_color_hidden_value -
+          (index - i) * playerAppearanceStore.player_lyric_color_hidden_coefficient,
         0
       )
       itemElements_active[i].style.color =
@@ -385,7 +426,8 @@ const startByteAnimations = (index: number, num: number) => {
     }
     for (let i = position_i_end; i <= position_i_length; i++) {
       const colorValue = Math.max(
-        player_lyric_color_hidden_value - (i - index) * player_lyric_color_hidden_coefficient,
+        playerAppearanceStore.player_lyric_color_hidden_value -
+          (i - index) * playerAppearanceStore.player_lyric_color_hidden_coefficient,
         0
       )
       itemElements_active[i].style.color =
@@ -421,13 +463,13 @@ const handleLeave_Refresh_Lyric_Color = () => {
   if (!scrollbar.value) return
   const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info')
   let lyric_bottom_hidden_num = 10
-  let color_hidden = player_lyric_color.slice(0, -2)
+  let color_hidden = playerAppearanceStore.player_lyric_color.slice(0, -2)
   for (let i = perviousIndex.value - 16; i <= perviousIndex.value + 16; i++) {
     if (i < perviousIndex.value) {
       const colorValue = Math.max(
-        player_lyric_color_hidden_value +
+        playerAppearanceStore.player_lyric_color_hidden_value +
           lyric_bottom_hidden_num -
-          (perviousIndex.value - i) * player_lyric_color_hidden_coefficient,
+          (perviousIndex.value - i) * playerAppearanceStore.player_lyric_color_hidden_coefficient,
         0
       )
       try {
@@ -436,9 +478,9 @@ const handleLeave_Refresh_Lyric_Color = () => {
       } catch {}
     } else {
       const colorValue = Math.max(
-        player_lyric_color_hidden_value +
+        playerAppearanceStore.player_lyric_color_hidden_value +
           lyric_bottom_hidden_num -
-          (i - perviousIndex.value) * player_lyric_color_hidden_coefficient,
+          (i - perviousIndex.value) * playerAppearanceStore.player_lyric_color_hidden_coefficient,
         0
       )
       try {
@@ -465,7 +507,7 @@ const handleAuto_fontSize = (value: number) => {
   })
 }
 watch(
-  () => player_lyric_fontSize_Num,
+  () => playerAppearanceStore.player_lyric_fontSize_Num,
   (newValue) => {
     handleLeave_Refresh_Lyric_Color()
     handleAuto_fontSize(newValue)
@@ -474,14 +516,13 @@ watch(
 
 ////// player_configs bind theme_all
 function init_player_theme() {
-  if (player_background_model_num.value === 0) {
-    player_show_of_control_info.value = false
+  if (playerAppearanceStore.player_background_model_num === 0) {
+    playerAppearanceStore.player_show_of_control_info = false
   } else {
-    player_show_of_control_info.value = true
+    playerAppearanceStore.player_show_of_control_info = true
   }
 }
 
-////// player_bar auto hidden
 let timer_auto_hidden: string | number | NodeJS.Timeout | undefined
 const collapsed_action_bar = ref(false)
 const collapsed_action_bar_hover = ref(false)
@@ -499,53 +540,6 @@ const unwatch_player_collapsed = watchEffect(() => {
     clearInterval(timer_auto_hidden)
   }
 })
-
-////// Animation lottie Load // lottie-web will cause memory leaks，so replace lottie-player_configs
-import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
-import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
-import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
-
-const playerSettingStore = usePlayerSettingStore()
-import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
-import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { Pause, Play, PlayBack, PlayForward, VolumeMedium } from '@vicons/ionicons5'
-import Bar_Music_PlayList from '@/views/view_app/drawer/View_Player_PlayList.vue'
-import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
-import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
-import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
-import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
-import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
-
-// 在setup上下文中获取Store实例
-const playerAppearanceStore = usePlayerAppearanceStore()
-const playerAudioStore = usePlayerAudioStore()
-const playlistStore = usePlaylistStore()
-const pageMediaStore = usePageMediaStore()
-// 使用 storeToRefs 解构出所需的响应式属性
-const {
-  player_lyric_fontSize_Num,
-  player_lyric_fontWeight,
-  player_lyric_color,
-  player_lyric_colorHover,
-  player_lyric_color_hidden_value,
-  player_lyric_color_hidden_coefficient,
-  player_background_model_num,
-  player_show_of_control_info,
-  player_collapsed_action_bar_of_Immersion_model,
-} = storeToRefs(playerAppearanceStore)
-
-const {
-  this_audio_song_name,
-  this_audio_artist_name,
-  this_audio_album_name,
-  this_audio_song_rating,
-  page_top_album_image_url,
-  this_audio_lyrics_info_line_font,
-  this_audio_song_id,
-  this_audio_song_favorite,
-  this_audio_lyrics_info_byte_model,
-  this_audio_lyrics_info_byte_font,
-} = storeToRefs(playerAudioStore)
 
 ///
 const show_mini_album_model = ref(false)
@@ -573,10 +567,9 @@ const handleItemClick_Favorite = (id: any, favorite: boolean) => {
     const item_file: Media_File | undefined = pageMediaStore.media_Files_temporary.find(
       (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
     )
-    const item_playlist: Media_File | undefined =
-      playlistStore.playlist_MediaFiles_temporary.find(
-        (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
-      )
+    const item_playlist: Media_File | undefined = playlistStore.playlist_MediaFiles_temporary.find(
+      (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
+    )
     if (item_file !== undefined) item_file.favorite = !favorite
     if (item_playlist !== undefined) item_playlist.favorite = !favorite
   }
@@ -588,27 +581,23 @@ const handleItemClick_Rating = (id: any, rating: any) => {
   const item_file: Media_File | undefined = pageMediaStore.media_Files_temporary.find(
     (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
   )
-  const item_playlist: Media_File | undefined =
-    playlistStore.playlist_MediaFiles_temporary.find(
-      (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
-    )
+  const item_playlist: Media_File | undefined = playlistStore.playlist_MediaFiles_temporary.find(
+    (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
+  )
   if (item_file !== undefined) item_file.rating = rating
   if (item_playlist !== undefined) item_playlist.rating = rating
 }
-import { store_player_sound_effects } from '@/views/view_app/page/page_player/store/store_player_sound_effects'
-import { store_player_sound_speed } from '@/views/view_app/page/page_player/store/store_player_sound_speed'
-import { store_player_sound_more } from '@/views/view_app/page/page_player/store/store_player_sound_more'
-////// open sound effects
+
 const Set_Player_Show_Sound_effects = () => {
   store_player_sound_effects.player_show_sound_effects =
     !store_player_sound_effects.player_show_sound_effects
 }
-////// open sound speedPlayer_Show_Sound_more
+
 const Set_Player_Show_Sound_speed = () => {
   store_player_sound_speed.player_show_sound_speed =
     store_player_sound_speed.player_show_sound_speed === false
 }
-////// open sound more info
+
 const Set_Player_Show_Sound_more = () => {
   store_player_sound_more.player_show_sound_more =
     store_player_sound_more.player_show_sound_more === false
@@ -834,16 +823,10 @@ onBeforeUnmount(() => {
                 </n-space>
                 <n-space style="margin-top: -2px">
                   <n-ellipsis style="width: 250px; color: #929292">
-                    <template
-                      v-for="artist in this_audio_artist_name.split(
-                        /[\/|｜、]/
-                      )"
-                    >
+                    <template v-for="artist in this_audio_artist_name.split(/[\/|｜、]/)">
                       <span id="bar_ar_name_part">{{ artist + '&nbsp' }}</span>
                     </template>
-                    <span id="bar_al_name">{{
-                      '—&nbsp' + this_audio_album_name
-                    }}</span>
+                    <span id="bar_al_name">{{ '—&nbsp' + this_audio_album_name }}</span>
                   </n-ellipsis>
                 </n-space>
               </div>
@@ -920,9 +903,7 @@ onBeforeUnmount(() => {
                           ? 'center'
                           : 'left',
                       }"
-                      v-for="(
-                        item, index
-                      ) in this_audio_lyrics_info_line_font"
+                      v-for="(item, index) in this_audio_lyrics_info_line_font"
                       @click="handleItemDbClick(index)"
                     >
                       <div class="lyrics_text_active">
@@ -982,23 +963,15 @@ onBeforeUnmount(() => {
                 <div class="bar_left_text_info" style="margin-left: -6px">
                   <n-space>
                     <n-ellipsis style="color: white; width: 250px">
-                      <span id="bar_so_name">{{
-                        this_audio_song_name
-                      }}</span>
+                      <span id="bar_so_name">{{ this_audio_song_name }}</span>
                     </n-ellipsis>
                   </n-space>
                   <n-space style="margin-top: -2px">
                     <n-ellipsis style="width: 250px; color: #929292">
-                      <template
-                        v-for="artist in this_audio_artist_name.split(
-                          /[\/|｜、]/
-                        )"
-                      >
+                      <template v-for="artist in this_audio_artist_name.split(/[\/|｜、]/)">
                         <span id="bar_ar_name_part">{{ artist + '&nbsp' }}</span>
                       </template>
-                      <span id="bar_al_name">{{
-                        '—&nbsp' + this_audio_album_name
-                      }}</span>
+                      <span id="bar_al_name">{{ '—&nbsp' + this_audio_album_name }}</span>
                     </n-ellipsis>
                   </n-space>
                 </div>
@@ -1032,7 +1005,7 @@ onBeforeUnmount(() => {
                   }"
                   style="width: 32px; font-size: 12px"
                 >
-                  {{ playerSettingStore.current_play_time }}
+                  {{ current_play_time }}
                 </n-space>
                 <n-slider
                   style="
@@ -1043,7 +1016,7 @@ onBeforeUnmount(() => {
                     --n-handle-size: 20px;
                     border-radius: 20px;
                   "
-                  v-model:value="playerSettingStore.slider_singleValue"
+                  v-model:value="slider_singleValue"
                   :min="0"
                   :max="100"
                   :format-tooltip="
@@ -1055,25 +1028,16 @@ onBeforeUnmount(() => {
                   "
                   :on-dragend="
                     () => {
-                      if (
-                        playerSettingStore.slider_singleValue >= 99.5 ||
-                        playerSettingStore.slider_singleValue == 0
-                      ) {
+                      if (slider_singleValue >= 99.5 || slider_singleValue == 0) {
                         playerSettingStore.player_is_play_ended = true
-                        playerSettingStore.play_go_duration(
-                          playerSettingStore.slider_singleValue,
-                          true
-                        )
+                        playerSettingStore.play_go_duration(slider_singleValue, true)
                       }
                       playerSettingStore.player_range_duration_isDragging = false
                     }
                   "
                   @click="
                     () => {
-                      playerSettingStore.play_go_duration(
-                        playerSettingStore.slider_singleValue,
-                        true
-                      )
+                      playerSettingStore.play_go_duration(slider_singleValue, true)
                     }
                   "
                   @mousedown="playerSettingStore.player_range_duration_isDragging = true"
@@ -1091,7 +1055,7 @@ onBeforeUnmount(() => {
                   }"
                   style="width: 32px; font-size: 12px"
                 >
-                  {{ playerSettingStore.total_play_time }}
+                  {{ total_play_time }}
                 </n-space>
               </n-space>
               <!-- Button -->
@@ -1380,11 +1344,7 @@ onBeforeUnmount(() => {
                           size="small"
                           v-model:value="this_audio_song_rating"
                           @update:value="
-                            (value: number) =>
-                              handleItemClick_Rating(
-                                this_audio_song_id,
-                                value
-                              )
+                            (value: number) => handleItemClick_Rating(this_audio_song_id, value)
                           "
                         />
                       </template>
@@ -1396,10 +1356,7 @@ onBeforeUnmount(() => {
                           size="tiny"
                           text
                           @click="
-                            handleItemClick_Favorite(
-                              this_audio_song_id,
-                              this_audio_song_favorite
-                            )
+                            handleItemClick_Favorite(this_audio_song_id, this_audio_song_favorite)
                           "
                         >
                           <template #icon>

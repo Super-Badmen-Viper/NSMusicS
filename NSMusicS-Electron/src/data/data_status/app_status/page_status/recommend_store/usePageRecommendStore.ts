@@ -17,7 +17,7 @@ export const usePageRecommendStore = defineStore('pageRecommend', () => {
     recommend_MediaSearch_metadata,
     recommend_MediaFiles_metadata,
     recommend_MediaFiles_temporary,
-    
+
     // 可以在这里添加相关的方法
     // 例如：
     // clearRecommendData() {

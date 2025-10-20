@@ -90,8 +90,9 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
           media_Files_temporary.value[index].selected = false
         }
       })
-      media_Files_selected.value = 
-        media_Files_selected.value.filter((item: any) => item.id !== value.id)
+      media_Files_selected.value = media_Files_selected.value.filter(
+        (item: any) => item.id !== value.id
+      )
       console.log('media_Files_selected：' + value.path + '  ' + value.selected)
     }
   }
@@ -111,65 +112,65 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
   const get_selected_playlist_add_MediaFile = async (value: any) => {
     console.log('selected_playlist_addMediaFile', value)
     store_local_data_set_playlistInfo.Set_Selected_MediaInfo_Add_Selected_Playlist(
-          media_Files_selected.value.map((file: any) => file.id),
-          value
-        )
-        store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
+      media_Files_selected.value.map((file: any) => file.id),
+      value
+    )
+    store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
 
-        if (store_server_user_model.model_select === 'server') {
-          await store_server_data_set_playlistInfo.Set_Selected_MediaInfo_Add_Selected_Playlist(
-            media_Files_selected.value.map((file: any) => file.id),
-            value
-          )
-        }
+    if (store_server_user_model.model_select === 'server') {
+      await store_server_data_set_playlistInfo.Set_Selected_MediaInfo_Add_Selected_Playlist(
+        media_Files_selected.value.map((file: any) => file.id),
+        value
+      )
+    }
   }
 
   const get_selected_playlist_delete_MediaFile = async (value: any) => {
     console.log('selected_playlist_deleteMediaFile', value)
     store_local_data_set_playlistInfo.Set_Selected_MediaInfo_Delete_Selected_Playlist(
-          media_Files_selected.value.map((file: any) => file.id),
-          value
-        )
-        store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
+      media_Files_selected.value.map((file: any) => file.id),
+      value
+    )
+    store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
 
-        if (store_server_user_model.model_select === 'server') {
-          await store_server_data_set_playlistInfo.Set_Selected_MediaInfo_Delete_Selected_Playlist(
-            store_server_users.server_select_kind === 'emby'
-              ? media_Files_selected.value.map((file: any) => file.order_title)
-              : media_Files_selected.value.map((file: any) => file.id),
-            value
-          )
-        }
+    if (store_server_user_model.model_select === 'server') {
+      await store_server_data_set_playlistInfo.Set_Selected_MediaInfo_Delete_Selected_Playlist(
+        store_server_users.server_select_kind === 'emby'
+          ? media_Files_selected.value.map((file: any) => file.order_title)
+          : media_Files_selected.value.map((file: any) => file.id),
+        value
+      )
+    }
   }
 
   const get_selected_lovelist_add_MediaFile = (value: any) => {
     console.log('selected_lovelist_addMediaFile', value)
     store_local_data_set_annotionInfo.Set_MediaInfo_Add_Selected_Favorite(
-          media_Files_selected.value.map((file: any) => file.id),
-          true
-        )
-        store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
+      media_Files_selected.value.map((file: any) => file.id),
+      true
+    )
+    store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
 
-        if (store_server_user_model.model_select === 'server') {
-          media_Files_selected.value.forEach((media: any) => {
-            store_server_data_set_mediaInfo.Set_MediaInfo_To_Favorite_Server(media.id, false)
-          })
-        }
+    if (store_server_user_model.model_select === 'server') {
+      media_Files_selected.value.forEach((media: any) => {
+        store_server_data_set_mediaInfo.Set_MediaInfo_To_Favorite_Server(media.id, false)
+      })
+    }
   }
 
   const get_selected_lovelist_delete_MediaFile = (value: any) => {
     console.log('selected_lovelist_deleteMediaFile', value)
     store_local_data_set_annotionInfo.Set_MediaInfo_Delete_Selected_Favorite(
-          media_Files_selected.value.map((file: any) => file.id),
-          value
-        )
-        store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
+      media_Files_selected.value.map((file: any) => file.id),
+      value
+    )
+    store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
 
-        if (store_server_user_model.model_select === 'server') {
-          media_Files_selected.value.forEach((media: any) => {
-            store_server_data_set_mediaInfo.Set_MediaInfo_To_Favorite_Server(media.id, true)
-          })
-        }
+    if (store_server_user_model.model_select === 'server') {
+      media_Files_selected.value.forEach((media: any) => {
+        store_server_data_set_mediaInfo.Set_MediaInfo_To_Favorite_Server(media.id, true)
+      })
+    }
   }
 
   const get_selected_locallist_delete_MediaFile = (value: any) => {
@@ -184,10 +185,10 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
   const get_selected_recentlist_deletet_MediaFile = (value: any) => {
     console.log('selected_recentlist_deletetMediaFile', value)
     store_local_data_set_annotionInfo.Set_MediaInfo_To_Selected_PlayCount_of_Delete(
-        media_Files_selected.value.map((file: any) => file.id),
-        value
-      )
-      store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
+      media_Files_selected.value.map((file: any) => file.id),
+      value
+    )
+    store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
   }
 
   const get_page_songlists_keyword = async (newValue: any) => {
@@ -208,7 +209,7 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
         page_songlists_keywordFilter.value = `WHERE album_id = '${search}'`
       }
     } else {
-      page_songlists_keywordFilter.value = 
+      page_songlists_keywordFilter.value =
         newValue.length > 0
           ? `WHERE title LIKE '%${newValue}%' OR artist LIKE '%${newValue}%' OR album LIKE '%${newValue}%'`
           : ''
@@ -241,61 +242,49 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
   }
 
   // 监听逻辑
-  watch(
-    page_songlists_options_Sort_key,
-    async (newValue) => {
-      if (newValue != null && list_options_Hand_Sort.value) {
-        list_options_Hand_Sort.value = false
-        store_router_history_data_of_media.fix_router_history_of_Media_scroller_value(
-          store_router_history_data_of_media.router_history_model_of_Media_scroller_value
-        ) // 保留此滚轮值(上次浏览位置)
-        await store_general_fetch_media_list.fetchData_Media()
-      }
-    }
-  )
-
-  watch(
-    list_data_StartUpdate,
-    async (newValue) => {
-      if (newValue) {
-        page_songlists_keyword.value = ''
-        if (list_selected_Hand_click.value) {
-          page_songlists_keywordFilter.value = ''
-        }
-        store_router_data_info.find_music_model = false
-        await store_general_fetch_media_list.fetchData_Media()
-
-        store_router_history_data_of_media.router_history_datas_of_Media = []
-        if (store_router_history_data_of_media.router_select_history_date_of_Media) {
-          store_router_history_data_of_media.router_select_history_date_of_Media.id = 1
-          store_router_history_data_of_media.router_history_datas_of_Media.push(
-            store_router_history_data_of_media.router_select_history_date_of_Media
-          )
-        }
-
-        list_data_StartUpdate.value = false
-        console.log('list_data_StartUpdate')
-      }
-    }
-  )
-
-  watch(
-    page_songlists_filter_path_folder,
-    async (newValue) => {
-      page_songlists_filter_model.value = page_songlists_filter_path_folder.value !== ''
-      await store_system_configs_save.save_system_config_of_App_Configs()
-      page_songlists_keywordFilter.value = ''
-      list_selected_Hand_click.value = false
+  watch(page_songlists_options_Sort_key, async (newValue) => {
+    if (newValue != null && list_options_Hand_Sort.value) {
+      list_options_Hand_Sort.value = false
+      store_router_history_data_of_media.fix_router_history_of_Media_scroller_value(
+        store_router_history_data_of_media.router_history_model_of_Media_scroller_value
+      ) // 保留此滚轮值(上次浏览位置)
       await store_general_fetch_media_list.fetchData_Media()
     }
-  )
+  })
 
-  watch(
-    page_songlists_multi_sort,
-    async (newValue) => {
-      await store_general_fetch_media_list.fetchData_Media_of_server_web_start()
+  watch(list_data_StartUpdate, async (newValue) => {
+    if (newValue) {
+      page_songlists_keyword.value = ''
+      if (list_selected_Hand_click.value) {
+        page_songlists_keywordFilter.value = ''
+      }
+      store_router_data_info.find_music_model = false
+      await store_general_fetch_media_list.fetchData_Media()
+
+      store_router_history_data_of_media.router_history_datas_of_Media = []
+      if (store_router_history_data_of_media.router_select_history_date_of_Media) {
+        store_router_history_data_of_media.router_select_history_date_of_Media.id = 1
+        store_router_history_data_of_media.router_history_datas_of_Media.push(
+          store_router_history_data_of_media.router_select_history_date_of_Media
+        )
+      }
+
+      list_data_StartUpdate.value = false
+      console.log('list_data_StartUpdate')
     }
-  )
+  })
+
+  watch(page_songlists_filter_path_folder, async (newValue) => {
+    page_songlists_filter_model.value = page_songlists_filter_path_folder.value !== ''
+    await store_system_configs_save.save_system_config_of_App_Configs()
+    page_songlists_keywordFilter.value = ''
+    list_selected_Hand_click.value = false
+    await store_general_fetch_media_list.fetchData_Media()
+  })
+
+  watch(page_songlists_multi_sort, async (newValue) => {
+    await store_general_fetch_media_list.fetchData_Media_of_server_web_start()
+  })
 
   // 返回状态和方法
   return {
@@ -307,7 +296,7 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
     media_starred_count,
     media_recently_count,
     media_playlist_count,
-    
+
     list_data_StartUpdate,
     list_data_Hand_Search,
     list_options_Hand_Sort,
@@ -332,7 +321,7 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
     page_songlists_bool_show_search_area,
     page_songlists_input_search_Value,
     page_songlists_random_play,
-    
+
     get_duration_formatTime,
     set_media_Files_selected,
     set_media_Files_selected_all,
@@ -343,6 +332,6 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
     get_selected_locallist_delete_MediaFile,
     get_selected_recentlist_deletet_MediaFile,
     get_page_songlists_keyword,
-    get_page_songlists_selected
+    get_page_songlists_selected,
   }
 })

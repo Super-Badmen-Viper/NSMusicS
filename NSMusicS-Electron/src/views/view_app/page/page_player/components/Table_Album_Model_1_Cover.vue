@@ -35,7 +35,7 @@ const {
   page_top_album_image_url,
   this_audio_song_name,
   this_audio_artist_name,
-  this_audio_album_name
+  this_audio_album_name,
 } = storeToRefs(playerAudioStore)
 
 function getAssetImage(firstImage: string) {
@@ -147,20 +147,14 @@ function getAssetImage(firstImage: string) {
               playerSettingStore.slider_singleValue == 0
             ) {
               playerSettingStore.player_is_play_ended = true
-              playerSettingStore.play_go_duration(
-                playerSettingStore.slider_singleValue,
-                true
-              )
+              playerSettingStore.play_go_duration(playerSettingStore.slider_singleValue, true)
             }
             playerSettingStore.player_range_duration_isDragging = false
           }
         "
         @click="
           () => {
-            playerSettingStore.play_go_duration(
-              playerSettingStore.slider_singleValue,
-              true
-            )
+            playerSettingStore.play_go_duration(playerSettingStore.slider_singleValue, true)
           }
         "
         @mousedown="playerSettingStore.player_range_duration_isDragging = true"
@@ -230,11 +224,7 @@ function getAssetImage(firstImage: string) {
           },
         ]"
       >
-        <n-button
-          quaternary
-          round
-          @click="playerSettingStore.player_click_state_of_play = true"
-        >
+        <n-button quaternary round @click="playerSettingStore.player_click_state_of_play = true">
           <template #icon>
             <n-icon v-if="playerSettingStore.player.isPlaying" :size="36"><Pause /></n-icon>
             <n-icon v-else :size="36"><Play /></n-icon>
@@ -305,9 +295,7 @@ function getAssetImage(firstImage: string) {
         "
       >
         <template #icon>
-          <n-icon :size="26" v-if="playerSettingStore.play_volume != 0"
-            ><VolumeMedium
-          /></n-icon>
+          <n-icon :size="26" v-if="playerSettingStore.play_volume != 0"><VolumeMedium /></n-icon>
           <n-icon :size="26" v-else><VolumeOff /></n-icon>
         </template>
       </n-button>

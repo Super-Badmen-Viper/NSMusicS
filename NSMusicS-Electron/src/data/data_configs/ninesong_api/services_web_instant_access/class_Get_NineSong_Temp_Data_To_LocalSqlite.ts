@@ -824,8 +824,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     try {
       const getPlaylists_all = await this.playlistApi.getPlaylists()
       const playlists = getPlaylists_all['ninesong-response']['playlists']
-      if (playlists != undefined)
-        this.pageMediaStore.media_playlist_count = playlists.length || 0
+      if (playlists != undefined) this.pageMediaStore.media_playlist_count = playlists.length || 0
     } catch {}
   }
 

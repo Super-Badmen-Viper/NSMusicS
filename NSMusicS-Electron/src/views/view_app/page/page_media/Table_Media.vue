@@ -306,14 +306,9 @@ let options_Sort = computed(() => {
   ) {
     options_Sort_key.value.forEach((element) => {
       if (element.key === pageMediaStore.page_songlists_options_Sort_key[0].columnKey)
-        if (
-          pageMediaStore.page_songlists_options_Sort_key[0].order === state_Sort.Ascend
-        )
+        if (pageMediaStore.page_songlists_options_Sort_key[0].order === state_Sort.Ascend)
           element.state_Sort = state_Sort.Ascend
-        else if (
-          pageMediaStore.page_songlists_options_Sort_key[0].order ===
-          state_Sort.Descend
-        )
+        else if (pageMediaStore.page_songlists_options_Sort_key[0].order === state_Sort.Descend)
           element.state_Sort = state_Sort.Descend
     })
   }
@@ -426,8 +421,7 @@ const input_search_InstRef = ref()
 let bool_input_search = false
 const click_search = () => {
   if (pageMediaStore.page_songlists_input_search_Value) {
-    const page_songlists_keyword =
-      pageMediaStore.page_songlists_input_search_Value.toLowerCase()
+    const page_songlists_keyword = pageMediaStore.page_songlists_input_search_Value.toLowerCase()
     pageMediaStore.get_page_songlists_keyword(page_songlists_keyword)
     bool_input_search = true
     options_Sort_key.value.forEach((element) => {
@@ -486,11 +480,9 @@ onMounted(() => {
     pageMediaStore.page_songlists_bool_show_search_area = true
     bool_input_search = true
   } else {
-    pageMediaStore.page_songlists_input_search_Value =
-      pageMediaStore.page_songlists_keyword
+    pageMediaStore.page_songlists_input_search_Value = pageMediaStore.page_songlists_keyword
 
-    const shouldShowSearch =
-      pageMediaStore.page_songlists_input_search_Value.length > 0
+    const shouldShowSearch = pageMediaStore.page_songlists_input_search_Value.length > 0
     pageMediaStore.page_songlists_bool_show_search_area = shouldShowSearch
     bool_input_search = shouldShowSearch
   }
@@ -586,8 +578,7 @@ const page_songlists_handleselected_updatevalue = async (value: any) => {
   await pageMediaStore.get_page_songlists_selected(value)
   console.log('selected_value_for_songlistall：' + value)
   breadcrumbItems.value =
-    pageMediaStore.page_songlists_options.find((option) => option.value === value)
-      ?.label || ''
+    pageMediaStore.page_songlists_options.find((option) => option.value === value)?.label || ''
   bool_start_play.value = true
   pageMediaStore.set_media_Files_selected_all(false)
 }
@@ -682,11 +673,8 @@ const handleItemClick_album = async (album_id: string) => {
   ) {
     click_count = 0
     if (store_server_user_model.model_server_type_of_local) {
-      pageMediaStore.page_songlists_input_search_Value =
-        album_id + 'accurate_search' + '__album__'
-      pageMediaStore.get_page_songlists_keyword(
-        album_id + 'accurate_search' + '__album__'
-      )
+      pageMediaStore.page_songlists_input_search_Value = album_id + 'accurate_search' + '__album__'
+      pageMediaStore.get_page_songlists_keyword(album_id + 'accurate_search' + '__album__')
       pageMediaStore.page_songlists_bool_show_search_area = false
       show_search_area()
       click_search()
@@ -746,10 +734,9 @@ const handleItemClick_Favorite = (id: any, favorite: boolean) => {
   if (id === playerAudioStore.this_audio_song_id) {
     playerAudioStore.this_audio_song_favorite = !favorite
     //
-    const item_playlist: Media_File | undefined =
-      playlistStore.playlist_MediaFiles_temporary.find(
-        (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
-      )
+    const item_playlist: Media_File | undefined = playlistStore.playlist_MediaFiles_temporary.find(
+      (mediaFile: Media_File) => mediaFile.id === playerAudioStore.this_audio_song_id
+    )
     if (item_playlist !== undefined) {
       item_playlist.favorite = !favorite
     }
@@ -844,10 +831,7 @@ const {
   playlist_Menu_Item,
 } = storeToRefs(playlistStore)
 
-const { 
-  this_audio_song_name,
-  page_top_album_image_url
-} = storeToRefs(playerAudioStore)
+const { this_audio_song_name, page_top_album_image_url } = storeToRefs(playerAudioStore)
 
 const {
   page_songlists_bool_show_search_area,
@@ -862,7 +846,7 @@ const {
   page_songlists_selected,
   page_songlists_options,
   media_Files_selected,
-  media_Files_temporary
+  media_Files_temporary,
 } = storeToRefs(pageMediaStore)
 
 const Type_Add_Playlist = ref(false)
@@ -1026,8 +1010,9 @@ async function update_playlist_deleteMediaFile(id: any) {
         )
       }
     }
-    pageMediaStore.media_Files_temporary =
-      pageMediaStore.media_Files_temporary.filter((media: any) => media.id !== id)
+    pageMediaStore.media_Files_temporary = pageMediaStore.media_Files_temporary.filter(
+      (media: any) => media.id !== id
+    )
     message.success(t('common.delete'))
     store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
   } catch (e) {
@@ -1050,23 +1035,15 @@ async function update_lovelist_addMediaFile_selected() {
 }
 async function update_button_deleteMediaFile_selected() {
   if (pageMediaStore.page_songlists_selected === 'song_list_all') {
-    await update_locallist_deleteMediaFile_selected(
-      pageMediaStore.page_songlists_selected
-    )
+    await update_locallist_deleteMediaFile_selected(pageMediaStore.page_songlists_selected)
   } else if (pageMediaStore.page_songlists_selected === 'song_list_love') {
-    await update_lovelist_deleteMediaFile_selected(
-      pageMediaStore.page_songlists_selected
-    )
+    await update_lovelist_deleteMediaFile_selected(pageMediaStore.page_songlists_selected)
   } else if (pageMediaStore.page_songlists_selected !== 'song_list_all') {
-    await update_playlist_deleteMediaFile_selected(
-      pageMediaStore.page_songlists_selected
-    )
+    await update_playlist_deleteMediaFile_selected(pageMediaStore.page_songlists_selected)
   }
-  pageMediaStore.media_Files_temporary =
-    pageMediaStore.media_Files_temporary.filter(
-      (file) =>
-        !pageMediaStore.media_Files_selected.some((selected) => selected.id === file.id)
-    )
+  pageMediaStore.media_Files_temporary = pageMediaStore.media_Files_temporary.filter(
+    (file) => !pageMediaStore.media_Files_selected.some((selected) => selected.id === file.id)
+  )
   message.success(t('common.delete'))
 }
 async function update_playlist_deleteMediaFile_selected(playlist_id: any) {
@@ -1672,11 +1649,7 @@ onBeforeUnmount(() => {
             </template>
             {{ $t('Search') }}
           </n-tooltip>
-          <n-tooltip
-            trigger="hover"
-            placement="top"
-            v-if="page_songlists_bool_show_search_area"
-          >
+          <n-tooltip trigger="hover" placement="top" v-if="page_songlists_bool_show_search_area">
             <template #trigger>
               <n-input-group style="width: 144px">
                 <n-input
@@ -1743,12 +1716,7 @@ onBeforeUnmount(() => {
             "
           >
             <template #trigger>
-              <n-badge
-               v-if="page_songlists_multi_sort.length > 0"
-                dot
-                value="1"
-                :offset="[-18, 3]"
-              >
+              <n-badge v-if="page_songlists_multi_sort.length > 0" dot value="1" :offset="[-18, 3]">
                 <n-button quaternary circle style="rotate: 90deg" @click="Type_Multi_Sort = true">
                   <template #icon>
                     <n-icon :size="20" :depth="2"><MultipleStopOutlined /></n-icon>
@@ -1980,19 +1948,13 @@ onBeforeUnmount(() => {
                     }}</span>
                     <n-space vertical>
                       <n-select
-                        :disabled="
-                          page_songlists_library_path.length === 0
-                        "
-                        v-model:value="
-                          page_songlists_library_folder_path
-                        "
+                        :disabled="page_songlists_library_path.length === 0"
+                        v-model:value="page_songlists_library_folder_path"
                         :options="browseFolderPathOptions"
                         placement="bottom"
                         style="width: 200px"
                         @click="
-                          find_server_folder_path(
-                            pageMediaStore.page_songlists_library_folder_path
-                          )
+                          find_server_folder_path(pageMediaStore.page_songlists_library_folder_path)
                         "
                         @update:value="filter_media_folder_path"
                       />
@@ -2153,11 +2115,7 @@ onBeforeUnmount(() => {
               {{ $t('Delete') }}
             </n-tooltip>
             <n-p style="margin-top: 6px">
-              {{
-                $t('nsmusics.view_page.selectedMedia') +
-                ' ' +
-                media_Files_selected.length
-              }}
+              {{ $t('nsmusics.view_page.selectedMedia') + ' ' + media_Files_selected.length }}
               *
             </n-p>
           </n-space>

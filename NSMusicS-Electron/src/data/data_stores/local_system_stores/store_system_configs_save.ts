@@ -82,9 +82,7 @@ export const store_system_configs_save = reactive({
           clear_Equilibrium_Model: String(store_router_data_logic.clear_Equilibrium_Model),
           clear_UserExperience_Model: String(store_router_data_logic.clear_UserExperience_Model),
           theme_auto_system: String(store_system_configs_info.theme_auto_system),
-          page_songlists_filter_year: String(
-            pageMediaStore.page_songlists_filter_year
-          ),
+          page_songlists_filter_year: String(pageMediaStore.page_songlists_filter_year),
           player_select: String(playerSettingStore.player_select),
           player_fade_value: String(playerSettingStore.player_fade_value),
           player_dolby: String(playerSettingStore.player_dolby),
@@ -253,9 +251,7 @@ export const store_system_configs_save = reactive({
     player_Configs_of_Audio_Info = ref(
       new Player_Configs_of_Audio_Info({
         this_audio_file_path: String(playerAudioStore.this_audio_file_path),
-        this_audio_file_medium_image_url: String(
-          playerAudioStore.this_audio_file_medium_image_url
-        ),
+        this_audio_file_medium_image_url: String(playerAudioStore.this_audio_file_medium_image_url),
         this_audio_file_lyric: String(playerAudioStore.this_audio_lyrics_string),
         this_audio_artist_name: String(playerAudioStore.this_audio_artist_name),
         this_audio_artist_id: String(playerAudioStore.this_audio_artist_id),
@@ -265,9 +261,7 @@ export const store_system_configs_save = reactive({
         this_audio_song_favorite: String(playerAudioStore.this_audio_song_favorite),
         this_audio_album_name: String(playerAudioStore.this_audio_album_name),
         this_audio_album_id: String(playerAudioStore.this_audio_album_id),
-        this_audio_Index_of_play_list: String(
-          playerAudioStore.this_audio_Index_of_play_list
-        ),
+        this_audio_Index_of_play_list: String(playerAudioStore.this_audio_Index_of_play_list),
 
         page_top_album_image_url: String(playerAudioStore.page_top_album_image_url),
         page_top_album_id: String(playerAudioStore.page_top_album_id),
@@ -377,8 +371,8 @@ export const store_system_configs_save = reactive({
         'cue_track_count',
         'cue_track_show',
       ])
-      const data = playlistStore
-        .playlist_MediaFiles_temporary.filter((item) => item.id && !excludedFields.has('id'))
+      const data = playlistStore.playlist_MediaFiles_temporary
+        .filter((item) => item.id && !excludedFields.has('id'))
         .map((item, index) => ({
           ID: this.generateMockObjectId(),
           ConfigKey: item.id,

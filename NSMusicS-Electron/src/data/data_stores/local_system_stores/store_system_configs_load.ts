@@ -487,15 +487,11 @@ export const store_system_configs_load = reactive({
         /// playlist configs
         await playlistStore.reset_data()
         /// player
-        playerSettingStore.play_order =
-          '' + system_Configs_Read.app_Configs.value['play_order']
+        playerSettingStore.play_order = '' + system_Configs_Read.app_Configs.value['play_order']
         playerSettingStore.play_volume = Number(
           '' + system_Configs_Read.app_Configs.value['play_volume']
         )
-        if (
-          playerSettingStore.play_volume === 0 ||
-          playerSettingStore.play_volume === undefined
-        ) {
+        if (playerSettingStore.play_volume === 0 || playerSettingStore.play_volume === undefined) {
           playerSettingStore.play_volume = 100
         }
       } catch (e) {

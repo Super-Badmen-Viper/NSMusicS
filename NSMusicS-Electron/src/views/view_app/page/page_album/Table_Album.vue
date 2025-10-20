@@ -54,16 +54,16 @@ const playerAppearanceStore = usePlayerAppearanceStore()
 const playerSettingStore = usePlayerSettingStore()
 const pageAlbumStore = usePageAlbumStore()
 const pageMediaStore = usePageMediaStore()
-const { 
-  album_item_count, 
-  album_starred_count, 
+const {
+  album_item_count,
+  album_starred_count,
   album_recently_count,
   page_albumlists_input_search_Value,
   page_albumlists_multi_sort,
   page_albumlists_filter_year,
   page_albumlists_selected,
   page_albumlists_options,
-  album_Files_temporary
+  album_Files_temporary,
 } = storeToRefs(pageAlbumStore)
 
 const { t } = useI18n({
@@ -361,15 +361,9 @@ let options_Sort = computed(() => {
   ) {
     options_Sort_key.value.forEach((element) => {
       if (element.key === pageAlbumStore.page_albumlists_options_Sort_key[0].columnKey)
-        if (
-          pageAlbumStore.page_albumlists_options_Sort_key[0].order ===
-          state_Sort.Ascend
-        )
+        if (pageAlbumStore.page_albumlists_options_Sort_key[0].order === state_Sort.Ascend)
           element.state_Sort = state_Sort.Ascend
-        else if (
-          pageAlbumStore.page_albumlists_options_Sort_key[0].order ===
-          state_Sort.Descend
-        )
+        else if (pageAlbumStore.page_albumlists_options_Sort_key[0].order === state_Sort.Descend)
           element.state_Sort = state_Sort.Descend
     })
   }
@@ -612,8 +606,7 @@ const page_albumlists_handleSelected_updateValue = (value: any) => {
   pageAlbumStore.page_albumlists_selected = value
   console.log('selected_value_for_albumlistall：' + value)
   breadcrumbItems.value =
-    pageAlbumStore.page_albumlists_options.find((option) => option.value === value)
-      ?.label || ''
+    pageAlbumStore.page_albumlists_options.find((option) => option.value === value)?.label || ''
 }
 
 ////// router_app history
@@ -905,11 +898,7 @@ async function menu_item_add_to_playlist_next() {
       const newItem = JSON.parse(JSON.stringify(item))
       newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
       playlistStore.playlist_MediaFiles_temporary.splice(index + 1 + i, 0, newItem)
-      playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.splice(
-        index + 1 + i,
-        0,
-        newItem.id
-      )
+      playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.splice(index + 1 + i, 0, newItem.id)
     })
 
     playlistStore.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
@@ -1017,18 +1006,11 @@ onBeforeUnmount(() => {
   store_general_fetch_album_list.set_artist_id('')
 })
 // 使用 storeToRefs 解构出所需的响应式属性
-const { 
-  playlist_names_ALLLists, 
-  playlist_Menu_Item_Id, 
-  playlist_Menu_Item 
-} = storeToRefs(playlistStore)
+const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
+  storeToRefs(playlistStore)
 
-const { 
-  page_top_album_name,
-  page_top_album_image_url,
-  this_audio_artist_id,
-  page_top_album_id
-} = storeToRefs(playerAudioStore)
+const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, page_top_album_id } =
+  storeToRefs(playerAudioStore)
 </script>
 <template>
   <n-space vertical :size="12">
@@ -1600,15 +1582,17 @@ const {
                         @click="
                           () => {
                             handleItemClick_artist(artist.ArtistID)
-                            pageAlbumStore.page_albumlists_input_search_Value =
-                              artist.ArtistName
+                            pageAlbumStore.page_albumlists_input_search_Value = artist.ArtistName
                           }
                         "
                       >
                         {{ artist.ArtistName + '&nbsp' }}
                       </span>
                     </template>
-                    <template v-else v-for="artist in item.artist?.split(/[\/|｜、]/) ?? item.artist">
+                    <template
+                      v-else
+                      v-for="artist in item.artist?.split(/[\/|｜、]/) ?? item.artist"
+                    >
                       <span
                         @click="
                           () => {

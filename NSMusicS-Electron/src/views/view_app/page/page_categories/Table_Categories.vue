@@ -462,11 +462,7 @@ async function menu_item_add_to_playlist_next() {
       const newItem = JSON.parse(JSON.stringify(item))
       newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
       playlistStore.playlist_MediaFiles_temporary.splice(index + 1 + i, 0, newItem)
-      playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.splice(
-        index + 1 + i,
-        0,
-        newItem.id
-      )
+      playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.splice(index + 1 + i, 0, newItem.id)
     })
   } else {
     console.error('Current audio song not found in playlist')
@@ -499,8 +495,7 @@ onBeforeUnmount(() => {
         v-contextmenu:contextmenu
         @contextmenu.prevent="
           () => {
-            playlistStore.playlist_Menu_Item =
-              store_view_home_page_info.home_selected_top_album
+            playlistStore.playlist_Menu_Item = store_view_home_page_info.home_selected_top_album
             playlistStore.playlist_Menu_Item_Id =
               store_view_home_page_info.home_selected_top_album?.id
           }
@@ -1688,6 +1683,98 @@ onBeforeUnmount(() => {
                   </div>
                 </div>
               </div>
+            </div>
+          </DynamicScrollerItem>
+        </template>
+      </DynamicScroller>
+    </n-space>
+
+    <n-space vertical style="margin-left: 8px">
+      <n-space
+        justify="space-between"
+        align="center"
+        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)' }"
+      >
+        <n-space align="center">
+          <span style="font-size: 16px; font-weight: 600">
+            {{
+              $t('page.home.recentlyPlayed') +
+              ' : ' +
+              (store_server_users.server_select_kind === 'jellyfin' ||
+              store_server_users.server_select_kind === 'emby'
+                ? $t('entity.track_other')
+                : $t('entity.album_other'))
+            }}
+          </span>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button
+                quaternary
+                @click="
+                  () => {
+                    store_general_fetch_home_list.fetchData_Home_of_recently_played()
+                    dynamicScroller_recently_played.$el.scrollLeft = 0
+                    offset_recently_played = 0
+                  }
+                "
+              >
+                <template #icon>
+                  <n-icon :size="20"><ArrowReset24Filled /></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('common.refresh') }}
+          </n-tooltip>
+          <n-space
+            v-if="store_view_home_page_info.home_Files_temporary_recently_played.length === 0"
+            style="margin-top: 2px"
+          >
+            {{ $t('None') + $t('Play') + $t('Data') }}
+          </n-space>
+        </n-space>
+        <n-space>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary @click="scrollTo_recently_played(-1)">
+                <n-icon size="20" :depth="2">
+                  <ChevronLeft16Filled />
+                </n-icon>
+              </n-button>
+            </template>
+            {{ $t('common.backward') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary @click="scrollTo_recently_played(1)">
+                <n-icon size="20" :depth="2">
+                  <ChevronRight16Filled />
+                </n-icon>
+              </n-button>
+            </template>
+            {{ $t('common.forward') }}
+          </n-tooltip>
+        </n-space>
+      </n-space>
+      <DynamicScroller
+        class="home-wall"
+        ref="dynamicScroller_recently_played"
+        v-if="store_view_home_page_info.home_Files_temporary_recently_played.length != 0"
+        :style="{
+          width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)',
+          height: item_album_image + 60 + 'px',
+        }"
+        :items="store_view_home_page_info.home_Files_temporary_recently_played"
+        :itemSize="itemSize"
+        :minItemSize="itemSize"
+        :emit-update="true"
+        direction="horizontal"
+      >
+        <template #default="{ item, index, active }">
+          <DynamicScrollerItem
+            :item="item"
+            :active="active"
+            :data-index="index"
+            :data-active="active"
             v-contextmenu:contextmenu
             @contextmenu.prevent="
               () => {

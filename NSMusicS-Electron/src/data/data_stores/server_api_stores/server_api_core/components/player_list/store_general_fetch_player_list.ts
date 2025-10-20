@@ -14,11 +14,12 @@ export const store_general_fetch_player_list = reactive({
 
     playlistStore.playlist_MediaFiles_temporary = []
     if (!cue_model) {
-      playlistStore.playlist_MediaFiles_temporary =
-        pageMediaStore.media_Files_temporary.map((row: any) => {
+      playlistStore.playlist_MediaFiles_temporary = pageMediaStore.media_Files_temporary.map(
+        (row: any) => {
           row.play_id = row.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
           return row
-        })
+        }
+      )
       const media_file = playlistStore.playlist_MediaFiles_temporary.find(
         (row: any) => row.id === playerAudioStore.this_audio_song_id
       )

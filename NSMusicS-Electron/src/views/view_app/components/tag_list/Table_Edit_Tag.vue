@@ -96,11 +96,10 @@ async function save_edit_tag() {
           const save_tag = JSON.parse(
             JSON.stringify(store_player_tag_modify.player_current_media_tag)
           )
-          const item: Media_File | undefined =
-            pageMediaStore.media_Files_temporary.find(
-              (mediaFile: Media_File) =>
-                mediaFile.path === store_player_tag_modify.player_current_media_path
-            )
+          const item: Media_File | undefined = pageMediaStore.media_Files_temporary.find(
+            (mediaFile: Media_File) =>
+              mediaFile.path === store_player_tag_modify.player_current_media_path
+          )
           item.title = save_tag.title || ''
           item.artist = Array.isArray(save_tag.artist)
             ? save_tag.artist.join('、') || ''

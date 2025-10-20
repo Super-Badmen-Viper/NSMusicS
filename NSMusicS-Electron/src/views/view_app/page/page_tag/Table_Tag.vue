@@ -31,10 +31,8 @@ const { t } = useI18n({
 })
 
 const pageMediaStore = usePageMediaStore()
-const {
-  page_songlists_library_path,
-  page_songlists_library_folder_path
-} = storeToRefs(pageMediaStore)
+const { page_songlists_library_path, page_songlists_library_folder_path } =
+  storeToRefs(pageMediaStore)
 
 ///
 const browseFolderOptions = ref([])
@@ -268,9 +266,7 @@ const tag_type_options = ref([
                     placement="bottom"
                     style="width: 170px"
                     @click="
-                      find_server_folder_path(
-                        pageMediaStore.page_songlists_library_folder_path
-                      )
+                      find_server_folder_path(pageMediaStore.page_songlists_library_folder_path)
                     "
                     @update:value="filter_media_folder_path"
                   />

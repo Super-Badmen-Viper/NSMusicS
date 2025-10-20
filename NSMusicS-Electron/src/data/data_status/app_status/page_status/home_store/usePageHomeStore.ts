@@ -24,35 +24,30 @@ export const usePageHomeStore = defineStore('pageHome', () => {
   const list_data_StartUpdate = ref(false)
 
   // 监听逻辑（从 store_view_home_page_info.ts 合并）
-  watch(
-    home_selected_top_album,
-    (newValue) => {
-      if (newValue && home_selected_top_album.value != undefined) {
-        if (home_selected_top_album.value.medium_image_url){
-            home_selected_top_album_medium_image_url.value = home_selected_top_album.value.medium_image_url
-        } else {
-            home_selected_top_album_medium_image_url.value = error_album
-        }
+  watch(home_selected_top_album, (newValue) => {
+    if (newValue && home_selected_top_album.value != undefined) {
+      if (home_selected_top_album.value.medium_image_url) {
+        home_selected_top_album_medium_image_url.value =
+          home_selected_top_album.value.medium_image_url
       } else {
         home_selected_top_album_medium_image_url.value = error_album
       }
+    } else {
+      home_selected_top_album_medium_image_url.value = error_album
     }
-  )
+  })
 
   // 监听逻辑（从 store_view_home_page_logic.ts 合并）
-  watch(
-    list_data_StartUpdate,
-    (newValue) => {
-      if (newValue) {
-        store_general_fetch_home_list.fetchData_Home()
-        const pageMediaStore = usePageMediaStore()
-        pageMediaStore.list_selected_Hand_click = true
-        console.log('store_view_home_page_logic.list_data_StartUpdate')
-        
-        list_data_StartUpdate.value = false
-      }
+  watch(list_data_StartUpdate, (newValue) => {
+    if (newValue) {
+      store_general_fetch_home_list.fetchData_Home()
+      const pageMediaStore = usePageMediaStore()
+      pageMediaStore.list_selected_Hand_click = true
+      console.log('store_view_home_page_logic.list_data_StartUpdate')
+
+      list_data_StartUpdate.value = false
     }
-  )
+  })
 
   // 返回状态和方法
   return {
@@ -65,8 +60,8 @@ export const usePageHomeStore = defineStore('pageHome', () => {
     home_selected_top_album_subscript,
     home_selected_top_album,
     home_selected_top_album_medium_image_url,
-    
+
     // 从 store_view_home_page_logic.ts 返回的状态
-    list_data_StartUpdate
+    list_data_StartUpdate,
   }
 })

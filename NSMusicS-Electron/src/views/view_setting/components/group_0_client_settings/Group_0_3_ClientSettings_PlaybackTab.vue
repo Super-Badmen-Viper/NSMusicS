@@ -31,7 +31,7 @@ const {
   player_replayGainPreamp,
   player_replayGainClip,
   player_replayGainFallback,
-  player_dolby
+  player_dolby,
 } = storeToRefs(playerSettingStore)
 
 // 在setup上下文中获取Store实例
@@ -370,10 +370,7 @@ import { openLink } from '@/utils/electron/openLink'
             <span style="font-size: 12px">{{ $t('setting.audioExclusiveMode_description') }}</span>
           </div>
         </n-space>
-        <n-switch
-          :disabled="player_select != 'mpv'"
-          v-model:value="player_audioExclusiveMode"
-        >
+        <n-switch :disabled="player_select != 'mpv'" v-model:value="player_audioExclusiveMode">
         </n-switch>
       </n-space>
       <n-space justify="space-between" align="center" style="margin-left: 30px">
@@ -419,10 +416,7 @@ import { openLink } from '@/utils/electron/openLink'
             <span style="font-size: 12px">{{ $t('setting.replayGainClipping_description') }}</span>
           </div>
         </n-space>
-        <n-switch
-          :disabled="player_select != 'mpv'"
-          v-model:value="player_replayGainClip"
-        >
+        <n-switch :disabled="player_select != 'mpv'" v-model:value="player_replayGainClip">
         </n-switch>
       </n-space>
       <n-space justify="space-between" align="center" style="margin-left: 30px">

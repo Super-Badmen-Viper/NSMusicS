@@ -499,11 +499,8 @@ const playerAudioStore = usePlayerAudioStore()
 const playerAppearanceStore = usePlayerAppearanceStore()
 const playerSettingStore = usePlayerSettingStore()
 
-const { 
-  playlist_names_ALLLists, 
-  playlist_Menu_Item_Id, 
-  playlist_Menu_Item 
-} = storeToRefs(playlistStore)
+const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
+  storeToRefs(playlistStore)
 </script>
 
 <template>

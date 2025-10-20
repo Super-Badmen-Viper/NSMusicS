@@ -54,10 +54,7 @@ export const store_general_fetch_album_list = reactive({
             const sortOrder =
               pageAlbumStore.page_albumlists_options_Sort_key.length > 0 &&
               pageAlbumStore.page_albumlists_options_Sort_key[0].order !== 'default'
-                ? pageAlbumStore.page_albumlists_options_Sort_key[0].order.replace(
-                    'end',
-                    ''
-                  )
+                ? pageAlbumStore.page_albumlists_options_Sort_key[0].order.replace('end', '')
                 : ''
             let keywordFilter =
               pageAlbumStore.page_albumlists_keyword.length > 0
@@ -118,18 +115,13 @@ export const store_general_fetch_album_list = reactive({
                 page_lists_selected: pageAlbumStore.page_albumlists_selected,
                 columnKey:
                   pageAlbumStore.page_albumlists_options_Sort_key.length > 0 &&
-                  pageAlbumStore.page_albumlists_options_Sort_key[0].order !==
-                    'default'
+                  pageAlbumStore.page_albumlists_options_Sort_key[0].order !== 'default'
                     ? pageAlbumStore.page_albumlists_options_Sort_key[0].columnKey
                     : 'id',
                 order:
                   pageAlbumStore.page_albumlists_options_Sort_key.length > 0 &&
-                  pageAlbumStore.page_albumlists_options_Sort_key[0].order !==
-                    'default'
-                    ? pageAlbumStore.page_albumlists_options_Sort_key[0].order.replace(
-                        'end',
-                        ''
-                      )
+                  pageAlbumStore.page_albumlists_options_Sort_key[0].order !== 'default'
+                    ? pageAlbumStore.page_albumlists_options_Sort_key[0].order.replace('end', '')
                     : '',
                 page_lists_scrollindex:
                   store_router_history_data_of_album.router_history_model_of_Album_scroller_value,
@@ -249,26 +241,21 @@ export const store_general_fetch_album_list = reactive({
               .all()
               .map((annotation: any) => annotation.item_id)
           }
-          pageAlbumStore.album_Files_temporary =
-            pageAlbumStore.album_Files_temporary.filter((item: any) => {
+          pageAlbumStore.album_Files_temporary = pageAlbumStore.album_Files_temporary.filter(
+            (item: any) => {
               if (pageAlbumStore.page_albumlists_selected === 'album_list_all') {
                 return true
-              } else if (
-                pageAlbumStore.page_albumlists_selected === 'album_list_love'
-              ) {
+              } else if (pageAlbumStore.page_albumlists_selected === 'album_list_love') {
                 return annotations.some(
                   (annotation: { item_id: string }) => annotation.item_id === item.id
                 )
-              } else if (
-                pageAlbumStore.page_albumlists_selected === 'album_list_recently'
-              ) {
+              } else if (pageAlbumStore.page_albumlists_selected === 'album_list_recently') {
                 return order_play_date.includes(item.id)
-              } else if (
-                pageAlbumStore.page_albumlists_selected === 'album_list_all_PlayList'
-              ) {
+              } else if (pageAlbumStore.page_albumlists_selected === 'album_list_all_PlayList') {
                 return true
               }
-            })
+            }
+          )
           if (pageAlbumStore.page_albumlists_selected === 'album_list_recently') {
             const new_sort: Album[] = pageAlbumStore.album_Files_temporary.slice()
             pageAlbumStore.album_Files_temporary = []

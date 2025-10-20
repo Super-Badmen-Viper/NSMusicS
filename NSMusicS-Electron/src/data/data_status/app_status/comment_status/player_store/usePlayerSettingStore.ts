@@ -21,7 +21,7 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
   const player_state_skip_back_click = ref(false)
   const player_state_skip_forward_click = ref(false)
   const player_init_play = ref(false)
-  
+
   // Player configuration
   const player_kind = ref([
     { label: 'mpv', value: 'mpv' },
@@ -31,7 +31,7 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
   const player_device_kind = ref<string[]>([])
   const player_device_select = ref('default')
   const player_model_cue = ref(false)
-  
+
   // Playback settings
   const play_order = ref('playback-2')
   const play_volume = ref(100)
@@ -46,7 +46,7 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
   const player_replayGainClip = ref(false)
   const player_replayGainFallback = ref(0)
   const player_mpvExtraParameters = ref('')
-  
+
   // Player state flags
   const player_is_play_ended = ref(false)
   const player_range_duration_isDragging = ref(false)
@@ -54,7 +54,7 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
   const player_click_state_of_play_skip_back = ref(false)
   const player_click_state_of_play = ref(false)
   const player_click_state_of_play_skip_forward = ref(false)
-  
+
   // Time tracking
   const total_play_time = ref('04:42')
   const current_play_time = ref('01:36')
@@ -62,7 +62,7 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
   const slider_singleValue = ref(0)
   const marks_slider_singleValue = ref<Record<string, any>>({})
   const player_no_progress_jump = ref(true)
-  
+
   // UI state
   const player_back_ChevronDouble = ref('')
   const player_slider_click = ref(false)
@@ -70,13 +70,13 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
   const player_go_lyric_line_index_of_audio_play_progress = ref(0)
   const player_save_new_data = ref(false)
   const this_audio_initial_trigger = ref(false)
-  
+
   // Drawer state
   const drawer_order_show = ref(false)
   const drawer_order_height = ref(160)
   const drawer_volume_show = ref(false)
   const drawer_theme_show = ref(false)
-  
+
   // UI dimensions
   const orderToolShow = ref(true)
   const voiceToolShow = ref(true)
@@ -100,7 +100,7 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
   }
   const orderPanelWidath = ref('202')
   const orderButonWidath = ref('202')
-  
+
   // Item click states
   const boolHandleItemClick_Favorite = ref(false)
   const boolHandleItemClick_Played = ref(false)
@@ -213,7 +213,8 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
       } else {
         index_num = index_num <= 0 ? 1 : index_num
         playerAudioStore.this_audio_cue_track_current_no = index_num
-        playerAudioStore.this_audio_cue_track_current_indexes = media_file.cue_tracks[index_num - 1].INDEXES
+        playerAudioStore.this_audio_cue_track_current_indexes =
+          media_file.cue_tracks[index_num - 1].INDEXES
         player_model_cue.value = true
       }
     } else {
@@ -244,7 +245,8 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
       playerAudioStore.this_audio_album_name = media_file.title
       /// load : cue play init
       playerAudioStore.this_audio_cue_track_current_no = index_num
-      playerAudioStore.this_audio_cue_track_current_indexes = media_file.cue_tracks[index_num - 1].INDEXES
+      playerAudioStore.this_audio_cue_track_current_indexes =
+        media_file.cue_tracks[index_num - 1].INDEXES
       player_model_cue.value = true
     }
     playerAudioStore.this_audio_play_id = media_file.play_id ?? media_file.id ?? ''
@@ -310,15 +312,17 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
           let lyrics = []
           try {
             if (store_server_users.server_select_kind === 'jellyfin') {
-              const getAudio_lyrics_id_of_Je = await audio_ApiService_of_Je.getAudio_lyrics_id_of_Je(media_file.id)
+              const getAudio_lyrics_id_of_Je =
+                await audio_ApiService_of_Je.getAudio_lyrics_id_of_Je(media_file.id)
               lyrics = getAudio_lyrics_id_of_Je?.Lyrics
                 ? [convertToLRC_Array_of_Je(getAudio_lyrics_id_of_Je.Lyrics)]
                 : []
             } else if (store_server_users.server_select_kind === 'emby') {
-              const getAudio_lyrics_id_of_Em = await audio_ApiService_of_Je.getAudio_lyrics_id_of_Em(
-                media_file.id,
-                media_file.lyrics
-              )
+              const getAudio_lyrics_id_of_Em =
+                await audio_ApiService_of_Je.getAudio_lyrics_id_of_Em(
+                  media_file.id,
+                  media_file.lyrics
+                )
               lyrics = getAudio_lyrics_id_of_Em?.Lyrics || []
             }
           } catch (error) {
@@ -391,10 +395,7 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
 
   watch(player_device_select, (newValue) => {
     if (player_select.value === 'web') {
-      if (
-        player_device_select.value != undefined &&
-        player_device_select.value.length > 0
-      ) {
+      if (player_device_select.value != undefined && player_device_select.value.length > 0) {
         if (player.value.howl != null) {
           const audioElement = player.value.howl._sounds[0]._node
           if (typeof audioElement.setSinkId === 'function') {
@@ -427,10 +428,10 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
     player_replayGainPreamp,
     player_replayGainClip,
     player_replayGainFallback,
-    player_mpvExtraParameters
+    player_mpvExtraParameters,
   ]
 
-  configProperties.forEach(prop => {
+  configProperties.forEach((prop) => {
     watch(prop, () => {
       store_system_configs_save.save_system_config_of_App_Configs()
     })
@@ -473,14 +474,14 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
     player_state_skip_back_click,
     player_state_skip_forward_click,
     player_init_play,
-    
+
     // Player configuration
     player_kind,
     player_select,
     player_device_kind,
     player_device_select,
     player_model_cue,
-    
+
     // Playback settings
     play_order,
     play_volume,
@@ -495,7 +496,7 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
     player_replayGainClip,
     player_replayGainFallback,
     player_mpvExtraParameters,
-    
+
     // Player state flags
     player_is_play_ended,
     player_range_duration_isDragging,
@@ -503,7 +504,7 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
     player_click_state_of_play_skip_back,
     player_click_state_of_play,
     player_click_state_of_play_skip_forward,
-    
+
     // Time tracking
     total_play_time,
     current_play_time,
@@ -511,7 +512,7 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
     slider_singleValue,
     marks_slider_singleValue,
     player_no_progress_jump,
-    
+
     // UI state
     player_back_ChevronDouble,
     player_slider_click,
@@ -519,24 +520,24 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
     player_go_lyric_line_index_of_audio_play_progress,
     player_save_new_data,
     this_audio_initial_trigger,
-    
+
     // Drawer state
     drawer_order_show,
     drawer_order_height,
     drawer_volume_show,
     drawer_theme_show,
-    
+
     // UI dimensions
     orderToolShow,
     voiceToolShow,
     langWidths,
     orderPanelWidath,
     orderButonWidath,
-    
+
     // Item click states
     boolHandleItemClick_Favorite,
     boolHandleItemClick_Played,
-    
+
     // Methods
     init_player,
     formatTime,
@@ -545,6 +546,6 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
     play_go_duration,
     update_current_media_info,
     update_current_lyrics,
-    convertToLRC_Array_of_Je
+    convertToLRC_Array_of_Je,
   }
 })

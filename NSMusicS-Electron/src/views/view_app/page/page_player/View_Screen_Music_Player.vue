@@ -123,14 +123,11 @@ onMounted(() => {
 function load_lyrics() {
   if (this_audio_lyrics_string.value.length > 0) {
     if (this_audio_lyrics_null.value) {
-      this_audio_lyrics_info_line_font.value.forEach(
-        (item: any, index: number) => {
-          if ((item != null || item != 'undefined' || item != '') && item === '未找到可用歌词') {
-            this_audio_lyrics_info_line_font.value[index] =
-              computed_i18n_Label_Lyric_Not_Find.value
-          }
+      this_audio_lyrics_info_line_font.value.forEach((item: any, index: number) => {
+        if ((item != null || item != 'undefined' || item != '') && item === '未找到可用歌词') {
+          this_audio_lyrics_info_line_font.value[index] = computed_i18n_Label_Lyric_Not_Find.value
         }
-      )
+      })
     }
     handleAuto_fontSize(player_lyric_fontSize_Num.value)
     begin_lyrics_animation()
@@ -159,8 +156,7 @@ function begin_lyrics_animation() {
             ///
             if (playerSettingStore.player_model_cue) {
               if (this_audio_cue_track_current_indexes.value.length > 0) {
-                const track_str =
-                  this_audio_cue_track_current_indexes.value[0].TIME
+                const track_str = this_audio_cue_track_current_indexes.value[0].TIME
                 if (track_str.length > 0) {
                   currentTime = currentTime - playerSettingStore.formatStrTime(track_str)
                 }
@@ -186,9 +182,7 @@ function begin_lyrics_animation() {
                   scrollToItem(i + this_audio_lyrics_info_line_num.value)
                 }
                 break
-              } else if (
-                currentTime < this_audio_lyrics_info_line_time.value[i + 1]
-              ) {
+              } else if (currentTime < this_audio_lyrics_info_line_time.value[i + 1]) {
                 if (
                   !lyrics_list_whell.value &&
                   (isFirstRun || store_player_view.currentScrollIndex !== i)
@@ -213,8 +207,7 @@ function begin_lyrics_animation() {
             const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active')
             let color_hidden = player_lyric_color.value.slice(0, -2)
             const index =
-              store_player_view.currentScrollIndex +
-              this_audio_lyrics_info_line_num.value
+              store_player_view.currentScrollIndex + this_audio_lyrics_info_line_num.value
             scrollToItem(index)
             for (let i = index - 16; i <= index + 16; i++) {
               const colorValue = Math.max(
@@ -252,15 +245,10 @@ const handleItemDbClick = async (index: any) => {
   if (index < this_audio_lyrics_info_line_num.value) return
   if (
     index >
-    this_audio_lyrics_info_line_font.value.length -
-      this_audio_lyrics_info_line_num.value -
-      1
+    this_audio_lyrics_info_line_font.value.length - this_audio_lyrics_info_line_num.value - 1
   )
     return
-  const time =
-    this_audio_lyrics_info_line_time.value[
-      index - this_audio_lyrics_info_line_num.value
-    ]
+  const time = this_audio_lyrics_info_line_time.value[index - this_audio_lyrics_info_line_num.value]
   if (time >= (await playerSettingStore.player.getDuration()) * 1000) return
   if (time < 0) return
   if (!playerSettingStore.player_model_cue) {
@@ -368,12 +356,9 @@ const startByteAnimations = (index: number, num: number) => {
   try {
     if (!scrollbar.value) return
     const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active')
-    let position_i_length = this_audio_lyrics_info_byte_time.value.reduce(
-      (acc: any, curr: any) => {
-        return acc + curr.length
-      },
-      0
-    )
+    let position_i_length = this_audio_lyrics_info_byte_time.value.reduce((acc: any, curr: any) => {
+      return acc + curr.length
+    }, 0)
     let position_i_start = this_audio_lyrics_info_byte_time.value
       .slice(0, index)
       .reduce((acc: any, curr: any) => {
@@ -1391,12 +1376,12 @@ onBeforeUnmount(() => {
                   <Table_Album_Model_1_AlbumScroll
                     @mouseover="
                       () => {
-                        play_list_carousel_model.value = true
+                        playerAudioStore.play_list_carousel_model = true
                       }
                     "
                     @mouseleave="
                       () => {
-                        play_list_carousel_model.value = false
+                        playerAudioStore.play_list_carousel_model = false
                       }
                     "
                   />
@@ -1419,8 +1404,7 @@ onBeforeUnmount(() => {
                       class="animate__rotate_slower"
                       :class="{
                         animate__rotate_slower_paused:
-                          player_background_model_num !== 1 ||
-                          !playerSettingStore.player.isPlaying,
+                          player_background_model_num !== 1 || !playerSettingStore.player.isPlaying,
                       }"
                       v-if="!clear_lottie_animationInstance && player_use_lottie_animation"
                       autoplay
@@ -1528,9 +1512,7 @@ onBeforeUnmount(() => {
                             )
                           }
                         "
-                        @mousedown="
-                          playerSettingStore.player_range_duration_isDragging = true
-                        "
+                        @mousedown="playerSettingStore.player_range_duration_isDragging = true"
                         @mouseup="playerSettingStore.player_range_duration_isDragging = false"
                       >
                         <template #thumb>
@@ -1570,8 +1552,7 @@ onBeforeUnmount(() => {
                       class="animate__rotate_fast"
                       :class="{
                         animate__rotate_fast_paused:
-                          player_background_model_num !== 2 ||
-                          !playerSettingStore.player.isPlaying,
+                          player_background_model_num !== 2 || !playerSettingStore.player.isPlaying,
                       }"
                       v-if="!clear_lottie_animationInstance && player_use_lottie_animation"
                       speed="0.8"
@@ -1689,9 +1670,7 @@ onBeforeUnmount(() => {
                             opacity 0.4s;
                         "
                         :style="{
-                          right: playerSettingStore.player.isPlaying
-                            ? 'calc(-1vh)'
-                            : 'calc(13vh)',
+                          right: playerSettingStore.player.isPlaying ? 'calc(-1vh)' : 'calc(13vh)',
                           opacity: playerSettingStore.player.isPlaying ? 1 : 0,
                         }"
                       ></div>
@@ -1843,9 +1822,7 @@ onBeforeUnmount(() => {
                         :style="{
                           textAlign: player_collapsed_album ? 'center' : 'left',
                         }"
-                        v-for="(
-                          item, index
-                        ) in this_audio_lyrics_info_line_font"
+                        v-for="(item, index) in this_audio_lyrics_info_line_font"
                         @click="handleItemDbClick(index)"
                       >
                         <div class="lyrics_text_active">

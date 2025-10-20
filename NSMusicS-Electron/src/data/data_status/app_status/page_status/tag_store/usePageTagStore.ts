@@ -15,7 +15,7 @@ export const usePageTagStore = defineStore('pageTag', () => {
     tag_type_select,
     tag_LibraryItems_metadata,
     tag_LibraryItems_temporary,
-    
+
     // 可以在这里添加相关的方法
     // 例如：
     // resetTagData() {

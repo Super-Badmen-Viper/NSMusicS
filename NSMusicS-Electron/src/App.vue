@@ -40,6 +40,8 @@ import { store_server_model_statistics } from '@/data/data_stores/server_api_sto
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 
 import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
+import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
@@ -496,9 +498,7 @@ const Init_page_songlists_statistic_Data = () => {
     comment: computed(() => t('nsmusics.view_page.recentPlay')),
     duration: 0,
     song_count:
-      pageMediaStore.media_recently_count > 0
-        ? pageMediaStore.media_recently_count
-        : '*' + ' *',
+      pageMediaStore.media_recently_count > 0 ? pageMediaStore.media_recently_count : '*' + ' *',
     public: 0,
     created_at: '',
     updated_at: '',
@@ -713,9 +713,7 @@ const Init_page_albumlists_statistic_Data = () => {
       comment: computed(() => t('nsmusics.view_page.recentPlay')),
       duration: 0,
       song_count:
-        pageAlbumStore.album_recently_count > 0
-          ? pageAlbumStore.album_recently_count
-          : '*' + ' *',
+        pageAlbumStore.album_recently_count > 0 ? pageAlbumStore.album_recently_count : '*' + ' *',
       public: 0,
       created_at: '',
       updated_at: '',

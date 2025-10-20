@@ -267,19 +267,13 @@ const Play_This_Audio_Path = () => {
           playerSettingStore.player_init_play
         ) {
           if (playerSettingStore.player_select === 'mpv') {
-            playerSettingStore.play_go_duration(
-              playerSettingStore.slider_init_singleValue,
-              true
-            )
+            playerSettingStore.play_go_duration(playerSettingStore.slider_init_singleValue, true)
             playerSettingStore.slider_init_singleValue = 0
           }
         } else {
           // init play logic
           playerSettingStore.slider_init_singleValue = 0
-          playerSettingStore.play_go_duration(
-            playerSettingStore.slider_init_singleValue,
-            true
-          )
+          playerSettingStore.play_go_duration(playerSettingStore.slider_init_singleValue, true)
         }
       } else {
         if (playerAudioStore.this_audio_cue_track_current_indexes.length > 0) {
@@ -361,14 +355,8 @@ const init_player_howler = async () => {
         }
       }
 
-      if (
-        playerSettingStore.slider_init_singleValue != 0 &&
-        playerSettingStore.player_init_play
-      ) {
-        playerSettingStore.play_go_duration(
-          playerSettingStore.slider_init_singleValue,
-          true
-        )
+      if (playerSettingStore.slider_init_singleValue != 0 && playerSettingStore.player_init_play) {
+        playerSettingStore.play_go_duration(playerSettingStore.slider_init_singleValue, true)
         playerSettingStore.slider_init_singleValue = 0
         playerSettingStore.player.pause()
       }
@@ -920,8 +908,7 @@ function play_skip_cue_order(
       let find_result = false
       for (let i = media_file.cue_tracks.length - 1; i >= 0; i--) {
         const track = media_file.cue_tracks[i]
-        const current_cue_time =
-          playerSettingStore.formatStrTime(track.INDEXES[0].TIME) / 1000
+        const current_cue_time = playerSettingStore.formatStrTime(track.INDEXES[0].TIME) / 1000
         if (currentTime > current_cue_time && !find_result) {
           playerAudioStore.this_audio_song_name = track.Title
           if (playerAudioStore.this_audio_song_name.length === 0) {
@@ -961,8 +948,7 @@ function play_skip_cue_order(
       if (playerAudioStore.this_audio_song_name.length === 0) {
         playerAudioStore.this_audio_song_name = index_num + ':' + media_file.title
       }
-      playerAudioStore.this_audio_artist_name =
-        media_file.cue_tracks[index_num - 1].Performer
+      playerAudioStore.this_audio_artist_name = media_file.cue_tracks[index_num - 1].Performer
       playerAudioStore.this_audio_album_name = media_file.title
       ///
       playerSettingStore.player_model_cue = true
@@ -1053,8 +1039,7 @@ const set_slider_singleValue = async () => {
     const currentTime = await playerSettingStore.player.getCurrentTime()
     const duration = await playerSettingStore.player.getDuration()
     const calculatedValue =
-      ((currentTime + playerSettingStore.player_slider_currentTime_added_value) / duration) *
-      100
+      ((currentTime + playerSettingStore.player_slider_currentTime_added_value) / duration) * 100
     playerSettingStore.slider_singleValue = Number(calculatedValue.toFixed(2))
     if (playerSettingStore.player_model_cue) {
       play_skip_cue_order(0, true, currentTime, duration)
@@ -1206,9 +1191,7 @@ const handleItemClick_artist = (artist) => {
       pageMediaStore.page_songlists_bool_show_search_area = true
       pageMediaStore.page_songlists_input_search_Value = artist
       if (store_server_user_model.model_server_type_of_local) {
-        pageMediaStore.get_page_songlists_keyword(
-          artist + 'accurate_search' + '__artist__'
-        )
+        pageMediaStore.get_page_songlists_keyword(artist + 'accurate_search' + '__artist__')
       } else if (store_server_user_model.model_server_type_of_web) {
         pageMediaStore.get_page_songlists_keyword(artist)
       }
@@ -1236,9 +1219,7 @@ const handleItemClick_album = (album) => {
       pageMediaStore.page_songlists_bool_show_search_area = true
       pageMediaStore.page_songlists_input_search_Value = album
       if (store_server_user_model.model_server_type_of_local) {
-        pageMediaStore.get_page_songlists_keyword(
-          album + 'accurate_search' + '__album__'
-        )
+        pageMediaStore.get_page_songlists_keyword(album + 'accurate_search' + '__album__')
       } else if (store_server_user_model.model_server_type_of_web) {
         pageMediaStore.get_page_songlists_keyword(album)
       }
@@ -1373,17 +1354,13 @@ watch(
         <div class="bar_left_text_song_info">
           <n-space>
             <n-ellipsis>
-              <span
-                id="bar_song_name"
-                @click="handleItemClick_title(this_audio_song_name)"
-              >
+              <span id="bar_song_name" @click="handleItemClick_title(this_audio_song_name)">
                 {{ this_audio_song_name }}
               </span>
               <span style="font-size: 16px"> - </span>
               <template
-                v-for="artist in this_audio_artist_name.split(
-                  /[\/|｜、]/
-                ) ?? this_audio_artist_name"
+                v-for="artist in this_audio_artist_name.split(/[\/|｜、]/) ??
+                this_audio_artist_name"
               >
                 <span id="bar_artist_name_part" @click="handleItemClick_artist(artist)">{{
                   artist + '&nbsp'
@@ -1453,8 +1430,7 @@ watch(
                   size="small"
                   @click="
                     () => {
-                      drawer_order_show.value =
-                        !drawer_order_show.value
+                      drawer_order_show.value = !drawer_order_show.value
                     }
                   "
                 >
@@ -1462,22 +1438,13 @@ watch(
                     <n-icon :size="26" v-if="play_order === 'playback-1'">
                       <ArrowAutofitDown24Regular />
                     </n-icon>
-                    <n-icon
-                      :size="26"
-                      v-else-if="play_order === 'playback-2'"
-                    >
+                    <n-icon :size="26" v-else-if="play_order === 'playback-2'">
                       <ArrowRepeatAll16Regular />
                     </n-icon>
-                    <n-icon
-                      :size="26"
-                      v-else-if="play_order === 'playback-3'"
-                    >
+                    <n-icon :size="26" v-else-if="play_order === 'playback-3'">
                       <RepeatOneRound />
                     </n-icon>
-                    <n-icon
-                      :size="20"
-                      v-else-if="play_order === 'playback-4'"
-                    >
+                    <n-icon :size="20" v-else-if="play_order === 'playback-4'">
                       <Random />
                     </n-icon>
                   </template>
@@ -1490,8 +1457,7 @@ watch(
                 size="small"
                 @click="
                   () => {
-                    drawer_order_show.value =
-                      !drawer_order_show.value
+                    drawer_order_show.value = !drawer_order_show.value
                   }
                 "
               >
@@ -1499,22 +1465,13 @@ watch(
                   <n-icon :size="26" v-if="play_order === 'playback-1'">
                     <ArrowAutofitDown24Regular />
                   </n-icon>
-                  <n-icon
-                    :size="26"
-                    v-else-if="play_order === 'playback-2'"
-                  >
+                  <n-icon :size="26" v-else-if="play_order === 'playback-2'">
                     <ArrowRepeatAll16Regular />
                   </n-icon>
-                  <n-icon
-                    :size="26"
-                    v-else-if="play_order === 'playback-3'"
-                  >
+                  <n-icon :size="26" v-else-if="play_order === 'playback-3'">
                     <RepeatOneRound />
                   </n-icon>
-                  <n-icon
-                    :size="20"
-                    v-else-if="play_order === 'playback-4'"
-                  >
+                  <n-icon :size="20" v-else-if="play_order === 'playback-4'">
                     <Random />
                   </n-icon>
                 </template>
@@ -1523,9 +1480,7 @@ watch(
             {{ $t('Play') + $t('common.sortOrder') }}
           </n-tooltip>
           <n-badge
-            v-if="
-              !orderToolShow && store_server_user_model.random_play_model
-            "
+            v-if="!orderToolShow && store_server_user_model.random_play_model"
             dot
             :value="store_server_user_model.random_play_model"
             :offset="[-8, 14]"
@@ -1536,8 +1491,7 @@ watch(
               size="small"
               @click="
                 () => {
-                  drawer_order_show.value =
-                    !drawer_order_show.value
+                  drawer_order_show.value = !drawer_order_show.value
                 }
               "
             >
@@ -1558,16 +1512,13 @@ watch(
             </n-button>
           </n-badge>
           <n-button
-            v-if="
-              !orderToolShow && !store_server_user_model.random_play_model
-            "
+            v-if="!orderToolShow && !store_server_user_model.random_play_model"
             quaternary
             round
             size="small"
             @click="
               () => {
-                drawer_order_show.value =
-                  !drawer_order_show.value
+                drawer_order_show.value = !drawer_order_show.value
               }
             "
           >
@@ -1600,9 +1551,7 @@ watch(
             <template #trigger>
               <n-button quaternary round @click="Init_Audio_Player">
                 <template #icon>
-                  <n-icon v-if="playerSettingStore.player.isPlaying" :size="36"
-                    ><Pause
-                  /></n-icon>
+                  <n-icon v-if="playerSettingStore.player.isPlaying" :size="36"><Pause /></n-icon>
                   <n-icon v-else :size="36"><Play /></n-icon>
                 </template>
               </n-button>
@@ -1627,8 +1576,7 @@ watch(
                 size="small"
                 @click="
                   () => {
-                    drawer_volume_show.value =
-                      !drawer_volume_show.value
+                    drawer_volume_show.value = !drawer_volume_show.value
                   }
                 "
               >
@@ -1646,8 +1594,7 @@ watch(
             size="small"
             @click="
               () => {
-                drawer_volume_show.value =
-                  !drawer_volume_show.value
+                drawer_volume_show.value = !drawer_volume_show.value
               }
             "
           >
@@ -1698,25 +1645,16 @@ watch(
               "
               :on-dragend="
                 () => {
-                  if (
-                    slider_singleValue >= 99.5 ||
-                    slider_singleValue == 0
-                  ) {
+                  if (slider_singleValue >= 99.5 || slider_singleValue == 0) {
                     playerSettingStore.player_is_play_ended = true
-                    playerSettingStore.play_go_duration(
-                      slider_singleValue,
-                      true
-                    )
+                    playerSettingStore.play_go_duration(slider_singleValue, true)
                   }
                   playerSettingStore.player_range_duration_isDragging = false
                 }
               "
               @click="
                 () => {
-                  playerSettingStore.play_go_duration(
-                    slider_singleValue,
-                    true
-                  )
+                  playerSettingStore.play_go_duration(slider_singleValue, true)
                 }
               "
               @mousedown="playerSettingStore.player_range_duration_isDragging = true"
@@ -2002,13 +1940,7 @@ watch(
           >
             <n-tooltip trigger="hover" placement="top" v-if="player_show">
               <template #trigger>
-                <n-button
-                  size="tiny"
-                  text
-                  @click="
-                    drawer_theme_show = !drawer_theme_show
-                  "
-                >
+                <n-button size="tiny" text @click="drawer_theme_show = !drawer_theme_show">
                   <template #icon>
                     <n-icon
                       :size="

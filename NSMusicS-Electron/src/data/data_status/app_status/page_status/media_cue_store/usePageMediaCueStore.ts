@@ -193,10 +193,10 @@ export const usePageMediaCueStore = defineStore('pageMediaCue', () => {
   const get_page_songlists_keyword = async (newValue: any) => {
     page_songlists_multi_sort.value = ''
     page_songlists_keyword.value = newValue
-    
+
     // 使用局部变量避免直接修改参数
     let searchValue = newValue
-    
+
     if (searchValue.indexOf('accurate_search') > 0) {
       searchValue = searchValue.replace('accurate_search', '')
       if (searchValue.indexOf('__title__') > 0) {
@@ -210,12 +210,12 @@ export const usePageMediaCueStore = defineStore('pageMediaCue', () => {
         page_songlists_keywordFilter.value = `WHERE album_id = '${searchValue}'`
       }
     } else {
-      page_songlists_keywordFilter.value = 
+      page_songlists_keywordFilter.value =
         searchValue.length > 0
           ? `WHERE title LIKE '%${searchValue}%' OR artist LIKE '%${searchValue}%' OR album LIKE '%${searchValue}%'`
           : ''
     }
-    
+
     page_songlists_keyword_reset.value = true
     console.log('page_songlists_keyword:' + newValue)
 
@@ -228,7 +228,7 @@ export const usePageMediaCueStore = defineStore('pageMediaCue', () => {
   const get_page_songlists_selected = async (newValue: any) => {
     page_songlists_selected.value = newValue
     const playerAppearanceStore = usePlayerAppearanceStore()
-    
+
     if (playerAppearanceStore.player_mode_of_medialist_from_external_import) {
       playerAppearanceStore.player_mode_of_medialist_from_external_import = false
     } else {
@@ -244,72 +244,57 @@ export const usePageMediaCueStore = defineStore('pageMediaCue', () => {
   }
 
   // Watch 监听器
-  watch(
-    page_songlists_options_Sort_key,
-    async (newValue) => {
-      if (newValue != null && list_options_Hand_Sort.value) {
-        list_options_Hand_Sort.value = false
-        store_router_history_data_of_media.fix_router_history_of_Media_scroller_value(
-          store_router_history_data_of_media.router_history_model_of_Media_scroller_value
-        ) // 保留此滚轮值(上次浏览位置)
-        await store_general_fetch_media_cue_list.fetchData_Media()
-      }
-    }
-  )
-
-  watch(
-    list_data_StartUpdate,
-    async (newValue) => {
-      if (newValue) {
-        page_songlists_keyword.value = ''
-        if (list_selected_Hand_click.value) {
-          page_songlists_keywordFilter.value = ''
-        }
-        store_router_data_info.find_music_model = false
-        await store_general_fetch_media_cue_list.fetchData_Media()
-
-        store_router_history_data_of_media.router_history_datas_of_Media = []
-        if (store_router_history_data_of_media.router_select_history_date_of_Media) {
-          store_router_history_data_of_media.router_select_history_date_of_Media.id = 1
-          store_router_history_data_of_media.router_history_datas_of_Media.push(
-            store_router_history_data_of_media.router_select_history_date_of_Media
-          )
-        }
-
-        list_data_StartUpdate.value = false
-        console.log('store_view_media_cue_page_logic.list_data_StartUpdate')
-      }
-    }
-  )
-
-  watch(
-    page_songlists_filter_year,
-    async (newValue) => {
-      page_songlists_filter_model.value = page_songlists_filter_year.value !== 0
-      await store_system_configs_save.save_system_config_of_App_Configs()
-      page_songlists_keywordFilter.value = ''
-      list_selected_Hand_click.value = false
+  watch(page_songlists_options_Sort_key, async (newValue) => {
+    if (newValue != null && list_options_Hand_Sort.value) {
+      list_options_Hand_Sort.value = false
+      store_router_history_data_of_media.fix_router_history_of_Media_scroller_value(
+        store_router_history_data_of_media.router_history_model_of_Media_scroller_value
+      ) // 保留此滚轮值(上次浏览位置)
       await store_general_fetch_media_cue_list.fetchData_Media()
     }
-  )
+  })
 
-  watch(
-    page_songlists_filter_path_folder,
-    async (newValue) => {
-      page_songlists_filter_model.value = page_songlists_filter_path_folder.value !== ''
-      await store_system_configs_save.save_system_config_of_App_Configs()
-      page_songlists_keywordFilter.value = ''
-      list_selected_Hand_click.value = false
+  watch(list_data_StartUpdate, async (newValue) => {
+    if (newValue) {
+      page_songlists_keyword.value = ''
+      if (list_selected_Hand_click.value) {
+        page_songlists_keywordFilter.value = ''
+      }
+      store_router_data_info.find_music_model = false
       await store_general_fetch_media_cue_list.fetchData_Media()
-    }
-  )
 
-  watch(
-    page_songlists_multi_sort,
-    async () => {
-      await store_general_fetch_media_cue_list.fetchData_Media_of_server_web_start()
+      store_router_history_data_of_media.router_history_datas_of_Media = []
+      if (store_router_history_data_of_media.router_select_history_date_of_Media) {
+        store_router_history_data_of_media.router_select_history_date_of_Media.id = 1
+        store_router_history_data_of_media.router_history_datas_of_Media.push(
+          store_router_history_data_of_media.router_select_history_date_of_Media
+        )
+      }
+
+      list_data_StartUpdate.value = false
+      console.log('store_view_media_cue_page_logic.list_data_StartUpdate')
     }
-  )
+  })
+
+  watch(page_songlists_filter_year, async (newValue) => {
+    page_songlists_filter_model.value = page_songlists_filter_year.value !== 0
+    await store_system_configs_save.save_system_config_of_App_Configs()
+    page_songlists_keywordFilter.value = ''
+    list_selected_Hand_click.value = false
+    await store_general_fetch_media_cue_list.fetchData_Media()
+  })
+
+  watch(page_songlists_filter_path_folder, async (newValue) => {
+    page_songlists_filter_model.value = page_songlists_filter_path_folder.value !== ''
+    await store_system_configs_save.save_system_config_of_App_Configs()
+    page_songlists_keywordFilter.value = ''
+    list_selected_Hand_click.value = false
+    await store_general_fetch_media_cue_list.fetchData_Media()
+  })
+
+  watch(page_songlists_multi_sort, async () => {
+    await store_general_fetch_media_cue_list.fetchData_Media_of_server_web_start()
+  })
 
   // 返回状态和方法
   return {
@@ -342,7 +327,7 @@ export const usePageMediaCueStore = defineStore('pageMediaCue', () => {
     page_songlists_bool_show_search_area,
     page_songlists_input_search_Value,
     page_songlists_random_play,
-    
+
     // 方法
     get_duration_formatTime,
     set_media_Files_selected,
@@ -354,6 +339,6 @@ export const usePageMediaCueStore = defineStore('pageMediaCue', () => {
     get_selected_locallist_delete_MediaFile,
     get_selected_recentlist_deletet_MediaFile,
     get_page_songlists_keyword,
-    get_page_songlists_selected
+    get_page_songlists_selected,
   }
 })

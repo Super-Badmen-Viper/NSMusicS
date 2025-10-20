@@ -20,9 +20,15 @@ import { ref, onMounted, watch, onBeforeUnmount, computed, h } from 'vue'
 import { NButton, NIcon } from 'naive-ui'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
+import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { store_local_db_info } from '@/data/data_stores/local_app_stores/store_local_db_info'
 
 const playerSettingStore = usePlayerSettingStore()
+const playlistStore = usePlaylistStore()
+const playerAudioStore = usePlayerAudioStore()
+const pageMediaStore = usePageMediaStore()
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 import { store_server_data_select_logic } from '@/data/data_stores/server_configs_stores/server_data_select/store_server_data_select_logic'
 import { Users_ApiService_of_Je } from '@/data/data_configs/jellyfin_api/services_web/Users/index_service'
@@ -278,10 +284,6 @@ async function update_server_setUser(
   }
 }
 /// app select
-// 在<script setup>顶层获取Store实例
-const playerAudioStore = usePlayerAudioStore()
-const pageMediaStore = usePageMediaStore()
-
 async function update_server_config_of_current_user_of_sqlite(value: any, select_change: any) {
   if (select_change) {
     try {
@@ -320,10 +322,8 @@ async function update_server_config_of_current_user_of_sqlite(value: any, select
     }
   }
   store_server_users.percentage_of_nd = 0
-  // Close navidrome random model
   store_server_user_model.random_play_model = false
-  // Refresh Playlist(Local / Server)
-  usePlaylistStore().playlist_MediaFiles_temporary = []
+  playlistStore.playlist_MediaFiles_temporary = []
   await playerSettingStore.player.pause()
   // 修正：使用顶层定义的Store实例而不是直接调用usePlayerAudioStore()
   playerAudioStore.reset_data()
@@ -538,9 +538,6 @@ const model_local_step_2 = computed(() => t('nsmusics.view_page.selectLibrary'))
 //////
 import { store_local_data_select_logic } from '@/data/data_stores/local_app_stores/local_data_select/store_local_data_select_logic'
 import { Library_ApiService_of_Je } from '@/data/data_configs/jellyfin_api/services_web/Library/index_service'
-import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
-import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
-import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 </script>
 
 <template>
