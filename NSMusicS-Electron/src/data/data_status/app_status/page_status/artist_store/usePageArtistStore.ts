@@ -1,0 +1,130 @@
+import { defineStore } from 'pinia'
+import { ref, watch } from 'vue'
+import { store_router_history_data_of_artist } from '@/router/router_store/store_router_history_data_of_artist'
+// 使用 require 导入无法直接使用 ES6 导入的模块
+const store_general_fetch_artist_list = require('@/data/data_stores/server_api_stores/server_api_core/page/page_artist/store_general_fetch_artist_list').store_general_fetch_artist_list
+
+export const usePageArtistStore = defineStore('pageArtist', () => {
+  // 从 store_view_artist_page_info.ts 合并的状态
+  const artist_File_metadata = ref<any[]>([])
+  const artist_Files_temporary = ref<any[]>([])
+  const artist_page_sizes = ref<number>(15)
+  const artist_item_count = ref<number>(0)
+  const artist_starred_count = ref<number>(0)
+  const artist_recently_count = ref<number>(0)
+
+  // 从 store_view_artist_page_logic.ts 合并的状态
+  const list_data_StartUpdate = ref<boolean>(false)
+  const page_artistlists_options = ref<any[]>([])
+  const page_artistlists_statistic = ref<any[]>([])
+  const page_artistlists = ref<any[]>([])
+  const page_artistlists_selected = ref<string>('artist_list_all')
+  const page_artistlists_keyword_reset = ref<boolean>(false)
+  const page_artistlists_keyword = ref<string>('')
+  const page_artistlists_get_keyword_model_num = ref<number>(0)
+  const page_artistlists_options_Sort_key = ref<any[]>([])
+  const page_artistlists_multi_sort = ref<string>('')
+
+  // 从 store_view_artist_page_logic.ts 合并的 watch 监听器
+  watch(
+    () => page_artistlists_options_Sort_key,
+    (newValue) => {
+      if (newValue != null) {
+        page_artistlists_keyword.value = ''
+        store_router_history_data_of_artist.fix_router_history_of_Artist_scroller_value(
+          store_router_history_data_of_artist.router_history_model_of_Artist_scroller_value
+        ) // 保留此滚轮值(上次浏览位置)
+        store_general_fetch_artist_list.fetchData_Artist()
+      }
+    }
+  )
+
+  watch(
+    () => page_artistlists_keyword,
+    (newValue) => {
+      page_artistlists_multi_sort.value = ''
+      // 使用局部变量存储字符串值，避免重复访问 .value
+      let keyword = newValue.value
+      if (keyword.indexOf('accurate_search') > 0) {
+        keyword = keyword.replace('accurate_search', '')
+        if (keyword.indexOf('__title__') > 0) {
+          keyword = keyword.replace('__title__', '')
+          page_artistlists_get_keyword_model_num.value = 1
+        } else if (keyword.indexOf('__artist__') > 0) {
+          keyword = keyword.replace('__artist__', '')
+          page_artistlists_get_keyword_model_num.value = 2
+        } else if (keyword.indexOf('__album__') > 0) {
+          keyword = keyword.replace('__album__', '')
+          page_artistlists_get_keyword_model_num.value = 3
+        }
+        // 更新原始值
+        page_artistlists_keyword.value = keyword
+      } else {
+        page_artistlists_get_keyword_model_num.value = 0
+      }
+      page_artistlists_keyword_reset.value = true
+      console.log('page_artistlists_keyword:' + page_artistlists_keyword.value)
+
+      store_general_fetch_artist_list.fetchData_Artist()
+    }
+  )
+
+  watch(
+    () => page_artistlists_selected,
+    (newValue) => {
+      console.log('page_artistlists_selected：' + newValue)
+      store_general_fetch_artist_list.fetchData_Artist()
+    }
+  )
+
+  watch(
+    () => list_data_StartUpdate,
+    (newValue) => {
+      if (newValue) {
+        page_artistlists_keyword.value = ''
+        store_general_fetch_artist_list.fetchData_Artist()
+
+        store_router_history_data_of_artist.router_history_datas_of_Artist = []
+        if (store_router_history_data_of_artist.router_select_history_date_of_Artist) {
+          store_router_history_data_of_artist.router_select_history_date_of_Artist.id = 1
+          store_router_history_data_of_artist.router_history_datas_of_Artist.push(
+            store_router_history_data_of_artist.router_select_history_date_of_Artist
+          )
+        }
+
+        list_data_StartUpdate.value = false
+        console.log('page_artistlists_reset_data?:' + newValue)
+      }
+    }
+  )
+
+  watch(
+    () => page_artistlists_multi_sort,
+    (newValue) => {
+      store_general_fetch_artist_list.fetchData_Artist_of_server_web_start()
+    }
+  )
+
+  // 导出所有状态
+  return {
+    // 从 store_view_artist_page_info.ts 导出的状态
+    artist_File_metadata,
+    artist_Files_temporary,
+    artist_page_sizes,
+    artist_item_count,
+    artist_starred_count,
+    artist_recently_count,
+    
+    // 从 store_view_artist_page_logic.ts 导出的状态
+    list_data_StartUpdate,
+    page_artistlists_options,
+    page_artistlists_statistic,
+    page_artistlists,
+    page_artistlists_selected,
+    page_artistlists_keyword_reset,
+    page_artistlists_keyword,
+    page_artistlists_get_keyword_model_num,
+    page_artistlists_options_Sort_key,
+    page_artistlists_multi_sort
+  }
+})
