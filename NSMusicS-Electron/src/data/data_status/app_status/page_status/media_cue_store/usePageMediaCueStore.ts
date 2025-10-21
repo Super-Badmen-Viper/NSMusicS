@@ -27,7 +27,6 @@ interface Media_File {
 }
 
 export const usePageMediaCueStore = defineStore('pageMediaCue', () => {
-  // 状态定义（从 store_view_media_cue_page_info 合并）
   const media_File_metadata = ref<any[]>([])
   const media_Files_temporary = ref<any[]>([])
   const media_Files_selected = ref<any[]>([])
@@ -37,7 +36,6 @@ export const usePageMediaCueStore = defineStore('pageMediaCue', () => {
   const media_recently_count = ref(0)
   const media_playlist_count = ref(0)
 
-  // 状态定义（从 store_view_media_cue_page_logic 合并）
   const list_data_StartUpdate = ref(false)
   const list_data_Hand_Search = ref(false)
   const list_options_Hand_Sort = ref(false)
@@ -272,7 +270,6 @@ export const usePageMediaCueStore = defineStore('pageMediaCue', () => {
       }
 
       list_data_StartUpdate.value = false
-      console.log('store_view_media_cue_page_logic.list_data_StartUpdate')
     }
   })
 

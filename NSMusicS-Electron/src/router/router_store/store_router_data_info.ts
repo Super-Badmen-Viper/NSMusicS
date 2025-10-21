@@ -10,7 +10,7 @@ import { store_general_model_player_list } from '@/data/data_stores/server_api_s
 import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list'
 import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
-import { store_view_media_cue_page_logic } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_logic'
+import { usePageMediaCueStore } from '@/data/data_status/app_status/page_status/media_cue_store/usePageMediaCueStore'
 
 export const store_router_data_info = reactive({
   router: null,
@@ -45,8 +45,9 @@ watch(
       } else if (newValue === 'tag') {
       } else if (newValue === 'media_cue') {
         if (store_router_data_info.router_click) {
-          store_view_media_cue_page_logic.page_songlists_keyword = ''
-          store_view_media_cue_page_logic.page_songlists_keywordFilter = ''
+          const pageMediaCueStore = usePageMediaCueStore()
+          pageMediaCueStore.page_songlists_keyword = ''
+          pageMediaCueStore.page_songlists_keywordFilter = ''
         }
         await store_general_fetch_media_cue_list.fetchData_Media()
       } else if (newValue === 'media') {

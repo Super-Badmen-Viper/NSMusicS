@@ -865,12 +865,13 @@ const clearMarks = () => {
   playerSettingStore.marks_slider_singleValue = {}
 }
 let media_cue_temp = undefined
-function play_skip_cue_order(
+const play_skip_cue_order = (
   increased: number,
   find_model: boolean,
   currentTime: any,
   duration: any
-) {
+) => {
+  const pageMediaCueStore = usePageMediaCueStore()
   let media_file = undefined
   let index_num = 0
   const index = playerAudioStore.this_audio_cue_track_current_no + increased
@@ -880,8 +881,8 @@ function play_skip_cue_order(
     playerAudioStore.this_audio_cue_tracks = []
     return false
   }
-  for (let i = 0; i < store_view_media_cue_page_info.media_Files_temporary.length; i++) {
-    const media_cue = store_view_media_cue_page_info.media_Files_temporary[i]
+  for (let i = 0; i < pageMediaCueStore.media_Files_temporary.length; i++) {
+    const media_cue = pageMediaCueStore.media_Files_temporary[i]
     if (
       media_cue != undefined &&
       media_cue.path === playerAudioStore.this_audio_file_path &&
@@ -1126,7 +1127,7 @@ import { store_server_users } from '@/data/data_stores/server_configs_stores/sto
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
-import { store_view_media_cue_page_info } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_info'
+import { usePageMediaCueStore } from '@/data/data_status/app_status/page_status/media_cue_store/usePageMediaCueStore'
 
 const handleItemClick_Favorite = (id, favorite) => {
   if (id != null && id.length > 0 && id != 'undefined') {

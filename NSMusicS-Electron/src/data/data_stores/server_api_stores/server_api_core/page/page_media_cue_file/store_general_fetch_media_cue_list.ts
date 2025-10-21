@@ -1,8 +1,7 @@
 import { reactive, watch } from 'vue'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { store_view_media_cue_page_info } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_info'
-import { store_view_media_cue_page_logic } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_logic'
+import { usePageMediaCueStore } from '@/data/data_status/app_status/page_status/media_cue_store/usePageMediaCueStore'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
@@ -24,9 +23,10 @@ import { store_server_login_info } from '@/views/view_server/page_login/store/st
  */
 export const store_general_fetch_media_cue_list = reactive({
   async fetchData_Media() {
+    const pageMediaCueStore = usePageMediaCueStore()
     try {
       if (store_server_user_model.model_server_type_of_web) {
-        store_view_media_cue_page_info.media_Files_temporary = []
+        pageMediaCueStore.media_Files_temporary = []
         await this.fetchData_Media_of_server_web_start()
       }
     } catch (e) {
@@ -34,6 +34,7 @@ export const store_general_fetch_media_cue_list = reactive({
     }
   },
   async fetchData_Media_Find_This_Album(id: string) {
+    const pageMediaCueStore = usePageMediaCueStore()
     if (
       store_server_user_model.model_server_type_of_local ||
       (store_server_users.server_select_kind === 'navidrome' &&
@@ -56,11 +57,11 @@ export const store_general_fetch_media_cue_list = reactive({
           rows.forEach((row: Media_File, index: number) => {
             row.absoluteIndex = index
             row.selected = false
-            row.duration_txt = store_view_media_cue_page_logic.get_duration_formatTime(row.duration)
+            row.duration_txt = pageMediaCueStore.get_duration_formatTime(row.duration)
             this.setMediumImageUrl(row)
-            store_view_media_cue_page_info.media_Files_temporary.push(row)
+            pageMediaCueStore.media_Files_temporary.push(row)
           })
-          store_view_media_cue_page_info.media_Files_temporary.forEach(
+          pageMediaCueStore.media_Files_temporary.forEach(
             (item: any, index: number) => {
               item.absoluteIndex = index + 1
             }
@@ -84,6 +85,7 @@ export const store_general_fetch_media_cue_list = reactive({
     }
   },
   async fetchData_Media_Find_This_Artist(id: string) {
+    const pageMediaCueStore = usePageMediaCueStore()
     if (
       store_server_user_model.model_server_type_of_local ||
       (store_server_users.server_select_kind === 'navidrome' &&
@@ -105,11 +107,11 @@ export const store_general_fetch_media_cue_list = reactive({
           rows.forEach((row: Media_File, index: number) => {
             row.absoluteIndex = index
             row.selected = false
-            row.duration_txt = store_view_media_cue_page_logic.get_duration_formatTime(row.duration)
+            row.duration_txt = pageMediaCueStore.get_duration_formatTime(row.duration)
             this.setMediumImageUrl(row)
-            store_view_media_cue_page_info.media_Files_temporary.push(row)
+            pageMediaCueStore.media_Files_temporary.push(row)
           })
-          store_view_media_cue_page_info.media_Files_temporary.forEach(
+          pageMediaCueStore.media_Files_temporary.forEach(
             (item: any, index: number) => {
               item.absoluteIndex = index + 1
             }
@@ -216,7 +218,8 @@ export const store_general_fetch_media_cue_list = reactive({
       ) {
         // 随机播放逻辑
       } else {
-        store_view_media_cue_page_info.media_Files_temporary = []
+        const pageMediaCueStore = usePageMediaCueStore()
+        pageMediaCueStore.media_Files_temporary = []
       }
 
       this._start = 0
@@ -285,22 +288,23 @@ export const store_general_fetch_media_cue_list = reactive({
   },
 
   async fetchData_Media_of_server_web(find_model: boolean) {
+    const pageMediaCueStore = usePageMediaCueStore()
     try {
       const _search =
-        (store_view_media_cue_page_logic.page_songlists_keywordFilter || '').match(
+        (pageMediaCueStore.page_songlists_keywordFilter || '').match(
           /%([^%]+)%/
         )?.[1] || ''
-      const selected = store_view_media_cue_page_logic.page_songlists_selected
+      const selected = pageMediaCueStore.page_songlists_selected
 
       let _sort =
-        store_view_media_cue_page_logic.page_songlists_options_Sort_key.length > 0 &&
-        store_view_media_cue_page_logic.page_songlists_options_Sort_key[0].order !== 'default'
-          ? store_view_media_cue_page_logic.page_songlists_options_Sort_key[0].columnKey
+        pageMediaCueStore.page_songlists_options_Sort_key.length > 0 &&
+        pageMediaCueStore.page_songlists_options_Sort_key[0].order !== 'default'
+          ? pageMediaCueStore.page_songlists_options_Sort_key[0].columnKey
           : 'id'
       let _order =
-        store_view_media_cue_page_logic.page_songlists_options_Sort_key.length > 0 &&
-        store_view_media_cue_page_logic.page_songlists_options_Sort_key[0].order !== 'default'
-          ? store_view_media_cue_page_logic.page_songlists_options_Sort_key[0].order.replace(
+        pageMediaCueStore.page_songlists_options_Sort_key.length > 0 &&
+        pageMediaCueStore.page_songlists_options_Sort_key[0].order !== 'default'
+          ? pageMediaCueStore.page_songlists_options_Sort_key[0].order.replace(
               'end',
               ''
             )
@@ -347,11 +351,11 @@ export const store_general_fetch_media_cue_list = reactive({
             limit,
             _sort,
             _order,
-            store_view_media_cue_page_logic.page_songlists_multi_sort,
+            pageMediaCueStore.page_songlists_multi_sort,
             _starred,
             _search,
-            store_view_media_cue_page_logic.page_songlists_filter_year > 0
-              ? store_view_media_cue_page_logic.page_songlists_filter_year
+            pageMediaCueStore.page_songlists_filter_year > 0
+              ? pageMediaCueStore.page_songlists_filter_year
               : '',
             playlist_id,
             _artist_id
@@ -363,8 +367,9 @@ export const store_general_fetch_media_cue_list = reactive({
     }
   },
   fetchData_Media_of_data_synchronization_to_playlist() {
+    const pageMediaCueStore = usePageMediaCueStore()
     const playlistStore = usePlaylistStore()
-    store_view_media_cue_page_info.media_Files_temporary.forEach((row) => {
+    pageMediaCueStore.media_Files_temporary.forEach((row) => {
       const existingIndex = playlistStore.playlist_MediaFiles_temporary.findIndex(
         (item) => item.id === row.id
       )

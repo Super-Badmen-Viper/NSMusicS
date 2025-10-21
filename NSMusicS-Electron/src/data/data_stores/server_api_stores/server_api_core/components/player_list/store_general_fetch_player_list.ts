@@ -3,7 +3,7 @@ import { usePageMediaStore } from '@/data/data_status/app_status/page_status/med
 
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
-import { store_view_media_cue_page_info } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_info'
+import { usePageMediaCueStore } from '@/data/data_status/app_status/page_status/media_cue_store/usePageMediaCueStore'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 
 export const store_general_fetch_player_list = reactive({
@@ -11,6 +11,7 @@ export const store_general_fetch_player_list = reactive({
     const pageMediaStore = usePageMediaStore()
     const playerAudioStore = usePlayerAudioStore()
     const playlistStore = usePlaylistStore()
+    const pageMediaCueStore = usePageMediaCueStore()
 
     playlistStore.playlist_MediaFiles_temporary = []
     if (!cue_model) {
@@ -31,7 +32,7 @@ export const store_general_fetch_player_list = reactive({
       store_system_configs_save.save_system_playlist_item_id_config()
     } else {
       playlistStore.playlist_MediaFiles_temporary =
-        store_view_media_cue_page_info.media_Files_temporary.map((row: any) => {
+        pageMediaCueStore.media_Files_temporary.map((row: any) => {
           row.play_id = row.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
           return row
         })

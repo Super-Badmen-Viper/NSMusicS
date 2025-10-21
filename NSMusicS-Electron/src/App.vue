@@ -51,8 +51,7 @@ import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_ap
 import { store_general_fetch_home_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_home/store_general_fetch_home_list'
 import { store_general_fetch_album_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_album/store_general_fetch_album_list'
 import { store_general_fetch_artist_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_artist/store_general_fetch_artist_list'
-import { store_view_media_cue_page_logic } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_logic'
-import { store_view_media_cue_page_info } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_info'
+import { usePageMediaCueStore } from '@/data/data_status/app_status/page_status/media_cue_store/usePageMediaCueStore'
 import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
 
 ////// BrowserWindow
@@ -66,6 +65,7 @@ const playerAudioStore = usePlayerAudioStore()
 const playerSettingStore = usePlayerSettingStore()
 const pageArtistStore = usePageArtistStore()
 const pageMediaStore = usePageMediaStore()
+const pageMediaCueStore = usePageMediaCueStore()
 // 使用 storeToRefs 解构出所需的响应式属性
 const {
   player_show,
@@ -552,10 +552,9 @@ const Init_page_songlists_statistic_Data = () => {
 }
 ///// view of media_cue
 const Init_page_cuelists_statistic_Data = () => {
-  store_view_media_cue_page_logic.page_songlists_options = []
-  store_view_media_cue_page_logic.page_songlists_statistic = []
-  store_view_media_cue_page_logic.page_songlists = []
-  ///
+  pageMediaCueStore.page_songlists_options = []
+  pageMediaCueStore.page_songlists_statistic = []
+  pageMediaCueStore.page_songlists = []
   const temp_Play_List_ALL: Play_List = {
     label: computed(() => t('nsmusics.view_page.allDisk')),
     value: 'song_list_all',
@@ -563,7 +562,7 @@ const Init_page_cuelists_statistic_Data = () => {
     name: computed(() => t('nsmusics.view_page.allDisk')),
     comment: computed(() => t('nsmusics.view_page.allDisk')),
     duration: 0,
-    song_count: store_view_media_cue_page_info.media_item_count + ' *',
+    song_count: pageMediaCueStore.media_item_count + ' *',
     public: 0,
     created_at: '',
     updated_at: '',
@@ -574,14 +573,13 @@ const Init_page_cuelists_statistic_Data = () => {
     evaluated_at: '',
     owner_id: '',
   }
-  store_view_media_cue_page_logic.page_songlists_options.push(temp_Play_List_ALL)
-  store_view_media_cue_page_logic.page_songlists_statistic.push({
+  pageMediaCueStore.page_songlists_options.push(temp_Play_List_ALL)
+  pageMediaCueStore.page_songlists_statistic.push({
     label: temp_Play_List_ALL.label,
     song_count: temp_Play_List_ALL.song_count.toString(),
     id: temp_Play_List_ALL.id,
   })
-  store_view_media_cue_page_logic.page_songlists.push(temp_Play_List_ALL)
-  ///
+  pageMediaCueStore.page_songlists.push(temp_Play_List_ALL)
   const temp_Play_List_Love: Play_List = {
     label: computed(() => t('nsmusics.view_page.loveDisk')),
     value: 'song_list_love',
@@ -589,7 +587,7 @@ const Init_page_cuelists_statistic_Data = () => {
     name: computed(() => t('nsmusics.view_page.loveDisk')),
     comment: computed(() => t('nsmusics.view_page.loveDisk')),
     duration: 0,
-    song_count: store_view_media_cue_page_info.media_starred_count + ' *',
+    song_count: pageMediaCueStore.media_starred_count + ' *',
     public: 0,
     created_at: '',
     updated_at: '',
@@ -600,14 +598,13 @@ const Init_page_cuelists_statistic_Data = () => {
     evaluated_at: '',
     owner_id: '',
   }
-  store_view_media_cue_page_logic.page_songlists_options.push(temp_Play_List_Love)
-  store_view_media_cue_page_logic.page_songlists_statistic.push({
+  pageMediaCueStore.page_songlists_options.push(temp_Play_List_Love)
+  pageMediaCueStore.page_songlists_statistic.push({
     label: temp_Play_List_Love.label,
     song_count: temp_Play_List_Love.song_count.toString(),
     id: temp_Play_List_Love.id,
   })
-  store_view_media_cue_page_logic.page_songlists.push(temp_Play_List_Love)
-  ///
+  pageMediaCueStore.page_songlists.push(temp_Play_List_Love)
   const temp_Play_List_Recently: Play_List = {
     label: computed(() => t('nsmusics.view_page.recentPlay')),
     value: 'song_list_recently',
@@ -616,8 +613,8 @@ const Init_page_cuelists_statistic_Data = () => {
     comment: computed(() => t('nsmusics.view_page.recentPlay')),
     duration: 0,
     song_count:
-      store_view_media_cue_page_info.media_recently_count > 0
-        ? store_view_media_cue_page_info.media_recently_count
+      pageMediaCueStore.media_recently_count > 0
+        ? pageMediaCueStore.media_recently_count
         : '*' + ' *',
     public: 0,
     created_at: '',
@@ -629,8 +626,8 @@ const Init_page_cuelists_statistic_Data = () => {
     evaluated_at: '',
     owner_id: '',
   }
-  store_view_media_cue_page_logic.page_songlists_options.push(temp_Play_List_Recently)
-  store_view_media_cue_page_logic.page_songlists_statistic.push({
+  pageMediaCueStore.page_songlists_options.push(temp_Play_List_Recently)
+  pageMediaCueStore.page_songlists_statistic.push({
     label: temp_Play_List_Recently.label,
     song_count:
       store_server_user_model.model_server_type_of_local ||
@@ -639,7 +636,7 @@ const Init_page_cuelists_statistic_Data = () => {
         : '*' + ' *',
     id: temp_Play_List_Recently.id,
   })
-  store_view_media_cue_page_logic.page_songlists.push(temp_Play_List_Recently)
+  pageMediaCueStore.page_songlists.push(temp_Play_List_Recently)
 }
 ////// view of album
 const Init_page_albumlists_statistic_Data = () => {

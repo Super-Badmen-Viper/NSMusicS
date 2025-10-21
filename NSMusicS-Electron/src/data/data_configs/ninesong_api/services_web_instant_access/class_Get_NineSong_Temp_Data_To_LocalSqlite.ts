@@ -22,7 +22,7 @@ import { Home_ApiService_of_NineSong } from '../services_web/Scene/Music/Home/in
 import error_artist from '@/assets/img/error_artist.jpg'
 import error_album from '@/assets/img/error_album.jpg'
 import { MediaCues_ApiService_of_NineSong } from '../services_web/Scene/Music/Media_Cue_Files/index_service'
-import { store_view_media_cue_page_info } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_info'
+import { usePageMediaCueStore } from '@/data/data_status/app_status/page_status/media_cue_store/usePageMediaCueStore'
 import { Recommend_ApiService_of_NineSong } from '../services_web/Scene/Music/Recommend/index_service'
 import { store_view_recommend_page_info } from '@/views/view_app/page/page_recommend/store/store_view_recommend_page_info'
 import { store_view_tag_page_info } from '@/views/view_app/page/page_tag/store/store_view_tag_page_info'
@@ -43,6 +43,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
   private pageAlbumStore = usePageAlbumStore()
   private pageArtistStore = usePageArtistStore()
   private pageMediaStore = usePageMediaStore()
+  private pageMediaCueStore = usePageMediaCueStore()
 
   public async get_home_list(url: string) {
     await this.get_home_list_of_maximum_playback(url, false)
@@ -541,8 +542,8 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
         const new_song = this.mapMedia_Cue(song, url, index, last_index)
         if (!metadata_model) {
           if (store_general_fetch_media_list._load_model === 'search') {
-            store_view_media_cue_page_info.media_File_metadata.push(song)
-            store_view_media_cue_page_info.media_Files_temporary.push(new_song)
+            this.pageMediaCueStore.media_File_metadata.push(song)
+            this.pageMediaCueStore.media_Files_temporary.push(new_song)
           } else {
             this.playlistStore.playlist_MediaFiles_temporary.push({
               ...new_song,
@@ -561,7 +562,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       if (!metadata_model) {
         if (store_general_fetch_media_list._load_model === 'play') {
           this.playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =
-            store_view_media_cue_page_info.media_Files_temporary.map((item) => item.id)
+            this.pageMediaCueStore.media_Files_temporary.map((item) => item.id)
         }
       }
     }
@@ -796,9 +797,9 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     try {
       const counts = await this.cueFilesApi.getMediaCuesCounts()
       const response = counts['ninesong-response']['cueFiles']
-      store_view_media_cue_page_info.media_item_count = response.Total
-      store_view_media_cue_page_info.media_starred_count = response.Starred
-      store_view_media_cue_page_info.media_recently_count = response.RecentPlay
+      this.pageMediaCueStore.media_item_count = response.Total
+      this.pageMediaCueStore.media_starred_count = response.Starred
+      this.pageMediaCueStore.media_recently_count = response.RecentPlay
     } catch {}
   }
   public async get_count_of_album() {

@@ -39,17 +39,28 @@ import error_album from '@/assets/img/error_album.jpg'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { storeToRefs } from 'pinia'
+import { usePageMediaCueStore } from '@/data/data_status/app_status/page_status/media_cue_store/usePageMediaCueStore'
 
-// 在setup上下文中获取Store实例
 const playlistStore = usePlaylistStore()
+const pageMediaCueStore = usePageMediaCueStore()
 
-// 使用 storeToRefs 解构出所需的响应式属性
 const {
   playlist_Menu_Item_Rating,
   playlist_Menu_Item_Id,
   playlist_Menu_Item_IndexId,
   playlist_Menu_Item,
 } = storeToRefs(playlistStore)
+
+const {
+  page_songlists_bool_show_search_area,
+  page_songlists_input_search_Value,
+  page_songlists_multi_sort,
+  page_songlists_filter_year,
+  page_songlists_filter_path_folder,
+  page_songlists_selected,
+  page_songlists_options,
+  media_Files_temporary,
+} = storeToRefs(pageMediaCueStore)
 
 const errorHandled = ref(new Map())
 const handleImageError = async (item: any) => {
@@ -151,20 +162,20 @@ const options_Sort_key = ref([
 let Select_Sort_Model = false
 let options_Sort = computed(() => {
   if (
-    store_view_media_cue_page_logic.page_songlists_options_Sort_key != null &&
-    store_view_media_cue_page_logic.page_songlists_options_Sort_key.length > 0
+    pageMediaCueStore.page_songlists_options_Sort_key != null &&
+    pageMediaCueStore.page_songlists_options_Sort_key.length > 0
   ) {
     options_Sort_key.value.forEach((element) => {
       if (
-        element.key === store_view_media_cue_page_logic.page_songlists_options_Sort_key[0].columnKey
+        element.key === pageMediaCueStore.page_songlists_options_Sort_key[0].columnKey
       )
         if (
-          store_view_media_cue_page_logic.page_songlists_options_Sort_key[0].order ===
+          pageMediaCueStore.page_songlists_options_Sort_key[0].order ===
           state_Sort.Ascend
         )
           element.state_Sort = state_Sort.Ascend
         else if (
-          store_view_media_cue_page_logic.page_songlists_options_Sort_key[0].order ===
+          pageMediaCueStore.page_songlists_options_Sort_key[0].order ===
           state_Sort.Descend
         )
           element.state_Sort = state_Sort.Descend
@@ -195,7 +206,7 @@ let options_Sort = computed(() => {
   })
 })
 const handleSelect_Sort = (key: string | number) => {
-  store_view_media_cue_page_logic.page_songlists_multi_sort = ''
+  pageMediaCueStore.page_songlists_multi_sort = ''
   updateSortConditions()
   //
   let _state_Sort_: state_Sort = state_Sort.Default
@@ -222,8 +233,8 @@ const handleSelect_Sort = (key: string | number) => {
       _state_Sort_ = state_Sort.Descend
       break
   }
-  store_view_media_cue_page_logic.list_options_Hand_Sort = true
-  store_view_media_cue_page_logic.page_songlists_options_Sort_key = [
+  pageMediaCueStore.list_options_Hand_Sort = true
+  pageMediaCueStore.page_songlists_options_Sort_key = [
     {
       columnKey: String(key),
       order: _state_Sort_,
@@ -231,15 +242,15 @@ const handleSelect_Sort = (key: string | number) => {
   ]
 
   const sortKey =
-    store_view_media_cue_page_logic.page_songlists_options_Sort_key.length > 0 &&
-    store_view_media_cue_page_logic.page_songlists_options_Sort_key[0].columnKey !== '_id' &&
-    store_view_media_cue_page_logic.page_songlists_options_Sort_key[0].order !== 'default'
-      ? store_view_media_cue_page_logic.page_songlists_options_Sort_key[0].columnKey
+    pageMediaCueStore.page_songlists_options_Sort_key.length > 0 &&
+    pageMediaCueStore.page_songlists_options_Sort_key[0].columnKey !== '_id' &&
+    pageMediaCueStore.page_songlists_options_Sort_key[0].order !== 'default'
+      ? pageMediaCueStore.page_songlists_options_Sort_key[0].columnKey
       : 'id'
   const sortOrder =
-    store_view_media_cue_page_logic.page_songlists_options_Sort_key.length > 0 &&
-    store_view_media_cue_page_logic.page_songlists_options_Sort_key[0].order !== 'default'
-      ? store_view_media_cue_page_logic.page_songlists_options_Sort_key[0].order.replace('end', '')
+    pageMediaCueStore.page_songlists_options_Sort_key.length > 0 &&
+    pageMediaCueStore.page_songlists_options_Sort_key[0].order !== 'default'
+      ? pageMediaCueStore.page_songlists_options_Sort_key[0].order.replace('end', '')
       : ''
   Select_Sort_Model = !(
     (sortKey === '_id' || sortKey === 'id') &&
@@ -252,11 +263,11 @@ const options_Sort_key_Default_key = ref()
 const options_Sort_key_Default = ref<SortItem[]>()
 // lineItems Search(filter)
 const show_search_area = () => {
-  if (store_view_media_cue_page_logic.page_songlists_bool_show_search_area) {
-    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = false
+  if (pageMediaCueStore.page_songlists_bool_show_search_area) {
+    pageMediaCueStore.page_songlists_bool_show_search_area = false
     input_search_InstRef.value?.clear()
     if (bool_input_search) {
-      // store_view_media_cue_page_logic.list_data_StartUpdate = true
+      // pageMediaCueStore.list_data_StartUpdate = true
       back_search_default()
       bool_input_search = false
       scrollTo(0)
@@ -265,10 +276,10 @@ const show_search_area = () => {
       store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
     }
     input_search_InstRef.value?.clear()
-    store_view_media_cue_page_logic.page_songlists_keywordFilter = ''
+    pageMediaCueStore.page_songlists_keywordFilter = ''
     click_search()
   } else {
-    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true
+    pageMediaCueStore.page_songlists_bool_show_search_area = true
     options_Sort_key_Default.value = options_Sort_key.value.slice()
     options_Sort_key.value.forEach((element) => {
       //保存 sort key
@@ -279,17 +290,17 @@ const show_search_area = () => {
 const input_search_InstRef = ref()
 let bool_input_search = false
 const click_search = () => {
-  if (store_view_media_cue_page_logic.page_songlists_input_search_Value) {
+  if (pageMediaCueStore.page_songlists_input_search_Value) {
     const page_songlists_keyword =
-      store_view_media_cue_page_logic.page_songlists_input_search_Value.toLowerCase()
-    store_view_media_cue_page_logic.get_page_songlists_keyword(page_songlists_keyword)
+      pageMediaCueStore.page_songlists_input_search_Value.toLowerCase()
+    pageMediaCueStore.get_page_songlists_keyword(page_songlists_keyword)
     bool_input_search = true
     options_Sort_key.value.forEach((element) => {
       element.state_Sort = state_Sort.Default
     })
   } else {
-    store_view_media_cue_page_logic.page_songlists_keywordFilter = ''
-    store_view_media_cue_page_logic.list_data_StartUpdate = true
+    pageMediaCueStore.page_songlists_keywordFilter = ''
+    pageMediaCueStore.list_data_StartUpdate = true
     bool_input_search = false
     back_search_default()
     ///
@@ -305,16 +316,16 @@ const back_search_default = () => {
       if (options_Sort_key.value[i].key === options_Sort_key_Default_key.value) {
         const sortersArray: { columnKey: string; order: string }[] = []
         if (options_Sort_key.value[i].state_Sort === 'default') {
-          store_view_media_cue_page_logic.list_options_Hand_Sort = true
-          store_view_media_cue_page_logic.page_songlists_options_Sort_key = null
+          pageMediaCueStore.list_options_Hand_Sort = true
+          pageMediaCueStore.page_songlists_options_Sort_key = null
         } else {
           const sorter = {
             columnKey: options_Sort_key.value[i].key,
             order: options_Sort_key.value[i].state_Sort,
           }
           sortersArray.push(sorter)
-          store_view_media_cue_page_logic.list_options_Hand_Sort = true
-          store_view_media_cue_page_logic.page_songlists_options_Sort_key = sortersArray
+          pageMediaCueStore.list_options_Hand_Sort = true
+          pageMediaCueStore.page_songlists_options_Sort_key = sortersArray
         }
         break
       }
@@ -322,20 +333,20 @@ const back_search_default = () => {
   }
 }
 onMounted(() => {
-  store_view_media_cue_page_logic.page_songlists_input_search_Value =
-    store_view_media_cue_page_logic.page_songlists_keyword
-  if (store_view_media_cue_page_logic.page_songlists_input_search_Value.length > 0) {
-    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true
+  pageMediaCueStore.page_songlists_input_search_Value =
+    pageMediaCueStore.page_songlists_keyword
+  if (pageMediaCueStore.page_songlists_input_search_Value.length > 0) {
+    pageMediaCueStore.page_songlists_bool_show_search_area = true
     bool_input_search = true
   } else {
-    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = false
+    pageMediaCueStore.page_songlists_bool_show_search_area = false
     bool_input_search = false
   }
 
   if (store_general_fetch_media_list._album_id.length > 0) {
-    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true
+    pageMediaCueStore.page_songlists_bool_show_search_area = true
     bool_input_search = true
-    store_view_media_cue_page_logic.page_songlists_input_search_Value =
+    pageMediaCueStore.page_songlists_input_search_Value =
       store_general_fetch_media_list._album_id
   }
 })
@@ -421,20 +432,20 @@ const page_songlists_handleselected_updatevalue = async (value: any) => {
       store_server_users.server_select_kind === 'emby')
   ) {
     store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
-    store_view_media_cue_page_logic.page_songlists_keyword = ''
+    pageMediaCueStore.page_songlists_keyword = ''
     input_search_InstRef.value?.clear()
-    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = false
+    pageMediaCueStore.page_songlists_bool_show_search_area = false
   }
   /// navidrome/app
-  store_view_media_cue_page_logic.set_media_Files_selected_all(false)
-  store_view_media_cue_page_logic.list_selected_Hand_click = true
-  await store_view_media_cue_page_logic.get_page_songlists_selected(value)
+  pageMediaCueStore.set_media_Files_selected_all(false)
+  pageMediaCueStore.list_selected_Hand_click = true
+  await pageMediaCueStore.get_page_songlists_selected(value)
   console.log('selected_value_for_songlistall：' + value)
   breadcrumbItems.value =
-    store_view_media_cue_page_logic.page_songlists_options.find((option) => option.value === value)
+    pageMediaCueStore.page_songlists_options.find((option) => option.value === value)
       ?.label || ''
   bool_start_play.value = true
-  store_view_media_cue_page_logic.set_media_Files_selected_all(false)
+  pageMediaCueStore.set_media_Files_selected_all(false)
 }
 
 /////// emits audio_info of songlist_view_list
@@ -494,16 +505,16 @@ const handleItemDbClick = async (media_file: any, index: any) => {
 const handleItemClick_title = (title: string) => {
   if (store_server_user_model.model_server_type_of_local) {
     click_count = 0
-    store_view_media_cue_page_logic.page_songlists_input_search_Value = title //+'accurate_search'+'__title__'
-    store_view_media_cue_page_logic.get_page_songlists_keyword(title)
-    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = false
+    pageMediaCueStore.page_songlists_input_search_Value = title //+'accurate_search'+'__title__'
+    pageMediaCueStore.get_page_songlists_keyword(title)
+    pageMediaCueStore.page_songlists_bool_show_search_area = false
     show_search_area()
     click_search()
     scrollTo(0)
   } else if (store_server_user_model.model_server_type_of_web) {
-    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true
-    store_view_media_cue_page_logic.page_songlists_input_search_Value = title
-    store_view_media_cue_page_logic.get_page_songlists_keyword(title)
+    pageMediaCueStore.page_songlists_bool_show_search_area = true
+    pageMediaCueStore.page_songlists_input_search_Value = title
+    pageMediaCueStore.get_page_songlists_keyword(title)
   }
 }
 const handleItemClick_artist = async (artist: string) => {
@@ -514,26 +525,26 @@ const handleItemClick_artist = async (artist: string) => {
   ) {
     click_count = 0
     if (store_server_user_model.model_server_type_of_local) {
-      store_view_media_cue_page_logic.page_songlists_input_search_Value = artist //+'accurate_search'+'__artist__'//artist不参与精确搜索
-      store_view_media_cue_page_logic.get_page_songlists_keyword(artist)
-      store_view_media_cue_page_logic.page_songlists_bool_show_search_area = false
+      pageMediaCueStore.page_songlists_input_search_Value = artist //+'accurate_search'+'__artist__'//artist不参与精确搜索
+      pageMediaCueStore.get_page_songlists_keyword(artist)
+      pageMediaCueStore.page_songlists_bool_show_search_area = false
       show_search_area()
       click_search()
       scrollTo(0)
     } else if (store_server_user_model.model_server_type_of_web) {
       store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
-      store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true
-      store_view_media_cue_page_logic.page_songlists_input_search_Value = artist
-      store_view_media_cue_page_logic.get_page_songlists_keyword(artist)
+      pageMediaCueStore.page_songlists_bool_show_search_area = true
+      pageMediaCueStore.page_songlists_input_search_Value = artist
+      pageMediaCueStore.get_page_songlists_keyword(artist)
     }
   } else if (
     store_server_users.server_select_kind === 'ninesong' &&
     store_server_user_model.model_server_type_of_web
   ) {
     store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
-    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true
-    store_view_media_cue_page_logic.page_songlists_input_search_Value = artist
-    // store_view_media_cue_page_logic.get_page_songlists_keyword(artist)
+    pageMediaCueStore.page_songlists_bool_show_search_area = true
+    pageMediaCueStore.page_songlists_input_search_Value = artist
+    // pageMediaCueStore.get_page_songlists_keyword(artist)
     store_general_fetch_media_list.set_artist_id(artist)
     await store_general_fetch_media_list.fetchData_Media()
   } else {
@@ -550,28 +561,28 @@ const handleItemClick_album = async (album_id: string) => {
   ) {
     click_count = 0
     if (store_server_user_model.model_server_type_of_local) {
-      store_view_media_cue_page_logic.page_songlists_input_search_Value =
+      pageMediaCueStore.page_songlists_input_search_Value =
         album_id + 'accurate_search' + '__album__'
-      store_view_media_cue_page_logic.get_page_songlists_keyword(
+      pageMediaCueStore.get_page_songlists_keyword(
         album_id + 'accurate_search' + '__album__'
       )
-      store_view_media_cue_page_logic.page_songlists_bool_show_search_area = false
+      pageMediaCueStore.page_songlists_bool_show_search_area = false
       show_search_area()
       click_search()
       scrollTo(0)
     } else if (store_server_user_model.model_server_type_of_web) {
       store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
-      store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true
-      store_view_media_cue_page_logic.page_songlists_input_search_Value = album_id
-      store_view_media_cue_page_logic.get_page_songlists_keyword(album_id)
+      pageMediaCueStore.page_songlists_bool_show_search_area = true
+      pageMediaCueStore.page_songlists_input_search_Value = album_id
+      pageMediaCueStore.get_page_songlists_keyword(album_id)
     }
   } else if (
     store_server_users.server_select_kind === 'ninesong' &&
     store_server_user_model.model_server_type_of_web
   ) {
     store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
-    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true
-    store_view_media_cue_page_logic.page_songlists_input_search_Value = album_id
+    pageMediaCueStore.page_songlists_bool_show_search_area = true
+    pageMediaCueStore.page_songlists_input_search_Value = album_id
     store_general_fetch_media_list.set_album_id(album_id)
     await store_general_fetch_media_list.fetchData_Media()
   } else {
@@ -587,8 +598,8 @@ const handleItemClick_Favorite = (id: any, favorite: boolean) => {
   store_server_data_set_media_cueInfo.Set_MediaInfo_To_Favorite_Server(id, favorite)
   page_songlists_statistic.value.forEach((item: any) => {
     if (item.id === 'song_list_love') {
-      store_view_media_cue_page_info.media_starred_count += !favorite ? 1 : -1
-      item.song_count = store_view_media_cue_page_info.media_starred_count + ' *'
+      pageMediaCueStore.media_starred_count += !favorite ? 1 : -1
+      item.song_count = pageMediaCueStore.media_starred_count + ' *'
     }
   })
   if (id === playerAudioStore.this_audio_song_id) {
@@ -607,7 +618,7 @@ let after_rating = false
 const handleItemClick_Rating = (id_rating: any) => {
   click_count = 0
   const rating_item: Media_File | undefined =
-    store_view_media_cue_page_info.media_Files_temporary.find(
+    pageMediaCueStore.media_Files_temporary.find(
       (mediaFile: Media_File) => mediaFile.id === playlistStore.playlist_Menu_Item_Id
     )
   if (rating_item != undefined) {
@@ -642,21 +653,11 @@ const handleItemClick_Rating = (id_rating: any) => {
   }
 }
 
-////// playlist
 import { useMessage } from 'naive-ui'
 const message = useMessage()
 const themeVars = useThemeVars()
-/// add playlist
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
-
-// 在setup上下文中获取Store实例
-const playerAudioStore = usePlayerAudioStore()
-// 使用 storeToRefs 解构出所需的响应式属性
-const { page_top_album_image_url, this_audio_song_name } = storeToRefs(playerAudioStore)
-
-import { store_view_media_cue_page_info } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_info'
-import { store_view_media_cue_page_logic } from '@/views/view_app/page/page_media_cue/store/store_view_media_cue_page_logic'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
 import { store_server_data_set_media_cueInfo } from '@/data/data_stores/server_api_stores/server_api_core/annotation/store_server_data_set_media_cueInfo'
@@ -667,10 +668,11 @@ import { store_server_data_set_playlistInfo } from '@/data/data_stores/server_ap
 import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 
-// 在setup上下文中获取Store实例
+const playerAudioStore = usePlayerAudioStore()
 const playerAppearanceStore = usePlayerAppearanceStore()
-
 const playerSettingStore = usePlayerSettingStore()
+
+const { page_top_album_image_url, this_audio_song_name } = storeToRefs(playerAudioStore)
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_general_fetch_album_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_album/store_general_fetch_album_list'
@@ -774,7 +776,7 @@ const generateSortQuery = () => {
   return validConditions.map((condition) => `sort=${condition.key}:${condition.order}`).join('&')
 }
 const updateStoreSortParam = () => {
-  store_view_media_cue_page_logic.page_songlists_multi_sort = generateSortQuery()
+  pageMediaCueStore.page_songlists_multi_sort = generateSortQuery()
 }
 const handleKeyChange = (value: string, index: number) => {
   sortConditions.value[index].key = value
@@ -805,7 +807,7 @@ const parseSortQuery = (query: string): SortCondition[] => {
   return conditions
 }
 const updateSortConditions = () => {
-  const storedQuery = store_view_media_cue_page_logic.page_songlists_multi_sort
+  const storedQuery = pageMediaCueStore.page_songlists_multi_sort
 
   if (storedQuery) {
     // 解析存储的排序条件
@@ -831,7 +833,7 @@ onMounted(() => {
 ////// right menu
 const contextmenu = ref(null)
 function menu_item_add_to_playlist_end() {
-  const item: Media_File | undefined = store_view_media_cue_page_info.media_Files_temporary.find(
+  const item: Media_File | undefined = pageMediaCueStore.media_Files_temporary.find(
     (mediaFile: Media_File) => mediaFile.id === playlistStore.playlist_Menu_Item_Id
   )
   if (item != undefined && item != 'undefined') {
@@ -851,7 +853,7 @@ function menu_item_add_to_playlist_end() {
 
 function menu_item_add_to_playlist_next() {
   const rating_item: Media_File | undefined =
-    store_view_media_cue_page_info.media_Files_temporary.find(
+    pageMediaCueStore.media_Files_temporary.find(
       (mediaFile: Media_File) => mediaFile.id === playlist_Menu_Item_Id.value
     )
   if (item != undefined && item != 'undefined') {
@@ -899,10 +901,10 @@ const onRefreshSharp = debounce(async (event, args) => {
       store_general_fetch_media_list.set_artist_id('')
     }
     store_general_fetch_media_list.fetchData_Media_of_server_web_clear_search_parms()
-    store_view_media_cue_page_logic.page_songlists_keyword = ''
+    pageMediaCueStore.page_songlists_keyword = ''
     input_search_InstRef.value?.clear()
-    store_view_media_cue_page_logic.page_songlists_keywordFilter = ''
-    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = false
+    pageMediaCueStore.page_songlists_keywordFilter = ''
+    pageMediaCueStore.page_songlists_bool_show_search_area = false
     store_general_fetch_media_list.fetchData_Media_of_server_web_start()
   }
 }, 500)
@@ -916,11 +918,11 @@ const page_songlists_statistic = ref<
 >([])
 function Refresh_page_songlists_statistic() {
   page_songlists_statistic.value = []
-  store_view_media_cue_page_logic.page_songlists_statistic.forEach((item: any, index: number) => {
+  pageMediaCueStore.page_songlists_statistic.forEach((item: any, index: number) => {
     page_songlists_statistic.value.push({
-      label: store_view_media_cue_page_logic.page_songlists_statistic[index].label,
-      song_count: store_view_media_cue_page_logic.page_songlists_statistic[index].song_count,
-      id: store_view_media_cue_page_logic.page_songlists_statistic[index].id,
+      label: pageMediaCueStore.page_songlists_statistic[index].label,
+      song_count: pageMediaCueStore.page_songlists_statistic[index].song_count,
+      id: pageMediaCueStore.page_songlists_statistic[index].id,
     })
   })
 }
@@ -931,7 +933,7 @@ onMounted(() => {
     store_general_fetch_media_list._album_id.length > 0 ||
     store_general_fetch_media_list._album_artist_id.length > 0
   ) {
-    store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true
+    pageMediaCueStore.page_songlists_bool_show_search_area = true
   }
 })
 const stopWatching_boolHandleItemClick_Favorite = watch(
@@ -979,7 +981,7 @@ onBeforeUnmount(() => {
                   circle
                   @click="
                     () => {
-                      store_view_media_cue_page_logic.page_songlists_bool_show_search_area = true
+                      pageMediaCueStore.page_songlists_bool_show_search_area = true
                       store_general_fetch_media_list.set_album_id('')
                       store_general_fetch_media_list.set_artist_id('')
                       show_search_area()
@@ -1020,14 +1022,14 @@ onBeforeUnmount(() => {
           <n-tooltip
             trigger="hover"
             placement="top"
-            v-if="store_view_media_cue_page_logic.page_songlists_bool_show_search_area"
+            v-if="page_songlists_bool_show_search_area"
           >
             <template #trigger>
               <n-input-group style="width: 144px">
                 <n-input
                   style="width: 144px"
                   ref="input_search_InstRef"
-                  v-model:value="store_view_media_cue_page_logic.page_songlists_input_search_Value"
+                  v-model:value="page_songlists_input_search_Value"
                   @keydown.enter="click_search"
                 />
               </n-input-group>
@@ -1071,7 +1073,7 @@ onBeforeUnmount(() => {
           >
             <template #trigger>
               <n-badge
-                v-if="store_view_media_cue_page_logic.page_songlists_multi_sort.length > 0"
+                v-if="page_songlists_multi_sort.length > 0"
                 dot
                 value="1"
                 :offset="[-18, 5]"
@@ -1104,7 +1106,7 @@ onBeforeUnmount(() => {
                 </span>
               </n-space>
               <n-space justify="space-between" align="center" style="margin-bottom: 10px">
-                {{ store_view_media_cue_page_logic.page_songlists_multi_sort }}
+                {{ pageMediaCueStore.page_songlists_multi_sort }}
               </n-space>
               <n-space vertical size="large" style="width: 400px; margin-bottom: 12px">
                 <n-space justify="space-between" v-for="(_, index) in sortConditions" :key="index">
@@ -1136,7 +1138,7 @@ onBeforeUnmount(() => {
                     strong
                     @click="
                       () => {
-                        store_view_media_cue_page_logic.page_songlists_multi_sort = ''
+                        pageMediaCueStore.page_songlists_multi_sort = ''
                         updateSortConditions()
                       }
                     "
@@ -1162,7 +1164,7 @@ onBeforeUnmount(() => {
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-badge
-                :value="store_view_media_cue_page_logic.page_songlists_filter_year"
+                :value="page_songlists_filter_year"
                 :offset="[22, 17]"
               >
                 <n-button quaternary circle @click="Type_Filter_Show = true">
@@ -1190,12 +1192,12 @@ onBeforeUnmount(() => {
                         clearable
                         placeholder=""
                         style="width: 200px"
-                        v-model:value="store_view_media_cue_page_logic.page_songlists_filter_year"
+                        v-model:value="page_songlists_filter_year"
                       />
                       <n-button
                         strong
                         secondary
-                        @click="store_view_media_cue_page_logic.page_songlists_filter_year = 0"
+                        @click="pageMediaCueStore.page_songlists_filter_year = 0"
                       >
                         {{ $t('common.clear') }}
                       </n-button>
@@ -1207,21 +1209,15 @@ onBeforeUnmount(() => {
                     }}</span>
                     <n-space vertical>
                       <n-select
-                        :value="store_view_media_cue_page_logic.page_songlists_filter_path_folder"
+                        v-model:value="page_songlists_filter_path_folder"
                         :options="store_local_db_info.local_config_of_all_user_of_select"
                         style="width: 200px"
-                        @update:value="
-                          (value: any) => {
-                            store_view_media_cue_page_logic.page_songlists_filter_path_folder =
-                              value
-                          }
-                        "
                       />
                       <n-button
                         strong
                         secondary
                         @click="
-                          store_view_media_cue_page_logic.page_songlists_filter_path_folder = ''
+                          pageMediaCueStore.page_songlists_filter_path_folder = ''
                         "
                       >
                         {{ $t('common.clear') }}
@@ -1278,8 +1274,8 @@ onBeforeUnmount(() => {
               <template #trigger>
                 <n-select
                   size="small"
-                  :value="store_view_media_cue_page_logic.page_songlists_selected"
-                  :options="store_view_media_cue_page_logic.page_songlists_options"
+                  v-model:value="page_songlists_selected"
+                  :options="page_songlists_options"
                   style="width: 181px"
                   @update:value="page_songlists_handleselected_updatevalue"
                 />
@@ -1297,7 +1293,7 @@ onBeforeUnmount(() => {
           width: 'calc(100vw - ' + (collapsed_width - 35) + 'px)',
           height: show_top_selectedlist ? 'calc(100vh - 236px)' : 'calc(100vh - 194px)',
         }"
-        :items="store_view_media_cue_page_info.media_Files_temporary"
+        :items="media_Files_temporary"
         :minItemSize="50"
         :emit-update="true"
         key-field="absoluteIndex"
@@ -1389,8 +1385,8 @@ onBeforeUnmount(() => {
                     <n-tooltip trigger="hover" placement="top">
                       <template #trigger>
                         <n-select
-                          :value="store_view_media_cue_page_logic.page_songlists_selected"
-                          :options="store_view_media_cue_page_logic.page_songlists_options"
+                          v-model:value="page_songlists_selected"
+                          :options="page_songlists_options"
                           style="width: 166px"
                           @update:value="page_songlists_handleselected_updatevalue"
                         />
