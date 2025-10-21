@@ -25,7 +25,10 @@ use([
 
 // 导入状态管理
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { store_view_charts_page_info } from '@/views/view_app/page/page_charts/store/store_view_charts_page_info'
+import { usePageChartsStore } from '@/data/data_status/app_status/page_status/charts_store/usePageChartsStore'
+import { store_general_fetch_charts_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_charts/store_general_fetch_charts_list'
+
+const pageChartsStore = usePageChartsStore()
 
 const selectedCategory = ref('media_file')
 
@@ -33,7 +36,7 @@ function getData(
   selectedCategory = 'media_file',
   theme: 'lightTheme' | 'darkTheme' = 'lightTheme'
 ) {
-  const category = store_view_charts_page_info.charts_data_temporary.find(
+  const category = pageChartsStore.charts_data_temporary.find(
     (d) => d.type === selectedCategory
   )
   if (!category) return {}
@@ -236,7 +239,7 @@ const loadingOptions = {
 const option = shallowRef(getData(selectedCategory.value, store_system_configs_info.theme_name))
 
 const dimensionOptions = computed(() => {
-  return store_view_charts_page_info.charts_data_temporary.map((dim) => ({
+  return pageChartsStore.charts_data_temporary.map((dim) => ({
     label: dim.name,
     value: dim.type,
   }))
@@ -254,7 +257,7 @@ let unwatch_theme_name = watch(
 
 // 新增：图表数据变化监听器
 let unwatch_charts_data = watch(
-  () => store_view_charts_page_info.charts_data_temporary,
+  () => pageChartsStore.charts_data_temporary,
   (newData) => {
     // 检查当前选中的分类是否在新数据中存在
     const currentCategory = selectedCategory.value
@@ -283,7 +286,7 @@ function handleCategoryChange(newCategory: string) {
 // 刷新数据
 async function refresh() {
   loading.value = true
-  await store_view_charts_page_logic.fetchData_Charts()
+  await store_general_fetch_charts_list.fetchData_Charts()
   option.value = getData(selectedCategory.value, store_system_configs_info.theme_name)
   loading.value = false
 }
@@ -296,7 +299,6 @@ onBeforeUnmount(() => {
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
-import { store_view_charts_page_logic } from '@/views/view_app/page/page_charts/store/store_view_charts_page_logic'
 const { t } = useI18n({
   inheritLocale: true,
 })

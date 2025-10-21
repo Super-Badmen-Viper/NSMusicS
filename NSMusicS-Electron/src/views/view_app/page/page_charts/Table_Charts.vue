@@ -7,9 +7,11 @@ import PieChart from '@/views/view_app/page/page_charts/demo/examples/PieChart.v
 import PolarChart from '@/views/view_app/page/page_charts/demo/examples/PolarChart.vue'
 import ScatterChart from '@/views/view_app/page/page_charts/demo/examples/ScatterChart.vue'
 import { computed, onMounted } from 'vue'
-import { store_view_charts_page_info } from '@/views/view_app/page/page_charts/store/store_view_charts_page_info'
+import { usePageChartsStore } from '@/data/data_status/app_status/page_status/charts_store/usePageChartsStore'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
+
+const pageChartsStore = usePageChartsStore()
 
 use([CanvasRenderer, SVGRenderer])
 
@@ -19,20 +21,16 @@ const { t } = useI18n({
 })
 
 onMounted(async () => {
-  // 1. 初始化数据结构
-  store_view_charts_page_info.charts_data_temporary = [
+  pageChartsStore.charts_data_temporary = [
     { type: 'media', name: computed(() => t('entity.track_other')), items: [] },
     { type: 'album', name: computed(() => t('entity.album_other')), items: [] },
     { type: 'artist', name: computed(() => t('entity.artist_other')), items: [] },
     { type: 'media_cue', name: computed(() => 'CUE ' + t('nsmusics.view_page.disk')), items: [] },
   ]
-  //
-  await store_view_charts_page_logic.fetchData_Charts()
+  await pageChartsStore.init_Load_Charts()
 })
 
-////// i18n auto lang
 import { useThemeVars } from 'naive-ui'
-import { store_view_charts_page_logic } from '@/views/view_app/page/page_charts/store/store_view_charts_page_logic'
 const themeVars = useThemeVars()
 </script>
 

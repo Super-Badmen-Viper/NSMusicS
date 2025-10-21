@@ -3,15 +3,13 @@ import { ref } from 'vue'
 import { store_general_fetch_charts_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_charts/store_general_fetch_charts_list'
 
 export const usePageChartsStore = defineStore('pageCharts', () => {
-  // 从 store_view_charts_page_info.ts 合并的状态
   const charts_media_file_metadata = ref<any[]>([])
   const charts_album_metadata = ref<any[]>([])
   const charts_artist_metadata = ref<any[]>([])
   const charts_media_cue_metadata = ref<any[]>([])
   const charts_data_temporary = ref<any[]>([])
 
-  // 从 store_view_charts_page_logic.ts 合并的方法
-  async function fetchData_Charts() {
+  async function init_Load_Charts() {
     try {
       // 并行获取所有数据
       await store_general_fetch_charts_list.fetchData_Charts()
@@ -37,10 +35,15 @@ export const usePageChartsStore = defineStore('pageCharts', () => {
         }
 
         // 排序并截取
-        charts_data_temporary.value[targetIndex].items = result
+        const sortedResult = result
           .sort((a, b) => b.play_count - a.play_count) // 降序排序
           .slice(0, maxItems)
-        charts_data_temporary.value[targetIndex].items.reverse()
+          .reverse()
+        
+        // 更新charts_data_temporary中的items
+        if (charts_data_temporary.value[targetIndex]) {
+          charts_data_temporary.value[targetIndex].items = sortedResult
+        }
       }
 
       // 并行处理所有数据类型
@@ -55,16 +58,12 @@ export const usePageChartsStore = defineStore('pageCharts', () => {
     }
   }
 
-  // 导出所有状态和方法
   return {
-    // 从 store_view_charts_page_info.ts 导出的状态
     charts_media_file_metadata,
     charts_album_metadata,
     charts_artist_metadata,
     charts_media_cue_metadata,
     charts_data_temporary,
-
-    // 从 store_view_charts_page_logic.ts 导出的方法
-    fetchData_Charts,
+    init_Load_Charts,
   }
 })
