@@ -42,7 +42,7 @@ import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_sta
 import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list'
 
 import { useI18n } from 'vue-i18n'
-import { store_view_recommend_page_info } from '@/views/view_app/page/page_recommend/store/store_view_recommend_page_info'
+import { usePageRecommendStore } from '@/data/data_status/app_status/page_status/recommend_store/usePageRecommendStore'
 
 const { t } = useI18n({ inheritLocale: true })
 const message = useMessage()
@@ -50,6 +50,7 @@ const themeVars = useThemeVars()
 
 const pageMediaStore = usePageMediaStore()
 const pageHomeStore = usePageHomeStore()
+const pageRecommendStore = usePageRecommendStore()
 const { 
   home_Files_temporary_maximum_playback, 
   home_Files_temporary_random_search, 
@@ -61,6 +62,7 @@ const {
   home_selected_top_album_medium_image_url,
   list_data_StartUpdate
 } = storeToRefs(pageHomeStore)
+const { recommend_MediaFiles_temporary } = storeToRefs(pageRecommendStore)
 
 const item_album = ref(160)
 const item_album_image = ref(item_album.value - 20)
@@ -365,7 +367,7 @@ async function add_to_playlist(next: boolean) {
     } else if (pageHomeStore.home_Files_temporary_type_select === 'media') {
       store_general_fetch_media_list._media_id = itemId
       await store_general_fetch_media_list.fetchData_Media()
-      matchingItems = store_view_recommend_page_info.recommend_MediaFiles_temporary.filter(
+      matchingItems = recommend_MediaFiles_temporary.value.filter(
         (item: Media_File) => item.id === itemId
       )
     }

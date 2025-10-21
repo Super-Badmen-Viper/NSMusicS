@@ -30,11 +30,23 @@ import { TooltipComponent, VisualMapComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import 'echarts-wordcloud'
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
-import { store_view_recommend_page_info } from '@/views/view_app/page/page_recommend/store/store_view_recommend_page_info'
-import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-
+import { usePageRecommendStore } from '@/data/data_status/app_status/page_status/recommend_store/usePageRecommendStore'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
+import { storeToRefs } from 'pinia'
+
+// 在<script setup>顶层获取Store实例
+const pageRecommendStore = usePageRecommendStore()
 const playlistStore = usePlaylistStore()
+
+// 解构需要绑定到模板的响应式属性
+const { 
+  recommend_MediaFiles_temporary,
+  recommend_WordCloudTag_metadata,
+  recommend_WordCloudGenre_metadata,
+  recommend_MediaSearch_metadata,
+  recommend_MediaFiles_metadata
+} = storeToRefs(pageRecommendStore)
 
 echarts.use([TooltipComponent, VisualMapComponent, CanvasRenderer])
 
@@ -81,11 +93,11 @@ const lerp = (start: number, end: number, t: number) => {
 }
 
 // --- Computed Properties ---
-const wordCloudTags = computed(() => store_view_recommend_page_info.recommend_WordCloudTag_metadata)
+const wordCloudTags = computed(() => pageRecommendStore.recommend_WordCloudTag_metadata)
 const wordCloudGenres = computed(
-  () => store_view_recommend_page_info.recommend_WordCloudGenre_metadata
+  () => pageRecommendStore.recommend_WordCloudGenre_metadata
 )
-const finalSongList = computed(() => store_view_recommend_page_info.recommend_MediaFiles_temporary)
+const finalSongList = computed(() => pageRecommendStore.recommend_MediaFiles_temporary)
 
 const combinedWordCloudData = computed(() => {
   const tags = wordCloudTags.value.map((tag) => ({ ...tag, type: 'tag' }))
@@ -109,9 +121,9 @@ const clearSelections = () => {
     syncChartSelectionState()
   }
   message.info('已清空所有选择')
-  store_view_recommend_page_info.recommend_MediaSearch_metadata = []
-  store_view_recommend_page_info.recommend_MediaFiles_metadata = []
-  store_view_recommend_page_info.recommend_MediaFiles_temporary = []
+  pageRecommendStore.recommend_MediaSearch_metadata = []
+  pageRecommendStore.recommend_MediaFiles_metadata = []
+  pageRecommendStore.recommend_MediaFiles_temporary = []
 }
 
 const removeWordSelection = (word: any) => {
@@ -193,20 +205,20 @@ const fetchWordCloudGenres = async () => {
 
 const fetchRecommendationsAndDetails = async () => {
   if (selectedWords.value.length === 0) {
-    store_view_recommend_page_info.recommend_MediaFiles_temporary = []
+    pageRecommendStore.recommend_MediaFiles_temporary = []
     return
   }
 
   loading.recs = true
   loading.details = true
-  store_view_recommend_page_info.recommend_MediaSearch_metadata = []
-  store_view_recommend_page_info.recommend_MediaFiles_temporary = []
+  pageRecommendStore.recommend_MediaSearch_metadata = []
+  pageRecommendStore.recommend_MediaFiles_temporary = []
 
   try {
     const keywords = selectedWords.value.map((w) => w.name).join(',')
     await get_NineSong_Temp_Data_To_LocalSqlite.get_recommend_result(keywords)
 
-    const recommendedSongs = store_view_recommend_page_info.recommend_MediaSearch_metadata
+    const recommendedSongs = pageRecommendStore.recommend_MediaSearch_metadata
     if (recommendedSongs.length > 0) {
       const ids = recommendedSongs.map((s: any) => s.id).join(',')
       await get_NineSong_Temp_Data_To_LocalSqlite.get_recommend_medias(ids)
@@ -272,12 +284,12 @@ onBeforeUnmount(() => {
   chartInstance?.dispose()
 
   // Clear temporary data
-  store_view_recommend_page_info.recommend_MediaFiles_temporary = []
+  pageRecommendStore.recommend_MediaFiles_temporary = []
 })
 
 onUnmounted(() => {
-  if (store_view_recommend_page_info.recommend_MediaFiles_temporary.length > 0) {
-    store_view_recommend_page_info.recommend_MediaFiles_temporary = []
+  if (pageRecommendStore.recommend_MediaFiles_temporary.length > 0) {
+    pageRecommendStore.recommend_MediaFiles_temporary = []
     console.log('Table_Recommend unmounted, temporary data cleared')
   }
 })
@@ -576,7 +588,7 @@ const { t } = useI18n({
               {{ $t('Tags') }}
             </n-h4>
             <n-empty
-              v-if="wordCloudTags.length === 0"
+              v-if="!wordCloudTags || wordCloudTags.length === 0"
               description="正在加载高频标签..."
               style="margin-top: 20px"
             ></n-empty>
@@ -598,7 +610,7 @@ const { t } = useI18n({
               {{ $t('entity.genre_other') }}
             </n-h4>
             <n-empty
-              v-if="wordCloudGenres.length === 0"
+              v-if="!wordCloudGenres || wordCloudGenres.length === 0"
               description="正在加载高频流派..."
               style="margin-top: 20px"
             ></n-empty>
@@ -620,7 +632,7 @@ const { t } = useI18n({
           <!-- View Mode: Chart -->
           <div v-show="displayMode === 'chart'" class="chart-view-container">
             <n-empty
-              v-if="wordCloudTags.length === 0 && wordCloudGenres.length === 0"
+              v-if="(!wordCloudTags || wordCloudTags.length === 0) && (!wordCloudGenres || wordCloudGenres.length === 0)"
               description="正在加载标签和流派数据..."
             ></n-empty>
             <div v-else class="word-cloud-wrapper">
@@ -646,7 +658,7 @@ const { t } = useI18n({
           />
           <DynamicScroller
             class="table"
-            :items="store_view_recommend_page_info.recommend_MediaFiles_temporary"
+            :items="recommend_MediaFiles_temporary"
             key-field="play_id"
             :minItemSize="50"
           >
@@ -661,7 +673,7 @@ const { t } = useI18n({
                   () => {
                     playlistStore.handleItemDbClick(item, index)
                     playlistStore.playlist_MediaFiles_temporary =
-                      store_view_recommend_page_info.recommend_MediaFiles_temporary
+                      pageRecommendStore.recommend_MediaFiles_temporary
                   }
                 "
               >
