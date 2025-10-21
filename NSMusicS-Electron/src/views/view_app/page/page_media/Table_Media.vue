@@ -747,7 +747,7 @@ let after_rating = false
 const handleItemClick_Rating = (id_rating: any) => {
   click_count = 0
   const rating_item: Media_File | undefined = pageMediaStore.media_Files_temporary.find(
-    (mediaFile: Media_File) => mediaFile.id === playlist_Menu_Item_Id
+    (mediaFile: Media_File) => mediaFile.id === playlist_Menu_Item_Id.value
   )
   if (rating_item != undefined) {
     const [id, rating] = id_rating.split('-')
@@ -1368,7 +1368,7 @@ const contextmenu = ref(null as any)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'))
 function menu_item_add_to_playlist_end() {
   const item: Media_File | undefined = pageMediaStore.media_Files_temporary.find(
-    (mediaFile: Media_File) => mediaFile.id === playlist_Menu_Item_Id
+    (mediaFile: Media_File) => mediaFile.id === playlist_Menu_Item_Id.value
   )
   if (item != undefined && item != 'undefined') {
     const newItem: any = JSON.parse(JSON.stringify(item))
@@ -1387,7 +1387,7 @@ function menu_item_add_to_playlist_end() {
 }
 function menu_item_add_to_playlist_next() {
   const item: Media_File | undefined = pageMediaStore.media_Files_temporary.find(
-    (mediaFile: Media_File) => mediaFile.id === playlist_Menu_Item_Id
+    (mediaFile: Media_File) => mediaFile.id === playlist_Menu_Item_Id.value
   )
   if (item != undefined && item != 'undefined') {
     let index = playlistStore.playlist_MediaFiles_temporary.findIndex(
@@ -1412,7 +1412,7 @@ function menu_item_add_to_playlist_next() {
 function menu_item_edit_selected_media_tags() {
   playerTagModifyStore.player_show_tag_kind = 'media'
   const item: Media_File | undefined = pageMediaStore.media_Files_temporary.find(
-    (mediaFile: Media_File) => mediaFile.id === playlist_Menu_Item_Id
+    (mediaFile: Media_File) => mediaFile.id === playlist_Menu_Item_Id.value
   )
   if (item != undefined && item != 'undefined') {
     playerTagModifyStore.player_current_media_path = item.path
@@ -1541,7 +1541,7 @@ let folder_Entity_ApiService_of_NineSong = new Folder_Entity_ApiService_of_NineS
   store_server_login_info.server_url
 )
 onMounted(async () => {
-  if (store_server_users.server_select_kind === 'ninesong') {
+  if (store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong') {
     store_server_users.server_all_library =
       await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
     browseFolderOptions.value = store_server_users.server_all_library.map((item: any) => ({

@@ -179,7 +179,7 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
     player_no_progress_jump.value = false
     player_slider_currentTime_added_value.value = 0
     const playerViewStore = usePagePlayerViewStore()
-    playerViewStore.currentScrollIndex.value = 0
+    playerViewStore.currentScrollIndex = 0
 
     // 注意，此时currentTime将从0开始，需要计算附加值
     if (silder_path) {

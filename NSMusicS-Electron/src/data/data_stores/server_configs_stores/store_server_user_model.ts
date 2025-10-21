@@ -3,6 +3,7 @@ import { store_system_configs_save } from '@/data/data_stores/local_system_store
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 
+import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'

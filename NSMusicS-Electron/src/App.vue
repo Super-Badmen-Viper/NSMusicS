@@ -77,6 +77,19 @@ const {
   player_collapsed_action_bar_of_Immersion_model,
   player_lyric_fontSize_Num,
 } = storeToRefs(playerAppearanceStore)
+const {
+  player_show_sound_effects,
+} = storeToRefs(playerSoundEffectsStore)
+const {
+  player_show_sound_speed,
+} = storeToRefs(playerSoundSpeedStore)
+const {
+  player_show_sound_more,
+} = storeToRefs(playerSoundMoreStore)
+const {
+  player_show_tag_modify,
+} = storeToRefs(playerTagModifyStore)
+
 
 window.addEventListener('resize', () => {
   store_system_configs_info.window_innerWidth = window.innerWidth
@@ -350,8 +363,6 @@ provide('get_playerbar_to_switch_playerview', get_playerbar_to_switch_playerview
 store_router_data_info.router = useRouter()
 import routers from './router'
 import { store_system_configs_update } from '@/data/data_stores/local_system_stores/store_system_configs_update'
-import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
-import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 routers.beforeEach((to, from, next) => {

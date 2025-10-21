@@ -44,7 +44,7 @@ async function update_server_addUser() {
     )
     if (result) {
       message.success(t('ButtonAddMediaLibrary') + ' | ' + t('LabelFinish'))
-      if (store_server_users.server_select_kind === 'ninesong') {
+      if (store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong') {
         store_server_users.server_all_library =
           await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
       }
@@ -76,7 +76,7 @@ async function update_server_deleteUser(id: string, folderPath: string) {
       const result = await folder_Entity_ApiService_of_NineSong.deleteFolder_Entity(id)
       if (result) {
         message.success(t('HeaderRemoveMediaFolder') + ' | ' + t('LabelFinish'))
-        if (store_server_users.server_select_kind === 'ninesong') {
+        if (store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong') {
           store_server_users.server_all_library =
             await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
         }
@@ -108,7 +108,7 @@ async function update_server_setUser(id: string, newName: string, newFolderPath:
     )
     if (result) {
       message.success(t('form.editPlaylist.success'))
-      if (store_server_users.server_select_kind === 'ninesong') {
+      if (store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong') {
         store_server_users.server_all_library =
           await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
       }
@@ -198,7 +198,7 @@ const startProgressPolling = (folder_path: string) => {
         updateProgressBar(100)
         progressBarShow.value = false
         // 确保更新媒体库数据
-        if (store_server_users.server_select_kind === 'ninesong') {
+        if (store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong') {
           store_server_users.server_all_library =
             await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
         }
@@ -322,7 +322,7 @@ let file_Entity_ApiService_of_NineSong = new File_Entity_ApiService_of_NineSong(
 )
 onMounted(async () => {
   updateGridItems()
-  if (store_server_users.server_select_kind === 'ninesong') {
+  if (store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong') {
     store_server_users.server_all_library =
       await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
     await find_server_folder_path('')
@@ -340,6 +340,7 @@ import { store_server_login_info } from '@/views/view_server/page_login/store/st
 import { usePagePlayerViewStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerViewStore'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
+import {store_server_user_model} from "@/data/data_stores/server_configs_stores/store_server_user_model";
 
 const contentTypeValue = ref(1)
 const contentTypeOptions = ref([
