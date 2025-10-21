@@ -6,7 +6,7 @@ import { store_system_configs_load } from '@/data/data_stores/local_system_store
 import { store_local_data_set_albumInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_albumInfo'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
-import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
+import { usePagePlayerTagModifyStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerTagModifyStore'
 // 图片导入使用类型断言
 import error_album from '@/assets/img/error_album.jpg'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
@@ -19,7 +19,6 @@ import { usePageArtistStore } from '@/data/data_status/app_status/page_status/ar
 import vinyl from '@/assets/img/vinyl.jpg'
 
 export const usePlayerAudioStore = defineStore('playerAudio', () => {
-  const pageMediaStore = usePageMediaStore()
   // State using refs
   const this_audio_file_path = ref('')
   const this_audio_file_medium_image_url = ref('')
@@ -71,6 +70,9 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
   const this_audio_lyrics_info_byte_time = ref([] as any[])
 
   const this_audio_lyrics_info_line_num = ref(28)
+
+  // 在store内部获取其他store实例，确保在整个store范围内复用
+  const playerTagModifyStore = usePagePlayerTagModifyStore()
 
   // Actions
   const reset_data = async () => {
@@ -230,11 +232,12 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
     if (newValue != undefined && newValue != 'undefined' && newValue.length > 0) {
       console.log('this_audio_file_path：' + newValue)
 
-      store_player_tag_modify.player_current_media_id = this_audio_song_id.value
-      store_player_tag_modify.player_current_media_path = this_audio_file_path.value
+      // 使用在store顶层定义的实例，而不是在函数内部重复调用usePagePlayerTagModifyStore()
+      playerTagModifyStore.player_current_media_id = this_audio_song_id.value
+      playerTagModifyStore.player_current_media_path = this_audio_file_path.value
 
       const playlistStore = usePlaylistStore()
-
+      const pageMediaStore = usePageMediaStore()
       if (
         pageMediaStore.media_Files_temporary != undefined &&
         pageMediaStore.media_Files_temporary.length != 0
@@ -303,7 +306,7 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
 
   watch(this_audio_song_rating, (newValue) => {
     console.log('this_audio_song_rating：' + newValue)
-
+    const pageMediaStore = usePageMediaStore()
     pageMediaStore.media_Files_temporary.forEach((item: any) => {
       if (item.id === this_audio_song_id.value) item.rating = this_audio_song_rating.value
     })
@@ -311,7 +314,7 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
 
   watch(this_audio_song_favorite, (newValue) => {
     console.log('this_audio_song_favorite：' + newValue)
-
+    const pageMediaStore = usePageMediaStore()
     pageMediaStore.media_Files_temporary.forEach((item: any) => {
       if (item.id === this_audio_song_id.value) item.favorite = this_audio_song_favorite.value
     })

@@ -16,11 +16,11 @@ const { t } = useI18n({
 const themeVars = useThemeVars()
 const pageMediaStore = usePageMediaStore()
 const pageTagStore = usePageTagStore()
-const { 
+const {
   tag_metadata_find_model,
   tag_type_select,
   tag_LibraryItems_metadata,
-  tag_LibraryItems_temporary
+  tag_LibraryItems_temporary,
 } = storeToRefs(pageTagStore)
 const {
   page_songlists_bool_show_search_area,
@@ -37,7 +37,7 @@ const {
   media_Files_selected,
   media_Files_temporary,
   model_server_type_of_web,
-  model_server_type_of_local
+  model_server_type_of_local,
 } = storeToRefs(pageMediaStore)
 
 ////// i18n auto lang
@@ -116,9 +116,7 @@ import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_ap
 const jsonValue = ref()
 function find_json_value(id: string) {
   try {
-    jsonValue.value = pageTagStore.tag_LibraryItems_metadata.find(
-      (item: any) => item.ID === id
-    )
+    jsonValue.value = pageTagStore.tag_LibraryItems_metadata.find((item: any) => item.ID === id)
   } catch {
     jsonValue.value = ''
   }
@@ -277,9 +275,7 @@ const browseFolderOptions = ref([])
                     :options="browseFolderPathOptions"
                     placement="bottom"
                     style="width: 170px"
-                    @click="
-                      find_server_folder_path(page_songlists_library_folder_path)
-                    "
+                    @click="find_server_folder_path(page_songlists_library_folder_path)"
                     @update:value="filter_media_folder_path"
                   />
                   <n-button

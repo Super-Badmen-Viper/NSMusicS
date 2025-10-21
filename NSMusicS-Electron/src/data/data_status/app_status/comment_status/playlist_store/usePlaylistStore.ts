@@ -28,7 +28,6 @@ import { store_general_fetch_media_cue_list } from '../../../../data_stores/serv
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 
 export const usePlaylistStore = defineStore('playlist', () => {
-  const pageMediaStore = usePageMediaStore()
   // 外观状态
   const playlist_show = ref(false)
   const playlist_use_model = ref('media')
@@ -169,6 +168,7 @@ export const usePlaylistStore = defineStore('playlist', () => {
   async function handleItemDbClick(media_file: Media_File, index: number) {
     if (store_server_user_model.model_server_type_of_web) {
       // Data synchronization
+      const pageMediaStore = usePageMediaStore()
       playlist_MediaFiles_temporary.value.forEach((row: Media_File) => {
         const existingIndex = pageMediaStore.media_Files_temporary.findIndex(
           (item: Media_File) => item.id === row.id

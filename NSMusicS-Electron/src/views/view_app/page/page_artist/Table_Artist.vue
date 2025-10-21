@@ -44,7 +44,7 @@ import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_sto
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_general_fetch_album_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_album/store_general_fetch_album_list'
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
-import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
+import { usePagePlayerTagModifyStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerTagModifyStore'
 import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
@@ -59,6 +59,7 @@ const { t } = useI18n({
 
 const pageMediaStore = usePageMediaStore()
 const pageArtistStore = usePageArtistStore()
+const playerTagModifyStore = usePagePlayerTagModifyStore()
 const { page_artistlists_multi_sort, page_artistlists_selected, page_artistlists_options } =
   storeToRefs(pageArtistStore)
 
@@ -757,13 +758,13 @@ async function menu_item_add_to_playlist_next() {
   }
 }
 function menu_item_edit_selected_media_tags() {
-  store_player_tag_modify.player_show_tag_kind = 'artist'
+  playerTagModifyStore.player_show_tag_kind = 'artist'
   const item: Album | undefined = artist_Files_temporary.value.find(
     (artist: Album) => artist.id === playlist_Menu_Item_Id.value
   )
   if (item != undefined && item != 'undefined') {
-    store_player_tag_modify.player_current_artist_id = item.id
-    store_player_tag_modify.player_show_tag_modify = true
+    playerTagModifyStore.player_current_artist_id = item.id
+    playerTagModifyStore.player_show_tag_modify = true
     contextmenu.value.hide()
   }
 }

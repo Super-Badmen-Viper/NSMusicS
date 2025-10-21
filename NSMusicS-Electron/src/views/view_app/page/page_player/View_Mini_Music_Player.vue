@@ -35,7 +35,7 @@ import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_sta
 import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
 import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 
-import { store_player_view } from '@/views/view_app/page/page_player/store/store_player_view'
+import { usePagePlayerViewStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerViewStore'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
@@ -43,11 +43,11 @@ import { Pause, Play, PlayBack, PlayForward, VolumeMedium } from '@vicons/ionico
 import Bar_Music_PlayList from '@/views/view_app/drawer/View_Player_PlayList.vue'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
-import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
+import { usePagePlayerTagModifyStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerTagModifyStore'
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
-import { store_player_sound_effects } from '@/views/view_app/page/page_player/store/store_player_sound_effects'
-import { store_player_sound_speed } from '@/views/view_app/page/page_player/store/store_player_sound_speed'
-import { store_player_sound_more } from '@/views/view_app/page/page_player/store/store_player_sound_more'
+import { usePagePlayerSoundEffectsStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerSoundEffectsStore'
+import { usePagePlayerSoundSpeedStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerSoundSpeedStore'
+import { usePagePlayerSoundMoreStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerSoundMoreStore'
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
@@ -74,6 +74,11 @@ const playerAppearanceStore = usePlayerAppearanceStore()
 const playerAudioStore = usePlayerAudioStore()
 const playlistStore = usePlaylistStore()
 const pageMediaStore = usePageMediaStore()
+const playerTagModifyStore = usePagePlayerTagModifyStore()
+const playerSoundEffectsStore = usePagePlayerSoundEffectsStore()
+const playerSoundSpeedStore = usePagePlayerSoundSpeedStore()
+const playerSoundMoreStore = usePagePlayerSoundMoreStore()
+const playerViewStore = usePagePlayerViewStore()
 
 const {
   player_lyric_fontSize_Num,
@@ -152,7 +157,7 @@ function begin_lyrics_animation() {
           if (currentTime <= playerAudioStore.this_audio_lyrics_info_line_time[0]) {
             if (
               !lyrics_list_whell.value &&
-              (isFirstRun || store_player_view.currentScrollIndex !== 0)
+              (isFirstRun || playerViewStore.currentScrollIndex !== 0)
             ) {
               store_player_view.currentScrollIndex = 0
               scrollToItem(playerAudioStore.this_audio_lyrics_info_line_num)
@@ -162,18 +167,18 @@ function begin_lyrics_animation() {
             if (i === playerAudioStore.this_audio_lyrics_info_line_time.length - 1) {
               if (
                 !lyrics_list_whell.value &&
-                (isFirstRun || store_player_view.currentScrollIndex !== i)
+                (isFirstRun || playerViewStore.currentScrollIndex !== i)
               ) {
-                store_player_view.currentScrollIndex = i
+                playerViewStore.currentScrollIndex = i
                 scrollToItem(i + playerAudioStore.this_audio_lyrics_info_line_num)
               }
               break
             } else if (currentTime < playerAudioStore.this_audio_lyrics_info_line_time[i + 1]) {
               if (
                 !lyrics_list_whell.value &&
-                (isFirstRun || store_player_view.currentScrollIndex !== i)
+                (isFirstRun || playerViewStore.currentScrollIndex !== i)
               ) {
-                store_player_view.currentScrollIndex = i
+                playerViewStore.currentScrollIndex = i
                 scrollToItem(i + playerAudioStore.this_audio_lyrics_info_line_num)
               }
               break
@@ -193,7 +198,7 @@ function begin_lyrics_animation() {
           scrollbar.value?.$el.querySelectorAll('.lyrics_text_active') || []
         let color_hidden = playerAppearanceStore.player_lyric_color.slice(0, -2)
         const index =
-          store_player_view.currentScrollIndex + playerAudioStore.this_audio_lyrics_info_line_num
+          playerViewStore.currentScrollIndex + playerAudioStore.this_audio_lyrics_info_line_num
         scrollToItem(index)
         for (let i = index - 16; i <= index + 16; i++) {
           const colorValue = Math.max(
@@ -237,7 +242,7 @@ const handleItemDbClick = async (index: any) => {
   if (time >= (await playerSettingStore.player.getDuration()) * 1000) return
   if (time < 0) return
   playerSettingStore.player_go_lyric_line_index_of_audio_play_progress = time
-  store_player_view.currentScrollIndex = index
+  playerViewStore.currentScrollIndex = index
 
   handleLeave_Refresh_Lyric_Color()
 }
@@ -273,7 +278,7 @@ const scrollToItem = (index: number) => {
     itemElements[index].style.transformOrigin = 'center'
     itemElements[index].style.width = 'calc(90vw)'
   }
-  if (store_player_view.currentScrollIndex === 0)
+  if (playerViewStore.currentScrollIndex === 0)
     itemElements[index].scrollIntoView({ block: 'center', behavior: 'instant' })
   else itemElements[index].scrollIntoView({ block: 'center', behavior: 'smooth' })
   // 设置前后16列的颜色
@@ -589,18 +594,18 @@ const handleItemClick_Rating = (id: any, rating: any) => {
 }
 
 const Set_Player_Show_Sound_effects = () => {
-  store_player_sound_effects.player_show_sound_effects =
-    !store_player_sound_effects.player_show_sound_effects
+  playerSoundEffectsStore.player_show_sound_effects =
+    !playerSoundEffectsStore.player_show_sound_effects
 }
 
 const Set_Player_Show_Sound_speed = () => {
-  store_player_sound_speed.player_show_sound_speed =
-    store_player_sound_speed.player_show_sound_speed === false
+  playerSoundSpeedStore.player_show_sound_speed =
+    playerSoundSpeedStore.player_show_sound_speed === false
 }
 
 const Set_Player_Show_Sound_more = () => {
-  store_player_sound_more.player_show_sound_more =
-    store_player_sound_more.player_show_sound_more === false
+  playerSoundMoreStore.player_show_sound_more =
+    playerSoundMoreStore.player_show_sound_more === false
 }
 
 ////// player_configs Remove data
@@ -881,7 +886,7 @@ onBeforeUnmount(() => {
                   @mouseleave="
                     () => {
                       handleLeave_Refresh_Lyric_Color()
-                      store_player_view.currentScrollIndex = 0
+                      playerViewStore.currentScrollIndex = 0
                       begin_lyrics_animation()
                     }
                   "

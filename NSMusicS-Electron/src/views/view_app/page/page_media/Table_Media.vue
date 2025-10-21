@@ -803,12 +803,12 @@ import { store_system_configs_save } from '@/data/data_stores/local_system_store
 const playerAppearanceStore = usePlayerAppearanceStore()
 const playerSettingStore = usePlayerSettingStore()
 const pageMediaStore = usePageMediaStore()
+const playerTagModifyStore = usePagePlayerTagModifyStore()
 
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_general_fetch_album_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_album/store_general_fetch_album_list'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
-import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
 import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
@@ -821,6 +821,7 @@ import { Folder_Entity_ApiService_of_NineSong } from '@/data/data_configs/nineso
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { storeToRefs } from 'pinia'
 const playlistStore = usePlaylistStore()
+import { usePagePlayerTagModifyStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerTagModifyStore'
 import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
 const playerAudioStore = usePlayerAudioStore()
 const {
@@ -1409,14 +1410,14 @@ function menu_item_add_to_playlist_next() {
   }
 }
 function menu_item_edit_selected_media_tags() {
-  store_player_tag_modify.player_show_tag_kind = 'media'
+  playerTagModifyStore.player_show_tag_kind = 'media'
   const item: Media_File | undefined = pageMediaStore.media_Files_temporary.find(
     (mediaFile: Media_File) => mediaFile.id === playlist_Menu_Item_Id
   )
   if (item != undefined && item != 'undefined') {
-    store_player_tag_modify.player_current_media_path = item.path
-    store_player_tag_modify.player_current_media_id = item.id
-    store_player_tag_modify.player_show_tag_modify = true
+    playerTagModifyStore.player_current_media_path = item.path
+    playerTagModifyStore.player_current_media_id = item.id
+    playerTagModifyStore.player_show_tag_modify = true
     contextmenu.value.hide()
   }
 }

@@ -40,12 +40,12 @@ const pageRecommendStore = usePageRecommendStore()
 const playlistStore = usePlaylistStore()
 
 // 解构需要绑定到模板的响应式属性
-const { 
+const {
   recommend_MediaFiles_temporary,
   recommend_WordCloudTag_metadata,
   recommend_WordCloudGenre_metadata,
   recommend_MediaSearch_metadata,
-  recommend_MediaFiles_metadata
+  recommend_MediaFiles_metadata,
 } = storeToRefs(pageRecommendStore)
 
 echarts.use([TooltipComponent, VisualMapComponent, CanvasRenderer])
@@ -94,9 +94,7 @@ const lerp = (start: number, end: number, t: number) => {
 
 // --- Computed Properties ---
 const wordCloudTags = computed(() => pageRecommendStore.recommend_WordCloudTag_metadata)
-const wordCloudGenres = computed(
-  () => pageRecommendStore.recommend_WordCloudGenre_metadata
-)
+const wordCloudGenres = computed(() => pageRecommendStore.recommend_WordCloudGenre_metadata)
 const finalSongList = computed(() => pageRecommendStore.recommend_MediaFiles_temporary)
 
 const combinedWordCloudData = computed(() => {
@@ -632,7 +630,10 @@ const { t } = useI18n({
           <!-- View Mode: Chart -->
           <div v-show="displayMode === 'chart'" class="chart-view-container">
             <n-empty
-              v-if="(!wordCloudTags || wordCloudTags.length === 0) && (!wordCloudGenres || wordCloudGenres.length === 0)"
+              v-if="
+                (!wordCloudTags || wordCloudTags.length === 0) &&
+                (!wordCloudGenres || wordCloudGenres.length === 0)
+              "
               description="正在加载标签和流派数据..."
             ></n-empty>
             <div v-else class="word-cloud-wrapper">

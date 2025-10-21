@@ -166,18 +166,10 @@ let options_Sort = computed(() => {
     pageMediaCueStore.page_songlists_options_Sort_key.length > 0
   ) {
     options_Sort_key.value.forEach((element) => {
-      if (
-        element.key === pageMediaCueStore.page_songlists_options_Sort_key[0].columnKey
-      )
-        if (
-          pageMediaCueStore.page_songlists_options_Sort_key[0].order ===
-          state_Sort.Ascend
-        )
+      if (element.key === pageMediaCueStore.page_songlists_options_Sort_key[0].columnKey)
+        if (pageMediaCueStore.page_songlists_options_Sort_key[0].order === state_Sort.Ascend)
           element.state_Sort = state_Sort.Ascend
-        else if (
-          pageMediaCueStore.page_songlists_options_Sort_key[0].order ===
-          state_Sort.Descend
-        )
+        else if (pageMediaCueStore.page_songlists_options_Sort_key[0].order === state_Sort.Descend)
           element.state_Sort = state_Sort.Descend
     })
   }
@@ -291,8 +283,7 @@ const input_search_InstRef = ref()
 let bool_input_search = false
 const click_search = () => {
   if (pageMediaCueStore.page_songlists_input_search_Value) {
-    const page_songlists_keyword =
-      pageMediaCueStore.page_songlists_input_search_Value.toLowerCase()
+    const page_songlists_keyword = pageMediaCueStore.page_songlists_input_search_Value.toLowerCase()
     pageMediaCueStore.get_page_songlists_keyword(page_songlists_keyword)
     bool_input_search = true
     options_Sort_key.value.forEach((element) => {
@@ -333,8 +324,7 @@ const back_search_default = () => {
   }
 }
 onMounted(() => {
-  pageMediaCueStore.page_songlists_input_search_Value =
-    pageMediaCueStore.page_songlists_keyword
+  pageMediaCueStore.page_songlists_input_search_Value = pageMediaCueStore.page_songlists_keyword
   if (pageMediaCueStore.page_songlists_input_search_Value.length > 0) {
     pageMediaCueStore.page_songlists_bool_show_search_area = true
     bool_input_search = true
@@ -346,8 +336,7 @@ onMounted(() => {
   if (store_general_fetch_media_list._album_id.length > 0) {
     pageMediaCueStore.page_songlists_bool_show_search_area = true
     bool_input_search = true
-    pageMediaCueStore.page_songlists_input_search_Value =
-      store_general_fetch_media_list._album_id
+    pageMediaCueStore.page_songlists_input_search_Value = store_general_fetch_media_list._album_id
   }
 })
 // lineItems Filter To Favorite
@@ -442,8 +431,7 @@ const page_songlists_handleselected_updatevalue = async (value: any) => {
   await pageMediaCueStore.get_page_songlists_selected(value)
   console.log('selected_value_for_songlistall：' + value)
   breadcrumbItems.value =
-    pageMediaCueStore.page_songlists_options.find((option) => option.value === value)
-      ?.label || ''
+    pageMediaCueStore.page_songlists_options.find((option) => option.value === value)?.label || ''
   bool_start_play.value = true
   pageMediaCueStore.set_media_Files_selected_all(false)
 }
@@ -563,9 +551,7 @@ const handleItemClick_album = async (album_id: string) => {
     if (store_server_user_model.model_server_type_of_local) {
       pageMediaCueStore.page_songlists_input_search_Value =
         album_id + 'accurate_search' + '__album__'
-      pageMediaCueStore.get_page_songlists_keyword(
-        album_id + 'accurate_search' + '__album__'
-      )
+      pageMediaCueStore.get_page_songlists_keyword(album_id + 'accurate_search' + '__album__')
       pageMediaCueStore.page_songlists_bool_show_search_area = false
       show_search_area()
       click_search()
@@ -617,10 +603,9 @@ let before_rating = false
 let after_rating = false
 const handleItemClick_Rating = (id_rating: any) => {
   click_count = 0
-  const rating_item: Media_File | undefined =
-    pageMediaCueStore.media_Files_temporary.find(
-      (mediaFile: Media_File) => mediaFile.id === playlistStore.playlist_Menu_Item_Id
-    )
+  const rating_item: Media_File | undefined = pageMediaCueStore.media_Files_temporary.find(
+    (mediaFile: Media_File) => mediaFile.id === playlistStore.playlist_Menu_Item_Id
+  )
   if (rating_item != undefined) {
     const [id, rating] = id_rating.split('-')
     if (after_rating) {
@@ -667,17 +652,17 @@ import { store_server_user_model } from '@/data/data_stores/server_configs_store
 import { store_server_data_set_playlistInfo } from '@/data/data_stores/server_api_stores/server_api_core/annotation/store_server_data_set_playlistInfo'
 import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
+import { usePagePlayerTagModifyStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerTagModifyStore'
 
 const playerAudioStore = usePlayerAudioStore()
 const playerAppearanceStore = usePlayerAppearanceStore()
 const playerSettingStore = usePlayerSettingStore()
-
+const playerTagModifyStore = usePagePlayerTagModifyStore()
 const { page_top_album_image_url, this_audio_song_name } = storeToRefs(playerAudioStore)
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_general_fetch_album_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_album/store_general_fetch_album_list'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
-import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
 import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
@@ -852,10 +837,9 @@ function menu_item_add_to_playlist_end() {
 }
 
 function menu_item_add_to_playlist_next() {
-  const rating_item: Media_File | undefined =
-    pageMediaCueStore.media_Files_temporary.find(
-      (mediaFile: Media_File) => mediaFile.id === playlist_Menu_Item_Id.value
-    )
+  const rating_item: Media_File | undefined = pageMediaCueStore.media_Files_temporary.find(
+    (mediaFile: Media_File) => mediaFile.id === playlist_Menu_Item_Id.value
+  )
   if (item != undefined && item != 'undefined') {
     let index = playlistStore.playlist_MediaFiles_temporary.findIndex(
       (item: any) => item.id === playerAudioStore.this_audio_song_id
@@ -1019,11 +1003,7 @@ onBeforeUnmount(() => {
             </template>
             {{ $t('Search') }}
           </n-tooltip>
-          <n-tooltip
-            trigger="hover"
-            placement="top"
-            v-if="page_songlists_bool_show_search_area"
-          >
+          <n-tooltip trigger="hover" placement="top" v-if="page_songlists_bool_show_search_area">
             <template #trigger>
               <n-input-group style="width: 144px">
                 <n-input
@@ -1072,12 +1052,7 @@ onBeforeUnmount(() => {
             "
           >
             <template #trigger>
-              <n-badge
-                v-if="page_songlists_multi_sort.length > 0"
-                dot
-                value="1"
-                :offset="[-18, 5]"
-              >
+              <n-badge v-if="page_songlists_multi_sort.length > 0" dot value="1" :offset="[-18, 5]">
                 <n-button quaternary circle style="rotate: 90deg" @click="Type_Multi_Sort = true">
                   <template #icon>
                     <n-icon :size="20" :depth="2"><MultipleStopOutlined /></n-icon>
@@ -1163,10 +1138,7 @@ onBeforeUnmount(() => {
 
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
-              <n-badge
-                :value="page_songlists_filter_year"
-                :offset="[22, 17]"
-              >
+              <n-badge :value="page_songlists_filter_year" :offset="[22, 17]">
                 <n-button quaternary circle @click="Type_Filter_Show = true">
                   <template #icon>
                     <n-icon :size="20"><Filter20Filled /></n-icon>
@@ -1216,9 +1188,7 @@ onBeforeUnmount(() => {
                       <n-button
                         strong
                         secondary
-                        @click="
-                          pageMediaCueStore.page_songlists_filter_path_folder = ''
-                        "
+                        @click="pageMediaCueStore.page_songlists_filter_path_folder = ''"
                       >
                         {{ $t('common.clear') }}
                       </n-button>

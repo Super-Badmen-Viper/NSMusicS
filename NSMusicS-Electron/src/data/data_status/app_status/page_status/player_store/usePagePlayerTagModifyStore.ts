@@ -48,7 +48,6 @@ interface ArtistTag {
 }
 
 export const usePagePlayerTagModifyStore = defineStore('pagePlayerTagModify', () => {
-  const pageMediaStore = usePageMediaStore()
   // 使用 ref 替代 reactive 定义所有状态
   const player_show_tag_modify = ref(false)
   const player_show_tag_kind = ref('media')
@@ -119,6 +118,7 @@ export const usePagePlayerTagModifyStore = defineStore('pagePlayerTagModify', ()
   // 监听标签修改显示状态变化
   watch(player_show_tag_modify, async (newValue) => {
     if (newValue) {
+      const pageMediaStore = usePageMediaStore()
       if (isElectron) {
         if (store_server_user_model.model_server_type_of_local) {
           /// modify 'app media file tag' and 'database $media_file$ info'

@@ -30,9 +30,9 @@ import Bar_Music_PlayList from '@/views/view_app/drawer/View_Player_PlayList.vue
 import View_Screen_Music_Player from '@/views/view_app/page/page_player/View_Screen_Music_Player.vue'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
-import { store_player_sound_effects } from '@/views/view_app/page/page_player/store/store_player_sound_effects'
-import { store_player_sound_speed } from '@/views/view_app/page/page_player/store/store_player_sound_speed'
-import { store_player_sound_more } from '@/views/view_app/page/page_player/store/store_player_sound_more'
+import { usePagePlayerSoundEffectsStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerSoundEffectsStore'
+import { usePagePlayerSoundSpeedStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerSoundSpeedStore'
+import { usePagePlayerSoundMoreStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerSoundMoreStore'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { storeToRefs } from 'pinia'
 import { store_server_login_logic } from '@/views/view_server/page_login/store/store_server_login_logic'
@@ -52,7 +52,7 @@ import { store_general_fetch_home_list } from '@/data/data_stores/server_api_sto
 import { store_general_fetch_album_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_album/store_general_fetch_album_list'
 import { store_general_fetch_artist_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_artist/store_general_fetch_artist_list'
 import { usePageMediaCueStore } from '@/data/data_status/app_status/page_status/media_cue_store/usePageMediaCueStore'
-import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
+import { usePagePlayerTagModifyStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerTagModifyStore'
 
 ////// BrowserWindow
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
@@ -66,6 +66,10 @@ const playerSettingStore = usePlayerSettingStore()
 const pageArtistStore = usePageArtistStore()
 const pageMediaStore = usePageMediaStore()
 const pageMediaCueStore = usePageMediaCueStore()
+const playerSoundEffectsStore = usePagePlayerSoundEffectsStore()
+const playerSoundSpeedStore = usePagePlayerSoundSpeedStore()
+const playerSoundMoreStore = usePagePlayerSoundMoreStore()
+const playerTagModifyStore = usePagePlayerTagModifyStore()
 // 使用 storeToRefs 解构出所需的响应式属性
 const {
   player_show,
@@ -1393,7 +1397,7 @@ function fullScreen() {
       </n-drawer>
       <!-- bottom drwaer of player_bar(more,sound speed,sound effect) -->
       <n-drawer
-        v-model:show="store_player_sound_more.player_show_sound_more"
+        v-model:show="player_show_sound_more"
         :width="440"
         style="
           border-radius: 12px 0 0 12px;
@@ -1404,14 +1408,14 @@ function fullScreen() {
           height: 560px;
         "
       >
-        <n-drawer-content v-if="store_player_sound_more.player_show_sound_more">
+        <n-drawer-content v-if="player_show_sound_more">
           <template #default>
             <span style="font-size: 24px; font-weight: 800">Not open || 未开放</span>
           </template>
         </n-drawer-content>
       </n-drawer>
       <n-drawer
-        v-model:show="store_player_sound_speed.player_show_sound_speed"
+        v-model:show="player_show_sound_speed"
         :width="440"
         style="
           border-radius: 12px 0 0 12px;
@@ -1422,14 +1426,14 @@ function fullScreen() {
           height: 560px;
         "
       >
-        <n-drawer-content v-if="store_player_sound_speed.player_show_sound_speed">
+        <n-drawer-content v-if="player_show_sound_speed">
           <template #default>
             <span style="font-size: 24px; font-weight: 800">Not open || 未开放</span>
           </template>
         </n-drawer-content>
       </n-drawer>
       <n-drawer
-        v-model:show="store_player_sound_effects.player_show_sound_effects"
+        v-model:show="player_show_sound_effects"
         :width="660"
         style="
           border-radius: 12px 0 0 12px;
@@ -1440,7 +1444,7 @@ function fullScreen() {
           height: 560px;
         "
       >
-        <n-drawer-content v-if="store_player_sound_effects.player_show_sound_effects">
+        <n-drawer-content v-if="player_show_sound_effects">
           <template #default>
             <n-tabs type="line" animated>
               <n-tab-pane name="000">
@@ -1474,7 +1478,7 @@ function fullScreen() {
       </n-drawer>
       <!-- right drwaer of tag_modify -->
       <n-drawer
-        v-model:show="store_player_tag_modify.player_show_tag_modify"
+        v-model:show="player_show_tag_modify"
         :width="680"
         style="
           border-radius: 12px 0 0 12px;

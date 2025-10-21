@@ -61,11 +61,9 @@ export const store_general_fetch_media_cue_list = reactive({
             this.setMediumImageUrl(row)
             pageMediaCueStore.media_Files_temporary.push(row)
           })
-          pageMediaCueStore.media_Files_temporary.forEach(
-            (item: any, index: number) => {
-              item.absoluteIndex = index + 1
-            }
-          )
+          pageMediaCueStore.media_Files_temporary.forEach((item: any, index: number) => {
+            item.absoluteIndex = index + 1
+          })
         } else {
           // other
         }
@@ -111,11 +109,9 @@ export const store_general_fetch_media_cue_list = reactive({
             this.setMediumImageUrl(row)
             pageMediaCueStore.media_Files_temporary.push(row)
           })
-          pageMediaCueStore.media_Files_temporary.forEach(
-            (item: any, index: number) => {
-              item.absoluteIndex = index + 1
-            }
-          )
+          pageMediaCueStore.media_Files_temporary.forEach((item: any, index: number) => {
+            item.absoluteIndex = index + 1
+          })
         } else {
           // other
         }
@@ -291,9 +287,7 @@ export const store_general_fetch_media_cue_list = reactive({
     const pageMediaCueStore = usePageMediaCueStore()
     try {
       const _search =
-        (pageMediaCueStore.page_songlists_keywordFilter || '').match(
-          /%([^%]+)%/
-        )?.[1] || ''
+        (pageMediaCueStore.page_songlists_keywordFilter || '').match(/%([^%]+)%/)?.[1] || ''
       const selected = pageMediaCueStore.page_songlists_selected
 
       let _sort =
@@ -304,10 +298,7 @@ export const store_general_fetch_media_cue_list = reactive({
       let _order =
         pageMediaCueStore.page_songlists_options_Sort_key.length > 0 &&
         pageMediaCueStore.page_songlists_options_Sort_key[0].order !== 'default'
-          ? pageMediaCueStore.page_songlists_options_Sort_key[0].order.replace(
-              'end',
-              ''
-            )
+          ? pageMediaCueStore.page_songlists_options_Sort_key[0].order.replace('end', '')
           : 'ASC'
 
       let _starred = ''

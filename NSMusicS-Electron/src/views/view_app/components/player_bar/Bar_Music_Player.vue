@@ -51,6 +51,9 @@ const playlistStore = usePlaylistStore()
 const playerAudioStore = usePlayerAudioStore()
 const playerSettingStore = usePlayerSettingStore()
 const pageMediaStore = usePageMediaStore()
+const playerSoundEffectsStore = usePagePlayerSoundEffectsStore()
+const playerSoundSpeedStore = usePagePlayerSoundSpeedStore()
+const playerSoundMoreStore = usePagePlayerSoundMoreStore()
 // 使用 storeToRefs 解构出所需的响应式属性
 const {
   player_show,
@@ -876,16 +879,16 @@ const play_skip_cue_order = async (
   let index_num = 0
   const index = playerAudioStore.this_audio_cue_track_current_no + increased
   if (index < 0) {
-    let next_index = 0;
+    let next_index = 0
     for (let i = 0; i < pageMediaCueStore.media_Files_temporary.length; i++) {
       const media_cue = pageMediaCueStore.media_Files_temporary[i]
       if (
-          media_cue != undefined &&
-          media_cue.path === playerAudioStore.this_audio_file_path &&
-          media_cue.cue_tracks != undefined
+        media_cue != undefined &&
+        media_cue.path === playerAudioStore.this_audio_file_path &&
+        media_cue.cue_tracks != undefined
       ) {
         if (index <= media_cue.cue_tracks.length) {
-          next_index = i - 1;
+          next_index = i - 1
           break
         }
       }
@@ -893,7 +896,8 @@ const play_skip_cue_order = async (
     if (next_index >= 0) {
       media_file = pageMediaCueStore.media_Files_temporary[next_index]
     } else {
-      media_file = pageMediaCueStore.media_Files_temporary[pageMediaCueStore.media_Files_temporary.length - 1]
+      media_file =
+        pageMediaCueStore.media_Files_temporary[pageMediaCueStore.media_Files_temporary.length - 1]
     }
     index_num = 1
     ///
@@ -902,8 +906,8 @@ const play_skip_cue_order = async (
       store_server_user_model.random_play_model = false
     }
     await playerSettingStore.update_current_media_info(
-        media_file,
-        media_file.absoluteIndex + '-' + media_file.cue_tracks[index_num - 1].TRACK
+      media_file,
+      media_file.absoluteIndex + '-' + media_file.cue_tracks[index_num - 1].TRACK
     )
     playlistStore.media_page_handleItemDbClick = true
     playerAppearanceStore.player_mode_of_lock_playlist = false
@@ -975,17 +979,20 @@ const play_skip_cue_order = async (
       playerAudioStore.this_audio_cue_tracks = []
       playerSettingStore.player_model_cue = false
     } else {
-      if (media_file.cue_tracks[index_num - 1] === undefined || media_file.cue_tracks[index_num - 1].INDEXES === undefined) {
-        let next_index = 0;
+      if (
+        media_file.cue_tracks[index_num - 1] === undefined ||
+        media_file.cue_tracks[index_num - 1].INDEXES === undefined
+      ) {
+        let next_index = 0
         for (let i = 0; i < pageMediaCueStore.media_Files_temporary.length; i++) {
           const media_cue = pageMediaCueStore.media_Files_temporary[i]
           if (
-              media_cue != undefined &&
-              media_cue.path === playerAudioStore.this_audio_file_path &&
-              media_cue.cue_tracks != undefined
+            media_cue != undefined &&
+            media_cue.path === playerAudioStore.this_audio_file_path &&
+            media_cue.cue_tracks != undefined
           ) {
             if (index <= media_cue.cue_tracks.length) {
-              next_index = i + 1;
+              next_index = i + 1
               break
             }
           }
@@ -1002,8 +1009,8 @@ const play_skip_cue_order = async (
           store_server_user_model.random_play_model = false
         }
         await playerSettingStore.update_current_media_info(
-            media_file,
-            media_file.absoluteIndex + '-' + media_file.cue_tracks[index_num - 1].TRACK
+          media_file,
+          media_file.absoluteIndex + '-' + media_file.cue_tracks[index_num - 1].TRACK
         )
         playlistStore.media_page_handleItemDbClick = true
         playerAppearanceStore.player_mode_of_lock_playlist = false
@@ -1158,18 +1165,18 @@ const Set_Playlist_Show = () => {
 }
 ////// open sound effects
 const Set_Player_Show_Sound_effects = () => {
-  store_player_sound_effects.player_show_sound_effects =
-    !store_player_sound_effects.player_show_sound_effects
+  playerSoundEffectsStore.player_show_sound_effects =
+    !playerSoundEffectsStore.player_show_sound_effects
 }
 ////// open sound speedPlayer_Show_Sound_more
 const Set_Player_Show_Sound_speed = () => {
-  store_player_sound_speed.player_show_sound_speed =
-    store_player_sound_speed.player_show_sound_speed === false
+  playerSoundSpeedStore.player_show_sound_speed =
+    playerSoundSpeedStore.player_show_sound_speed === false
 }
 ////// open sound more info
 const Set_Player_Show_Sound_more = () => {
-  store_player_sound_more.player_show_sound_more =
-    store_player_sound_more.player_show_sound_more === false
+  playerSoundMoreStore.player_show_sound_more =
+    playerSoundMoreStore.player_show_sound_more === false
 }
 
 ////// auto collapse player_configs bar
@@ -1184,15 +1191,16 @@ const handleMouseMove = () => {
 }
 
 ////// changed_data write to sqlite
-import { store_player_sound_effects } from '@/views/view_app/page/page_player/store/store_player_sound_effects'
-import { store_player_sound_speed } from '@/views/view_app/page/page_player/store/store_player_sound_speed'
-import { store_player_sound_more } from '@/views/view_app/page/page_player/store/store_player_sound_more'
+import { usePagePlayerSoundEffectsStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerSoundEffectsStore'
+import { usePagePlayerSoundSpeedStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerSoundSpeedStore'
+import { usePagePlayerSoundMoreStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerSoundMoreStore'
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
 
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { Audio_howler } from '@/data/data_models/app_models/song_Audio_Out/Audio_howler'
 import { Audio_node_mpv } from '@/data/data_models/app_models/song_Audio_Out/Audio_node_mpv'
-import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
+import { usePagePlayerTagModifyStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerTagModifyStore'
+const playerTagModifyStore = usePagePlayerTagModifyStore()
 import { Get_LocalSqlite_AnnotationInfo } from '@/data/data_repository/app_repository/LocalSqlite_Get_AnnotationInfo'
 import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
@@ -1200,12 +1208,8 @@ import { store_general_fetch_media_list } from '@/data/data_stores/server_api_st
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { usePageMediaCueStore } from '@/data/data_status/app_status/page_status/media_cue_store/usePageMediaCueStore'
-import {
-  store_general_fetch_media_cue_list
-} from "@/data/data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list";
-import {
-  store_general_fetch_player_list
-} from "@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list";
+import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list'
+import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 
 const handleItemClick_Favorite = (id, favorite) => {
   if (id != null && id.length > 0 && id != 'undefined') {
@@ -2051,17 +2055,17 @@ watch(
                   text
                   @click="
                     () => {
-                      store_player_tag_modify.player_current_media_path =
+                      playerTagModifyStore.player_current_media_path =
                         playerAudioStore.this_audio_file_path
-                      store_player_tag_modify.player_current_media_id =
+                      playerTagModifyStore.player_current_media_id =
                         playerAudioStore.this_audio_song_id
-                      store_player_tag_modify.player_current_album_id =
+                      playerTagModifyStore.player_current_album_id =
                         playerAudioStore.this_audio_album_id
-                      store_player_tag_modify.player_current_artist_id =
+                      playerTagModifyStore.player_current_artist_id =
                         playerAudioStore.this_audio_artist_id
                       //
-                      store_player_tag_modify.player_show_tag_modify =
-                        !store_player_tag_modify.player_show_tag_modify
+                      playerTagModifyStore.player_show_tag_modify =
+                        !playerTagModifyStore.player_show_tag_modify
                     }
                   "
                 >

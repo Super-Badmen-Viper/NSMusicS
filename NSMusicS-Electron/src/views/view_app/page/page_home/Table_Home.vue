@@ -51,16 +51,16 @@ const themeVars = useThemeVars()
 const pageMediaStore = usePageMediaStore()
 const pageHomeStore = usePageHomeStore()
 const pageRecommendStore = usePageRecommendStore()
-const { 
-  home_Files_temporary_maximum_playback, 
-  home_Files_temporary_random_search, 
-  home_Files_temporary_recently_added, 
+const {
+  home_Files_temporary_maximum_playback,
+  home_Files_temporary_random_search,
+  home_Files_temporary_recently_added,
   home_Files_temporary_recently_played,
   home_Files_temporary_type_select,
   home_selected_top_album_subscript,
   home_selected_top_album,
   home_selected_top_album_medium_image_url,
-  list_data_StartUpdate
+  list_data_StartUpdate,
 } = storeToRefs(pageHomeStore)
 const { recommend_MediaFiles_temporary } = storeToRefs(pageRecommendStore)
 
@@ -434,20 +434,20 @@ const menu_item_add_to_playlist_end = () => add_to_playlist(false)
 const menu_item_add_to_playlist_next = () => add_to_playlist(true)
 
 const stopWatchCollapsed = watch(
-    () => store_system_configs_info.app_view_left_menu_collapsed,
-    () => updateGridItems()
-  )
+  () => store_system_configs_info.app_view_left_menu_collapsed,
+  () => updateGridItems()
+)
 
-  const stopWatchWidth = watch(
-    () => store_system_configs_info.window_innerWidth,
-    () => {
-      bool_watch = false
-      updateGridItems()
-      if (bool_watch) {
-        startTimer()
-      }
+const stopWatchWidth = watch(
+  () => store_system_configs_info.window_innerWidth,
+  () => {
+    bool_watch = false
+    updateGridItems()
+    if (bool_watch) {
+      startTimer()
     }
-  )
+  }
+)
 
 const stopWatchSubscript = watch(
   () => pageHomeStore.home_selected_top_album_subscript,
@@ -459,18 +459,18 @@ const stopWatchSubscript = watch(
 )
 
 onMounted(() => {
-    startTimer()
-    updateGridItems()
-    if (store_server_user_model.model_server_type_of_web) {
-      if (store_server_users.server_select_kind === 'navidrome') {
-        pageHomeStore.home_Files_temporary_type_select = 'album'
-      } else if (store_server_users.server_select_kind != 'ninesong') {
-        pageHomeStore.home_Files_temporary_type_select = 'media'
-      }
-    } else {
+  startTimer()
+  updateGridItems()
+  if (store_server_user_model.model_server_type_of_web) {
+    if (store_server_users.server_select_kind === 'navidrome') {
       pageHomeStore.home_Files_temporary_type_select = 'album'
+    } else if (store_server_users.server_select_kind != 'ninesong') {
+      pageHomeStore.home_Files_temporary_type_select = 'media'
     }
-  })
+  } else {
+    pageHomeStore.home_Files_temporary_type_select = 'album'
+  }
+})
 
 onBeforeUnmount(() => {
   stopWatchCollapsed()
@@ -536,11 +536,11 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
       />
       <div
         v-if="
-        !(
-          store_server_user_model.model_server_type_of_web &&
-          store_server_users.server_select_kind === 'ninesong'
-        )
-      "
+          !(
+            store_server_user_model.model_server_type_of_web &&
+            store_server_users.server_select_kind === 'ninesong'
+          )
+        "
         style="font-size: 15px; font-weight: bold"
       >
         {{
@@ -591,12 +591,12 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
               <n-button
                 quaternary
                 @click="
-              () => {
-                store_general_fetch_home_list.fetchData_Home_of_maximum_playback()
-                dynamicScroller_maximum_playback.$el.scrollLeft = 0
+                  () => {
+                    store_general_fetch_home_list.fetchData_Home_of_maximum_playback()
+                    dynamicScroller_maximum_playback.$el.scrollLeft = 0
                     offset_maximum_playback = 0
-              }
-            "
+                  }
+                "
               >
                 <template #icon>
                   <n-icon :size="20"><ArrowReset24Filled /></n-icon>

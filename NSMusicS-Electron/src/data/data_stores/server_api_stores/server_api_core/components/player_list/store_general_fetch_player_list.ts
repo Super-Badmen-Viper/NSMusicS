@@ -31,11 +31,12 @@ export const store_general_fetch_player_list = reactive({
         pageMediaStore.media_Files_temporary.map((item: any) => item.id)
       store_system_configs_save.save_system_playlist_item_id_config()
     } else {
-      playlistStore.playlist_MediaFiles_temporary =
-        pageMediaCueStore.media_Files_temporary.map((row: any) => {
+      playlistStore.playlist_MediaFiles_temporary = pageMediaCueStore.media_Files_temporary.map(
+        (row: any) => {
           row.play_id = row.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
           return row
-        })
+        }
+      )
       const media_file = playlistStore.playlist_MediaFiles_temporary.find(
         (row: any) => row.id === playerAudioStore.this_audio_song_id
       )

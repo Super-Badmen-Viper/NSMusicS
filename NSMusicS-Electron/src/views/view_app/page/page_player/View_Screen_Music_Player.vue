@@ -43,7 +43,7 @@ const computed_i18n_Label_ViewSetConfig_Cover_6 = computed(() =>
 )
 
 // audio_class & player_bar & player_view
-import { store_player_view } from '@/views/view_app/page/page_player/store/store_player_view'
+import { usePagePlayerViewStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerViewStore'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
@@ -54,6 +54,7 @@ const playerSettingStore = usePlayerSettingStore()
 const playerAppearanceStore = usePlayerAppearanceStore()
 const playlistStore = usePlaylistStore()
 const playerAudioStore = usePlayerAudioStore()
+const playerViewStore = usePagePlayerViewStore()
 // 使用 storeToRefs 解构出所需的响应式属性
 const {
   player_show,
@@ -166,9 +167,9 @@ function begin_lyrics_animation() {
             if (currentTime <= this_audio_lyrics_info_line_time.value[0]) {
               if (
                 !lyrics_list_whell.value &&
-                (isFirstRun || store_player_view.currentScrollIndex !== 0)
+                (isFirstRun || playerViewStore.currentScrollIndex !== 0)
               ) {
-                store_player_view.currentScrollIndex = 0
+                playerViewStore.currentScrollIndex = 0
                 scrollToItem(this_audio_lyrics_info_line_num.value)
               }
               break
@@ -176,18 +177,18 @@ function begin_lyrics_animation() {
               if (i === playerAudioStore.this_audio_lyrics_info_line_time.length - 1) {
                 if (
                   !lyrics_list_whell.value &&
-                  (isFirstRun || store_player_view.currentScrollIndex !== i)
+                  (isFirstRun || playerViewStore.currentScrollIndex !== i)
                 ) {
-                  store_player_view.currentScrollIndex = i
+                  playerViewStore.currentScrollIndex = i
                   scrollToItem(i + this_audio_lyrics_info_line_num.value)
                 }
                 break
               } else if (currentTime < this_audio_lyrics_info_line_time.value[i + 1]) {
                 if (
                   !lyrics_list_whell.value &&
-                  (isFirstRun || store_player_view.currentScrollIndex !== i)
+                  (isFirstRun || playerViewStore.currentScrollIndex !== i)
                 ) {
-                  store_player_view.currentScrollIndex = i
+                  playerViewStore.currentScrollIndex = i
                   scrollToItem(i + this_audio_lyrics_info_line_num.value)
                 }
                 break
@@ -206,8 +207,7 @@ function begin_lyrics_animation() {
             const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info')
             const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active')
             let color_hidden = player_lyric_color.value.slice(0, -2)
-            const index =
-              store_player_view.currentScrollIndex + this_audio_lyrics_info_line_num.value
+            const index = playerViewStore.currentScrollIndex + this_audio_lyrics_info_line_num.value
             scrollToItem(index)
             for (let i = index - 16; i <= index + 16; i++) {
               const colorValue = Math.max(
@@ -263,7 +263,7 @@ const handleItemDbClick = async (index: any) => {
       }
     }
   }
-  store_player_view.currentScrollIndex = index
+  playerViewStore.currentScrollIndex = index
 
   handleLeave_Refresh_Lyric_Color()
 }
@@ -299,7 +299,7 @@ const scrollToItem = (index: number) => {
       itemElements[index].style.transformOrigin = 'center'
       itemElements[index].style.width = 'calc(40vw)'
     }
-    if (store_player_view.currentScrollIndex === 0)
+    if (playerViewStore.currentScrollIndex === 0)
       itemElements[index].scrollIntoView({ block: 'center', behavior: 'instant' })
     else itemElements[index].scrollIntoView({ block: 'center', behavior: 'smooth' })
     // 设置前后16列的颜色
@@ -682,7 +682,7 @@ const player_theme_set_theme = (index: number) => {
     player_collapsed_skin.value = player_theme_0_bind_style.value.normalStyle.player_collapsed_skin
 
     const index_lyric =
-      store_player_view.currentScrollIndex + playerAudioStore.this_audio_lyrics_info_line_num
+      playerViewStore.currentScrollIndex + playerAudioStore.this_audio_lyrics_info_line_num
     const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info')
     if (!player_collapsed_album.value) {
       itemElements[index_lyric].style.transformOrigin = 'left center'
@@ -1093,7 +1093,7 @@ onBeforeUnmount(() => {
                         () => {
                           playerSettingStore.player_slider_click = true
                           const index =
-                            store_player_view.currentScrollIndex +
+                            playerViewStore.currentScrollIndex +
                             playerAudioStore.this_audio_lyrics_info_line_num
                           scrollToItem(index - 3)
                           scrollToItem(index)
@@ -1804,7 +1804,7 @@ onBeforeUnmount(() => {
                     @mouseleave="
                       () => {
                         handleLeave_Refresh_Lyric_Color()
-                        store_player_view.currentScrollIndex = 0
+                        playerViewStore.currentScrollIndex = 0
                         begin_lyrics_animation()
                       }
                     "

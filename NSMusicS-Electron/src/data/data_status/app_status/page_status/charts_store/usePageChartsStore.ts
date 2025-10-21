@@ -39,7 +39,7 @@ export const usePageChartsStore = defineStore('pageCharts', () => {
           .sort((a, b) => b.play_count - a.play_count) // 降序排序
           .slice(0, maxItems)
           .reverse()
-        
+
         // 更新charts_data_temporary中的items
         if (charts_data_temporary.value[targetIndex]) {
           charts_data_temporary.value[targetIndex].items = sortedResult

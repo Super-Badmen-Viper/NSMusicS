@@ -4,9 +4,9 @@ import { store_system_configs_save } from '@/data/data_stores/local_system_store
 import { Audio_node_mpv } from '@/data/data_models/app_models/song_Audio_Out/Audio_node_mpv'
 import { Audio_howler } from '@/data/data_models/app_models/song_Audio_Out/Audio_howler'
 import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
-import { store_player_view } from '@/views/view_app/page/page_player/store/store_player_view'
+import { usePagePlayerViewStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerViewStore'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
-import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
+import { usePagePlayerTagModifyStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerTagModifyStore'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import error_album from '@/assets/img/error_album.jpg'
 import { Audio_ApiService_of_Je } from '@/data/data_configs/jellyfin_api/services_web/Audio/index_service'
@@ -15,6 +15,7 @@ import { Retrieval_ApiService_of_NineSong } from '@/data/data_configs/ninesong_a
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 
 export const usePlayerSettingStore = defineStore('playerSetting', () => {
+  const playerTagModifyStore = usePagePlayerTagModifyStore()
   // Player instance and state
   const player = ref(new Audio_howler())
   const player_state_play_click = ref(false)
@@ -177,7 +178,8 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
     player_slider_click.value = true
     player_no_progress_jump.value = false
     player_slider_currentTime_added_value.value = 0
-    store_player_view.currentScrollIndex = 0
+    const playerViewStore = usePagePlayerViewStore()
+    playerViewStore.currentScrollIndex.value = 0
 
     // 注意，此时currentTime将从0开始，需要计算附加值
     if (silder_path) {
@@ -261,9 +263,9 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
     playerAudioStore.this_audio_album_id = media_file.album_id ?? ''
     playerAudioStore.this_audio_Index_of_play_list = index_num != undefined ? index_num : 0
     //
-    store_player_tag_modify.player_current_media_starred = media_file.favorite ?? false
-    store_player_tag_modify.player_current_media_playCount = media_file.play_count ?? 0
-    store_player_tag_modify.player_current_media_playDate = media_file.play_date ?? ''
+    playerTagModifyStore.player_current_media_starred = media_file.favorite ?? false
+    playerTagModifyStore.player_current_media_playCount = media_file.play_count ?? 0
+    playerTagModifyStore.player_current_media_playDate = media_file.play_date ?? ''
     ///
     await update_current_lyrics(media_file)
   }

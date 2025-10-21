@@ -196,11 +196,14 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     const type = this.pageHomeStore.home_Files_temporary_type_select
 
     type DataStrategy = {
-      fetch: () => Promise<any[]>,
+      fetch: () => Promise<any[]>
       mapper: (item: any, url: string, index?: number) => any
     }
     // 获取对应策略
-    const strategy = this.STRATEGY_CONFIG[strategyKey][type as keyof typeof this.STRATEGY_CONFIG[keyof typeof this.STRATEGY_CONFIG]]
+    const strategy =
+      this.STRATEGY_CONFIG[strategyKey][
+        type as keyof (typeof this.STRATEGY_CONFIG)[keyof typeof this.STRATEGY_CONFIG]
+      ]
     if (!strategy) return
 
     try {

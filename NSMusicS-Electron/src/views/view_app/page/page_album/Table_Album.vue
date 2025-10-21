@@ -45,7 +45,7 @@ import { store_general_fetch_media_list } from '@/data/data_stores/server_api_st
 ////// right menu
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
-import { store_player_tag_modify } from '@/views/view_app/page/page_player/store/store_player_tag_modify'
+import { usePagePlayerTagModifyStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerTagModifyStore'
 
 // 在顶层获取 Store 实例
 const playlistStore = usePlaylistStore()
@@ -54,6 +54,7 @@ const playerAppearanceStore = usePlayerAppearanceStore()
 const playerSettingStore = usePlayerSettingStore()
 const pageAlbumStore = usePageAlbumStore()
 const pageMediaStore = usePageMediaStore()
+const playerTagModifyStore = usePagePlayerTagModifyStore()
 const {
   album_item_count,
   album_starred_count,
@@ -911,13 +912,13 @@ async function menu_item_add_to_playlist_next() {
   }
 }
 function menu_item_edit_selected_media_tags() {
-  store_player_tag_modify.player_show_tag_kind = 'album'
+  playerTagModifyStore.player_show_tag_kind = 'album'
   const item: Album | undefined = pageAlbumStore.album_Files_temporary.find(
     (album: Album) => album.id === playlist_Menu_Item_Id.value
   )
   if (item != undefined && item != 'undefined') {
-    store_player_tag_modify.player_current_album_id = item.id
-    store_player_tag_modify.player_show_tag_modify = true
+    playerTagModifyStore.player_current_album_id = item.id
+    playerTagModifyStore.player_show_tag_modify = true
     contextmenu.value.hide()
   }
 }

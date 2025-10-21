@@ -46,9 +46,7 @@ function getData(
   theme: 'lightTheme' | 'darkTheme' = 'lightTheme'
 ) {
   // 获取选中的维度数据
-  const category = pageChartsStore.charts_data_temporary.find(
-    (d) => d.type === selectedCategory
-  )
+  const category = pageChartsStore.charts_data_temporary.find((d) => d.type === selectedCategory)
   if (!category) return {}
 
   const items = category.items
