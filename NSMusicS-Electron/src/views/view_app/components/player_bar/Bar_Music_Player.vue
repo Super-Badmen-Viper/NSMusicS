@@ -797,7 +797,7 @@ async function begin_random_play_model() {
 ////// player_configs player_button middle area
 const play_skip_back_click = async () => {
   if (playerSettingStore.player_model_cue) {
-    if (play_skip_cue_order(-1, false, undefined, undefined)) {
+    if (await play_skip_cue_order(-1, false, undefined, undefined)) {
       return
     }
   }
@@ -818,7 +818,7 @@ const play_skip_back_click = async () => {
 }
 const play_skip_forward_click = async () => {
   if (playerSettingStore.player_model_cue) {
-    if (play_skip_cue_order(1, false, undefined, undefined)) {
+    if (await play_skip_cue_order(1, false, undefined, undefined)) {
       return
     }
   }
@@ -865,7 +865,7 @@ const clearMarks = () => {
   playerSettingStore.marks_slider_singleValue = {}
 }
 let media_cue_temp = undefined
-const play_skip_cue_order = (
+const play_skip_cue_order = async (
   increased: number,
   find_model: boolean,
   currentTime: any,
@@ -876,10 +876,44 @@ const play_skip_cue_order = (
   let index_num = 0
   const index = playerAudioStore.this_audio_cue_track_current_no + increased
   if (index < 0) {
-    playerAudioStore.this_audio_cue_track_current_no = 0
-    playerAudioStore.this_audio_cue_track_current_indexes = []
-    playerAudioStore.this_audio_cue_tracks = []
-    return false
+    let next_index = 0;
+    for (let i = 0; i < pageMediaCueStore.media_Files_temporary.length; i++) {
+      const media_cue = pageMediaCueStore.media_Files_temporary[i]
+      if (
+          media_cue != undefined &&
+          media_cue.path === playerAudioStore.this_audio_file_path &&
+          media_cue.cue_tracks != undefined
+      ) {
+        if (index <= media_cue.cue_tracks.length) {
+          next_index = i - 1;
+          break
+        }
+      }
+    }
+    if (next_index >= 0) {
+      media_file = pageMediaCueStore.media_Files_temporary[next_index]
+    } else {
+      media_file = pageMediaCueStore.media_Files_temporary[pageMediaCueStore.media_Files_temporary.length - 1]
+    }
+    index_num = 1
+    ///
+    if (store_server_user_model.model_server_type_of_web) {
+      store_general_fetch_media_cue_list.fetchData_Media_of_data_synchronization_to_playlist()
+      store_server_user_model.random_play_model = false
+    }
+    await playerSettingStore.update_current_media_info(
+        media_file,
+        media_file.absoluteIndex + '-' + media_file.cue_tracks[index_num - 1].TRACK
+    )
+    playlistStore.media_page_handleItemDbClick = true
+    playerAppearanceStore.player_mode_of_lock_playlist = false
+    playerAudioStore.this_audio_restart_play = true
+    //
+    store_general_fetch_player_list.fetchData_PlayList(true)
+    //
+    playlistStore.reset_carousel()
+
+    return true
   }
   for (let i = 0; i < pageMediaCueStore.media_Files_temporary.length; i++) {
     const media_cue = pageMediaCueStore.media_Files_temporary[i]
@@ -941,6 +975,44 @@ const play_skip_cue_order = (
       playerAudioStore.this_audio_cue_tracks = []
       playerSettingStore.player_model_cue = false
     } else {
+      if (media_file.cue_tracks[index_num - 1] === undefined || media_file.cue_tracks[index_num - 1].INDEXES === undefined) {
+        let next_index = 0;
+        for (let i = 0; i < pageMediaCueStore.media_Files_temporary.length; i++) {
+          const media_cue = pageMediaCueStore.media_Files_temporary[i]
+          if (
+              media_cue != undefined &&
+              media_cue.path === playerAudioStore.this_audio_file_path &&
+              media_cue.cue_tracks != undefined
+          ) {
+            if (index <= media_cue.cue_tracks.length) {
+              next_index = i + 1;
+              break
+            }
+          }
+        }
+        if (next_index < pageMediaCueStore.media_Files_temporary.length) {
+          media_file = pageMediaCueStore.media_Files_temporary[next_index]
+        } else {
+          media_file = pageMediaCueStore.media_Files_temporary[0]
+        }
+        index_num = 1
+        ///
+        if (store_server_user_model.model_server_type_of_web) {
+          store_general_fetch_media_cue_list.fetchData_Media_of_data_synchronization_to_playlist()
+          store_server_user_model.random_play_model = false
+        }
+        await playerSettingStore.update_current_media_info(
+            media_file,
+            media_file.absoluteIndex + '-' + media_file.cue_tracks[index_num - 1].TRACK
+        )
+        playlistStore.media_page_handleItemDbClick = true
+        playerAppearanceStore.player_mode_of_lock_playlist = false
+        playerAudioStore.this_audio_restart_play = true
+        //
+        store_general_fetch_player_list.fetchData_PlayList(true)
+        //
+        playlistStore.reset_carousel()
+      }
       playerAudioStore.this_audio_cue_track_current_no = index_num
       playerAudioStore.this_audio_cue_track_current_indexes =
         media_file.cue_tracks[index_num - 1].INDEXES
@@ -1042,8 +1114,8 @@ const set_slider_singleValue = async () => {
     const calculatedValue =
       ((currentTime + playerSettingStore.player_slider_currentTime_added_value) / duration) * 100
     playerSettingStore.slider_singleValue = Number(calculatedValue.toFixed(2))
-    if (playerSettingStore.player_model_cue) {
-      play_skip_cue_order(0, true, currentTime, duration)
+    if (playerSettingStore.player_model_cue && playerSettingStore.player.isPlaying) {
+      await play_skip_cue_order(0, true, currentTime, duration)
     }
   }
 }
@@ -1128,6 +1200,12 @@ import { store_general_fetch_media_list } from '@/data/data_stores/server_api_st
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { usePageMediaCueStore } from '@/data/data_status/app_status/page_status/media_cue_store/usePageMediaCueStore'
+import {
+  store_general_fetch_media_cue_list
+} from "@/data/data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list";
+import {
+  store_general_fetch_player_list
+} from "@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list";
 
 const handleItemClick_Favorite = (id, favorite) => {
   if (id != null && id.length > 0 && id != 'undefined') {
