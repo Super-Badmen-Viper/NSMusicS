@@ -1,5 +1,6 @@
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
-import { store_view_home_page_info } from '@/views/view_app/page/page_home/store/store_view_home_page_info'
+import { usePageHomeStore } from '@/data/data_status/app_status/page_status/home_store/usePageHomeStore'
+import axios from 'axios'
 import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
@@ -25,6 +26,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
   private pageAlbumStore = usePageAlbumStore()
   private pageArtistStore = usePageArtistStore()
   private pageMediaStore = usePageMediaStore()
+  private pageHomeStore = usePageHomeStore()
 
   public async get_home_list(parentId: string) {
     await this.get_home_list_of_maximum_playback(parentId)
@@ -74,7 +76,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
                   '&api_key=' +
                   store_server_user_model.authorization_of_Je
               : undefined
-          store_view_home_page_info.home_Files_temporary_maximum_playback.push({
+          this.pageHomeStore.home_Files_temporary_maximum_playback.push({
             favorite: album.UserData.IsFavorite,
             rating: 0,
             id: album.Id,
@@ -182,7 +184,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
                   '&api_key=' +
                   store_server_user_model.authorization_of_Je
               : undefined
-          store_view_home_page_info.home_Files_temporary_random_search.push({
+          this.pageHomeStore.home_Files_temporary_random_search.push({
             favorite: album.UserData.IsFavorite,
             rating: 0,
             id: album.Id,
@@ -266,7 +268,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
                   '&api_key=' +
                   store_server_user_model.authorization_of_Je
               : undefined
-          store_view_home_page_info.home_Files_temporary_recently_added.push({
+          this.pageHomeStore.home_Files_temporary_recently_added.push({
             favorite: album.UserData.IsFavorite,
             rating: 0,
             id: album.Id,
@@ -352,7 +354,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite {
                   '&api_key=' +
                   store_server_user_model.authorization_of_Je
               : undefined
-          store_view_home_page_info.home_Files_temporary_recently_played.push({
+          this.pageHomeStore.home_Files_temporary_recently_played.push({
             favorite: album.UserData.IsFavorite,
             rating: 0,
             id: album.Id,

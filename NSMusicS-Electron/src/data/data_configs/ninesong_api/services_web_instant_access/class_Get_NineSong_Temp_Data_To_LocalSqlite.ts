@@ -1,4 +1,4 @@
-import { store_view_home_page_info } from '@/views/view_app/page/page_home/store/store_view_home_page_info'
+import { usePageHomeStore } from '@/data/data_status/app_status/page_status/home_store/usePageHomeStore'
 import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
@@ -44,6 +44,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
   private pageArtistStore = usePageArtistStore()
   private pageMediaStore = usePageMediaStore()
   private pageMediaCueStore = usePageMediaCueStore()
+  private pageHomeStore = usePageHomeStore()
 
   public async get_home_list(url: string) {
     await this.get_home_list_of_maximum_playback(url, false)
@@ -87,7 +88,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       url = url.includes('api') ? url : `${url}/api`
 
       if (!find_model) {
-        const type = store_view_home_page_info.home_Files_temporary_type_select
+        const type = this.pageHomeStore.home_Files_temporary_type_select
         const strategy = this.mappingStrategies[type as keyof typeof this.mappingStrategies]
 
         if (strategy) {
@@ -95,7 +96,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
           return this.processData(
             data,
             (item, index) => strategy.map(item, url, index),
-            store_view_home_page_info.home_Files_temporary_maximum_playback
+            this.pageHomeStore.home_Files_temporary_maximum_playback
           )
         }
         return []
@@ -190,14 +191,14 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     const apiUrl = url.includes('api') ? url : `${url}/api`
 
     // 获取当前选择类型
-    const type = store_view_home_page_info.home_Files_temporary_type_select
+    const type = this.pageHomeStore.home_Files_temporary_type_select
 
     type DataStrategy = {
-      fetch: () => Promise<any[]>
-      mapper: (item: any, url: string, index: number) => any
+      fetch: () => Promise<any[]>,
+      mapper: (item: any, url: string, index?: number) => any
     }
     // 获取对应策略
-    const strategy = this.STRATEGY_CONFIG[strategyKey][type as keyof DataStrategy]
+    const strategy = this.STRATEGY_CONFIG[strategyKey][type as keyof typeof this.STRATEGY_CONFIG[keyof typeof this.STRATEGY_CONFIG]]
     if (!strategy) return
 
     try {
@@ -219,21 +220,21 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
   public async get_home_list_of_random_search(url: string) {
     await this.processHomeList(
       'random_search',
-      store_view_home_page_info.home_Files_temporary_random_search,
+      this.pageHomeStore.home_Files_temporary_random_search,
       url
     )
   }
   public async get_home_list_of_recently_added(url: string) {
     await this.processHomeList(
       'recently_added',
-      store_view_home_page_info.home_Files_temporary_recently_added,
+      this.pageHomeStore.home_Files_temporary_recently_added,
       url
     )
   }
   public async get_home_list_of_recently_played(url: string) {
     await this.processHomeList(
       'recently_played',
-      store_view_home_page_info.home_Files_temporary_recently_played,
+      this.pageHomeStore.home_Files_temporary_recently_played,
       url
     )
   }
