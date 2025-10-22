@@ -493,7 +493,6 @@ const Type_Filter_Show = ref(false)
 ////// dynamicScroller of artistlist_view
 const dynamicScroller = ref(null as any)
 const onResize = () => {
-  show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150
   console.log('resize')
 }
 const updateParts = { viewStartIdx: 0, viewEndIdx: 0, visibleStartIdx: 0, visibleEndIdx: 0 } // 输出渲染范围updateParts
@@ -509,10 +508,7 @@ const onUpdate = (
   updateParts.visibleEndIdx = visibleEndIndex
 
   store_router_history_data_of_media.router_history_model_of_Media_scroller_value = viewEndIndex
-
-  show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150
 }
-const show_top_selectedlist = ref(false)
 const stopWatching_router_history_model_of_Media_scroll = watch(
   () => store_router_history_data_of_media.router_history_model_of_Media_scroll,
   (newValue) => {
@@ -1425,7 +1421,7 @@ function menu_item_edit_selected_media_tags() {
 //////
 const isScrolling = ref(false)
 const onScrollStart = () => {
-  show_top_selectedlist.value = false
+  
 }
 const onScrollEnd = async () => {
   if (isScrolling.value) return
@@ -1436,7 +1432,7 @@ const onScrollEnd = async () => {
   isScrolling.value = false
 }
 const onScroll = async () => {
-  show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150
+  
 }
 
 /////
@@ -2237,7 +2233,7 @@ onBeforeUnmount(() => {
           </n-tooltip>
         </n-space>
         <n-space align="center">
-          <n-space v-if="show_top_selectedlist" style="margin-left: 7px; margin-bottom: 14px">
+          <n-space style="margin-left: 7px;">
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
                 <n-select
@@ -2294,7 +2290,7 @@ onBeforeUnmount(() => {
         ref="dynamicScroller"
         :style="{
           width: 'calc(100vw - ' + (collapsed_width - 35) + 'px)',
-          height: show_top_selectedlist ? 'calc(100vh - 236px)' : 'calc(100vh - 194px)',
+          height: 'calc(100vh - 136px)',
         }"
         :items="media_Files_temporary"
         :minItemSize="50"
@@ -2307,157 +2303,7 @@ onBeforeUnmount(() => {
         @scroll="onScroll"
       >
         <template #before>
-          <div class="notice">
-            <div
-              :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)' }"
-              style="
-                position: absolute;
-                z-index: 0;
-                height: 283px;
-                border-radius: 10px;
-                overflow: hidden;
-                background-size: cover;
-                background-position: center;
-                filter: blur(0px);
-                background-color: transparent;
-              "
-            >
-              <img
-                :style="{
-                  width: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
-                  height: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
-                  minHeight: '280px',
-                  WebkitMaskImage:
-                    'linear-gradient(to right, rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, 1) 100%)',
-                }"
-                style="
-                  margin-left: 200px;
-                  transform: translateY(-25%);
-                  object-fit: cover;
-                  object-position: center;
-                "
-                :src="getAssetImage(page_top_album_image_url)"
-                alt=""
-              />
-            </div>
-            <n-page-header
-              style="
-                position: relative;
-                z-index: 1;
-                width: calc(100vw - 220px);
-                height: 300px;
-                border-radius: 10px;
-                margin-left: 12px;
-              "
-            >
-              <template #title>
-                <n-space vertical align="start" style="height: 280px; margin-left: 12px">
-                  <n-space style="margin-top: 26px; margin-left: 11px">
-                    <div style="font-size: 32px; font-weight: 600">
-                      {{ $t('entity.track_other') }}
-                    </div>
-                    <div
-                      v-if="playerAudioStore.this_audio_song_name.length > 0"
-                      style="font-size: 32px; font-weight: 600; margin-top: -2px"
-                    >
-                      {{ ' : ' }}
-                    </div>
-                    <div
-                      :style="{
-                        maxWidth: 'calc(100vw - ' + (collapsed_width + 540) + 'px)',
-                      }"
-                      style="
-                        text-align: left;
-                        cursor: pointer;
-                        font-size: 32px;
-                        font-weight: 600;
-                        display: -webkit-box;
-                        -webkit-box-orient: vertical;
-                        -webkit-line-clamp: 1;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                      "
-                    >
-                      {{ this_audio_song_name }}
-                    </div>
-                  </n-space>
-                  <n-space align="center" style="margin-top: 2px; margin-left: 11px">
-                    <div style="color: #767c82; font-size: 15px; font-weight: 600">
-                      {{ $t('GuideProviderSelectListings') + ' >' }}
-                    </div>
-                    <n-tooltip trigger="hover" placement="top">
-                      <template #trigger>
-                        <n-select
-                          :value="page_songlists_selected"
-                          :options="page_songlists_options"
-                          style="width: 166px"
-                          @update:value="page_songlists_handleselected_updatevalue"
-                        />
-                      </template>
-                      {{ $t('Select') + $t('LabelPlaylist') }}
-                    </n-tooltip>
-                    <n-tooltip trigger="hover" placement="top">
-                      <template #trigger>
-                        <n-button
-                          secondary
-                          strong
-                          @click="Type_Update_Playlist = !Type_Update_Playlist"
-                        >
-                          <template #icon>
-                            <n-icon>
-                              <Menu />
-                            </n-icon>
-                          </template>
-                        </n-button>
-                      </template>
-                      {{ $t('HeaderAdmin') + $t('LabelPlaylist') }}
-                    </n-tooltip>
-                    <n-tooltip trigger="hover" placement="top">
-                      <template #trigger>
-                        <n-button secondary strong @click="Type_Add_Playlist = !Type_Add_Playlist">
-                          <template #icon>
-                            <n-icon>
-                              <Add />
-                            </n-icon>
-                          </template>
-                        </n-button>
-                      </template>
-                      {{ $t('Add') + $t('LabelPlaylist') }}
-                    </n-tooltip>
-                  </n-space>
-                  <n-space vertical style="margin-top: 10px; margin-left: 7px">
-                    <n-grid
-                      :cols="2"
-                      :x-gap="0"
-                      :y-gap="10"
-                      layout-shift-disabled
-                      style="margin-left: 4px; width: 386px"
-                    >
-                      <n-gi v-for="songlist in page_songlists_statistic" :key="songlist.id">
-                        <n-statistic :label="songlist.label" :value="songlist.song_count" />
-                      </n-gi>
-                    </n-grid>
-                  </n-space>
-                </n-space>
-              </template>
-              <template #header> </template>
-              <template #avatar>
-                <img
-                  style="
-                    width: 280px;
-                    height: 280px;
-                    border-radius: 12px;
-                    object-fit: cover;
-                    margin-left: -3px;
-                  "
-                  :src="getAssetImage(page_top_album_image_url)"
-                  alt=""
-                />
-              </template>
-              <template #extra> </template>
-              <template #footer> </template>
-            </n-page-header>
-          </div>
+          
         </template>
         <template #after> </template>
         <template #default="{ item, index, active }">
@@ -3107,6 +2953,9 @@ onBeforeUnmount(() => {
 .message-media {
   width: calc(100vw - 230px);
   height: 77px;
+}
+.message-media:nth-child(1) {
+  margin-top: 16px;
 }
 .media_info {
   width: calc(100vw - 230px);
