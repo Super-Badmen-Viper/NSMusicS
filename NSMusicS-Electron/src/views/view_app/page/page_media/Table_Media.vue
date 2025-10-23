@@ -2949,6 +2949,7 @@ onBeforeUnmount(() => {
 }
 .table-media {
   width: calc(100vw - 200px);
+  scroll-behavior: smooth;
 }
 .message-media {
   width: calc(100vw - 230px);
@@ -2962,7 +2963,7 @@ onBeforeUnmount(() => {
   height: 70px;
   display: flex;
   align-items: center;
-  transition: all 0.2s ease-in-out; /* Smooth transition for all properties */
+  transition: all 0.3s ease;
   border-radius: 8px; /* iOS-style rounded corners */
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.05); /* Subtle initial shadow */
 }
