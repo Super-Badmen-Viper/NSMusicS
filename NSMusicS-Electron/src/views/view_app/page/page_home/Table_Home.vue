@@ -42,7 +42,7 @@ import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_sta
 import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list'
 
 import { useI18n } from 'vue-i18n'
-import { store_view_recommend_page_info } from '@/views/view_app/page/page_recommend/store/store_view_recommend_page_info'
+import { usePageRecommendStore } from '@/data/data_status/app_status/page_status/recommend_store/usePageRecommendStore'
 
 const { t } = useI18n({ inheritLocale: true })
 const message = useMessage()
@@ -50,17 +50,19 @@ const themeVars = useThemeVars()
 
 const pageMediaStore = usePageMediaStore()
 const pageHomeStore = usePageHomeStore()
-const { 
-  home_Files_temporary_maximum_playback, 
-  home_Files_temporary_random_search, 
-  home_Files_temporary_recently_added, 
+const pageRecommendStore = usePageRecommendStore()
+const {
+  home_Files_temporary_maximum_playback,
+  home_Files_temporary_random_search,
+  home_Files_temporary_recently_added,
   home_Files_temporary_recently_played,
   home_Files_temporary_type_select,
   home_selected_top_album_subscript,
   home_selected_top_album,
   home_selected_top_album_medium_image_url,
-  list_data_StartUpdate
+  list_data_StartUpdate,
 } = storeToRefs(pageHomeStore)
+const { recommend_MediaFiles_temporary } = storeToRefs(pageRecommendStore)
 
 const item_album = ref(160)
 const item_album_image = ref(item_album.value - 20)
@@ -163,7 +165,7 @@ const scrollTo_maximum_playback = (value: number) => {
     value,
     dynamicScroller_maximum_playback,
     offset_maximum_playback,
-    home_Files_temporary_maximum_playback.value,
+    pageHomeStore.home_Files_temporary_maximum_playback,
     224
   )
 }
@@ -172,7 +174,7 @@ const scrollTo_random_search = (value: number) => {
     value,
     dynamicScroller_random_search,
     offset_random_search,
-    home_Files_temporary_random_search.value,
+    pageHomeStore.home_Files_temporary_random_search,
     224
   )
 }
@@ -181,7 +183,7 @@ const scrollTo_recently_added = (value: number) => {
     value,
     dynamicScroller_recently_added,
     offset_recently_added,
-    home_Files_temporary_recently_added.value,
+    pageHomeStore.home_Files_temporary_recently_added,
     224
   )
 }
@@ -190,7 +192,7 @@ const scrollTo_recently_played = (value: number) => {
     value,
     dynamicScroller_recently_played,
     offset_recently_played,
-    home_Files_temporary_recently_played.value,
+    pageHomeStore.home_Files_temporary_recently_played,
     224
   )
 }
@@ -236,7 +238,7 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
     store_server_user_model.model_server_type_of_web &&
     store_server_users.server_select_kind === 'ninesong'
   ) {
-    if (home_Files_temporary_type_select.value === 'artist') {
+    if (pageHomeStore.home_Files_temporary_type_select === 'artist') {
       if (store_server_user_model.model_server_type_of_web) {
         store_general_fetch_media_list.set_artist_id(item.id)
         pageMediaStore.page_songlists_selected = 'song_list_all'
@@ -246,7 +248,7 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
       }
       console.log('play_this_artist_song_list：' + item.id)
       await store_general_fetch_artist_list.fetchData_This_Artist_MediaList(item.id)
-    } else if (home_Files_temporary_type_select.value === 'media') {
+    } else if (pageHomeStore.home_Files_temporary_type_select === 'media') {
       if (store_server_user_model.model_server_type_of_web) {
         store_general_fetch_media_list.fetchData_Media_of_data_synchronization_to_playlist()
         store_server_user_model.random_play_model = false
@@ -264,7 +266,7 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
         play_id: item.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
       })
       playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.push(item.id)
-    } else if (home_Files_temporary_type_select.value === 'media_cue') {
+    } else if (pageHomeStore.home_Files_temporary_type_select === 'media_cue') {
       if (store_server_user_model.model_server_type_of_web) {
         store_general_fetch_media_cue_list.fetchData_Media_of_data_synchronization_to_playlist()
         store_server_user_model.random_play_model = false
@@ -276,7 +278,7 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
       //
       store_general_fetch_player_list.fetchData_PlayList(true)
     }
-    if (home_Files_temporary_type_select.value != 'album') {
+    if (pageHomeStore.home_Files_temporary_type_select != 'album') {
       playlistStore.reset_carousel()
       return
     }
@@ -294,15 +296,15 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
 }
 
 const Play_Next_album_MediaList_click = (value: number) => {
-  let current = home_selected_top_album_subscript.value
+  let current = pageHomeStore.home_selected_top_album_subscript
   if (value === 1) {
     current = current >= 17 ? 0 : current + 1
   } else {
     current = current === 0 ? 0 : current - 1
   }
-  home_selected_top_album_subscript.value = current
+  pageHomeStore.home_selected_top_album_subscript = current
   if (current === 0) {
-    list_data_StartUpdate.value = true
+    pageHomeStore.list_data_StartUpdate = true
   }
 }
 
@@ -355,17 +357,17 @@ async function add_to_playlist(next: boolean) {
   if (
     store_server_user_model.model_server_type_of_web &&
     store_server_users.server_select_kind === 'ninesong' &&
-    home_Files_temporary_type_select.value != 'album'
+    pageHomeStore.home_Files_temporary_type_select != 'album'
   ) {
-    if (home_Files_temporary_type_select.value === 'artist') {
+    if (pageHomeStore.home_Files_temporary_type_select === 'artist') {
       await store_general_fetch_media_list.fetchData_Media_Find_This_Artist(itemId)
       matchingItems = pageMediaStore.media_Files_temporary.filter(
         (item: Media_File) => item.artist_id === itemId
       )
-    } else if (home_Files_temporary_type_select.value === 'media') {
+    } else if (pageHomeStore.home_Files_temporary_type_select === 'media') {
       store_general_fetch_media_list._media_id = itemId
       await store_general_fetch_media_list.fetchData_Media()
-      matchingItems = store_view_recommend_page_info.recommend_MediaFiles_temporary.filter(
+      matchingItems = recommend_MediaFiles_temporary.value.filter(
         (item: Media_File) => item.id === itemId
       )
     }
@@ -409,10 +411,10 @@ async function add_to_playlist(next: boolean) {
     if (index !== -1) {
       playlistStore.playlist_MediaFiles_temporary.splice(index + 1, 0, ...newItems)
       playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.splice(
-      index + 1,
-      0,
-      ...newItems.map((i: any) => i.id)
-    )
+        index + 1,
+        0,
+        ...newItems.map((i) => i.id)
+      )
     } else {
       console.error('Current audio song not found in playlist')
     }
@@ -425,52 +427,50 @@ async function add_to_playlist(next: boolean) {
     item.absoluteIndex = index
   })
   store_system_configs_save.save_system_playlist_item_id_config()
-  if (contextmenu.value) {
-    contextmenu.value.hide()
-  }
+  contextmenu.value.hide()
 }
 
 const menu_item_add_to_playlist_end = () => add_to_playlist(false)
 const menu_item_add_to_playlist_next = () => add_to_playlist(true)
 
 const stopWatchCollapsed = watch(
-    () => store_system_configs_info.app_view_left_menu_collapsed,
-    () => updateGridItems()
-  )
+  () => store_system_configs_info.app_view_left_menu_collapsed,
+  () => updateGridItems()
+)
 
-  const stopWatchWidth = watch(
-    () => store_system_configs_info.window_innerWidth,
-    () => {
-      bool_watch = false
-      updateGridItems()
-      if (bool_watch) {
-        startTimer()
-      }
+const stopWatchWidth = watch(
+  () => store_system_configs_info.window_innerWidth,
+  () => {
+    bool_watch = false
+    updateGridItems()
+    if (bool_watch) {
+      startTimer()
     }
-  )
+  }
+)
 
 const stopWatchSubscript = watch(
-  () => home_selected_top_album_subscript.value,
+  () => pageHomeStore.home_selected_top_album_subscript,
   (newValue) => {
-    const searchResults = home_Files_temporary_random_search.value
-    home_selected_top_album.value =
+    const searchResults = pageHomeStore.home_Files_temporary_random_search
+    pageHomeStore.home_selected_top_album =
       searchResults && searchResults.length > 0 ? searchResults[newValue] : undefined
   }
 )
 
 onMounted(() => {
-    startTimer()
-    updateGridItems()
-    if (store_server_user_model.model_server_type_of_web) {
-      if (store_server_users.server_select_kind === 'navidrome') {
-        home_Files_temporary_type_select.value = 'album'
-      } else if (store_server_users.server_select_kind != 'ninesong') {
-        home_Files_temporary_type_select.value = 'media'
-      }
-    } else {
-      home_Files_temporary_type_select.value = 'album'
+  startTimer()
+  updateGridItems()
+  if (store_server_user_model.model_server_type_of_web) {
+    if (store_server_users.server_select_kind === 'navidrome') {
+      pageHomeStore.home_Files_temporary_type_select = 'album'
+    } else if (store_server_users.server_select_kind != 'ninesong') {
+      pageHomeStore.home_Files_temporary_type_select = 'media'
     }
-  })
+  } else {
+    pageHomeStore.home_Files_temporary_type_select = 'album'
+  }
+})
 
 onBeforeUnmount(() => {
   stopWatchCollapsed()
@@ -508,12 +508,12 @@ function change_home_Files_temporary_type() {
   store_general_fetch_home_list.fetchData_Home()
 }
 
-import { storeToRefs } from 'pinia'
+import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
+const pageAlbumStore = usePageAlbumStore()
 const playlistStore = usePlaylistStore()
 const playerAudioStore = usePlayerAudioStore()
 const playerAppearanceStore = usePlayerAppearanceStore()
 const playerSettingStore = usePlayerSettingStore()
-
 const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
   storeToRefs(playlistStore)
 </script>
@@ -531,16 +531,16 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
           )
         "
         :options="home_Files_temporary_type_options"
-        v-model:value="home_Files_temporary_type_select.value"
+        v-model:value="home_Files_temporary_type_select"
         @update:value="change_home_Files_temporary_type"
       />
       <div
         v-if="
-        !(
-          store_server_user_model.model_server_type_of_web &&
-          store_server_users.server_select_kind === 'ninesong'
-        )
-      "
+          !(
+            store_server_user_model.model_server_type_of_web &&
+            store_server_users.server_select_kind === 'ninesong'
+          )
+        "
         style="font-size: 15px; font-weight: bold"
       >
         {{
@@ -570,17 +570,17 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
             {{
               $t('page.home.mostPlayed') +
               ' : ' +
-              (server_select_kind === 'jellyfin' ||
-              server_select_kind === 'emby'
+              (store_server_users.server_select_kind === 'jellyfin' ||
+              store_server_users.server_select_kind === 'emby'
                 ? $t('entity.track_other')
-                : server_select_kind === 'ninesong'
-                  ? home_Files_temporary_type_select.value === 'media'
+                : store_server_users.server_select_kind === 'ninesong'
+                  ? home_Files_temporary_type_select === 'media'
                     ? $t('entity.track_other')
-                    : home_Files_temporary_type_select.value === 'album'
+                    : home_Files_temporary_type_select === 'album'
                       ? $t('entity.album_other')
-                      : home_Files_temporary_type_select.value === 'artist'
+                      : home_Files_temporary_type_select === 'artist'
                         ? $t('entity.artist_other')
-                        : home_Files_temporary_type_select.value === 'media_cue'
+                        : home_Files_temporary_type_select === 'media_cue'
                           ? 'CUE ' + $t('nsmusics.view_page.disk')
                           : $t('entity.album_other')
                   : $t('entity.album_other'))
@@ -591,14 +591,12 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
               <n-button
                 quaternary
                 @click="
-              () => {
-                store_general_fetch_home_list.fetchData_Home_of_maximum_playback()
-                if (dynamicScroller_maximum_playback.value && dynamicScroller_maximum_playback.value.$el) {
-                  dynamicScroller_maximum_playback.value.$el.scrollLeft = 0
-                }
-                offset_maximum_playback = 0
-              }
-            "
+                  () => {
+                    store_general_fetch_home_list.fetchData_Home_of_maximum_playback()
+                    dynamicScroller_maximum_playback.$el.scrollLeft = 0
+                    offset_maximum_playback = 0
+                  }
+                "
               >
                 <template #icon>
                   <n-icon :size="20"><ArrowReset24Filled /></n-icon>
@@ -716,7 +714,7 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
                           store_server_user_model.model_server_type_of_local ||
                           store_server_users.server_select_kind === 'navidrome' ||
                           (store_server_users.server_select_kind === 'ninesong' &&
-                            home_Files_temporary_type_select.value === 'album')
+                            home_Files_temporary_type_select === 'album')
                         "
                         class="open-this-home-artist-button"
                         @click="Open_this_album_MediaList_click(item, 'maximum')"
@@ -745,7 +743,7 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
                     {{
                       store_server_user_model.model_server_type_of_web &&
                       store_server_users.server_select_kind === 'ninesong'
-                        ? home_Files_temporary_type_select.value === 'media'
+                        ? home_Files_temporary_type_select === 'media'
                           ? item.title
                           : item.name
                         : item.name
@@ -778,13 +776,13 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
               store_server_users.server_select_kind === 'emby'
                 ? $t('entity.track_other')
                 : store_server_users.server_select_kind === 'ninesong'
-                  ? home_Files_temporary_type_select.value === 'media'
+                  ? home_Files_temporary_type_select === 'media'
                     ? $t('entity.track_other')
-                    : home_Files_temporary_type_select.value === 'album'
+                    : home_Files_temporary_type_select === 'album'
                       ? $t('entity.album_other')
-                      : home_Files_temporary_type_select.value === 'artist'
+                      : home_Files_temporary_type_select === 'artist'
                         ? $t('entity.artist_other')
-                        : home_Files_temporary_type_select.value === 'media_cue'
+                        : home_Files_temporary_type_select === 'media_cue'
                           ? 'CUE ' + $t('nsmusics.view_page.disk')
                           : $t('entity.album_other')
                   : $t('entity.album_other'))
@@ -918,7 +916,7 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
                           store_server_user_model.model_server_type_of_local ||
                           store_server_users.server_select_kind === 'navidrome' ||
                           (store_server_users.server_select_kind === 'ninesong' &&
-                            home_Files_temporary_type_select.value === 'album')
+                            home_Files_temporary_type_select === 'album')
                         "
                         class="open-this-home-artist-button"
                         @click="Open_this_album_MediaList_click(item, 'random')"
@@ -947,7 +945,7 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
                     {{
                       store_server_user_model.model_server_type_of_web &&
                       store_server_users.server_select_kind === 'ninesong'
-                        ? home_Files_temporary_type_select.value === 'media'
+                        ? home_Files_temporary_type_select === 'media'
                           ? item.title
                           : item.name
                         : item.name
@@ -980,13 +978,13 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
               store_server_users.server_select_kind === 'emby'
                 ? $t('entity.track_other')
                 : store_server_users.server_select_kind === 'ninesong'
-                  ? home_Files_temporary_type_select.value === 'media'
+                  ? home_Files_temporary_type_select === 'media'
                     ? $t('entity.track_other')
-                    : home_Files_temporary_type_select.value === 'album'
+                    : home_Files_temporary_type_select === 'album'
                       ? $t('entity.album_other')
-                      : home_Files_temporary_type_select.value === 'artist'
+                      : home_Files_temporary_type_select === 'artist'
                         ? $t('entity.artist_other')
-                        : home_Files_temporary_type_select.value === 'media_cue'
+                        : home_Files_temporary_type_select === 'media_cue'
                           ? 'CUE ' + $t('nsmusics.view_page.disk')
                           : $t('entity.album_other')
                   : $t('entity.album_other'))
@@ -1121,7 +1119,7 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
                           store_server_user_model.model_server_type_of_local ||
                           store_server_users.server_select_kind === 'navidrome' ||
                           (store_server_users.server_select_kind === 'ninesong' &&
-                            home_Files_temporary_type_select.value === 'album')
+                            home_Files_temporary_type_select === 'album')
                         "
                         class="open-this-home-artist-button"
                         @click="Open_this_album_MediaList_click(item, 'recently_added')"
@@ -1150,7 +1148,7 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
                     {{
                       store_server_user_model.model_server_type_of_web &&
                       store_server_users.server_select_kind === 'ninesong'
-                        ? home_Files_temporary_type_select.value === 'media'
+                        ? home_Files_temporary_type_select === 'media'
                           ? item.title
                           : item.name
                         : item.name
@@ -1183,13 +1181,13 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
               store_server_users.server_select_kind === 'emby'
                 ? $t('entity.track_other')
                 : store_server_users.server_select_kind === 'ninesong'
-                  ? home_Files_temporary_type_select.value === 'media'
+                  ? home_Files_temporary_type_select === 'media'
                     ? $t('entity.track_other')
-                    : home_Files_temporary_type_select.value === 'album'
+                    : home_Files_temporary_type_select === 'album'
                       ? $t('entity.album_other')
-                      : home_Files_temporary_type_select.value === 'artist'
+                      : home_Files_temporary_type_select === 'artist'
                         ? $t('entity.artist_other')
-                        : home_Files_temporary_type_select.value === 'media_cue'
+                        : home_Files_temporary_type_select === 'media_cue'
                           ? 'CUE ' + $t('nsmusics.view_page.disk')
                           : $t('entity.album_other')
                   : $t('entity.album_other'))
@@ -1323,7 +1321,7 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
                           store_server_user_model.model_server_type_of_local ||
                           store_server_users.server_select_kind === 'navidrome' ||
                           (store_server_users.server_select_kind === 'ninesong' &&
-                            home_Files_temporary_type_select.value === 'album')
+                            home_Files_temporary_type_select === 'album')
                         "
                         class="open-this-home-artist-button"
                         @click="Open_this_album_MediaList_click(item, 'recently_played')"
@@ -1352,7 +1350,7 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
                     {{
                       store_server_user_model.model_server_type_of_web &&
                       store_server_users.server_select_kind === 'ninesong'
-                        ? home_Files_temporary_type_select.value === 'media'
+                        ? home_Files_temporary_type_select === 'media'
                           ? item.title
                           : item.name
                         : item.name
@@ -1374,7 +1372,7 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
         !(
           store_server_user_model.model_server_type_of_web &&
           store_server_users.server_select_kind === 'ninesong' &&
-          home_Files_temporary_type_select.value === 'media_cue'
+          home_Files_temporary_type_select === 'media_cue'
         )
       "
       ref="contextmenu"
