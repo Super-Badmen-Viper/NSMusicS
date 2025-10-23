@@ -1111,7 +1111,6 @@ onBeforeUnmount(() => {
                     $t('setting.albumBackground')
                   }}</span>
                   <n-space style="margin-right: 32px">
-                    <n-switch v-model:value="player_use_background_repeat_fill" />
                     <n-switch v-model:value="player_use_background_filter_blur" />
                   </n-space>
                 </n-space>

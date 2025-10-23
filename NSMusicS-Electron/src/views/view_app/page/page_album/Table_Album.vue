@@ -1016,7 +1016,7 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
 <template>
   <n-space vertical :size="12">
     <div class="album-wall-container">
-      <n-space vertical @wheel.prevent style="overflow: hidden">
+      <n-space vertical @wheel.prevent style="position: absolute;top: 0;">
         <n-space align="center" style="margin-top: 3px">
           <n-space>
             <n-tooltip trigger="hover" placement="top">
@@ -1302,7 +1302,8 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
         ref="dynamicScroller"
         :style="{
           width: 'calc(100vw - ' + (collapsed_width - 35) + 'px)',
-          height: 'calc(100vh - 136px)',
+          height: 'calc(100vh - 236px)',
+          marginTop: '80px',
         }"
         :items="album_Files_temporary"
         :itemSize="itemSize"
@@ -1599,8 +1600,7 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
   width: 100%;
   height: 100%;
   padding-right: 20px;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  overflow: hidden;
 
   --card-color: v-bind('themeVars.cardColor');
   --border-color: v-bind('themeVars.borderColor');

@@ -844,7 +844,7 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
 <template>
   <n-space vertical :size="12">
     <div class="artist-wall-container">
-      <n-space vertical @wheel.prevent style="overflow: hidden; margin-left: 4px">
+      <n-space vertical @wheel.prevent style="position: absolute;top: 0;">
         <n-space align="center" style="margin-top: 3px">
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
@@ -1060,7 +1060,8 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
         ref="dynamicScroller"
         :style="{
           width: 'calc(100vw - ' + (collapsed_width - 35) + 'px)',
-          height: 'calc(100vh - 136px)',
+          height: 'calc(100vh - 236px)',
+          marginTop: '80px',
         }"
         :items="artist_Files_temporary"
         :itemSize="itemSize"
@@ -1318,8 +1319,7 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
   width: 100%;
   height: 100%;
   padding-right: 20px;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  overflow: hidden;
 
   --card-color: v-bind('themeVars.cardColor');
   --border-color: v-bind('themeVars.borderColor');

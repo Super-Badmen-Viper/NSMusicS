@@ -33,30 +33,16 @@ const { t } = useI18n({
 
 const pageMediaStore = usePageMediaStore()
 const pageHomeStore = usePageHomeStore()
-const {
-  home_Files_temporary_random_search,
-  home_selected_top_album_subscript,
+const { 
+  home_Files_temporary_random_search, 
+  home_selected_top_album_subscript, 
   home_selected_top_album,
   home_selected_top_album_medium_image_url,
   list_data_StartUpdate,
   home_Files_temporary_maximum_playback,
   home_Files_temporary_recently_added,
-  home_Files_temporary_recently_played,
+  home_Files_temporary_recently_played
 } = storeToRefs(pageHomeStore)
-
-// 计算属性用于获取数组长度
-const home_Files_temporary_maximum_playback_length = computed(
-  () => home_Files_temporary_maximum_playback.value.length
-)
-const home_Files_temporary_random_search_length = computed(
-  () => home_Files_temporary_random_search.value.length
-)
-const home_Files_temporary_recently_added_length = computed(
-  () => home_Files_temporary_recently_added.value.length
-)
-const home_Files_temporary_recently_played_length = computed(
-  () => home_Files_temporary_recently_played.value.length
-)
 
 ////// passed as argument
 
@@ -174,7 +160,10 @@ const scrollTo_maximum_playback = (value: number) => {
         : (offset_maximum_playback = 0)
       dynamicScroller_maximum_playback.value.$el.scrollLeft = offset_maximum_playback
     } else if (value === 1) {
-      if (offset_maximum_playback + 220 * 2 <= home_Files_temporary_maximum_playback_length * 224) {
+      if (
+        offset_maximum_playback + 220 * 2 <=
+        home_Files_temporary_maximum_playback.value.length * 224
+      ) {
         offset_maximum_playback += 220 * 2
         dynamicScroller_maximum_playback.value.$el.scrollLeft = offset_maximum_playback
       } else {
@@ -193,7 +182,10 @@ const scrollTo_random_search = (value: number) => {
         : (offset_random_search = 0)
       dynamicScroller_random_search.value.$el.scrollLeft = offset_random_search
     } else if (value === 1) {
-      if (offset_random_search + 220 * 2 <= home_Files_temporary_random_search_length * 224) {
+      if (
+        offset_random_search + 220 * 2 <=
+        home_Files_temporary_random_search.value.length * 224
+      ) {
         offset_random_search += 220 * 2
         dynamicScroller_random_search.value.$el.scrollLeft = offset_random_search
       } else {
@@ -212,7 +204,10 @@ const scrollTo_recently_added = (value: number) => {
         : (offset_recently_added = 0)
       dynamicScroller_recently_added.value.$el.scrollLeft = offset_recently_added
     } else if (value === 1) {
-      if (offset_recently_added + 220 * 2 <= home_Files_temporary_recently_added_length * 224) {
+      if (
+        offset_recently_added + 220 * 2 <=
+        home_Files_temporary_recently_added.value.length * 224
+      ) {
         offset_recently_added += 220 * 2
         dynamicScroller_recently_added.value.$el.scrollLeft = offset_recently_added
       } else {
@@ -231,7 +226,10 @@ const scrollTo_recently_played = (value: number) => {
         : (offset_recently_played = 0)
       dynamicScroller_recently_played.value.$el.scrollLeft = offset_recently_played
     } else if (value === 1) {
-      if (offset_recently_played + 220 * 2 <= home_Files_temporary_recently_played_length * 224) {
+      if (
+        offset_recently_played + 220 * 2 <=
+        home_Files_temporary_recently_played.value.length * 224
+      ) {
         offset_recently_played += 220 * 2
         dynamicScroller_recently_played.value.$el.scrollLeft = offset_recently_played
       } else {
@@ -293,28 +291,28 @@ const Get_this_album_info = (item: any, list_name: string): string => {
 }
 const Play_Next_album_MediaList_click = (value: number) => {
   if (value === 1) {
-    if (pageHomeStore.home_selected_top_album_subscript >= 17) {
-      pageHomeStore.home_selected_top_album_subscript = 0
-      pageHomeStore.list_data_StartUpdate = true
+    if (home_selected_top_album_subscript.value >= 17) {
+      home_selected_top_album_subscript.value = 0
+      list_data_StartUpdate.value = true
     } else {
-      pageHomeStore.home_selected_top_album_subscript += 1
+      home_selected_top_album_subscript.value += 1
     }
   } else {
-    if (pageHomeStore.home_selected_top_album_subscript === 0) {
-      pageHomeStore.home_selected_top_album_subscript = 0
-      pageHomeStore.list_data_StartUpdate = true
+    if (home_selected_top_album_subscript.value === 0) {
+      home_selected_top_album_subscript.value = 0
+      list_data_StartUpdate.value = true
     } else {
-      pageHomeStore.home_selected_top_album_subscript -= 1
+      home_selected_top_album_subscript.value -= 1
     }
   }
 }
 watch(
-  () => pageHomeStore.home_selected_top_album_subscript,
+  () => home_selected_top_album_subscript.value,
   (newValue) => {
     pageHomeStore.home_selected_top_album =
-      pageHomeStore.home_Files_temporary_random_search &&
-      pageHomeStore.home_Files_temporary_random_search.length > 0
-        ? pageHomeStore.home_Files_temporary_random_search[newValue]
+      home_Files_temporary_random_search.value &&
+      home_Files_temporary_random_search.value.length > 0
+        ? home_Files_temporary_random_search.value[newValue]
         : undefined
   }
 )
@@ -510,8 +508,9 @@ onBeforeUnmount(() => {
         v-contextmenu:contextmenu
         @contextmenu.prevent="
           () => {
-            playlistStore.playlist_Menu_Item = home_selected_top_album
-            playlistStore.playlist_Menu_Item_Id = home_selected_top_album?.id || ''
+            playlistStore.playlist_Menu_Item = home_selected_top_album.value
+            playlistStore.playlist_Menu_Item_Id =
+              home_selected_top_album.value?.id || ''
           }
         "
       >
@@ -543,8 +542,10 @@ onBeforeUnmount(() => {
                 object-position: center;
                 border: 1.5px solid #ffffff20;
               "
-              :src="getAssetImage(home_selected_top_album_medium_image_url)"
-              @error="(event) => handleImageError(homeSelectedTopAlbum, event)"
+              :src="
+                getAssetImage(home_selected_top_album_medium_image_url.value)
+              "
+              @error="(event) => handleImageError(home_selected_top_album.value, event)"
               alt=""
             />
           </div>
@@ -559,8 +560,8 @@ onBeforeUnmount(() => {
         style="margin-left: calc(3.5vh); margin-top: -202px"
       >
         <img
-          :src="getAssetImage(homeSelectedTopAlbumMediumImageUrl)"
-          @error="(event) => handleImageError(homeSelectedTopAlbum, event)"
+          :src="getAssetImage(home_selected_top_album_medium_image_url.value)"
+          @error="(event) => handleImageError(home_selected_top_album.value, event)"
           style="
             object-fit: cover;
             object-position: center;
@@ -578,14 +579,16 @@ onBeforeUnmount(() => {
           vertical
           style="margin-top: -2px; margin-left: 12px"
           :style="{
-            width: `calc(${(window_innerWidth || 0) - (collapsed_width + 300)} / ${(window_innerHeight || 500) / 500}px)`,
+            width:
+              `calc(${(window_innerWidth || 0) - (collapsed_width + 300)} / ${(window_innerHeight || 500) / 500}px)`,
           }"
         >
           <div style="font-size: 16px; font-weight: 600">
             {{
               $t('page.home.explore') +
               ' : ' +
-              (server_select_kind === 'jellyfin' || server_select_kind === 'emby'
+              (server_select_kind === 'jellyfin' ||
+              server_select_kind === 'emby'
                 ? $t('entity.track_other')
                 : $t('entity.album_other'))
             }}
@@ -600,7 +603,10 @@ onBeforeUnmount(() => {
               text-overflow: ellipsis;
             "
           >
-            {{ home_selected_top_album?.name ?? $t('None') + $t('Play') + $t('Data') }}
+            {{
+              home_selected_top_album?.name ??
+              $t('None') + $t('Play') + $t('Data')
+            }}
           </div>
           <div
             style="
@@ -612,7 +618,10 @@ onBeforeUnmount(() => {
               text-overflow: ellipsis;
             "
           >
-            {{ home_selected_top_album?.artist ?? $t('None') + $t('Play') + $t('Data') }}
+            {{
+              home_selected_top_album?.artist ??
+              $t('None') + $t('Play') + $t('Data')
+            }}
           </div>
           <n-space style="margin-top: 6px">
             <n-tooltip trigger="hover" placement="top">
@@ -635,7 +644,10 @@ onBeforeUnmount(() => {
                   quaternary
                   @click="
                     async () => {
-                      await Play_this_album_MediaList_click(home_selected_top_album, 'random')
+                      await Play_this_album_MediaList_click(
+                        home_selected_top_album.value,
+                        'random'
+                      )
                     }
                   "
                   style="margin-right: -6px"
@@ -677,7 +689,8 @@ onBeforeUnmount(() => {
             {{
               $t('page.home.mostPlayed') +
               ' : ' +
-              (server_select_kind === 'jellyfin' || server_select_kind === 'emby'
+              (server_select_kind === 'jellyfin' ||
+              server_select_kind === 'emby'
                 ? $t('entity.track_other')
                 : $t('entity.album_other'))
             }}
@@ -702,7 +715,7 @@ onBeforeUnmount(() => {
             {{ $t('common.refresh') }}
           </n-tooltip>
           <n-space
-            v-if="home_Files_temporary_maximum_playback_length === 0"
+            v-if="home_Files_temporary_maximum_playback.value.length === 0"
             style="margin-top: 2px"
           >
             {{ $t('None') + $t('Play') + $t('Data') }}
@@ -734,12 +747,12 @@ onBeforeUnmount(() => {
       <DynamicScroller
         class="home-wall"
         ref="dynamicScroller_maximum_playback"
-        v-if="home_Files_temporary_maximum_playback_length != 0"
+        v-if="home_Files_temporary_maximum_playback.value.length != 0"
         :style="{
           width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)',
           height: item_album_image + 60 + 'px',
         }"
-        :items="home_Files_temporary_maximum_playback"
+        :items="home_Files_temporary_maximum_playback.value"
         :itemSize="itemSize"
         :minItemSize="itemSize"
         :emit-update="true"
@@ -957,7 +970,10 @@ onBeforeUnmount(() => {
             </template>
             {{ $t('common.refresh') }}
           </n-tooltip>
-          <n-space v-if="home_Files_temporary_random_search_length === 0" style="margin-top: 2px">
+          <n-space
+            v-if="home_Files_temporary_random_search.value.length === 0"
+            style="margin-top: 2px"
+          >
             {{ $t('None') + $t('Play') + $t('Data') }}
           </n-space>
         </n-space>
@@ -987,12 +1003,12 @@ onBeforeUnmount(() => {
       <DynamicScroller
         class="home-wall"
         ref="dynamicScroller_random_search"
-        v-if="home_Files_temporary_random_search_length != 0"
+        v-if="home_Files_temporary_random_search.value.length != 0"
         :style="{
           width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)',
           height: item_album_image + 60 + 'px',
         }"
-        :items="home_Files_temporary_random_search"
+        :items="home_Files_temporary_random_search.value"
         :itemSize="itemSize"
         :minItemSize="itemSize"
         :emit-update="true"
@@ -1209,7 +1225,10 @@ onBeforeUnmount(() => {
             </template>
             {{ $t('common.refresh') }}
           </n-tooltip>
-          <n-space v-if="home_Files_temporary_recently_added_length === 0" style="margin-top: 2px">
+          <n-space
+            v-if="home_Files_temporary_recently_added.value.length === 0"
+            style="margin-top: 2px"
+          >
             {{ $t('None') + $t('Play') + $t('Data') }}
           </n-space>
         </n-space>
@@ -1239,12 +1258,12 @@ onBeforeUnmount(() => {
       <DynamicScroller
         class="home-wall"
         ref="dynamicScroller_recently_added"
-        v-if="home_Files_temporary_recently_added_length != 0"
+        v-if="home_Files_temporary_recently_added.value.length != 0"
         :style="{
           width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)',
           height: item_album_image + 60 + 'px',
         }"
-        :items="home_Files_temporary_recently_added"
+        :items="home_Files_temporary_recently_added.value"
         :itemSize="itemSize"
         :minItemSize="itemSize"
         :emit-update="true"
@@ -1460,7 +1479,10 @@ onBeforeUnmount(() => {
             </template>
             {{ $t('common.refresh') }}
           </n-tooltip>
-          <n-space v-if="home_Files_temporary_recently_played_length === 0" style="margin-top: 2px">
+          <n-space
+            v-if="home_Files_temporary_recently_played.value.length === 0"
+            style="margin-top: 2px"
+          >
             {{ $t('None') + $t('Play') + $t('Data') }}
           </n-space>
         </n-space>
@@ -1490,12 +1512,12 @@ onBeforeUnmount(() => {
       <DynamicScroller
         class="home-wall"
         ref="dynamicScroller_recently_played"
-        v-if="home_Files_temporary_recently_played_length != 0"
+        v-if="home_Files_temporary_recently_played.value.length != 0"
         :style="{
           width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)',
           height: item_album_image + 60 + 'px',
         }"
-        :items="home_Files_temporary_recently_played"
+        :items="home_Files_temporary_recently_played.value"
         :itemSize="itemSize"
         :minItemSize="itemSize"
         :emit-update="true"
@@ -1713,7 +1735,10 @@ onBeforeUnmount(() => {
             </template>
             {{ $t('common.refresh') }}
           </n-tooltip>
-          <n-space v-if="home_Files_temporary_recently_played_length === 0" style="margin-top: 2px">
+          <n-space
+            v-if="home_Files_temporary_recently_played.value.length === 0"
+            style="margin-top: 2px"
+          >
             {{ $t('None') + $t('Play') + $t('Data') }}
           </n-space>
         </n-space>
@@ -1743,12 +1768,12 @@ onBeforeUnmount(() => {
       <DynamicScroller
         class="home-wall"
         ref="dynamicScroller_recently_played"
-        v-if="home_Files_temporary_recently_played_length != 0"
+        v-if="home_Files_temporary_recently_played.value.length != 0"
         :style="{
           width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)',
           height: item_album_image + 60 + 'px',
         }"
-        :items="home_Files_temporary_recently_played"
+        :items="home_Files_temporary_recently_played.value"
         :itemSize="itemSize"
         :minItemSize="itemSize"
         :emit-update="true"
@@ -1965,7 +1990,10 @@ onBeforeUnmount(() => {
             </template>
             {{ $t('common.refresh') }}
           </n-tooltip>
-          <n-space v-if="home_Files_temporary_recently_played_length === 0" style="margin-top: 2px">
+          <n-space
+            v-if="home_Files_temporary_recently_played.value.length === 0"
+            style="margin-top: 2px"
+          >
             {{ $t('None') + $t('Play') + $t('Data') }}
           </n-space>
         </n-space>
@@ -1995,12 +2023,12 @@ onBeforeUnmount(() => {
       <DynamicScroller
         class="home-wall"
         ref="dynamicScroller_recently_played"
-        v-if="home_Files_temporary_recently_played_length != 0"
+        v-if="home_Files_temporary_recently_played.value.length != 0"
         :style="{
           width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)',
           height: item_album_image + 60 + 'px',
         }"
-        :items="home_Files_temporary_recently_played"
+        :items="home_Files_temporary_recently_played.value"
         :itemSize="itemSize"
         :minItemSize="itemSize"
         :emit-update="true"

@@ -1,27 +1,38 @@
 <script setup lang="ts">
-import { onMounted, ref, computed, onBeforeUnmount } from 'vue'
-import { NButton, NCard, NIcon, NInput, NSelect, NSpace, useMessage, useThemeVars } from 'naive-ui'
-import { Folder28Filled, Search28Filled } from '@vicons/fluent'
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
+import {
+  NMessageProvider,
+  NSpace,
+  NCard,
+  NButton,
+  NH3,
+  NSelect,
+  useMessage,
+  useThemeVars,
+} from 'naive-ui'
+import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
+
+const get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
+const message = useMessage()
+const themeVars = useThemeVars()
+
+////// i18n auto lang
 import { useI18n } from 'vue-i18n'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { storeToRefs } from 'pinia'
-import { usePageTagStore } from '@/data/data_status/app_status/page_status/tag_store/usePageTagStore'
-
+import { Folder_Entity_ApiService_of_NineSong } from '@/data/data_configs/ninesong_api/services_web/Folder_Entity/index_service'
+import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
+import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
+import { store_view_tag_page_info } from '@/views/view_app/page/page_tag/store/store_view_tag_page_info'
 const { t } = useI18n({
   inheritLocale: true,
 })
 
-const themeVars = useThemeVars()
 const pageMediaStore = usePageMediaStore()
-const pageTagStore = usePageTagStore()
-const {
-  tag_metadata_find_model,
-  tag_type_select,
-  tag_LibraryItems_metadata,
-  tag_LibraryItems_temporary,
-} = storeToRefs(pageTagStore)
+const { page_songlists_library_path, page_songlists_library_folder_path } =
+  storeToRefs(pageMediaStore)
 const {
   page_songlists_bool_show_search_area,
   page_songlists_input_search_Value,
@@ -36,23 +47,25 @@ const {
   page_songlists_options,
   media_Files_selected,
   media_Files_temporary,
-  model_server_type_of_web,
-  model_server_type_of_local,
 } = storeToRefs(pageMediaStore)
 
-////// i18n auto lang
-import { Folder_Entity_ApiService_of_NineSong } from '@/data/data_configs/ninesong_api/services_web/Folder_Entity/index_service'
-import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
-import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
-
+///
+const browseFolderOptions = ref([])
+const browseFolderPathOptions = ref([])
 let folder_Entity_ApiService_of_NineSong = new Folder_Entity_ApiService_of_NineSong(
   store_server_login_info.server_url
 )
-
-const browseFolderPathOptions = ref<Array<{ label: string; value: string }>>([])
-
 onMounted(async () => {
-  if (store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong') {
+  if (store_server_users.server_select_kind === 'ninesong') {
+    store_server_users.server_all_library =
+      await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
+    browseFolderOptions.value = store_server_users.server_all_library.map((item: any) => ({
+      label: item.name,
+      value: item.folderPath,
+    }))
+  }
+  ///
+  if (store_server_users.server_select_kind === 'ninesong') {
     store_server_users.server_all_library =
       await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
     browseFolderOptions.value = store_server_users.server_all_library.map((item: any) => ({
@@ -63,33 +76,33 @@ onMounted(async () => {
   pageMediaStore.page_songlists_library_path = ''
   pageMediaStore.page_songlists_library_folder_path = ''
   ///
-  pageTagStore.tag_metadata_find_model = true
+  store_view_tag_page_info.tag_metadata_find_model = true
   ///
-  pageTagStore.tag_LibraryItems_metadata = []
-  pageTagStore.tag_LibraryItems_temporary = []
+  store_view_tag_page_info.tag_LibraryItems_metadata = []
+  store_view_tag_page_info.tag_LibraryItems_temporary = []
   ///
 })
 onBeforeUnmount(() => {
-  pageTagStore.tag_metadata_find_model = false
+  store_view_tag_page_info.tag_metadata_find_model = false
   pageMediaStore.page_songlists_library_path = ''
   pageMediaStore.page_songlists_library_folder_path = ''
   ///
-  pageTagStore.tag_LibraryItems_metadata = []
-  pageTagStore.tag_LibraryItems_temporary = []
+  store_view_tag_page_info.tag_LibraryItems_metadata = []
+  store_view_tag_page_info.tag_LibraryItems_temporary = []
   ///
 })
 async function filter_media_folder_path() {
   ///
-  pageTagStore.tag_LibraryItems_metadata = []
-  pageTagStore.tag_LibraryItems_temporary = []
+  store_view_tag_page_info.tag_LibraryItems_metadata = []
+  store_view_tag_page_info.tag_LibraryItems_temporary = []
   ///
-  if (pageTagStore.tag_type_select === 'media') {
+  if (store_view_tag_page_info.tag_type_select === 'media') {
     await store_general_fetch_media_list.fetchData_Media()
-  } else if (pageTagStore.tag_type_select === 'album') {
+  } else if (store_view_tag_page_info.tag_type_select === 'album') {
     await store_general_fetch_album_list.fetchData_Album()
-  } else if (pageTagStore.tag_type_select === 'artist') {
+  } else if (store_view_tag_page_info.tag_type_select === 'artist') {
     await store_general_fetch_artist_list.fetchData_Artist()
-  } else if (pageTagStore.tag_type_select === 'media_cue') {
+  } else if (store_view_tag_page_info.tag_type_select === 'media_cue') {
     await store_general_fetch_media_cue_list.fetchData_Media()
   }
 }
@@ -116,7 +129,9 @@ import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_ap
 const jsonValue = ref()
 function find_json_value(id: string) {
   try {
-    jsonValue.value = pageTagStore.tag_LibraryItems_metadata.find((item: any) => item.ID === id)
+    jsonValue.value = store_view_tag_page_info.tag_LibraryItems_metadata.find(
+      (item) => item.ID === id
+    )
   } catch {
     jsonValue.value = ''
   }
@@ -127,14 +142,14 @@ const isScrolling = ref(false)
 const onScrollEnd = async () => {
   if (isScrolling.value) return
   isScrolling.value = true
-  if (pageMediaStore.model_server_type_of_web) {
-    if (pageTagStore.tag_type_select === 'media') {
+  if (store_server_user_model.model_server_type_of_web) {
+    if (store_view_tag_page_info.tag_type_select === 'media') {
       await store_general_fetch_media_list.fetchData_Media_of_server_web_end()
-    } else if (pageTagStore.tag_type_select === 'album') {
+    } else if (store_view_tag_page_info.tag_type_select === 'album') {
       await store_general_fetch_album_list.fetchData_Album_of_server_web_end()
-    } else if (pageTagStore.tag_type_select === 'artist') {
+    } else if (store_view_tag_page_info.tag_type_select === 'artist') {
       await store_general_fetch_artist_list.fetchData_Artist_of_server_web_end()
-    } else if (pageTagStore.tag_type_select === 'media_cue') {
+    } else if (store_view_tag_page_info.tag_type_select === 'media_cue') {
       await store_general_fetch_media_cue_list.fetchData_Media_of_server_web_end()
     }
   }
@@ -160,8 +175,6 @@ const tag_type_options = ref([
     value: 'media_cue',
   },
 ])
-
-const browseFolderOptions = ref([])
 </script>
 
 <template>
@@ -193,7 +206,7 @@ const browseFolderOptions = ref([])
               )
             "
             :options="tag_type_options"
-            v-model:value="tag_type_select"
+            v-model:value="store_view_tag_page_info.tag_type_select"
             @update:value="filter_media_folder_path"
           />
           <div
@@ -225,7 +238,7 @@ const browseFolderOptions = ref([])
       <div class="left-tag-panel">
         <n-card class="selection-tag-card" :bordered="false">
           <template #header>
-            <n-space justify="start" v-if="tag_type_select === 'media'">
+            <n-space justify="start" v-if="store_view_tag_page_info.tag_type_select === 'media'">
               <n-space
                 vertical
                 v-if="
@@ -275,7 +288,9 @@ const browseFolderOptions = ref([])
                     :options="browseFolderPathOptions"
                     placement="bottom"
                     style="width: 170px"
-                    @click="find_server_folder_path(page_songlists_library_folder_path)"
+                    @click="
+                      find_server_folder_path(pageMediaStore.page_songlists_library_folder_path)
+                    "
                     @update:value="filter_media_folder_path"
                   />
                   <n-button
@@ -297,9 +312,9 @@ const browseFolderOptions = ref([])
           <DynamicScroller
             class="table_tag"
             :style="{
-              marginTop: tag_type_select === 'media' ? '0px' : '20px',
+              marginTop: store_view_tag_page_info.tag_type_select === 'media' ? '0px' : '20px',
             }"
-            :items="tag_LibraryItems_temporary"
+            :items="store_view_tag_page_info.tag_LibraryItems_temporary"
             key-field="absoluteIndex"
             :minItemSize="50"
             @scroll-end="onScrollEnd"

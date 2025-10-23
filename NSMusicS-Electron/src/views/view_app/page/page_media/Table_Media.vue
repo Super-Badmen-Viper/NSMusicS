@@ -1598,7 +1598,7 @@ onBeforeUnmount(() => {
 <template>
   <n-space vertical :size="12">
     <div class="dynamic-scroller-demo-media">
-      <n-space vertical @wheel.prevent style="overflow: hidden">
+      <n-space vertical @wheel.prevent style="position: absolute;top: 0;">
         <n-space align="center" style="margin-top: 3px">
           <n-space>
             <n-tooltip trigger="hover" placement="top">
@@ -2290,7 +2290,8 @@ onBeforeUnmount(() => {
         ref="dynamicScroller"
         :style="{
           width: 'calc(100vw - ' + (collapsed_width - 35) + 'px)',
-          height: 'calc(100vh - 136px)',
+          height: 'calc(100vh - 236px)',
+          marginTop: '80px',
         }"
         :items="media_Files_temporary"
         :minItemSize="50"
@@ -2931,8 +2932,7 @@ onBeforeUnmount(() => {
 
 .dynamic-scroller-demo-media {
   height: 100%;
-  overflow: auto;
-  overflow-x: hidden;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 

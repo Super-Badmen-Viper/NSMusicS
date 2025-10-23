@@ -24,8 +24,8 @@ import error_album from '@/assets/img/error_album.jpg'
 import { MediaCues_ApiService_of_NineSong } from '../services_web/Scene/Music/Media_Cue_Files/index_service'
 import { usePageMediaCueStore } from '@/data/data_status/app_status/page_status/media_cue_store/usePageMediaCueStore'
 import { Recommend_ApiService_of_NineSong } from '../services_web/Scene/Music/Recommend/index_service'
-import { usePageTagStore } from '@/data/data_status/app_status/page_status/tag_store/usePageTagStore'
-import { usePageRecommendStore } from '@/data/data_status/app_status/page_status/recommend_store/usePageRecommendStore'
+import { store_view_recommend_page_info } from '@/views/view_app/page/page_recommend/store/store_view_recommend_page_info'
+import { store_view_tag_page_info } from '@/views/view_app/page/page_tag/store/store_view_tag_page_info'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 
 export class Get_NineSong_Temp_Data_To_LocalSqlite {
@@ -45,8 +45,6 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
   private pageMediaStore = usePageMediaStore()
   private pageMediaCueStore = usePageMediaCueStore()
   private pageHomeStore = usePageHomeStore()
-  private pageTagStore = usePageTagStore()
-  private pageRecommendStore = usePageRecommendStore()
 
   public async get_home_list(url: string) {
     await this.get_home_list_of_maximum_playback(url, false)
@@ -272,7 +270,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     const folder_path_sub_filter = this.pageMediaStore.page_songlists_library_folder_path
     let song_list = []
     let totalCount = 0
-    const metadata_model = this.pageTagStore.tag_metadata_find_model
+    const metadata_model = store_view_tag_page_info.tag_metadata_find_model
     if (!metadata_model) {
       if (playlist_id === '') {
         if (multi_sorts.length === 0) {
@@ -404,7 +402,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
         ? store_general_fetch_media_list._load_model === 'search'
           ? this.pageMediaStore.media_Files_temporary.length
           : this.playlistStore.playlist_MediaFiles_temporary.length
-        : this.pageTagStore.tag_LibraryItems_temporary.length
+        : store_view_tag_page_info.tag_LibraryItems_temporary.length
       this.pageMediaStore.media_File_metadata = []
       song_list.map(async (song: any, index: number) => {
         const new_song = this.mapMedia(song, url, index, last_index)
@@ -419,8 +417,8 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
             })
           }
         } else {
-          this.pageTagStore.tag_LibraryItems_metadata.push(song)
-          this.pageTagStore.tag_LibraryItems_temporary.push({
+          store_view_tag_page_info.tag_LibraryItems_metadata.push(song)
+          store_view_tag_page_info.tag_LibraryItems_temporary.push({
             id: song.ID,
             file_name: song.FileName,
             absoluteIndex: index + 1 + last_index,
@@ -452,7 +450,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     url = url.includes('api') ? url : url + '/api'
     let song_list = []
     let totalCount = 0
-    const metadata_model = this.pageTagStore.tag_metadata_find_model
+    const metadata_model = store_view_tag_page_info.tag_metadata_find_model
     if (!metadata_model) {
       if (playlist_id === '') {
         if (multi_sorts.length === 0) {
@@ -542,7 +540,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
         ? store_general_fetch_media_list._load_model === 'search'
           ? this.pageMediaStore.media_Files_temporary.length
           : this.playlistStore.playlist_MediaFiles_temporary.length
-        : this.pageTagStore.tag_LibraryItems_temporary.length
+        : store_view_tag_page_info.tag_LibraryItems_temporary.length
       this.pageMediaStore.media_File_metadata = []
       song_list.map(async (song: any, index: number) => {
         const new_song = this.mapMedia_Cue(song, url, index, last_index)
@@ -557,8 +555,8 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
             })
           }
         } else {
-          this.pageTagStore.tag_LibraryItems_metadata.push(song)
-          this.pageTagStore.tag_LibraryItems_temporary.push({
+          store_view_tag_page_info.tag_LibraryItems_metadata.push(song)
+          store_view_tag_page_info.tag_LibraryItems_temporary.push({
             id: song.ID,
             file_name: song.FileName,
             absoluteIndex: index + 1 + last_index,
@@ -588,7 +586,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
   ) {
     url = url.includes('api') ? url : url + '/api'
     let album_list = []
-    const metadata_model = this.pageTagStore.tag_metadata_find_model
+    const metadata_model = store_view_tag_page_info.tag_metadata_find_model
     if (!metadata_model) {
       if (multi_sorts.length === 0) {
         const data = await this.albumsApi.getAlbums(
@@ -652,7 +650,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       }
       const last_index = !metadata_model
         ? this.pageAlbumStore.album_Files_temporary.length
-        : this.pageTagStore.tag_LibraryItems_temporary.length
+        : store_view_tag_page_info.tag_LibraryItems_temporary.length
       this.pageAlbumStore.album_File_metadata = []
       album_list.map(async (album: any, index: number) => {
         if (!metadata_model) {
@@ -661,8 +659,8 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
             this.mapAlbum(album, url, index, last_index)
           )
         } else {
-          this.pageTagStore.tag_LibraryItems_metadata.push(album)
-          this.pageTagStore.tag_LibraryItems_temporary.push({
+          store_view_tag_page_info.tag_LibraryItems_metadata.push(album)
+          store_view_tag_page_info.tag_LibraryItems_temporary.push({
             id: album.ID,
             file_name: album.Name + ' - ' + album.Artist,
             absoluteIndex: index + 1 + last_index,
@@ -683,7 +681,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
   ) {
     url = url.includes('api') ? url : url + '/api'
     let artist_list = []
-    const metadata_model = this.pageTagStore.tag_metadata_find_model
+    const metadata_model = store_view_tag_page_info.tag_metadata_find_model
     if (!metadata_model) {
       if (multi_sorts.length === 0) {
         const data = await this.artistsApi.getArtists(
@@ -738,7 +736,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       }
       const last_index = !metadata_model
         ? this.pageArtistStore.artist_Files_temporary.length
-        : this.pageTagStore.tag_LibraryItems_temporary.length
+        : store_view_tag_page_info.tag_LibraryItems_temporary.length
       this.pageArtistStore.artist_File_metadata = []
       artist_list.map(async (artist: any, index: number) => {
         if (!metadata_model) {
@@ -747,8 +745,8 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
             this.mapArtist(artist, url, index, last_index)
           )
         } else {
-          this.pageTagStore.tag_LibraryItems_metadata.push(artist)
-          this.pageTagStore.tag_LibraryItems_temporary.push({
+          store_view_tag_page_info.tag_LibraryItems_metadata.push(artist)
+          store_view_tag_page_info.tag_LibraryItems_temporary.push({
             id: artist.ID,
             file_name: artist.Name,
             absoluteIndex: index + 1 + last_index,
@@ -906,9 +904,9 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       all_word_clouds = result['ninesong-response']['wordClouds']
     }
     if (all_word_clouds != undefined && all_word_clouds.length > 0) {
-      this.pageRecommendStore.recommend_WordCloudTag_metadata = []
+      store_view_recommend_page_info.recommend_WordCloudTag_metadata = []
       all_word_clouds.map((word: any) => {
-        this.pageRecommendStore.recommend_WordCloudTag_metadata.push({
+        store_view_recommend_page_info.recommend_WordCloudTag_metadata.push({
           id: word.ID,
           name: word.Name,
           count: word.Count,
@@ -928,9 +926,9 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       all_word_clouds = result['ninesong-response']['wordClouds']
     }
     if (all_word_clouds != undefined && all_word_clouds.length > 0) {
-      this.pageRecommendStore.recommend_WordCloudGenre_metadata = []
+      store_view_recommend_page_info.recommend_WordCloudGenre_metadata = []
       all_word_clouds.map((word: any) => {
-        this.pageRecommendStore.recommend_WordCloudGenre_metadata.push({
+        store_view_recommend_page_info.recommend_WordCloudGenre_metadata.push({
           id: word.ID,
           name: word.Name,
           count: word.Count,
@@ -948,9 +946,9 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       all_word_clouds = result['ninesong-response']['wordClouds']
     }
     if (all_word_clouds != undefined && all_word_clouds.length > 0) {
-      this.pageRecommendStore.recommend_WordCloudTag_metadata = []
+      store_view_recommend_page_info.recommend_WordCloudTag_metadata = []
       all_word_clouds.map((word: any) => {
-        this.pageRecommendStore.recommend_WordCloudTag_metadata.push({
+        store_view_recommend_page_info.recommend_WordCloudTag_metadata.push({
           id: word.ID,
           name: word.Name,
           count: word.Count,
@@ -968,9 +966,9 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       all_medias = result['ninesong-response']['wordClouds']
     }
     if (all_medias != undefined && all_medias.length > 0) {
-      this.pageRecommendStore.recommend_MediaSearch_metadata = []
+      store_view_recommend_page_info.recommend_MediaSearch_metadata = []
       all_medias.map((word: any) => {
-        this.pageRecommendStore.recommend_MediaSearch_metadata.push({
+        store_view_recommend_page_info.recommend_MediaSearch_metadata.push({
           id: word.ID,
           type: word.Type,
           name: word.Name,
@@ -989,8 +987,8 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       song_list = result['ninesong-response']['mediaFiles']
     }
     if (song_list != undefined && song_list.length > 0) {
-      this.pageRecommendStore.recommend_MediaFiles_metadata = []
-      this.pageRecommendStore.recommend_MediaFiles_temporary = []
+      store_view_recommend_page_info.recommend_MediaFiles_metadata = []
+      store_view_recommend_page_info.recommend_MediaFiles_temporary = []
       song_list.map(async (song: any, index: number) => {
         let new_song = undefined
         if (store_router_data_info.router_select === 'recommend') {
@@ -998,8 +996,8 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
         } else {
           new_song = this.mapMedia(song, url, index)
         }
-        this.pageRecommendStore.recommend_MediaFiles_metadata.push(song)
-        this.pageRecommendStore.recommend_MediaFiles_temporary.push({
+        store_view_recommend_page_info.recommend_MediaFiles_metadata.push(song)
+        store_view_recommend_page_info.recommend_MediaFiles_temporary.push({
           ...new_song,
           play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
         })
