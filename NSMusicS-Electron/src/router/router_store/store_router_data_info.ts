@@ -52,7 +52,7 @@ watch(
       store_router_data_info.router_select = newValue
       if (newValue === 'home') {
         await store_general_fetch_home_list.fetchData_Home()
-      } else if (newValue === 'categories') {
+      } else if (newValue === 'play_data') {
       } else if (newValue === 'charts') {
       } else if (newValue === 'recommend') {
       } else if (newValue === 'tag') {

@@ -27,8 +27,16 @@ const router = createRouter({
       },
     },
     {
-      path: '/categories',
-      name: 'categories',
+      path: '/play_data',
+      name: 'play_data',
+      component: () => import('@/router/router_views/router_app/Router_Categories.vue'),
+      meta: {
+        cleanup: true,
+      },
+    },
+    {
+      path: '/recently_added',
+      name: 'recently_added',
       component: () => import('@/router/router_views/router_app/Router_Categories.vue'),
       meta: {
         cleanup: true,

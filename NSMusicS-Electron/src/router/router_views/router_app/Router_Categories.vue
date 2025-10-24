@@ -6,13 +6,13 @@ import { store_server_user_model } from '@/data/data_stores/server_configs_store
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 
 onMounted(async () => {
-  store_router_data_info.router_select = 'categories'
+  store_router_data_info.router_select = 'play_data'
 })
 </script>
 
 <template>
   <div class="view_show">
-    <!--    <Table_Categories/>-->
+    <!--    <Table_Play_data/>-->
     <div
       v-if="
         store_server_user_model.model_server_type_of_web &&

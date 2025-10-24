@@ -7,7 +7,7 @@ import {
   FullScreenMinimize24Filled,
   Settings20Regular,
   WindowNew16Regular,
-  ChartMultiple24Regular,
+  ReceiptPlay24Regular,
   DataHistogram20Regular,
   TagMultiple24Regular,
   History20Filled,
@@ -130,9 +130,7 @@ function create_menuOptions_appBar() {
   )
   store_system_configs_info.app_view_menuOptions.push(
     {
-      label: computed(() =>
-        renderRouterLink('charts', t('Play') + t('nsmusics.siderbar_menu.charts'))
-      ),
+      label: computed(() => renderRouterLink('charts', t('Play') + t('nsmusics.siderbar_menu.charts'))),
       key: 'charts',
       icon: renderIcon(DataHistogram20Regular),
     },
@@ -142,9 +140,9 @@ function create_menuOptions_appBar() {
       icon: renderIcon(FindInPageFilled),
     },
     {
-      label: computed(() => renderRouterLink('home', t('Play') + t('Data'))),
-      key: 'home',
-      icon: renderIcon(ChartMultiple24Regular),
+      label: computed(() => renderRouterLink('play_data', t('Play') + t('Data'))),
+      key: 'play_data',
+      icon: renderIcon(ReceiptPlay24Regular),
     },
     {
       label: computed(() => renderRouterLink('home', t('common.home'))),
@@ -153,10 +151,8 @@ function create_menuOptions_appBar() {
     },
     { key: 'divider-1', type: 'divider', props: { style: { marginLeft: '22px' } } },
     {
-      label: computed(() =>
-        renderRouterLink('home', t('filter.recentlyAdded'))
-      ),
-      key: 'home',
+      label: computed(() => renderRouterLink('recently_added', t('filter.recentlyAdded'))),
+      key: 'recently_added',
       icon: renderIcon(History20Filled),
     },
     {
@@ -231,10 +227,15 @@ async function get_playerbar_to_switch_playerview(value) {
 }
 async function handleMenuSelection() {
   const menuActions = {
-    categories: () => {
-      clearFilesIfNeeded('categories')
-      store_router_data_info.router_select = 'categories'
-      fetchDataIfNeeded('categories')
+    play_data: () => {
+      clearFilesIfNeeded('play_data')
+      store_router_data_info.router_select = 'play_data'
+      fetchDataIfNeeded('play_data')
+    },
+    recently_added: () => {
+      clearFilesIfNeeded('recently_added')
+      store_router_data_info.router_select = 'recently_added'
+      fetchDataIfNeeded('recently_added')
     },
     charts: () => {
       clearFilesIfNeeded('charts')
@@ -301,7 +302,8 @@ async function handleMenuSelection() {
 function clearFilesIfNeeded(
   except?:
     | 'home'
-    | 'categories'
+    | 'play_data'
+    | 'recently_added'
     | 'charts'
     | 'recommend'
     | 'tag'
@@ -321,7 +323,8 @@ function clearFilesIfNeeded(
 function fetchDataIfNeeded(
   type:
     | 'home'
-    | 'categories'
+    | 'play_data'
+    | 'recently_added'
     | 'charts'
     | 'recommend'
     | 'tag'
@@ -333,7 +336,8 @@ function fetchDataIfNeeded(
   if (store_router_data_logic.clear_Memory_Model) {
     if (type === 'home') {
       store_general_fetch_home_list.fetchData_Home()
-    } else if (type === 'categories') {
+    } else if (type === 'play_data') {
+    } else if (type === 'recently_added') {
     } else if (type === 'charts') {
     } else if (type === 'recommend') {
     } else if (type === 'tag') {
@@ -373,7 +377,9 @@ routers.afterEach(async (to, from) => {
     store_router_data_info.router_select = to.name
     if (to.name === 'home') {
       store_router_data_info.router_name = to.name
-    } else if (to.name === 'categories') {
+    } else if (to.name === 'play_data') {
+      store_router_data_info.router_name = to.name
+    } else if (to.name === 'recently_added') {
       store_router_data_info.router_name = to.name
     } else if (to.name === 'charts') {
       store_router_data_info.router_name = to.name
@@ -1043,10 +1049,15 @@ function fullScreen() {
               class="view_show_data"
               v-else-if="store_router_data_info.router_select === 'home'"
             ></RouterView>
-            <!--Categories View -->
+            <!--play_data View -->
             <RouterView
               class="view_show_data"
-              v-else-if="store_router_data_info.router_select === 'categories'"
+              v-else-if="store_router_data_info.router_select === 'play_data'"
+            ></RouterView>
+            <!--play_data View -->
+            <RouterView
+                class="view_show_data"
+                v-else-if="store_router_data_info.router_select === 'recently_added'"
             ></RouterView>
             <!--Charts View -->
             <RouterView

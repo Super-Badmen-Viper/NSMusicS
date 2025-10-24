@@ -17,7 +17,7 @@ import { store_system_configs_save } from '@/data/data_stores/local_system_store
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 
 // 定义页面类型枚举
-type PageType = 'home' | 'categories' | 'charts' | 'recommend' | 'tag' | 'media_cue' | 'media' | 'album' | 'artist'
+type PageType = 'home' | 'play_data' | 'charts' | 'recommend' | 'tag' | 'media_cue' | 'media' | 'album' | 'artist'
 
 export const store_router_data_logic = reactive({
   reset_data() {
@@ -135,8 +135,8 @@ export const store_router_data_logic = reactive({
     this.clearTemporaryFilesExcept('home')
   },
   
-  clear_Files_temporary_except_categories() {
-    this.clearTemporaryFilesExcept('categories')
+  clear_Files_temporary_except_play_data() {
+    this.clearTemporaryFilesExcept('play_data')
   },
   
   clear_Files_temporary_except_charts() {
