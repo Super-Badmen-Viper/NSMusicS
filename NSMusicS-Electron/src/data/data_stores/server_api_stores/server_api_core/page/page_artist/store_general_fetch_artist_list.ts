@@ -27,7 +27,7 @@ export const store_general_fetch_artist_list = reactive({
   async fetchData_Artist() {
     const pageArtistStore = usePageArtistStore()
     // clear RouterView of vue-virtual-scroller data
-    store_router_data_logic.clear_Files_temporary()
+    store_router_data_logic.clearAllTemporaryFiles()
     store_router_data_info.router_select = 'artist'
     if (store_server_user_model.model_server_type_of_local) {
       if (isElectron) {

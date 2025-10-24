@@ -29,7 +29,7 @@ export const store_router_history_data_of_media = reactive({
     ) // 保留此滚轮值(上次浏览位置)
     this.router_select_history_date_of_Media = this.router_history_datas_of_Media[newIndex]
 
-    store_router_data_logic.clear_Files_temporary()
+    store_router_data_logic.clearAllTemporaryFiles()
 
     const selectedRouterName = this.router_select_history_date_of_Media.router_name
     if (selectedRouterName === 'media') {

@@ -16,6 +16,9 @@ import { store_system_configs_save } from '@/data/data_stores/local_system_store
 // @ts-ignore - 忽略模块导入类型检查
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 
+// 定义页面类型枚举
+type PageType = 'home' | 'categories' | 'charts' | 'recommend' | 'tag' | 'media_cue' | 'media' | 'album' | 'artist'
+
 export const store_router_data_logic = reactive({
   reset_data() {
     const pageMediaStore = usePageMediaStore()
@@ -38,149 +41,130 @@ export const store_router_data_logic = reactive({
 
   clear_Memory_Model: false,
   get_clear_Memory_Model(value: any) {
-    if (value) {
-      store_router_data_logic.clear_Equilibrium_Model = false
-      store_router_data_logic.clear_UserExperience_Model = false
-    } else {
-      store_router_data_logic.clear_Equilibrium_Model = false
-      store_router_data_logic.clear_UserExperience_Model = true
-    }
+    this.clear_Memory_Model = value
+    this.clear_Equilibrium_Model = value ? false : this.clear_Equilibrium_Model
+    this.clear_UserExperience_Model = value ? false : true
     store_system_configs_save.save_system_config_of_App_Configs()
   },
   clear_Equilibrium_Model: false,
   get_clear_Equilibrium_Model(value: any) {
-    if (value) {
-      store_router_data_logic.clear_Memory_Model = false
-      store_router_data_logic.clear_UserExperience_Model = false
-    } else {
-      store_router_data_logic.clear_Memory_Model = true
-      store_router_data_logic.clear_UserExperience_Model = false
-    }
+    this.clear_Equilibrium_Model = value
+    this.clear_Memory_Model = value ? false : true
+    this.clear_UserExperience_Model = value ? false : this.clear_UserExperience_Model
     store_system_configs_save.save_system_config_of_App_Configs()
   },
   clear_UserExperience_Model: true,
   get_clear_UserExperience_Model(value: any) {
-    if (value) {
-      store_router_data_logic.clear_Memory_Model = false
-      store_router_data_logic.clear_Equilibrium_Model = false
-    } else {
-      store_router_data_logic.clear_Memory_Model = true
-      store_router_data_logic.clear_Equilibrium_Model = false
-    }
+    this.clear_UserExperience_Model = value
+    this.clear_Memory_Model = value ? false : true
+    this.clear_Equilibrium_Model = value ? false : this.clear_Equilibrium_Model
     store_system_configs_save.save_system_config_of_App_Configs()
   },
 
+  /**
+   * 清除所有页面的临时文件数据
+   */
+  clearAllTemporaryFiles() {
+    const pageHomeStore = usePageHomeStore()
+    const pageMediaStore = usePageMediaStore()
+    const pageAlbumStore = usePageAlbumStore()
+    const pageArtistStore = usePageArtistStore()
+    
+    // 清除首页临时数据
+    pageHomeStore.home_Files_temporary_maximum_playback = []
+    pageHomeStore.home_Files_temporary_random_search = []
+    pageHomeStore.home_Files_temporary_recently_added = []
+    pageHomeStore.home_Files_temporary_recently_played = []
+    
+    // 清除其他页面临时数据
+    pageMediaStore.media_Files_temporary = []
+    pageAlbumStore.album_Files_temporary = []
+    pageArtistStore.artist_Files_temporary = []
+  },
+
+  /**
+   * 根据指定页面清除临时文件（保留该页面的数据）
+   * @param pageToKeep 需要保留数据的页面
+   */
+  clearTemporaryFilesExcept(pageToKeep: PageType) {
+    store_router_data_info.router_select = pageToKeep
+    
+    const pageHomeStore = usePageHomeStore()
+    const pageMediaStore = usePageMediaStore()
+    const pageAlbumStore = usePageAlbumStore()
+    const pageArtistStore = usePageArtistStore()
+    
+    // 定义需要保留首页数据的页面
+    const keepHomeData = pageToKeep === 'home'
+    
+    // 定义需要保留各页面数据的条件
+    const keepMediaData = pageToKeep === 'media'
+    const keepAlbumData = pageToKeep === 'album'
+    const keepArtistData = pageToKeep === 'artist'
+    
+    // 清除首页数据（除非需要保留）
+    if (!keepHomeData) {
+      pageHomeStore.home_Files_temporary_maximum_playback = []
+      pageHomeStore.home_Files_temporary_random_search = []
+      pageHomeStore.home_Files_temporary_recently_added = []
+      pageHomeStore.home_Files_temporary_recently_played = []
+    }
+    
+    // 清除媒体页面数据（除非需要保留）
+    if (!keepMediaData) {
+      pageMediaStore.media_Files_temporary = []
+    }
+    
+    // 清除专辑页面数据（除非需要保留）
+    if (!keepAlbumData) {
+      pageAlbumStore.album_Files_temporary = []
+    }
+    
+    // 清除艺术家页面数据（除非需要保留）
+    if (!keepArtistData) {
+      pageArtistStore.artist_Files_temporary = []
+    }
+  },
+
+  // 原有的清除特定页面临时文件的方法，使用新的通用方法实现
   clear_Files_temporary() {
-    const pageHomeStore = usePageHomeStore()
-    const pageMediaStore = usePageMediaStore()
-    const pageAlbumStore = usePageAlbumStore()
-    const pageArtistStore = usePageArtistStore()
-    pageHomeStore.home_Files_temporary_maximum_playback = []
-    pageHomeStore.home_Files_temporary_random_search = []
-    pageHomeStore.home_Files_temporary_recently_added = []
-    pageHomeStore.home_Files_temporary_recently_played = []
-    pageMediaStore.media_Files_temporary = []
-    pageAlbumStore.album_Files_temporary = []
-    pageArtistStore.artist_Files_temporary = []
+    this.clearAllTemporaryFiles()
   },
+  
   clear_Files_temporary_except_home() {
-    store_router_data_info.router_select = 'home'
-    const pageMediaStore = usePageMediaStore()
-    const pageAlbumStore = usePageAlbumStore()
-    const pageArtistStore = usePageArtistStore()
-    pageMediaStore.media_Files_temporary = []
-    pageAlbumStore.album_Files_temporary = []
-    pageArtistStore.artist_Files_temporary = []
+    this.clearTemporaryFilesExcept('home')
   },
+  
   clear_Files_temporary_except_categories() {
-    store_router_data_info.router_select = 'categories'
-    const pageMediaStore = usePageMediaStore()
-    const pageAlbumStore = usePageAlbumStore()
-    const pageArtistStore = usePageArtistStore()
-    pageMediaStore.media_Files_temporary = []
-    pageAlbumStore.album_Files_temporary = []
-    pageArtistStore.artist_Files_temporary = []
+    this.clearTemporaryFilesExcept('categories')
   },
+  
   clear_Files_temporary_except_charts() {
-    store_router_data_info.router_select = 'charts'
-    const pageHomeStore = usePageHomeStore()
-    const pageAlbumStore = usePageAlbumStore()
-    const pageArtistStore = usePageArtistStore()
-    pageHomeStore.home_Files_temporary_maximum_playback = []
-    pageHomeStore.home_Files_temporary_random_search = []
-    pageHomeStore.home_Files_temporary_recently_added = []
-    pageHomeStore.home_Files_temporary_recently_played = []
-    pageAlbumStore.album_Files_temporary = []
-    pageArtistStore.artist_Files_temporary = []
+    this.clearTemporaryFilesExcept('charts')
   },
+  
   clear_Files_temporary_except_recommend() {
-    store_router_data_info.router_select = 'recommend'
-    const pageHomeStore = usePageHomeStore()
-    const pageAlbumStore = usePageAlbumStore()
-    const pageArtistStore = usePageArtistStore()
-    pageHomeStore.home_Files_temporary_maximum_playback = []
-    pageHomeStore.home_Files_temporary_random_search = []
-    pageHomeStore.home_Files_temporary_recently_added = []
-    pageHomeStore.home_Files_temporary_recently_played = []
-    pageAlbumStore.album_Files_temporary = []
-    pageArtistStore.artist_Files_temporary = []
+    this.clearTemporaryFilesExcept('recommend')
   },
+  
   clear_Files_temporary_except_tag() {
-    store_router_data_info.router_select = 'tag'
-    const pageHomeStore = usePageHomeStore()
-    const pageAlbumStore = usePageAlbumStore()
-    const pageArtistStore = usePageArtistStore()
-    pageHomeStore.home_Files_temporary_maximum_playback = []
-    pageHomeStore.home_Files_temporary_random_search = []
-    pageHomeStore.home_Files_temporary_recently_added = []
-    pageHomeStore.home_Files_temporary_recently_played = []
-    pageAlbumStore.album_Files_temporary = []
-    pageArtistStore.artist_Files_temporary = []
+    this.clearTemporaryFilesExcept('tag')
   },
+  
   clear_Files_temporary_except_media_cue() {
-    store_router_data_info.router_select = 'media_cue'
-    const pageMediaStore = usePageMediaStore()
-    const pageAlbumStore = usePageAlbumStore()
-    const pageArtistStore = usePageArtistStore()
-    pageMediaStore.media_Files_temporary = []
-    pageAlbumStore.album_Files_temporary = []
-    pageArtistStore.artist_Files_temporary = []
+    this.clearTemporaryFilesExcept('media_cue')
   },
+  
   clear_Files_temporary_except_album() {
-    store_router_data_info.router_select = 'album'
-    const pageHomeStore = usePageHomeStore()
-    const pageMediaStore = usePageMediaStore()
-    const pageArtistStore = usePageArtistStore()
-    pageHomeStore.home_Files_temporary_maximum_playback = []
-    pageHomeStore.home_Files_temporary_random_search = []
-    pageHomeStore.home_Files_temporary_recently_added = []
-    pageHomeStore.home_Files_temporary_recently_played = []
-    pageMediaStore.media_Files_temporary = []
-    pageArtistStore.artist_Files_temporary = []
+    this.clearTemporaryFilesExcept('album')
   },
+  
   clear_Files_temporary_except_media() {
-    store_router_data_info.router_select = 'media'
-    const pageHomeStore = usePageHomeStore()
-    const pageAlbumStore = usePageAlbumStore()
-    const pageArtistStore = usePageArtistStore()
-    pageHomeStore.home_Files_temporary_maximum_playback = []
-    pageHomeStore.home_Files_temporary_random_search = []
-    pageHomeStore.home_Files_temporary_recently_added = []
-    pageHomeStore.home_Files_temporary_recently_played = []
-    pageAlbumStore.album_Files_temporary = []
-    pageArtistStore.artist_Files_temporary = []
+    this.clearTemporaryFilesExcept('media')
   },
+  
   clear_Files_temporary_except_artist() {
-    store_router_data_info.router_select = 'artist'
-    const pageHomeStore = usePageHomeStore()
-    const pageMediaStore = usePageMediaStore()
-    const pageAlbumStore = usePageAlbumStore()
-    pageHomeStore.home_Files_temporary_maximum_playback = []
-    pageHomeStore.home_Files_temporary_random_search = []
-    pageHomeStore.home_Files_temporary_recently_added = []
-    pageHomeStore.home_Files_temporary_recently_played = []
-    pageMediaStore.media_Files_temporary = []
-    pageAlbumStore.album_Files_temporary = []
+    this.clearTemporaryFilesExcept('artist')
   },
 
   get_media_list_of_album_id_by_album_info(value: any) {

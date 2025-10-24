@@ -197,7 +197,7 @@ function create_menuOptions_appBar() {
 async function get_playerbar_to_switch_playerview(value) {
   playerAppearanceStore.player_show_complete = false
   if (store_router_data_logic.clear_Memory_Model) {
-    store_router_data_logic.clear_Files_temporary() // Memory Model
+    store_router_data_logic.clearAllTemporaryFiles() // Memory Model
   }
   if (value === 0) {
     playerAppearanceStore.player_show = true
@@ -311,26 +311,10 @@ function clearFilesIfNeeded(
     | 'artist'
 ) {
   if (!store_router_data_logic.clear_Memory_Model) {
-    if (except === 'home') {
-      store_router_data_logic.clear_Files_temporary_except_home()
-    } else if (except === 'categories') {
-      store_router_data_logic.clear_Files_temporary_except_categories()
-    } else if (except === 'charts') {
-      store_router_data_logic.clear_Files_temporary_except_charts()
-    } else if (except === 'recommend') {
-      store_router_data_logic.clear_Files_temporary_except_recommend()
-    } else if (except === 'tag') {
-      store_router_data_logic.clear_Files_temporary_except_tag()
-    } else if (except === 'media_cue') {
-      store_router_data_logic.clear_Files_temporary_except_media_cue()
-    } else if (except === 'album') {
-      store_router_data_logic.clear_Files_temporary_except_album()
-    } else if (except === 'media') {
-      store_router_data_logic.clear_Files_temporary_except_media()
-    } else if (except === 'artist') {
-      store_router_data_logic.clear_Files_temporary_except_artist()
+    if (except) {
+      store_router_data_logic.clearTemporaryFilesExcept(except)
     } else {
-      store_router_data_logic.clear_Files_temporary()
+      store_router_data_logic.clearAllTemporaryFiles()
     }
   }
 }
@@ -374,7 +358,7 @@ import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/alb
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 routers.beforeEach((to, from, next) => {
   if (to.name !== from.name) {
-    store_router_data_logic.clear_Files_temporary()
+    store_router_data_logic.clearAllTemporaryFiles()
     next()
   }
 })
@@ -385,7 +369,7 @@ routers.afterEach(async (to, from) => {
     } catch (error) {
       console.error('获取页面顶部信息失败:', error)
     }
-    store_router_data_logic.clear_Files_temporary()
+    store_router_data_logic.clearAllTemporaryFiles()
     store_router_data_info.router_select = to.name
     if (to.name === 'home') {
       store_router_data_info.router_name = to.name

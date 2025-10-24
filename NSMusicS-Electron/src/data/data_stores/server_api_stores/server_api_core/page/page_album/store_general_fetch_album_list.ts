@@ -32,7 +32,7 @@ export const store_general_fetch_album_list = reactive({
         if (playerAppearanceStore.player_mode_of_medialist_from_external_import) {
           playerAppearanceStore.player_mode_of_medialist_from_external_import = false
         } else {
-          store_router_data_logic.clear_Files_temporary()
+          store_router_data_logic.clearAllTemporaryFiles()
           store_router_data_info.router_select = 'album'
         }
 
