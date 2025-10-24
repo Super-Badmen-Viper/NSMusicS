@@ -8,7 +8,9 @@ import {
   Settings20Regular,
   WindowNew16Regular,
   ChartMultiple24Regular,
+  DataHistogram20Regular,
   TagMultiple24Regular,
+  History20Filled,
 } from '@vicons/fluent'
 import {
   AlbumFilled,
@@ -127,19 +129,12 @@ function create_menuOptions_appBar() {
     { key: 'divider-1', type: 'divider', props: { style: { marginLeft: '22px' } } }
   )
   store_system_configs_info.app_view_menuOptions.push(
-    // {
-    //   label: computed(() =>
-    //     renderRouterLink('categories', t('entity.smartPlaylist') + t('Categories'))
-    //   ),
-    //   key: 'categories',
-    //   icon: renderIcon(DataClass),
-    // },
     {
       label: computed(() =>
-        renderRouterLink('charts', t('Play') + t('Data') + t('nsmusics.siderbar_menu.charts'))
+        renderRouterLink('charts', t('Play') + t('nsmusics.siderbar_menu.charts'))
       ),
       key: 'charts',
-      icon: renderIcon(ChartMultiple24Regular),
+      icon: renderIcon(DataHistogram20Regular),
     },
     {
       label: computed(() => renderRouterLink('recommend', t('nsmusics.view_page.recommend'))),
@@ -147,11 +142,23 @@ function create_menuOptions_appBar() {
       icon: renderIcon(FindInPageFilled),
     },
     {
+      label: computed(() => renderRouterLink('home', t('Play') + t('Data'))),
+      key: 'home',
+      icon: renderIcon(ChartMultiple24Regular),
+    },
+    {
       label: computed(() => renderRouterLink('home', t('common.home'))),
       key: 'home',
       icon: renderIcon(Home28Regular),
     },
     { key: 'divider-1', type: 'divider', props: { style: { marginLeft: '22px' } } },
+    {
+      label: computed(() =>
+        renderRouterLink('home', t('filter.recentlyAdded'))
+      ),
+      key: 'home',
+      icon: renderIcon(History20Filled),
+    },
     {
       label: computed(() => renderRouterLink('album', t('entity.album_other'))),
       key: 'album',
