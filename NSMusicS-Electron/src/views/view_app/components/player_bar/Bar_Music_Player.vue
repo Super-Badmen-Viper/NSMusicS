@@ -1513,7 +1513,7 @@ watch(
                   size="small"
                   @click="
                     () => {
-                      drawer_order_show.value = !drawer_order_show.value
+                      drawer_order_show = !drawer_order_show
                     }
                   "
                 >
@@ -1540,7 +1540,7 @@ watch(
                 size="small"
                 @click="
                   () => {
-                    drawer_order_show.value = !drawer_order_show.value
+                    drawer_order_show = !drawer_order_show
                   }
                 "
               >
@@ -1574,7 +1574,7 @@ watch(
               size="small"
               @click="
                 () => {
-                  drawer_order_show.value = !drawer_order_show.value
+                  drawer_order_show = !drawer_order_show
                 }
               "
             >
@@ -1601,7 +1601,7 @@ watch(
             size="small"
             @click="
               () => {
-                drawer_order_show.value = !drawer_order_show.value
+                drawer_order_show = !drawer_order_show
               }
             "
           >
@@ -1659,7 +1659,7 @@ watch(
                 size="small"
                 @click="
                   () => {
-                    drawer_volume_show.value = !drawer_volume_show.value
+                    drawer_volume_show = !drawer_volume_show
                   }
                 "
               >
@@ -1677,7 +1677,7 @@ watch(
             size="small"
             @click="
               () => {
-                drawer_volume_show.value = !drawer_volume_show.value
+                drawer_volume_show = !drawer_volume_show
               }
             "
           >
@@ -1771,8 +1771,8 @@ watch(
                   quaternary
                   @click="
                     () => {
-                      play_order.value = 'playback-1'
-                      drawer_order_show.value = false
+                      play_order = 'playback-1'
+                      drawer_order_show = false
                       store_server_user_model.random_play_model = false
                     }
                   "
@@ -1794,8 +1794,8 @@ watch(
                   quaternary
                   @click="
                     () => {
-                      play_order.value = 'playback-2'
-                      drawer_order_show.value = false
+                      play_order = 'playback-2'
+                      drawer_order_show = false
                       store_server_user_model.random_play_model = false
                     }
                   "
@@ -1817,8 +1817,8 @@ watch(
                   quaternary
                   @click="
                     () => {
-                      play_order.value = 'playback-3'
-                      drawer_order_show.value = false
+                      play_order = 'playback-3'
+                      drawer_order_show = false
                       store_server_user_model.random_play_model = false
                     }
                   "
@@ -1879,10 +1879,10 @@ watch(
                   quaternary
                   @click="
                     async () => {
-                      play_order.value = 'playback-2'
+                      play_order = 'playback-2'
                       // 刷新play_order响应式状态
-                      play_order.value = 'playback-4'
-                      drawer_order_show.value = false
+                      play_order = 'playback-4'
+                      drawer_order_show = false
                       store_server_user_model.random_play_model = true
                       await begin_random_play_model()
                     }

@@ -856,7 +856,7 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
             </template>
             {{ $t('common.refresh') }}
           </n-tooltip>
-          <n-divider vertical style="width: 2px; height: 20px; margin-top: -4px" />
+          <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;margin-left: 4px;margin-right: 4px;" />
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle @click="show_search_area">
@@ -1012,7 +1012,7 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
             </n-card>
           </n-modal>
 
-          <n-divider vertical style="width: 2px; height: 20px; margin-top: -2px" />
+          <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;margin-left: 4px;margin-right: 4px;" />
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle @click="dynamicScroller.$el.scrollTop = 0">

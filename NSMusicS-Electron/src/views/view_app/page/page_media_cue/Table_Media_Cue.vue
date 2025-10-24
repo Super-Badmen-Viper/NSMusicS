@@ -991,7 +991,7 @@ onBeforeUnmount(() => {
             </template>
             {{ $t('common.refresh') }}
           </n-tooltip>
-          <n-divider vertical style="width: 2px; height: 20px; margin-top: -4px" />
+          <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;margin-left: 4px;margin-right: 4px;" />
 
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
@@ -1138,13 +1138,16 @@ onBeforeUnmount(() => {
 
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
-              <n-badge :value="page_songlists_filter_year" :offset="[22, 17]">
-                <n-button quaternary circle @click="Type_Filter_Show = true">
-                  <template #icon>
-                    <n-icon :size="20"><Filter20Filled /></n-icon>
-                  </template>
-                </n-button>
-              </n-badge>
+              <n-button
+                quaternary
+                circle
+                style="margin-left: -10px; margin-right: -10px"
+                @click="Type_Filter_Show = true"
+              >
+                <template #icon>
+                  <n-icon :size="20"><Filter20Filled /></n-icon>
+                </template>
+              </n-button>
             </template>
             {{ $t('Filters') }}
           </n-tooltip>
@@ -1199,7 +1202,7 @@ onBeforeUnmount(() => {
             </n-card>
           </n-modal>
 
-          <n-divider vertical style="width: 2px; height: 20px; margin-top: -4px" />
+          <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;margin-left: 4px;margin-right: 4px;" />
 
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
@@ -1615,7 +1618,7 @@ onBeforeUnmount(() => {
 }
 .table_media_cue {
   width: calc(100vw - 200px);
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth; */
 }
 .message_media_cue {
   width: calc(100vw - 230px);

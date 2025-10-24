@@ -1634,7 +1634,10 @@ onBeforeUnmount(() => {
             </template>
             {{ $t('common.refresh') }}
           </n-tooltip>
-          <n-divider vertical style="width: 2px; height: 20px; margin-top: -4px" />
+          <n-divider
+            vertical
+            style="width: 2px;height: 20px;margin-top: -4px;margin-left: 4px;margin-right: 4px;"
+          />
 
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
@@ -2047,7 +2050,7 @@ onBeforeUnmount(() => {
           <n-divider
             v-if="page_songlists_selected !== 'song_list_recently'"
             vertical
-            style="width: 2px; height: 20px; margin-top: -4px"
+            style="width: 2px;height: 20px;margin-top: -4px;margin-left: 4px;margin-right: 4px;"
           />
           <n-tooltip
             v-if="page_songlists_selected !== 'song_list_recently'"
@@ -2117,7 +2120,10 @@ onBeforeUnmount(() => {
             </n-p>
           </n-space>
 
-          <n-divider vertical style="width: 2px; height: 20px; margin-top: -4px" />
+          <n-divider
+            vertical
+            style="width: 2px;height: 20px;margin-top: -4px;margin-left: 4px;margin-right: 4px;"
+          />
           <n-dropdown
             v-if="
               store_server_users.server_select_kind != 'jellyfin' &&
@@ -2192,9 +2198,8 @@ onBeforeUnmount(() => {
                 store_server_users.server_select_kind === 'emby')
             "
             vertical
-            style="width: 2px; height: 20px; margin-top: -4px"
+            style="width: 2px;height: 20px;margin-top: -4px;margin-left: 4px;margin-right: 4px;"
           />
-
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button
@@ -2304,7 +2309,20 @@ onBeforeUnmount(() => {
         @scroll="onScroll"
       >
         <template #before>
-          
+          <n-space vertical
+                   style="margin-left: 19px;margin-top: 17px;height: 70px;">
+            <n-grid
+              :cols="4"
+              :x-gap="40"
+              :y-gap="10"
+              layout-shift-disabled
+              style="width: 730px"
+            >
+              <n-gi v-for="songlist in page_songlists_statistic" :key="songlist.id">
+                <n-statistic :label="songlist.label" :value="songlist.song_count" />
+              </n-gi>
+            </n-grid>
+          </n-space>
         </template>
         <template #after> </template>
         <template #default="{ item, index, active }">
@@ -2949,14 +2967,14 @@ onBeforeUnmount(() => {
 }
 .table-media {
   width: calc(100vw - 200px);
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth; */
 }
 .message-media {
   width: calc(100vw - 230px);
   height: 77px;
 }
 .message-media:nth-child(1) {
-  margin-top: 16px;
+  margin-top: 12px;
 }
 .media_info {
   width: calc(100vw - 230px);
