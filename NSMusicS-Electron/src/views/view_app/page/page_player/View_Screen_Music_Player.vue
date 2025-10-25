@@ -790,24 +790,25 @@ let unwatch_animationInstance = watch(
 let unwatch_player_background_model_num = watch(
   () => player_background_model_num.value,
   (newValue) => {
-    if (playerAppearanceStore.player_use_lottie_animation && playerSettingStore.player.isPlaying) {
+    if (playerAppearanceStore.player_use_lottie_animation) {
       animationInstance_model_1_spectrum.value.pause()
       animationInstance_model_1_wave.value.pause()
       animationInstance_model_1_spectrum_copy.value.pause()
       animationInstance_model_2_wave.value.pause()
-      ///
-      if (playerAppearanceStore.player_background_model_num === 1) {
-        animationInstance_model_1_spectrum.value.play()
-        animationInstance_model_1_wave.value.play()
-      }
-      if (playerAppearanceStore.player_background_model_num === 2) {
-        animationInstance_model_2_wave.value.play()
-      }
-      if (playerAppearanceStore.player_background_model_num === 4) {
-        animationInstance_model_1_spectrum_copy.value.play()
-      }
-      if (playerAppearanceStore.player_background_model_num === 5) {
-        animationInstance_model_5_wave.value.play()
+      if (playerSettingStore.player.isPlaying) {
+        if (playerAppearanceStore.player_background_model_num === 1) {
+          animationInstance_model_1_spectrum.value.play()
+          animationInstance_model_1_wave.value.play()
+        }
+        if (playerAppearanceStore.player_background_model_num === 2) {
+          animationInstance_model_2_wave.value.play()
+        }
+        if (playerAppearanceStore.player_background_model_num === 4) {
+          animationInstance_model_1_spectrum_copy.value.play()
+        }
+        if (playerAppearanceStore.player_background_model_num === 5) {
+          animationInstance_model_5_wave.value.play()
+        }
       }
     }
   }
