@@ -1,4 +1,5 @@
 import { NineSong_Api_Services_Web } from '../NineSong_Api_Services_Web'
+import { usePageHomeStore } from "@/data/data_status/app_status/page_status/home_store/usePageHomeStore";
 
 export class Home_ApiService_of_NineSong extends NineSong_Api_Services_Web {
   public async getRandomArtists(start: string, end: string): Promise<any> {
@@ -66,6 +67,16 @@ export class Home_ApiService_of_NineSong extends NineSong_Api_Services_Web {
   }
   public async getMediaList_Recently_Added(): Promise<any> {
     try {
+      const pageHomeStore = usePageHomeStore()
+      if (pageHomeStore.home_Files_temporary_recently_added_search != undefined) {
+        const result = await this.sendRequest('GET', 'medias', {
+          start: pageHomeStore.home_Files_temporary_recently_added_search.start,
+          end: pageHomeStore.home_Files_temporary_recently_added_search.end,
+          sort: 'recently_added',
+          order: 'desc',
+        })
+        return result['ninesong-response']['mediaFiles']
+      }
       const result = await this.sendRequest('GET', 'medias', {
         start: '0',
         end: '15',
@@ -109,6 +120,16 @@ export class Home_ApiService_of_NineSong extends NineSong_Api_Services_Web {
   }
   public async getMediaCue_Recently_Added(): Promise<any> {
     try {
+      const pageHomeStore = usePageHomeStore()
+      if (pageHomeStore.home_Files_temporary_recently_added_search != undefined) {
+        const result = await this.sendRequest('GET', 'cues', {
+          start: pageHomeStore.home_Files_temporary_recently_added_search.start,
+          end: pageHomeStore.home_Files_temporary_recently_added_search.end,
+          sort: 'recently_added',
+          order: 'desc',
+        })
+        return result['ninesong-response']['cueFiles']
+      }
       const result = await this.sendRequest('GET', 'cues', {
         start: '0',
         end: '15',
@@ -152,6 +173,16 @@ export class Home_ApiService_of_NineSong extends NineSong_Api_Services_Web {
   }
   public async getAlbumList_Recently_Added(): Promise<any> {
     try {
+      const pageHomeStore = usePageHomeStore()
+      if (pageHomeStore.home_Files_temporary_recently_added_search != undefined) {
+        const result = await this.sendRequest('GET', 'albums', {
+          start: pageHomeStore.home_Files_temporary_recently_added_search.start,
+          end: pageHomeStore.home_Files_temporary_recently_added_search.end,
+          sort: 'recently_added',
+          order: 'desc',
+        })
+        return result['ninesong-response']['albums']
+      }
       const result = await this.sendRequest('GET', 'albums', {
         start: '0',
         end: '15',
@@ -195,6 +226,16 @@ export class Home_ApiService_of_NineSong extends NineSong_Api_Services_Web {
   }
   public async getArtistList_Recently_Added(): Promise<any> {
     try {
+      const pageHomeStore = usePageHomeStore()
+      if (pageHomeStore.home_Files_temporary_recently_added_search != undefined) {
+        const result = await this.sendRequest('GET', 'artists', {
+          start: pageHomeStore.home_Files_temporary_recently_added_search.start,
+          end: pageHomeStore.home_Files_temporary_recently_added_search.end,
+          sort: 'recently_added',
+          order: 'desc',
+        })
+        return result['ninesong-response']['artists']
+      }
       const result = await this.sendRequest('GET', 'artists', {
         start: '0',
         end: '15',

@@ -22,6 +22,8 @@ export const usePageHomeStore = defineStore('pageHome', () => {
   const home_selected_top_album = ref<AlbumType | null>(null)
   const home_selected_top_album_medium_image_url = ref(error_album)
 
+  const home_Files_temporary_recently_added_search = ref<any>({start: '0',end: '0'})
+
   const list_data_StartUpdate = ref(false)
 
   watch(home_selected_top_album, (newValue) => {
@@ -57,6 +59,8 @@ export const usePageHomeStore = defineStore('pageHome', () => {
     home_selected_top_album_subscript,
     home_selected_top_album,
     home_selected_top_album_medium_image_url,
+
+    home_Files_temporary_recently_added_search,
 
     list_data_StartUpdate,
   }

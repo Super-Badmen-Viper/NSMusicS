@@ -23,7 +23,9 @@ export const store_general_fetch_home_list = reactive({
       const pageHomeStore = usePageHomeStore()
       pageHomeStore.home_Files_temporary_maximum_playback = []
       pageHomeStore.home_Files_temporary_random_search = []
-      pageHomeStore.home_Files_temporary_recently_added = []
+      if (pageHomeStore.home_Files_temporary_recently_added_search === undefined) {
+        pageHomeStore.home_Files_temporary_recently_added = []
+      }
       pageHomeStore.home_Files_temporary_recently_played = []
       pageHomeStore.home_selected_top_album = undefined
 
@@ -160,7 +162,9 @@ export const store_general_fetch_home_list = reactive({
     try {
       // @ts-ignore - 忽略store实例类型检查
       const pageHomeStore = usePageHomeStore()
-      pageHomeStore.home_Files_temporary_recently_added = []
+      if (pageHomeStore.home_Files_temporary_recently_added_search === undefined) {
+        pageHomeStore.home_Files_temporary_recently_added = []
+      }
       // @ts-ignore - 忽略属性访问类型检查
       if (store_server_user_model.model_server_type_of_local) {
         const get_HomeDataInfos_From_LocalSqlite = new Get_LocalSqlite_HomeDataInfos()

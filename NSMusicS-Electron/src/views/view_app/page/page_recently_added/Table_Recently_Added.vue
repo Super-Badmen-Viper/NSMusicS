@@ -6,42 +6,64 @@ import {
   PlayCircle24Regular,
   Heart24Regular,
   Heart28Filled,
-  ChevronLeft16Filled,
-  ChevronRight16Filled,
   Open28Filled,
-  ArrowReset24Filled,
 } from '@vicons/fluent'
 import { Play } from '@vicons/ionicons5'
 
+// @ts-ignore - 忽略模块导入类型检查
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
+// @ts-ignore - 忽略模块导入类型检查
 import { usePageHomeStore } from '@/data/data_status/app_status/page_status/home_store/usePageHomeStore'
 import { storeToRefs } from 'pinia'
+// @ts-ignore - 忽略模块导入类型检查
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
+// @ts-ignore - 忽略模块导入类型检查
 import { store_general_fetch_album_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_album/store_general_fetch_album_list'
 
+// @ts-ignore - 忽略模块导入类型检查
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+// @ts-ignore - 忽略模块导入类型检查
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
+// @ts-ignore - 忽略模块导入类型检查
 import { store_general_fetch_home_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_home/store_general_fetch_home_list'
+// @ts-ignore - 忽略模块导入类型检查
 import { store_local_data_set_albumInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_albumInfo'
+// @ts-ignore - 忽略模块导入类型检查
+import { store_local_data_set_artistInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_artistInfo'
+// @ts-ignore - 忽略模块导入类型检查
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 
+// @ts-ignore - 忽略模块导入类型检查
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+// @ts-ignore - 忽略模块导入类型检查
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
+// @ts-ignore - 忽略模块导入类型检查
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
+// @ts-ignore - 忽略模块导入类型检查
 import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
+// @ts-ignore - 忽略模块导入类型检查
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
+// @ts-ignore - 忽略模块导入类型检查
 import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
+// @ts-ignore - 忽略模块导入类型检查
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
+// @ts-ignore - 忽略模块导入类型检查
 import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
 
+// @ts-ignore - 忽略模块导入类型检查
 import error_album from '@/assets/img/error_album.jpg'
+// @ts-ignore - 忽略模块导入类型检查
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
+// @ts-ignore - 忽略模块导入类型检查
 import { store_general_fetch_artist_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_artist/store_general_fetch_artist_list'
+// @ts-ignore - 忽略模块导入类型检查
 import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 
+// @ts-ignore - 忽略模块导入类型检查
 import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list'
 
 import { useI18n } from 'vue-i18n'
+// @ts-ignore - 忽略模块导入类型检查
 import { usePageRecommendStore } from '@/data/data_status/app_status/page_status/recommend_store/usePageRecommendStore'
 
 const { t } = useI18n({ inheritLocale: true })
@@ -52,15 +74,8 @@ const pageMediaStore = usePageMediaStore()
 const pageHomeStore = usePageHomeStore()
 const pageRecommendStore = usePageRecommendStore()
 const {
-  home_Files_temporary_maximum_playback,
-  home_Files_temporary_random_search,
   home_Files_temporary_recently_added,
-  home_Files_temporary_recently_played,
   home_Files_temporary_type_select,
-  home_selected_top_album_subscript,
-  home_selected_top_album,
-  home_selected_top_album_medium_image_url,
-  list_data_StartUpdate,
 } = storeToRefs(pageHomeStore)
 const { recommend_MediaFiles_temporary } = storeToRefs(pageRecommendStore)
 
@@ -68,25 +83,114 @@ const item_album = ref(160)
 const item_album_image = ref(item_album.value - 20)
 const item_album_txt = ref(item_album.value - 20)
 const itemSize = ref(180)
-const collapsed_width = ref(1090)
+const gridItems = ref(5)
+const itemSecondarySize = ref(185)
 const errorHandled = ref(new Map())
-const timer = ref()
+const timer = ref<NodeJS.Timeout | null>(null)
 let bool_watch = false
-let before_rating = false
-let after_rating = false
+let before_rating: any = false
+let after_rating: boolean = false
 
-const dynamicScroller_maximum_playback = ref(null)
-let offset_maximum_playback = 0
-const dynamicScroller_random_search = ref(null)
-let offset_random_search = 0
-const dynamicScroller_recently_added = ref(null)
-let offset_recently_added = 0
-const dynamicScroller_recently_played = ref(null)
-let offset_recently_played = 0
+// 添加dynamicScroller的定义
+const dynamicScroller = ref(null)
 
-const contextmenu = ref(null)
+// 当前显示的时间分区文字
+const currentGroupName = ref('')
+
+// 检测当前可见的分组索引
+const visibleGroupIndex = ref(0)
+
+const contextmenu = ref<any>(null)
 const recently_added_contextmenu_of_emby = ref(false)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'))
+
+// 时间分组相关
+const getTimeGroupName = (date: Date): string => {
+  const now = new Date()
+  const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24))
+  
+  if (diffDays <= 7) return '本周'
+  if (diffDays <= 30) return '本月'
+  if (diffDays <= 90) return '最近3个月'
+  if (diffDays <= 180) return '最近6个月'
+  
+  const year = date.getFullYear()
+  if (year === now.getFullYear()) return '今年'
+  
+  // 返回年份作为分组名
+  return year.toString()
+}
+
+// 按时间分组的数据
+const groupedRecentlyAdded = computed(() => {
+  // 确保使用最新的完整数据
+  const currentData = home_Files_temporary_recently_added.value || []
+  
+  // 每次重新计算时都基于完整的数据集
+  if (currentData.length === 0) return []
+  
+  // 按创建时间排序
+  const sortedItems = [...currentData].sort((a: any, b: any) => {
+    if (!a.created_at || !b.created_at) return 0
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  })
+  
+  // 按时间分组
+  const groups: { [key: string]: any[] } = {}
+  const years: Set<number> = new Set()
+  const now = new Date()
+  
+  sortedItems.forEach((item: any) => {
+    if (!item.created_at) return
+    const date = new Date(item.created_at)
+    const groupName = getTimeGroupName(date)
+    if (!groups[groupName]) {
+      groups[groupName] = []
+    }
+    groups[groupName].push(item)
+    
+    // 收集年份
+    const year = date.getFullYear()
+    if (year < now.getFullYear() && year >= 2020) { // 只收集2020年及以后的年份
+      years.add(year)
+    }
+  })
+  
+  // 动态生成分组顺序
+  const groupOrder = ['本周', '本月', '最近3个月', '最近6个月', '今年']
+  
+  // 按年份降序添加
+  const sortedYears = Array.from(years).sort((a, b) => b - a)
+  sortedYears.forEach(year => {
+    groupOrder.push(year.toString())
+  })
+  
+  groupOrder.push('更早')
+  
+  // 按时间顺序排列分组
+  const result: { name: string; items: any[] }[] = []
+  groupOrder.forEach(groupName => {
+    if (groups[groupName] && groups[groupName].length > 0) {
+      result.push({
+        name: groupName,
+        items: groups[groupName]
+      })
+    }
+  })
+  
+  return result
+})
+
+// 强制刷新ref，用于在home_Files_temporary_recently_added变化时触发重新渲染
+const groupedRecentlyAddedKey = ref(0)
+
+const stopWatch_home_Files_temporary_recently_added = watch(
+    () => home_Files_temporary_recently_added.value,
+    (newValue, oldValue) => {
+      // 当home_Files_temporary_recently_added变化时，增加key值强制重新渲染
+      groupedRecentlyAddedKey.value++
+    }
+)
 
 const handleImageError = async (item: any) => {
   if (item == undefined) return
@@ -99,6 +203,7 @@ const handleImageError = async (item: any) => {
   if (isElectron) {
     const originalSrc = item.medium_image_url
     try {
+      // @ts-ignore
       const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc)
       item.medium_image_url = newImagePath.length > 0 ? newImagePath : result_src
     } catch (error) {
@@ -120,82 +225,48 @@ const startTimer = () => {
   }, 1000)
 }
 
+// gridItems Re render
+const collapsed_width = ref(1090)
+const stopWatching_window_innerWidth = watch(
+  () => store_system_configs_info.window_innerWidth,
+  (newValue, oldValue) => {
+    updateGridItems()
+  }
+)
 const updateGridItems = () => {
-  collapsed_width.value = 155
-  const innerWidth = window.innerWidth
-  let num
-  if (innerWidth > 2460) {
-    num = innerWidth / 7.53
+  collapsed_width.value = 145
+  if (window.innerWidth > 2460) {
+    const num = window.innerWidth / 7.83
     itemSize.value = Math.floor(num) + 40
-  } else if (innerWidth > 1660) {
-    num = innerWidth / 6.53
-    itemSize.value = Math.floor(num) + 20
+    item_album.value = Math.floor(num)
+    item_album_image.value = item_album.value - 20
+    item_album_txt.value = item_album.value - 20
+    gridItems.value = 7
+    itemSecondarySize.value =
+      Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2
+  } else if (window.innerWidth > 1660) {
+    const num = window.innerWidth / 6.83
+    itemSize.value = Math.floor(num) + 40
+    item_album.value = Math.floor(num)
+    item_album_image.value = item_album.value - 20
+    item_album_txt.value = item_album.value - 20
+    gridItems.value = 6
+    itemSecondarySize.value =
+      Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2
   } else {
-    num = innerWidth / 5.53
-    itemSize.value = Math.floor(num) + 10
+    const num = window.innerWidth / 5.83
+    itemSize.value = Math.floor(num) + 40
+    item_album.value = Math.floor(num)
+    item_album_image.value = item_album.value - 20
+    item_album_txt.value = item_album.value - 20
+    gridItems.value = 5
+    itemSecondarySize.value =
+      Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2
   }
-  item_album.value = Math.floor(num)
-  item_album_image.value = item_album.value - 20
-  item_album_txt.value = item_album.value - 20
 }
-
-const scrollTo = (
-  direction: number,
-  scrollerRef: any,
-  offset: number,
-  items: any[],
-  itemWidth: number
-) => {
-  if (scrollerRef.value) {
-    const scrollAmount = itemWidth * 2
-    let newOffset = offset
-    if (direction === -1) {
-      newOffset = Math.max(0, offset - scrollAmount)
-    } else if (direction === 1) {
-      newOffset = offset + scrollAmount <= items.length * itemWidth ? offset + scrollAmount : 0
-    }
-    scrollerRef.value.$el.scrollLeft = newOffset
-    return newOffset
-  }
-  return offset
-}
-
-const scrollTo_maximum_playback = (value: number) => {
-  offset_maximum_playback = scrollTo(
-    value,
-    dynamicScroller_maximum_playback,
-    offset_maximum_playback,
-    pageHomeStore.home_Files_temporary_maximum_playback,
-    224
-  )
-}
-const scrollTo_random_search = (value: number) => {
-  offset_random_search = scrollTo(
-    value,
-    dynamicScroller_random_search,
-    offset_random_search,
-    pageHomeStore.home_Files_temporary_random_search,
-    224
-  )
-}
-const scrollTo_recently_added = (value: number) => {
-  offset_recently_added = scrollTo(
-    value,
-    dynamicScroller_recently_added,
-    offset_recently_added,
-    pageHomeStore.home_Files_temporary_recently_added,
-    224
-  )
-}
-const scrollTo_recently_played = (value: number) => {
-  offset_recently_played = scrollTo(
-    value,
-    dynamicScroller_recently_played,
-    offset_recently_played,
-    pageHomeStore.home_Files_temporary_recently_played,
-    224
-  )
-}
+onMounted(() => {
+  updateGridItems()
+})
 
 const Get_this_album_info = (item: any, list_name: string): string => {
   let temp_id = item.id
@@ -295,26 +366,28 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
   playlistStore.reset_carousel()
 }
 
-const Play_Next_album_MediaList_click = (value: number) => {
-  let current = pageHomeStore.home_selected_top_album_subscript
-  if (value === 1) {
-    current = current >= 17 ? 0 : current + 1
-  } else {
-    current = current === 0 ? 0 : current - 1
-  }
-  pageHomeStore.home_selected_top_album_subscript = current
-  if (current === 0) {
-    pageHomeStore.list_data_StartUpdate = true
-  }
-}
-
 const handleItemClick_Favorite = (id: any, favorite: boolean) => {
-  store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(id, favorite)
+  if (pageHomeStore.home_Files_temporary_type_select === 'media')
+    store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id, favorite)
+  else if (pageHomeStore.home_Files_temporary_type_select === 'album')
+    store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(id, favorite)
+  else if (pageHomeStore.home_Files_temporary_type_select === 'artist')
+    store_local_data_set_artistInfo.Set_ArtistInfo_To_Favorite(id, favorite)
+  else if (pageHomeStore.home_Files_temporary_type_select === 'media_cue')
+    store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id, favorite)
 }
 
 const handleItemClick_Rating = (id_rating: any) => {
   const [id, rating] = id_rating.split('-')
-  store_local_data_set_albumInfo.Set_AlbumInfo_To_Rating(id, after_rating ? 0 : rating)
+  const ratingValue = parseInt(rating)
+  if (pageHomeStore.home_Files_temporary_type_select === 'media')
+    store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, after_rating ? 0 : ratingValue)
+  else if (pageHomeStore.home_Files_temporary_type_select === 'album')
+    store_local_data_set_albumInfo.Set_AlbumInfo_To_Rating(id, after_rating ? 0 : ratingValue)
+  else if (pageHomeStore.home_Files_temporary_type_select === 'artist')
+    store_local_data_set_artistInfo.Set_ArtistInfo_To_Rating(id, after_rating ? 0 : ratingValue)
+  else if (pageHomeStore.home_Files_temporary_type_select === 'media_cue')
+    store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, after_rating ? 0 : ratingValue)
 }
 
 async function update_playlist_addAlbum(id: any, playlist_id: any) {
@@ -413,7 +486,7 @@ async function add_to_playlist(next: boolean) {
       playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.splice(
         index + 1,
         0,
-        ...newItems.map((i) => i.id)
+        ...newItems.map((i: any) => i.id)
       )
     } else {
       console.error('Current audio song not found in playlist')
@@ -427,7 +500,7 @@ async function add_to_playlist(next: boolean) {
     item.absoluteIndex = index
   })
   store_system_configs_save.save_system_playlist_item_id_config()
-  contextmenu.value.hide()
+  if (contextmenu.value && typeof contextmenu.value.hide === 'function') contextmenu.value.hide()
 }
 
 const menu_item_add_to_playlist_end = () => add_to_playlist(false)
@@ -476,38 +549,44 @@ onBeforeUnmount(() => {
   stopWatchCollapsed()
   stopWatchWidth()
   stopWatchSubscript()
+  stopWatching_window_innerWidth()
+  stopWatch_home_Files_temporary_recently_added()
   if (timer.value) {
     clearInterval(timer.value)
     timer.value = null
   }
-  dynamicScroller_maximum_playback.value = null
-  dynamicScroller_random_search.value = null
-  dynamicScroller_recently_added.value = null
-  dynamicScroller_recently_played.value = null
 })
 
 const home_Files_temporary_type_options = ref([
   {
-    label: computed(() => t('common.home') + ' : ' + t('entity.track_other')),
+    label: computed(() => t('filter.recentlyAdded') + ' : ' + t('entity.track_other')),
     value: 'media',
   },
   {
-    label: computed(() => t('common.home') + ' : ' + t('entity.album_other')),
+    label: computed(() => t('filter.recentlyAdded') + ' : ' + t('entity.album_other')),
     value: 'album',
   },
   {
-    label: computed(() => t('common.home') + ' : ' + t('entity.artist_other')),
+    label: computed(() => t('filter.recentlyAdded') + ' : ' + t('entity.artist_other')),
     value: 'artist',
   },
   {
-    label: computed(() => t('common.home') + ' : ' + 'CUE ' + t('nsmusics.view_page.disk')),
+    label: computed(() => t('filter.recentlyAdded') + ' : ' + 'CUE ' + t('nsmusics.view_page.disk')),
     value: 'media_cue',
   },
 ])
 function change_home_Files_temporary_type() {
-  store_general_fetch_home_list.fetchData_Home()
+  _start.value = 0
+  _end.value = 30
+  pageHomeStore.home_Files_temporary_recently_added_search = {
+    start: String(_start.value),
+    end: String(_end.value),
+  }
+  pageHomeStore.home_Files_temporary_recently_added = []
+  store_general_fetch_home_list.fetchData_Home_of_recently_added()
 }
 
+// @ts-ignore - 忽略模块导入类型检查
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 const pageAlbumStore = usePageAlbumStore()
 const playlistStore = usePlaylistStore()
@@ -516,650 +595,271 @@ const playerAppearanceStore = usePlayerAppearanceStore()
 const playerSettingStore = usePlayerSettingStore()
 const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
   storeToRefs(playlistStore)
+
+//////
+const _start = ref(0)
+const _end = ref(30)
+const isScrolling = ref(false)
+const onScrollStart = () => {
+  
+}
+
+const onScrollEnd = async () => {
+  if (isScrolling.value) return
+  isScrolling.value = true
+  if (store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong') {
+    _start.value += 30
+    _end.value += 30
+    pageHomeStore.home_Files_temporary_recently_added_search = {
+      start: String(_start.value),
+      end: String(_end.value),
+    }
+    await store_general_fetch_home_list.fetchData_Home_of_recently_added()
+  }
+  isScrolling.value = false
+}
+
+// 滚动事件处理，用于检测当前可见的分组
+const onScroll = (event: any) => {
+  // 如果有分组数据且组件已挂载
+  if (groupedRecentlyAdded.value && groupedRecentlyAdded.value.length > 0) {
+    // 获取外层滚动容器
+    const scroller = dynamicScroller.value ? (dynamicScroller.value as any).$el : null
+    if (scroller) {
+      // 获取滚动位置
+      const scrollTop = scroller.scrollTop
+      
+      // 如果滚动到顶部，恢复默认标题
+      if (scrollTop <= 0) {
+        currentGroupName.value = ''
+        visibleGroupIndex.value = 0
+        return
+      }
+      
+      // 计算每个分组的大致高度（这里需要根据实际情况调整）
+      // 假设每个分组标题高度为50px，内容区域高度根据items数量和itemSize计算
+      let accumulatedHeight = 0
+      let currentVisibleIndex = 0
+      
+      for (let i = 0; i < groupedRecentlyAdded.value.length; i++) {
+        const group = groupedRecentlyAdded.value[i]
+        // 分组标题高度
+        const headerHeight = 50
+        // 分组内容高度（简化计算）
+        const contentHeight = group.items.length > 0 ? 
+          Math.ceil(group.items.length / gridItems.value) * itemSecondarySize.value : 0
+        
+        // 累计高度
+        const groupTotalHeight = headerHeight + contentHeight + 30 // 30px是marginBottom
+        
+        // 如果滚动位置在这个分组范围内，或者稍微超出一点
+        if (scrollTop >= accumulatedHeight - 20 && scrollTop < accumulatedHeight + groupTotalHeight) {
+          currentVisibleIndex = i
+          break
+        }
+        
+        accumulatedHeight += groupTotalHeight
+      }
+      
+      // 更新可见分组索引
+      visibleGroupIndex.value = currentVisibleIndex
+      // 更新当前显示的时间分区文字
+      if (groupedRecentlyAdded.value[currentVisibleIndex]) {
+        currentGroupName.value = groupedRecentlyAdded.value[currentVisibleIndex].name
+      }
+    }
+  }
+}
+
 </script>
 
 <template>
   <div class="home-wall-container">
-    <n-space style="margin-top: 6px; margin-left: 8px" align="center">
+    <n-space align="center" style="margin-top: 6px;margin-left: -3px;">
+      <div class="recently-add-header">
+        <span class="recently-add-title">
+          {{ currentGroupName || t('filter.recentlyAdded') }}
+        </span>
+      </div>
       <n-select
         size="small"
-        style="min-width: 156px"
-        :disabled="
-          !(
-            store_server_user_model.model_server_type_of_web &&
-            store_server_users.server_select_kind === 'ninesong'
-          )
-        "
+        style="min-width: 172px"
         :options="home_Files_temporary_type_options"
         v-model:value="home_Files_temporary_type_select"
         @update:value="change_home_Files_temporary_type"
       />
-      <div
-        v-if="
-          !(
-            store_server_user_model.model_server_type_of_web &&
-            store_server_users.server_select_kind === 'ninesong'
-          )
-        "
-        style="font-size: 15px; font-weight: bold"
-      >
-        {{
-          '-> ' +
-          $t('Alternate') +
-          $t('Data') +
-          $t('LabelSource') +
-          ', ' +
-          $t('error.serverRequired') +
-          ': NineSong'
-        }}
-        <br />
-      </div>
-    </n-space>
-    <n-space vertical class="category-section">
-      <n-space
-        justify="space-between"
-        align="center"
-        class="category-header"
-        style="margin-top: 12px"
-        :style="{
-          width: `calc(100vw - ${collapsed_width - 18}px)`,
-        }"
-      >
-        <n-space align="center">
-          <span class="category-title">
-            {{
-              $t('page.home.mostPlayed') +
-              ' : ' +
-              (store_server_users.server_select_kind === 'jellyfin' ||
-              store_server_users.server_select_kind === 'emby'
-                ? $t('entity.track_other')
-                : store_server_users.server_select_kind === 'ninesong'
-                  ? home_Files_temporary_type_select === 'media'
-                    ? $t('entity.track_other')
-                    : home_Files_temporary_type_select === 'album'
-                      ? $t('entity.album_other')
-                      : home_Files_temporary_type_select === 'artist'
-                        ? $t('entity.artist_other')
-                        : home_Files_temporary_type_select === 'media_cue'
-                          ? 'CUE ' + $t('nsmusics.view_page.disk')
-                          : $t('entity.album_other')
-                  : $t('entity.album_other'))
-            }}
-          </span>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button
-                quaternary
-                @click="
-                  () => {
-                    store_general_fetch_home_list.fetchData_Home_of_maximum_playback()
-                    dynamicScroller_maximum_playback.$el.scrollLeft = 0
-                    offset_maximum_playback = 0
-                  }
-                "
-              >
-                <template #icon>
-                  <n-icon :size="20"><ArrowReset24Filled /></n-icon>
-                </template>
-              </n-button>
-            </template>
-            {{ $t('common.refresh') }}
-          </n-tooltip>
-        </n-space>
-        <n-space>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button quaternary @click="scrollTo_maximum_playback(-1)">
-                <n-icon size="20" :depth="2"><ChevronLeft16Filled /></n-icon>
-              </n-button>
-            </template>
-            {{ $t('common.backward') }}
-          </n-tooltip>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button quaternary @click="scrollTo_maximum_playback(1)">
-                <n-icon size="20" :depth="2"><ChevronRight16Filled /></n-icon>
-              </n-button>
-            </template>
-            {{ $t('common.forward') }}
-          </n-tooltip>
-        </n-space>
-      </n-space>
-      <DynamicScroller
-        class="home-wall"
-        ref="dynamicScroller_maximum_playback"
-        :style="{
-          width: `calc(100vw - ${collapsed_width - 18}px)`,
-          height: `${item_album_image + 80}px`,
-        }"
-        :items="home_Files_temporary_maximum_playback"
-        :item-size="itemSize"
-        :min-item-size="itemSize"
-        direction="horizontal"
-      >
-        <template #default="{ item, index, active }">
-          <DynamicScrollerItem
-            :item="item"
-            :active="active"
-            :data-index="index"
-            v-contextmenu:contextmenu
-            @contextmenu.prevent="
-              () => {
-                playlist_Menu_Item = item
-                playlist_Menu_Item_Id = item.id
-              }
-            "
-          >
-            <div :key="item.id" class="home-album">
-              <div
-                class="home-album-cover-container"
-                :style="{
-                  width: `${item_album_image}px`,
-                  height: `${item_album_image}px`,
-                }"
-              >
-                <img
-                  class="home-album-cover-image"
-                  :src="item.medium_image_url"
-                  @error="handleImageError(item)"
-                  :style="{
-                    width: `${item_album_image}px`,
-                    height: `${item_album_image}px`,
-                  }"
-                  alt=""
-                />
-                <div
-                  class="home-album-hover-overlay"
-                  @dblclick="Open_this_album_MediaList_click(item, 'maximum')"
-                >
-                  <div class="home-album-hover-content">
-                    <button
-                      class="play-this-home-album-button"
-                      @click="Play_this_album_MediaList_click(item, 'maximum')"
-                    >
-                      <icon :size="42" color="#FFFFFF"><PlayCircle24Regular /></icon>
-                    </button>
-                    <div
-                      class="home-album-hover-buttons-top"
-                      v-if="
-                        (store_server_users.server_select_kind !== 'jellyfin' &&
-                          store_server_users.server_select_kind !== 'emby') ||
-                        store_server_user_model.model_server_type_of_local
-                      "
-                    >
-                      <rate
-                        class="viaSlot"
-                        :length="5"
-                        v-model="item.rating"
-                        @before-rate="
-                          () => {
-                            before_rating = item.rating === 1
-                          }
-                        "
-                        @after-rate="
-                          (value) => {
-                            after_rating = item.rating === 1 && before_rating
-                            handleItemClick_Rating(`${item.id}-${value}`)
-                            if (after_rating) {
-                              item.rating = 0
-                              after_rating = false
-                            }
-                          }
-                        "
-                      />
-                    </div>
-                    <div class="home-album-hover-buttons-bottom">
-                      <button
-                        v-if="
-                          store_server_user_model.model_server_type_of_local ||
-                          store_server_users.server_select_kind === 'navidrome' ||
-                          (store_server_users.server_select_kind === 'ninesong' &&
-                            home_Files_temporary_type_select === 'album')
-                        "
-                        class="open-this-home-artist-button"
-                        @click="Open_this_album_MediaList_click(item, 'maximum')"
-                      >
-                        <icon :size="20" color="#FFFFFF"><Open28Filled /></icon>
-                      </button>
-                      <button
-                        class="love-this-home-album-button"
-                        @click="
-                          () => {
-                            handleItemClick_Favorite(item.id, item.favorite)
-                            item.favorite = !item.favorite
-                          }
-                        "
-                      >
-                        <icon v-if="item.favorite" :size="20" color="red"><Heart28Filled /></icon>
-                        <icon v-else :size="20" color="#FFFFFF"><Heart24Regular /></icon>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="home-album-info" :style="{ width: `${item_album_image}px` }">
-                <div class="home-album-text" :style="{ width: `${item_album_txt}px` }">
-                  <div class="home-album-name" :style="{ maxWidth: `${item_album_txt}px` }">
-                    {{
-                      store_server_user_model.model_server_type_of_web &&
-                      store_server_users.server_select_kind === 'ninesong'
-                        ? home_Files_temporary_type_select === 'media'
-                          ? item.title
-                          : item.name
-                        : item.name
-                    }}
-                  </div>
-                  <div class="home-artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
-                    {{ item.artist }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </DynamicScrollerItem>
-        </template>
-      </DynamicScroller>
     </n-space>
 
-    <n-space vertical class="category-section">
-      <n-space
-        justify="space-between"
-        align="center"
-        class="category-header"
-        :style="{ width: `calc(100vw - ${collapsed_width - 18}px)` }"
-      >
-        <n-space align="center">
-          <span class="category-title">
-            {{
-              $t('page.home.explore') +
-              ' : ' +
-              (store_server_users.server_select_kind === 'jellyfin' ||
-              store_server_users.server_select_kind === 'emby'
-                ? $t('entity.track_other')
-                : store_server_users.server_select_kind === 'ninesong'
-                  ? home_Files_temporary_type_select === 'media'
-                    ? $t('entity.track_other')
-                    : home_Files_temporary_type_select === 'album'
-                      ? $t('entity.album_other')
-                      : home_Files_temporary_type_select === 'artist'
-                        ? $t('entity.artist_other')
-                        : home_Files_temporary_type_select === 'media_cue'
-                          ? 'CUE ' + $t('nsmusics.view_page.disk')
-                          : $t('entity.album_other')
-                  : $t('entity.album_other'))
-            }}
-          </span>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button
-                quaternary
-                @click="
-                  () => {
-                    store_general_fetch_home_list.fetchData_Home_of_random_search()
-                    dynamicScroller_random_search.$el.scrollLeft = 0
-                    offset_random_search = 0
-                  }
-                "
-              >
-                <template #icon>
-                  <n-icon :size="20"><ArrowReset24Filled /></n-icon>
-                </template>
-              </n-button>
-            </template>
-            {{ $t('common.refresh') }}
-          </n-tooltip>
-        </n-space>
-        <n-space>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button quaternary @click="scrollTo_random_search(-1)">
-                <n-icon size="20" :depth="2"><ChevronLeft16Filled /></n-icon>
-              </n-button>
-            </template>
-            {{ $t('common.backward') }}
-          </n-tooltip>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button quaternary @click="scrollTo_random_search(1)">
-                <n-icon size="20" :depth="2"><ChevronRight16Filled /></n-icon>
-              </n-button>
-            </template>
-            {{ $t('common.forward') }}
-          </n-tooltip>
-        </n-space>
-      </n-space>
+    <n-space vertical class="category-recently-add-section">
       <DynamicScroller
-        class="home-wall"
-        ref="dynamicScroller_random_search"
+        ref="dynamicScroller"
         :style="{
-          width: `calc(100vw - ${collapsed_width - 18}px)`,
-          height: `${item_album_image + 80}px`,
+          height: 'calc(100vh - 208px)',
         }"
-        :items="home_Files_temporary_random_search"
-        :item-size="itemSize"
-        :min-item-size="itemSize"
-        direction="horizontal"
+        :items="groupedRecentlyAdded"
+        :minItemSize="50"
+        :emit-update="true"
+        :key="groupedRecentlyAddedKey"
+        key-field="name"
+        @scroll-start="onScrollStart"
+        @scroll-end="onScrollEnd"
+        @scroll="onScroll"
       >
-        <template #default="{ item, index, active }">
+        <template #before> </template>
+        <template #after> </template>
+        <template #default="{ item: group, index: groupIndex, active }">
           <DynamicScrollerItem
-            :item="item"
+            :item="group"
             :active="active"
-            :data-index="index"
-            v-contextmenu:contextmenu
-            @contextmenu.prevent="
-              () => {
-                playlist_Menu_Item = item
-                playlist_Menu_Item_Id = item.id
-              }
-            "
+            :data-index="groupIndex"
+            :data-active="active"
           >
-            <div :key="item.id" class="home-album">
-              <div
-                class="home-album-cover-container"
-                :style="{
-                  width: `${item_album_image}px`,
-                  height: `${item_album_image}px`,
-                }"
-              >
-                <img
-                  class="home-album-cover-image"
-                  :src="item.medium_image_url"
-                  @error="handleImageError(item)"
-                  :style="{
-                    width: `${item_album_image}px`,
-                    height: `${item_album_image}px`,
-                  }"
-                  alt=""
-                />
-                <div
-                  class="home-album-hover-overlay"
-                  @dblclick="Open_this_album_MediaList_click(item, 'random')"
-                >
-                  <div class="home-album-hover-content">
-                    <button
-                      class="play-this-home-album-button"
-                      @click="Play_this_album_MediaList_click(item, 'random')"
-                    >
-                      <icon :size="42" color="#FFFFFF"><PlayCircle24Regular /></icon>
-                    </button>
-                    <div
-                      class="home-album-hover-buttons-top"
-                      v-if="
-                        (store_server_users.server_select_kind !== 'jellyfin' &&
-                          store_server_users.server_select_kind !== 'emby') ||
-                        store_server_user_model.model_server_type_of_local
-                      "
-                    >
-                      <rate
-                        class="viaSlot"
-                        :length="5"
-                        v-model="item.rating"
-                        @before-rate="
-                          () => {
-                            before_rating = item.rating === 1
-                          }
-                        "
-                        @after-rate="
-                          (value) => {
-                            after_rating = item.rating === 1 && before_rating
-                            handleItemClick_Rating(`${item.id}-${value}`)
-                            if (after_rating) {
-                              item.rating = 0
-                              after_rating = false
-                            }
-                          }
-                        "
-                      />
-                    </div>
-                    <div class="home-album-hover-buttons-bottom">
-                      <button
-                        v-if="
-                          store_server_user_model.model_server_type_of_local ||
-                          store_server_users.server_select_kind === 'navidrome' ||
-                          (store_server_users.server_select_kind === 'ninesong' &&
-                            home_Files_temporary_type_select === 'album')
-                        "
-                        class="open-this-home-artist-button"
-                        @click="Open_this_album_MediaList_click(item, 'random')"
-                      >
-                        <icon :size="20" color="#FFFFFF"><Open28Filled /></icon>
-                      </button>
-                      <button
-                        class="love-this-home-album-button"
-                        @click="
-                          () => {
-                            handleItemClick_Favorite(item.id, item.favorite)
-                            item.favorite = !item.favorite
-                          }
-                        "
-                      >
-                        <icon v-if="item.favorite" :size="20" color="red"><Heart28Filled /></icon>
-                        <icon v-else :size="20" color="#FFFFFF"><Heart24Regular /></icon>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="home-album-info" :style="{ width: `${item_album_image}px` }">
-                <div class="home-album-text" :style="{ width: `${item_album_txt}px` }">
-                  <div class="home-album-name" :style="{ maxWidth: `${item_album_txt}px` }">
-                    {{
-                      store_server_user_model.model_server_type_of_web &&
-                      store_server_users.server_select_kind === 'ninesong'
-                        ? home_Files_temporary_type_select === 'media'
-                          ? item.title
-                          : item.name
-                        : item.name
-                    }}
-                  </div>
-                  <div class="home-artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
-                    {{ item.artist }}
-                  </div>
-                </div>
-              </div>
+            <!-- 时间分组标签 -->
+            <div class="category-recently-add-header">
+              <span class="category-recently-add-title">
+                {{ group.name }}
+              </span>
             </div>
-          </DynamicScrollerItem>
-        </template>
-      </DynamicScroller>
-    </n-space>
+            
+            <!-- 对应的时间分组DynamicScroller -->
+            <DynamicScroller
+              class="home-wall"
+              :style="{
+                width: `calc(100vw - ${collapsed_width - 18}px)`,
+                marginBottom: '30px',
+              }"
+              :items="group.items"
+              :itemSize="itemSize"
+              :minItemSize="itemSize"
+              :grid-items="gridItems"
+              :item-secondary-size="itemSecondarySize"
+              :emit-update="true"
+            >
+              <template #default="{ item, index, active }">
+                <DynamicScrollerItem
+                  :item="item"
+                  :active="active"
+                  :data-index="index"
+                  v-contextmenu:contextmenu
+                  @contextmenu.prevent="
+                    () => {
+                      playlist_Menu_Item = item
+                      playlist_Menu_Item_Id = item.id
+                      recently_added_contextmenu_of_emby = true
+                    }
+                  "
+                >
+                  <div :key="item.id" class="home-album">
+                    <div
+                      class="home-album-cover-container"
+                      :style="{
+                        width: `${item_album_image}px`,
+                        height: `${item_album_image}px`,
+                      }"
+                    >
+                      <img
+                        class="home-album-cover-image"
+                        :src="item.medium_image_url"
+                        @error="handleImageError(item)"
+                        :style="{
+                          width: `${item_album_image}px`,
+                          height: `${item_album_image}px`,
+                        }"
+                        alt=""
+                      />
+                      <div
+                        class="home-album-hover-overlay"
+                        @dblclick="Open_this_album_MediaList_click(item, 'recently_added')"
+                      >
+                        <div class="home-album-hover-content">
+                          <button
+                            class="play-this-home-album-button"
+                            @click="Play_this_album_MediaList_click(item, 'recently_added')"
+                          >
+                            <icon :size="42" color="#FFFFFF"><PlayCircle24Regular /></icon>
+                          </button>
+                          <div
+                            class="home-album-hover-buttons-top"
+                            v-if="
+                              (store_server_users.server_select_kind !== 'jellyfin' &&
+                                store_server_users.server_select_kind !== 'emby') ||
+                              store_server_user_model.model_server_type_of_local
+                            "
+                          >
+                            <rate
+                              class="viaSlot"
+                              :length="5"
+                              v-model="item.rating"
+                              @before-rate="
+                                () => {
+                                  before_rating = item.rating === 1 ? true : false as boolean
+                                }
+                              "
+                              @after-rate="
+                                (value: number) => {
+                                  after_rating = item.rating === 1 && before_rating
+                                  handleItemClick_Rating(`${item.id}-${value}`)
+                                  if (after_rating) {
+                                    item.rating = 0
+                                    after_rating = false
+                                  }
+                                }
+                              "
+                            />
+                          </div>
+                          <div class="home-album-hover-buttons-bottom">
+                            <button
+                              v-if="
+                                store_server_user_model.model_server_type_of_local ||
+                                store_server_users.server_select_kind === 'navidrome' ||
+                                (store_server_users.server_select_kind === 'ninesong' &&
+                                  home_Files_temporary_type_select === 'album')
+                              "
+                              class="open-this-home-artist-button"
+                              @click="Open_this_album_MediaList_click(item, 'recently_added')"
+                            >
+                              <icon :size="20" color="#FFFFFF"><Open28Filled /></icon>
+                            </button>
+                            <button
+                              class="love-this-home-album-button"
+                              @click="
+                                () => {
+                                  handleItemClick_Favorite(item.id, item.favorite)
+                                  item.favorite = !item.favorite
+                                }
+                              "
+                            >
+                              <icon v-if="item.favorite" :size="20" color="red"><Heart28Filled /></icon>
+                              <icon v-else :size="20" color="#FFFFFF"><Heart24Regular /></icon>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="home-album-info" :style="{ width: `${item_album_image}px` }">
+                      <div class="home-album-text" :style="{ width: `${item_album_txt}px` }">
+                        <div class="home-album-name" :style="{ maxWidth: `${item_album_txt}px` }">
+                          {{
+                            store_server_user_model.model_server_type_of_web &&
+                            store_server_users.server_select_kind === 'ninesong'
+                              ? home_Files_temporary_type_select === 'media'
+                                ? item.title
+                                : item.name
+                              : item.name
+                          }}
+                        </div>
+                        <div class="home-artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
+                          {{ item.artist }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </DynamicScrollerItem>
+              </template>
+            </DynamicScroller>
 
-    <n-space vertical class="category-section">
-      <n-space
-        justify="space-between"
-        align="center"
-        class="category-header"
-        :style="{ width: `calc(100vw - ${collapsed_width - 18}px)` }"
-      >
-        <n-space align="center">
-          <span class="category-title">
-            {{
-              $t('page.home.newlyAdded') +
-              ' : ' +
-              (store_server_users.server_select_kind === 'jellyfin' ||
-              store_server_users.server_select_kind === 'emby'
-                ? $t('entity.track_other')
-                : store_server_users.server_select_kind === 'ninesong'
-                  ? home_Files_temporary_type_select === 'media'
-                    ? $t('entity.track_other')
-                    : home_Files_temporary_type_select === 'album'
-                      ? $t('entity.album_other')
-                      : home_Files_temporary_type_select === 'artist'
-                        ? $t('entity.artist_other')
-                        : home_Files_temporary_type_select === 'media_cue'
-                          ? 'CUE ' + $t('nsmusics.view_page.disk')
-                          : $t('entity.album_other')
-                  : $t('entity.album_other'))
-            }}
-          </span>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button
-                quaternary
-                @click="
-                  () => {
-                    store_general_fetch_home_list.fetchData_Home_of_recently_added()
-                    dynamicScroller_recently_added.$el.scrollLeft = 0
-                    offset_recently_added = 0
-                  }
-                "
-              >
-                <template #icon>
-                  <n-icon :size="20"><ArrowReset24Filled /></n-icon>
-                </template>
-              </n-button>
-            </template>
-            {{ $t('common.refresh') }}
-          </n-tooltip>
-        </n-space>
-        <n-space>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button quaternary @click="scrollTo_recently_added(-1)">
-                <n-icon size="20" :depth="2"><ChevronLeft16Filled /></n-icon>
-              </n-button>
-            </template>
-            {{ $t('common.backward') }}
-          </n-tooltip>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button quaternary @click="scrollTo_recently_added(1)">
-                <n-icon size="20" :depth="2"><ChevronRight16Filled /></n-icon>
-              </n-button>
-            </template>
-            {{ $t('common.forward') }}
-          </n-tooltip>
-        </n-space>
-      </n-space>
-      <DynamicScroller
-        class="home-wall"
-        ref="dynamicScroller_recently_added"
-        :style="{
-          width: `calc(100vw - ${collapsed_width - 18}px)`,
-          height: `${item_album_image + 80}px`,
-        }"
-        :items="home_Files_temporary_recently_added"
-        :item-size="itemSize"
-        :min-item-size="itemSize"
-        direction="horizontal"
-      >
-        <template #default="{ item, index, active }">
-          <DynamicScrollerItem
-            :item="item"
-            :active="active"
-            :data-index="index"
-            v-contextmenu:contextmenu
-            @contextmenu.prevent="
-              () => {
-                playlist_Menu_Item = item
-                playlist_Menu_Item_Id = item.id
-                recently_added_contextmenu_of_emby = true
-              }
-            "
-          >
-            <div :key="item.id" class="home-album">
-              <div
-                class="home-album-cover-container"
-                :style="{
-                  width: `${item_album_image}px`,
-                  height: `${item_album_image}px`,
-                }"
-              >
-                <img
-                  class="home-album-cover-image"
-                  :src="item.medium_image_url"
-                  @error="handleImageError(item)"
-                  :style="{
-                    width: `${item_album_image}px`,
-                    height: `${item_album_image}px`,
-                  }"
-                  alt=""
-                />
-                <div
-                  class="home-album-hover-overlay"
-                  @dblclick="Open_this_album_MediaList_click(item, 'recently_added')"
-                >
-                  <div class="home-album-hover-content">
-                    <button
-                      class="play-this-home-album-button"
-                      @click="Play_this_album_MediaList_click(item, 'recently_added')"
-                    >
-                      <icon :size="42" color="#FFFFFF"><PlayCircle24Regular /></icon>
-                    </button>
-                    <div
-                      class="home-album-hover-buttons-top"
-                      v-if="
-                        (store_server_users.server_select_kind !== 'jellyfin' &&
-                          store_server_users.server_select_kind !== 'emby') ||
-                        store_server_user_model.model_server_type_of_local
-                      "
-                    >
-                      <rate
-                        class="viaSlot"
-                        :length="5"
-                        v-model="item.rating"
-                        @before-rate="
-                          () => {
-                            before_rating = item.rating === 1
-                          }
-                        "
-                        @after-rate="
-                          (value) => {
-                            after_rating = item.rating === 1 && before_rating
-                            handleItemClick_Rating(`${item.id}-${value}`)
-                            if (after_rating) {
-                              item.rating = 0
-                              after_rating = false
-                            }
-                          }
-                        "
-                      />
-                    </div>
-                    <div class="home-album-hover-buttons-bottom">
-                      <button
-                        v-if="
-                          store_server_user_model.model_server_type_of_local ||
-                          store_server_users.server_select_kind === 'navidrome' ||
-                          (store_server_users.server_select_kind === 'ninesong' &&
-                            home_Files_temporary_type_select === 'album')
-                        "
-                        class="open-this-home-artist-button"
-                        @click="Open_this_album_MediaList_click(item, 'recently_added')"
-                      >
-                        <icon :size="20" color="#FFFFFF"><Open28Filled /></icon>
-                      </button>
-                      <button
-                        class="love-this-home-album-button"
-                        @click="
-                          () => {
-                            handleItemClick_Favorite(item.id, item.favorite)
-                            item.favorite = !item.favorite
-                          }
-                        "
-                      >
-                        <icon v-if="item.favorite" :size="20" color="red"><Heart28Filled /></icon>
-                        <icon v-else :size="20" color="#FFFFFF"><Heart24Regular /></icon>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="home-album-info" :style="{ width: `${item_album_image}px` }">
-                <div class="home-album-text" :style="{ width: `${item_album_txt}px` }">
-                  <div class="home-album-name" :style="{ maxWidth: `${item_album_txt}px` }">
-                    {{
-                      store_server_user_model.model_server_type_of_web &&
-                      store_server_users.server_select_kind === 'ninesong'
-                        ? home_Files_temporary_type_select === 'media'
-                          ? item.title
-                          : item.name
-                        : item.name
-                    }}
-                  </div>
-                  <div class="home-artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
-                    {{ item.artist }}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <!-- 占位 -->
+            <div style="margin-top: -18px;width: 20px;height: 1px;"> </div>
           </DynamicScrollerItem>
         </template>
       </DynamicScroller>
@@ -1196,7 +896,7 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
   </div>
 </template>
 
-<style>
+<style scoped>
 .home-wall-container {
   width: 100%;
   height: 100%;
@@ -1216,23 +916,55 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
   --scrollbar-color-hover: v-bind('themeVars.scrollbarColorHover');
 }
 
-.category-section {
-  margin-bottom: -8px;
+.category-recently-add-section {
+  margin-top: 10px;
 }
 
-.category-header {
-  width: calc(100vw - 200px);
-  margin-left: 9px;
+.recently-add-header {
+  width: auto;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
+  text-align: left;
 }
 
-.category-title {
+.recently-add-title {
+  display: inline-block;
   font-size: 16px;
   font-weight: 700;
+  color: var(--text-color-1);
+  background-color: var(--card-color);
+  border-left: 4px solid var(--primary-color-hover);
+  border-radius: 0 8px 8px 0;
+  padding: 8px 16px;
+  margin: 0 0 0 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.no-data-placeholder {
-  margin-top: 2px;
-  color: #ffffff80;
+.category-recently-add-header {
+  width: auto;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
+  text-align: left;
+  margin: 16px 0 -4px -3px;
+}
+
+.category-recently-add-title {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-color-1);
+  background-color: var(--card-color);
+  border-left: 4px solid var(--primary-color-hover);
+  border-radius: 0 8px 8px 0;
+  padding: 8px 16px;
+  margin: 0 0 0 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .home-wall {
@@ -1241,6 +973,7 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
   scroll-behavior: smooth;
   scrollbar-width: none;
   overflow-x: auto;
+  margin-top: 10px;
 }
 
 .home-album {
@@ -1364,7 +1097,8 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
 }
 
 .home-album-name,
-.home-artist-name {
+.home-artist-name,
+.home-created-time {
   font-size: 14px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -1375,6 +1109,11 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
 
 .home-album-name {
   font-weight: 600;
+}
+
+.home-created-time {
+  color: var(--text-color-3);
+  font-size: 12px;
 }
 
 .context-menu {

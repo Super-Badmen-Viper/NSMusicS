@@ -535,7 +535,7 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
 
 <template>
   <div class="home-wall-container">
-    <n-space style="margin-top: 6px; margin-left: 8px" align="center">
+    <n-space style="margin-top: 6px; margin-left: 9px" align="center">
       <n-select
         size="small"
         style="min-width: 156px"
@@ -1413,7 +1413,7 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
   </div>
 </template>
 
-<style>
+<style scoped>
 .home-wall-container {
   width: 100%;
   height: 100%;

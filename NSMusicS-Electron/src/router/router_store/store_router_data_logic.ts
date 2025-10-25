@@ -100,6 +100,9 @@ export const store_router_data_logic = reactive({
     ///
     pageTagStore.tag_LibraryItems_metadata = []
     pageTagStore.tag_LibraryItems_temporary = []
+
+    //
+    pageHomeStore.home_Files_temporary_recently_added_search = undefined
   },
 
   /**
@@ -116,7 +119,7 @@ export const store_router_data_logic = reactive({
     const pageTagStore = usePageTagStore()
     
     // 定义需要保留首页数据的页面
-    const keepHomeData = pageToKeep === 'home' || pageToKeep === 'play_data' || pageToKeep === 'recently_added'
+    const keepHomeData = pageToKeep === 'home' || pageToKeep === 'play_data'
     
     // 定义需要保留各页面数据的条件
     const keepMediaData = pageToKeep === 'media'
@@ -124,6 +127,8 @@ export const store_router_data_logic = reactive({
     const keepArtistData = pageToKeep === 'artist'
 
     const keepTagData = pageToKeep === 'tag'
+
+    const keepRecentlyAddedData = pageToKeep === 'recently_added'
     
     // 清除首页数据（除非需要保留）
     if (!keepHomeData) {
@@ -156,6 +161,10 @@ export const store_router_data_logic = reactive({
       ///
       pageTagStore.tag_LibraryItems_metadata = []
       pageTagStore.tag_LibraryItems_temporary = []
+    }
+
+    if (!keepRecentlyAddedData) {
+      pageHomeStore.home_Files_temporary_recently_added_search = undefined
     }
   },
 

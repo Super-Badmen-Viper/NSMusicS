@@ -49,6 +49,7 @@ import { store_router_data_logic } from '@/router/router_store/store_router_data
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { store_system_configs_theme } from '@/data/data_stores/local_system_stores/store_system_configs_theme'
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
+import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
 import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list'
 import { store_general_fetch_home_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_home/store_general_fetch_home_list'
 import { store_general_fetch_album_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_album/store_general_fetch_album_list'
@@ -216,143 +217,11 @@ async function get_playerbar_to_switch_playerview(value) {
     }, 200)
   }, 30)
   setTimeout(async () => {
-    if (value !== 0) {
-      await handleMenuSelection()
-    }
     playerAppearanceStore.player_show_complete = true
     if (isElectron) {
       ipcRenderer.send('window-gc')
     }
   }, 600)
-}
-async function handleMenuSelection() {
-  const menuActions = {
-    play_data: () => {
-      clearFilesIfNeeded('play_data')
-      store_router_data_info.router_select = 'play_data'
-      fetchDataIfNeeded('play_data')
-    },
-    recently_added: () => {
-      clearFilesIfNeeded('recently_added')
-      store_router_data_info.router_select = 'recently_added'
-      fetchDataIfNeeded('recently_added')
-    },
-    charts: () => {
-      clearFilesIfNeeded('charts')
-      store_router_data_info.router_select = 'charts'
-      fetchDataIfNeeded('charts')
-    },
-    recommend: () => {
-      clearFilesIfNeeded('recommend')
-      store_router_data_info.router_select = 'recommend'
-      fetchDataIfNeeded('recommend')
-    },
-    tag: () => {
-      clearFilesIfNeeded('tag')
-      store_router_data_info.router_select = 'tag'
-      fetchDataIfNeeded('tag')
-    },
-    home: () => {
-      clearFilesIfNeeded('home')
-      store_router_data_info.router_select = 'home'
-      fetchDataIfNeeded('home')
-    },
-    media_cue: () => {
-      clearFilesIfNeeded('media_cue')
-      store_router_data_info.router_select = 'media_cue'
-      fetchDataIfNeeded('media_cue')
-    },
-    update: () => {
-      clearFilesIfNeeded()
-      store_router_data_info.router_select = 'update'
-    },
-    album: () => {
-      clearFilesIfNeeded('album')
-      fetchDataIfNeeded('album')
-      store_router_data_info.router_select = 'album'
-    },
-    media: async () => {
-      clearFilesIfNeeded('media')
-      fetchDataIfNeeded('media')
-      store_router_data_info.router_select = 'media'
-    },
-    artist: () => {
-      clearFilesIfNeeded('artist')
-      fetchDataIfNeeded('artist')
-      store_router_data_info.router_select = 'artist'
-    },
-    login: () => {
-      clearFilesIfNeeded()
-      store_router_data_info.router_select_model_server_login = true
-    },
-    setting: () => {
-      clearFilesIfNeeded()
-      store_router_data_info.router_select_model_server_setting = true
-    },
-    library: () => {
-      clearFilesIfNeeded()
-      store_router_data_info.router_select_model_server_setting = true
-    },
-  }
-  const selectedAction = menuActions[store_system_configs_info.app_view_left_menu_select_activeKey]
-  if (selectedAction) {
-    await selectedAction()
-  }
-}
-function clearFilesIfNeeded(
-  except?:
-    | 'home'
-    | 'play_data'
-    | 'recently_added'
-    | 'charts'
-    | 'recommend'
-    | 'tag'
-    | 'media_cue'
-    | 'album'
-    | 'media'
-    | 'artist'
-) {
-  if (!store_router_data_logic.clear_Memory_Model) {
-    if (except) {
-      store_router_data_logic.clearTemporaryFilesExcept(except)
-    } else {
-      store_router_data_logic.clearAllTemporaryFiles()
-    }
-  }
-}
-function fetchDataIfNeeded(
-  type:
-    | 'home'
-    | 'play_data'
-    | 'recently_added'
-    | 'charts'
-    | 'recommend'
-    | 'tag'
-    | 'media_cue'
-    | 'album'
-    | 'media'
-    | 'artist'
-) {
-  if (store_router_data_logic.clear_Memory_Model) {
-    if (type === 'home') {
-      store_general_fetch_home_list.fetchData_Home()
-    } else if (type === 'play_data') {
-      store_general_fetch_home_list.fetchData_Home()
-    } else if (type === 'recently_added') {
-      store_general_fetch_home_list.fetchData_Home()
-    } else if (type === 'charts') {
-    } else if (type === 'recommend') {
-    } else if (type === 'tag') {
-    } else if (type === 'media_cue') {
-      store_general_fetch_media_cue_list.fetchData_Media()
-    } else if (type === 'album') {
-      store_general_fetch_album_list.fetchData_Album()
-    } else if (type === 'media') {
-      store_general_fetch_media_list.fetchData_Media()
-    } else if (type === 'artist') {
-      store_general_fetch_artist_list.fetchData_Artist()
-    }
-  }
 }
 provide('get_playerbar_to_switch_playerview', get_playerbar_to_switch_playerview)
 
@@ -382,6 +251,11 @@ routers.afterEach(async (to, from) => {
     } else if (to.name === 'play_data') {
       store_router_data_info.router_name = to.name
     } else if (to.name === 'recently_added') {
+      const pageHomeStore = usePageHomeStore()
+      pageHomeStore.home_Files_temporary_recently_added_search = {
+        start: 0,
+        end: 30,
+      }
       store_router_data_info.router_name = to.name
     } else if (to.name === 'charts') {
       store_router_data_info.router_name = to.name
@@ -933,6 +807,7 @@ const computed_i18n_Label_Update = computed(() => t('filter.recentlyUpdated'))
 import View_Edit_Tag from '@/views/view_app/drawer/View_Edit_Tag.vue'
 import View_Player_Effect from '@/views/view_app/drawer/View_Player_Effect.vue'
 import View_Mini_Music_Player from '@/views/view_app/page/page_player/View_Mini_Music_Player.vue'
+import {usePageHomeStore} from "@/data/data_status/app_status/page_status/home_store/usePageHomeStore";
 
 ////// Load Configs
 const { locale } = useI18n({

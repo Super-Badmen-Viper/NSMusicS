@@ -195,10 +195,6 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     // 获取当前选择类型
     const type = this.pageHomeStore.home_Files_temporary_type_select
 
-    type DataStrategy = {
-      fetch: () => Promise<any[]>
-      mapper: (item: any, url: string, index?: number) => any
-    }
     // 获取对应策略
     const strategy =
         this.STRATEGY_CONFIG[strategyKey][
@@ -1434,6 +1430,8 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       guest_cue_count: artist.GuestCueCount,
       compilation: artist.Compilation ? 1 : 0,
       has_cover_art: artist.HasCoverArt ? 1 : 0,
+      created_at: artist.CreatedAt,
+      updated_at: artist.UpdatedAt,
       size: artist.Size,
       all_artist_ids: artist.AllArtistIDs,
       mbz_artist_id: '',
