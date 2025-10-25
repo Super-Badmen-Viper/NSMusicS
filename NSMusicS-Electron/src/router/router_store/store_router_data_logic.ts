@@ -18,7 +18,7 @@ import { store_server_user_model } from '@/data/data_stores/server_configs_store
 import { usePageTagStore } from '@/data/data_status/app_status/page_status/tag_store/usePageTagStore'
 
 // 定义页面类型枚举
-type PageType = 'home' | 'play_data' | 'charts' | 'recommend' | 'tag' | 'media_cue' | 'media' | 'album' | 'artist'
+type PageType = 'home' | 'play_data' | 'recently_added' | 'charts' | 'recommend' | 'tag' | 'media_cue' | 'media' | 'album' | 'artist'
 
 export const store_router_data_logic = reactive({
   reset_data() {
@@ -116,7 +116,7 @@ export const store_router_data_logic = reactive({
     const pageTagStore = usePageTagStore()
     
     // 定义需要保留首页数据的页面
-    const keepHomeData = pageToKeep === 'home'
+    const keepHomeData = pageToKeep === 'home' || pageToKeep === 'play_data' || pageToKeep === 'recently_added'
     
     // 定义需要保留各页面数据的条件
     const keepMediaData = pageToKeep === 'media'

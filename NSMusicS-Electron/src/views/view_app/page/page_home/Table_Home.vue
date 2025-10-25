@@ -23,6 +23,7 @@ import { store_server_user_model } from '@/data/data_stores/server_configs_store
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_general_fetch_home_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_home/store_general_fetch_home_list'
 import { store_local_data_set_albumInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_albumInfo'
+import { store_local_data_set_artistInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_artistInfo'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
@@ -309,12 +310,26 @@ const Play_Next_album_MediaList_click = (value: number) => {
 }
 
 const handleItemClick_Favorite = (id: any, favorite: boolean) => {
-  store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(id, favorite)
+  if (pageHomeStore.home_Files_temporary_type_select === 'media')
+    store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id, favorite)
+  else if (pageHomeStore.home_Files_temporary_type_select === 'album')
+    store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(id, favorite)
+  else if (pageHomeStore.home_Files_temporary_type_select === 'artist')
+    store_local_data_set_artistInfo.Set_ArtistInfo_To_Favorite(id, favorite)
+  else if (pageHomeStore.home_Files_temporary_type_select === 'media_cue')
+    store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id, favorite)
 }
 
 const handleItemClick_Rating = (id_rating: any) => {
   const [id, rating] = id_rating.split('-')
-  store_local_data_set_albumInfo.Set_AlbumInfo_To_Rating(id, after_rating ? 0 : rating)
+  if (pageHomeStore.home_Files_temporary_type_select === 'media')
+    store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, after_rating ? 0 : rating)
+  else if (pageHomeStore.home_Files_temporary_type_select === 'album')
+    store_local_data_set_albumInfo.Set_AlbumInfo_To_Rating(id, after_rating ? 0 : rating)
+  else if (pageHomeStore.home_Files_temporary_type_select === 'artist')
+    store_local_data_set_artistInfo.Set_ArtistInfo_To_Rating(id, after_rating ? 0 : rating)
+  else if (pageHomeStore.home_Files_temporary_type_select === 'media_cue')
+    store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, after_rating ? 0 : rating)
 }
 
 async function update_playlist_addAlbum(id: any, playlist_id: any) {

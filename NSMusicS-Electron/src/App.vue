@@ -337,7 +337,9 @@ function fetchDataIfNeeded(
     if (type === 'home') {
       store_general_fetch_home_list.fetchData_Home()
     } else if (type === 'play_data') {
+      store_general_fetch_home_list.fetchData_Home()
     } else if (type === 'recently_added') {
+      store_general_fetch_home_list.fetchData_Home()
     } else if (type === 'charts') {
     } else if (type === 'recommend') {
     } else if (type === 'tag') {
@@ -444,6 +446,67 @@ routers.afterEach(async (to, from) => {
     }
   }
 })
+watch(
+  () => store_router_data_info.router_select,
+  // @ts-ignore - 忽略类型检查
+  async (newValue: string) => {
+    // @ts-ignore - 忽略store实例类型检查
+    const playlistStore = usePlaylistStore()
+    if (!playlistStore.playlist_show) {
+      store_router_data_info.router_select = newValue
+      if (newValue === 'home') {
+        await store_general_fetch_home_list.fetchData_Home()
+      } else if (newValue === 'play_data') {
+        await store_general_fetch_home_list.fetchData_Home()
+      } else if (newValue === 'recently_added') {
+        await store_general_fetch_home_list.fetchData_Home()
+      } else if (newValue === 'charts') {
+      } else if (newValue === 'recommend') {
+      } else if (newValue === 'tag') {
+      } else if (newValue === 'media_cue') {
+        if (store_router_data_info.router_click) {
+          const pageMediaCueStore = usePageMediaCueStore()
+          pageMediaCueStore.page_songlists_keyword = ''
+          pageMediaCueStore.page_songlists_keywordFilter = ''
+        }
+        await store_general_fetch_media_cue_list.fetchData_Media()
+      } else if (newValue === 'media') {
+        if (store_router_data_info.router_click) {
+          const pageMediaStore = usePageMediaStore()
+          pageMediaStore.page_songlists_keyword = ''
+          pageMediaStore.page_songlists_keywordFilter = ''
+          //
+          store_general_fetch_media_list._artist_id = ''
+          store_general_fetch_media_list._album_id = ''
+          store_general_fetch_media_list._album_artist_id = ''
+          store_general_fetch_media_list._media_id = ''
+        }
+        await store_general_fetch_media_list.fetchData_Media()
+        /// Synchronize API data
+        if (store_server_user_model.model_select === 'server') {
+          // get app all playlist
+          await store_general_model_player_list.get_playlists_info()
+        }
+      } else if (newValue === 'album') {
+        if (store_router_data_info.router_click) {
+          const pageAlbumStore = usePageAlbumStore()
+          pageAlbumStore.page_albumlists_keyword = ''
+        }
+        await store_general_fetch_album_list.fetchData_Album()
+      } else if (newValue === 'artist') {
+        await store_general_fetch_artist_list.fetchData_Artist()
+      }
+      store_router_data_info.router_click = false
+    }
+  }
+)
+watch(
+  () => store_router_data_info.router_name,
+  async (newValue) => {
+    store_system_configs_info.app_view_left_menu_select_activeKey = newValue
+  }
+)
+
 ///// view of media
 const Init_page_songlists_statistic_Data = () => {
   pageMediaStore.page_songlists_options = []
