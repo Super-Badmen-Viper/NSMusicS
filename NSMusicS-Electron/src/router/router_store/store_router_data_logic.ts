@@ -15,6 +15,7 @@ import { store_router_history_data_of_artist } from '@/router/router_store/store
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 // @ts-ignore - 忽略模块导入类型检查
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { usePageTagStore } from '@/data/data_status/app_status/page_status/tag_store/usePageTagStore'
 
 // 定义页面类型枚举
 type PageType = 'home' | 'play_data' | 'charts' | 'recommend' | 'tag' | 'media_cue' | 'media' | 'album' | 'artist'
@@ -24,6 +25,8 @@ export const store_router_data_logic = reactive({
     const pageMediaStore = usePageMediaStore()
     const pageAlbumStore = usePageAlbumStore()
     const pageArtistStore = usePageArtistStore()
+    const pageTagStore = usePageTagStore()
+    ///
     pageMediaStore.page_songlists_keywordFilter = ''
     pageMediaStore.page_songlists_multi_sort = ''
     pageMediaStore.page_songlists_selected = 'song_list_all'
@@ -37,6 +40,14 @@ export const store_router_data_logic = reactive({
     store_router_history_data_of_media.router_select_history_date_of_Media = 'song_list_all'
     store_router_history_data_of_album.router_select_history_date_of_Album = 'album_list_all'
     store_router_history_data_of_artist.router_select_history_date_of_Artist = 'artist_list_all'
+    ///
+    pageTagStore.tag_metadata_find_model = false
+    pageMediaStore.page_songlists_library_path = ''
+    pageMediaStore.page_songlists_library_folder_path = ''
+    ///
+    pageTagStore.tag_LibraryItems_metadata = []
+    pageTagStore.tag_LibraryItems_temporary = []
+    ///
   },
 
   clear_Memory_Model: false,
@@ -69,6 +80,7 @@ export const store_router_data_logic = reactive({
     const pageMediaStore = usePageMediaStore()
     const pageAlbumStore = usePageAlbumStore()
     const pageArtistStore = usePageArtistStore()
+    const pageTagStore = usePageTagStore()
     
     // 清除首页临时数据
     pageHomeStore.home_Files_temporary_maximum_playback = []
@@ -80,6 +92,14 @@ export const store_router_data_logic = reactive({
     pageMediaStore.media_Files_temporary = []
     pageAlbumStore.album_Files_temporary = []
     pageArtistStore.artist_Files_temporary = []
+
+    // 清除其他页面临时数据
+    pageTagStore.tag_metadata_find_model = false
+    pageMediaStore.page_songlists_library_path = ''
+    pageMediaStore.page_songlists_library_folder_path = ''
+    ///
+    pageTagStore.tag_LibraryItems_metadata = []
+    pageTagStore.tag_LibraryItems_temporary = []
   },
 
   /**
@@ -93,6 +113,7 @@ export const store_router_data_logic = reactive({
     const pageMediaStore = usePageMediaStore()
     const pageAlbumStore = usePageAlbumStore()
     const pageArtistStore = usePageArtistStore()
+    const pageTagStore = usePageTagStore()
     
     // 定义需要保留首页数据的页面
     const keepHomeData = pageToKeep === 'home'
@@ -101,6 +122,8 @@ export const store_router_data_logic = reactive({
     const keepMediaData = pageToKeep === 'media'
     const keepAlbumData = pageToKeep === 'album'
     const keepArtistData = pageToKeep === 'artist'
+
+    const keepTagData = pageToKeep === 'tag'
     
     // 清除首页数据（除非需要保留）
     if (!keepHomeData) {
@@ -124,47 +147,16 @@ export const store_router_data_logic = reactive({
     if (!keepArtistData) {
       pageArtistStore.artist_Files_temporary = []
     }
-  },
 
-  // 原有的清除特定页面临时文件的方法，使用新的通用方法实现
-  clear_Files_temporary() {
-    this.clearAllTemporaryFiles()
-  },
-  
-  clear_Files_temporary_except_home() {
-    this.clearTemporaryFilesExcept('home')
-  },
-  
-  clear_Files_temporary_except_play_data() {
-    this.clearTemporaryFilesExcept('play_data')
-  },
-  
-  clear_Files_temporary_except_charts() {
-    this.clearTemporaryFilesExcept('charts')
-  },
-  
-  clear_Files_temporary_except_recommend() {
-    this.clearTemporaryFilesExcept('recommend')
-  },
-  
-  clear_Files_temporary_except_tag() {
-    this.clearTemporaryFilesExcept('tag')
-  },
-  
-  clear_Files_temporary_except_media_cue() {
-    this.clearTemporaryFilesExcept('media_cue')
-  },
-  
-  clear_Files_temporary_except_album() {
-    this.clearTemporaryFilesExcept('album')
-  },
-  
-  clear_Files_temporary_except_media() {
-    this.clearTemporaryFilesExcept('media')
-  },
-  
-  clear_Files_temporary_except_artist() {
-    this.clearTemporaryFilesExcept('artist')
+    // 清除元数据页面临时数据
+    if (!keepTagData) {
+      pageTagStore.tag_metadata_find_model = false
+      pageMediaStore.page_songlists_library_path = ''
+      pageMediaStore.page_songlists_library_folder_path = ''
+      ///
+      pageTagStore.tag_LibraryItems_metadata = []
+      pageTagStore.tag_LibraryItems_temporary = []
+    }
   },
 
   get_media_list_of_album_id_by_album_info(value: any) {

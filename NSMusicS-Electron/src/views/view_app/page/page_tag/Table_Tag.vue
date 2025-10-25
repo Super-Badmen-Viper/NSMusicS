@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, computed, onBeforeUnmount } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { NButton, NCard, NIcon, NInput, NSelect, NSpace, useMessage, useThemeVars } from 'naive-ui'
 import { Folder28Filled, Search28Filled } from '@vicons/fluent'
 import { useI18n } from 'vue-i18n'
@@ -64,15 +64,6 @@ onMounted(async () => {
   pageMediaStore.page_songlists_library_folder_path = ''
   ///
   pageTagStore.tag_metadata_find_model = true
-  ///
-  pageTagStore.tag_LibraryItems_metadata = []
-  pageTagStore.tag_LibraryItems_temporary = []
-  ///
-})
-onBeforeUnmount(() => {
-  pageTagStore.tag_metadata_find_model = false
-  pageMediaStore.page_songlists_library_path = ''
-  pageMediaStore.page_songlists_library_folder_path = ''
   ///
   pageTagStore.tag_LibraryItems_metadata = []
   pageTagStore.tag_LibraryItems_temporary = []
