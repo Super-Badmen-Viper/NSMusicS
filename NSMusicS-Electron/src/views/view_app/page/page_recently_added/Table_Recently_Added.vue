@@ -7,8 +7,10 @@ import {
   Heart24Regular,
   Heart28Filled,
   Open28Filled,
+  PaddingTop20Filled,
+  PaddingDown20Filled,
 } from '@vicons/fluent'
-import { Play } from '@vicons/ionicons5'
+import { RefreshSharp } from '@vicons/ionicons5'
 
 // @ts-ignore - 忽略模块导入类型检查
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
@@ -93,6 +95,21 @@ let after_rating: boolean = false
 
 // 添加dynamicScroller的定义
 const dynamicScroller = ref(null)
+const onResize = () => {
+  console.log('resize')
+}
+const updateParts = { viewStartIdx: 0, viewEndIdx: 0, visibleStartIdx: 0, visibleEndIdx: 0 } // 输出渲染范围updateParts
+const onUpdate = (
+  viewStartIndex: any,
+  viewEndIndex: any,
+  visibleStartIndex: any,
+  visibleEndIndex: any
+) => {
+  updateParts.viewStartIdx = viewStartIndex
+  updateParts.viewEndIdx = viewEndIndex
+  updateParts.visibleStartIdx = visibleStartIndex
+  updateParts.visibleEndIdx = visibleEndIndex
+}
 
 // 当前显示的时间分区文字
 const currentGroupName = ref('')
@@ -576,6 +593,7 @@ const home_Files_temporary_type_options = ref([
   },
 ])
 function change_home_Files_temporary_type() {
+  currentGroupName.value = ''
   _start.value = 0
   _end.value = 30
   pageHomeStore.home_Files_temporary_recently_added_search = {
@@ -584,6 +602,9 @@ function change_home_Files_temporary_type() {
   }
   pageHomeStore.home_Files_temporary_recently_added = []
   store_general_fetch_home_list.fetchData_Home_of_recently_added()
+}
+const onRefreshSharp = async () => {
+  change_home_Files_temporary_type()
 }
 
 // @ts-ignore - 忽略模块导入类型检查
@@ -615,19 +636,58 @@ const onScrollEnd = async () => {
       end: String(_end.value),
     }
     await store_general_fetch_home_list.fetchData_Home_of_recently_added()
+    
+    // 数据加载完成后，重新计算可见分组索引
+    // 获取外层滚动容器
+    const scroller = dynamicScroller.value ? (dynamicScroller.value as any).$el : null
+    if (scroller) {
+      // 获取滚动位置和容器尺寸
+      const scrollTop = scroller.scrollTop
+      const clientHeight = scroller.clientHeight
+      const scrollHeight = scroller.scrollHeight
+      
+      // 检查是否滚动到底部（距离底部小于150px）
+      const distanceToBottom = scrollHeight - scrollTop - clientHeight
+      if (distanceToBottom < 150) {
+        // 接近底部时，锁定显示最后一个分组的名称
+        const lastGroupIndex = groupedRecentlyAdded.value.length - 1
+        if (lastGroupIndex >= 0) {
+          visibleGroupIndex.value = lastGroupIndex
+          currentGroupName.value = groupedRecentlyAdded.value[lastGroupIndex].name
+        }
+      }
+    }
   }
   isScrolling.value = false
 }
 
-// 滚动事件处理，用于检测当前可见的分组
+// 添加一个新的滚动处理函数，用于检测是否滚动到底部
 const onScroll = (event: any) => {
+  // 如果正在滚动加载数据，则不更新currentGroupName
+  if (isScrolling.value) return
+  
   // 如果有分组数据且组件已挂载
   if (groupedRecentlyAdded.value && groupedRecentlyAdded.value.length > 0) {
     // 获取外层滚动容器
     const scroller = dynamicScroller.value ? (dynamicScroller.value as any).$el : null
     if (scroller) {
-      // 获取滚动位置
+      // 获取滚动位置和容器尺寸
       const scrollTop = scroller.scrollTop
+      const clientHeight = scroller.clientHeight
+      const scrollHeight = scroller.scrollHeight
+      
+      // 检查是否滚动到底部（距离底部小于150px）
+      const distanceToBottom = scrollHeight - scrollTop - clientHeight
+      if (distanceToBottom < 50) {
+        onScrollEnd()
+        // 接近底部时，锁定显示最后一个分组的名称
+        const lastGroupIndex = groupedRecentlyAdded.value.length - 1
+        if (lastGroupIndex >= 0 && visibleGroupIndex.value !== lastGroupIndex) {
+          visibleGroupIndex.value = lastGroupIndex
+          currentGroupName.value = groupedRecentlyAdded.value[lastGroupIndex].name
+        }
+        return
+      }
       
       // 如果滚动到顶部，恢复默认标题
       if (scrollTop <= 0) {
@@ -644,7 +704,7 @@ const onScroll = (event: any) => {
       for (let i = 0; i < groupedRecentlyAdded.value.length; i++) {
         const group = groupedRecentlyAdded.value[i]
         // 分组标题高度
-        const headerHeight = 50
+        const headerHeight = 120
         // 分组内容高度（简化计算）
         const contentHeight = group.items.length > 0 ? 
           Math.ceil(group.items.length / gridItems.value) * itemSecondarySize.value : 0
@@ -661,11 +721,13 @@ const onScroll = (event: any) => {
         accumulatedHeight += groupTotalHeight
       }
       
-      // 更新可见分组索引
-      visibleGroupIndex.value = currentVisibleIndex
-      // 更新当前显示的时间分区文字
-      if (groupedRecentlyAdded.value[currentVisibleIndex]) {
-        currentGroupName.value = groupedRecentlyAdded.value[currentVisibleIndex].name
+      // 只有当可见分组索引真正改变时才更新currentGroupName
+      if (visibleGroupIndex.value !== currentVisibleIndex) {
+        visibleGroupIndex.value = currentVisibleIndex
+        // 更新当前显示的时间分区文字
+        if (groupedRecentlyAdded.value[currentVisibleIndex]) {
+          currentGroupName.value = groupedRecentlyAdded.value[currentVisibleIndex].name
+        }
       }
     }
   }
@@ -688,11 +750,58 @@ const onScroll = (event: any) => {
         v-model:value="home_Files_temporary_type_select"
         @update:value="change_home_Files_temporary_type"
       />
+      <n-tooltip trigger="hover" placement="top">
+        <template #trigger>
+          <n-button quaternary circle @click="onRefreshSharp">
+            <template #icon>
+              <n-icon :size="20" :depth="2"><RefreshSharp /></n-icon>
+            </template>
+          </n-button>
+        </template>
+        {{ $t('common.refresh') }}
+      </n-tooltip>
+      <n-tooltip trigger="hover" placement="top">
+        <template #trigger>
+          <n-button
+            quaternary
+            circle
+            @click="
+              () => {
+                dynamicScroller.$el.scrollTop = 0
+              }
+            "
+          >
+            <template #icon>
+              <n-icon :size="20" :depth="2"><PaddingTop20Filled /></n-icon>
+            </template>
+          </n-button>
+        </template>
+        {{ $t('action.moveToTop') }}
+      </n-tooltip>
+      <n-tooltip trigger="hover" placement="top">
+        <template #trigger>
+          <n-button
+            quaternary
+            circle
+            @click="
+              () => {
+                dynamicScroller.$el.scrollTop = dynamicScroller.$el.scrollHeight
+              }
+            "
+          >
+            <template #icon>
+              <n-icon :size="20" :depth="2"><PaddingDown20Filled /></n-icon>
+            </template>
+          </n-button>
+        </template>
+        {{ $t('action.moveToBottom') }}
+      </n-tooltip>
     </n-space>
 
     <n-space vertical class="category-recently-add-section">
       <DynamicScroller
         ref="dynamicScroller"
+        style="scroll-behavior: smooth;"
         :style="{
           height: 'calc(100vh - 208px)',
         }"
@@ -701,9 +810,11 @@ const onScroll = (event: any) => {
         :emit-update="true"
         :key="groupedRecentlyAddedKey"
         key-field="name"
+        @resize="onResize"
+        @update="onUpdate"
         @scroll-start="onScrollStart"
-        @scroll-end="onScrollEnd"
         @scroll="onScroll"
+        @scroll-end="onScrollEnd"
       >
         <template #before> </template>
         <template #after> </template>
