@@ -413,7 +413,6 @@ const options_Filter = ref([
 ////// dynamicScroller of artistlist_view
 const dynamicScroller = ref(null)
 const onResize = () => {
-  
   console.log('resize')
 }
 const updateParts = { viewStartIdx: 0, viewEndIdx: 0, visibleStartIdx: 0, visibleEndIdx: 0 } // 输出渲染范围updateParts
@@ -429,8 +428,6 @@ const onUpdate = (
   updateParts.visibleEndIdx = visibleEndIndex
 
   store_router_history_data_of_artist.router_history_model_of_Artist_scroller_value = viewEndIndex
-
-  
 }
 
 const stopWatching_router_history_model_of_Artist_scroll = watch(
@@ -771,9 +768,7 @@ function menu_item_edit_selected_media_tags() {
 
 //////
 const isScrolling = ref(false)
-const onScrollStart = () => {
-  
-}
+const onScrollStart = () => {}
 const onScrollEnd = async () => {
   if (isScrolling.value) return
   isScrolling.value = true
@@ -782,9 +777,7 @@ const onScrollEnd = async () => {
   }
   isScrolling.value = false
 }
-const onScroll = async () => {
-  
-}
+const onScroll = async () => {}
 
 const page_artistlists_statistic = ref<
   {
@@ -844,7 +837,7 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
 <template>
   <n-space vertical :size="12">
     <div class="artist-wall-container">
-      <n-space vertical @wheel.prevent style="position: absolute;top: 0;">
+      <n-space vertical @wheel.prevent style="position: absolute; top: 0">
         <n-space align="center" style="margin-top: 3px">
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
@@ -856,7 +849,10 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
             </template>
             {{ $t('common.refresh') }}
           </n-tooltip>
-          <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;margin-left: 4px;margin-right: 4px;" />
+          <n-divider
+            vertical
+            style="width: 2px; height: 20px; margin-top: -4px; margin-left: 4px; margin-right: 4px"
+          />
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle @click="show_search_area">
@@ -1012,7 +1008,10 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
             </n-card>
           </n-modal>
 
-          <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;margin-left: 4px;margin-right: 4px;" />
+          <n-divider
+            vertical
+            style="width: 2px; height: 20px; margin-top: -4px; margin-left: 4px; margin-right: 4px"
+          />
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle @click="dynamicScroller.$el.scrollTop = 0">
@@ -1039,7 +1038,7 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
           </n-tooltip>
         </n-space>
         <n-space align="center">
-          <n-space style="margin-left: 7px;margin-bottom: 6px;">
+          <n-space style="margin-left: 7px; margin-bottom: 6px">
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
                 <n-select
@@ -1075,9 +1074,7 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
         @scroll-end="onScrollEnd"
         @scroll="onScroll"
       >
-        <template #before>
-          
-        </template>
+        <template #before> </template>
         <template #after> </template>
         <template #default="{ item, index, active }">
           <DynamicScrollerItem
@@ -1092,7 +1089,7 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
               }
             "
           >
-            <div :key="item.id" class="artist" style="margin-top: 20px;">
+            <div :key="item.id" class="artist" style="margin-top: 20px">
               <div
                 class="artist-cover-container"
                 :style="{

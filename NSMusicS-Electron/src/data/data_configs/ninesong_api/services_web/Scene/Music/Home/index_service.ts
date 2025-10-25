@@ -1,5 +1,5 @@
 import { NineSong_Api_Services_Web } from '../NineSong_Api_Services_Web'
-import { usePageHomeStore } from "@/data/data_status/app_status/page_status/home_store/usePageHomeStore";
+import { usePageHomeStore } from '@/data/data_status/app_status/page_status/home_store/usePageHomeStore'
 
 export class Home_ApiService_of_NineSong extends NineSong_Api_Services_Web {
   public async getRandomArtists(start: string, end: string): Promise<any> {

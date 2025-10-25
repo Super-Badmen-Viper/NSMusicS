@@ -345,7 +345,6 @@ const Type_Filter_Show = ref(false)
 ////// dynamicScroller of artistlist_view
 const dynamicScroller = ref(null)
 const onResize = () => {
-  
   console.log('resize')
 }
 const updateParts = { viewStartIdx: 0, viewEndIdx: 0, visibleStartIdx: 0, visibleEndIdx: 0 } // 输出渲染范围updateParts
@@ -361,8 +360,6 @@ const onUpdate = (
   updateParts.visibleEndIdx = visibleEndIndex
 
   store_router_history_data_of_media.router_history_model_of_Media_scroller_value = viewEndIndex
-
-  
 }
 
 const stopWatching_router_history_model_of_Media_scroll = watch(
@@ -862,9 +859,7 @@ function menu_item_add_to_playlist_next() {
 
 //////
 const isScrolling = ref(false)
-const onScrollStart = () => {
-  
-}
+const onScrollStart = () => {}
 const onScrollEnd = async () => {
   if (isScrolling.value) return
   isScrolling.value = true
@@ -873,9 +868,7 @@ const onScrollEnd = async () => {
   }
   isScrolling.value = false
 }
-const onScroll = async () => {
-  
-}
+const onScroll = async () => {}
 
 /////
 const onRefreshSharp = debounce(async (event, args) => {
@@ -955,7 +948,7 @@ onBeforeUnmount(() => {
 <template>
   <n-space vertical :size="12">
     <div class="dynamic-scroller-demo-media-cue">
-      <n-space vertical @wheel.prevent style="position: absolute;top: 0;">
+      <n-space vertical @wheel.prevent style="position: absolute; top: 0">
         <n-space align="center" style="margin-top: 3px">
           <n-space>
             <n-tooltip trigger="hover" placement="top">
@@ -991,7 +984,10 @@ onBeforeUnmount(() => {
             </template>
             {{ $t('common.refresh') }}
           </n-tooltip>
-          <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;margin-left: 4px;margin-right: 4px;" />
+          <n-divider
+            vertical
+            style="width: 2px; height: 20px; margin-top: -4px; margin-left: 4px; margin-right: 4px"
+          />
 
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
@@ -1202,7 +1198,10 @@ onBeforeUnmount(() => {
             </n-card>
           </n-modal>
 
-          <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;margin-left: 4px;margin-right: 4px;" />
+          <n-divider
+            vertical
+            style="width: 2px; height: 20px; margin-top: -4px; margin-left: 4px; margin-right: 4px"
+          />
 
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
@@ -1242,7 +1241,7 @@ onBeforeUnmount(() => {
           </n-tooltip>
         </n-space>
         <n-space align="center">
-          <n-space style="margin-left: 7px;">
+          <n-space style="margin-left: 7px">
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
                 <n-select
@@ -1277,9 +1276,7 @@ onBeforeUnmount(() => {
         @scroll-end="onScrollEnd"
         @scroll="onScroll"
       >
-        <template #before>
-          
-        </template>
+        <template #before> </template>
         <template #after> </template>
         <template #default="{ item, index, active }">
           <DynamicScrollerItem

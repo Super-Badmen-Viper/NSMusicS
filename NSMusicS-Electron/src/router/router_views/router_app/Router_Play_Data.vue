@@ -12,7 +12,7 @@ onMounted(async () => {
 
 <template>
   <div class="view_show">
-    <Table_Play_Data/>
+    <Table_Play_Data />
     <div
       v-if="
         store_server_user_model.model_server_type_of_web &&

@@ -1420,9 +1420,7 @@ function menu_item_edit_selected_media_tags() {
 
 //////
 const isScrolling = ref(false)
-const onScrollStart = () => {
-  
-}
+const onScrollStart = () => {}
 const onScrollEnd = async () => {
   if (isScrolling.value) return
   isScrolling.value = true
@@ -1431,9 +1429,7 @@ const onScrollEnd = async () => {
   }
   isScrolling.value = false
 }
-const onScroll = async () => {
-  
-}
+const onScroll = async () => {}
 
 /////
 const onRefreshSharp = debounce(async (event, args) => {
@@ -1537,7 +1533,10 @@ let folder_Entity_ApiService_of_NineSong = new Folder_Entity_ApiService_of_NineS
   store_server_login_info.server_url
 )
 onMounted(async () => {
-  if (store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong') {
+  if (
+    store_server_user_model.model_server_type_of_web &&
+    store_server_users.server_select_kind === 'ninesong'
+  ) {
     store_server_users.server_all_library =
       await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
     browseFolderOptions.value = store_server_users.server_all_library.map((item: any) => ({
@@ -1598,7 +1597,7 @@ onBeforeUnmount(() => {
 <template>
   <n-space vertical :size="12">
     <div class="dynamic-scroller-demo-media">
-      <n-space vertical @wheel.prevent style="position: absolute;top: 0;">
+      <n-space vertical @wheel.prevent style="position: absolute; top: 0">
         <n-space align="center" style="margin-top: 3px">
           <n-space>
             <n-tooltip trigger="hover" placement="top">
@@ -1636,7 +1635,7 @@ onBeforeUnmount(() => {
           </n-tooltip>
           <n-divider
             vertical
-            style="width: 2px;height: 20px;margin-top: -4px;margin-left: 4px;margin-right: 4px;"
+            style="width: 2px; height: 20px; margin-top: -4px; margin-left: 4px; margin-right: 4px"
           />
 
           <n-tooltip trigger="hover" placement="top">
@@ -2050,7 +2049,7 @@ onBeforeUnmount(() => {
           <n-divider
             v-if="page_songlists_selected !== 'song_list_recently'"
             vertical
-            style="width: 2px;height: 20px;margin-top: -4px;margin-left: 4px;margin-right: 4px;"
+            style="width: 2px; height: 20px; margin-top: -4px; margin-left: 4px; margin-right: 4px"
           />
           <n-tooltip
             v-if="page_songlists_selected !== 'song_list_recently'"
@@ -2122,7 +2121,7 @@ onBeforeUnmount(() => {
 
           <n-divider
             vertical
-            style="width: 2px;height: 20px;margin-top: -4px;margin-left: 4px;margin-right: 4px;"
+            style="width: 2px; height: 20px; margin-top: -4px; margin-left: 4px; margin-right: 4px"
           />
           <n-dropdown
             v-if="
@@ -2198,7 +2197,7 @@ onBeforeUnmount(() => {
                 store_server_users.server_select_kind === 'emby')
             "
             vertical
-            style="width: 2px;height: 20px;margin-top: -4px;margin-left: 4px;margin-right: 4px;"
+            style="width: 2px; height: 20px; margin-top: -4px; margin-left: 4px; margin-right: 4px"
           />
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
@@ -2238,7 +2237,7 @@ onBeforeUnmount(() => {
           </n-tooltip>
         </n-space>
         <n-space align="center">
-          <n-space style="margin-left: 7px;">
+          <n-space style="margin-left: 7px">
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
                 <n-select
@@ -2309,15 +2308,8 @@ onBeforeUnmount(() => {
         @scroll="onScroll"
       >
         <template #before>
-          <n-space vertical
-                   style="margin-left: 19px;margin-top: 17px;height: 70px;">
-            <n-grid
-              :cols="4"
-              :x-gap="40"
-              :y-gap="10"
-              layout-shift-disabled
-              style="width: 730px"
-            >
+          <n-space vertical style="margin-left: 19px; margin-top: 17px; height: 70px">
+            <n-grid :cols="4" :x-gap="40" :y-gap="10" layout-shift-disabled style="width: 730px">
               <n-gi v-for="songlist in page_songlists_statistic" :key="songlist.id">
                 <n-statistic :label="songlist.label" :value="songlist.song_count" />
               </n-gi>

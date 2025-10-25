@@ -80,19 +80,10 @@ const {
   player_collapsed_action_bar_of_Immersion_model,
   player_lyric_fontSize_Num,
 } = storeToRefs(playerAppearanceStore)
-const {
-  player_show_sound_effects,
-} = storeToRefs(playerSoundEffectsStore)
-const {
-  player_show_sound_speed,
-} = storeToRefs(playerSoundSpeedStore)
-const {
-  player_show_sound_more,
-} = storeToRefs(playerSoundMoreStore)
-const {
-  player_show_tag_modify,
-} = storeToRefs(playerTagModifyStore)
-
+const { player_show_sound_effects } = storeToRefs(playerSoundEffectsStore)
+const { player_show_sound_speed } = storeToRefs(playerSoundSpeedStore)
+const { player_show_sound_more } = storeToRefs(playerSoundMoreStore)
+const { player_show_tag_modify } = storeToRefs(playerTagModifyStore)
 
 window.addEventListener('resize', () => {
   store_system_configs_info.window_innerWidth = window.innerWidth
@@ -131,7 +122,9 @@ function create_menuOptions_appBar() {
   )
   store_system_configs_info.app_view_menuOptions.push(
     {
-      label: computed(() => renderRouterLink('charts', t('Play') + t('nsmusics.siderbar_menu.charts'))),
+      label: computed(() =>
+        renderRouterLink('charts', t('Play') + t('nsmusics.siderbar_menu.charts'))
+      ),
       key: 'charts',
       icon: renderIcon(DataHistogram20Regular),
     },
@@ -807,7 +800,7 @@ const computed_i18n_Label_Update = computed(() => t('filter.recentlyUpdated'))
 import View_Edit_Tag from '@/views/view_app/drawer/View_Edit_Tag.vue'
 import View_Player_Effect from '@/views/view_app/drawer/View_Player_Effect.vue'
 import View_Mini_Music_Player from '@/views/view_app/page/page_player/View_Mini_Music_Player.vue'
-import {usePageHomeStore} from "@/data/data_status/app_status/page_status/home_store/usePageHomeStore";
+import { usePageHomeStore } from '@/data/data_status/app_status/page_status/home_store/usePageHomeStore'
 
 ////// Load Configs
 const { locale } = useI18n({
@@ -994,8 +987,8 @@ function fullScreen() {
             ></RouterView>
             <!--play_data View -->
             <RouterView
-                class="view_show_data"
-                v-else-if="store_router_data_info.router_select === 'recently_added'"
+              class="view_show_data"
+              v-else-if="store_router_data_info.router_select === 'recently_added'"
             ></RouterView>
             <!--Charts View -->
             <RouterView

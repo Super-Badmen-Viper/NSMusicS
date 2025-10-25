@@ -52,7 +52,10 @@ let folder_Entity_ApiService_of_NineSong = new Folder_Entity_ApiService_of_NineS
 const browseFolderPathOptions = ref<Array<{ label: string; value: string }>>([])
 
 onMounted(async () => {
-  if (store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong') {
+  if (
+    store_server_user_model.model_server_type_of_web &&
+    store_server_users.server_select_kind === 'ninesong'
+  ) {
     store_server_users.server_all_library =
       await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
     browseFolderOptions.value = store_server_users.server_all_library.map((item: any) => ({

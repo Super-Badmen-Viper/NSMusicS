@@ -1042,7 +1042,10 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
             </template>
             {{ $t('common.refresh') }}
           </n-tooltip>
-          <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;margin-left: 4px;margin-right: 4px;" />
+          <n-divider
+            vertical
+            style="width: 2px; height: 20px; margin-top: -4px; margin-left: 4px; margin-right: 4px"
+          />
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle @click="show_search_area">
@@ -1255,7 +1258,10 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
             </n-card>
           </n-modal>
 
-          <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;margin-left: 4px;margin-right: 4px;" />
+          <n-divider
+            vertical
+            style="width: 2px; height: 20px; margin-top: -4px; margin-left: 4px; margin-right: 4px"
+          />
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle @click="dynamicScroller.$el.scrollTop = 0">
@@ -1281,15 +1287,15 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
             {{ $t('action.moveToBottom') }}
           </n-tooltip>
         </n-space>
-        <n-space v-if="show_top_selectedlist" style="margin-left: 7px;margin-bottom: 8px;">
+        <n-space v-if="show_top_selectedlist" style="margin-left: 7px; margin-bottom: 8px">
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-select
-                  size="small"
-                  :value="page_albumlists_selected"
-                  :options="page_albumlists_options"
-                  style="width: 181px"
-                  @update:value="page_albumlists_handleSelected_updateValue"
+                size="small"
+                :value="page_albumlists_selected"
+                :options="page_albumlists_options"
+                style="width: 181px"
+                @update:value="page_albumlists_handleSelected_updateValue"
               />
             </template>
             {{ $t('Select') + $t('LabelPlaylist') }}
@@ -1318,8 +1324,8 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
         <template #before>
           <div class="notice">
             <div
-                :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)' }"
-                style="
+              :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)' }"
+              style="
                 position: absolute;
                 z-index: 0;
                 height: 283px;
@@ -1332,25 +1338,25 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
               "
             >
               <img
-                  :style="{
+                :style="{
                   width: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
                   height: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
                   minHeight: '280px',
                   WebkitMaskImage:
                     'linear-gradient(to right, rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, 1) 100%)',
                 }"
-                  style="
+                style="
                   margin-left: 200px;
                   transform: translateY(-25%);
                   object-fit: cover;
                   object-position: center;
                 "
-                  :src="getAssetImage(playerAudioStore.page_top_album_image_url)"
-                  alt=""
+                :src="getAssetImage(playerAudioStore.page_top_album_image_url)"
+                alt=""
               />
             </div>
             <n-page-header
-                style="
+              style="
                 position: relative;
                 z-index: 1;
                 width: calc(100vw - 220px);
@@ -1366,16 +1372,16 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
                       {{ $t('entity.album_other') }}
                     </div>
                     <div
-                        v-if="page_top_album_name.length > 0"
-                        style="font-size: 32px; font-weight: 600; margin-top: -2px"
+                      v-if="page_top_album_name.length > 0"
+                      style="font-size: 32px; font-weight: 600; margin-top: -2px"
                     >
                       {{ ' : ' }}
                     </div>
                     <div
-                        :style="{
+                      :style="{
                         maxWidth: 'calc(100vw - ' + (collapsed_width + 540) + 'px)',
                       }"
-                        style="
+                      style="
                         text-align: left;
                         cursor: pointer;
                         font-size: 32px;
@@ -1386,7 +1392,7 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
                         overflow: hidden;
                         text-overflow: ellipsis;
                       "
-                        @click="
+                      @click="
                         () => {
                           if (store_server_user_model.model_server_type_of_local) {
                             handleItemClick_album(playerAudioStore.page_top_album_id)
@@ -1406,10 +1412,10 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
                     <n-tooltip trigger="hover" placement="top">
                       <template #trigger>
                         <n-select
-                            :value="page_albumlists_selected"
-                            :options="page_albumlists_options"
-                            style="width: 166px"
-                            @update:value="page_albumlists_handleSelected_updateValue"
+                          :value="page_albumlists_selected"
+                          :options="page_albumlists_options"
+                          style="width: 166px"
+                          @update:value="page_albumlists_handleSelected_updateValue"
                         />
                       </template>
                       {{ $t('Select') + $t('LabelPlaylist') }}
@@ -1417,11 +1423,11 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
                   </n-space>
                   <n-space vertical style="margin-top: 10px; margin-left: 7px">
                     <n-grid
-                        :cols="2"
-                        :x-gap="0"
-                        :y-gap="10"
-                        layout-shift-disabled
-                        style="margin-left: 4px; width: 386px"
+                      :cols="2"
+                      :x-gap="0"
+                      :y-gap="10"
+                      layout-shift-disabled
+                      style="margin-left: 4px; width: 386px"
                     >
                       <n-gi v-for="albumlist in page_albumlists_statistic" :key="albumlist.id">
                         <n-statistic :label="albumlist.label" :value="albumlist.album_count" />
@@ -1433,15 +1439,15 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
               <template #header> </template>
               <template #avatar>
                 <img
-                    style="
+                  style="
                     width: 280px;
                     height: 280px;
                     border-radius: 12px;
                     object-fit: cover;
                     margin-left: -3px;
                   "
-                    :src="getAssetImage(page_top_album_image_url)"
-                    alt=""
+                  :src="getAssetImage(page_top_album_image_url)"
+                  alt=""
                 />
               </template>
               <template #extra> </template>

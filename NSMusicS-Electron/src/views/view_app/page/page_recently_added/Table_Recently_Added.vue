@@ -75,10 +75,8 @@ const themeVars = useThemeVars()
 const pageMediaStore = usePageMediaStore()
 const pageHomeStore = usePageHomeStore()
 const pageRecommendStore = usePageRecommendStore()
-const {
-  home_Files_temporary_recently_added,
-  home_Files_temporary_type_select,
-} = storeToRefs(pageHomeStore)
+const { home_Files_temporary_recently_added, home_Files_temporary_type_select } =
+  storeToRefs(pageHomeStore)
 const { recommend_MediaFiles_temporary } = storeToRefs(pageRecommendStore)
 
 const item_album = ref(160)
@@ -125,15 +123,15 @@ const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'))
 const getTimeGroupName = (date: Date): string => {
   const now = new Date()
   const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24))
-  
+
   if (diffDays <= 7) return '本周'
   if (diffDays <= 30) return '本月'
   if (diffDays <= 90) return '最近3个月'
   if (diffDays <= 180) return '最近6个月'
-  
+
   const year = date.getFullYear()
   if (year === now.getFullYear()) return '今年'
-  
+
   // 返回年份作为分组名
   return year.toString()
 }
@@ -142,21 +140,21 @@ const getTimeGroupName = (date: Date): string => {
 const groupedRecentlyAdded = computed(() => {
   // 确保使用最新的完整数据
   const currentData = home_Files_temporary_recently_added.value || []
-  
+
   // 每次重新计算时都基于完整的数据集
   if (currentData.length === 0) return []
-  
+
   // 按创建时间排序
   const sortedItems = [...currentData].sort((a: any, b: any) => {
     if (!a.created_at || !b.created_at) return 0
     return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   })
-  
+
   // 按时间分组
   const groups: { [key: string]: any[] } = {}
   const years: Set<number> = new Set()
   const now = new Date()
-  
+
   sortedItems.forEach((item: any) => {
     if (!item.created_at) return
     const date = new Date(item.created_at)
@@ -165,36 +163,37 @@ const groupedRecentlyAdded = computed(() => {
       groups[groupName] = []
     }
     groups[groupName].push(item)
-    
+
     // 收集年份
     const year = date.getFullYear()
-    if (year < now.getFullYear() && year >= 2020) { // 只收集2020年及以后的年份
+    if (year < now.getFullYear() && year >= 2020) {
+      // 只收集2020年及以后的年份
       years.add(year)
     }
   })
-  
+
   // 动态生成分组顺序
   const groupOrder = ['本周', '本月', '最近3个月', '最近6个月', '今年']
-  
+
   // 按年份降序添加
   const sortedYears = Array.from(years).sort((a, b) => b - a)
-  sortedYears.forEach(year => {
+  sortedYears.forEach((year) => {
     groupOrder.push(year.toString())
   })
-  
+
   groupOrder.push('更早')
-  
+
   // 按时间顺序排列分组
   const result: { name: string; items: any[] }[] = []
-  groupOrder.forEach(groupName => {
+  groupOrder.forEach((groupName) => {
     if (groups[groupName] && groups[groupName].length > 0) {
       result.push({
         name: groupName,
-        items: groups[groupName]
+        items: groups[groupName],
       })
     }
   })
-  
+
   return result
 })
 
@@ -202,11 +201,11 @@ const groupedRecentlyAdded = computed(() => {
 const groupedRecentlyAddedKey = ref(0)
 
 const stopWatch_home_Files_temporary_recently_added = watch(
-    () => home_Files_temporary_recently_added.value,
-    (newValue, oldValue) => {
-      // 当home_Files_temporary_recently_added变化时，增加key值强制重新渲染
-      groupedRecentlyAddedKey.value++
-    }
+  () => home_Files_temporary_recently_added.value,
+  (newValue, oldValue) => {
+    // 当home_Files_temporary_recently_added变化时，增加key值强制重新渲染
+    groupedRecentlyAddedKey.value++
+  }
 )
 
 const handleImageError = async (item: any) => {
@@ -253,7 +252,7 @@ const stopWatching_window_innerWidth = watch(
 const updateGridItems = () => {
   collapsed_width.value = 145
   if (window.innerWidth > 2460) {
-    const num = window.innerWidth / 7.83
+    const num = window.innerWidth / 8.03
     itemSize.value = Math.floor(num) + 40
     item_album.value = Math.floor(num)
     item_album_image.value = item_album.value - 20
@@ -262,7 +261,7 @@ const updateGridItems = () => {
     itemSecondarySize.value =
       Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2
   } else if (window.innerWidth > 1660) {
-    const num = window.innerWidth / 6.83
+    const num = window.innerWidth / 7.03
     itemSize.value = Math.floor(num) + 40
     item_album.value = Math.floor(num)
     item_album_image.value = item_album.value - 20
@@ -271,7 +270,7 @@ const updateGridItems = () => {
     itemSecondarySize.value =
       Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2
   } else {
-    const num = window.innerWidth / 5.83
+    const num = window.innerWidth / 6.03
     itemSize.value = Math.floor(num) + 40
     item_album.value = Math.floor(num)
     item_album_image.value = item_album.value - 20
@@ -588,7 +587,9 @@ const home_Files_temporary_type_options = ref([
     value: 'artist',
   },
   {
-    label: computed(() => t('filter.recentlyAdded') + ' : ' + 'CUE ' + t('nsmusics.view_page.disk')),
+    label: computed(
+      () => t('filter.recentlyAdded') + ' : ' + 'CUE ' + t('nsmusics.view_page.disk')
+    ),
     value: 'media_cue',
   },
 ])
@@ -621,14 +622,15 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
 const _start = ref(0)
 const _end = ref(30)
 const isScrolling = ref(false)
-const onScrollStart = () => {
-  
-}
+const onScrollStart = () => {}
 
 const onScrollEnd = async () => {
   if (isScrolling.value) return
   isScrolling.value = true
-  if (store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong') {
+  if (
+    store_server_user_model.model_server_type_of_web &&
+    store_server_users.server_select_kind === 'ninesong'
+  ) {
     _start.value += 30
     _end.value += 30
     pageHomeStore.home_Files_temporary_recently_added_search = {
@@ -636,7 +638,7 @@ const onScrollEnd = async () => {
       end: String(_end.value),
     }
     await store_general_fetch_home_list.fetchData_Home_of_recently_added()
-    
+
     // 数据加载完成后，重新计算可见分组索引
     // 获取外层滚动容器
     const scroller = dynamicScroller.value ? (dynamicScroller.value as any).$el : null
@@ -645,7 +647,7 @@ const onScrollEnd = async () => {
       const scrollTop = scroller.scrollTop
       const clientHeight = scroller.clientHeight
       const scrollHeight = scroller.scrollHeight
-      
+
       // 检查是否滚动到底部（距离底部小于150px）
       const distanceToBottom = scrollHeight - scrollTop - clientHeight
       if (distanceToBottom < 150) {
@@ -665,7 +667,7 @@ const onScrollEnd = async () => {
 const onScroll = (event: any) => {
   // 如果正在滚动加载数据，则不更新currentGroupName
   if (isScrolling.value) return
-  
+
   // 如果有分组数据且组件已挂载
   if (groupedRecentlyAdded.value && groupedRecentlyAdded.value.length > 0) {
     // 获取外层滚动容器
@@ -675,7 +677,7 @@ const onScroll = (event: any) => {
       const scrollTop = scroller.scrollTop
       const clientHeight = scroller.clientHeight
       const scrollHeight = scroller.scrollHeight
-      
+
       // 检查是否滚动到底部（距离底部小于150px）
       const distanceToBottom = scrollHeight - scrollTop - clientHeight
       if (distanceToBottom < 50) {
@@ -688,39 +690,44 @@ const onScroll = (event: any) => {
         }
         return
       }
-      
+
       // 如果滚动到顶部，恢复默认标题
       if (scrollTop <= 0) {
         currentGroupName.value = ''
         visibleGroupIndex.value = 0
         return
       }
-      
+
       // 计算每个分组的大致高度（这里需要根据实际情况调整）
       // 假设每个分组标题高度为50px，内容区域高度根据items数量和itemSize计算
       let accumulatedHeight = 0
       let currentVisibleIndex = 0
-      
+
       for (let i = 0; i < groupedRecentlyAdded.value.length; i++) {
         const group = groupedRecentlyAdded.value[i]
         // 分组标题高度
         const headerHeight = 120
         // 分组内容高度（简化计算）
-        const contentHeight = group.items.length > 0 ? 
-          Math.ceil(group.items.length / gridItems.value) * itemSecondarySize.value : 0
-        
+        const contentHeight =
+          group.items.length > 0
+            ? Math.ceil(group.items.length / gridItems.value) * itemSecondarySize.value
+            : 0
+
         // 累计高度
         const groupTotalHeight = headerHeight + contentHeight + 30 // 30px是marginBottom
-        
+
         // 如果滚动位置在这个分组范围内，或者稍微超出一点
-        if (scrollTop >= accumulatedHeight - 20 && scrollTop < accumulatedHeight + groupTotalHeight) {
+        if (
+          scrollTop >= accumulatedHeight - 20 &&
+          scrollTop < accumulatedHeight + groupTotalHeight
+        ) {
           currentVisibleIndex = i
           break
         }
-        
+
         accumulatedHeight += groupTotalHeight
       }
-      
+
       // 只有当可见分组索引真正改变时才更新currentGroupName
       if (visibleGroupIndex.value !== currentVisibleIndex) {
         visibleGroupIndex.value = currentVisibleIndex
@@ -732,12 +739,11 @@ const onScroll = (event: any) => {
     }
   }
 }
-
 </script>
 
 <template>
   <div class="home-wall-container">
-    <n-space align="center" style="margin-top: 6px;margin-left: -3px;">
+    <n-space align="center" style="margin-top: 6px; margin-left: -3px">
       <div class="recently-add-header">
         <span class="recently-add-title">
           {{ currentGroupName || t('filter.recentlyAdded') }}
@@ -801,7 +807,7 @@ const onScroll = (event: any) => {
     <n-space vertical class="category-recently-add-section">
       <DynamicScroller
         ref="dynamicScroller"
-        style="scroll-behavior: smooth;"
+        style="scroll-behavior: smooth"
         :style="{
           height: 'calc(100vh - 208px)',
         }"
@@ -831,7 +837,7 @@ const onScroll = (event: any) => {
                 {{ group.name }}
               </span>
             </div>
-            
+
             <!-- 对应的时间分组DynamicScroller -->
             <DynamicScroller
               class="home-wall"
@@ -903,7 +909,7 @@ const onScroll = (event: any) => {
                               v-model="item.rating"
                               @before-rate="
                                 () => {
-                                  before_rating = item.rating === 1 ? true : false as boolean
+                                  before_rating = item.rating === 1 ? true : (false as boolean)
                                 }
                               "
                               @after-rate="
@@ -940,7 +946,9 @@ const onScroll = (event: any) => {
                                 }
                               "
                             >
-                              <icon v-if="item.favorite" :size="20" color="red"><Heart28Filled /></icon>
+                              <icon v-if="item.favorite" :size="20" color="red"
+                                ><Heart28Filled
+                              /></icon>
                               <icon v-else :size="20" color="#FFFFFF"><Heart24Regular /></icon>
                             </button>
                           </div>
@@ -970,7 +978,7 @@ const onScroll = (event: any) => {
             </DynamicScroller>
 
             <!-- 占位 -->
-            <div style="margin-top: -18px;width: 20px;height: 1px;"> </div>
+            <div style="margin-top: -18px; width: 20px; height: 1px"></div>
           </DynamicScrollerItem>
         </template>
       </DynamicScroller>

@@ -13,10 +13,11 @@ onMounted(async () => {
 <template>
   <div class="view_show">
     <Table_Recently_Added
-    v-if="
-      store_server_user_model.model_server_type_of_web &&
-      store_server_users.server_select_kind === 'ninesong'
-    "/>
+      v-if="
+        store_server_user_model.model_server_type_of_web &&
+        store_server_users.server_select_kind === 'ninesong'
+      "
+    />
     <div v-else style="font-size: 24px; font-weight: bold; margin-top: 20px">
       {{ $t('error.serverRequired') + ': NineSong' }}
       <br />

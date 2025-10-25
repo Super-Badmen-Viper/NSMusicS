@@ -18,7 +18,17 @@ import { store_server_user_model } from '@/data/data_stores/server_configs_store
 import { usePageTagStore } from '@/data/data_status/app_status/page_status/tag_store/usePageTagStore'
 
 // 定义页面类型枚举
-type PageType = 'home' | 'play_data' | 'recently_added' | 'charts' | 'recommend' | 'tag' | 'media_cue' | 'media' | 'album' | 'artist'
+type PageType =
+  | 'home'
+  | 'play_data'
+  | 'recently_added'
+  | 'charts'
+  | 'recommend'
+  | 'tag'
+  | 'media_cue'
+  | 'media'
+  | 'album'
+  | 'artist'
 
 export const store_router_data_logic = reactive({
   reset_data() {
@@ -81,13 +91,13 @@ export const store_router_data_logic = reactive({
     const pageAlbumStore = usePageAlbumStore()
     const pageArtistStore = usePageArtistStore()
     const pageTagStore = usePageTagStore()
-    
+
     // 清除首页临时数据
     pageHomeStore.home_Files_temporary_maximum_playback = []
     pageHomeStore.home_Files_temporary_random_search = []
     pageHomeStore.home_Files_temporary_recently_added = []
     pageHomeStore.home_Files_temporary_recently_played = []
-    
+
     // 清除其他页面临时数据
     pageMediaStore.media_Files_temporary = []
     pageAlbumStore.album_Files_temporary = []
@@ -111,16 +121,16 @@ export const store_router_data_logic = reactive({
    */
   clearTemporaryFilesExcept(pageToKeep: PageType) {
     store_router_data_info.router_select = pageToKeep
-    
+
     const pageHomeStore = usePageHomeStore()
     const pageMediaStore = usePageMediaStore()
     const pageAlbumStore = usePageAlbumStore()
     const pageArtistStore = usePageArtistStore()
     const pageTagStore = usePageTagStore()
-    
+
     // 定义需要保留首页数据的页面
     const keepHomeData = pageToKeep === 'home' || pageToKeep === 'play_data'
-    
+
     // 定义需要保留各页面数据的条件
     const keepMediaData = pageToKeep === 'media'
     const keepAlbumData = pageToKeep === 'album'
@@ -129,7 +139,7 @@ export const store_router_data_logic = reactive({
     const keepTagData = pageToKeep === 'tag'
 
     const keepRecentlyAddedData = pageToKeep === 'recently_added'
-    
+
     // 清除首页数据（除非需要保留）
     if (!keepHomeData) {
       pageHomeStore.home_Files_temporary_maximum_playback = []
@@ -137,17 +147,17 @@ export const store_router_data_logic = reactive({
       pageHomeStore.home_Files_temporary_recently_added = []
       pageHomeStore.home_Files_temporary_recently_played = []
     }
-    
+
     // 清除媒体页面数据（除非需要保留）
     if (!keepMediaData) {
       pageMediaStore.media_Files_temporary = []
     }
-    
+
     // 清除专辑页面数据（除非需要保留）
     if (!keepAlbumData) {
       pageAlbumStore.album_Files_temporary = []
     }
-    
+
     // 清除艺术家页面数据（除非需要保留）
     if (!keepArtistData) {
       pageArtistStore.artist_Files_temporary = []

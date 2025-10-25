@@ -22,7 +22,7 @@ export const usePageHomeStore = defineStore('pageHome', () => {
   const home_selected_top_album = ref<AlbumType | null>(null)
   const home_selected_top_album_medium_image_url = ref(error_album)
 
-  const home_Files_temporary_recently_added_search = ref<any>({start: '0',end: '0'})
+  const home_Files_temporary_recently_added_search = ref<any>({ start: '0', end: '0' })
 
   const list_data_StartUpdate = ref(false)
 
