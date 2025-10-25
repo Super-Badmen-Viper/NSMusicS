@@ -27,14 +27,6 @@ const router = createRouter({
       },
     },
     {
-      path: '/play_data',
-      name: 'play_data',
-      component: () => import('@/router/router_views/router_app/Router_Play_Data.vue'),
-      meta: {
-        cleanup: true,
-      },
-    },
-    {
       path: '/recently_added',
       name: 'recently_added',
       component: () => import('@/router/router_views/router_app/Router_Recently_Added.vue'),

@@ -134,11 +134,6 @@ function create_menuOptions_appBar() {
       icon: renderIcon(FindInPageFilled),
     },
     {
-      label: computed(() => renderRouterLink('play_data', t('Play') + t('Data'))),
-      key: 'play_data',
-      icon: renderIcon(ReceiptPlay24Regular),
-    },
-    {
       label: computed(() => renderRouterLink('home', t('common.home'))),
       key: 'home',
       icon: renderIcon(Home28Regular),
@@ -241,8 +236,6 @@ routers.afterEach(async (to, from) => {
     store_router_data_info.router_select = to.name
     if (to.name === 'home') {
       store_router_data_info.router_name = to.name
-    } else if (to.name === 'play_data') {
-      store_router_data_info.router_name = to.name
     } else if (to.name === 'recently_added') {
       const pageHomeStore = usePageHomeStore()
       pageHomeStore.home_Files_temporary_recently_added_search = {
@@ -322,8 +315,6 @@ watch(
     if (!playlistStore.playlist_show) {
       store_router_data_info.router_select = newValue
       if (newValue === 'home') {
-        await store_general_fetch_home_list.fetchData_Home()
-      } else if (newValue === 'play_data') {
         await store_general_fetch_home_list.fetchData_Home()
       } else if (newValue === 'recently_added') {
         await store_general_fetch_home_list.fetchData_Home()
@@ -980,12 +971,7 @@ function fullScreen() {
               class="view_show_data"
               v-else-if="store_router_data_info.router_select === 'home'"
             ></RouterView>
-            <!--play_data View -->
-            <RouterView
-              class="view_show_data"
-              v-else-if="store_router_data_info.router_select === 'play_data'"
-            ></RouterView>
-            <!--play_data View -->
+            <!--Recently Added View -->
             <RouterView
               class="view_show_data"
               v-else-if="store_router_data_info.router_select === 'recently_added'"

@@ -20,7 +20,6 @@ import { usePageTagStore } from '@/data/data_status/app_status/page_status/tag_s
 // 定义页面类型枚举
 type PageType =
   | 'home'
-  | 'play_data'
   | 'recently_added'
   | 'charts'
   | 'recommend'
@@ -129,7 +128,7 @@ export const store_router_data_logic = reactive({
     const pageTagStore = usePageTagStore()
 
     // 定义需要保留首页数据的页面
-    const keepHomeData = pageToKeep === 'home' || pageToKeep === 'play_data'
+    const keepHomeData = pageToKeep === 'home'
 
     // 定义需要保留各页面数据的条件
     const keepMediaData = pageToKeep === 'media'
