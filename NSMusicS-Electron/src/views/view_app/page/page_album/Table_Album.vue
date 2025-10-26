@@ -1377,7 +1377,7 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
                   vertical
                   justify="end"
                   align="start"
-                  style="height: 280px; margin-left: 10px"
+                  style="height: 280px; margin-left: 10px; margin-top: -6px"
                 >
                   <n-space vertical>
                     <n-space>

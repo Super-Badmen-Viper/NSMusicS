@@ -8,7 +8,7 @@ import {
   Open28Filled,
   PaddingDown20Filled,
   PaddingTop20Filled,
-  PlayCircle24Regular,
+  Play24Regular,
   Search20Filled,
   TextSortAscending20Regular,
   TextSortDescending20Regular,
@@ -96,56 +96,9 @@ const handleImageError = async (item: any) => {
     item.medium_image_url = error_artist
   }
 }
-function getAssetImage(firstImage: string) {
-  return new URL(firstImage, import.meta.url).href
-}
 // gridItems Re render
-const collapsed_width = ref(1090)
-const stopWatching_window_innerWidth = watch(
-  () => store_system_configs_info.window_innerWidth,
-  () => {
-    updateGridItems()
-  }
-)
-const updateGridItems = () => {
-  collapsed_width.value = 145
-  if (window.innerWidth > 2460) {
-    const num = window.innerWidth / 7.53
-    itemSize.value = Math.floor(num) + 40
-    item_artist.value = Math.floor(num)
-    item_artist_image.value = item_artist.value - 20
-    item_artist_txt.value = item_artist.value - 20
-    gridItems.value = 7
-    itemSecondarySize.value =
-      Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2
-  } else if (window.innerWidth > 1660) {
-    const num = window.innerWidth / 6.53
-    itemSize.value = Math.floor(num) + 40
-    item_artist.value = Math.floor(num)
-    item_artist_image.value = item_artist.value - 20
-    item_artist_txt.value = item_artist.value - 20
-    gridItems.value = 6
-    itemSecondarySize.value =
-      Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2
-  } else {
-    const num = window.innerWidth / 5.53
-    itemSize.value = Math.floor(num) + 40
-    item_artist.value = Math.floor(num)
-    item_artist_image.value = item_artist.value - 20
-    item_artist_txt.value = item_artist.value - 20
-    gridItems.value = 5
-    itemSecondarySize.value =
-      Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2
-  }
-  if (
-    store_server_user_model.model_server_type_of_web &&
-    store_server_users.server_select_kind === 'ninesong'
-  ) {
-    itemSize.value += 35
-  }
-}
+const collapsed_width = ref(145)
 onMounted(() => {
-  updateGridItems()
   input_search_Value.value = pageArtistStore.page_artistlists_keyword
   if (input_search_Value.value.length > 0) {
     bool_show_search_area.value = true
@@ -810,7 +763,6 @@ const onRefreshSharp = debounce(async (event, args) => {
 ////// view artistlist_view Remove data
 onBeforeUnmount(() => {
   stopWatching_boolHandleItemClick_Played()
-  stopWatching_window_innerWidth()
   stopWatching_router_history_model_of_Artist_scroll()
   stopWatching_conditionCount()
   dynamicScroller.value = null
@@ -1059,216 +1011,410 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
           </n-space>
         </n-space>
       </n-space>
-      <DynamicScroller
-        class="artist-wall"
-        ref="dynamicScroller"
-        :style="{
-          width: 'calc(100vw - ' + (collapsed_width - 35) + 'px)',
-          height: 'calc(100vh - 236px)',
-          marginTop: '80px',
-        }"
-        :items="artist_Files_temporary"
-        :itemSize="itemSize"
-        :minItemSize="itemSize"
-        :grid-items="gridItems"
-        :item-secondary-size="itemSecondarySize"
-        :emit-update="true"
-        @resize="onResize"
-        @update="onUpdate"
-        @scroll-start="onScrollStart"
-        @scroll-end="onScrollEnd"
-        @scroll="onScroll"
-      >
-        <template #before> </template>
-        <template #after> </template>
-        <template #default="{ item, index, active }">
-          <DynamicScrollerItem
-            :item="item"
-            :active="active"
-            :data-index="index"
-            v-contextmenu:contextmenu
-            @contextmenu.prevent="
-              () => {
-                playlistStore.playlist_Menu_Item = item
-                playlistStore.playlist_Menu_Item_Id = item.id
-              }
-            "
-          >
-            <div :key="item.id" class="artist" style="margin-top: 20px">
+      <n-space style="width: 100vw">
+        <DynamicScroller
+          class="artist-wall"
+          ref="dynamicScroller"
+          :style="{
+            width: 'calc(45vw - ' + (collapsed_width - 22) + 'px)',
+            height: 'calc(100vh - 236px)',
+            marginTop: '80px',
+          }"
+          :items="artist_Files_temporary"
+          :minItemSize="50"
+          :emit-update="true"
+          key-field="absoluteIndex"
+          @resize="onResize"
+          @update="onUpdate"
+          @scroll-start="onScrollStart"
+          @scroll-end="onScrollEnd"
+          @scroll="onScroll"
+        >
+          <template #before> </template>
+          <template #after> </template>
+          <template #default="{ item, index, active }">
+            <DynamicScrollerItem
+              :item="item"
+              :active="active"
+              :data-index="index"
+              v-contextmenu:contextmenu
+              @contextmenu.prevent="
+                () => {
+                  playlistStore.playlist_Menu_Item = item
+                  playlistStore.playlist_Menu_Item_Id = item.id
+                }
+              "
+              :style="{ width: 'calc(45vw - ' + (collapsed_width - 17) + 'px)' }"
+            >
               <div
-                class="artist-cover-container"
-                :style="{
-                  width: `${item_artist_image}px`,
-                  height: `${item_artist_image}px`,
-                }"
+                :key="item.id"
+                class="artist_info"
+                style="margin-top: 20px; margin-left: 10px; display: flex; align-items: center"
+                :style="{ width: 'calc(45vw - ' + collapsed_width + 'px)' }"
               >
                 <img
-                  class="artist-cover-image"
                   :src="item.medium_image_url"
                   @error="handleImageError(item)"
+                  style="width: 46px; height: 46px; margin-left: 6px; border-radius: 50%"
+                  alt=""
+                />
+                <span class="artist-name" style="margin-left: 8px; width: 200px">
+                  {{ item.name }}
+                </span>
+
+                <div
+                  style="
+                    margin-left: auto;
+                    margin-right: 0;
+                    width: 40px;
+                    display: flex;
+                    flex-direction: row;
+                  "
+                >
+                  <button
+                    class="love-this-home-album-button"
+                    @click="
+                      () => {
+                        handleItemClick_Favorite(item.id, item.favorite)
+                        item.favorite = !item.favorite
+                      }
+                    "
+                    style="
+                      border: 0;
+                      background-color: transparent;
+                      width: 28px;
+                      height: 28px;
+                      margin-right: 10px;
+                      cursor: pointer;
+                    "
+                  >
+                    <template v-if="item.favorite">
+                      <icon :size="20" color="red" style="margin-left: -2px; margin-top: 3px"
+                        ><Heart28Filled
+                      /></icon>
+                    </template>
+                    <template v-else-if="!store_system_configs_info.update_theme">
+                      <icon color="#101014" :size="20" style="margin-left: -2px; margin-top: 3px"
+                        ><Heart24Regular
+                      /></icon>
+                    </template>
+                    <template v-else-if="store_system_configs_info.update_theme">
+                      <icon color="#FAFAFC" :size="20" style="margin-left: -2px; margin-top: 3px"
+                        ><Heart24Regular
+                      /></icon>
+                    </template>
+                  </button>
+                </div>
+                <div
+                  style="
+                    width: 100px;
+                    margin-top: 4px;
+                    margin-right: 0;
+                    text-align: left;
+                    font-size: 14px;
+                    font-weight: 600;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                  "
+                >
+                  <button
+                    class="play-this-artist-button"
+                    @click="Play_this_artist_all_media_list_click(item.id)"
+                  >
+                    <icon :size="22"><Play24Regular /></icon>
+                  </button>
+                </div>
+              </div>
+            </DynamicScrollerItem>
+          </template>
+        </DynamicScroller>
+        <DynamicScroller
+          v-if="false"
+          ref="dynamicScroller"
+          style="scroll-behavior: smooth"
+          :style="{
+            height: 'calc(100vh - 208px)',
+          }"
+          :items="groupedRecentlyAdded"
+          :minItemSize="50"
+          :emit-update="true"
+          :key="groupedRecentlyAddedKey"
+          key-field="name"
+          @resize="onResize"
+          @update="onUpdate"
+          @scroll-start="onScrollStart"
+          @scroll="onScroll"
+          @scroll-end="onScrollEnd"
+        >
+          <template #before> </template>
+          <template #after> </template>
+          <template #default="{ item: group, index: groupIndex, active }">
+            <DynamicScrollerItem
+              :item="group"
+              :active="active"
+              :data-index="groupIndex"
+              :data-active="active"
+            >
+              <!-- 时间分组标签 -->
+              <div class="category-recently-add-header">
+                <span class="category-recently-add-title">
+                  {{ group.name }}
+                </span>
+              </div>
+
+              <!-- 对应的时间分组DynamicScroller -->
+              <DynamicScroller
+                class="home-wall"
+                :style="{
+                  width: `calc(100vw - ${collapsed_width - 18}px)`,
+                  marginBottom: '30px',
+                }"
+                :items="group.items"
+                :itemSize="itemSize"
+                :minItemSize="itemSize"
+                :grid-items="gridItems"
+                :item-secondary-size="itemSecondarySize"
+                :emit-update="true"
+              >
+                <template #default="{ item, index, active }">
+                  <DynamicScrollerItem
+                    :item="item"
+                    :active="active"
+                    :data-index="index"
+                    v-contextmenu:contextmenu
+                    @contextmenu.prevent="
+                      () => {
+                        playlist_Menu_Item = item
+                        playlist_Menu_Item_Id = item.id
+                        recently_added_contextmenu_of_emby = true
+                      }
+                    "
+                  >
+                    <div :key="item.id" class="home-album"></div>
+                  </DynamicScrollerItem>
+                </template>
+              </DynamicScroller>
+
+              <!-- 占位 -->
+              <div style="margin-top: -18px; width: 20px; height: 1px"></div>
+            </DynamicScrollerItem>
+          </template>
+        </DynamicScroller>
+        <DynamicScroller
+          v-if="false"
+          class="artist-wall"
+          ref="dynamicScroller"
+          :style="{
+            width: 'calc(100vw - ' + (collapsed_width - 35) + 'px)',
+            height: 'calc(100vh - 236px)',
+            marginTop: '80px',
+          }"
+          :items="artist_Files_temporary"
+          :itemSize="itemSize"
+          :minItemSize="itemSize"
+          :grid-items="gridItems"
+          :item-secondary-size="itemSecondarySize"
+          :emit-update="true"
+          @resize="onResize"
+          @update="onUpdate"
+          @scroll-start="onScrollStart"
+          @scroll-end="onScrollEnd"
+          @scroll="onScroll"
+        >
+          <template #before> </template>
+          <template #after> </template>
+          <template #default="{ item, index, active }">
+            <DynamicScrollerItem
+              :item="item"
+              :active="active"
+              :data-index="index"
+              v-contextmenu:contextmenu
+              @contextmenu.prevent="
+                () => {
+                  playlistStore.playlist_Menu_Item = item
+                  playlistStore.playlist_Menu_Item_Id = item.id
+                }
+              "
+            >
+              <div :key="item.id" class="artist" style="margin-top: 20px">
+                <div
+                  class="artist-cover-container"
                   :style="{
                     width: `${item_artist_image}px`,
                     height: `${item_artist_image}px`,
                   }"
-                  alt=""
-                />
-                <div
-                  class="hover-overlay-artist"
-                  @dblclick="Open_this_artist_all_artist_list_click(item.id)"
                 >
-                  <div class="hover-content-artist">
-                    <button
-                      class="play-this-artist-button"
-                      @click="Play_this_artist_all_media_list_click(item.id)"
-                    >
-                      <icon :size="42" color="#FFFFFF"><PlayCircle24Regular /></icon>
-                    </button>
-                    <div
-                      class="hover-buttons-top-artist"
+                  <img
+                    class="artist-cover-image"
+                    :src="item.medium_image_url"
+                    @error="handleImageError(item)"
+                    :style="{
+                      width: `${item_artist_image}px`,
+                      height: `${item_artist_image}px`,
+                    }"
+                    alt=""
+                  />
+                  <div
+                    class="hover-overlay-artist"
+                    @dblclick="Open_this_artist_all_artist_list_click(item.id)"
+                  >
+                    <div class="hover-content-artist">
+                      <button
+                        class="play-this-artist-button"
+                        @click="Play_this_artist_all_media_list_click(item.id)"
+                      >
+                        <icon :size="42" color="#FFFFFF"><PlayCircle24Regular /></icon>
+                      </button>
+                      <div
+                        class="hover-buttons-top-artist"
+                        v-if="
+                          (store_server_users.server_select_kind != 'jellyfin' &&
+                            store_server_users.server_select_kind != 'emby') ||
+                          store_server_user_model.model_server_type_of_local
+                        "
+                      >
+                        <rate
+                          class="viaSlot"
+                          :length="5"
+                          v-model="item.rating"
+                          @before-rate="
+                            () => {
+                              before_rating = item.rating === 1
+                            }
+                          "
+                          @after-rate="
+                            (value) => {
+                              after_rating = item.rating === 1 && before_rating
+                              handleItemClick_Rating(`${item.id}-${value}`)
+                              if (after_rating) {
+                                item.rating = 0
+                                after_rating = false
+                              }
+                            }
+                          "
+                        />
+                      </div>
+                      <div class="hover-buttons-bottom-artist">
+                        <button
+                          v-if="
+                            store_server_user_model.model_server_type_of_local ||
+                            (store_server_users.server_select_kind !== 'jellyfin' &&
+                              store_server_users.server_select_kind !== 'emby')
+                          "
+                          class="open-this-artist-button"
+                          @click="Open_this_artist_all_artist_list_click(item.id)"
+                        >
+                          <icon :size="20" color="#FFFFFF"><Open28Filled /></icon>
+                        </button>
+                        <button
+                          class="love-this-artist-button"
+                          @click="
+                            () => {
+                              handleItemClick_Favorite(item.id, item.favorite)
+                              item.favorite = !item.favorite
+                            }
+                          "
+                        >
+                          <icon v-if="item.favorite" :size="20" color="red"><Heart28Filled /></icon>
+                          <icon v-else :size="20" color="#FFFFFF"><Heart24Regular /></icon>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div :style="{ width: item_artist_image + 'px' }">
+                  <div :style="{ width: item_artist_txt + 'px' }">
+                    <div>
+                      <span
+                        class="artist-name"
+                        :style="{
+                          maxWidth: item_artist_txt + 'px',
+                          textAlign:
+                            store_server_users.server_select_kind != 'navidrome'
+                              ? 'center'
+                              : 'left',
+                        }"
+                      >
+                        {{ item.name }}
+                      </span>
+                    </div>
+                    <n-space
+                      justify="space-between"
+                      :style="{ width: item_artist_image + 'px' }"
                       v-if="
                         (store_server_users.server_select_kind != 'jellyfin' &&
                           store_server_users.server_select_kind != 'emby') ||
                         store_server_user_model.model_server_type_of_local
                       "
                     >
-                      <rate
-                        class="viaSlot"
-                        :length="5"
-                        v-model="item.rating"
-                        @before-rate="
-                          () => {
-                            before_rating = item.rating === 1
-                          }
-                        "
-                        @after-rate="
-                          (value) => {
-                            after_rating = item.rating === 1 && before_rating
-                            handleItemClick_Rating(`${item.id}-${value}`)
-                            if (after_rating) {
-                              item.rating = 0
-                              after_rating = false
-                            }
-                          }
-                        "
-                      />
-                    </div>
-                    <div class="hover-buttons-bottom-artist">
-                      <button
+                      <span>
+                        {{ $t('entity.track_other') + ': ' + item.song_count }}
+                      </span>
+                      <span
                         v-if="
-                          store_server_user_model.model_server_type_of_local ||
-                          (store_server_users.server_select_kind !== 'jellyfin' &&
-                            store_server_users.server_select_kind !== 'emby')
-                        "
-                        class="open-this-artist-button"
-                        @click="Open_this_artist_all_artist_list_click(item.id)"
-                      >
-                        <icon :size="20" color="#FFFFFF"><Open28Filled /></icon>
-                      </button>
-                      <button
-                        class="love-this-artist-button"
-                        @click="
-                          () => {
-                            handleItemClick_Favorite(item.id, item.favorite)
-                            item.favorite = !item.favorite
-                          }
+                          store_server_user_model.model_server_type_of_web &&
+                          store_server_users.server_select_kind === 'ninesong'
                         "
                       >
-                        <icon v-if="item.favorite" :size="20" color="red"><Heart28Filled /></icon>
-                        <icon v-else :size="20" color="#FFFFFF"><Heart24Regular /></icon>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div :style="{ width: item_artist_image + 'px' }">
-                <div :style="{ width: item_artist_txt + 'px' }">
-                  <div>
-                    <span
-                      class="artist-name"
-                      :style="{
-                        maxWidth: item_artist_txt + 'px',
-                        textAlign:
-                          store_server_users.server_select_kind != 'navidrome' ? 'center' : 'left',
-                      }"
-                    >
-                      {{ item.name }}
-                    </span>
-                  </div>
-                  <n-space
-                    justify="space-between"
-                    :style="{ width: item_artist_image + 'px' }"
-                    v-if="
-                      (store_server_users.server_select_kind != 'jellyfin' &&
-                        store_server_users.server_select_kind != 'emby') ||
-                      store_server_user_model.model_server_type_of_local
-                    "
-                  >
-                    <span>
-                      {{ $t('entity.track_other') + ': ' + item.song_count }}
-                    </span>
-                    <span
+                        {{
+                          $t('nsmusics.view_page.guest') +
+                          $t('entity.track_other') +
+                          ': ' +
+                          item.guest_song_count
+                        }}
+                      </span>
+                      <span v-else>
+                        {{ $t('entity.album_other') + ': ' + item.album_count }}
+                      </span>
+                    </n-space>
+                    <n-space
+                      justify="space-between"
+                      :style="{ width: item_artist_image + 'px' }"
                       v-if="
                         store_server_user_model.model_server_type_of_web &&
                         store_server_users.server_select_kind === 'ninesong'
                       "
                     >
-                      {{
-                        $t('nsmusics.view_page.guest') +
-                        $t('entity.track_other') +
-                        ': ' +
-                        item.guest_song_count
-                      }}
-                    </span>
-                    <span v-else>
-                      {{ $t('entity.album_other') + ': ' + item.album_count }}
-                    </span>
-                  </n-space>
-                  <n-space
-                    justify="space-between"
-                    :style="{ width: item_artist_image + 'px' }"
-                    v-if="
-                      store_server_user_model.model_server_type_of_web &&
-                      store_server_users.server_select_kind === 'ninesong'
-                    "
-                  >
-                    <span>
-                      {{ $t('entity.album_other') + ': ' + item.album_count }}
-                    </span>
-                    <span>
-                      {{
-                        $t('nsmusics.view_page.guest') +
-                        $t('entity.album_other') +
-                        ': ' +
-                        item.guest_album_count
-                      }}
-                    </span>
-                  </n-space>
-                  <n-space
-                    justify="space-between"
-                    :style="{ width: item_artist_image + 'px' }"
-                    v-if="
-                      store_server_user_model.model_server_type_of_web &&
-                      store_server_users.server_select_kind === 'ninesong'
-                    "
-                  >
-                    <span>
-                      {{ $t('nsmusics.view_page.disk') + ': ' + item.cue_count }}
-                    </span>
-                    <span>
-                      {{
-                        $t('nsmusics.view_page.guest') +
-                        $t('nsmusics.view_page.disk') +
-                        ': ' +
-                        item.guest_cue_count
-                      }}
-                    </span>
-                  </n-space>
+                      <span>
+                        {{ $t('entity.album_other') + ': ' + item.album_count }}
+                      </span>
+                      <span>
+                        {{
+                          $t('nsmusics.view_page.guest') +
+                          $t('entity.album_other') +
+                          ': ' +
+                          item.guest_album_count
+                        }}
+                      </span>
+                    </n-space>
+                    <n-space
+                      justify="space-between"
+                      :style="{ width: item_artist_image + 'px' }"
+                      v-if="
+                        store_server_user_model.model_server_type_of_web &&
+                        store_server_users.server_select_kind === 'ninesong'
+                      "
+                    >
+                      <span>
+                        {{ $t('nsmusics.view_page.disk') + ': ' + item.cue_count }}
+                      </span>
+                      <span>
+                        {{
+                          $t('nsmusics.view_page.guest') +
+                          $t('nsmusics.view_page.disk') +
+                          ': ' +
+                          item.guest_cue_count
+                        }}
+                      </span>
+                    </n-space>
+                  </div>
                 </div>
               </div>
-            </div>
-          </DynamicScrollerItem>
-        </template>
-      </DynamicScroller>
+            </DynamicScrollerItem>
+          </template>
+        </DynamicScroller>
+      </n-space>
       <v-contextmenu
         ref="contextmenu"
         class="v-contextmenu-item v-contextmenu-item--hover"
@@ -1465,5 +1611,36 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
   -webkit-line-clamp: 1;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.artist_info {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+  border-radius: 8px; /* iOS-style rounded corners */
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.05); /* Subtle initial shadow */
+}
+.artist_info:hover {
+  transform: scale(1.01); /* Slight zoom on hover */
+  box-shadow: 0 0 10px 0 var(--scrollbar-color);
+  z-index: 10;
+  position: relative;
+  background-color: var(--card-color); /* Use a variable for background */
+}
+.artist_info:hover .artist-name {
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--primary-color-hover);
+}
+.artist_info:nth-child(1) {
+  margin-top: 8px;
 }
 </style>

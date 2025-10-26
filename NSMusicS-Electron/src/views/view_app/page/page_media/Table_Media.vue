@@ -3108,9 +3108,6 @@ onBeforeUnmount(() => {
   border-radius: 8px; /* iOS-style rounded corners */
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.05); /* Subtle initial shadow */
 }
-.media_info:nth-child(1) {
-  margin-top: 8px;
-}
 .media_info:hover {
   transform: scale(1.01) translateX(14px); /* Slight zoom on hover */
   box-shadow: 0 0 10px 0 var(--scrollbar-color);
@@ -3121,11 +3118,9 @@ onBeforeUnmount(() => {
 .media_info:hover .songlist_title {
   color: var(--primary-color-hover);
 }
-/*
-.media_info:hover .songlist_artist {
-  color: var(--primary-color-hover);
+.media_info:nth-child(1) {
+  margin-top: 8px;
 }
-*/
 
 .checkbox {
   width: 20px;
