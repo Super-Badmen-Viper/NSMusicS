@@ -1037,7 +1037,13 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
           </n-tooltip>
           <n-divider
             vertical
-            style="width: 2px; height: 20px; margin-top: -4px; margin-left: 4px; margin-right: 4px"
+            style="
+              width: 2px;
+              height: 20px;
+              margin-top: -4px;
+              margin-left: 10px;
+              margin-right: 10px;
+            "
           />
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
@@ -1253,7 +1259,13 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
 
           <n-divider
             vertical
-            style="width: 2px; height: 20px; margin-top: -4px; margin-left: 4px; margin-right: 4px"
+            style="
+              width: 2px;
+              height: 20px;
+              margin-top: -4px;
+              margin-left: 10px;
+              margin-right: 10px;
+            "
           />
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
@@ -1280,7 +1292,7 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
             {{ $t('action.moveToBottom') }}
           </n-tooltip>
         </n-space>
-        <n-space v-if="show_top_selectedlist" style="margin-left: 10px;margin-bottom: 15px;">
+        <n-space v-if="show_top_selectedlist" style="margin-left: 10px; margin-bottom: 7px">
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-select
@@ -1300,7 +1312,7 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
         ref="dynamicScroller"
         :style="{
           width: 'calc(100vw - ' + (collapsed_width - 35) + 'px)',
-          height: show_top_selectedlist ? 'calc(100vh - 236px)' : 'calc(100vh - 194px)',
+          height: show_top_selectedlist ? 'calc(100vh - 230px)' : 'calc(100vh - 184px)',
         }"
         :items="album_Files_temporary"
         :itemSize="itemSize"
@@ -1317,11 +1329,12 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
         <template #before>
           <div class="notice">
             <div
-              :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)' }"
+              :style="{ width: 'calc(100vw - ' + (collapsed_width - 19) + 'px)' }"
               style="
                 position: absolute;
+                top: 10px;
                 z-index: 0;
-                height: 283px;
+                height: 100vh;
                 border-radius: 10px;
                 overflow: hidden;
                 background-size: cover;
@@ -1336,7 +1349,7 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
                   height: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
                   minHeight: '280px',
                   WebkitMaskImage:
-                    'linear-gradient(to right, rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, 1) 100%)',
+                    'linear-gradient(to top, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 1) 100%)',
                 }"
                 style="
                   margin-left: 200px;
@@ -1352,7 +1365,7 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
               style="
                 position: relative;
                 z-index: 1;
-                width: calc(100vw - 220px);
+                width: calc(100vw);
                 height: 300px;
                 border-radius: 10px;
                 margin-left: 12px;
@@ -1360,73 +1373,91 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
               "
             >
               <template #title>
-                <n-space vertical align="start" style="height: 280px; margin-left: 12px">
-                  <n-space style="margin-top: 26px; margin-left: 11px">
-                    <div style="font-size: 26px; font-weight: 600">
-                      {{ $t('entity.album_other') }}
-                    </div>
-                    <div
-                      v-if="page_top_album_name.length > 0"
-                      style="font-size: 26px; font-weight: 600; margin-top: -2px"
-                    >
-                      {{ ' : ' }}
-                    </div>
-                    <div
-                      :style="{
-                        maxWidth: 'calc(100vw - ' + (collapsed_width + 540) + 'px)',
-                      }"
-                      style="
-                        text-align: left;
-                        cursor: pointer;
-                        font-size: 26px;
-                        font-weight: 600;
-                        display: -webkit-box;
-                        -webkit-box-orient: vertical;
-                        -webkit-line-clamp: 1;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                      "
-                      @click="
-                        () => {
-                          if (store_server_user_model.model_server_type_of_local) {
-                            handleItemClick_album(playerAudioStore.page_top_album_id)
-                          } else if (store_server_user_model.model_server_type_of_web) {
-                            handleItemClick_album(playerAudioStore.page_top_album_name)
+                <n-space
+                  vertical
+                  justify="end"
+                  align="start"
+                  style="height: 280px; margin-left: 10px"
+                >
+                  <n-space vertical>
+                    <n-space>
+                      <div style="font-size: 26px; font-weight: 600">
+                        {{ $t('entity.album_other') + ':' }}
+                      </div>
+                    </n-space>
+                    <n-space style="margin-top: -8px">
+                      <div
+                        :style="{
+                          maxWidth: 'calc(100vw - ' + (collapsed_width + 540) + 'px)',
+                        }"
+                        style="
+                          text-align: left;
+                          cursor: pointer;
+                          font-size: 26px;
+                          font-weight: 600;
+                          display: -webkit-box;
+                          -webkit-box-orient: vertical;
+                          -webkit-line-clamp: 1;
+                          overflow: hidden;
+                          text-overflow: ellipsis;
+                        "
+                        @click="
+                          () => {
+                            if (store_server_user_model.model_server_type_of_local) {
+                              handleItemClick_album(playerAudioStore.page_top_album_id)
+                            } else if (store_server_user_model.model_server_type_of_web) {
+                              handleItemClick_album(playerAudioStore.page_top_album_name)
+                            }
                           }
-                        }
+                        "
+                      >
+                        {{ page_top_album_name }}
+                      </div>
+                    </n-space>
+                  </n-space>
+                  <n-space vertical style="margin-top: 4px">
+                    <n-space
+                      align="center"
+                      style="border-left: 4px solid var(--primary-color-hover); border-radius: 3px"
+                    >
+                      <div style="font-size: 15px; font-weight: 600; margin-left: 13px">
+                        {{ $t('GuideProviderSelectListings') + ':' }}
+                      </div>
+                      <n-tooltip trigger="hover" placement="top">
+                        <template #trigger>
+                          <n-select
+                            size="small"
+                            :value="page_albumlists_selected"
+                            :options="page_albumlists_options"
+                            style="width: 166px"
+                            @update:value="page_albumlists_handleSelected_updateValue"
+                          />
+                        </template>
+                        {{ $t('Select') + $t('LabelPlaylist') }}
+                      </n-tooltip>
+                    </n-space>
+                    <n-space
+                      vertical
+                      justify="center"
+                      style="
+                        margin-top: 14px;
+                        padding-left: 14px;
+                        border-left: 4px solid var(--primary-color-hover);
+                        border-radius: 3px;
                       "
                     >
-                      {{ page_top_album_name }}
-                    </div>
-                  </n-space>
-                  <n-space align="center" style="margin-top: 2px; margin-left: 11px">
-                    <div style="color: #767c82; font-size: 15px; font-weight: 600">
-                      {{ $t('GuideProviderSelectListings') + ' >' }}
-                    </div>
-                    <n-tooltip trigger="hover" placement="top">
-                      <template #trigger>
-                        <n-select
-                          :value="page_albumlists_selected"
-                          :options="page_albumlists_options"
-                          style="width: 166px"
-                          @update:value="page_albumlists_handleSelected_updateValue"
-                        />
-                      </template>
-                      {{ $t('Select') + $t('LabelPlaylist') }}
-                    </n-tooltip>
-                  </n-space>
-                  <n-space vertical style="margin-top: 10px; margin-left: 11px;">
-                    <n-grid
-                      :cols="2"
-                      :x-gap="0"
-                      :y-gap="10"
-                      layout-shift-disabled
-                      style="width: 386px"
-                    >
-                      <n-gi v-for="albumlist in page_albumlists_statistic" :key="albumlist.id">
-                        <n-statistic :label="albumlist.label" :value="albumlist.album_count" />
-                      </n-gi>
-                    </n-grid>
+                      <n-grid
+                        :cols="4"
+                        :x-gap="40"
+                        :y-gap="10"
+                        layout-shift-disabled
+                        style="width: 478px; margin-top: 4px"
+                      >
+                        <n-gi v-for="albumlist in page_albumlists_statistic" :key="albumlist.id">
+                          <n-statistic :label="albumlist.label" :value="albumlist.album_count" />
+                        </n-gi>
+                      </n-grid>
+                    </n-space>
                   </n-space>
                 </n-space>
               </template>
@@ -1439,6 +1470,7 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
                     border-radius: 12px;
                     object-fit: cover;
                     margin-left: -3px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
                   "
                   :src="getAssetImage(page_top_album_image_url)"
                   alt=""

@@ -844,7 +844,13 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
           </n-tooltip>
           <n-divider
             vertical
-            style="width: 2px; height: 20px; margin-top: -4px; margin-left: 4px; margin-right: 4px"
+            style="
+              width: 2px;
+              height: 20px;
+              margin-top: -4px;
+              margin-left: 10px;
+              margin-right: 10px;
+            "
           />
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
@@ -1003,7 +1009,13 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
 
           <n-divider
             vertical
-            style="width: 2px; height: 20px; margin-top: -4px; margin-left: 4px; margin-right: 4px"
+            style="
+              width: 2px;
+              height: 20px;
+              margin-top: -4px;
+              margin-left: 10px;
+              margin-right: 10px;
+            "
           />
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
@@ -1031,7 +1043,7 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
           </n-tooltip>
         </n-space>
         <n-space align="center">
-          <n-space style="margin-left: 10px;margin-bottom: 6px;">
+          <n-space style="margin-left: 10px; margin-bottom: 6px">
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
                 <n-select

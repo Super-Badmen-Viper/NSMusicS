@@ -1635,7 +1635,13 @@ onBeforeUnmount(() => {
           </n-tooltip>
           <n-divider
             vertical
-            style="width: 2px; height: 20px; margin-top: -4px; margin-left: 4px; margin-right: 4px"
+            style="
+              width: 2px;
+              height: 20px;
+              margin-top: -4px;
+              margin-left: 10px;
+              margin-right: 10px;
+            "
           />
 
           <n-tooltip trigger="hover" placement="top">
@@ -2049,7 +2055,13 @@ onBeforeUnmount(() => {
           <n-divider
             v-if="page_songlists_selected !== 'song_list_recently'"
             vertical
-            style="width: 2px; height: 20px; margin-top: -4px; margin-left: 4px; margin-right: 4px"
+            style="
+              width: 2px;
+              height: 20px;
+              margin-top: -4px;
+              margin-left: 10px;
+              margin-right: 10px;
+            "
           />
           <n-tooltip
             v-if="page_songlists_selected !== 'song_list_recently'"
@@ -2121,7 +2133,13 @@ onBeforeUnmount(() => {
 
           <n-divider
             vertical
-            style="width: 2px; height: 20px; margin-top: -4px; margin-left: 4px; margin-right: 4px"
+            style="
+              width: 2px;
+              height: 20px;
+              margin-top: -4px;
+              margin-left: 10px;
+              margin-right: 10px;
+            "
           />
           <n-dropdown
             v-if="
@@ -2197,7 +2215,13 @@ onBeforeUnmount(() => {
                 store_server_users.server_select_kind === 'emby')
             "
             vertical
-            style="width: 2px; height: 20px; margin-top: -4px; margin-left: 4px; margin-right: 4px"
+            style="
+              width: 2px;
+              height: 20px;
+              margin-top: -4px;
+              margin-left: 10px;
+              margin-right: 10px;
+            "
           />
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
@@ -2308,13 +2332,17 @@ onBeforeUnmount(() => {
         @scroll="onScroll"
       >
         <template #before>
-          <n-space style="
+          <n-space
+            style="
               position: relative;
               z-index: 1;
-              width: calc(100vw - 140px);height: 196px;
+              width: calc(100vw - 140px);
+              height: 196px;
               border-radius: 10px;
-              margin-left: 12.5px;margin-top: 20px;
-            ">
+              margin-left: 12.5px;
+              margin-top: 20px;
+            "
+          >
             <img
               style="
                 width: 194px;
@@ -2326,13 +2354,13 @@ onBeforeUnmount(() => {
               :src="getAssetImage(page_top_album_image_url)"
               alt=""
             />
-            <n-space vertical justify="end" align="start" style="height: 194px;">
-              <n-space style="margin-left: 11px;">
+            <n-space vertical justify="end" align="start" style="height: 194px">
+              <n-space style="margin-left: 11px">
                 <div style="font-size: 26px; font-weight: 600">
                   {{ $t('entity.track_other') + ':' }}
                 </div>
               </n-space>
-              <n-space style="margin-left: 11px;margin-top: -14px;">
+              <n-space style="margin-left: 11px; margin-top: -14px">
                 <div
                   :style="{
                     maxWidth: 'calc(100vw - ' + (collapsed_width + 480) + 'px)',
@@ -2353,50 +2381,68 @@ onBeforeUnmount(() => {
                   {{ this_audio_song_name }}
                 </div>
               </n-space>
-              <n-space style="margin-top: -14px;margin-left: 10px;margin-bottom: 4px;border-left: 4px solid var(--primary-color-hover);
-                  border-radius: 3px;">
+              <n-space
+                style="
+                  margin-top: -14px;
+                  margin-left: 10px;
+                  margin-bottom: 4px;
+                  border-left: 4px solid var(--primary-color-hover);
+                  border-radius: 3px;
+                "
+              >
                 <n-button
-                    secondary strong
-                    style="height: 36px;"
-                    @click="
-                      () => {
-                        click_count = 2;
-                        handleItemDbClick(media_Files_temporary[0], 0)
-                      }
-                      "
+                  secondary
+                  strong
+                  style="height: 36px"
+                  @click="
+                    () => {
+                      click_count = 2
+                      handleItemDbClick(media_Files_temporary[0], 0)
+                    }
+                  "
                 >
                   <template #icon>
                     <n-icon size="22" :depth="2">
                       <Play24Filled />
                     </n-icon>
                   </template>
-                  <div style="margin-left: 6px;font-size: 14px;font-weight: 600;">
+                  <div style="margin-left: 6px; font-size: 14px; font-weight: 600">
                     {{ $t('HeaderPlayAll') }}
                   </div>
                 </n-button>
                 <n-button
-                    secondary strong
-                    style="height: 36px;"
-                    @click="current_list_add_to_playlist_end()"
+                  secondary
+                  strong
+                  style="height: 36px"
+                  @click="current_list_add_to_playlist_end()"
                 >
                   <template #icon>
                     <n-icon size="22" :depth="2">
                       <AddCircle20Filled />
                     </n-icon>
                   </template>
-                  <div style="margin-left: 6px;font-size: 14px;font-weight: 600;">
+                  <div style="margin-left: 6px; font-size: 14px; font-weight: 600">
                     {{ $t('All') + $t('AddToPlayQueue') }}
                   </div>
                 </n-button>
               </n-space>
               <n-space
-                  vertical
-                  justify="center"
-                  style="margin-left: 10px;
+                vertical
+                justify="center"
+                style="
+                  margin-left: 10px;
                   padding-left: 14px;
                   border-left: 4px solid var(--primary-color-hover);
-                  border-radius: 3px;">
-                <n-grid :cols="4" :x-gap="40" :y-gap="10" layout-shift-disabled style="width: 478px">
+                  border-radius: 3px;
+                "
+              >
+                <n-grid
+                  :cols="4"
+                  :x-gap="40"
+                  :y-gap="10"
+                  layout-shift-disabled
+                  style="width: 478px; margin-top: 4px"
+                >
                   <n-gi v-for="songlist in page_songlists_statistic" :key="songlist.id">
                     <n-statistic :label="songlist.label" :value="songlist.song_count" />
                   </n-gi>
@@ -2426,10 +2472,7 @@ onBeforeUnmount(() => {
             @click="handleItemClick"
             @dblclick="handleItemDbClick(item, index)"
           >
-            <div
-              class="media_info"
-              :style="{ width: 'calc(100vw - ' + (collapsed_width) + 'px)' }"
-            >
+            <div class="media_info" :style="{ width: 'calc(100vw - ' + collapsed_width + 'px)' }">
               <input
                 type="checkbox"
                 class="checkbox"

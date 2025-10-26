@@ -979,7 +979,13 @@ onBeforeUnmount(() => {
           </n-tooltip>
           <n-divider
             vertical
-            style="width: 2px; height: 20px; margin-top: -4px; margin-left: 4px; margin-right: 4px"
+            style="
+              width: 2px;
+              height: 20px;
+              margin-top: -4px;
+              margin-left: 10px;
+              margin-right: 10px;
+            "
           />
 
           <n-tooltip trigger="hover" placement="top">
@@ -1193,7 +1199,13 @@ onBeforeUnmount(() => {
 
           <n-divider
             vertical
-            style="width: 2px; height: 20px; margin-top: -4px; margin-left: 4px; margin-right: 4px"
+            style="
+              width: 2px;
+              height: 20px;
+              margin-top: -4px;
+              margin-left: 10px;
+              margin-right: 10px;
+            "
           />
 
           <n-tooltip trigger="hover" placement="top">
@@ -1297,7 +1309,7 @@ onBeforeUnmount(() => {
               <div
                 class="media_cue_info"
                 :style="{
-                  width: 'calc(100vw - ' + (collapsed_width) + 'px)',
+                  width: 'calc(100vw - ' + collapsed_width + 'px)',
                 }"
                 @dblclick="
                   () => {
