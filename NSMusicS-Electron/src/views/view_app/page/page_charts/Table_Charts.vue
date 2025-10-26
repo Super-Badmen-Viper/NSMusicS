@@ -37,7 +37,7 @@ const themeVars = useThemeVars()
 <template>
   <div class="home-wall-container">
     <!--    <logo-chart />-->
-    <div style="text-align: center; font-weight: bold; font-size: 32px; margin-bottom: 10px">
+    <div style="text-align: center; font-weight: bold; font-size: 26px; margin-bottom: 10px">
       Vue-ECharts
       <span
         v-if="

@@ -699,13 +699,6 @@ const allSortOrders = computed(() => [
   { label: t('Ascending'), value: 'asc' },
   { label: t('Descending'), value: 'desc' },
 ])
-const availableSortKeys = computed(() => {
-  const usedKeys = sortConditions.value.map((condition) => condition.key).filter((key) => key)
-  return allSortKeys.value.map((group) => ({
-    ...group,
-    disabled: usedKeys.includes(group.value),
-  }))
-})
 const Type_Multi_Sort = ref(false)
 const conditionCount = ref(3)
 const sortConditions = ref<SortCondition[]>([])
@@ -1241,7 +1234,7 @@ onBeforeUnmount(() => {
           </n-tooltip>
         </n-space>
         <n-space align="center">
-          <n-space style="margin-left: 7px">
+          <n-space style="margin-left: 10px">
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
                 <n-select
@@ -1304,7 +1297,7 @@ onBeforeUnmount(() => {
               <div
                 class="media_cue_info"
                 :style="{
-                  width: 'calc(100vw - ' + (collapsed_width - 10) + 'px)',
+                  width: 'calc(100vw - ' + (collapsed_width) + 'px)',
                 }"
                 @dblclick="
                   () => {
@@ -1625,7 +1618,6 @@ onBeforeUnmount(() => {
   margin-top: 16px;
 }
 .media_cue_info {
-  width: calc(100vw - 230px);
   height: 70px;
   display: flex;
   align-items: center;

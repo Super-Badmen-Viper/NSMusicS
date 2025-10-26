@@ -12,12 +12,13 @@ import {
   Heart24Regular,
   Heart28Filled,
   ChevronLeft16Filled,
-  ChevronRight16Filled,
+  Play24Filled,
   Filter20Filled,
   PaddingTop20Filled,
   PaddingDown20Filled,
   ArrowRepeatAll16Regular,
   ArrowAutofitDown24Regular,
+  AddCircle20Filled,
 } from '@vicons/fluent'
 import { Random } from '@vicons/fa'
 import { Play, RefreshSharp } from '@vicons/ionicons5'
@@ -579,14 +580,6 @@ const page_songlists_handleselected_updatevalue = async (value: any) => {
   pageMediaStore.set_media_Files_selected_all(false)
 }
 
-////// router_app history
-const get_router_history_model_pervious = () => {
-  store_router_history_data_of_media.get_router_history_model_of_Media(-1)
-}
-const get_router_history_model_next = () => {
-  store_router_history_data_of_media.get_router_history_model_of_Media(1)
-}
-
 /////// emits audio_info of songlist_view_list
 const handleItemClick = () => {
   click_count++
@@ -600,12 +593,11 @@ const handleItemDbClick = async (media_file: any, index: number) => {
         store_server_user_model.random_play_model = false
       }
       await playerSettingStore.update_current_media_info(media_file, index)
-      playlistStore.media_page_handleItemDbClick = true
       playerAppearanceStore.player_mode_of_lock_playlist = false
       playerAudioStore.this_audio_restart_play = true
       //
+      playlistStore.media_page_handleItemDbClick = true
       store_general_fetch_player_list.fetchData_PlayList(false)
-      //
       playlistStore.reset_carousel()
     }
   }
@@ -789,7 +781,6 @@ import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_
 import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
 import type { SelectBaseOption } from 'naive-ui/es/select/src/interface'
-import { store_local_db_info } from '@/data/data_stores/local_app_stores/store_local_db_info'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_server_data_set_playlistInfo } from '@/data/data_stores/server_api_stores/server_api_core/annotation/store_server_data_set_playlistInfo'
 import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
@@ -1088,13 +1079,6 @@ const allSortOrders = computed(() => [
   { label: t('Ascending'), value: 'asc' },
   { label: t('Descending'), value: 'desc' },
 ])
-const availableSortKeys = computed(() => {
-  const usedKeys = sortConditions.value.map((condition) => condition.key).filter((key) => key)
-  return allSortKeys.value.map((group) => ({
-    ...group,
-    disabled: usedKeys.includes(group.value),
-  }))
-})
 const Type_Multi_Sort = ref(false)
 const conditionCount = ref(3)
 const sortConditions = ref<SortCondition[]>([])
@@ -1457,6 +1441,22 @@ const onRefreshSharp = debounce(async (event, args) => {
     // store_general_fetch_media_list.fetchData_Media()
   }
 }, 500)
+
+//////
+function current_list_add_to_playlist_end() {
+  pageMediaStore.media_Files_temporary.forEach((item: any, index: number) => {
+    if (item != undefined && item != 'undefined') {
+      const newItem: any = JSON.parse(JSON.stringify(item))
+      newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
+      playlistStore.playlist_MediaFiles_temporary.push(newItem)
+      playlistStore.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+        item.absoluteIndex = index
+      })
+      playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id)
+      store_system_configs_save.save_system_playlist_item_id_config()
+    }
+  })
+}
 
 const page_songlists_statistic = ref<
   {
@@ -2237,14 +2237,14 @@ onBeforeUnmount(() => {
           </n-tooltip>
         </n-space>
         <n-space align="center">
-          <n-space style="margin-left: 7px">
+          <n-space style="margin-left: 10px">
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
                 <n-select
                   size="small"
                   :value="page_songlists_selected"
                   :options="page_songlists_options"
-                  style="width: 181px"
+                  style="width: 191px"
                   @update:value="page_songlists_handleselected_updatevalue"
                 />
               </template>
@@ -2308,12 +2308,101 @@ onBeforeUnmount(() => {
         @scroll="onScroll"
       >
         <template #before>
-          <n-space vertical style="margin-left: 19px; margin-top: 17px; height: 70px">
-            <n-grid :cols="4" :x-gap="40" :y-gap="10" layout-shift-disabled style="width: 730px">
-              <n-gi v-for="songlist in page_songlists_statistic" :key="songlist.id">
-                <n-statistic :label="songlist.label" :value="songlist.song_count" />
-              </n-gi>
-            </n-grid>
+          <n-space style="
+              position: relative;
+              z-index: 1;
+              width: calc(100vw - 140px);height: 196px;
+              border-radius: 10px;
+              margin-left: 12.5px;margin-top: 20px;
+            ">
+            <img
+              style="
+                width: 194px;
+                height: 194px;
+                border-radius: 12px;
+                object-fit: cover;
+                margin-left: -3px;
+              "
+              :src="getAssetImage(page_top_album_image_url)"
+              alt=""
+            />
+            <n-space vertical justify="end" align="start" style="height: 194px;">
+              <n-space style="margin-left: 11px;">
+                <div style="font-size: 26px; font-weight: 600">
+                  {{ $t('entity.track_other') + ':' }}
+                </div>
+              </n-space>
+              <n-space style="margin-left: 11px;margin-top: -14px;">
+                <div
+                  :style="{
+                    maxWidth: 'calc(100vw - ' + (collapsed_width + 480) + 'px)',
+                  }"
+                  style="
+                    margin-bottom: 8px;
+                    text-align: left;
+                    cursor: pointer;
+                    font-size: 26px;
+                    font-weight: 600;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 1;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                  "
+                >
+                  {{ this_audio_song_name }}
+                </div>
+              </n-space>
+              <n-space style="margin-top: -14px;margin-left: 10px;margin-bottom: 4px;border-left: 4px solid var(--primary-color-hover);
+                  border-radius: 3px;">
+                <n-button
+                    secondary strong
+                    style="height: 36px;"
+                    @click="
+                      () => {
+                        click_count = 2;
+                        handleItemDbClick(media_Files_temporary[0], 0)
+                      }
+                      "
+                >
+                  <template #icon>
+                    <n-icon size="22" :depth="2">
+                      <Play24Filled />
+                    </n-icon>
+                  </template>
+                  <div style="margin-left: 6px;font-size: 14px;font-weight: 600;">
+                    {{ $t('HeaderPlayAll') }}
+                  </div>
+                </n-button>
+                <n-button
+                    secondary strong
+                    style="height: 36px;"
+                    @click="current_list_add_to_playlist_end()"
+                >
+                  <template #icon>
+                    <n-icon size="22" :depth="2">
+                      <AddCircle20Filled />
+                    </n-icon>
+                  </template>
+                  <div style="margin-left: 6px;font-size: 14px;font-weight: 600;">
+                    {{ $t('All') + $t('AddToPlayQueue') }}
+                  </div>
+                </n-button>
+              </n-space>
+              <n-space
+                  vertical
+                  justify="center"
+                  style="margin-left: 10px;
+                  padding-left: 14px;
+                  border-left: 4px solid var(--primary-color-hover);
+                  border-radius: 3px;">
+                <n-grid :cols="4" :x-gap="40" :y-gap="10" layout-shift-disabled style="width: 478px">
+                  <n-gi v-for="songlist in page_songlists_statistic" :key="songlist.id">
+                    <n-statistic :label="songlist.label" :value="songlist.song_count" />
+                  </n-gi>
+                </n-grid>
+              </n-space>
+            </n-space>
           </n-space>
         </template>
         <template #after> </template>
@@ -2339,7 +2428,7 @@ onBeforeUnmount(() => {
           >
             <div
               class="media_info"
-              :style="{ width: 'calc(100vw - ' + (collapsed_width - 10) + 'px)' }"
+              :style="{ width: 'calc(100vw - ' + (collapsed_width) + 'px)' }"
             >
               <input
                 type="checkbox"
@@ -2969,7 +3058,6 @@ onBeforeUnmount(() => {
   margin-top: 12px;
 }
 .media_info {
-  width: calc(100vw - 230px);
   height: 70px;
   display: flex;
   align-items: center;

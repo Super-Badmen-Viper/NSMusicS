@@ -723,13 +723,6 @@ const allSortOrders = computed(() => [
   { label: t('Ascending'), value: 'asc' },
   { label: t('Descending'), value: 'desc' },
 ])
-const availableSortKeys = computed(() => {
-  const usedKeys = sortConditions.value.map((condition) => condition.key).filter((key) => key)
-  return allSortKeys.value.map((group) => ({
-    ...group,
-    disabled: usedKeys.includes(group.value),
-  }))
-})
 const Type_Multi_Sort = ref(false)
 const conditionCount = ref(3)
 const sortConditions = ref<SortCondition[]>([])
@@ -1287,7 +1280,7 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
             {{ $t('action.moveToBottom') }}
           </n-tooltip>
         </n-space>
-        <n-space v-if="show_top_selectedlist" style="margin-left: 7px; margin-bottom: 8px">
+        <n-space v-if="show_top_selectedlist" style="margin-left: 10px;margin-bottom: 15px;">
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-select
@@ -1363,17 +1356,18 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
                 height: 300px;
                 border-radius: 10px;
                 margin-left: 12px;
+                margin-bottom: -8px;
               "
             >
               <template #title>
                 <n-space vertical align="start" style="height: 280px; margin-left: 12px">
                   <n-space style="margin-top: 26px; margin-left: 11px">
-                    <div style="font-size: 32px; font-weight: 600">
+                    <div style="font-size: 26px; font-weight: 600">
                       {{ $t('entity.album_other') }}
                     </div>
                     <div
                       v-if="page_top_album_name.length > 0"
-                      style="font-size: 32px; font-weight: 600; margin-top: -2px"
+                      style="font-size: 26px; font-weight: 600; margin-top: -2px"
                     >
                       {{ ' : ' }}
                     </div>
@@ -1384,7 +1378,7 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
                       style="
                         text-align: left;
                         cursor: pointer;
-                        font-size: 32px;
+                        font-size: 26px;
                         font-weight: 600;
                         display: -webkit-box;
                         -webkit-box-orient: vertical;
@@ -1421,13 +1415,13 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
                       {{ $t('Select') + $t('LabelPlaylist') }}
                     </n-tooltip>
                   </n-space>
-                  <n-space vertical style="margin-top: 10px; margin-left: 7px">
+                  <n-space vertical style="margin-top: 10px; margin-left: 11px;">
                     <n-grid
                       :cols="2"
                       :x-gap="0"
                       :y-gap="10"
                       layout-shift-disabled
-                      style="margin-left: 4px; width: 386px"
+                      style="width: 386px"
                     >
                       <n-gi v-for="albumlist in page_albumlists_statistic" :key="albumlist.id">
                         <n-statistic :label="albumlist.label" :value="albumlist.album_count" />

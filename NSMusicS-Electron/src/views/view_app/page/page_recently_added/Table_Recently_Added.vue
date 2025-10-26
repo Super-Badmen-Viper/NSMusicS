@@ -650,7 +650,7 @@ const onScrollEnd = async () => {
 
       // 检查是否滚动到底部（距离底部小于150px）
       const distanceToBottom = scrollHeight - scrollTop - clientHeight
-      if (distanceToBottom < 150) {
+      if (distanceToBottom < 50) {
         // 接近底部时，锁定显示最后一个分组的名称
         const lastGroupIndex = groupedRecentlyAdded.value.length - 1
         if (lastGroupIndex >= 0) {
@@ -696,6 +696,9 @@ const onScroll = (event: any) => {
         currentGroupName.value = ''
         visibleGroupIndex.value = 0
         return
+      } else if (scrollTop > 50 && scrollTop <= 100) {
+        currentGroupName.value = groupedRecentlyAdded.value[0].name
+        return
       }
 
       // 计算每个分组的大致高度（这里需要根据实际情况调整）
@@ -706,7 +709,7 @@ const onScroll = (event: any) => {
       for (let i = 0; i < groupedRecentlyAdded.value.length; i++) {
         const group = groupedRecentlyAdded.value[i]
         // 分组标题高度
-        const headerHeight = 120
+        const headerHeight = 50
         // 分组内容高度（简化计算）
         const contentHeight =
           group.items.length > 0
@@ -1056,7 +1059,7 @@ const onScroll = (event: any) => {
   color: var(--text-color-1);
   background-color: var(--card-color);
   border-left: 4px solid var(--primary-color-hover);
-  border-radius: 0 8px 8px 0;
+  border-radius: 4px 8px 8px 4px;
   padding: 8px 16px;
   margin: 0 0 0 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -1080,7 +1083,7 @@ const onScroll = (event: any) => {
   color: var(--text-color-1);
   background-color: var(--card-color);
   border-left: 4px solid var(--primary-color-hover);
-  border-radius: 0 8px 8px 0;
+  border-radius: 4px 8px 8px 4px;
   padding: 8px 16px;
   margin: 0 0 0 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

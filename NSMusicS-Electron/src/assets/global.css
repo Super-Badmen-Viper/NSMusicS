@@ -37,6 +37,14 @@
   transform: scale(1.1);
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
 }
+.n-statistic {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.n-statistic:hover {
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
+}
 
 .RateCustom.viaSlot .icon {
   width: 15px;

@@ -565,13 +565,6 @@ const allSortOrders = computed(() => [
   { label: t('Ascending'), value: 'asc' },
   { label: t('Descending'), value: 'desc' },
 ])
-const availableSortKeys = computed(() => {
-  const usedKeys = sortConditions.value.map((condition) => condition.key).filter((key) => key)
-  return allSortKeys.value.map((group) => ({
-    ...group,
-    disabled: usedKeys.includes(group.value),
-  }))
-})
 const Type_Multi_Sort = ref(false)
 const conditionCount = ref(3)
 const sortConditions = ref<SortCondition[]>([])
@@ -1038,7 +1031,7 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
           </n-tooltip>
         </n-space>
         <n-space align="center">
-          <n-space style="margin-left: 7px; margin-bottom: 6px">
+          <n-space style="margin-left: 10px;margin-bottom: 6px;">
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
                 <n-select
