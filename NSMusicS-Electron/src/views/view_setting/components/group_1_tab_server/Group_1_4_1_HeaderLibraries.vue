@@ -481,6 +481,7 @@ const refreshModeOptions = ref([
         ref="scrollbar"
         :style="{
           width: 'calc(100vw - ' + (collapsed_width + 320) + 'px)',
+          height: 'calc(100vh - 330px)',
         }"
         style="overflow: auto; margin-top: 6px"
         :items="store_server_users.server_all_library"

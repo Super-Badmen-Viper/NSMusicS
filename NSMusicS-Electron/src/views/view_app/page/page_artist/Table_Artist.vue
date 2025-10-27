@@ -802,7 +802,7 @@ const onRefreshSharp = debounce(async (event, args) => {
 }, 500)
 
 // 示例数据：最近添加的专辑数据（移除分组结构）
-const recentlyAddedAlbums = ref([
+const allArtistAlbumMediaFiles = ref([
   {
     id: '1',
     name: 'Album One',
@@ -850,7 +850,7 @@ const recentlyAddedAlbums = ref([
   }
 ])
 // 用于触发虚拟列表重新渲染的key
-const recentlyAddedAlbumsKey = ref(0)
+const allArtistAlbumMediaFilesKey = ref(0)
 // 获取专辑歌曲列表的方法
 const getAlbumSongs = (albumId) => {
   // 根据专辑ID返回不同的歌曲列表
@@ -900,6 +900,7 @@ async function findThisArtistAllAlbumsMediaFiles(item: any) {
   pageAlbumStore.page_albumlists_get_keyword_model_num = 2
   store_router_data_info.find_album_model = false
   store_router_data_info.find_artist_model = true
+  // update pageAlbumStore.album_Files_temporary
   await store_general_fetch_album_list.fetchData_Album()
 }
 
@@ -918,7 +919,7 @@ const playerAudioStore = usePlayerAudioStore()
 const playerAppearanceStore = usePlayerAppearanceStore()
 const pageAlbumStore = usePageAlbumStore()
 // 使用 storeToRefs 解构出所需的响应式属性
-const { playlist_names_ALLLists, playlist_Menu_Item_Id } = storeToRefs(playlistStore)
+const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } = storeToRefs(playlistStore)
 const { page_top_album_image_url, this_audio_artist_name, this_audio_song_id } =
   storeToRefs(playerAudioStore)
 const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistStore)
@@ -1185,13 +1186,13 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
               v-contextmenu:contextmenu
               @contextmenu.prevent="
                 () => {
-                  playlistStore.playlist_Menu_Item = item
-                  playlistStore.playlist_Menu_Item_Id = item.id
+                  playlist_Menu_Item = item
+                  playlist_Menu_Item_Id = item.id
                 }
               "
               @click="()=>{
-                playlistStore.playlist_Menu_Item = item
-                playlistStore.playlist_Menu_Item_Id = item.id
+                playlist_Menu_Item = item
+                playlist_Menu_Item_Id = item.id
                 findThisArtistAllAlbumsMediaFiles(item.id)
               }"
             >
@@ -1291,10 +1292,10 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
             marginTop: '40px',
             marginLeft: '-10px'
           }"
-          :items="recentlyAddedAlbums"
+          :items="allArtistAlbumMediaFiles"
           :minItemSize="50"
           :emit-update="true"
-          :key="recentlyAddedAlbumsKey"
+          :key="allArtistAlbumMediaFilesKey"
           key-field="id"
           @resize="onResize"
           @update="onUpdate"
@@ -1314,7 +1315,6 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
                 () => {
                   playlist_Menu_Item = item
                   playlist_Menu_Item_Id = item.id
-                  recently_added_contextmenu_of_emby = true
                 }
               "
               :style="{
@@ -1323,23 +1323,23 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
               }"
             >
               <!-- 重构后的专辑列表项 -->
-              <div class="album-item-container" :key="item.id">
+              <div class="artist-album-item-container" :key="item.id">
                 <!-- 左侧专辑封面 -->
-                <div class="album-cover-section">
+                <div class="artist-album-cover-section">
                   <img
                     :src="item.medium_image_url"
                     @error="handleImageError(item)"
-                    class="album-cover-image"
+                    class="artist-album-cover-image"
                     alt=""
                   />
                 </div>
                 
                 <!-- 右侧专辑信息 -->
-                <div class="album-info-section">
+                <div class="artist-album-info-section">
                   <!-- 专辑名称和操作按钮 -->
-                  <div class="album-header">
-                    <span class="album-name">{{ item.name }}</span>
-                    <div class="album-actions">
+                  <div class="artist-album-header">
+                    <span class="artist-album-name">{{ item.name }}</span>
+                    <div class="artist-album-actions">
                       <button
                         class="love-button"
                         @click="
@@ -1381,12 +1381,12 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
                   </div>
                   
                   <!-- 专辑年份 -->
-                  <div class="album-year">
+                  <div class="artist-album-year">
                     {{ item.min_year || item.max_year || 'Unknown Year' }}
                   </div>
                   
                   <!-- 专辑歌曲列表 -->
-                  <div class="album-songs-list">
+                  <div class="artist-album-songs-list">
                     <!-- 这里将加载该专辑的所有歌曲 -->
                     <div 
                       v-for="(song, songIndex) in getAlbumSongs(item.id)" 
@@ -1586,8 +1586,8 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
               v-contextmenu:contextmenu
               @contextmenu.prevent="
                 () => {
-                  playlistStore.playlist_Menu_Item = item
-                  playlistStore.playlist_Menu_Item_Id = item.id
+                  playlist_Menu_Item = item
+                  playlist_Menu_Item_Id = item.id
                 }
               "
             >
@@ -1999,7 +1999,7 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
 }
 
 /* 重构后的专辑列表项样式 */
-.album-item-container {
+.artist-album-item-container {
   display: flex;
   flex-direction: row;
   padding: 16px;
@@ -2011,7 +2011,7 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
   overflow: hidden;
   transition: all 0.3s ease;
 }
-.album-item-container:hover {
+.artist-album-item-container:hover {
   transform: scale(1.01); /* Slight zoom on hover */
   box-shadow: 0 0 10px 0 var(--scrollbar-color);
   z-index: 10;
@@ -2020,33 +2020,33 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
   border-color: var(--primary-color-hover);
   box-shadow: 0 0 7px 0 var(--primary-color-suppl);
 }
-.album-item-container:nth-child(1) {
+.artist-album-item-container:nth-child(1) {
   margin-top: 18px;
 }
 
 
 /* 移除:hover伪类，取消浮动动画效果 */
 
-.album-cover-section {
+.artist-album-cover-section {
   flex-shrink: 0;
   margin-right: 16px;
 }
 
-.album-cover-image {
+.artist-album-cover-image {
   width: 120px;
   height: 120px;
   object-fit: cover;
   border-radius: 8px;
 }
 
-.album-info-section {
+.artist-album-info-section {
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-.album-header {
+.artist-album-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -2054,7 +2054,7 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
   flex-shrink: 0;
 }
 
-.album-name {
+.artist-album-name {
   font-size: 18px;
   font-weight: 600;
   color: var(--text-color-1);
@@ -2064,7 +2064,7 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
   flex: 1;
 }
 
-.album-actions {
+.artist-album-actions {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -2102,14 +2102,14 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
   justify-content: center;
 }
 
-.album-year {
+.artist-album-year {
   font-size: 14px;
   color: var(--text-color-2);
   margin-bottom: 12px;
   flex-shrink: 0;
 }
 
-.album-songs-list {
+.artist-album-songs-list {
   flex: 1;
   overflow: hidden;
   max-height: 80px;
