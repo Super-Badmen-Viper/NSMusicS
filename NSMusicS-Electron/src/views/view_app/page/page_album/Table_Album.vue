@@ -1369,7 +1369,7 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
                 height: 300px;
                 border-radius: 10px;
                 margin-left: 12px;
-                margin-bottom: -8px;
+                margin-bottom: -10px;
               "
             >
               <template #title>

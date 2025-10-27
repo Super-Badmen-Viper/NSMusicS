@@ -2,7 +2,7 @@
 ////// this_view resource of vicons_svg
 import {
   ArrowSort24Regular,
-  Filter20Filled,
+  PlayCircle24Regular,
   Heart24Regular,
   Heart28Filled,
   Open28Filled,
@@ -10,6 +10,8 @@ import {
   PaddingTop20Filled,
   Play24Regular,
   Search20Filled,
+  Star24Regular,
+  Star28Filled,
   TextSortAscending20Regular,
   TextSortDescending20Regular,
 } from '@vicons/fluent'
@@ -64,7 +66,7 @@ const { page_artistlists_multi_sort, page_artistlists_selected, page_artistlists
   storeToRefs(pageArtistStore)
 
 ////// artistlist_view page_layout gridItems
-const item_artist = ref(170)
+const item_artist = ref(160)
 const item_artist_image = ref(item_artist.value - 20)
 const item_artist_txt = ref(item_artist.value - 20)
 const itemSize = ref(220)
@@ -96,9 +98,56 @@ const handleImageError = async (item: any) => {
     item.medium_image_url = error_artist
   }
 }
+function getAssetImage(firstImage: string) {
+  return new URL(firstImage, import.meta.url).href
+}
 // gridItems Re render
 const collapsed_width = ref(145)
+const stopWatching_window_innerWidth = watch(
+    () => store_system_configs_info.window_innerWidth,
+    () => {
+      updateGridItems()
+    }
+)
+const updateGridItems = () => {
+  collapsed_width.value = 145
+  if (window.innerWidth > 2460) {
+    const num = window.innerWidth / 7.53
+    itemSize.value = Math.floor(num) + 40
+    item_artist.value = Math.floor(num)
+    item_artist_image.value = item_artist.value - 20
+    item_artist_txt.value = item_artist.value - 20
+    gridItems.value = 7
+    itemSecondarySize.value =
+        Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2
+  } else if (window.innerWidth > 1660) {
+    const num = window.innerWidth / 6.53
+    itemSize.value = Math.floor(num) + 40
+    item_artist.value = Math.floor(num)
+    item_artist_image.value = item_artist.value - 20
+    item_artist_txt.value = item_artist.value - 20
+    gridItems.value = 6
+    itemSecondarySize.value =
+        Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2
+  } else {
+    const num = window.innerWidth / 5.53
+    itemSize.value = Math.floor(num) + 40
+    item_artist.value = Math.floor(num)
+    item_artist_image.value = item_artist.value - 20
+    item_artist_txt.value = item_artist.value - 20
+    gridItems.value = 5
+    itemSecondarySize.value =
+        Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2
+  }
+  if (
+      store_server_user_model.model_server_type_of_web &&
+      store_server_users.server_select_kind === 'ninesong'
+  ) {
+    itemSize.value += 35
+  }
+}
 onMounted(() => {
+  updateGridItems()
   input_search_Value.value = pageArtistStore.page_artistlists_keyword
   if (input_search_Value.value.length > 0) {
     bool_show_search_area.value = true
@@ -436,14 +485,6 @@ const page_artistlists_handleselected_updatevalue = (value: any) => {
     pageArtistStore.page_artistlists_options.find((option) => option.value === value)?.label || ''
 }
 
-////// router_app history
-const get_router_history_model_pervious = () => {
-  store_router_history_data_of_artist.get_router_history_model_of_Artist(-1)
-}
-const get_router_history_model_next = () => {
-  store_router_history_data_of_artist.get_router_history_model_of_Artist(1)
-}
-
 ////// go to media_view
 const Open_this_artist_all_artist_list_click = (artist_id: string) => {
   if (store_server_user_model.model_server_type_of_web) {
@@ -760,10 +801,113 @@ const onRefreshSharp = debounce(async (event, args) => {
   await store_general_fetch_artist_list.fetchData_Artist()
 }, 500)
 
+// 示例数据：最近添加的专辑数据（移除分组结构）
+const recentlyAddedAlbums = ref([
+  {
+    id: '1',
+    name: 'Album One',
+    min_year: 2023,
+    max_year: 2023,
+    medium_image_url: 'https://picsum.photos/100/100?random=1',
+    favorite: false,
+    rating: 4
+  },
+  {
+    id: '2',
+    name: 'Album Two',
+    min_year: 2022,
+    max_year: 2022,
+    medium_image_url: 'https://picsum.photos/100/100?random=2',
+    favorite: true,
+    rating: 5
+  },
+  {
+    id: '3',
+    name: 'Album Three',
+    min_year: 2021,
+    max_year: 2021,
+    medium_image_url: 'https://picsum.photos/100/100?random=3',
+    favorite: false,
+    rating: 3
+  },
+  {
+    id: '4',
+    name: 'Album Four',
+    min_year: 2020,
+    max_year: 2020,
+    medium_image_url: 'https://picsum.photos/100/100?random=4',
+    favorite: true,
+    rating: 4
+  },
+  {
+    id: '5',
+    name: 'Album Five',
+    min_year: 2019,
+    max_year: 2019,
+    medium_image_url: 'https://picsum.photos/100/100?random=5',
+    favorite: false,
+    rating: 5
+  }
+])
+// 用于触发虚拟列表重新渲染的key
+const recentlyAddedAlbumsKey = ref(0)
+// 获取专辑歌曲列表的方法
+const getAlbumSongs = (albumId) => {
+  // 根据专辑ID返回不同的歌曲列表
+  const songsByAlbum = {
+    '1': [
+      { id: '101', title: 'Song One', duration: 180 },
+      { id: '102', title: 'Song Two', duration: 210 },
+      { id: '103', title: 'Song Three', duration: 195 }
+    ],
+    '2': [
+      { id: '201', title: 'Track One', duration: 200 },
+      { id: '202', title: 'Track Two', duration: 180 },
+      { id: '203', title: 'Track Three', duration: 220 },
+      { id: '204', title: 'Track Four', duration: 240 }
+    ],
+    '3': [
+      { id: '301', title: 'First Song', duration: 190 },
+      { id: '302', title: 'Second Song', duration: 210 }
+    ],
+    '4': [
+      { id: '401', title: 'Melody One', duration: 200 },
+      { id: '402', title: 'Melody Two', duration: 185 },
+      { id: '403', title: 'Melody Three', duration: 225 }
+    ],
+    '5': [
+      { id: '501', title: 'Hit Single', duration: 180 },
+      { id: '502', title: 'Popular Track', duration: 210 },
+      { id: '503', title: 'Fan Favorite', duration: 195 },
+      { id: '504', title: 'New Release', duration: 230 },
+      { id: '505', title: 'Latest Hit', duration: 200 }
+    ]
+  }
+  
+  return songsByAlbum[albumId] || []
+}
+// 格式化歌曲时长的方法
+const formatDuration = (seconds) => {
+  const mins = Math.floor(seconds / 60)
+  const secs = seconds % 60
+  return `${mins}:${secs < 10 ? '0' : ''}${secs}`
+}
+//
+async function findThisArtistAllAlbumsMediaFiles(item: any) {
+  store_general_fetch_album_list.set_artist_id(item.id)
+  pageAlbumStore.page_albumlists_selected = 'album_list_all'
+  pageAlbumStore.page_albumlists_keyword = ''
+  pageAlbumStore.page_albumlists_get_keyword_model_num = 2
+  store_router_data_info.find_album_model = false
+  store_router_data_info.find_artist_model = true
+  await store_general_fetch_album_list.fetchData_Album()
+}
+
 ////// view artistlist_view Remove data
 onBeforeUnmount(() => {
   stopWatching_boolHandleItemClick_Played()
   stopWatching_router_history_model_of_Artist_scroll()
+  stopWatching_window_innerWidth()
   stopWatching_conditionCount()
   dynamicScroller.value = null
 })
@@ -784,6 +928,19 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
     <div class="artist-wall-container">
       <n-space vertical @wheel.prevent style="position: absolute; top: 0">
         <n-space align="center" style="margin-top: 3px">
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-select
+                  size="small"
+                  :value="page_artistlists_selected"
+                  :options="page_artistlists_options"
+                  style="width: 181px;margin-left: 10px"
+                  @update:value="page_artistlists_handleselected_updatevalue"
+              />
+            </template>
+            {{ $t('Select') + $t('LabelPlaylist') }}
+          </n-tooltip>
+
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle @click="onRefreshSharp">
@@ -994,31 +1151,19 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
             {{ $t('action.moveToBottom') }}
           </n-tooltip>
         </n-space>
-        <n-space align="center">
-          <n-space style="margin-left: 10px; margin-bottom: 6px">
-            <n-tooltip trigger="hover" placement="top">
-              <template #trigger>
-                <n-select
-                  size="small"
-                  :value="page_artistlists_selected"
-                  :options="page_artistlists_options"
-                  style="width: 181px"
-                  @update:value="page_artistlists_handleselected_updatevalue"
-                />
-              </template>
-              {{ $t('Select') + $t('LabelPlaylist') }}
-            </n-tooltip>
-          </n-space>
-        </n-space>
       </n-space>
-      <n-space style="width: 100vw">
+      <n-space style="display: flex; flex-direction: row;">
         <DynamicScroller
+          v-if="
+            store_server_user_model.model_server_type_of_web &&
+            store_server_users.server_select_kind === 'ninesong'
+          "
           class="artist-wall"
           ref="dynamicScroller"
           :style="{
-            width: 'calc(45vw - ' + (collapsed_width - 22) + 'px)',
-            height: 'calc(100vh - 236px)',
-            marginTop: '80px',
+            width: '415px',
+            height: 'calc(100vh - 188px)',
+            marginTop: '40px',
           }"
           :items="artist_Files_temporary"
           :minItemSize="50"
@@ -1044,13 +1189,17 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
                   playlistStore.playlist_Menu_Item_Id = item.id
                 }
               "
-              :style="{ width: 'calc(45vw - ' + (collapsed_width - 17) + 'px)' }"
+              @click="()=>{
+                playlistStore.playlist_Menu_Item = item
+                playlistStore.playlist_Menu_Item_Id = item.id
+                findThisArtistAllAlbumsMediaFiles(item.id)
+              }"
             >
               <div
                 :key="item.id"
                 class="artist_info"
                 style="margin-top: 20px; margin-left: 10px; display: flex; align-items: center"
-                :style="{ width: 'calc(45vw - ' + collapsed_width + 'px)' }"
+                :style="{ width: '390px', }"
               >
                 <img
                   :src="item.medium_image_url"
@@ -1130,17 +1279,23 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
           </template>
         </DynamicScroller>
         <DynamicScroller
-          v-if="false"
-          ref="dynamicScroller"
-          style="scroll-behavior: smooth"
+          v-if="
+            store_server_user_model.model_server_type_of_web &&
+            store_server_users.server_select_kind === 'ninesong'
+          "
+          ref="dynamicScrollerAlbum"
+          style="scroll-behavior: smooth;"
           :style="{
-            height: 'calc(100vh - 208px)',
+            width: 'calc(100vw - ' + (collapsed_width - 35 + 435) + 'px)',
+            height: 'calc(100vh - 188px)',
+            marginTop: '40px',
+            marginLeft: '-10px'
           }"
-          :items="groupedRecentlyAdded"
+          :items="recentlyAddedAlbums"
           :minItemSize="50"
           :emit-update="true"
-          :key="groupedRecentlyAddedKey"
-          key-field="name"
+          :key="recentlyAddedAlbumsKey"
+          key-field="id"
           @resize="onResize"
           @update="onUpdate"
           @scroll-start="onScrollStart"
@@ -1149,66 +1304,120 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
         >
           <template #before> </template>
           <template #after> </template>
-          <template #default="{ item: group, index: groupIndex, active }">
+          <template #default="{ item, index, active }">
             <DynamicScrollerItem
-              :item="group"
+              :item="item"
               :active="active"
-              :data-index="groupIndex"
-              :data-active="active"
+              :data-index="index"
+              v-contextmenu:contextmenu
+              @contextmenu.prevent="
+                () => {
+                  playlist_Menu_Item = item
+                  playlist_Menu_Item_Id = item.id
+                  recently_added_contextmenu_of_emby = true
+                }
+              "
+              :style="{
+                width: 'calc(100vw - ' + (collapsed_width - 35 + 460) + 'px)',
+                marginLeft: '10px'
+              }"
             >
-              <!-- 时间分组标签 -->
-              <div class="category-recently-add-header">
-                <span class="category-recently-add-title">
-                  {{ group.name }}
-                </span>
+              <!-- 重构后的专辑列表项 -->
+              <div class="album-item-container" :key="item.id">
+                <!-- 左侧专辑封面 -->
+                <div class="album-cover-section">
+                  <img
+                    :src="item.medium_image_url"
+                    @error="handleImageError(item)"
+                    class="album-cover-image"
+                    alt=""
+                  />
+                </div>
+                
+                <!-- 右侧专辑信息 -->
+                <div class="album-info-section">
+                  <!-- 专辑名称和操作按钮 -->
+                  <div class="album-header">
+                    <span class="album-name">{{ item.name }}</span>
+                    <div class="album-actions">
+                      <button
+                        class="love-button"
+                        @click="
+                          () => {
+                            handleItemClick_Favorite(item.id, item.favorite)
+                            item.favorite = !item.favorite
+                          }
+                        "
+                      >
+                        <template v-if="item.favorite">
+                          <icon :size="20" color="red"><Heart28Filled /></icon>
+                        </template>
+                        <template v-else-if="!store_system_configs_info.update_theme">
+                          <icon color="#101014" :size="20"><Heart24Regular /></icon>
+                        </template>
+                        <template v-else-if="store_system_configs_info.update_theme">
+                          <icon color="#FAFAFC" :size="20"><Heart24Regular /></icon>
+                        </template>
+                      </button>
+                      
+                      <!-- 评分星级按钮 -->
+                      <div class="rating-stars">
+                        <button
+                          v-for="i in 5"
+                          :key="i"
+                          class="rating-button"
+                          @click="handleItemClick_Rating(`${item.id}-${i}`)"
+                        >
+                          <icon 
+                            :size="18" 
+                            :color="i <= item.rating ? '#FFD700' : '#CCCCCC'"
+                          >
+                            <Star28Filled v-if="i <= item.rating" />
+                            <Star24Regular v-else />
+                          </icon>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- 专辑年份 -->
+                  <div class="album-year">
+                    {{ item.min_year || item.max_year || 'Unknown Year' }}
+                  </div>
+                  
+                  <!-- 专辑歌曲列表 -->
+                  <div class="album-songs-list">
+                    <!-- 这里将加载该专辑的所有歌曲 -->
+                    <div 
+                      v-for="(song, songIndex) in getAlbumSongs(item.id)" 
+                      :key="song.id"
+                      class="song-item"
+                    >
+                      <span class="song-track-number">{{ songIndex + 1 }}.</span>
+                      <span class="song-title">{{ song.title }}</span>
+                      <span class="song-duration">{{ formatDuration(song.duration) }}</span>
+                    </div>
+                    
+                    <!-- 如果歌曲列表为空，显示加载提示 -->
+                    <div v-if="!getAlbumSongs(item.id).length" class="songs-loading">
+                      Loading songs...
+                    </div>
+                  </div>
+                </div>
               </div>
-
-              <!-- 对应的时间分组DynamicScroller -->
-              <DynamicScroller
-                class="home-wall"
-                :style="{
-                  width: `calc(100vw - ${collapsed_width - 18}px)`,
-                  marginBottom: '30px',
-                }"
-                :items="group.items"
-                :itemSize="itemSize"
-                :minItemSize="itemSize"
-                :grid-items="gridItems"
-                :item-secondary-size="itemSecondarySize"
-                :emit-update="true"
-              >
-                <template #default="{ item, index, active }">
-                  <DynamicScrollerItem
-                    :item="item"
-                    :active="active"
-                    :data-index="index"
-                    v-contextmenu:contextmenu
-                    @contextmenu.prevent="
-                      () => {
-                        playlist_Menu_Item = item
-                        playlist_Menu_Item_Id = item.id
-                        recently_added_contextmenu_of_emby = true
-                      }
-                    "
-                  >
-                    <div :key="item.id" class="home-album"></div>
-                  </DynamicScrollerItem>
-                </template>
-              </DynamicScroller>
-
               <!-- 占位 -->
-              <div style="margin-top: -18px; width: 20px; height: 1px"></div>
+            <div style="margin-top: 10px; width: 20px; height: 1px"></div>
             </DynamicScrollerItem>
           </template>
         </DynamicScroller>
         <DynamicScroller
-          v-if="false"
+          v-else
           class="artist-wall"
           ref="dynamicScroller"
           :style="{
             width: 'calc(100vw - ' + (collapsed_width - 35) + 'px)',
-            height: 'calc(100vh - 236px)',
-            marginTop: '80px',
+            height: 'calc(100vh - 188px)',
+            marginTop: '37px',
           }"
           :items="artist_Files_temporary"
           :itemSize="itemSize"
@@ -1222,7 +1431,152 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
           @scroll-end="onScrollEnd"
           @scroll="onScroll"
         >
-          <template #before> </template>
+          <template #before>
+            <div class="notice">
+              <div
+                  :style="{ width: 'calc(100vw - ' + (collapsed_width - 19) + 'px)' }"
+                  style="
+                position: absolute;
+                top: 10px;
+                z-index: 0;
+                height: 100vh;
+                border-radius: 10px;
+                overflow: hidden;
+                background-size: cover;
+                background-position: center;
+                filter: blur(0px);
+                background-color: transparent;
+              "
+              >
+                <img
+                    :style="{
+                  width: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
+                  height: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
+                  minHeight: '280px',
+                  WebkitMaskImage:
+                    'linear-gradient(to top, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 1) 100%)',
+                }"
+                    style="
+                  margin-left: 200px;
+                  transform: translateY(-25%);
+                  object-fit: cover;
+                  object-position: center;
+                "
+                    :src="getAssetImage(playerAudioStore.page_top_album_image_url)"
+                    alt=""
+                />
+              </div>
+              <n-page-header
+                  style="
+                position: relative;
+                z-index: 1;
+                width: calc(100vw);
+                height: 300px;
+                border-radius: 10px;
+                margin-left: 12px;
+                margin-bottom: -20px;
+              "
+              >
+                <template #title>
+                  <n-space
+                      vertical
+                      justify="end"
+                      align="start"
+                      style="height: 280px; margin-left: 10px; margin-top: -6px"
+                  >
+                    <n-space vertical>
+                      <n-space>
+                        <div style="font-size: 26px; font-weight: 600">
+                          {{ $t('entity.artist_other') + ':' }}
+                        </div>
+                      </n-space>
+                      <n-space style="margin-top: -8px">
+                        <div
+                          :style="{
+                            maxWidth: 'calc(100vw - ' + (collapsed_width + 540) + 'px)',
+                          }"
+                          style="
+                          text-align: left;
+                          cursor: pointer;
+                          font-size: 26px;
+                          font-weight: 600;
+                          display: -webkit-box;
+                          -webkit-box-orient: vertical;
+                          -webkit-line-clamp: 1;
+                          overflow: hidden;
+                          text-overflow: ellipsis;
+                        "
+                        >
+                          {{ this_audio_artist_name }}
+                        </div>
+                      </n-space>
+                    </n-space>
+                    <n-space vertical style="margin-top: 4px">
+                      <n-space
+                          align="center"
+                          style="border-left: 4px solid var(--primary-color-hover); border-radius: 3px"
+                      >
+                        <div style="font-size: 15px; font-weight: 600; margin-left: 13px">
+                          {{ $t('GuideProviderSelectListings') + ':' }}
+                        </div>
+                        <n-tooltip trigger="hover" placement="top">
+                          <template #trigger>
+                            <n-select
+                                size="small"
+                                :value="page_artistlists_selected"
+                                :options="page_artistlists_options"
+                                style="width: 166px"
+                                @update:value="page_artistlists_handleselected_updatevalue"
+                            />
+                          </template>
+                          {{ $t('Select') + $t('LabelPlaylist') }}
+                        </n-tooltip>
+                      </n-space>
+                      <n-space
+                          vertical
+                          justify="center"
+                          style="
+                        margin-top: 14px;
+                        padding-left: 14px;
+                        border-left: 4px solid var(--primary-color-hover);
+                        border-radius: 3px;
+                      "
+                      >
+                        <n-grid
+                            :cols="4"
+                            :x-gap="40"
+                            :y-gap="10"
+                            layout-shift-disabled
+                            style="width: 478px; margin-top: 4px"
+                        >
+                          <n-gi v-for="artistlist in page_artistlists_statistic" :key="artistlist.id">
+                            <n-statistic :label="artistlist.label" :value="artistlist.artist_count" />
+                          </n-gi>
+                        </n-grid>
+                      </n-space>
+                    </n-space>
+                  </n-space>
+                </template>
+                <template #header> </template>
+                <template #avatar>
+                  <img
+                      style="
+                    width: 280px;
+                    height: 280px;
+                    border-radius: 12px;
+                    object-fit: cover;
+                    margin-left: -3px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+                  "
+                      :src="getAssetImage(page_top_album_image_url)"
+                      alt=""
+                  />
+                </template>
+                <template #extra> </template>
+                <template #footer> </template>
+              </n-page-header>
+            </div>
+          </template>
           <template #after> </template>
           <template #default="{ item, index, active }">
             <DynamicScrollerItem
@@ -1642,5 +1996,166 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
 }
 .artist_info:nth-child(1) {
   margin-top: 8px;
+}
+
+/* 重构后的专辑列表项样式 */
+.album-item-container {
+  display: flex;
+  flex-direction: row;
+  padding: 16px;
+  border-radius: 8px;
+  background-color: var(--card-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.album-item-container:hover {
+  transform: scale(1.01); /* Slight zoom on hover */
+  box-shadow: 0 0 10px 0 var(--scrollbar-color);
+  z-index: 10;
+  position: relative;
+  background-color: var(--card-color); /* Use a variable for background */
+  border-color: var(--primary-color-hover);
+  box-shadow: 0 0 7px 0 var(--primary-color-suppl);
+}
+.album-item-container:nth-child(1) {
+  margin-top: 18px;
+}
+
+
+/* 移除:hover伪类，取消浮动动画效果 */
+
+.album-cover-section {
+  flex-shrink: 0;
+  margin-right: 16px;
+}
+
+.album-cover-image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.album-info-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.album-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.album-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-color-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.album-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.love-button {
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rating-stars {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.rating-button {
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.album-year {
+  font-size: 14px;
+  color: var(--text-color-2);
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.album-songs-list {
+  flex: 1;
+  overflow: hidden;
+  max-height: 80px;
+}
+
+.song-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.song-item:last-child {
+  border-bottom: none;
+}
+
+.song-track-number {
+  font-size: 12px;
+  color: var(--text-color-3);
+  width: 20px;
+  flex-shrink: 0;
+}
+
+.song-title {
+  flex: 1;
+  font-size: 12px;
+  color: var(--text-color-1);
+  margin: 0 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.song-duration {
+  font-size: 12px;
+  color: var(--text-color-3);
+  width: 35px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.songs-loading {
+  font-size: 12px;
+  color: var(--text-color-3);
+  text-align: center;
+  padding: 8px 0;
 }
 </style>
