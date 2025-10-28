@@ -132,55 +132,55 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     random_search: {
       album: {
         fetch: () => this.homeApi.getRandomAlbums('0', '18'),
-        mapper: (item, url) => this.mapAlbum_Home(item, url),
+        mapper: (item: any, url: string) => this.mapAlbum_Home(item, url),
       },
       artist: {
         fetch: () => this.homeApi.getRandomArtists('0', '18'),
-        mapper: (item, url, index) => this.mapArtist(item, url, index, 0),
+        mapper: (item: any, url: string, index: number) => this.mapArtist(item, url, index, 0),
       },
       media: {
         fetch: () => this.homeApi.getRandomMedias('0', '18'),
-        mapper: (item, url, index) => this.mapMedia(item, url, index, 0),
+        mapper: (item: any, url: string, index: number) => this.mapMedia(item, url, index, 0),
       },
       media_cue: {
         fetch: () => this.homeApi.getRandomMediaCues('0', '18'),
-        mapper: (item, url, index) => this.mapMedia_Cue(item, url, index, 0),
+        mapper: (item: any, url: string, index: number) => this.mapMedia_Cue(item, url, index, 0),
       },
     },
     recently_added: {
       album: {
         fetch: () => this.homeApi.getAlbumList_Recently_Added(),
-        mapper: (item, url) => this.mapAlbum_Home(item, url),
+        mapper: (item: any, url: string) => this.mapAlbum_Home(item, url),
       },
       artist: {
         fetch: () => this.homeApi.getArtistList_Recently_Added(),
-        mapper: (item, url, index) => this.mapArtist(item, url, index, 0),
+        mapper: (item: any, url: string, index: number) => this.mapArtist(item, url, index, 0),
       },
       media: {
         fetch: () => this.homeApi.getMediaList_Recently_Added(),
-        mapper: (item, url, index) => this.mapMedia(item, url, index, 0),
+        mapper: (item: any, url: string, index: number) => this.mapMedia(item, url, index, 0),
       },
       media_cue: {
         fetch: () => this.homeApi.getMediaCue_Recently_Added(),
-        mapper: (item, url, index) => this.mapMedia_Cue(item, url, index, 0),
+        mapper: (item: any, url: string, index: number) => this.mapMedia_Cue(item, url, index, 0),
       },
     },
     recently_played: {
       album: {
         fetch: () => this.homeApi.getAlbumList_Play_Date(),
-        mapper: (item, url) => this.mapAlbum_Home(item, url),
+        mapper: (item: any, url: string) => this.mapAlbum_Home(item, url),
       },
       artist: {
         fetch: () => this.homeApi.getArtistList_Play_Date(),
-        mapper: (item, url, index) => this.mapArtist(item, url, index, 0),
+        mapper: (item: any, url: string, index: number) => this.mapArtist(item, url, index, 0),
       },
       media: {
         fetch: () => this.homeApi.getMediaList_Play_Date(),
-        mapper: (item, url, index) => this.mapMedia(item, url, index, 0),
+        mapper: (item: any, url: string, index: number) => this.mapMedia(item, url, index, 0),
       },
       media_cue: {
         fetch: () => this.homeApi.getMediaCue_Play_Date(),
-        mapper: (item, url, index) => this.mapMedia_Cue(item, url, index, 0),
+        mapper: (item: any, url: string, index: number) => this.mapMedia_Cue(item, url, index, 0),
       },
     },
   }
@@ -378,7 +378,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
           store_general_fetch_media_list._load_model === 'search'
             ? this.pageMediaStore.media_Files_temporary
             : this.playlistStore.playlist_MediaFiles_temporary
-        const existingIds = new Set(targetArray.map((item) => item.id))
+        const existingIds = new Set(targetArray.map((item: any) => item.id))
         song_list = song_list.filter((song) => {
           if (existingIds.has(song.ID)) {
             return false
@@ -426,7 +426,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       if (!metadata_model) {
         if (store_general_fetch_media_list._load_model === 'play') {
           this.playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =
-            this.pageMediaStore.media_Files_temporary.map((item) => item.id)
+            this.pageMediaStore.media_Files_temporary.map((item: any) => item.id)
           store_system_configs_save.save_system_playlist_item_id_config()
         }
       }
@@ -516,7 +516,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
           store_general_fetch_media_list._load_model === 'search'
             ? this.pageMediaStore.media_Files_temporary
             : this.playlistStore.playlist_MediaFiles_temporary
-        const existingIds = new Set(targetArray.map((item) => item.id))
+        const existingIds = new Set(targetArray.map((item: any) => item.id))
         song_list = song_list.filter((song) => {
           if (existingIds.has(song.ID)) {
             return false
@@ -564,7 +564,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       if (!metadata_model) {
         if (store_general_fetch_media_list._load_model === 'play') {
           this.playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =
-            this.pageMediaCueStore.media_Files_temporary.map((item) => item.id)
+            this.pageMediaCueStore.media_Files_temporary.map((item: any) => item.id)
         }
       }
     }
@@ -632,7 +632,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
           store_general_fetch_media_list._load_model === 'search'
             ? this.pageMediaStore.media_Files_temporary
             : this.playlistStore.playlist_MediaFiles_temporary
-        const existingIds = new Set(targetArray.map((item) => item.id))
+        const existingIds = new Set(targetArray.map((item: any) => item.id))
         album_list = album_list.filter((album) => {
           if (existingIds.has(album.ID)) {
             return false
@@ -718,7 +718,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
           store_general_fetch_media_list._load_model === 'search'
             ? this.pageMediaStore.media_Files_temporary
             : this.playlistStore.playlist_MediaFiles_temporary
-        const existingIds = new Set(targetArray.map((item) => item.id))
+        const existingIds = new Set(targetArray.map((item: any) => item.id))
         artist_list = artist_list.filter((artist) => {
           if (existingIds.has(artist.ID)) {
             return false
@@ -767,7 +767,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
         if (!store_server_user_model.random_play_model_search) {
           if (index === song_list.length - 1) {
             const index_num = store_server_user_model.random_play_model_add
-              ? this.playlistStore.playlist_MediaFiles_temporary.length - _end
+              ? this.playlistStore.playlist_MediaFiles_temporary.length - Number(_end)
               : 0
             const media_file = this.playlistStore.playlist_MediaFiles_temporary[index_num]
             await this.playerSettingStore.update_current_media_info(media_file, index_num)
@@ -780,8 +780,38 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       })
 
       this.playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =
-        this.playlistStore.playlist_MediaFiles_temporary.map((item) => item.id)
+        this.playlistStore.playlist_MediaFiles_temporary.map((item: any) => item.id)
       store_system_configs_save.save_system_playlist_item_id_config()
+    }
+  }
+  public async get_artist_tree(
+    url: string,
+    _start: string,
+    _end: string,
+    _artist_id: string,
+  ) {
+    url = url.includes('api') ? url : url + '/api'
+    let artistTrees = []
+    const data = await this.artistsApi.getArtistTree(
+      _start,
+      _end,
+      _artist_id,
+    )
+    artistTrees = data['ninesong-response']['artistTrees']
+    if (Array.isArray(artistTrees) && artistTrees.length > 0) {
+      this.pageArtistStore.artist_Tree_Artist_info = artistTrees[0]['Artist'];
+      const albumTrees = artistTrees[0]['Albums'];
+      albumTrees.map((albumTree: any, index: number) => {
+        const album = this.mapAlbum(albumTree['Album'], url, index, 0);
+        const mediaFiles = albumTree['MediaFiles'].map((mediaFile: any, media_index: number) => {
+          return this.mapMedia(mediaFile, url, index, media_index);
+        });
+        const albumData = {
+          album,
+          mediaFiles,
+        }
+        this.pageArtistStore.artist_Tree_Album_Tree_temporary.push(albumData);
+      })
     }
   }
 
@@ -939,7 +969,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
 
   public async get_recommend_high_frequency() {
     let all_word_clouds = []
-    const result = await this.recommendApi.getHighFrequency(100)
+    const result = await this.recommendApi.getHighFrequency('100')
     if (result != undefined) {
       all_word_clouds = result['ninesong-response']['wordClouds']
     }
@@ -957,9 +987,9 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     }
   }
 
-  public async get_recommend_result(keywords: string) {
+  public async get_recommend_world_cloud_result(keywords: string) {
     let all_medias = []
-    const result = await this.recommendApi.getRecommended(keywords)
+    const result = await this.recommendApi.getWordCloudRecommended(keywords)
     if (result != undefined) {
       all_medias = result['ninesong-response']['wordClouds']
     }
@@ -988,12 +1018,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       this.pageRecommendStore.recommend_MediaFiles_metadata = []
       this.pageRecommendStore.recommend_MediaFiles_temporary = []
       song_list.map(async (song: any, index: number) => {
-        let new_song = undefined
-        if (store_router_data_info.router_select === 'recommend') {
-          new_song = this.mapMedia_Recommend(song, url, index)
-        } else {
-          new_song = this.mapMedia(song, url, index)
-        }
+        let new_song = this.mapMedia(song, url, index, 0)
         this.pageRecommendStore.recommend_MediaFiles_metadata.push(song)
         this.pageRecommendStore.recommend_MediaFiles_temporary.push({
           ...new_song,
@@ -1221,80 +1246,6 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       cue_tracks: song.CueTracks,
       cue_track_count: song.CueTrackCount,
       cue_track_show: false,
-    }
-  }
-
-  private mapMedia_Recommend(song: any, url: string, index: number) {
-    return {
-      absoluteIndex: index + 1,
-      favorite: song.Starred,
-      play_count: song.PlayCount,
-      play_date: song.PlayDate,
-      play_complete_count: song.PlayCompleteCount,
-      rating: song.Rating,
-      duration_txt: this.playerSettingStore.formatTime_RunTimeTicks(song.Duration),
-      id: song.ID,
-      title: song.Title,
-      path:
-        url +
-        '/media/stream?access_token=' +
-        store_server_login_info.server_accessToken +
-        '&media_file_id=' +
-        song.ID,
-      artist: song.Artist,
-      album: song.Album,
-      artist_id: song.ArtistID,
-      album_id: song.AlbumID,
-      album_artist: song.AlbumArtist,
-      has_cover_art: song.HasCoverArt ? 1 : 0,
-      track_number: 0,
-      disc_number: 0,
-      year: song.Year,
-      size: song.Size,
-      suffix: song.Suffix,
-      duration: song.Duration,
-      bit_rate: song.BitRate,
-      encoding_format: song.EncodingFormat,
-      genre: song.Genre,
-      compilation: song.Compilation ? 1 : 0,
-      created_at: song.CreatedAt,
-      updated_at: song.UpdatedAt,
-      all_artist_ids: song.AllArtistIDs,
-      all_album_artist_ids: song.AllAlbumArtistIDs,
-      full_text: '',
-      album_artist_id: song.AlbumArtistID,
-      order_album_name: '',
-      order_album_artist_name: '',
-      order_artist_name: '',
-      sort_album_name: '',
-      sort_artist_name: '',
-      sort_album_artist_name: '',
-      sort_title: '',
-      disc_subtitle: '',
-      mbz_track_id: '',
-      mbz_album_id: '',
-      mbz_artist_id: '',
-      mbz_album_artist_id: '',
-      mbz_album_type: '',
-      mbz_album_comment: '',
-      catalog_num: '',
-      comment: '',
-      lyrics: '',
-      bpm: 0,
-      channels: 0,
-      order_title: '',
-      mbz_release_track_id: '',
-      rg_album_gain: 0,
-      rg_album_peak: 0,
-      rg_track_gain: 0,
-      rg_track_peak: 0,
-      medium_image_url: song.HasCoverArt
-        ? url +
-          '/media/cover?access_token=' +
-          store_server_login_info.server_accessToken +
-          '&type=media&target_id=' +
-          song.ID
-        : error_album,
     }
   }
 

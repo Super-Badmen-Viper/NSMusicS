@@ -290,7 +290,7 @@ export const store_general_fetch_artist_list = reactive({
   },
 
   _start: 0,
-  _end: 100,
+  _end: 30,
   async fetchData_Artist_of_server_web_start() {
     const pageArtistStore = usePageArtistStore()
     pageArtistStore.artist_Files_temporary = []

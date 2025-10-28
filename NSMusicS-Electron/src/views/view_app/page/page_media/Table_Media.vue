@@ -2318,7 +2318,7 @@ onBeforeUnmount(() => {
         ref="dynamicScroller"
         :style="{
           width: 'calc(100vw - ' + (collapsed_width - 35) + 'px)',
-          height: 'calc(100vh - 236px)',
+          height: 'calc(100vh - 226px)',
           marginTop: '80px',
         }"
         :items="media_Files_temporary"

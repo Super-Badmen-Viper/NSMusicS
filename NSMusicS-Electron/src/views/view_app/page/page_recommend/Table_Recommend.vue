@@ -214,7 +214,7 @@ const fetchRecommendationsAndDetails = async () => {
 
   try {
     const keywords = selectedWords.value.map((w) => w.name).join(',')
-    await get_NineSong_Temp_Data_To_LocalSqlite.get_recommend_result(keywords)
+    await get_NineSong_Temp_Data_To_LocalSqlite.get_recommend_world_cloud_result(keywords)
 
     const recommendedSongs = pageRecommendStore.recommend_MediaSearch_metadata
     if (recommendedSongs.length > 0) {

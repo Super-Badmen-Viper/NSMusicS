@@ -27,6 +27,7 @@ import { usePageArtistStore } from '@/data/data_status/app_status/page_status/ar
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 import { store_router_history_data_of_artist } from '@/router/router_store/store_router_history_data_of_artist'
 import { store_general_fetch_artist_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_artist/store_general_fetch_artist_list'
+import { store_general_fetch_artist_tree } from '@/data/data_stores/server_api_stores/server_api_core/page/page_artist/store_general_fetch_artist_tree'
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
@@ -893,15 +894,17 @@ const formatDuration = (seconds) => {
   return `${mins}:${secs < 10 ? '0' : ''}${secs}`
 }
 //
-async function findThisArtistAllAlbumsMediaFiles(item: any) {
-  store_general_fetch_album_list.set_artist_id(item.id)
-  pageAlbumStore.page_albumlists_selected = 'album_list_all'
-  pageAlbumStore.page_albumlists_keyword = ''
-  pageAlbumStore.page_albumlists_get_keyword_model_num = 2
-  store_router_data_info.find_album_model = false
-  store_router_data_info.find_artist_model = true
-  // update pageAlbumStore.album_Files_temporary
-  await store_general_fetch_album_list.fetchData_Album()
+async function findThisArtistTree(artist_id: string) {
+  store_general_fetch_artist_tree._artist_id = artist_id
+  await store_general_fetch_artist_tree.fetchData_ArtistTree()
+}
+const onScrollEndArtistTree = async () => {
+  if (isScrolling.value) return
+  isScrolling.value = true
+  if (store_server_user_model.model_server_type_of_web) {
+    await store_general_fetch_artist_tree.fetchData_ArtistTree_of_server_web_end()
+  }
+  isScrolling.value = false
 }
 
 ////// view artistlist_view Remove data
@@ -1193,7 +1196,7 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
               @click="()=>{
                 playlist_Menu_Item = item
                 playlist_Menu_Item_Id = item.id
-                findThisArtistAllAlbumsMediaFiles(item.id)
+                findThisArtistTree(item.id)
               }"
             >
               <div
@@ -1297,11 +1300,7 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
           :emit-update="true"
           :key="allArtistAlbumMediaFilesKey"
           key-field="id"
-          @resize="onResize"
-          @update="onUpdate"
-          @scroll-start="onScrollStart"
-          @scroll="onScroll"
-          @scroll-end="onScrollEnd"
+          @scroll-end="onScrollEndArtistTree"
         >
           <template #before> </template>
           <template #after> </template>

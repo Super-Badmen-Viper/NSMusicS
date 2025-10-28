@@ -11,6 +11,9 @@ export const usePageArtistStore = defineStore('pageArtist', () => {
   const artist_starred_count = ref<number>(0)
   const artist_recently_count = ref<number>(0)
 
+  const artist_Tree_Artist_info = ref<any>()
+  const artist_Tree_Album_Tree_temporary = ref<any[]>([])
+
   const list_data_StartUpdate = ref<boolean>(false)
   const page_artistlists_options = ref<any[]>([])
   const page_artistlists_statistic = ref<any[]>([])
