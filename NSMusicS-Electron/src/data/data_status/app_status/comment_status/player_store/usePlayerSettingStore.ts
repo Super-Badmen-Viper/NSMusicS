@@ -174,6 +174,16 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
     return `${formattedMinutes}:${formattedSeconds}`
   }
 
+  function formatTime_RunTimeTicks_Min(timestamp: number): string {
+    const divisor = store_server_users.server_select_kind === 'ninesong' ? 100 : 1
+    const milliseconds = Math.floor(timestamp / 10000 / divisor)
+    const totalSeconds = Math.floor(milliseconds / 1000)
+    const minutes = Math.floor(totalSeconds / 60)
+    const formattedMinutes = String(minutes).padStart(2, '')
+
+    return `${formattedMinutes}`
+  }
+
   async function play_go_duration(slider_value: number, silder_path: boolean) {
     player_slider_click.value = true
     player_no_progress_jump.value = false
@@ -545,6 +555,7 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
     formatTime,
     formatStrTime,
     formatTime_RunTimeTicks,
+    formatTime_RunTimeTicks_Min,
     play_go_duration,
     update_current_media_info,
     update_current_lyrics,

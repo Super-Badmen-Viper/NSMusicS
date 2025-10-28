@@ -16,6 +16,7 @@ import {
   TextSortDescending20Regular,
 } from '@vicons/fluent'
 import { RefreshSharp } from '@vicons/ionicons5'
+import { Random } from '@vicons/fa'
 
 ////// this_view views_components of navie ui
 import { computed, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
@@ -44,6 +45,7 @@ import { usePageMediaStore } from '@/data/data_status/app_status/page_status/med
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
+import { store_local_data_set_albumInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_albumInfo'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_general_fetch_album_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_album/store_general_fetch_album_list'
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
@@ -105,10 +107,10 @@ function getAssetImage(firstImage: string) {
 // gridItems Re render
 const collapsed_width = ref(145)
 const stopWatching_window_innerWidth = watch(
-    () => store_system_configs_info.window_innerWidth,
-    () => {
-      updateGridItems()
-    }
+  () => store_system_configs_info.window_innerWidth,
+  () => {
+    updateGridItems()
+  }
 )
 const updateGridItems = () => {
   collapsed_width.value = 145
@@ -120,7 +122,7 @@ const updateGridItems = () => {
     item_artist_txt.value = item_artist.value - 20
     gridItems.value = 7
     itemSecondarySize.value =
-        Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2
+      Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2
   } else if (window.innerWidth > 1660) {
     const num = window.innerWidth / 6.53
     itemSize.value = Math.floor(num) + 40
@@ -129,7 +131,7 @@ const updateGridItems = () => {
     item_artist_txt.value = item_artist.value - 20
     gridItems.value = 6
     itemSecondarySize.value =
-        Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2
+      Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2
   } else {
     const num = window.innerWidth / 5.53
     itemSize.value = Math.floor(num) + 40
@@ -138,11 +140,11 @@ const updateGridItems = () => {
     item_artist_txt.value = item_artist.value - 20
     gridItems.value = 5
     itemSecondarySize.value =
-        Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2
+      Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2
   }
   if (
-      store_server_user_model.model_server_type_of_web &&
-      store_server_users.server_select_kind === 'ninesong'
+    store_server_user_model.model_server_type_of_web &&
+    store_server_users.server_select_kind === 'ninesong'
   ) {
     itemSize.value += 35
   }
@@ -415,6 +417,7 @@ const options_Filter = ref([
 
 ////// dynamicScroller of artistlist_view
 const dynamicScroller = ref(null)
+const dynamicScrollerAlbum = ref(null)
 const onResize = () => {
   console.log('resize')
 }
@@ -529,6 +532,12 @@ const handleItemClick_Favorite = (id: any, favorite: boolean) => {
     }
   })
 }
+const handleItemClick_Favorite_Tree = (id: any, favorite: boolean, type: string) => {
+  if (type === 'media') store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id, favorite)
+  else if (type === 'album') store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(id, favorite)
+  else if (type === 'artist')
+    store_local_data_set_artistInfo.Set_ArtistInfo_To_Favorite(id, favorite)
+}
 let before_rating = false
 let after_rating = false
 const handleItemClick_Rating = (id_rating: any) => {
@@ -537,6 +546,18 @@ const handleItemClick_Rating = (id_rating: any) => {
     store_local_data_set_artistInfo.Set_ArtistInfo_To_Rating(id, 0)
   } else {
     store_local_data_set_artistInfo.Set_ArtistInfo_To_Rating(id, rating)
+  }
+}
+const handleItemClick_Rating_Tree = (id_rating: any, type: string) => {
+  const [id, rating] = id_rating.split('-')
+  if (after_rating) {
+    if (type === 'media') store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, 0)
+    else if (type === 'album') store_local_data_set_albumInfo.Set_AlbumInfo_To_Rating(id, 0)
+    else if (type === 'artist') store_local_data_set_artistInfo.Set_ArtistInfo_To_Rating(id, 0)
+  } else {
+    if (type === 'media') store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, rating)
+    else if (type === 'album') store_local_data_set_albumInfo.Set_AlbumInfo_To_Rating(id, rating)
+    else if (type === 'artist') store_local_data_set_artistInfo.Set_ArtistInfo_To_Rating(id, rating)
   }
 }
 
@@ -800,99 +821,20 @@ const stopWatching_boolHandleItemClick_Played = watch(
 
 const onRefreshSharp = debounce(async (event, args) => {
   await store_general_fetch_artist_list.fetchData_Artist()
+  if (
+    store_server_user_model.model_server_type_of_web &&
+    store_server_users.server_select_kind === 'ninesong'
+  ) {
+    if (
+      pageArtistStore.artist_Files_temporary != undefined &&
+      pageArtistStore.artist_Files_temporary.length > 0
+    ) {
+      store_general_fetch_artist_tree._artist_id = pageArtistStore.artist_Files_temporary[0].id
+      await store_general_fetch_artist_tree.fetchData_ArtistTree()
+    }
+  }
 }, 500)
 
-// 示例数据：最近添加的专辑数据（移除分组结构）
-const allArtistAlbumMediaFiles = ref([
-  {
-    id: '1',
-    name: 'Album One',
-    min_year: 2023,
-    max_year: 2023,
-    medium_image_url: 'https://picsum.photos/100/100?random=1',
-    favorite: false,
-    rating: 4
-  },
-  {
-    id: '2',
-    name: 'Album Two',
-    min_year: 2022,
-    max_year: 2022,
-    medium_image_url: 'https://picsum.photos/100/100?random=2',
-    favorite: true,
-    rating: 5
-  },
-  {
-    id: '3',
-    name: 'Album Three',
-    min_year: 2021,
-    max_year: 2021,
-    medium_image_url: 'https://picsum.photos/100/100?random=3',
-    favorite: false,
-    rating: 3
-  },
-  {
-    id: '4',
-    name: 'Album Four',
-    min_year: 2020,
-    max_year: 2020,
-    medium_image_url: 'https://picsum.photos/100/100?random=4',
-    favorite: true,
-    rating: 4
-  },
-  {
-    id: '5',
-    name: 'Album Five',
-    min_year: 2019,
-    max_year: 2019,
-    medium_image_url: 'https://picsum.photos/100/100?random=5',
-    favorite: false,
-    rating: 5
-  }
-])
-// 用于触发虚拟列表重新渲染的key
-const allArtistAlbumMediaFilesKey = ref(0)
-// 获取专辑歌曲列表的方法
-const getAlbumSongs = (albumId) => {
-  // 根据专辑ID返回不同的歌曲列表
-  const songsByAlbum = {
-    '1': [
-      { id: '101', title: 'Song One', duration: 180 },
-      { id: '102', title: 'Song Two', duration: 210 },
-      { id: '103', title: 'Song Three', duration: 195 }
-    ],
-    '2': [
-      { id: '201', title: 'Track One', duration: 200 },
-      { id: '202', title: 'Track Two', duration: 180 },
-      { id: '203', title: 'Track Three', duration: 220 },
-      { id: '204', title: 'Track Four', duration: 240 }
-    ],
-    '3': [
-      { id: '301', title: 'First Song', duration: 190 },
-      { id: '302', title: 'Second Song', duration: 210 }
-    ],
-    '4': [
-      { id: '401', title: 'Melody One', duration: 200 },
-      { id: '402', title: 'Melody Two', duration: 185 },
-      { id: '403', title: 'Melody Three', duration: 225 }
-    ],
-    '5': [
-      { id: '501', title: 'Hit Single', duration: 180 },
-      { id: '502', title: 'Popular Track', duration: 210 },
-      { id: '503', title: 'Fan Favorite', duration: 195 },
-      { id: '504', title: 'New Release', duration: 230 },
-      { id: '505', title: 'Latest Hit', duration: 200 }
-    ]
-  }
-  
-  return songsByAlbum[albumId] || []
-}
-// 格式化歌曲时长的方法
-const formatDuration = (seconds) => {
-  const mins = Math.floor(seconds / 60)
-  const secs = seconds % 60
-  return `${mins}:${secs < 10 ? '0' : ''}${secs}`
-}
 //
 async function findThisArtistTree(artist_id: string) {
   store_general_fetch_artist_tree._artist_id = artist_id
@@ -902,7 +844,12 @@ const onScrollEndArtistTree = async () => {
   if (isScrolling.value) return
   isScrolling.value = true
   if (store_server_user_model.model_server_type_of_web) {
-    await store_general_fetch_artist_tree.fetchData_ArtistTree_of_server_web_end()
+    if (
+      pageArtistStore.artist_Files_temporary != undefined &&
+      pageArtistStore.artist_Files_temporary.length > 0
+    ) {
+      await store_general_fetch_artist_tree.fetchData_ArtistTree_of_server_web_end()
+    }
   }
   isScrolling.value = false
 }
@@ -916,30 +863,87 @@ onBeforeUnmount(() => {
   dynamicScroller.value = null
 })
 
+//////
+const playAlbumSongs = async (album_id) => {
+  if (!album_id) return
+}
+const playSong = async (media_id) => {
+  if (!media_id) return
+}
+
 // 在setup上下文中获取Store实例
 const playlistStore = usePlaylistStore()
 const playerAudioStore = usePlayerAudioStore()
 const playerAppearanceStore = usePlayerAppearanceStore()
 const pageAlbumStore = usePageAlbumStore()
 // 使用 storeToRefs 解构出所需的响应式属性
-const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } = storeToRefs(playlistStore)
+const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
+  storeToRefs(playlistStore)
 const { page_top_album_image_url, this_audio_artist_name, this_audio_song_id } =
   storeToRefs(playerAudioStore)
-const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistStore)
+const {
+  artist_Files_temporary,
+  artist_starred_count,
+  artist_Tree_Album_Tree_temporary,
+  artist_Tree_Artist_info,
+} = storeToRefs(pageArtistStore)
+
+// 处理专辑树数据，确保每个item都有唯一的id
+const processedAlbumTreeData = computed(() => {
+  if (!artist_Tree_Album_Tree_temporary.value) return []
+
+  return artist_Tree_Album_Tree_temporary.value.map((item, index) => {
+    // 确保每个item都有一个唯一的id属性
+    return {
+      ...item,
+      id: item.album?.id || `album-${index}`, // 使用album的id，如果没有则使用索引
+    }
+  })
+})
+
+function scrollerAlbumStart() {
+  if (dynamicScrollerAlbum.value && dynamicScrollerAlbum.value.$el) {
+    dynamicScrollerAlbum.value.$el.style.scrollBehavior = 'auto'
+    dynamicScrollerAlbum.value.$el.scrollTop = 0
+    setTimeout(() => {
+      if (dynamicScrollerAlbum.value && dynamicScrollerAlbum.value.$el) {
+        dynamicScrollerAlbum.value.$el.style.scrollBehavior = 'smooth'
+      }
+    }, 100)
+  }
+}
+function scrollerAlbumEnd() {
+  if (dynamicScrollerAlbum.value && dynamicScrollerAlbum.value.$el) {
+    dynamicScrollerAlbum.value.$el.style.scrollBehavior = 'auto'
+    dynamicScrollerAlbum.value.$el.scrollTop = dynamicScrollerAlbum.value.$el.scrollHeight
+    setTimeout(() => {
+      if (dynamicScrollerAlbum.value && dynamicScrollerAlbum.value.$el) {
+        dynamicScrollerAlbum.value.$el.style.scrollBehavior = 'smooth'
+      }
+    }, 100)
+  }
+}
 </script>
 <template>
   <n-space vertical :size="12">
     <div class="artist-wall-container">
-      <n-space vertical @wheel.prevent style="position: absolute; top: 0">
-        <n-space align="center" style="margin-top: 3px">
+      <n-space
+        justify="space-between"
+        @wheel.prevent
+        :style="{
+          width: 'calc(100vw - ' + (collapsed_width - 25) + 'px)',
+        }"
+        style="position: absolute; top: 0; margin-top: 3px"
+      >
+        <n-space align="center">
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-select
-                  size="small"
-                  :value="page_artistlists_selected"
-                  :options="page_artistlists_options"
-                  style="width: 181px;margin-left: 10px"
-                  @update:value="page_artistlists_handleselected_updatevalue"
+                size="small"
+                :value="page_artistlists_selected"
+                :options="page_artistlists_options"
+                style="width: 181px; margin-left: 10px"
+                @update:value="page_artistlists_handleselected_updatevalue"
               />
             </template>
             {{ $t('Select') + $t('LabelPlaylist') }}
@@ -1155,8 +1159,40 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
             {{ $t('action.moveToBottom') }}
           </n-tooltip>
         </n-space>
+        <n-space>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button
+                quaternary
+                circle
+                style="position: relative; left: -29px"
+                @click="scrollerAlbumStart"
+              >
+                <template #icon>
+                  <n-icon :size="20" :depth="2"><PaddingTop20Filled /></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('action.moveToTop') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button
+                quaternary
+                circle
+                style="position: relative; left: -37px"
+                @click="scrollerAlbumEnd"
+              >
+                <template #icon>
+                  <n-icon :size="20" :depth="2"><PaddingDown20Filled /></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('action.moveToBottom') }}
+          </n-tooltip>
+        </n-space>
       </n-space>
-      <n-space style="display: flex; flex-direction: row;">
+      <n-space style="display: flex; flex-direction: row">
         <DynamicScroller
           v-if="
             store_server_user_model.model_server_type_of_web &&
@@ -1165,7 +1201,7 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
           class="artist-wall"
           ref="dynamicScroller"
           :style="{
-            width: '415px',
+            width: '250px',
             height: 'calc(100vh - 188px)',
             marginTop: '40px',
           }"
@@ -1189,21 +1225,23 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
               v-contextmenu:contextmenu
               @contextmenu.prevent="
                 () => {
-                  playlist_Menu_Item = item
-                  playlist_Menu_Item_Id = item.id
+                  playlist_Menu_Item = item.album || item
+                  playlist_Menu_Item_Id = item.album?.id || item.id
                 }
               "
-              @click="()=>{
-                playlist_Menu_Item = item
-                playlist_Menu_Item_Id = item.id
-                findThisArtistTree(item.id)
-              }"
+              @click="
+                () => {
+                  playlist_Menu_Item = item
+                  playlist_Menu_Item_Id = item.id
+                  findThisArtistTree(item.id)
+                }
+              "
             >
               <div
                 :key="item.id"
                 class="artist_info"
                 style="margin-top: 20px; margin-left: 10px; display: flex; align-items: center"
-                :style="{ width: '390px', }"
+                :style="{ width: '225px' }"
               >
                 <img
                   :src="item.medium_image_url"
@@ -1211,73 +1249,9 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
                   style="width: 46px; height: 46px; margin-left: 6px; border-radius: 50%"
                   alt=""
                 />
-                <span class="artist-name" style="margin-left: 8px; width: 200px">
+                <span class="artist-name" style="margin-left: 8px; width: 150px">
                   {{ item.name }}
                 </span>
-
-                <div
-                  style="
-                    margin-left: auto;
-                    margin-right: 0;
-                    width: 40px;
-                    display: flex;
-                    flex-direction: row;
-                  "
-                >
-                  <button
-                    class="love-this-home-album-button"
-                    @click="
-                      () => {
-                        handleItemClick_Favorite(item.id, item.favorite)
-                        item.favorite = !item.favorite
-                      }
-                    "
-                    style="
-                      border: 0;
-                      background-color: transparent;
-                      width: 28px;
-                      height: 28px;
-                      margin-right: 10px;
-                      cursor: pointer;
-                    "
-                  >
-                    <template v-if="item.favorite">
-                      <icon :size="20" color="red" style="margin-left: -2px; margin-top: 3px"
-                        ><Heart28Filled
-                      /></icon>
-                    </template>
-                    <template v-else-if="!store_system_configs_info.update_theme">
-                      <icon color="#101014" :size="20" style="margin-left: -2px; margin-top: 3px"
-                        ><Heart24Regular
-                      /></icon>
-                    </template>
-                    <template v-else-if="store_system_configs_info.update_theme">
-                      <icon color="#FAFAFC" :size="20" style="margin-left: -2px; margin-top: 3px"
-                        ><Heart24Regular
-                      /></icon>
-                    </template>
-                  </button>
-                </div>
-                <div
-                  style="
-                    width: 100px;
-                    margin-top: 4px;
-                    margin-right: 0;
-                    text-align: left;
-                    font-size: 14px;
-                    font-weight: 600;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                  "
-                >
-                  <button
-                    class="play-this-artist-button"
-                    @click="Play_this_artist_all_media_list_click(item.id)"
-                  >
-                    <icon :size="22"><Play24Regular /></icon>
-                  </button>
-                </div>
               </div>
             </DynamicScrollerItem>
           </template>
@@ -1285,24 +1259,155 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
         <DynamicScroller
           v-if="
             store_server_user_model.model_server_type_of_web &&
-            store_server_users.server_select_kind === 'ninesong'
+            store_server_users.server_select_kind === 'ninesong' &&
+            processedAlbumTreeData &&
+            processedAlbumTreeData.length > 0
           "
           ref="dynamicScrollerAlbum"
-          style="scroll-behavior: smooth;"
+          style="position: relative; left: 14px"
           :style="{
-            width: 'calc(100vw - ' + (collapsed_width - 35 + 435) + 'px)',
+            width: 'calc(100vw - ' + (collapsed_width - 35 + 270) + 'px)',
             height: 'calc(100vh - 188px)',
             marginTop: '40px',
-            marginLeft: '-10px'
+            marginLeft: '-10px',
+            scrollBehavior: 'smooth',
           }"
-          :items="allArtistAlbumMediaFiles"
+          :items="processedAlbumTreeData"
           :minItemSize="50"
           :emit-update="true"
-          :key="allArtistAlbumMediaFilesKey"
+          :key="artist_Tree_Artist_info?.id"
           key-field="id"
           @scroll-end="onScrollEndArtistTree"
         >
-          <template #before> </template>
+          <template #before>
+            <!-- 艺术家信息头部 -->
+            <div
+              class="artist-header-info"
+              :style="{
+                width: 'calc(100vw - ' + (collapsed_width - 35 + 295) + 'px)',
+                marginLeft: '10px',
+              }"
+            >
+              <!-- 第一行：艺术家名和操作按钮 -->
+              <div class="artist-header-row">
+                <div class="artist-name-section">
+                  <span class="artist-main-name">{{ artist_Tree_Artist_info.name }}</span>
+                </div>
+                <div class="artist-action-buttons">
+                  <!-- 播放按钮 -->
+                  <button
+                    class="album-play-button"
+                    style="position: relative; left: 6px"
+                    @click="Play_this_artist_all_media_list_click(artist_Tree_Artist_info.id)"
+                  >
+                    <icon :size="20"><Play24Regular /></icon>
+                  </button>
+                  <button
+                    class="album-play-button"
+                    style="position: relative; left: 13px"
+                    @click="playAlbumSongs(artist_Tree_Artist_info?.id)"
+                  >
+                    <icon :size="16"><Random /></icon>
+                  </button>
+                  <button
+                    class="love-button"
+                    style="position: relative; left: 13px"
+                    @click="
+                      () => {
+                        handleItemClick_Favorite_Tree(
+                          artist_Tree_Artist_info?.id,
+                          artist_Tree_Artist_info?.favorite,
+                          'artist'
+                        )
+                        if (artist_Tree_Artist_info)
+                          artist_Tree_Artist_info.favorite = !artist_Tree_Artist_info.favorite
+                      }
+                    "
+                  >
+                    <template v-if="artist_Tree_Artist_info?.favorite">
+                      <icon :size="20" color="red"><Heart28Filled /></icon>
+                    </template>
+                    <template v-else-if="!store_system_configs_info.update_theme">
+                      <icon color="#101014" :size="20"><Heart24Regular /></icon>
+                    </template>
+                    <template v-else-if="store_system_configs_info.update_theme">
+                      <icon color="#FAFAFC" :size="20"><Heart24Regular /></icon>
+                    </template>
+                  </button>
+                  <!-- 评分星级按钮 -->
+                  <div style="margin-top: -9px">
+                    <rate
+                      class="viaSlot"
+                      style="position: relative; left: 0"
+                      :length="5"
+                      :model-value="artist_Tree_Artist_info?.rating || 0"
+                      @before-rate="
+                        () => {
+                          before_rating = (artist_Tree_Artist_info?.rating || 0) === 1
+                        }
+                      "
+                      @after-rate="
+                        (value) => {
+                          after_rating =
+                            (artist_Tree_Artist_info?.rating || 0) === 1 && before_rating
+                          handleItemClick_Rating_Tree(
+                            `${artist_Tree_Artist_info?.id || ''}-${value}`,
+                            'artist'
+                          )
+                          if (after_rating) {
+                            if (artist_Tree_Artist_info) artist_Tree_Artist_info.rating = 0
+                            after_rating = false
+                          }
+                        }
+                      "
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- 第二行：专辑和歌曲统计信息 -->
+              <div class="artist-stats-row">
+                <div class="artist-stats-container">
+                  <div class="artist-stat-item">
+                    <span class="stat-label">{{ $t('entity.track_other') }}</span>
+                    <span class="stat-value">{{ artist_Tree_Artist_info.song_count || 0 }}</span>
+                  </div>
+                  <div class="artist-stat-item">
+                    <span class="stat-label">{{
+                      $t('nsmusics.view_page.guest') + $t('entity.track_other')
+                    }}</span>
+                    <span class="stat-value">{{
+                      artist_Tree_Artist_info.guest_song_count || 0
+                    }}</span>
+                  </div>
+                  <div class="artist-stat-item">
+                    <span class="stat-label">{{ $t('entity.album_other') }}</span>
+                    <span class="stat-value">{{ artist_Tree_Artist_info.album_count || 0 }}</span>
+                  </div>
+                  <div class="artist-stat-item">
+                    <span class="stat-label">{{
+                      $t('nsmusics.view_page.guest') + $t('entity.album_other')
+                    }}</span>
+                    <span class="stat-value">{{
+                      artist_Tree_Artist_info.guest_album_count || 0
+                    }}</span>
+                  </div>
+                  <div class="artist-stat-item">
+                    <span class="stat-label">{{ $t('nsmusics.view_page.disk') }}</span>
+                    <span class="stat-value">{{ artist_Tree_Artist_info.cue_count || 0 }}</span>
+                  </div>
+                  <div class="artist-stat-item">
+                    <span class="stat-label">{{
+                      $t('nsmusics.view_page.guest') + $t('nsmusics.view_page.disk')
+                    }}</span>
+                    <span class="stat-value">{{
+                      artist_Tree_Artist_info.guest_cue_count || 0
+                    }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
           <template #after> </template>
           <template #default="{ item, index, active }">
             <DynamicScrollerItem
@@ -1312,43 +1417,60 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
               v-contextmenu:contextmenu
               @contextmenu.prevent="
                 () => {
-                  playlist_Menu_Item = item
-                  playlist_Menu_Item_Id = item.id
+                  playlist_Menu_Item = item.album
+                  playlist_Menu_Item_Id = item.album.id
                 }
               "
               :style="{
-                width: 'calc(100vw - ' + (collapsed_width - 35 + 460) + 'px)',
-                marginLeft: '10px'
+                width: 'calc(100vw - ' + (collapsed_width - 35 + 295) + 'px)',
+                marginLeft: '10px',
               }"
             >
               <!-- 重构后的专辑列表项 -->
-              <div class="artist-album-item-container" :key="item.id">
+              <div class="artist-album-item-container" :key="item.album?.id">
                 <!-- 左侧专辑封面 -->
                 <div class="artist-album-cover-section">
                   <img
-                    :src="item.medium_image_url"
-                    @error="handleImageError(item)"
+                    :src="item.album?.medium_image_url"
+                    @error="handleImageError(item.album)"
                     class="artist-album-cover-image"
                     alt=""
                   />
+                  <div style="margin-left: 1px; margin-top: 8px">
+                    {{ item.album.song_count - 1 + '首歌曲，' + item.album.duration_txt + '分钟' }}
+                  </div>
                 </div>
-                
+
                 <!-- 右侧专辑信息 -->
                 <div class="artist-album-info-section">
                   <!-- 专辑名称和操作按钮 -->
                   <div class="artist-album-header">
-                    <span class="artist-album-name">{{ item.name }}</span>
+                    <span class="artist-album-name">{{ item.album?.name }}</span>
                     <div class="artist-album-actions">
+                      <!-- 播放按钮 -->
+                      <button
+                        class="album-play-button"
+                        style="position: relative; left: 11px"
+                        @click="playAlbumSongs(item.album?.id)"
+                      >
+                        <icon :size="18"><Play24Regular /></icon>
+                      </button>
+
                       <button
                         class="love-button"
+                        style="position: relative; left: 10px"
                         @click="
                           () => {
-                            handleItemClick_Favorite(item.id, item.favorite)
-                            item.favorite = !item.favorite
+                            handleItemClick_Favorite_Tree(
+                              item.album?.id,
+                              item.album?.favorite,
+                              'album'
+                            )
+                            if (item.album) item.album.favorite = !item.album.favorite
                           }
                         "
                       >
-                        <template v-if="item.favorite">
+                        <template v-if="item.album?.favorite">
                           <icon :size="20" color="red"><Heart28Filled /></icon>
                         </template>
                         <template v-else-if="!store_system_configs_info.update_theme">
@@ -1358,54 +1480,88 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
                           <icon color="#FAFAFC" :size="20"><Heart24Regular /></icon>
                         </template>
                       </button>
-                      
+
                       <!-- 评分星级按钮 -->
-                      <div class="rating-stars">
-                        <button
-                          v-for="i in 5"
-                          :key="i"
-                          class="rating-button"
-                          @click="handleItemClick_Rating(`${item.id}-${i}`)"
-                        >
-                          <icon 
-                            :size="18" 
-                            :color="i <= item.rating ? '#FFD700' : '#CCCCCC'"
-                          >
-                            <Star28Filled v-if="i <= item.rating" />
-                            <Star24Regular v-else />
-                          </icon>
-                        </button>
+                      <div style="margin-top: -9px">
+                        <rate
+                          class="viaSlot"
+                          style="position: relative; left: -2px"
+                          :length="5"
+                          :model-value="item.album?.rating || 0"
+                          @before-rate="
+                            () => {
+                              before_rating = (item.album?.rating || 0) === 1
+                            }
+                          "
+                          @after-rate="
+                            (value) => {
+                              after_rating = (item.album?.rating || 0) === 1 && before_rating
+                              handleItemClick_Rating_Tree(
+                                `${item.album?.id || ''}-${value}`,
+                                'album'
+                              )
+                              if (after_rating) {
+                                if (item.album) item.album.rating = 0
+                                after_rating = false
+                              }
+                            }
+                          "
+                        />
                       </div>
                     </div>
                   </div>
-                  
+
                   <!-- 专辑年份 -->
                   <div class="artist-album-year">
-                    {{ item.min_year || item.max_year || 'Unknown Year' }}
+                    {{ item.album?.min_year || item.album?.max_year || 'Unknown Year' }}
                   </div>
-                  
+
                   <!-- 专辑歌曲列表 -->
                   <div class="artist-album-songs-list">
                     <!-- 这里将加载该专辑的所有歌曲 -->
-                    <div 
-                      v-for="(song, songIndex) in getAlbumSongs(item.id)" 
+                    <div
+                      v-for="(song, songIndex) in item.mediaFiles || []"
                       :key="song.id"
                       class="song-item"
                     >
                       <span class="song-track-number">{{ songIndex + 1 }}.</span>
                       <span class="song-title">{{ song.title }}</span>
-                      <span class="song-duration">{{ formatDuration(song.duration) }}</span>
+                      <div class="song-item-actions">
+                        <button class="song-play-button">
+                          <icon :size="18"><Play24Regular /></icon>
+                        </button>
+                        <button
+                          class="song-love-button"
+                          @click="
+                            () => {
+                              handleItemClick_Favorite_Tree(song.id, song.favorite, 'media')
+                              song.favorite = !song.favorite
+                            }
+                          "
+                        >
+                          <template v-if="song.favorite">
+                            <icon :size="18" color="red"><Heart28Filled /></icon>
+                          </template>
+                          <template v-else-if="!store_system_configs_info.update_theme">
+                            <icon color="#101014" :size="18"><Heart24Regular /></icon>
+                          </template>
+                          <template v-else-if="store_system_configs_info.update_theme">
+                            <icon color="#FAFAFC" :size="18"><Heart24Regular /></icon>
+                          </template>
+                        </button>
+                      </div>
+                      <span class="song-duration">{{ song.duration_txt }}</span>
                     </div>
-                    
+
                     <!-- 如果歌曲列表为空，显示加载提示 -->
-                    <div v-if="!getAlbumSongs(item.id).length" class="songs-loading">
+                    <div v-if="!(item.mediaFiles || []).length" class="songs-loading">
                       Loading songs...
                     </div>
                   </div>
                 </div>
               </div>
               <!-- 占位 -->
-            <div style="margin-top: 10px; width: 20px; height: 1px"></div>
+              <div style="margin-top: 10px; width: 20px; height: 1px"></div>
             </DynamicScrollerItem>
           </template>
         </DynamicScroller>
@@ -1433,55 +1589,55 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
           <template #before>
             <div class="notice">
               <div
-                  :style="{ width: 'calc(100vw - ' + (collapsed_width - 19) + 'px)' }"
-                  style="
-                position: absolute;
-                top: 10px;
-                z-index: 0;
-                height: 100vh;
-                border-radius: 10px;
-                overflow: hidden;
-                background-size: cover;
-                background-position: center;
-                filter: blur(0px);
-                background-color: transparent;
-              "
+                :style="{ width: 'calc(100vw - ' + (collapsed_width - 19) + 'px)' }"
+                style="
+                  position: absolute;
+                  top: 10px;
+                  z-index: 0;
+                  height: 100vh;
+                  border-radius: 10px;
+                  overflow: hidden;
+                  background-size: cover;
+                  background-position: center;
+                  filter: blur(0px);
+                  background-color: transparent;
+                "
               >
                 <img
-                    :style="{
-                  width: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
-                  height: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
-                  minHeight: '280px',
-                  WebkitMaskImage:
-                    'linear-gradient(to top, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 1) 100%)',
-                }"
-                    style="
-                  margin-left: 200px;
-                  transform: translateY(-25%);
-                  object-fit: cover;
-                  object-position: center;
-                "
-                    :src="getAssetImage(playerAudioStore.page_top_album_image_url)"
-                    alt=""
+                  :style="{
+                    width: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
+                    height: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
+                    minHeight: '280px',
+                    WebkitMaskImage:
+                      'linear-gradient(to top, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 1) 100%)',
+                  }"
+                  style="
+                    margin-left: 200px;
+                    transform: translateY(-25%);
+                    object-fit: cover;
+                    object-position: center;
+                  "
+                  :src="getAssetImage(playerAudioStore.page_top_album_image_url)"
+                  alt=""
                 />
               </div>
               <n-page-header
-                  style="
-                position: relative;
-                z-index: 1;
-                width: calc(100vw);
-                height: 300px;
-                border-radius: 10px;
-                margin-left: 12px;
-                margin-bottom: -20px;
-              "
+                style="
+                  position: relative;
+                  z-index: 1;
+                  width: calc(100vw);
+                  height: 300px;
+                  border-radius: 10px;
+                  margin-left: 12px;
+                  margin-bottom: -20px;
+                "
               >
                 <template #title>
                   <n-space
-                      vertical
-                      justify="end"
-                      align="start"
-                      style="height: 280px; margin-left: 10px; margin-top: -6px"
+                    vertical
+                    justify="end"
+                    align="start"
+                    style="height: 280px; margin-left: 10px; margin-top: -6px"
                   >
                     <n-space vertical>
                       <n-space>
@@ -1495,16 +1651,16 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
                             maxWidth: 'calc(100vw - ' + (collapsed_width + 540) + 'px)',
                           }"
                           style="
-                          text-align: left;
-                          cursor: pointer;
-                          font-size: 26px;
-                          font-weight: 600;
-                          display: -webkit-box;
-                          -webkit-box-orient: vertical;
-                          -webkit-line-clamp: 1;
-                          overflow: hidden;
-                          text-overflow: ellipsis;
-                        "
+                            text-align: left;
+                            cursor: pointer;
+                            font-size: 26px;
+                            font-weight: 600;
+                            display: -webkit-box;
+                            -webkit-box-orient: vertical;
+                            -webkit-line-clamp: 1;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                          "
                         >
                           {{ this_audio_artist_name }}
                         </div>
@@ -1512,8 +1668,11 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
                     </n-space>
                     <n-space vertical style="margin-top: 4px">
                       <n-space
-                          align="center"
-                          style="border-left: 4px solid var(--primary-color-hover); border-radius: 3px"
+                        align="center"
+                        style="
+                          border-left: 4px solid var(--primary-color-hover);
+                          border-radius: 3px;
+                        "
                       >
                         <div style="font-size: 15px; font-weight: 600; margin-left: 13px">
                           {{ $t('GuideProviderSelectListings') + ':' }}
@@ -1521,35 +1680,41 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
                         <n-tooltip trigger="hover" placement="top">
                           <template #trigger>
                             <n-select
-                                size="small"
-                                :value="page_artistlists_selected"
-                                :options="page_artistlists_options"
-                                style="width: 166px"
-                                @update:value="page_artistlists_handleselected_updatevalue"
+                              size="small"
+                              :value="page_artistlists_selected"
+                              :options="page_artistlists_options"
+                              style="width: 166px"
+                              @update:value="page_artistlists_handleselected_updatevalue"
                             />
                           </template>
                           {{ $t('Select') + $t('LabelPlaylist') }}
                         </n-tooltip>
                       </n-space>
                       <n-space
-                          vertical
-                          justify="center"
-                          style="
-                        margin-top: 14px;
-                        padding-left: 14px;
-                        border-left: 4px solid var(--primary-color-hover);
-                        border-radius: 3px;
-                      "
+                        vertical
+                        justify="center"
+                        style="
+                          margin-top: 14px;
+                          padding-left: 14px;
+                          border-left: 4px solid var(--primary-color-hover);
+                          border-radius: 3px;
+                        "
                       >
                         <n-grid
-                            :cols="4"
-                            :x-gap="40"
-                            :y-gap="10"
-                            layout-shift-disabled
-                            style="width: 478px; margin-top: 4px"
+                          :cols="4"
+                          :x-gap="40"
+                          :y-gap="10"
+                          layout-shift-disabled
+                          style="width: 478px; margin-top: 4px"
                         >
-                          <n-gi v-for="artistlist in page_artistlists_statistic" :key="artistlist.id">
-                            <n-statistic :label="artistlist.label" :value="artistlist.artist_count" />
+                          <n-gi
+                            v-for="artistlist in page_artistlists_statistic"
+                            :key="artistlist.id"
+                          >
+                            <n-statistic
+                              :label="artistlist.label"
+                              :value="artistlist.artist_count"
+                            />
                           </n-gi>
                         </n-grid>
                       </n-space>
@@ -1559,16 +1724,16 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
                 <template #header> </template>
                 <template #avatar>
                   <img
-                      style="
-                    width: 280px;
-                    height: 280px;
-                    border-radius: 12px;
-                    object-fit: cover;
-                    margin-left: -3px;
-                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-                  "
-                      :src="getAssetImage(page_top_album_image_url)"
-                      alt=""
+                    style="
+                      width: 280px;
+                      height: 280px;
+                      border-radius: 12px;
+                      object-fit: cover;
+                      margin-left: -3px;
+                      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+                    "
+                    :src="getAssetImage(page_top_album_image_url)"
+                    alt=""
                   />
                 </template>
                 <template #extra> </template>
@@ -1802,7 +1967,7 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
     </div>
   </n-space>
 </template>
-<style>
+<style scoped>
 .n-base-selection .n-base-selection-label .n-base-selection-input .n-base-selection-input__content {
   font-size: 15px;
   font-weight: 600;
@@ -1997,45 +2162,168 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
   margin-top: 8px;
 }
 
+/* 艺术家信息头部样式 */
+.artist-header-info {
+  border-radius: 8px;
+  padding: 15px 25px 25px 25px;
+  background-color: var(--card-color);
+  position: relative;
+  top: 20px;
+  margin-bottom: 26px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-left: 8px solid var(--primary-color-hover);
+}
+
+.artist-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.artist-name-section {
+  flex: 1;
+}
+
+.artist-main-name {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-color-1);
+  cursor: pointer;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.artist-action-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  position: relative;
+  left: -2px;
+}
+
+.album-play-button {
+  border: 0;
+  background-color: var(--primary-color-hover);
+  color: white;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.album-play-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.love-button {
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.artist-stats-row {
+  border-top: 1px solid var(--border-color);
+  padding-top: 15px;
+  margin-top: 10px;
+}
+
+.artist-stats-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: left;
+  padding: 8px 0;
+}
+
+.artist-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+  padding: 10px 12px;
+  background-color: var(--card-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.artist-stat-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.stat-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-color-2);
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary-color-hover);
+  text-align: center;
+}
+
 /* 重构后的专辑列表项样式 */
 .artist-album-item-container {
   display: flex;
   flex-direction: row;
-  padding: 16px;
-  border-radius: 8px;
+  padding: 25px;
+  border-radius: 16px;
   background-color: var(--card-color);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   width: 100%;
   box-sizing: border-box;
   overflow: hidden;
+  margin-bottom: 25px;
+  flex-shrink: 0;
   transition: all 0.3s ease;
 }
+
 .artist-album-item-container:hover {
-  transform: scale(1.01); /* Slight zoom on hover */
-  box-shadow: 0 0 10px 0 var(--scrollbar-color);
-  z-index: 10;
-  position: relative;
-  background-color: var(--card-color); /* Use a variable for background */
-  border-color: var(--primary-color-hover);
-  box-shadow: 0 0 7px 0 var(--primary-color-suppl);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
 }
+
 .artist-album-item-container:nth-child(1) {
-  margin-top: 18px;
+  margin-top: 25px;
 }
 
-
-/* 移除:hover伪类，取消浮动动画效果 */
+.artist-album-item-container:last-child {
+  margin-bottom: 25px;
+}
 
 .artist-album-cover-section {
   flex-shrink: 0;
-  margin-right: 16px;
+  margin-right: 25px;
 }
 
 .artist-album-cover-image {
-  width: 120px;
-  height: 120px;
+  width: 170px;
+  height: 170px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .artist-album-info-section {
@@ -2049,13 +2337,13 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 15px;
   flex-shrink: 0;
 }
 
 .artist-album-name {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 700;
   color: var(--text-color-1);
   white-space: nowrap;
   overflow: hidden;
@@ -2066,60 +2354,30 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
 .artist-album-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   flex-shrink: 0;
-}
-
-.love-button {
-  border: 0;
-  background-color: transparent;
-  cursor: pointer;
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.rating-stars {
-  display: flex;
-  gap: 2px;
-  flex-shrink: 0;
-}
-
-.rating-button {
-  border: 0;
-  background-color: transparent;
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
-  width: 18px;
-  height: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .artist-album-year {
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 500;
   color: var(--text-color-2);
-  margin-bottom: 12px;
+  margin-bottom: 18px;
   flex-shrink: 0;
 }
 
 .artist-album-songs-list {
   flex: 1;
   overflow: hidden;
-  max-height: 80px;
 }
 
 .song-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 4px 0;
+  padding: 10px 0;
   border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
 }
 
 .song-item:last-child {
@@ -2127,34 +2385,54 @@ const { artist_Files_temporary, artist_starred_count } = storeToRefs(pageArtistS
 }
 
 .song-track-number {
-  font-size: 12px;
+  font-size: 15px;
   color: var(--text-color-3);
-  width: 20px;
+  width: 25px;
   flex-shrink: 0;
 }
 
 .song-title {
   flex: 1;
-  font-size: 12px;
+  font-size: 15px;
+  font-weight: 500;
   color: var(--text-color-1);
-  margin: 0 8px;
+  margin: 0 12px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .song-duration {
-  font-size: 12px;
+  font-size: 15px;
   color: var(--text-color-3);
-  width: 35px;
+  width: 45px;
   text-align: right;
   flex-shrink: 0;
 }
 
+.song-item-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: 12px;
+  flex-shrink: 0;
+}
+
+.song-play-button,
+.song-love-button {
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .songs-loading {
-  font-size: 12px;
+  font-size: 15px;
   color: var(--text-color-3);
   text-align: center;
-  padding: 8px 0;
+  padding: 12px 0;
 }
 </style>

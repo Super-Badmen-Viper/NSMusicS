@@ -1592,6 +1592,29 @@ onBeforeUnmount(() => {
   store_general_fetch_media_list.set_album_id('')
   store_general_fetch_media_list.set_artist_id('')
 })
+
+function scrollerStart() {
+  if (dynamicScroller.value && dynamicScroller.value.$el) {
+    dynamicScroller.value.$el.style.scrollBehavior = 'auto'
+    dynamicScroller.value.$el.scrollTop = 0
+    setTimeout(() => {
+      if (dynamicScroller.value && dynamicScroller.value.$el) {
+        dynamicScroller.value.$el.style.scrollBehavior = 'smooth'
+      }
+    }, 100)
+  }
+}
+function scrollerEnd() {
+  if (dynamicScroller.value && dynamicScroller.value.$el) {
+    dynamicScroller.value.$el.style.scrollBehavior = 'auto'
+    dynamicScroller.value.$el.scrollTop = dynamicScroller.value.$el.scrollHeight
+    setTimeout(() => {
+      if (dynamicScroller.value && dynamicScroller.value.$el) {
+        dynamicScroller.value.$el.style.scrollBehavior = 'smooth'
+      }
+    }, 100)
+  }
+}
 </script>
 
 <template>
@@ -2228,11 +2251,7 @@ onBeforeUnmount(() => {
               <n-button
                 quaternary
                 circle
-                @click="
-                  () => {
-                    dynamicScroller.$el.scrollTop = 0
-                  }
-                "
+                @click="scrollerStart"
               >
                 <template #icon>
                   <n-icon :size="20" :depth="2"><PaddingTop20Filled /></n-icon>
@@ -2246,11 +2265,7 @@ onBeforeUnmount(() => {
               <n-button
                 quaternary
                 circle
-                @click="
-                  () => {
-                    dynamicScroller.$el.scrollTop = dynamicScroller.$el.scrollHeight
-                  }
-                "
+                @click="scrollerEnd"
               >
                 <template #icon>
                   <n-icon :size="20" :depth="2"><PaddingDown20Filled /></n-icon>
@@ -3091,7 +3106,7 @@ onBeforeUnmount(() => {
 }
 .table-media {
   width: calc(100vw - 200px);
-  /* scroll-behavior: smooth; */
+  scroll-behavior: smooth;
 }
 .message-media {
   width: calc(100vw - 230px);

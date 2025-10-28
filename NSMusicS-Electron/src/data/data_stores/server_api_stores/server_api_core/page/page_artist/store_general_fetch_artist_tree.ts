@@ -9,9 +9,8 @@ export const store_general_fetch_artist_tree = reactive({
   async fetchData_ArtistTree() {
     const pageArtistStore = usePageArtistStore()
     pageArtistStore.artist_Tree_Artist_info = undefined
-    pageArtistStore.artist_Tree_Album_Tree_temporary= []
+    pageArtistStore.artist_Tree_Album_Tree_temporary = []
     if (store_server_user_model.model_server_type_of_local) {
-      
     } else if (store_server_user_model.model_server_type_of_web) {
       await this.fetchData_ArtistTree_of_server_web_start()
     }
@@ -23,7 +22,7 @@ export const store_general_fetch_artist_tree = reactive({
   async fetchData_ArtistTree_of_server_web_start() {
     const pageArtistStore = usePageArtistStore()
     pageArtistStore.artist_Tree_Artist_info = undefined
-    pageArtistStore.artist_Tree_Album_Tree_temporary= []
+    pageArtistStore.artist_Tree_Album_Tree_temporary = []
     this._start = 0
     this._end = 30
     await this.fetchData_ArtistTree_of_server_web()
@@ -37,10 +36,10 @@ export const store_general_fetch_artist_tree = reactive({
     try {
       if (this._artist_id.length > 0) {
         if (store_server_user_model.model_server_type_of_local) {
-
         } else if (store_server_user_model.model_server_type_of_web) {
           if (store_server_users.server_select_kind === 'ninesong') {
-            const get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
+            const get_NineSong_Temp_Data_To_LocalSqlite =
+              new Get_NineSong_Temp_Data_To_LocalSqlite()
             await get_NineSong_Temp_Data_To_LocalSqlite.get_artist_tree(
               store_server_login_info.server_url,
               String(this._start),

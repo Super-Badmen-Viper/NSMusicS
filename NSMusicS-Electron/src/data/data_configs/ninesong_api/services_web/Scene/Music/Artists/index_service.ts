@@ -54,11 +54,7 @@ export class Artists_ApiService_of_NineSong extends NineSong_Api_Services_Web {
     return this.sendRequest('GET', 'artists/filter_counts')
   }
 
-  public async getArtistTree(
-    start: string,
-    end: string,
-    artist_id: string,
-  ): Promise<any> {
+  public async getArtistTree(start: string, end: string, artist_id: string): Promise<any> {
     return this.sendRequest('GET', 'artists/tree', {
       start,
       end,

@@ -55,18 +55,6 @@ const { t } = useI18n({
   inheritLocale: true,
 })
 
-const computed_i18n_Label_ViewSetConfig_Cover_1 = computed(() =>
-  t('nsmusics.view_player.view_seting.coverSquare_1')
-)
-const computed_i18n_Label_ViewSetConfig_Cover_2 = computed(() =>
-  t('nsmusics.view_player.view_seting.coverRotate_2')
-)
-const computed_i18n_Label_ViewSetConfig_Cover_3 = computed(() =>
-  t('nsmusics.view_player.view_seting.coverBeaut_3')
-)
-const computed_i18n_Label_ViewSetConfig_Cover_4 = computed(() =>
-  t('nsmusics.view_player.view_seting.coverBase_4')
-)
 const computed_i18n_Label_Lyric_Not_Find = computed(() => t('HeaderNoLyrics'))
 
 const playerSettingStore = usePlayerSettingStore()
@@ -119,7 +107,6 @@ let unwatch = watch(
 )
 onMounted(() => {
   load_lyrics()
-  init_player_theme()
 })
 function load_lyrics() {
   if (playerAudioStore.this_audio_lyrics_string.length > 0) {
@@ -131,7 +118,7 @@ function load_lyrics() {
         }
       })
     }
-    handleAuto_fontSize(player_lyric_fontSize_Num)
+    handleAuto_fontSize(20)
     begin_lyrics_animation()
     try {
       setTimeout(() => {
@@ -499,9 +486,7 @@ const handleAuto_fontSize = (value: number) => {
   if (!scrollbar.value) return
   const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active')
   itemElements_active.forEach((itemElement: any) => {
-    itemElement.style.fontSize = !store_system_configs_info.window_state_miniplayer_desktop_lyric
-      ? '20px'
-      : '26px'
+    itemElement.style.fontSize = !store_system_configs_info.window_state_miniplayer_desktop_lyric ? '20px' : '26px'
     itemElement.style.fontWeight = 400
   })
   let marginTop = 6 + Math.floor((window.innerHeight - 880) / 200) * 0.5
@@ -510,22 +495,6 @@ const handleAuto_fontSize = (value: number) => {
     itemElement.style.marginTop = marginTop
     itemElement.style.lineHeight = marginTop * 2 * 0.1
   })
-}
-watch(
-  () => playerAppearanceStore.player_lyric_fontSize_Num,
-  (newValue) => {
-    handleLeave_Refresh_Lyric_Color()
-    handleAuto_fontSize(newValue)
-  }
-)
-
-////// player_configs bind theme_all
-function init_player_theme() {
-  if (playerAppearanceStore.player_background_model_num === 0) {
-    playerAppearanceStore.player_show_of_control_info = false
-  } else {
-    playerAppearanceStore.player_show_of_control_info = true
-  }
 }
 
 let timer_auto_hidden: string | number | NodeJS.Timeout | undefined

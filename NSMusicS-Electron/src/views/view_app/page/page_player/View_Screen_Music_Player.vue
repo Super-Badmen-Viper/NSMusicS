@@ -283,6 +283,7 @@ const scrollToItem = (index: number) => {
 
     const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active')
     itemElements_active[index].style.fontSize = player_lyric_fontSize.value
+    // itemElements_active[index].style.fontSize = '26px'
     itemElements_active[index].style.fontWeight = player_lyric_fontWeight.value
 
     const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info')
@@ -389,6 +390,7 @@ const startByteAnimations = (index: number, num: number) => {
       elementWidth += parseFloat(computedStyle.width)
 
       itemElements_active[i].style.fontSize = player_lyric_fontSize.value
+      // itemElements_active[i].style.fontSize = '26px'
       itemElements_active[i].style.fontWeight = 400
 
       itemElements_active[i].style.filter = 'blur(0px)'
@@ -541,6 +543,7 @@ const handleAuto_fontSize = (value: number) => {
     const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active')
     itemElements_active.forEach((itemElement: any) => {
       itemElement.style.fontSize = player_lyric_fontSize.value
+      // itemElement.style.fontSize = '26px'
       itemElement.style.fontWeight = 400
     })
     let marginTop = 6 + Math.floor((window.innerHeight - 880) / 200) * 0.5
@@ -552,7 +555,7 @@ const handleAuto_fontSize = (value: number) => {
   } catch {}
 }
 watch(
-  () => player_lyric_fontSize_Num,
+  () => player_lyric_fontSize_Num.value,
   (newValue) => {
     handleLeave_Refresh_Lyric_Color()
     handleAuto_fontSize(newValue)

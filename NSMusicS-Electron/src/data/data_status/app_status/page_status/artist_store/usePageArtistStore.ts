@@ -25,17 +25,17 @@ export const usePageArtistStore = defineStore('pageArtist', () => {
   const page_artistlists_options_Sort_key = ref<any[]>([])
   const page_artistlists_multi_sort = ref<string>('')
 
-  watch(page_artistlists_options_Sort_key, (newValue) => {
+  watch(page_artistlists_options_Sort_key, async (newValue) => {
     if (newValue != null) {
       page_artistlists_keyword.value = ''
       store_router_history_data_of_artist.fix_router_history_of_Artist_scroller_value(
         store_router_history_data_of_artist.router_history_model_of_Artist_scroller_value
       ) // 保留此滚轮值(上次浏览位置)
-      store_general_fetch_artist_list.fetchData_Artist()
+      await store_general_fetch_artist_list.fetchData_Artist()
     }
   })
 
-  watch(page_artistlists_keyword, (newValue) => {
+  watch(page_artistlists_keyword, async (newValue) => {
     page_artistlists_multi_sort.value = ''
     // 使用局部变量存储字符串值，避免重复访问 .value
     let keyword = page_artistlists_keyword.value
@@ -59,18 +59,18 @@ export const usePageArtistStore = defineStore('pageArtist', () => {
     page_artistlists_keyword_reset.value = true
     console.log('page_artistlists_keyword:' + page_artistlists_keyword.value)
 
-    store_general_fetch_artist_list.fetchData_Artist()
+    await store_general_fetch_artist_list.fetchData_Artist()
   })
 
-  watch(page_artistlists_selected, (newValue) => {
+  watch(page_artistlists_selected, async (newValue) => {
     console.log('page_artistlists_selected：' + newValue)
-    store_general_fetch_artist_list.fetchData_Artist()
+    await store_general_fetch_artist_list.fetchData_Artist()
   })
 
-  watch(list_data_StartUpdate, (newValue) => {
+  watch(list_data_StartUpdate, async (newValue) => {
     if (newValue) {
       page_artistlists_keyword.value = ''
-      store_general_fetch_artist_list.fetchData_Artist()
+      await store_general_fetch_artist_list.fetchData_Artist()
 
       store_router_history_data_of_artist.router_history_datas_of_Artist = []
       if (store_router_history_data_of_artist.router_select_history_date_of_Artist) {
@@ -96,6 +96,9 @@ export const usePageArtistStore = defineStore('pageArtist', () => {
     artist_item_count,
     artist_starred_count,
     artist_recently_count,
+
+    artist_Tree_Artist_info,
+    artist_Tree_Album_Tree_temporary,
 
     list_data_StartUpdate,
     page_artistlists_options,

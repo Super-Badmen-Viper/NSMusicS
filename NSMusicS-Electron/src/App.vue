@@ -140,7 +140,12 @@ function create_menuOptions_appBar() {
     },
     { key: 'divider-1', type: 'divider', props: { style: { marginLeft: '22px' } } },
     {
-      label: computed(() => renderRouterLink('recently_added', t('filter.recentlyAdded') + ' | ' + t('MediaInfoTimestamp'))),
+      label: computed(() =>
+        renderRouterLink(
+          'recently_added',
+          t('filter.recentlyAdded') + ' | ' + t('MediaInfoTimestamp')
+        )
+      ),
       key: 'recently_added',
       icon: renderIcon(History20Filled),
     },

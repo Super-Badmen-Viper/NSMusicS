@@ -101,6 +101,8 @@ export const store_router_data_logic = reactive({
     pageMediaStore.media_Files_temporary = []
     pageAlbumStore.album_Files_temporary = []
     pageArtistStore.artist_Files_temporary = []
+    pageArtistStore.artist_Tree_Artist_info = undefined
+    pageArtistStore.artist_Tree_Album_Tree_temporary = []
 
     // 清除其他页面临时数据
     pageTagStore.tag_metadata_find_model = false
@@ -160,6 +162,8 @@ export const store_router_data_logic = reactive({
     // 清除艺术家页面数据（除非需要保留）
     if (!keepArtistData) {
       pageArtistStore.artist_Files_temporary = []
+      pageArtistStore.artist_Tree_Artist_info = undefined
+      pageArtistStore.artist_Tree_Album_Tree_temporary = []
     }
 
     // 清除元数据页面临时数据

@@ -300,7 +300,10 @@ export const store_general_fetch_album_list = reactive({
 
     store_general_fetch_player_list.fetchData_PlayList(false)
 
-    if (store_router_data_info.router_select != 'home' && store_router_data_info.router_select != 'recently_added') {
+    if (
+      store_router_data_info.router_select != 'home' &&
+      store_router_data_info.router_select != 'recently_added'
+    ) {
       store_router_data_info.router_select = 'album'
       // home-page-album 传入则不需要指定album模式
       // recently-added-page-album 传入则不需要指定album模式

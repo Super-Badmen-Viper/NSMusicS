@@ -784,33 +784,28 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       store_system_configs_save.save_system_playlist_item_id_config()
     }
   }
-  public async get_artist_tree(
-    url: string,
-    _start: string,
-    _end: string,
-    _artist_id: string,
-  ) {
+  public async get_artist_tree(url: string, _start: string, _end: string, _artist_id: string) {
     url = url.includes('api') ? url : url + '/api'
     let artistTrees = []
-    const data = await this.artistsApi.getArtistTree(
-      _start,
-      _end,
-      _artist_id,
-    )
+    const data = await this.artistsApi.getArtistTree(_start, _end, _artist_id)
     artistTrees = data['ninesong-response']['artistTrees']
     if (Array.isArray(artistTrees) && artistTrees.length > 0) {
-      this.pageArtistStore.artist_Tree_Artist_info = artistTrees[0]['Artist'];
-      const albumTrees = artistTrees[0]['Albums'];
-      albumTrees.map((albumTree: any, index: number) => {
-        const album = this.mapAlbum(albumTree['Album'], url, index, 0);
+      this.pageArtistStore.artist_Tree_Artist_info = this.mapArtist(
+        artistTrees[0]['Artist'],
+        url,
+        0,
+        0
+      )
+      artistTrees[0]['Albums'].map((albumTree: any, index: number) => {
+        const album = this.mapAlbum(albumTree['Album'], url, index, 0)
         const mediaFiles = albumTree['MediaFiles'].map((mediaFile: any, media_index: number) => {
-          return this.mapMedia(mediaFile, url, index, media_index);
-        });
+          return this.mapMedia(mediaFile, url, index, media_index)
+        })
         const albumData = {
           album,
           mediaFiles,
         }
-        this.pageArtistStore.artist_Tree_Album_Tree_temporary.push(albumData);
+        this.pageArtistStore.artist_Tree_Album_Tree_temporary.push(albumData)
       })
     }
   }
@@ -1323,6 +1318,7 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       compilation: album.Compilation ? 1 : 0,
       song_count: album.SongCount,
       duration: album.Duration,
+      duration_txt: this.playerSettingStore.formatTime_RunTimeTicks_Min(album.Duration),
       genre: '',
       has_cover_art: album.HasCoverArt ? 1 : 0,
       created_at: album.CreatedAt,

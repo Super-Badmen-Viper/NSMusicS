@@ -18,19 +18,36 @@ export class Recommend_ApiService_of_NineSong extends NineSong_Api_Services_Web 
     })
   }
 
-  public async getRecommendAnnotationWordCloudItems(start, end, recommend_type, random_seed, offset: string): Promise<any> {
+  public async getRecommendAnnotationWordCloudItems(
+    start,
+    end,
+    recommend_type,
+    random_seed,
+    offset: string
+  ): Promise<any> {
     return this.sendRequest('POST', 'recommend/annotation_wordcloud', undefined, {
-      start, end, recommend_type, random_seed, offset
+      start,
+      end,
+      recommend_type,
+      random_seed,
+      offset,
     })
   }
-  public async getPersonalizedRecommendations(recommend_type, limit, user_id: string): Promise<any> {
+  public async getPersonalizedRecommendations(
+    recommend_type,
+    limit,
+    user_id: string
+  ): Promise<any> {
     return this.sendRequest('POST', 'recommend/personalized', undefined, {
-      recommend_type, limit, user_id
+      recommend_type,
+      limit,
+      user_id,
     })
   }
   public async getPopularRecommendations(recommend_type, limit: string): Promise<any> {
     return this.sendRequest('POST', 'recommend/popular', undefined, {
-      recommend_type, limit
+      recommend_type,
+      limit,
     })
   }
 }

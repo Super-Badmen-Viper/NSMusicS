@@ -22,6 +22,7 @@ import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_configs/navi
 import { Get_Jellyfin_Temp_Data_To_LocalSqlite } from '@/data/data_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite'
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
+import { store_general_fetch_artist_tree } from '@/data/data_stores/server_api_stores/server_api_core/page/page_artist/store_general_fetch_artist_tree'
 
 export const store_general_fetch_artist_list = reactive({
   async fetchData_Artist() {
@@ -241,6 +242,16 @@ export const store_general_fetch_artist_list = reactive({
       const pageArtistStore = usePageArtistStore()
       pageArtistStore.artist_Files_temporary = []
       await this.fetchData_Artist_of_server_web_start()
+      ///
+      if (
+        store_server_users.server_select_kind === 'ninesong' &&
+        store_router_data_info.router_select === 'artist'
+      ) {
+        if (pageArtistStore.artist_Files_temporary.length > 0) {
+          store_general_fetch_artist_tree._artist_id = pageArtistStore.artist_Files_temporary[0].id
+          await store_general_fetch_artist_tree.fetchData_ArtistTree()
+        }
+      }
     }
   },
   async fetchData_This_Artist_MediaList(artist_id: any) {
