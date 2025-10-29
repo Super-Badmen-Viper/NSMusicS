@@ -8,6 +8,7 @@ import {
   Open28Filled,
   PaddingDown20Filled,
   PaddingTop20Filled,
+  Play24Filled,
   Play24Regular,
   Search20Filled,
   Star24Regular,
@@ -1467,7 +1468,7 @@ onMounted(() => {
                     style="position: relative; left: 6px"
                     @click="Play_this_artist_all_media_list_click(artist_Tree_Artist_info?.id)"
                   >
-                    <icon :size="20"><Play24Regular /></icon>
+                    <icon :size="20"><Play24Filled /></icon>
                   </button>
                   <button
                     class="album-play-button"
@@ -1626,7 +1627,7 @@ onMounted(() => {
                           handleItemDbClick(item.mediaFiles[0], 0)
                         }"
                       >
-                        <icon :size="18"><Play24Regular /></icon>
+                        <icon :size="18"><Play24Filled /></icon>
                       </button>
 
                       <button
@@ -2469,7 +2470,7 @@ onMounted(() => {
   align-items: center;
   transition: all 0.3s ease;
   border-radius: 8px; /* iOS-style rounded corners */
-  box-shadow: 0 0 1px rgba(0, 0, 0, 0.05); /* Subtle initial shadow */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); /* Subtle initial shadow */
 }
 .artist_info:hover {
   transform: scale(1.01); /* Slight zoom on hover */
@@ -2503,7 +2504,6 @@ onMounted(() => {
   top: 20px;
   margin-bottom: 26px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-left: 8px solid var(--primary-color-hover);
 }
 
 .artist-header-row {
@@ -2594,6 +2594,10 @@ onMounted(() => {
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
+}
+.artist-stat-item:nth-child(1) {
+  border-left: 4px solid var(--primary-color-hover);
+  border-radius: 3px;
 }
 
 .artist-stat-item:hover {
