@@ -663,7 +663,7 @@ const player_theme_Styles = ref<PlayerTheme_LyricItem[]>([
   player_theme_3.value, // play model 3 ：炫胶唱片
   player_theme_4.value, // play model 4 ：专辑底图
   player_theme_5.value, // play model 5 ：皮肤底图  :disabled
-  // player_theme_6.value, // play model 5 ：皮肤底图  :disabled
+  player_theme_6.value, // play model 5 ：皮肤底图  :disabled
 ])
 
 ////// player_configs bind theme_all
@@ -2295,11 +2295,64 @@ onBeforeUnmount(() => {
   background-image: var(--background-image);
 }
 .animate__rotate_fast_model_6 {
-  animation: rotate 26s linear infinite;
+  animation: rotateAndPulse 18s linear infinite;
   animation-play-state: running;
 }
 .animate__rotate_fast_model_6_paused {
   animation-play-state: paused;
+}
+@keyframes rotateAndPulse {
+  0% {
+    transform: rotate(0deg) scale(0.95);
+  }
+  6.25% {
+    transform: rotate(22.5deg) scale(1.05);
+  }
+  12.5% {
+    transform: rotate(45deg) scale(0.95);
+  }
+  18.75% {
+    transform: rotate(67.5deg) scale(1.05);
+  }
+  25% {
+    transform: rotate(90deg) scale(0.95);
+  }
+  31.25% {
+    transform: rotate(112.5deg) scale(1.05);
+  }
+  37.5% {
+    transform: rotate(135deg) scale(0.95);
+  }
+  43.75% {
+    transform: rotate(157.5deg) scale(1.05);
+  }
+  50% {
+    transform: rotate(180deg) scale(0.95);
+  }
+  56.25% {
+    transform: rotate(202.5deg) scale(1.05);
+  }
+  62.5% {
+    transform: rotate(225deg) scale(0.95);
+  }
+  68.75% {
+    transform: rotate(247.5deg) scale(1.05);
+  }
+  75% {
+    transform: rotate(270deg) scale(0.95);
+  }
+  81.25% {
+    transform: rotate(292.5deg) scale(1.05);
+  }
+  87.5% {
+    transform: rotate(315deg) scale(0.95);
+  }
+  93.75% {
+    transform: rotate(337.5deg) scale(1.05);
+  }
+  100% {
+    transform: rotate(360deg) scale(0.95);
+  }
 }
 
 @keyframes rotate {

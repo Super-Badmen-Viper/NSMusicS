@@ -57,6 +57,7 @@ import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_
 import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
 import { debounce } from 'lodash'
 import { MultipleStopOutlined } from '@vicons/material'
+import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 
 const { t } = useI18n({
   inheritLocale: true,
@@ -64,6 +65,7 @@ const { t } = useI18n({
 
 const pageMediaStore = usePageMediaStore()
 const pageArtistStore = usePageArtistStore()
+const playerSettingStore = usePlayerSettingStore()
 const playerTagModifyStore = usePagePlayerTagModifyStore()
 const { page_artistlists_multi_sort, page_artistlists_selected, page_artistlists_options } =
   storeToRefs(pageArtistStore)
@@ -559,6 +561,17 @@ const handleItemClick_Rating_Tree = (id_rating: any, type: string) => {
     else if (type === 'album') store_local_data_set_albumInfo.Set_AlbumInfo_To_Rating(id, rating)
     else if (type === 'artist') store_local_data_set_artistInfo.Set_ArtistInfo_To_Rating(id, rating)
   }
+
+  if (type === 'media') {
+    artist_Tree_Album_Tree_temporary.value.map((item: any) => {
+      item.mediaFiles.map((media: any) => {
+        if (media.id === id) {
+          media.rating = rating
+          return
+        }
+      })
+    })
+  }
 }
 
 /// multi_level_sort
@@ -687,7 +700,9 @@ onMounted(() => {
   updateSortConditions()
 })
 
-const contextmenu = ref(null)
+const contextmenu_artist = ref(null)
+const contextmenu_album = ref(null)
+const contextmenu_media = ref(null)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'))
 const message = useMessage()
 const themeVars = useThemeVars()
@@ -713,7 +728,7 @@ async function update_playlist_addArtist(id: any, playlist_id: any) {
     console.error(e)
   }
 }
-async function menu_item_add_to_playlist_end() {
+async function menu_artist_item_add_to_playlist_end() {
   await store_general_fetch_media_list.fetchData_Media_Find_This_Artist(playlist_Menu_Item_Id.value)
   const matchingItems = pageMediaStore.media_Files_temporary.filter(
     (item: Media_File) => item.artist_id === playlist_Menu_Item_Id.value
@@ -732,9 +747,9 @@ async function menu_item_add_to_playlist_end() {
     item.absoluteIndex = index
   })
   store_system_configs_save.save_system_playlist_item_id_config()
-  contextmenu.value.hide()
+  contextmenu_artist.value.hide()
 }
-async function menu_item_add_to_playlist_next() {
+async function menu_artist_item_add_to_playlist_next() {
   await store_general_fetch_media_list.fetchData_Media_Find_This_Artist(playlist_Menu_Item_Id.value)
   const matchingItems = pageMediaStore.media_Files_temporary.filter(
     (item: Media_File) => item.artist_id === playlist_Menu_Item_Id.value
@@ -758,11 +773,105 @@ async function menu_item_add_to_playlist_next() {
       item.absoluteIndex = index
     })
     store_system_configs_save.save_system_playlist_item_id_config()
-    contextmenu.value.hide()
+    contextmenu_artist.value.hide()
   } else {
     console.error('Current audio song not found in playlist')
   }
 }
+async function menu_album_item_add_to_playlist_end() {
+  await store_general_fetch_media_list.fetchData_Media_Find_This_Album(playlist_Menu_Item_Id.value)
+  const matchingItems = pageMediaStore.media_Files_temporary.filter(
+    (item: Media_File) => item.album_id === playlist_Menu_Item_Id.value
+  )
+
+  pageMediaStore.media_Files_temporary = []
+
+  for (let item of matchingItems) {
+    const newItem: any = JSON.parse(JSON.stringify(item))
+    newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
+    playlistStore.playlist_MediaFiles_temporary.push(newItem)
+    playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id)
+  }
+
+  playlistStore.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+    item.absoluteIndex = index
+  })
+  store_system_configs_save.save_system_playlist_item_id_config()
+  contextmenu_album.value.hide()
+}
+async function menu_album_item_add_to_playlist_next() {
+  await store_general_fetch_media_list.fetchData_Media_Find_This_Album(playlist_Menu_Item_Id.value)
+  const matchingItems = pageMediaStore.media_Files_temporary.filter(
+    (item: Media_File) => item.album_id === playlist_Menu_Item_Id.value
+  )
+
+  pageMediaStore.media_Files_temporary = []
+
+  const index = playlistStore.playlist_MediaFiles_temporary.findIndex(
+    (item: any) => item.id === playerAudioStore.this_audio_song_id
+  )
+
+  if (index !== -1) {
+    matchingItems.forEach((item: Media_File, i: number) => {
+      const newItem = JSON.parse(JSON.stringify(item))
+      newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
+      playlistStore.playlist_MediaFiles_temporary.splice(index + 1 + i, 0, newItem)
+      playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.splice(index + 1 + i, 0, newItem.id)
+    })
+
+    playlistStore.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+      item.absoluteIndex = index
+    })
+    store_system_configs_save.save_system_playlist_item_id_config()
+    contextmenu_album.value.hide()
+  } else {
+    console.error('Current audio song not found in playlist')
+  }
+}
+async function menu_media_item_add_to_playlist_end() {
+  const item: Media_File | undefined = pageMediaStore.media_Files_temporary.find(
+    (mediaFile: Media_File) => mediaFile.id === playlist_Menu_Item_Id.value
+  )
+  if (item != undefined && item != 'undefined') {
+    const newItem: any = JSON.parse(JSON.stringify(item))
+    newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
+    playlistStore.playlist_MediaFiles_temporary.push(newItem)
+    playlistStore.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+      item.absoluteIndex = index
+    })
+
+    playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id)
+
+    store_system_configs_save.save_system_playlist_item_id_config()
+
+    contextmenu_media.value.hide()
+  }
+}
+async function menu_media_item_add_to_playlist_next() {
+  const item: Media_File | undefined = pageMediaStore.media_Files_temporary.find(
+    (mediaFile: Media_File) => mediaFile.id === playlist_Menu_Item_Id.value
+  )
+  if (item != undefined && item != 'undefined') {
+    let index = playlistStore.playlist_MediaFiles_temporary.findIndex(
+      (item: any) => item.id === playerAudioStore.this_audio_song_id
+    )
+
+    const newItem: any = JSON.parse(JSON.stringify(item))
+    newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
+    playlistStore.playlist_MediaFiles_temporary.splice(index + 1, 0, newItem)
+
+    playlistStore.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+      item.absoluteIndex = index
+    })
+
+    playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds.splice(index + 1, 0, newItem.id)
+
+    store_system_configs_save.save_system_playlist_item_id_config()
+
+    contextmenu_media.value.hide()
+  }
+}
+
 function menu_item_edit_selected_media_tags() {
   playerTagModifyStore.player_show_tag_kind = 'artist'
   const item: Album | undefined = artist_Files_temporary.value.find(
@@ -771,7 +880,7 @@ function menu_item_edit_selected_media_tags() {
   if (item != undefined && item != 'undefined') {
     playerTagModifyStore.player_current_artist_id = item.id
     playerTagModifyStore.player_show_tag_modify = true
-    contextmenu.value.hide()
+    contextmenu_artist.value.hide()
   }
 }
 
@@ -809,11 +918,11 @@ onMounted(() => {
   Refresh_page_artistlists_statistic()
 })
 const stopWatching_boolHandleItemClick_Played = watch(
-  () => usePlayerSettingStore().boolHandleItemClick_Played,
+  () => playerSettingStore.boolHandleItemClick_Played,
   (newValue, oldValue) => {
     if (newValue && newValue !== oldValue) {
       Refresh_page_artistlists_statistic()
-      usePlayerSettingStore().boolHandleItemClick_Played = false
+      playerSettingStore.boolHandleItemClick_Played = false
     }
   },
   { immediate: true }
@@ -864,11 +973,38 @@ onBeforeUnmount(() => {
 })
 
 //////
-const playAlbumSongs = async (album_id) => {
+const playAlbumSongs = async (album_id: string) => {
   if (!album_id) return
 }
-const playSong = async (media_id) => {
-  if (!media_id) return
+let click_count = 0;
+let click_timer: any = null;
+
+const handleItemClick = () => {
+  click_count++;
+  if (click_timer) {
+    clearTimeout(click_timer);
+  }
+  click_timer = setTimeout(() => {
+    click_count = 0;
+  }, 300);
+}
+const handleItemDbClick = async (media_file: any, index: number) => {
+  if (click_timer) {
+    clearTimeout(click_timer);
+  }
+  click_count = 0;
+  //
+  if (store_server_user_model.model_server_type_of_web) {
+    store_general_fetch_media_list.fetchData_Media_of_data_synchronization_to_playlist()
+    store_server_user_model.random_play_model = false
+  }
+  await playerSettingStore.update_current_media_info(media_file, index)
+  playerAppearanceStore.player_mode_of_lock_playlist = false
+  playerAudioStore.this_audio_restart_play = true
+  //
+  playlistStore.media_page_handleItemDbClick = true
+  store_general_fetch_player_list.fetchData_PlayList(false)
+  playlistStore.reset_carousel()
 }
 
 // 在setup上下文中获取Store实例
@@ -877,7 +1013,7 @@ const playerAudioStore = usePlayerAudioStore()
 const playerAppearanceStore = usePlayerAppearanceStore()
 const pageAlbumStore = usePageAlbumStore()
 // 使用 storeToRefs 解构出所需的响应式属性
-const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
+const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item, playlist_Menu_Item_Rating } =
   storeToRefs(playlistStore)
 const { page_top_album_image_url, this_audio_artist_name, this_audio_song_id } =
   storeToRefs(playerAudioStore)
@@ -1222,7 +1358,7 @@ function scrollerAlbumEnd() {
               :item="item"
               :active="active"
               :data-index="index"
-              v-contextmenu:contextmenu
+              v-contextmenu:contextmenu_artist
               @contextmenu.prevent="
                 () => {
                   playlist_Menu_Item = item.album || item
@@ -1283,6 +1419,13 @@ function scrollerAlbumEnd() {
             <!-- 艺术家信息头部 -->
             <div
               class="artist-header-info"
+              v-contextmenu:contextmenu_artist
+              @contextmenu.prevent="
+                () => {
+                  playlist_Menu_Item = artist_Tree_Artist_info
+                  playlist_Menu_Item_Id = artist_Tree_Artist_info.id
+                }
+              "
               :style="{
                 width: 'calc(100vw - ' + (collapsed_width - 35 + 295) + 'px)',
                 marginLeft: '10px',
@@ -1414,13 +1557,6 @@ function scrollerAlbumEnd() {
               :item="item"
               :active="active"
               :data-index="index"
-              v-contextmenu:contextmenu
-              @contextmenu.prevent="
-                () => {
-                  playlist_Menu_Item = item.album
-                  playlist_Menu_Item_Id = item.album.id
-                }
-              "
               :style="{
                 width: 'calc(100vw - ' + (collapsed_width - 35 + 295) + 'px)',
                 marginLeft: '10px',
@@ -1434,6 +1570,13 @@ function scrollerAlbumEnd() {
                     :src="item.album?.medium_image_url"
                     @error="handleImageError(item.album)"
                     class="artist-album-cover-image"
+                    v-contextmenu:contextmenu_album
+                @contextmenu.prevent="
+                  () => {
+                    playlist_Menu_Item = item.album
+                    playlist_Menu_Item_Id = item.album.id
+                  }
+                "
                     alt=""
                   />
                   <div style="margin-left: 1px; margin-top: 8px">
@@ -1451,7 +1594,10 @@ function scrollerAlbumEnd() {
                       <button
                         class="album-play-button"
                         style="position: relative; left: 11px"
-                        @click="playAlbumSongs(item.album?.id)"
+                        @click="()=>{
+                          pageMediaStore.media_Files_temporary = item.mediaFiles
+                          handleItemDbClick(item.mediaFiles[0], 0)
+                        }"
                       >
                         <icon :size="18"><Play24Regular /></icon>
                       </button>
@@ -1523,11 +1669,31 @@ function scrollerAlbumEnd() {
                       v-for="(song, songIndex) in item.mediaFiles || []"
                       :key="song.id"
                       class="song-item"
+                      v-contextmenu:contextmenu_media
+                      @contextmenu.prevent="
+                        () => {
+                          pageMediaStore.media_Files_temporary = item.mediaFiles
+                          playlist_Menu_Item = song
+                          playlist_Menu_Item_Id = song.id
+                          playlist_Menu_Item_Rating = song.rating
+                        }
+                      "
+                      @click="handleItemClick"
+                      @dblclick="()=>{
+                        pageMediaStore.media_Files_temporary = item.mediaFiles
+                        handleItemDbClick(song, songIndex)
+                      }"
                     >
                       <span class="song-track-number">{{ songIndex + 1 }}.</span>
                       <span class="song-title">{{ song.title }}</span>
                       <div class="song-item-actions">
-                        <button class="song-play-button">
+                        <button 
+                        class="song-play-button"
+                        @click="()=>{
+                          pageMediaStore.media_Files_temporary = item.mediaFiles
+                          handleItemDbClick(song, songIndex)
+                        }"
+                        >
                           <icon :size="18"><Play24Regular /></icon>
                         </button>
                         <button
@@ -1747,7 +1913,7 @@ function scrollerAlbumEnd() {
               :item="item"
               :active="active"
               :data-index="index"
-              v-contextmenu:contextmenu
+              v-contextmenu:contextmenu_artist
               @contextmenu.prevent="
                 () => {
                   playlist_Menu_Item = item
@@ -1934,7 +2100,7 @@ function scrollerAlbumEnd() {
         </DynamicScroller>
       </n-space>
       <v-contextmenu
-        ref="contextmenu"
+        ref="contextmenu_artist"
         class="v-contextmenu-item v-contextmenu-item--hover"
         style="z-index: 999"
       >
@@ -1948,10 +2114,10 @@ function scrollerAlbumEnd() {
           </v-contextmenu-item>
         </v-contextmenu-submenu>
         <v-contextmenu-divider />
-        <v-contextmenu-item @click="menu_item_add_to_playlist_end">
+        <v-contextmenu-item @click="menu_artist_item_add_to_playlist_end">
           {{ $t('player.addLast') }}
         </v-contextmenu-item>
-        <v-contextmenu-item @click="menu_item_add_to_playlist_next">
+        <v-contextmenu-item @click="menu_artist_item_add_to_playlist_next">
           {{ $t('player.addNext') }}
         </v-contextmenu-item>
         <v-contextmenu-item
@@ -1962,6 +2128,81 @@ function scrollerAlbumEnd() {
           @click="menu_item_edit_selected_media_tags"
         >
           {{ $t('page.contextMenu.showDetails') }}
+        </v-contextmenu-item>
+      </v-contextmenu>
+      <v-contextmenu
+        ref="contextmenu_album"
+        class="v-contextmenu-item v-contextmenu-item--hover"
+        style="z-index: 999"
+      >
+        <v-contextmenu-submenu :title="menu_item_add_to_songlist">
+          <v-contextmenu-item
+            v-for="n in playlist_names_ALLLists"
+            :key="n.value"
+            @click="update_playlist_addArtist(playlist_Menu_Item_Id, n.value)"
+          >
+            {{ n.label }}
+          </v-contextmenu-item>
+        </v-contextmenu-submenu>
+        <v-contextmenu-divider />
+        <v-contextmenu-item @click="menu_album_item_add_to_playlist_end">
+          {{ $t('player.addLast') }}
+        </v-contextmenu-item>
+        <v-contextmenu-item @click="menu_album_item_add_to_playlist_next">
+          {{ $t('player.addNext') }}
+        </v-contextmenu-item>
+      </v-contextmenu>
+      <v-contextmenu
+        ref="contextmenu_media"
+        class="v-contextmenu-item v-contextmenu-item--hover"
+        style="z-index: 999"
+      >
+        <v-contextmenu-submenu :title="menu_item_add_to_songlist">
+          <v-contextmenu-item
+            v-for="n in playlist_names_ALLLists"
+            :key="n.value"
+            @click="update_playlist_addArtist(playlist_Menu_Item_Id, n.value)"
+          >
+            {{ n.label }}
+          </v-contextmenu-item>
+        </v-contextmenu-submenu>
+        <v-contextmenu-divider />
+        <v-contextmenu-item @click="menu_media_item_add_to_playlist_end">
+          {{ $t('player.addLast') }}
+        </v-contextmenu-item>
+        <v-contextmenu-item @click="menu_media_item_add_to_playlist_next">
+          {{ $t('player.addNext') }}
+        </v-contextmenu-item>
+        <v-contextmenu-item>
+          <rate
+            class="viaSlot"
+            style="margin-left: -12px; margin-top: -12px; height: 16px"
+            :length="5"
+            v-model="playlist_Menu_Item_Rating"
+            @before-rate="
+              (value) => {
+                if (playlist_Menu_Item_Rating == 1) {
+                  before_rating = true
+                }
+              }
+            "
+            @after-rate="
+              (value) => {
+                if (playlist_Menu_Item_Rating == 1 && before_rating == true) {
+                  after_rating = true
+                  before_rating = false
+                }
+                handleItemClick_Rating_Tree(playlist_Menu_Item_Id + '-' + value, 'media')
+                if (after_rating) {
+                  if (playlist_Menu_Item_Rating === playerAudioStore.this_audio_song_id) {
+                    playerAudioStore.this_audio_song_rating = 0
+                  }
+                  playlist_Menu_Item_Rating = 0
+                  after_rating = false
+                }
+              }
+            "
+          />
         </v-contextmenu-item>
       </v-contextmenu>
     </div>
@@ -2301,8 +2542,8 @@ function scrollerAlbumEnd() {
 }
 
 .artist-album-item-container:hover {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-  transform: translateY(-2px);
+  border-color: var(--primary-color-hover);
+  box-shadow: 0 0 7px 0 var(--primary-color-suppl);
 }
 
 .artist-album-item-container:nth-child(1) {
@@ -2324,6 +2565,11 @@ function scrollerAlbumEnd() {
   object-fit: cover;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+.artist-album-cover-image:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
 }
 
 .artist-album-info-section {
@@ -2378,8 +2624,14 @@ function scrollerAlbumEnd() {
   padding: 10px 0;
   border-bottom: 1px solid var(--border-color);
   flex-shrink: 0;
+  transition: all 0.3s ease;
 }
-
+.song-item:hover {
+  /* transform: scale(1.1); */
+  background-color: var(--card-color-hover);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
 .song-item:last-child {
   border-bottom: none;
 }
@@ -2417,7 +2669,17 @@ function scrollerAlbumEnd() {
   flex-shrink: 0;
 }
 
-.song-play-button,
+.song-play-button {
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 4px;
+}
 .song-love-button {
   border: 0;
   background-color: transparent;
@@ -2427,6 +2689,13 @@ function scrollerAlbumEnd() {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-right: 8px;
+}
+.song-play-button:hover {
+  transform: scale(1.1);
+}
+.song-love-button:hover {
+  transform: scale(1.1);
 }
 
 .songs-loading {

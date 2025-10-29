@@ -86,6 +86,10 @@ const { player_show_sound_more } = storeToRefs(playerSoundMoreStore)
 const { player_show_tag_modify } = storeToRefs(playerTagModifyStore)
 
 window.addEventListener('resize', () => {
+  init_player_configs()
+})
+
+function init_player_configs() {
   store_system_configs_info.window_innerWidth = window.innerWidth
   store_system_configs_info.window_innerHeight = window.innerHeight
 
@@ -96,7 +100,7 @@ window.addEventListener('resize', () => {
       ? 36 + Math.floor((window.innerHeight - 880) / 200) * 6
       : 33 + Math.floor((window.innerHeight - 880) / 200) * 6
   playerAppearanceStore.player_lyric_fontSize = `${player_lyric_fontSize_Num}px`
-})
+}
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
@@ -837,6 +841,7 @@ onMounted(async () => {
   }
   playerSettingStore.player_init_play = true
   store_router_data_info.router_click = false
+  init_player_configs()
 })
 watch(
   () => store_system_configs_info.lang,
