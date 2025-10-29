@@ -275,7 +275,7 @@ export const store_general_fetch_artist_list = reactive({
     await store_general_fetch_media_list.fetchData_Media()
     store_router_data_info.find_artist_model = false
 
-    store_general_fetch_player_list.fetchData_PlayList(false)
+    await store_general_fetch_player_list.fetchData_PlayList(false)
 
     store_router_data_info.router_select_model_artist = true
 

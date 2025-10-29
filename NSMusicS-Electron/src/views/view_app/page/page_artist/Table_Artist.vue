@@ -999,9 +999,6 @@ onBeforeUnmount(() => {
 })
 
 //////
-const playAlbumSongs = async (album_id: string) => {
-  if (!album_id) return
-}
 let click_count = 0;
 let click_timer: any = null;
 
@@ -1032,6 +1029,22 @@ const handleItemDbClick = async (media_file: any, index: number) => {
   store_general_fetch_player_list.fetchData_PlayList(false)
   playlistStore.reset_carousel()
 }
+
+const playArtistMediaRandom = async (artist_id: string) => {
+  pageMediaStore.media_Files_random_loaded = true
+  await Play_this_artist_all_media_list_click(artist_id)
+  pageMediaStore.media_Files_random_loaded = false
+}
+const playAlbumMediaRandom = (mediaFiles: any[]) => {
+  let randomMediaFiles = [...mediaFiles].sort(() => Math.random() - 0.5);
+  randomMediaFiles.forEach((item: any, index: number) => {
+    item.absoluteIndex = index;
+  });
+  pageMediaStore.media_Files_temporary = randomMediaFiles
+  handleItemDbClick(randomMediaFiles[0], 0)
+}
+
+
 
 // 在setup上下文中获取Store实例
 const playlistStore = usePlaylistStore()
@@ -1465,15 +1478,15 @@ onMounted(() => {
                   <!-- 播放按钮 -->
                   <button
                     class="album-play-button"
-                    style="position: relative; left: 6px"
+                    style="position: relative; left: 18px"
                     @click="Play_this_artist_all_media_list_click(artist_Tree_Artist_info?.id)"
                   >
                     <icon :size="20"><Play24Filled /></icon>
                   </button>
                   <button
                     class="album-play-button"
-                    style="position: relative; left: 13px"
-                    @click="playAlbumSongs(artist_Tree_Artist_info?.id)"
+                    style="position: relative; left: 17px"
+                    @click="playArtistMediaRandom(artist_Tree_Artist_info?.id)"
                   >
                     <icon :size="16"><Random /></icon>
                   </button>
@@ -1621,13 +1634,20 @@ onMounted(() => {
                       <!-- 播放按钮 -->
                       <button
                         class="album-play-button"
-                        style="position: relative; left: 11px"
+                        style="position: relative; left: 16px"
                         @click="()=>{
                           pageMediaStore.media_Files_temporary = item.mediaFiles
                           handleItemDbClick(item.mediaFiles[0], 0)
                         }"
                       >
                         <icon :size="18"><Play24Filled /></icon>
+                      </button>
+                      <button
+                          class="album-play-button"
+                          style="position: relative; left: 15px"
+                          @click="playAlbumMediaRandom(item.mediaFiles)"
+                      >
+                        <icon :size="16"><Random /></icon>
                       </button>
 
                       <button
@@ -2474,10 +2494,11 @@ onMounted(() => {
 }
 .artist_info:hover {
   transform: scale(1.01); /* Slight zoom on hover */
-  box-shadow: 0 0 10px 0 var(--scrollbar-color);
   z-index: 10;
   position: relative;
   background-color: var(--card-color); /* Use a variable for background */
+  border-color: var(--primary-color-hover);
+  box-shadow: 0 0 7px 0 var(--primary-color-suppl);
 }
 .artist_info:hover .artist-name {
   font-size: 14px;
@@ -2498,7 +2519,7 @@ onMounted(() => {
 /* 艺术家信息头部样式 */
 .artist-header-info {
   border-radius: 8px;
-  padding: 15px 25px 25px 25px;
+  padding: 15px 20px 20px 20px;
   background-color: var(--card-color);
   position: relative;
   top: 20px;
@@ -2539,8 +2560,6 @@ onMounted(() => {
 
 .album-play-button {
   border: 0;
-  background-color: var(--primary-color-hover);
-  color: white;
   cursor: pointer;
   width: 32px;
   height: 32px;
@@ -2560,6 +2579,7 @@ onMounted(() => {
 
 .love-button {
   border: 0;
+  border-radius: 50%;
   background-color: transparent;
   cursor: pointer;
   width: 32px;
@@ -2568,6 +2588,11 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+.love-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
 }
 
 .artist-stats-row {
@@ -2588,21 +2613,23 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor: pointer;
   min-width: 80px;
   padding: 10px 12px;
   background-color: var(--card-color);
-  border-radius: 8px;
+  border-radius: 16px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
 }
 .artist-stat-item:nth-child(1) {
   border-left: 4px solid var(--primary-color-hover);
-  border-radius: 3px;
+  border-radius: 3px 16px 16px 3px;
 }
 
 .artist-stat-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  transform: scale(1.1);
+  border-color: var(--primary-color-hover);
+  box-shadow: 0 0 7px 0 var(--primary-color-suppl);
 }
 
 .stat-label {
@@ -2624,14 +2651,14 @@ onMounted(() => {
 .artist-album-item-container {
   display: flex;
   flex-direction: row;
-  padding: 25px;
+  padding: 20px;
+  margin-bottom: 25px;
   border-radius: 16px;
   background-color: var(--card-color);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   width: 100%;
   box-sizing: border-box;
   overflow: hidden;
-  margin-bottom: 25px;
   flex-shrink: 0;
   transition: all 0.3s ease;
 }
@@ -2664,7 +2691,8 @@ onMounted(() => {
 }
 .artist-album-cover-image:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  border-color: var(--primary-color-hover);
+  box-shadow: 0 0 7px 0 var(--primary-color-suppl);
 }
 
 .artist-album-info-section {
@@ -2678,6 +2706,7 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 4px;
   margin-bottom: 15px;
   flex-shrink: 0;
 }
@@ -2723,9 +2752,9 @@ onMounted(() => {
 }
 .song-item:hover {
   /* transform: scale(1.1); */
-  background-color: var(--card-color-hover);
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
   cursor: pointer;
+  border-color: var(--primary-color-hover);
+  box-shadow: 0 0 7px 0 var(--primary-color-suppl);
 }
 .song-item:last-child {
   border-bottom: none;

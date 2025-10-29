@@ -423,6 +423,13 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
           })
         }
       })
+      if (this.pageMediaStore.media_Files_random_loaded) {
+        this.pageMediaStore.media_Files_temporary =
+            [...this.pageMediaStore.media_Files_temporary].sort(() => Math.random() - 0.5);
+        this.pageMediaStore.media_Files_temporary.forEach((item: any, index: number) => {
+          item.absoluteIndex = index;
+        });
+      }
       if (!metadata_model) {
         if (store_general_fetch_media_list._load_model === 'play') {
           this.playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds =

@@ -30,6 +30,7 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
   const media_File_metadata = ref<any[]>([])
   const media_Files_temporary = ref<any[]>([])
   const media_Files_selected = ref<any[]>([])
+  const media_Files_random_loaded = ref(false)
   const media_page_sizes = ref(15)
   const media_item_count = ref(0)
   const media_starred_count = ref(0)
@@ -291,6 +292,7 @@ export const usePageMediaStore = defineStore('pageMedia', () => {
     media_File_metadata,
     media_Files_temporary,
     media_Files_selected,
+    media_Files_random_loaded,
     media_page_sizes,
     media_item_count,
     media_starred_count,
