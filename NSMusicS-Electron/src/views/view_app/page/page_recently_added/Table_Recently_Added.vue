@@ -642,35 +642,38 @@ const onScrollStart = () => {}
 const onScrollEnd = async () => {
   if (isScrolling.value) return
   isScrolling.value = true
-  if (
-    store_server_user_model.model_server_type_of_web &&
+  if (store_server_user_model.model_server_type_of_web) {
+    if (
+    store_server_users.server_select_kind === 'navidrome' ||
     store_server_users.server_select_kind === 'ninesong'
-  ) {
-    _start.value += 30
-    _end.value += 30
-    pageHomeStore.home_Files_temporary_recently_added_search = {
-      start: String(_start.value),
-      end: String(_end.value),
-    }
-    await store_general_fetch_home_list.fetchData_Home_of_recently_added()
+  )
+    {
+      _start.value += 30
+      _end.value += 30
+      pageHomeStore.home_Files_temporary_recently_added_search = {
+        start: String(_start.value),
+        end: String(_end.value),
+      }
+      await store_general_fetch_home_list.fetchData_Home_of_recently_added()
 
-    // 数据加载完成后，重新计算可见分组索引
-    // 获取外层滚动容器
-    const scroller = dynamicScroller.value ? (dynamicScroller.value as any).$el : null
-    if (scroller) {
-      // 获取滚动位置和容器尺寸
-      const scrollTop = scroller.scrollTop
-      const clientHeight = scroller.clientHeight
-      const scrollHeight = scroller.scrollHeight
+      // 数据加载完成后，重新计算可见分组索引
+      // 获取外层滚动容器
+      const scroller = dynamicScroller.value ? (dynamicScroller.value as any).$el : null
+      if (scroller) {
+        // 获取滚动位置和容器尺寸
+        const scrollTop = scroller.scrollTop
+        const clientHeight = scroller.clientHeight
+        const scrollHeight = scroller.scrollHeight
 
-      // 检查是否滚动到底部（距离底部小于150px）
-      const distanceToBottom = scrollHeight - scrollTop - clientHeight
-      if (distanceToBottom < 50) {
-        // 接近底部时，锁定显示最后一个分组的名称
-        const lastGroupIndex = groupedRecentlyAdded.value.length - 1
-        if (lastGroupIndex >= 0) {
-          visibleGroupIndex.value = lastGroupIndex
-          currentGroupName.value = groupedRecentlyAdded.value[lastGroupIndex].name
+        // 检查是否滚动到底部（距离底部小于150px）
+        const distanceToBottom = scrollHeight - scrollTop - clientHeight
+        if (distanceToBottom < 50) {
+          // 接近底部时，锁定显示最后一个分组的名称
+          const lastGroupIndex = groupedRecentlyAdded.value.length - 1
+          if (lastGroupIndex >= 0) {
+            visibleGroupIndex.value = lastGroupIndex
+            currentGroupName.value = groupedRecentlyAdded.value[lastGroupIndex].name
+          }
         }
       }
     }
@@ -770,10 +773,31 @@ const onScroll = (event: any) => {
       <n-select
         size="small"
         style="min-width: 172px"
+        :disabled="!(store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong')"
         :options="home_Files_temporary_type_options"
         v-model:value="home_Files_temporary_type_select"
         @update:value="change_home_Files_temporary_type"
       />
+      <div
+          v-if="
+          !(
+            store_server_user_model.model_server_type_of_web &&
+            store_server_users.server_select_kind === 'ninesong'
+          )
+        "
+          style="font-size: 15px; font-weight: bold"
+      >
+        {{
+          '-> ' +
+          $t('Alternate') +
+          $t('Data') +
+          $t('LabelSource') +
+          ', ' +
+          $t('error.serverRequired') +
+          ': NineSong'
+        }}
+        <br />
+      </div>
       <n-tooltip trigger="hover" placement="top">
         <template #trigger>
           <n-button quaternary circle @click="onRefreshSharp">
