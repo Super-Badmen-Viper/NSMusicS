@@ -88,7 +88,13 @@
       "pinyin": "پین‌یین (رومانیزه‌سازی چینی)",
       "hybrid_search": "جستجوی هیبریدی",
       "simplified_chinese": "چینی ساده شده",
-      "traditional_chinese": "چینی سنتی"
+      "traditional_chinese": "چینی سنتی",
+      "tree_level_view": "نمای درختی",
+      "this_week": "این هفته",
+      "this_month": "این ماه",
+      "last_3_months": "3 ماه گذشته",
+      "last_6_months": "6 ماه گذشته",
+      "this_year": "امسال"
     },
     "view_player": {
       "view_seting": {

@@ -88,7 +88,13 @@
       "pinyin": "Pinyin (čínská romantizace)",
       "hybrid_search": "Hybridní Vyhledávání",
       "simplified_chinese": "Zjednodušená Čínština",
-      "traditional_chinese": "Tradiční Čínština"
+      "traditional_chinese": "Tradiční Čínština",
+      "tree_level_view": "Stromové Zobrazení",
+      "this_week": "Tento Týden",
+      "this_month": "Tento Měsíc",
+      "last_3_months": "Poslední 3 Měsíce",
+      "last_6_months": "Posledních 6 Měsíců",
+      "this_year": "Tento Rok"
     },
     "view_player": {
       "view_seting": {

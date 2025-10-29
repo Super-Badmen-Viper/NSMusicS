@@ -88,7 +88,13 @@
       "pinyin": "ピンイン（中国語ローマ字）",
       "hybrid_search": "ハイブリッド検索",
       "simplified_chinese": "簡体字中国語",
-      "traditional_chinese": "繁体字中国語"
+      "traditional_chinese": "繁体字中国語",
+      "tree_level_view": "ツリー表示",
+      "this_week": "今週",
+      "this_month": "今月",
+      "last_3_months": "過去3ヶ月",
+      "last_6_months": "過去6ヶ月",
+      "this_year": "今年"
     },
     "view_player": {
       "view_seting": {

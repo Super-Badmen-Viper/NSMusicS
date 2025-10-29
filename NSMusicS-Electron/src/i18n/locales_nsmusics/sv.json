@@ -88,7 +88,13 @@
       "pinyin": "Pinyin (kinesisk romanisering)",
       "hybrid_search": "Hybrid Sökning",
       "simplified_chinese": "Förenklad Kinesiska",
-      "traditional_chinese": "Traditionell Kinesiska"
+      "traditional_chinese": "Traditionell Kinesiska",
+      "tree_level_view": "Trädvy",
+      "this_week": "Denna Vecka",
+      "this_month": "Denna Månad",
+      "last_3_months": "Senaste 3 Månaderna",
+      "last_6_months": "Senaste 6 Månaderna",
+      "this_year": "Detta År"
     },
     "view_player": {
       "view_seting": {

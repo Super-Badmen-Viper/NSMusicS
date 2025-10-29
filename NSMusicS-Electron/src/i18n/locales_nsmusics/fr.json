@@ -88,7 +88,13 @@
       "pinyin": "Pinyin (Romanisation Chinoise)",
       "hybrid_search": "Recherche Hybride",
       "simplified_chinese": "Chinois Simplifié",
-      "traditional_chinese": "Chinois Traditionnel"
+      "traditional_chinese": "Chinois Traditionnel",
+      "tree_level_view": "Vue Arborescente",
+      "this_week": "Cette Semaine",
+      "this_month": "Ce Mois",
+      "last_3_months": "3 Derniers Mois",
+      "last_6_months": "6 Derniers Mois",
+      "this_year": "Cette Année"
     },
     "view_player": {
       "view_seting": {

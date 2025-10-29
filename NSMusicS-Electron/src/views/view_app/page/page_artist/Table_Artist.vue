@@ -14,6 +14,8 @@ import {
   Star28Filled,
   TextSortAscending20Regular,
   TextSortDescending20Regular,
+  Grid24Regular,
+  DataTreemap24Regular,
 } from '@vicons/fluent'
 import { RefreshSharp } from '@vicons/ionicons5'
 import { Random } from '@vicons/fa'
@@ -58,6 +60,8 @@ import { store_general_model_player_list } from '@/data/data_stores/server_api_s
 import { debounce } from 'lodash'
 import { MultipleStopOutlined } from '@vicons/material'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
+import { TracingChannel } from 'node:diagnostics_channel'
+import { BorderBottom } from '@vicons/carbon'
 
 const { t } = useI18n({
   inheritLocale: true,
@@ -707,18 +711,39 @@ const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'))
 const message = useMessage()
 const themeVars = useThemeVars()
 
-async function update_playlist_addArtist(id: any, playlist_id: any) {
+async function update_playlist_addArtist(id: any, playlist_id: any, type: string) {
   try {
-    await store_general_fetch_media_list.fetchData_Media_Find_This_Artist(id)
+    if (store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong') {
+      store_general_fetch_media_list.fetchData_Media_of_server_web_clear_all_parms()
+      if (type === 'artist') {
+        await store_general_fetch_media_list.fetchData_Media_Find_This_Artist(id)
+      } else if (type === 'album') {
+        await store_general_fetch_media_list.fetchData_Media_Find_This_Album(id)
+      } else if (type === 'media') {
+        await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(id, playlist_id)
+        ////
+        message.success(t('common.add'))
+        store_general_model_player_list.get_playlist_tracks_temporary_update_media_file()
+        return
+      }
+    } else {
+      await store_general_fetch_media_list.fetchData_Media_Find_This_Artist(id)
+    }
+
     const matchingIds: string[] = []
     pageMediaStore.media_Files_temporary.forEach((item: Media_File) => {
-      if (item.artist_id === id) {
-        matchingIds.push(item.id)
+      if (type === 'artist') {
+        if (item.artist_id === id) {
+          matchingIds.push(item.id)
+        }
+      } else if (type === 'album') {
+        if (item.album_id === id) {
+          matchingIds.push(item.id)
+        }
       }
     })
     pageMediaStore.media_Files_temporary = []
     for (let item_id of matchingIds) {
-      ////
       await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(item_id, playlist_id)
     }
     ////
@@ -1059,6 +1084,16 @@ function scrollerAlbumEnd() {
     }, 100)
   }
 }
+
+/// 
+onMounted(() => {
+  if (store_server_user_model.model_server_type_of_local || 
+  (store_server_user_model.model_server_type_of_web && 
+  store_server_users.server_select_kind != 'ninesong' && 
+  pageArtistStore.page_view_model === 'tree')) {
+    pageArtistStore.page_view_model = 'grid'
+  }
+})
 </script>
 <template>
   <n-space vertical :size="12">
@@ -1117,9 +1152,9 @@ function scrollerAlbumEnd() {
           </n-tooltip>
           <n-tooltip trigger="hover" placement="top" v-if="bool_show_search_area">
             <template #trigger>
-              <n-input-group style="width: 144px">
+              <n-input-group style="width: 144px;">
                 <n-input
-                  style="width: 144px"
+                  style="width: 144px;"
                   ref="input_search_InstRef"
                   v-model:value="input_search_Value"
                   @keydown.enter="click_search"
@@ -1197,68 +1232,6 @@ function scrollerAlbumEnd() {
             </template>
             {{ $t('OptionCustomUsers') + $t('nsmusics.view_page.multi_level_sort') }}
           </n-tooltip>
-          <n-modal transform-origin="mouse" v-model:show="Type_Multi_Sort">
-            <n-card style="width: 450px; border-radius: 4px">
-              <n-space justify="space-between" align="center" style="margin-bottom: 10px">
-                <span style="font-size: 20px; font-weight: 600">
-                  {{ $t('OptionCustomUsers') + $t('nsmusics.view_page.multi_level_sort') }}
-                </span>
-              </n-space>
-              <n-space justify="space-between" align="center" style="margin-bottom: 10px">
-                {{ pageArtistStore.page_artistlists_multi_sort }}
-              </n-space>
-              <n-space vertical size="large" style="width: 400px; margin-bottom: 12px">
-                <n-space justify="space-between" v-for="(_, index) in sortConditions" :key="index">
-                  <n-select
-                    style="width: 300px"
-                    :options="getAvailableKeysForIndex(index)"
-                    v-model:value="sortConditions[index].key"
-                    @update:value="(value) => handleKeyChange(value, index)"
-                    :placeholder="$t('SelectSortField')"
-                  />
-                  <n-select
-                    style="width: 80px"
-                    :options="allSortOrders"
-                    v-model:value="sortConditions[index].order"
-                    :disabled="!sortConditions[index].key"
-                    @update:value="(value) => handleOrderChange(value, index)"
-                  />
-                </n-space>
-              </n-space>
-              <n-space
-                size="large"
-                align="center"
-                justify="space-between"
-                style="width: 400px; margin-bottom: 6px"
-              >
-                <n-space>
-                  <n-button
-                    secondary
-                    strong
-                    @click="
-                      () => {
-                        pageArtistStore.page_artistlists_multi_sort = ''
-                        updateSortConditions()
-                      }
-                    "
-                  >
-                    {{ $t('common.clear') + $t('Sort') }}
-                  </n-button>
-                </n-space>
-                <n-space align="center">
-                  <span style="font-size: 14px; font-weight: 500; margin-right: 8px">
-                    {{ $t('Sort') + $t('nsmusics.view_page.count') }}
-                  </span>
-                  <n-input-number
-                    v-model:value="conditionCount"
-                    :min="0"
-                    :max="allSortKeys.length"
-                    style="width: 80px"
-                  />
-                </n-space>
-              </n-space>
-            </n-card>
-          </n-modal>
 
           <n-divider
             vertical
@@ -1272,7 +1245,8 @@ function scrollerAlbumEnd() {
           />
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
-              <n-button quaternary circle @click="dynamicScroller.$el.scrollTop = 0">
+              <n-button quaternary circle 
+              @click="dynamicScroller.$el.scrollTop = 0">
                 <template #icon>
                   <n-icon :size="20" :depth="2"><PaddingTop20Filled /></n-icon>
                 </template>
@@ -1295,13 +1269,70 @@ function scrollerAlbumEnd() {
             {{ $t('action.moveToBottom') }}
           </n-tooltip>
         </n-space>
-        <n-space>
+        <n-space align="center">
+          <div v-if="!bool_show_search_area">
+            NineSong:
+          </div>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary circle
+                :style="{
+                  borderBottom: pageArtistStore.page_view_model === 'grid' ? '4px solid var(--primary-color-hover)' : 'none'
+                }"
+                :disabled="!(store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong')"
+                @click="pageArtistStore.page_view_model = 'grid'">
+                <template #icon>
+                  <n-icon :size="20" :depth="2"><Grid24Regular /></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('GridView') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary circle
+                :style="{
+                  borderBottom: pageArtistStore.page_view_model === 'tree' ? '4px solid var(--primary-color-hover)' : 'none'
+                }"
+                :disabled="!(store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong')"
+                @click="pageArtistStore.page_view_model = 'tree'">
+                <template #icon>
+                  <n-icon :size="20" :depth="2"><DataTreemap24Regular /></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('nsmusics.view_page.tree_level_view') }}
+          </n-tooltip>
+          <n-divider
+            vertical
+            style="
+              width: 2px;
+              height: 20px;
+              margin-top: -4px;
+              margin-left: 10px;
+              margin-right: -6px;
+            "
+          />
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary circle 
+              style="position: relative; left: 17px"
+              :disabled="!(store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong')"
+              @click="store_general_fetch_artist_tree.fetchData_ArtistTree()">
+                <template #icon>
+                  <n-icon :size="20" :depth="2"><RefreshSharp /></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('common.refresh') }}
+          </n-tooltip>
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button
                 quaternary
                 circle
-                style="position: relative; left: -29px"
+                style="position: relative; left: 9px"
+                :disabled="!(store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong')"
                 @click="scrollerAlbumStart"
               >
                 <template #icon>
@@ -1316,7 +1347,8 @@ function scrollerAlbumEnd() {
               <n-button
                 quaternary
                 circle
-                style="position: relative; left: -37px"
+                style="position: relative; left: 0px"
+                :disabled="!(store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong')"
                 @click="scrollerAlbumEnd"
               >
                 <template #icon>
@@ -1330,10 +1362,7 @@ function scrollerAlbumEnd() {
       </n-space>
       <n-space style="display: flex; flex-direction: row">
         <DynamicScroller
-          v-if="
-            store_server_user_model.model_server_type_of_web &&
-            store_server_users.server_select_kind === 'ninesong'
-          "
+          v-if="pageArtistStore.page_view_model === 'tree'"
           class="artist-wall"
           ref="dynamicScroller"
           :style="{
@@ -1393,12 +1422,7 @@ function scrollerAlbumEnd() {
           </template>
         </DynamicScroller>
         <DynamicScroller
-          v-if="
-            store_server_user_model.model_server_type_of_web &&
-            store_server_users.server_select_kind === 'ninesong' &&
-            processedAlbumTreeData &&
-            processedAlbumTreeData.length > 0
-          "
+          v-if="pageArtistStore.page_view_model === 'tree'"
           ref="dynamicScrollerAlbum"
           style="position: relative; left: 14px"
           :style="{
@@ -1423,7 +1447,7 @@ function scrollerAlbumEnd() {
               @contextmenu.prevent="
                 () => {
                   playlist_Menu_Item = artist_Tree_Artist_info
-                  playlist_Menu_Item_Id = artist_Tree_Artist_info.id
+                  playlist_Menu_Item_Id = artist_Tree_Artist_info?.id
                 }
               "
               :style="{
@@ -1434,14 +1458,14 @@ function scrollerAlbumEnd() {
               <!-- 第一行：艺术家名和操作按钮 -->
               <div class="artist-header-row">
                 <div class="artist-name-section">
-                  <span class="artist-main-name">{{ artist_Tree_Artist_info.name }}</span>
+                  <span class="artist-main-name">{{ artist_Tree_Artist_info?.name }}</span>
                 </div>
                 <div class="artist-action-buttons">
                   <!-- 播放按钮 -->
                   <button
                     class="album-play-button"
                     style="position: relative; left: 6px"
-                    @click="Play_this_artist_all_media_list_click(artist_Tree_Artist_info.id)"
+                    @click="Play_this_artist_all_media_list_click(artist_Tree_Artist_info?.id)"
                   >
                     <icon :size="20"><Play24Regular /></icon>
                   </button>
@@ -1462,8 +1486,9 @@ function scrollerAlbumEnd() {
                           artist_Tree_Artist_info?.favorite,
                           'artist'
                         )
-                        if (artist_Tree_Artist_info)
+                        if (artist_Tree_Artist_info){
                           artist_Tree_Artist_info.favorite = !artist_Tree_Artist_info.favorite
+                        }
                       }
                     "
                   >
@@ -1491,15 +1516,17 @@ function scrollerAlbumEnd() {
                       "
                       @after-rate="
                         (value) => {
-                          after_rating =
-                            (artist_Tree_Artist_info?.rating || 0) === 1 && before_rating
-                          handleItemClick_Rating_Tree(
-                            `${artist_Tree_Artist_info?.id || ''}-${value}`,
-                            'artist'
-                          )
-                          if (after_rating) {
-                            if (artist_Tree_Artist_info) artist_Tree_Artist_info.rating = 0
-                            after_rating = false
+                          if (artist_Tree_Artist_info) {
+                            after_rating =
+                              (artist_Tree_Artist_info.rating || 0) === 1 && before_rating
+                            handleItemClick_Rating_Tree(
+                              `${artist_Tree_Artist_info.id || ''}-${value}`,
+                              'artist'
+                            )
+                            if (after_rating) {
+                              artist_Tree_Artist_info.rating = 0
+                              after_rating = false
+                            }
                           }
                         }
                       "
@@ -1513,38 +1540,38 @@ function scrollerAlbumEnd() {
                 <div class="artist-stats-container">
                   <div class="artist-stat-item">
                     <span class="stat-label">{{ $t('entity.track_other') }}</span>
-                    <span class="stat-value">{{ artist_Tree_Artist_info.song_count || 0 }}</span>
+                    <span class="stat-value">{{ artist_Tree_Artist_info?.song_count || 0 }}</span>
                   </div>
                   <div class="artist-stat-item">
                     <span class="stat-label">{{
                       $t('nsmusics.view_page.guest') + $t('entity.track_other')
                     }}</span>
                     <span class="stat-value">{{
-                      artist_Tree_Artist_info.guest_song_count || 0
+                      artist_Tree_Artist_info?.guest_song_count || 0
                     }}</span>
                   </div>
                   <div class="artist-stat-item">
                     <span class="stat-label">{{ $t('entity.album_other') }}</span>
-                    <span class="stat-value">{{ artist_Tree_Artist_info.album_count || 0 }}</span>
+                    <span class="stat-value">{{ artist_Tree_Artist_info?.album_count || 0 }}</span>
                   </div>
                   <div class="artist-stat-item">
                     <span class="stat-label">{{
                       $t('nsmusics.view_page.guest') + $t('entity.album_other')
                     }}</span>
                     <span class="stat-value">{{
-                      artist_Tree_Artist_info.guest_album_count || 0
+                      artist_Tree_Artist_info?.guest_album_count || 0
                     }}</span>
                   </div>
                   <div class="artist-stat-item">
                     <span class="stat-label">{{ $t('nsmusics.view_page.disk') }}</span>
-                    <span class="stat-value">{{ artist_Tree_Artist_info.cue_count || 0 }}</span>
+                    <span class="stat-value">{{ artist_Tree_Artist_info?.cue_count || 0 }}</span>
                   </div>
                   <div class="artist-stat-item">
                     <span class="stat-label">{{
                       $t('nsmusics.view_page.guest') + $t('nsmusics.view_page.disk')
                     }}</span>
                     <span class="stat-value">{{
-                      artist_Tree_Artist_info.guest_cue_count || 0
+                      artist_Tree_Artist_info?.guest_cue_count || 0
                     }}</span>
                   </div>
                 </div>
@@ -1732,7 +1759,7 @@ function scrollerAlbumEnd() {
           </template>
         </DynamicScroller>
         <DynamicScroller
-          v-else
+          v-if="pageArtistStore.page_view_model === 'grid'"
           class="artist-wall"
           ref="dynamicScroller"
           :style="{
@@ -2108,7 +2135,7 @@ function scrollerAlbumEnd() {
           <v-contextmenu-item
             v-for="n in playlist_names_ALLLists"
             :key="n.value"
-            @click="update_playlist_addArtist(playlist_Menu_Item_Id, n.value)"
+            @click="update_playlist_addArtist(playlist_Menu_Item_Id, n.value, 'artist')"
           >
             {{ n.label }}
           </v-contextmenu-item>
@@ -2139,7 +2166,7 @@ function scrollerAlbumEnd() {
           <v-contextmenu-item
             v-for="n in playlist_names_ALLLists"
             :key="n.value"
-            @click="update_playlist_addArtist(playlist_Menu_Item_Id, n.value)"
+            @click="update_playlist_addArtist(playlist_Menu_Item_Id, n.value, 'album')"
           >
             {{ n.label }}
           </v-contextmenu-item>
@@ -2161,7 +2188,7 @@ function scrollerAlbumEnd() {
           <v-contextmenu-item
             v-for="n in playlist_names_ALLLists"
             :key="n.value"
-            @click="update_playlist_addArtist(playlist_Menu_Item_Id, n.value)"
+            @click="update_playlist_addArtist(playlist_Menu_Item_Id, n.value, 'media')"
           >
             {{ n.label }}
           </v-contextmenu-item>
@@ -2173,6 +2200,7 @@ function scrollerAlbumEnd() {
         <v-contextmenu-item @click="menu_media_item_add_to_playlist_next">
           {{ $t('player.addNext') }}
         </v-contextmenu-item>
+        <v-contextmenu-divider/>
         <v-contextmenu-item>
           <rate
             class="viaSlot"
@@ -2205,6 +2233,69 @@ function scrollerAlbumEnd() {
           />
         </v-contextmenu-item>
       </v-contextmenu>
+
+      <n-modal transform-origin="mouse" v-model:show="Type_Multi_Sort">
+            <n-card style="width: 450px; border-radius: 4px">
+              <n-space justify="space-between" align="center" style="margin-bottom: 10px">
+                <span style="font-size: 20px; font-weight: 600">
+                  {{ $t('OptionCustomUsers') + $t('nsmusics.view_page.multi_level_sort') }}
+                </span>
+              </n-space>
+              <n-space justify="space-between" align="center" style="margin-bottom: 10px">
+                {{ pageArtistStore.page_artistlists_multi_sort }}
+              </n-space>
+              <n-space vertical size="large" style="width: 400px; margin-bottom: 12px">
+                <n-space justify="space-between" v-for="(_, index) in sortConditions" :key="index">
+                  <n-select
+                    style="width: 300px"
+                    :options="getAvailableKeysForIndex(index)"
+                    v-model:value="sortConditions[index].key"
+                    @update:value="(value) => handleKeyChange(value, index)"
+                    :placeholder="$t('SelectSortField')"
+                  />
+                  <n-select
+                    style="width: 80px"
+                    :options="allSortOrders"
+                    v-model:value="sortConditions[index].order"
+                    :disabled="!sortConditions[index].key"
+                    @update:value="(value) => handleOrderChange(value, index)"
+                  />
+                </n-space>
+              </n-space>
+              <n-space
+                size="large"
+                align="center"
+                justify="space-between"
+                style="width: 400px; margin-bottom: 6px"
+              >
+                <n-space>
+                  <n-button
+                    secondary
+                    strong
+                    @click="
+                      () => {
+                        pageArtistStore.page_artistlists_multi_sort = ''
+                        updateSortConditions()
+                      }
+                    "
+                  >
+                    {{ $t('common.clear') + $t('Sort') }}
+                  </n-button>
+                </n-space>
+                <n-space align="center">
+                  <span style="font-size: 14px; font-weight: 500; margin-right: 8px">
+                    {{ $t('Sort') + $t('nsmusics.view_page.count') }}
+                  </span>
+                  <n-input-number
+                    v-model:value="conditionCount"
+                    :min="0"
+                    :max="allSortKeys.length"
+                    style="width: 80px"
+                  />
+                </n-space>
+              </n-space>
+            </n-card>
+      </n-modal>
     </div>
   </n-space>
 </template>

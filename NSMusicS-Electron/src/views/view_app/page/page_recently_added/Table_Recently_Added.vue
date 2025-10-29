@@ -124,17 +124,26 @@ const getTimeGroupName = (date: Date): string => {
   const now = new Date()
   const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24))
 
-  if (diffDays <= 7) return '本周'
-  if (diffDays <= 30) return '本月'
-  if (diffDays <= 90) return '最近3个月'
-  if (diffDays <= 180) return '最近6个月'
+  if (diffDays <= 7) return t('nsmusics.view_page.this_week')
+  if (diffDays <= 30) return t('nsmusics.view_page.this_month')
+  if (diffDays <= 90) return t('nsmusics.view_page.last_3_months')
+  if (diffDays <= 180) return t('nsmusics.view_page.last_6_months')
 
   const year = date.getFullYear()
-  if (year === now.getFullYear()) return '今年'
+  if (year === now.getFullYear()) return t('nsmusics.view_page.this_year')
 
   // 返回年份作为分组名
   return year.toString()
 }
+
+// 定义时间分组名称的计算属性，确保语言切换时能实时更新
+const timeGroupNames = computed(() => ({
+  this_week: t('nsmusics.view_page.this_week'),
+  this_month: t('nsmusics.view_page.this_month'),
+  last_3_months: t('nsmusics.view_page.last_3_months'),
+  last_6_months: t('nsmusics.view_page.last_6_months'),
+  this_year: t('nsmusics.view_page.this_year')
+}))
 
 // 按时间分组的数据
 const groupedRecentlyAdded = computed(() => {
@@ -172,8 +181,14 @@ const groupedRecentlyAdded = computed(() => {
     }
   })
 
-  // 动态生成分组顺序
-  const groupOrder = ['本周', '本月', '最近3个月', '最近6个月', '今年']
+  // 动态生成分组顺序，使用计算属性确保语言切换时能实时更新
+  const groupOrder = [
+    timeGroupNames.value.this_week,
+    timeGroupNames.value.this_month,
+    timeGroupNames.value.last_3_months,
+    timeGroupNames.value.last_6_months,
+    timeGroupNames.value.this_year
+  ]
 
   // 按年份降序添加
   const sortedYears = Array.from(years).sort((a, b) => b - a)

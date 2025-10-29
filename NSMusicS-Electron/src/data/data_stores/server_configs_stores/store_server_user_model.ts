@@ -195,6 +195,9 @@ export const store_server_user_model = reactive({
           const folder_Entity_ApiService_of_NineSong = new Folder_Entity_ApiService_of_NineSong(url)
           store_server_users.server_all_library =
             await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
+          ///
+          const pageArtistStore = usePageArtistStore()
+          pageArtistStore.page_view_model = 'tree'
         } else {
           if (store_system_configs_info.desktop_system_kind === 'docker') {
             store_server_login_logic.server_logout()

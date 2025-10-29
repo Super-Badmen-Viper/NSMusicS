@@ -24,11 +24,14 @@ import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/p
 import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
 import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { store_local_db_info } from '@/data/data_stores/local_app_stores/store_local_db_info'
+import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
 
 const playerSettingStore = usePlayerSettingStore()
 const playlistStore = usePlaylistStore()
 const playerAudioStore = usePlayerAudioStore()
 const pageMediaStore = usePageMediaStore()
+const pageArtistStore = usePageArtistStore()
+
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 import { store_server_data_select_logic } from '@/data/data_stores/server_configs_stores/server_data_select/store_server_data_select_logic'
 import { Users_ApiService_of_Je } from '@/data/data_configs/jellyfin_api/services_web/Users/index_service'
@@ -306,6 +309,8 @@ async function update_server_config_of_current_user_of_sqlite(value: any, select
           store_server_users.server_select_kind = 'emby'
         } else if (user_config?.type === 'ninesong') {
           store_server_users.server_select_kind = 'ninesong'
+          ///
+          pageArtistStore.page_view_model = 'tree'
         }
         store_system_configs_save.save_system_config_of_App_Configs()
       } else {

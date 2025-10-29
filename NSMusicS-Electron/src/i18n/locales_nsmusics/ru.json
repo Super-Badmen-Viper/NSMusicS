@@ -88,7 +88,13 @@
       "pinyin": "Пиньинь (Китайская романизация)",
       "hybrid_search": "Гибридный Поиск",
       "simplified_chinese": "Упрощенный Китайский",
-      "traditional_chinese": "Традиционный Китайский"
+      "traditional_chinese": "Традиционный Китайский",
+      "tree_level_view": "Древовидное Представление",
+      "this_week": "Эта Неделя",
+      "this_month": "Этот Месяц",
+      "last_3_months": "Последние 3 Месяца",
+      "last_6_months": "Последние 6 Месяцев",
+      "this_year": "Этот Год"
     },
     "view_player": {
       "view_seting": {

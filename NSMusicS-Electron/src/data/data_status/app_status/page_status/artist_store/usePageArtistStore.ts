@@ -14,6 +14,8 @@ export const usePageArtistStore = defineStore('pageArtist', () => {
   const artist_Tree_Artist_info = ref<any>()
   const artist_Tree_Album_Tree_temporary = ref<any[]>([])
 
+  const page_view_model = ref<string>('tree')
+
   const list_data_StartUpdate = ref<boolean>(false)
   const page_artistlists_options = ref<any[]>([])
   const page_artistlists_statistic = ref<any[]>([])
@@ -99,6 +101,8 @@ export const usePageArtistStore = defineStore('pageArtist', () => {
 
     artist_Tree_Artist_info,
     artist_Tree_Album_Tree_temporary,
+
+    page_view_model,
 
     list_data_StartUpdate,
     page_artistlists_options,

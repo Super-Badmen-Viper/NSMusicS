@@ -88,7 +88,13 @@
       "pinyin": "Pinyin (Chinese romanisatie)",
       "hybrid_search": "Hybride Zoeken",
       "simplified_chinese": "Vereenvoudigd Chinees",
-      "traditional_chinese": "Traditioneel Chinees"
+      "traditional_chinese": "Traditioneel Chinees",
+      "tree_level_view": "Boomstructuurweergave",
+      "this_week": "Deze Week",
+      "this_month": "Deze Maand",
+      "last_3_months": "Afgelopen 3 Maanden",
+      "last_6_months": "Afgelopen 6 Maanden",
+      "this_year": "Dit Jaar"
     },
     "view_player": {
       "view_seting": {

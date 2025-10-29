@@ -90,7 +90,13 @@
       "range": "范围",
       "hybrid_search": "混合搜索",
       "simplified_chinese": "简体中文",
-      "traditional_chinese": "繁体中文"
+      "traditional_chinese": "繁体中文",
+      "tree_level_view": "树形视图",
+      "this_week": "本周",
+      "this_month": "本月",
+      "last_3_months": "最近3个月",
+      "last_6_months": "最近6个月",
+      "this_year": "今年"
     },
     "view_player": {
       "view_seting": {
