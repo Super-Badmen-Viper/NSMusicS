@@ -1,5 +1,5 @@
-import {Navidrome_Api_Services_Web} from '../../Navidrome_Api_Services_Web'
-import {usePageHomeStore} from "../../../../../data_status/app_status/page_status/home_store/usePageHomeStore";
+import { Navidrome_Api_Services_Web } from '../../Navidrome_Api_Services_Web'
+import { usePageHomeStore } from '../../../../../data_status/app_status/page_status/home_store/usePageHomeStore'
 
 export class Home_Lists_ApiWebService_of_ND extends Navidrome_Api_Services_Web {
   public async getAlbumList_Play_Count(): Promise<any> {

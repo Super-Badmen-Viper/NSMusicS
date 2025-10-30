@@ -12,7 +12,7 @@ onMounted(async () => {
 
 <template>
   <div class="view_show">
-    <Table_Recently_Added/>
+    <Table_Recently_Added />
   </div>
 </template>
 

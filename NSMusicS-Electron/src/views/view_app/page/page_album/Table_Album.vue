@@ -354,7 +354,7 @@ if (
     { label: computed(() => t('OptionRandom')), key: 'Random', state_Sort: state_Sort.Default },
   ]
 }
-let Select_Sort_Model = false
+const Select_Sort_Model = ref(false)
 let options_Sort = computed(() => {
   if (
     pageAlbumStore.page_albumlists_options_Sort_key != null &&
@@ -426,7 +426,10 @@ const handleSelect_Sort = (key: string | number) => {
       order: _state_Sort_,
     },
   ]
-
+  check_sort_state()
+  scrollTo(0)
+}
+function check_sort_state() {
   const sortKey =
     pageAlbumStore.page_albumlists_options_Sort_key.length > 0 &&
     pageAlbumStore.page_albumlists_options_Sort_key[0].order !== 'default'
@@ -437,13 +440,14 @@ const handleSelect_Sort = (key: string | number) => {
     pageAlbumStore.page_albumlists_options_Sort_key[0].order !== 'default'
       ? pageAlbumStore.page_albumlists_options_Sort_key[0].order.replace('end', '')
       : ''
-  Select_Sort_Model = !(
+  Select_Sort_Model.value = !(
     (sortKey === '_id' || sortKey === 'id') &&
     (sortOrder === '' || sortOrder === 'ascend')
   )
-
-  scrollTo(0)
 }
+onMounted(() => {
+  check_sort_state()
+})
 const options_Sort_key_Default_key = ref()
 const options_Sort_key_Default = ref<SortItem[]>()
 // gridItems Search(filter)
@@ -1137,10 +1141,7 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
 
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
-              <n-badge
-                :value="page_albumlists_filter_year"
-                :offset="[22, 17]"
-              >
+              <n-badge :value="page_albumlists_filter_year" :offset="[22, 17]">
                 <n-button quaternary circle @click="Type_Filter_Show = true">
                   <template #icon>
                     <n-icon :size="20"><Filter20Filled /></n-icon>
@@ -1636,109 +1637,102 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
       </v-contextmenu>
 
       <n-modal transform-origin="mouse" v-model:show="Type_Multi_Sort">
-            <n-card style="width: 450px; border-radius: 4px">
-              <n-space justify="space-between" align="center" style="margin-bottom: 10px">
-                <span style="font-size: 20px; font-weight: 600">
-                  {{ $t('OptionCustomUsers') + $t('nsmusics.view_page.multi_level_sort') }}
-                </span>
-              </n-space>
-              <n-space justify="space-between" align="center" style="margin-bottom: 10px">
-                {{ page_albumlists_multi_sort }}
-              </n-space>
-              <n-space vertical size="large" style="width: 400px; margin-bottom: 12px">
-                <n-space justify="space-between" v-for="(_, index) in sortConditions" :key="index">
-                  <n-select
-                    style="width: 300px"
-                    :options="getAvailableKeysForIndex(index)"
-                    v-model:value="sortConditions[index].key"
-                    @update:value="(value) => handleKeyChange(value, index)"
-                    :placeholder="$t('SelectSortField')"
-                  />
-                  <n-select
-                    style="width: 80px"
-                    :options="allSortOrders"
-                    v-model:value="sortConditions[index].order"
-                    :disabled="!sortConditions[index].key"
-                    @update:value="(value) => handleOrderChange(value, index)"
-                  />
-                </n-space>
-              </n-space>
-              <n-space
-                size="large"
-                align="center"
-                justify="space-between"
-                style="width: 400px; margin-bottom: 6px"
+        <n-card style="width: 450px; border-radius: 4px">
+          <n-space justify="space-between" align="center" style="margin-bottom: 10px">
+            <span style="font-size: 20px; font-weight: 600">
+              {{ $t('OptionCustomUsers') + $t('nsmusics.view_page.multi_level_sort') }}
+            </span>
+          </n-space>
+          <n-space justify="space-between" align="center" style="margin-bottom: 10px">
+            {{ page_albumlists_multi_sort }}
+          </n-space>
+          <n-space vertical size="large" style="width: 400px; margin-bottom: 12px">
+            <n-space justify="space-between" v-for="(_, index) in sortConditions" :key="index">
+              <n-select
+                style="width: 300px"
+                :options="getAvailableKeysForIndex(index)"
+                v-model:value="sortConditions[index].key"
+                @update:value="(value) => handleKeyChange(value, index)"
+                :placeholder="$t('SelectSortField')"
+              />
+              <n-select
+                style="width: 80px"
+                :options="allSortOrders"
+                v-model:value="sortConditions[index].order"
+                :disabled="!sortConditions[index].key"
+                @update:value="(value) => handleOrderChange(value, index)"
+              />
+            </n-space>
+          </n-space>
+          <n-space
+            size="large"
+            align="center"
+            justify="space-between"
+            style="width: 400px; margin-bottom: 6px"
+          >
+            <n-space>
+              <n-button
+                secondary
+                strong
+                @click="
+                  () => {
+                    pageAlbumStore.page_albumlists_multi_sort = ''
+                    updateSortConditions()
+                  }
+                "
               >
-                <n-space>
+                {{ $t('common.clear') + $t('Sort') }}
+              </n-button>
+            </n-space>
+            <n-space align="center">
+              <span style="font-size: 14px; font-weight: 500; margin-right: 8px">
+                {{ $t('Sort') + $t('nsmusics.view_page.count') }}
+              </span>
+              <n-input-number
+                v-model:value="conditionCount"
+                :min="0"
+                :max="allSortKeys.length"
+                style="width: 80px"
+              />
+            </n-space>
+          </n-space>
+        </n-card>
+      </n-modal>
+      <n-modal v-model:show="Type_Filter_Show">
+        <n-card style="width: 480px; border-radius: 4px">
+          <n-space vertical size="large">
+            <n-space>
+              <span style="font-size: 20px; font-weight: 600">{{ $t('common.filter_other') }}</span>
+            </n-space>
+            <n-space justify="space-between">
+              <n-space vertical>
+                <span style="font-size: 14px; font-weight: 600">{{ $t('common.year') }}</span>
+                <n-space vertical>
+                  <n-input
+                    clearable
+                    placeholder=""
+                    style="width: 200px"
+                    v-model:value="page_albumlists_filter_year"
+                  />
                   <n-button
-                    secondary
                     strong
-                    @click="
-                      () => {
-                        pageAlbumStore.page_albumlists_multi_sort = ''
-                        updateSortConditions()
-                      }
-                    "
+                    secondary
+                    @click="pageAlbumStore.page_albumlists_filter_year = 0"
                   >
-                    {{ $t('common.clear') + $t('Sort') }}
+                    {{ $t('common.clear') }}
                   </n-button>
                 </n-space>
-                <n-space align="center">
-                  <span style="font-size: 14px; font-weight: 500; margin-right: 8px">
-                    {{ $t('Sort') + $t('nsmusics.view_page.count') }}
-                  </span>
-                  <n-input-number
-                    v-model:value="conditionCount"
-                    :min="0"
-                    :max="allSortKeys.length"
-                    style="width: 80px"
-                  />
-                </n-space>
               </n-space>
-            </n-card>
-          </n-modal>
-          <n-modal v-model:show="Type_Filter_Show">
-            <n-card style="width: 480px; border-radius: 4px">
-              <n-space vertical size="large">
-                <n-space>
-                  <span style="font-size: 20px; font-weight: 600">{{
-                    $t('common.filter_other')
-                  }}</span>
-                </n-space>
-                <n-space justify="space-between">
-                  <n-space vertical>
-                    <span style="font-size: 14px; font-weight: 600">{{ $t('common.year') }}</span>
-                    <n-space vertical>
-                      <n-input
-                        clearable
-                        placeholder=""
-                        style="width: 200px"
-                        v-model:value="page_albumlists_filter_year"
-                      />
-                      <n-button
-                        strong
-                        secondary
-                        @click="pageAlbumStore.page_albumlists_filter_year = 0"
-                      >
-                        {{ $t('common.clear') }}
-                      </n-button>
-                    </n-space>
-                  </n-space>
-                  <n-space vertical>
-                    <span style="font-size: 14px; font-weight: 600">{{
-                      $t('entity.genre_other')
-                    }}</span>
-                    <n-input
-                      disabled
-                      clearable
-                      placeholder="Not open || 未开放"
-                      style="width: 200px"
-                    />
-                  </n-space>
-                </n-space>
+              <n-space vertical>
+                <span style="font-size: 14px; font-weight: 600">{{
+                  $t('entity.genre_other')
+                }}</span>
+                <n-input disabled clearable placeholder="Not open || 未开放" style="width: 200px" />
               </n-space>
-            </n-card>
-          </n-modal>
+            </n-space>
+          </n-space>
+        </n-card>
+      </n-modal>
     </div>
   </n-space>
 </template>

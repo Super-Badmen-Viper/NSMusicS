@@ -486,7 +486,9 @@ const handleAuto_fontSize = (value: number) => {
   if (!scrollbar.value) return
   const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active')
   itemElements_active.forEach((itemElement: any) => {
-    itemElement.style.fontSize = !store_system_configs_info.window_state_miniplayer_desktop_lyric ? '20px' : '26px'
+    itemElement.style.fontSize = !store_system_configs_info.window_state_miniplayer_desktop_lyric
+      ? '20px'
+      : '26px'
     itemElement.style.fontWeight = 400
   })
   let marginTop = 6 + Math.floor((window.innerHeight - 880) / 200) * 0.5

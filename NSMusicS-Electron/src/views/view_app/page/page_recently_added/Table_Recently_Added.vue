@@ -142,7 +142,7 @@ const timeGroupNames = computed(() => ({
   this_month: t('nsmusics.view_page.this_month'),
   last_3_months: t('nsmusics.view_page.last_3_months'),
   last_6_months: t('nsmusics.view_page.last_6_months'),
-  this_year: t('nsmusics.view_page.this_year')
+  this_year: t('nsmusics.view_page.this_year'),
 }))
 
 // 按时间分组的数据
@@ -187,7 +187,7 @@ const groupedRecentlyAdded = computed(() => {
     timeGroupNames.value.this_month,
     timeGroupNames.value.last_3_months,
     timeGroupNames.value.last_6_months,
-    timeGroupNames.value.this_year
+    timeGroupNames.value.this_year,
   ]
 
   // 按年份降序添加
@@ -644,10 +644,9 @@ const onScrollEnd = async () => {
   isScrolling.value = true
   if (store_server_user_model.model_server_type_of_web) {
     if (
-    store_server_users.server_select_kind === 'navidrome' ||
-    store_server_users.server_select_kind === 'ninesong'
-  )
-    {
+      store_server_users.server_select_kind === 'navidrome' ||
+      store_server_users.server_select_kind === 'ninesong'
+    ) {
       _start.value += 30
       _end.value += 30
       pageHomeStore.home_Files_temporary_recently_added_search = {
@@ -773,19 +772,24 @@ const onScroll = (event: any) => {
       <n-select
         size="small"
         style="min-width: 172px"
-        :disabled="!(store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong')"
-        :options="home_Files_temporary_type_options"
-        v-model:value="home_Files_temporary_type_select"
-        @update:value="change_home_Files_temporary_type"
-      />
-      <div
-          v-if="
+        :disabled="
           !(
             store_server_user_model.model_server_type_of_web &&
             store_server_users.server_select_kind === 'ninesong'
           )
         "
-          style="font-size: 15px; font-weight: bold"
+        :options="home_Files_temporary_type_options"
+        v-model:value="home_Files_temporary_type_select"
+        @update:value="change_home_Files_temporary_type"
+      />
+      <div
+        v-if="
+          !(
+            store_server_user_model.model_server_type_of_web &&
+            store_server_users.server_select_kind === 'ninesong'
+          )
+        "
+        style="font-size: 15px; font-weight: bold"
       >
         {{
           '-> ' +

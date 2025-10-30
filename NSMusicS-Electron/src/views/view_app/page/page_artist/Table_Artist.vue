@@ -255,7 +255,7 @@ if (
     },
   ]
 }
-let Select_Sort_Model = false
+const Select_Sort_Model = ref(false)
 const options_Sort = computed(() => {
   if (
     pageArtistStore.page_artistlists_options_Sort_key != null &&
@@ -327,7 +327,10 @@ const handleSelect_Sort = (key: string | number) => {
       order: _state_Sort_,
     },
   ]
-
+  check_sort_state()
+  scrollTo(0)
+}
+function check_sort_state() {
   const sortKey =
     pageArtistStore.page_artistlists_options_Sort_key.length > 0 &&
     pageArtistStore.page_artistlists_options_Sort_key[0].order !== 'default'
@@ -338,13 +341,14 @@ const handleSelect_Sort = (key: string | number) => {
     pageArtistStore.page_artistlists_options_Sort_key[0].order !== 'default'
       ? pageArtistStore.page_artistlists_options_Sort_key[0].order.replace('end', '')
       : ''
-  Select_Sort_Model = !(
+  Select_Sort_Model.value = !(
     (sortKey === '_id' || sortKey === 'id') &&
     (sortOrder === '' || sortOrder === 'ascend')
   )
-
-  scrollTo(0)
 }
+onMounted(() => {
+  check_sort_state()
+})
 const options_Sort_key_Default_key = ref()
 const options_Sort_key_Default = ref<SortItem[]>()
 // gridItems Search(filter)
@@ -714,7 +718,10 @@ const themeVars = useThemeVars()
 
 async function update_playlist_addArtist(id: any, playlist_id: any, type: string) {
   try {
-    if (store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong') {
+    if (
+      store_server_user_model.model_server_type_of_web &&
+      store_server_users.server_select_kind === 'ninesong'
+    ) {
       store_general_fetch_media_list.fetchData_Media_of_server_web_clear_all_parms()
       if (type === 'artist') {
         await store_general_fetch_media_list.fetchData_Media_Find_This_Artist(id)
@@ -999,23 +1006,23 @@ onBeforeUnmount(() => {
 })
 
 //////
-let click_count = 0;
-let click_timer: any = null;
+let click_count = 0
+let click_timer: any = null
 
 const handleItemClick = () => {
-  click_count++;
+  click_count++
   if (click_timer) {
-    clearTimeout(click_timer);
+    clearTimeout(click_timer)
   }
   click_timer = setTimeout(() => {
-    click_count = 0;
-  }, 300);
+    click_count = 0
+  }, 300)
 }
 const handleItemDbClick = async (media_file: any, index: number) => {
   if (click_timer) {
-    clearTimeout(click_timer);
+    clearTimeout(click_timer)
   }
-  click_count = 0;
+  click_count = 0
   //
   if (store_server_user_model.model_server_type_of_web) {
     store_general_fetch_media_list.fetchData_Media_of_data_synchronization_to_playlist()
@@ -1036,15 +1043,13 @@ const playArtistMediaRandom = async (artist_id: string) => {
   pageMediaStore.media_Files_random_loaded = false
 }
 const playAlbumMediaRandom = (mediaFiles: any[]) => {
-  let randomMediaFiles = [...mediaFiles].sort(() => Math.random() - 0.5);
+  let randomMediaFiles = [...mediaFiles].sort(() => Math.random() - 0.5)
   randomMediaFiles.forEach((item: any, index: number) => {
-    item.absoluteIndex = index;
-  });
+    item.absoluteIndex = index
+  })
   pageMediaStore.media_Files_temporary = randomMediaFiles
   handleItemDbClick(randomMediaFiles[0], 0)
 }
-
-
 
 // 在setup上下文中获取Store实例
 const playlistStore = usePlaylistStore()
@@ -1052,8 +1057,12 @@ const playerAudioStore = usePlayerAudioStore()
 const playerAppearanceStore = usePlayerAppearanceStore()
 const pageAlbumStore = usePageAlbumStore()
 // 使用 storeToRefs 解构出所需的响应式属性
-const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item, playlist_Menu_Item_Rating } =
-  storeToRefs(playlistStore)
+const {
+  playlist_names_ALLLists,
+  playlist_Menu_Item_Id,
+  playlist_Menu_Item,
+  playlist_Menu_Item_Rating,
+} = storeToRefs(playlistStore)
 const { page_top_album_image_url, this_audio_artist_name, this_audio_song_id } =
   storeToRefs(playerAudioStore)
 const {
@@ -1099,12 +1108,14 @@ function scrollerAlbumEnd() {
   }
 }
 
-/// 
+///
 onMounted(() => {
-  if (store_server_user_model.model_server_type_of_local || 
-  (store_server_user_model.model_server_type_of_web && 
-  store_server_users.server_select_kind != 'ninesong' && 
-  pageArtistStore.page_view_model === 'tree')) {
+  if (
+    store_server_user_model.model_server_type_of_local ||
+    (store_server_user_model.model_server_type_of_web &&
+      store_server_users.server_select_kind != 'ninesong' &&
+      pageArtistStore.page_view_model === 'tree')
+  ) {
     pageArtistStore.page_view_model = 'grid'
   }
 })
@@ -1166,9 +1177,9 @@ onMounted(() => {
           </n-tooltip>
           <n-tooltip trigger="hover" placement="top" v-if="bool_show_search_area">
             <template #trigger>
-              <n-input-group style="width: 144px;">
+              <n-input-group style="width: 144px">
                 <n-input
-                  style="width: 144px;"
+                  style="width: 144px"
                   ref="input_search_InstRef"
                   v-model:value="input_search_Value"
                   @keydown.enter="click_search"
@@ -1259,8 +1270,7 @@ onMounted(() => {
           />
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
-              <n-button quaternary circle 
-              @click="dynamicScroller.$el.scrollTop = 0">
+              <n-button quaternary circle @click="dynamicScroller.$el.scrollTop = 0">
                 <template #icon>
                   <n-icon :size="20" :depth="2"><PaddingTop20Filled /></n-icon>
                 </template>
@@ -1284,17 +1294,26 @@ onMounted(() => {
           </n-tooltip>
         </n-space>
         <n-space align="center">
-          <div v-if="!bool_show_search_area">
-            NineSong:
-          </div>
+          <div v-if="!bool_show_search_area">NineSong:</div>
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
-              <n-button quaternary circle
+              <n-button
+                quaternary
+                circle
                 :style="{
-                  borderBottom: pageArtistStore.page_view_model === 'grid' ? '4px solid var(--primary-color-hover)' : 'none'
+                  borderBottom:
+                    pageArtistStore.page_view_model === 'grid'
+                      ? '4px solid var(--primary-color-hover)'
+                      : 'none',
                 }"
-                :disabled="!(store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong')"
-                @click="pageArtistStore.page_view_model = 'grid'">
+                :disabled="
+                  !(
+                    store_server_user_model.model_server_type_of_web &&
+                    store_server_users.server_select_kind === 'ninesong'
+                  )
+                "
+                @click="pageArtistStore.page_view_model = 'grid'"
+              >
                 <template #icon>
                   <n-icon :size="20" :depth="2"><Grid24Regular /></n-icon>
                 </template>
@@ -1304,12 +1323,23 @@ onMounted(() => {
           </n-tooltip>
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
-              <n-button quaternary circle
+              <n-button
+                quaternary
+                circle
                 :style="{
-                  borderBottom: pageArtistStore.page_view_model === 'tree' ? '4px solid var(--primary-color-hover)' : 'none'
+                  borderBottom:
+                    pageArtistStore.page_view_model === 'tree'
+                      ? '4px solid var(--primary-color-hover)'
+                      : 'none',
                 }"
-                :disabled="!(store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong')"
-                @click="pageArtistStore.page_view_model = 'tree'">
+                :disabled="
+                  !(
+                    store_server_user_model.model_server_type_of_web &&
+                    store_server_users.server_select_kind === 'ninesong'
+                  )
+                "
+                @click="pageArtistStore.page_view_model = 'tree'"
+              >
                 <template #icon>
                   <n-icon :size="20" :depth="2"><DataTreemap24Regular /></n-icon>
                 </template>
@@ -1329,10 +1359,18 @@ onMounted(() => {
           />
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
-              <n-button quaternary circle 
-              style="position: relative; left: 17px"
-              :disabled="!(store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong')"
-              @click="store_general_fetch_artist_tree.fetchData_ArtistTree()">
+              <n-button
+                quaternary
+                circle
+                style="position: relative; left: 17px"
+                :disabled="
+                  !(
+                    store_server_user_model.model_server_type_of_web &&
+                    store_server_users.server_select_kind === 'ninesong'
+                  )
+                "
+                @click="store_general_fetch_artist_tree.fetchData_ArtistTree()"
+              >
                 <template #icon>
                   <n-icon :size="20" :depth="2"><RefreshSharp /></n-icon>
                 </template>
@@ -1346,7 +1384,12 @@ onMounted(() => {
                 quaternary
                 circle
                 style="position: relative; left: 9px"
-                :disabled="!(store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong')"
+                :disabled="
+                  !(
+                    store_server_user_model.model_server_type_of_web &&
+                    store_server_users.server_select_kind === 'ninesong'
+                  )
+                "
                 @click="scrollerAlbumStart"
               >
                 <template #icon>
@@ -1362,7 +1405,12 @@ onMounted(() => {
                 quaternary
                 circle
                 style="position: relative; left: 0px"
-                :disabled="!(store_server_user_model.model_server_type_of_web && store_server_users.server_select_kind === 'ninesong')"
+                :disabled="
+                  !(
+                    store_server_user_model.model_server_type_of_web &&
+                    store_server_users.server_select_kind === 'ninesong'
+                  )
+                "
                 @click="scrollerAlbumEnd"
               >
                 <template #icon>
@@ -1481,7 +1529,7 @@ onMounted(() => {
                     style="position: relative; left: 18px"
                     @click="Play_this_artist_all_media_list_click(artist_Tree_Artist_info?.id)"
                   >
-                    <icon :size="20"><Play24Filled /></icon>
+                    <icon :size="18"><Play24Filled /></icon>
                   </button>
                   <button
                     class="album-play-button"
@@ -1500,7 +1548,7 @@ onMounted(() => {
                           artist_Tree_Artist_info?.favorite,
                           'artist'
                         )
-                        if (artist_Tree_Artist_info){
+                        if (artist_Tree_Artist_info) {
                           artist_Tree_Artist_info.favorite = !artist_Tree_Artist_info.favorite
                         }
                       }
@@ -1612,12 +1660,12 @@ onMounted(() => {
                     @error="handleImageError(item.album)"
                     class="artist-album-cover-image"
                     v-contextmenu:contextmenu_album
-                @contextmenu.prevent="
-                  () => {
-                    playlist_Menu_Item = item.album
-                    playlist_Menu_Item_Id = item.album.id
-                  }
-                "
+                    @contextmenu.prevent="
+                      () => {
+                        playlist_Menu_Item = item.album
+                        playlist_Menu_Item_Id = item.album.id
+                      }
+                    "
                     alt=""
                   />
                   <div style="margin-left: 1px; margin-top: 8px">
@@ -1635,17 +1683,19 @@ onMounted(() => {
                       <button
                         class="album-play-button"
                         style="position: relative; left: 16px"
-                        @click="()=>{
-                          pageMediaStore.media_Files_temporary = item.mediaFiles
-                          handleItemDbClick(item.mediaFiles[0], 0)
-                        }"
+                        @click="
+                          () => {
+                            pageMediaStore.media_Files_temporary = item.mediaFiles
+                            handleItemDbClick(item.mediaFiles[0], 0)
+                          }
+                        "
                       >
                         <icon :size="18"><Play24Filled /></icon>
                       </button>
                       <button
-                          class="album-play-button"
-                          style="position: relative; left: 15px"
-                          @click="playAlbumMediaRandom(item.mediaFiles)"
+                        class="album-play-button"
+                        style="position: relative; left: 15px"
+                        @click="playAlbumMediaRandom(item.mediaFiles)"
                       >
                         <icon :size="16"><Random /></icon>
                       </button>
@@ -1727,20 +1777,24 @@ onMounted(() => {
                         }
                       "
                       @click="handleItemClick"
-                      @dblclick="()=>{
-                        pageMediaStore.media_Files_temporary = item.mediaFiles
-                        handleItemDbClick(song, songIndex)
-                      }"
+                      @dblclick="
+                        () => {
+                          pageMediaStore.media_Files_temporary = item.mediaFiles
+                          handleItemDbClick(song, songIndex)
+                        }
+                      "
                     >
                       <span class="song-track-number">{{ songIndex + 1 }}.</span>
                       <span class="song-title">{{ song.title }}</span>
                       <div class="song-item-actions">
-                        <button 
-                        class="song-play-button"
-                        @click="()=>{
-                          pageMediaStore.media_Files_temporary = item.mediaFiles
-                          handleItemDbClick(song, songIndex)
-                        }"
+                        <button
+                          class="song-play-button"
+                          @click="
+                            () => {
+                              pageMediaStore.media_Files_temporary = item.mediaFiles
+                              handleItemDbClick(song, songIndex)
+                            }
+                          "
                         >
                           <icon :size="18"><Play24Regular /></icon>
                         </button>
@@ -2221,7 +2275,7 @@ onMounted(() => {
         <v-contextmenu-item @click="menu_media_item_add_to_playlist_next">
           {{ $t('player.addNext') }}
         </v-contextmenu-item>
-        <v-contextmenu-divider/>
+        <v-contextmenu-divider />
         <v-contextmenu-item>
           <rate
             class="viaSlot"
@@ -2256,66 +2310,66 @@ onMounted(() => {
       </v-contextmenu>
 
       <n-modal transform-origin="mouse" v-model:show="Type_Multi_Sort">
-            <n-card style="width: 450px; border-radius: 4px">
-              <n-space justify="space-between" align="center" style="margin-bottom: 10px">
-                <span style="font-size: 20px; font-weight: 600">
-                  {{ $t('OptionCustomUsers') + $t('nsmusics.view_page.multi_level_sort') }}
-                </span>
-              </n-space>
-              <n-space justify="space-between" align="center" style="margin-bottom: 10px">
-                {{ pageArtistStore.page_artistlists_multi_sort }}
-              </n-space>
-              <n-space vertical size="large" style="width: 400px; margin-bottom: 12px">
-                <n-space justify="space-between" v-for="(_, index) in sortConditions" :key="index">
-                  <n-select
-                    style="width: 300px"
-                    :options="getAvailableKeysForIndex(index)"
-                    v-model:value="sortConditions[index].key"
-                    @update:value="(value) => handleKeyChange(value, index)"
-                    :placeholder="$t('SelectSortField')"
-                  />
-                  <n-select
-                    style="width: 80px"
-                    :options="allSortOrders"
-                    v-model:value="sortConditions[index].order"
-                    :disabled="!sortConditions[index].key"
-                    @update:value="(value) => handleOrderChange(value, index)"
-                  />
-                </n-space>
-              </n-space>
-              <n-space
-                size="large"
-                align="center"
-                justify="space-between"
-                style="width: 400px; margin-bottom: 6px"
+        <n-card style="width: 450px; border-radius: 4px">
+          <n-space justify="space-between" align="center" style="margin-bottom: 10px">
+            <span style="font-size: 20px; font-weight: 600">
+              {{ $t('OptionCustomUsers') + $t('nsmusics.view_page.multi_level_sort') }}
+            </span>
+          </n-space>
+          <n-space justify="space-between" align="center" style="margin-bottom: 10px">
+            {{ pageArtistStore.page_artistlists_multi_sort }}
+          </n-space>
+          <n-space vertical size="large" style="width: 400px; margin-bottom: 12px">
+            <n-space justify="space-between" v-for="(_, index) in sortConditions" :key="index">
+              <n-select
+                style="width: 300px"
+                :options="getAvailableKeysForIndex(index)"
+                v-model:value="sortConditions[index].key"
+                @update:value="(value) => handleKeyChange(value, index)"
+                :placeholder="$t('SelectSortField')"
+              />
+              <n-select
+                style="width: 80px"
+                :options="allSortOrders"
+                v-model:value="sortConditions[index].order"
+                :disabled="!sortConditions[index].key"
+                @update:value="(value) => handleOrderChange(value, index)"
+              />
+            </n-space>
+          </n-space>
+          <n-space
+            size="large"
+            align="center"
+            justify="space-between"
+            style="width: 400px; margin-bottom: 6px"
+          >
+            <n-space>
+              <n-button
+                secondary
+                strong
+                @click="
+                  () => {
+                    pageArtistStore.page_artistlists_multi_sort = ''
+                    updateSortConditions()
+                  }
+                "
               >
-                <n-space>
-                  <n-button
-                    secondary
-                    strong
-                    @click="
-                      () => {
-                        pageArtistStore.page_artistlists_multi_sort = ''
-                        updateSortConditions()
-                      }
-                    "
-                  >
-                    {{ $t('common.clear') + $t('Sort') }}
-                  </n-button>
-                </n-space>
-                <n-space align="center">
-                  <span style="font-size: 14px; font-weight: 500; margin-right: 8px">
-                    {{ $t('Sort') + $t('nsmusics.view_page.count') }}
-                  </span>
-                  <n-input-number
-                    v-model:value="conditionCount"
-                    :min="0"
-                    :max="allSortKeys.length"
-                    style="width: 80px"
-                  />
-                </n-space>
-              </n-space>
-            </n-card>
+                {{ $t('common.clear') + $t('Sort') }}
+              </n-button>
+            </n-space>
+            <n-space align="center">
+              <span style="font-size: 14px; font-weight: 500; margin-right: 8px">
+                {{ $t('Sort') + $t('nsmusics.view_page.count') }}
+              </span>
+              <n-input-number
+                v-model:value="conditionCount"
+                :min="0"
+                :max="allSortKeys.length"
+                style="width: 80px"
+              />
+            </n-space>
+          </n-space>
+        </n-card>
       </n-modal>
     </div>
   </n-space>
