@@ -17,19 +17,19 @@ export const store_general_fetch_artist_tree = reactive({
   },
 
   _start: 0,
-  _end: 30,
+  _end: 5,
   _artist_id: '',
   async fetchData_ArtistTree_of_server_web_start() {
     const pageArtistStore = usePageArtistStore()
     pageArtistStore.artist_Tree_Artist_info = undefined
     pageArtistStore.artist_Tree_Album_Tree_temporary = []
     this._start = 0
-    this._end = 30
+    this._end = 5
     await this.fetchData_ArtistTree_of_server_web()
   },
   async fetchData_ArtistTree_of_server_web_end() {
-    this._start += 30
-    this._end += 30
+    this._start += 5
+    this._end += 5
     await this.fetchData_ArtistTree_of_server_web()
   },
   async fetchData_ArtistTree_of_server_web() {

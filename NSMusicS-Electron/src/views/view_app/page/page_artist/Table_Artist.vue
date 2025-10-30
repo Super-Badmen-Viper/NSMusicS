@@ -1669,7 +1669,15 @@ onMounted(() => {
                     alt=""
                   />
                   <div style="margin-left: 1px; margin-top: 8px">
-                    {{ item.album.song_count - 1 + '首歌曲，' + item.album.duration_txt + '分钟' }}
+<!--                    item.album.duration_txt-->
+                    {{
+                      item.album.song_count + '首歌曲，' +
+                      playerSettingStore.formatTime_RunTimeTicks_Min(
+                      item.mediaFiles
+                        .filter((media: any) => media.album_id === item.album?.id)
+                        .reduce((totalDuration: number, media: any) => totalDuration + (media.duration || 0), 0) || 0
+                      ) + '分钟'
+                    }}
                   </div>
                 </div>
 
