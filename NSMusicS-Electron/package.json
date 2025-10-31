@@ -7,7 +7,7 @@
     "email": "1774148579@qq.com"
   },
   "description": "NSMusicS For Web(Electron+Vue3+TS),Multi platform Multi mode Super Music Software (Full stack development, audio processing, artificial intelligence, natural language processing)",
-  "version": "2.2.0",
+  "version": "2.2.2",
   "private": true,
   "license": "AGPL - 3.0",
   "scripts": {
@@ -34,7 +34,7 @@
     "bindings": "^1.5.0",
     "clone": "^2.1.2",
     "echarts": "^5.6.0",
-    "echarts-wordcloud": "^2.2.0",
+    "echarts-wordcloud": "^2.1.0",
     "electron-localshortcut": "^3.2.1",
     "electron-updater": "^6.3.0-alpha.6",
     "fast-xml-parser": "^4.5.0",
@@ -69,7 +69,7 @@
     "@typescript-eslint/parser": "^8.36.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/tsconfig": "^0.5.1",
-    "electron": "^32.2.0",
+    "electron": "^32.1.0",
     "electron-builder": "^24.12.0",
     "electron-store": "^8.1.0",
     "esbuild": "^0.25.5",
