@@ -90,11 +90,14 @@
       "simplified_chinese": "Cinese Semplificato",
       "traditional_chinese": "Cinese Tradizionale",
       "tree_level_view": "Vista ad Albero",
-      "this_week": "Questa Settimana",
-      "this_month": "Questo Mese",
-      "last_3_months": "Ultimi 3 Mesi",
-      "last_6_months": "Ultimi 6 Mesi",
-      "this_year": "Quest'Anno"
+      "this_week": "Questa settimana",
+      "this_month": "Questo mese",
+      "last_3_months": "Ultimi 3 mesi",
+      "last_6_months": "Ultimi 6 mesi",
+      "this_year": "Quest'anno",
+      "personalized_recommend": "Raccomandazioni personalizzate",
+      "hot_recommend": "Raccomandazioni popolari",
+      "word_cloud_recommend": "Raccomandazioni di nuvola di parole"
     },
     "view_player": {
       "view_seting": {

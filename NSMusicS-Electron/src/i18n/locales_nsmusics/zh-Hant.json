@@ -94,7 +94,10 @@
       "this_month": "本月",
       "last_3_months": "最近3個月",
       "last_6_months": "最近6個月",
-      "this_year": "今年"
+      "this_year": "今年",
+      "personalized_recommend": "個人化推薦",
+      "hot_recommend": "熱門推薦",
+      "word_cloud_recommend": "詞雲推薦"
     },
     "view_player": {
       "view_seting": {

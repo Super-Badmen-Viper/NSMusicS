@@ -275,15 +275,19 @@ routers.afterEach(async (to, from) => {
     } else if (to.name === 'login') {
       if (!isElectron) {
         store_router_data_info.router_select_model_server_login = true
-        store_router_data_info.router_name = to.name
       }
+      store_router_data_info.router_name = to.name
     } else if (to.name === 'library') {
+      store_router_data_info.router_select_model_server_setting = true
+      store_router_data_info.router_name = to.name
+    } else if (to.name === 'setting') {
       store_router_data_info.router_select_model_server_setting = true
       store_router_data_info.router_name = to.name
     } else {
       store_router_data_info.router_select_model_server_setting = true
-      store_router_data_info.router_name = to.name
+      store_router_data_info.router_name = to.name || 'home'
     }
+    // 确保 router_name 不为空
     if (!store_router_data_info.router_name || store_router_data_info.router_name === 'null') {
       store_router_data_info.router_name = 'home'
     }

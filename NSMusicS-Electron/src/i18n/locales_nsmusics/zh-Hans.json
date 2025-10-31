@@ -97,8 +97,9 @@
       "last_3_months": "最近3个月",
       "last_6_months": "最近6个月",
       "this_year": "今年",
-      "personalized": "个性化",
-      "hot": "热门"
+      "personalized_recommend": "个性化推荐",
+      "hot_recommend": "热门推荐",
+      "word_cloud_recommend": "词云推荐"
     },
     "view_player": {
       "view_seting": {

@@ -94,7 +94,10 @@
       "this_month": "این ماه",
       "last_3_months": "3 ماه گذشته",
       "last_6_months": "6 ماه گذشته",
-      "this_year": "امسال"
+      "this_year": "امسال",
+      "personalized_recommend": "توصیه‌های شخصی‌سازی‌شده",
+      "hot_recommend": "توصیه‌های داغ",
+      "word_cloud_recommend": "توصیه‌های ابر کلمات"
     },
     "view_player": {
       "view_seting": {

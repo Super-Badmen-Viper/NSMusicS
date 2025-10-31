@@ -90,11 +90,14 @@
       "simplified_chinese": "Упрощенный Китайский",
       "traditional_chinese": "Традиционный Китайский",
       "tree_level_view": "Древовидное Представление",
-      "this_week": "Эта Неделя",
-      "this_month": "Этот Месяц",
-      "last_3_months": "Последние 3 Месяца",
-      "last_6_months": "Последние 6 Месяцев",
-      "this_year": "Этот Год"
+      "this_week": "На этой неделе",
+      "this_month": "В этом месяце",
+      "last_3_months": "Последние 3 месяца",
+      "last_6_months": "Последние 6 месяцев",
+      "this_year": "В этом году",
+      "personalized_recommend": "Персонализированные рекомендации",
+      "hot_recommend": "Популярные рекомендации",
+      "word_cloud_recommend": "Рекомендации по облаку слов"
     },
     "view_player": {
       "view_seting": {

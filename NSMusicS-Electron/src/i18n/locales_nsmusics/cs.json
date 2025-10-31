@@ -90,11 +90,14 @@
       "simplified_chinese": "Zjednodušená Čínština",
       "traditional_chinese": "Tradiční Čínština",
       "tree_level_view": "Stromové Zobrazení",
-      "this_week": "Tento Týden",
-      "this_month": "Tento Měsíc",
-      "last_3_months": "Poslední 3 Měsíce",
-      "last_6_months": "Posledních 6 Měsíců",
-      "this_year": "Tento Rok"
+      "this_week": "Tento týden",
+      "this_month": "Tento měsíc",
+      "last_3_months": "Poslední 3 měsíce",
+      "last_6_months": "Posledních 6 měsíců",
+      "this_year": "Tento rok",
+      "personalized_recommend": "Personalizovaná doporučení",
+      "hot_recommend": "Populární doporučení",
+      "word_cloud_recommend": "Doporučení cloudových slov"
     },
     "view_player": {
       "view_seting": {

@@ -94,7 +94,10 @@
       "this_month": "This Month",
       "last_3_months": "Last 3 Months",
       "last_6_months": "Last 6 Months",
-      "this_year": "This Year"
+      "this_year": "This Year",
+      "personalized_recommend": "Personalized Recommendations",
+      "hot_recommend": "Hot Recommendations",
+      "word_cloud_recommend": "Word Cloud Recommendations"
     },
     "view_player": {
       "view_seting": {

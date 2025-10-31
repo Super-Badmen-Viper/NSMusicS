@@ -90,11 +90,14 @@
       "simplified_chinese": "Vereenvoudigd Chinees",
       "traditional_chinese": "Traditioneel Chinees",
       "tree_level_view": "Boomstructuurweergave",
-      "this_week": "Deze Week",
-      "this_month": "Deze Maand",
-      "last_3_months": "Afgelopen 3 Maanden",
-      "last_6_months": "Afgelopen 6 Maanden",
-      "this_year": "Dit Jaar"
+      "this_week": "Deze week",
+      "this_month": "Deze maand",
+      "last_3_months": "Afgelopen 3 maanden",
+      "last_6_months": "Afgelopen 6 maanden",
+      "this_year": "Dit jaar",
+      "personalized_recommend": "Gepersonaliseerde aanbevelingen",
+      "hot_recommend": "Populaire aanbevelingen",
+      "word_cloud_recommend": "Woordwolkaanbevelingen"
     },
     "view_player": {
       "view_seting": {

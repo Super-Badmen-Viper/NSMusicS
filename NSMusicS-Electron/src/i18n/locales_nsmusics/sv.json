@@ -90,11 +90,14 @@
       "simplified_chinese": "Förenklad Kinesiska",
       "traditional_chinese": "Traditionell Kinesiska",
       "tree_level_view": "Trädvy",
-      "this_week": "Denna Vecka",
-      "this_month": "Denna Månad",
-      "last_3_months": "Senaste 3 Månaderna",
-      "last_6_months": "Senaste 6 Månaderna",
-      "this_year": "Detta År"
+      "this_week": "Denna vecka",
+      "this_month": "Denna månad",
+      "last_3_months": "Senaste 3 månaderna",
+      "last_6_months": "Senaste 6 månaderna",
+      "this_year": "Detta år",
+      "personalized_recommend": "Personligt anpassade rekommendationer",
+      "hot_recommend": "Populära rekommendationer",
+      "word_cloud_recommend": "Ordmolnsrekommendationer"
     },
     "view_player": {
       "view_seting": {

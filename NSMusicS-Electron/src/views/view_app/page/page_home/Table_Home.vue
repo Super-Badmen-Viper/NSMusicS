@@ -640,7 +640,7 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
       >
         <n-space align="center">
           <span class="category-title">
-            {{ 'NineSong : ' + $t('nsmusics.view_page.personalized') + $t('nsmusics.view_page.recommend') }}
+            {{ 'NineSong : ' + $t('nsmusics.view_page.personalized_recommend')}}
           </span>
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
@@ -854,7 +854,7 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
       >
         <n-space align="center">
           <span class="category-title">
-            {{ 'NineSong : ' + $t('nsmusics.view_page.hot') + $t('nsmusics.view_page.recommend') }}
+            {{ 'NineSong : ' + $t('nsmusics.view_page.hot_recommend')}}
           </span>
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
@@ -1068,7 +1068,7 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
       >
         <n-space align="center">
           <span class="category-title">
-            {{ 'NineSong : ' + $t('page.setting.generalTab') + $t('nsmusics.view_page.recommend') }}
+            {{ 'NineSong : ' + $t('nsmusics.view_page.word_cloud_recommend') }}
           </span>
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>

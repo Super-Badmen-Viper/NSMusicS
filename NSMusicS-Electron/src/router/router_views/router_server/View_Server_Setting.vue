@@ -5,6 +5,7 @@ import { store_router_data_info } from '@/router/router_store/store_router_data_
 
 onMounted(async () => {
   store_router_data_info.router_select = 'setting'
+  store_router_data_info.router_name = 'setting'
 })
 </script>
 <template>

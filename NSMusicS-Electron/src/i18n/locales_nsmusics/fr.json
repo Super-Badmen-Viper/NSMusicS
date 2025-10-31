@@ -90,11 +90,14 @@
       "simplified_chinese": "Chinois Simplifié",
       "traditional_chinese": "Chinois Traditionnel",
       "tree_level_view": "Vue Arborescente",
-      "this_week": "Cette Semaine",
-      "this_month": "Ce Mois",
-      "last_3_months": "3 Derniers Mois",
-      "last_6_months": "6 Derniers Mois",
-      "this_year": "Cette Année"
+      "this_week": "Cette semaine",
+      "this_month": "Ce mois-ci",
+      "last_3_months": "3 derniers mois",
+      "last_6_months": "6 derniers mois",
+      "this_year": "Cette année",
+      "personalized_recommend": "Recommandations personnalisées",
+      "hot_recommend": "Recommandations populaires",
+      "word_cloud_recommend": "Recommandations de nuage de mots"
     },
     "view_player": {
       "view_seting": {

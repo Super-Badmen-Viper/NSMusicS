@@ -94,7 +94,10 @@
       "this_month": "今月",
       "last_3_months": "過去3ヶ月",
       "last_6_months": "過去6ヶ月",
-      "this_year": "今年"
+      "this_year": "今年",
+      "personalized_recommend": "パーソナライズされたおすすめ",
+      "hot_recommend": "人気のおすすめ",
+      "word_cloud_recommend": "ワードクラウドおすすめ"
     },
     "view_player": {
       "view_seting": {
