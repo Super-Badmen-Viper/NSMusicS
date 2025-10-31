@@ -15,6 +15,8 @@ import { Get_Jellyfin_Temp_Data_To_LocalSqlite } from '@/data/data_configs/jelly
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 // @ts-ignore - 忽略模块导入类型检查
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
+// @ts-ignore - 忽略模块导入类型检查
+import { usePageRecommendStore } from '@/data/data_status/app_status/page_status/recommend_store/usePageRecommendStore'
 
 export const store_general_fetch_home_list = reactive({
   async fetchData_Home() {
@@ -42,8 +44,8 @@ export const store_general_fetch_home_list = reactive({
           get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Album_Recently_Played()
       } else if (store_server_user_model.model_server_type_of_web) {
         if (store_server_users.server_select_kind === 'ninesong') {
-          const get_Navidrome_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
-          await get_Navidrome_Temp_Data_To_LocalSqlite.get_home_list(
+          const get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
+          await get_NineSong_Temp_Data_To_LocalSqlite.get_home_list(
             store_server_login_info.server_url
           )
         } else if (store_server_users.server_select_kind === 'navidrome') {
@@ -125,8 +127,8 @@ export const store_general_fetch_home_list = reactive({
           get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Album_Random_Search()
       } else if (store_server_user_model.model_server_type_of_web) {
         if (store_server_users.server_select_kind === 'ninesong') {
-          const get_Navidrome_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
-          await get_Navidrome_Temp_Data_To_LocalSqlite.get_home_list_of_random_search(
+          const get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
+          await get_NineSong_Temp_Data_To_LocalSqlite.get_home_list_of_random_search(
             store_server_login_info.server_url
           )
         } else if (store_server_users.server_select_kind === 'navidrome') {
@@ -172,8 +174,8 @@ export const store_general_fetch_home_list = reactive({
           get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Album_Recently_Added()
       } else if (store_server_user_model.model_server_type_of_web) {
         if (store_server_users.server_select_kind === 'ninesong') {
-          const get_Navidrome_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
-          await get_Navidrome_Temp_Data_To_LocalSqlite.get_home_list_of_recently_added(
+          const get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
+          await get_NineSong_Temp_Data_To_LocalSqlite.get_home_list_of_recently_added(
             store_server_login_info.server_url
           )
         } else if (store_server_users.server_select_kind === 'navidrome') {
@@ -212,8 +214,8 @@ export const store_general_fetch_home_list = reactive({
           get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Album_Recently_Played()
       } else if (store_server_user_model.model_server_type_of_web) {
         if (store_server_users.server_select_kind === 'ninesong') {
-          const get_Navidrome_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
-          await get_Navidrome_Temp_Data_To_LocalSqlite.get_home_list_of_recently_played(
+          const get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
+          await get_NineSong_Temp_Data_To_LocalSqlite.get_home_list_of_recently_played(
             store_server_login_info.server_url
           )
         } else if (store_server_users.server_select_kind === 'navidrome') {
@@ -237,6 +239,70 @@ export const store_general_fetch_home_list = reactive({
     } catch (error) {
       // @ts-ignore - 忽略错误类型检查
       console.error('Failed to fetch recently played data:', error)
+    }
+  },
+
+  async fetchData_Home_of_GeneralRecommendations() {
+    try {
+      const pageRecommendStore = usePageRecommendStore()
+      pageRecommendStore.home_Files_temporary_GeneralRecommendations = []
+      if (store_server_user_model.model_server_type_of_local) {
+      } else if (store_server_user_model.model_server_type_of_web) {
+        if (store_server_users.server_select_kind === 'ninesong') {
+          const get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
+          await get_NineSong_Temp_Data_To_LocalSqlite.get_home_list_of_GeneralRecommendations(
+            store_server_login_info.server_url,
+            'media',
+            '18',
+            '0',
+            '0'
+          )
+        }
+      }
+    } catch (error) {
+      // @ts-ignore - 忽略错误类型检查
+      console.error('Failed to fetch GeneralRecommendations data:', error)
+    }
+  },
+  async fetchData_Home_of_PersonalizedRecommendations() {
+    try {
+      const pageRecommendStore = usePageRecommendStore()
+      pageRecommendStore.home_Files_temporary_PersonalizedRecommendations = []
+      if (store_server_user_model.model_server_type_of_local) {
+      } else if (store_server_user_model.model_server_type_of_web) {
+        if (store_server_users.server_select_kind === 'ninesong') {
+          const get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
+          await get_NineSong_Temp_Data_To_LocalSqlite.get_home_list_of_PersonalizedRecommendations(
+            store_server_login_info.server_url,
+            'media',
+            '18',
+            ''
+          )
+        }
+      }
+    } catch (error) {
+      // @ts-ignore - 忽略错误类型检查
+      console.error('Failed to fetch PersonalizedRecommendations data:', error)
+    }
+  },
+  async fetchData_Home_of_PopularRecommendations() {
+    try {
+      const pageRecommendStore = usePageRecommendStore()
+      pageRecommendStore.home_Files_temporary_PopularRecommendations = []
+      if (store_server_user_model.model_server_type_of_local) {
+      } else if (store_server_user_model.model_server_type_of_web) {
+        if (store_server_users.server_select_kind === 'ninesong') {
+          const get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
+          await get_NineSong_Temp_Data_To_LocalSqlite.get_home_list_of_PopularRecommendations(
+            store_server_login_info.server_url,
+            'media',
+            '18'
+          )
+        }
+      }
+    } catch (error) {
+      // @ts-ignore - 忽略错误类型检查
+      console.error('Failed to fetch PopularRecommendations data:', error)
     }
   },
 })

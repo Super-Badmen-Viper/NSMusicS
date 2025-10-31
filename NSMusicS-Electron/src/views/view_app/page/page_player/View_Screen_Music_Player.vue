@@ -351,11 +351,11 @@ const scrollToItem = (index: number) => {
     // }
   } catch {}
 }
-onMounted(()=>{
+onMounted(() => {
   playerAppearanceStore.player_lyric_fontSize_Num =
-      playerAppearanceStore.player_use_lyric_skip_forward
-          ? 36 + Math.floor((window.innerHeight - 880) / 200) * 6
-          : 33 + Math.floor((window.innerHeight - 880) / 200) * 6
+    playerAppearanceStore.player_use_lyric_skip_forward
+      ? 36 + Math.floor((window.innerHeight - 880) / 200) * 6
+      : 33 + Math.floor((window.innerHeight - 880) / 200) * 6
   playerAppearanceStore.player_lyric_fontSize = `${playerAppearanceStore.player_lyric_fontSize_Num}px`
 })
 

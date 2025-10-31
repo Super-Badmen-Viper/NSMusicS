@@ -96,7 +96,9 @@
       "this_month": "本月",
       "last_3_months": "最近3个月",
       "last_6_months": "最近6个月",
-      "this_year": "今年"
+      "this_year": "今年",
+      "personalized": "个性化",
+      "hot": "热门"
     },
     "view_player": {
       "view_seting": {

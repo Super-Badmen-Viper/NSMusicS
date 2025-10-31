@@ -1669,14 +1669,20 @@ onMounted(() => {
                     alt=""
                   />
                   <div style="margin-left: 1px; margin-top: 8px">
-<!--                    item.album.duration_txt-->
+                    <!--                    item.album.duration_txt-->
                     {{
-                      item.album.song_count + '首歌曲，' +
+                      item.album.song_count +
+                      '首歌曲，' +
                       playerSettingStore.formatTime_RunTimeTicks_Min(
-                      item.mediaFiles
-                        .filter((media: any) => media.album_id === item.album?.id)
-                        .reduce((totalDuration: number, media: any) => totalDuration + (media.duration || 0), 0) || 0
-                      ) + '分钟'
+                        item.mediaFiles
+                          .filter((media: any) => media.album_id === item.album?.id)
+                          .reduce(
+                            (totalDuration: number, media: any) =>
+                              totalDuration + (media.duration || 0),
+                            0
+                          ) || 0
+                      ) +
+                      '分钟'
                     }}
                   </div>
                 </div>

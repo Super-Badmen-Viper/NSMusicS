@@ -53,6 +53,16 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     await this.get_home_list_of_random_search(url)
     await this.get_home_list_of_recently_added(url)
     await this.get_home_list_of_recently_played(url)
+
+    if (this.pageRecommendStore.recommend_MediaFiles_GeneralRecommendations.length === 0) {
+      await this.get_home_list_of_GeneralRecommendations(url, 'media', '18', '0', '0')
+    } 
+    if (this.pageRecommendStore.recommend_MediaFiles_PersonalizedRecommendations.length === 0) {
+      await this.get_home_list_of_PersonalizedRecommendations(url, 'media', '18', '0')
+    } 
+    if (this.pageRecommendStore.recommend_MediaFiles_PopularRecommendations.length === 0) {
+      await this.get_home_list_of_PopularRecommendations(url, 'media', '18')
+    }
   }
 
   ///
@@ -241,6 +251,96 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
   }
 
   ///
+  public async get_home_list_of_GeneralRecommendations(
+    url: string,
+    recommend_type: string,
+    limit: string,
+    random_seed: string,
+    recommend_offset: string
+  ) {
+    let song_list = []
+    url = url.includes('api') ? url : url + '/api'
+    const data = await this.recommendApi.GetGeneralRecommendations(
+      recommend_type,
+      limit,
+      random_seed,
+      recommend_offset
+    )
+    song_list = data['ninesong-response']['recommendations']
+    if (Array.isArray(song_list) && song_list.length > 0) {
+      this.pageRecommendStore.recommend_MediaFiles_GeneralRecommendations = []
+      song_list.map(async (song: any, index: number) => {
+        const new_song = this.mapMedia(song, url, index, 0)
+        this.pageRecommendStore.recommend_MediaFiles_GeneralRecommendations.push({
+          ...new_song,
+          play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
+        })
+      })
+      this.pageRecommendStore.recommend_MediaFiles_GeneralRecommendations.forEach(
+        (item: any, index: number) => {
+          item.absoluteIndex = index
+        }
+      )
+    }
+  }
+  public async get_home_list_of_PersonalizedRecommendations(
+    url: string,
+    recommend_type: string,
+    limit: string,
+    user_id: string
+  ) {
+    let song_list = []
+    url = url.includes('api') ? url : url + '/api'
+    const data = await this.recommendApi.getPersonalizedRecommendations(
+      recommend_type,
+      limit,
+      user_id
+    )
+    song_list = data['ninesong-response']['recommendations']
+    if (Array.isArray(song_list) && song_list.length > 0) {
+      this.pageRecommendStore.recommend_MediaFiles_PersonalizedRecommendations = []
+      song_list.map(async (song: any, index: number) => {
+        const new_song = this.mapMedia(song, url, index, 0)
+        this.pageRecommendStore.recommend_MediaFiles_PersonalizedRecommendations.push({
+          ...new_song,
+          play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
+        })
+      })
+      this.pageRecommendStore.recommend_MediaFiles_PersonalizedRecommendations.forEach(
+        (item: any, index: number) => {
+          item.absoluteIndex = index
+        }
+      )
+    }
+  }
+  public async get_home_list_of_PopularRecommendations(
+    url: string,
+    recommend_type: string,
+    limit: string
+  ) {
+    let song_list = []
+    url = url.includes('api') ? url : url + '/api'
+    const data = await this.recommendApi.getPopularRecommendations(recommend_type, limit)
+    song_list = data['ninesong-response']['recommendations']
+    if (Array.isArray(song_list) && song_list.length > 0) {
+      this.pageRecommendStore.recommend_MediaFiles_PopularRecommendations = []
+      song_list.map(async (song: any, index: number) => {
+        const new_song = this.mapMedia(song, url, index, 0)
+        this.pageRecommendStore.recommend_MediaFiles_PopularRecommendations.push({
+          ...new_song,
+          play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,
+        })
+      })
+      this.pageRecommendStore.recommend_MediaFiles_PopularRecommendations.forEach(
+        (item: any, index: number) => {
+          item.absoluteIndex = index
+        }
+      )
+    }
+  }
+  ///
+
+  ///
   public async get_media_list(
     url: string,
     _start: string,
@@ -373,20 +473,18 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     }
     ///
     if (Array.isArray(song_list) && song_list.length > 0) {
-      if (song_list.length > 0) {
-        const targetArray =
-          store_general_fetch_media_list._load_model === 'search'
-            ? this.pageMediaStore.media_Files_temporary
-            : this.playlistStore.playlist_MediaFiles_temporary
-        const existingIds = new Set(targetArray.map((item: any) => item.id))
-        song_list = song_list.filter((song) => {
-          if (existingIds.has(song.ID)) {
-            return false
-          }
-          existingIds.add(song.ID)
-          return true
-        })
-      }
+      const targetArray =
+        store_general_fetch_media_list._load_model === 'search'
+          ? this.pageMediaStore.media_Files_temporary
+          : this.playlistStore.playlist_MediaFiles_temporary
+      const existingIds = new Set(targetArray.map((item: any) => item.id))
+      song_list = song_list.filter((song) => {
+        if (existingIds.has(song.ID)) {
+          return false
+        }
+        existingIds.add(song.ID)
+        return true
+      })
     } else {
       return
     }

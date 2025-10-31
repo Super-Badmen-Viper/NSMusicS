@@ -63,7 +63,12 @@ const {
   home_selected_top_album_medium_image_url,
   list_data_StartUpdate,
 } = storeToRefs(pageHomeStore)
-const { recommend_MediaFiles_temporary } = storeToRefs(pageRecommendStore)
+const {
+  recommend_MediaFiles_temporary,
+  recommend_MediaFiles_GeneralRecommendations,
+  recommend_MediaFiles_PopularRecommendations,
+  recommend_MediaFiles_PersonalizedRecommendations,
+} = storeToRefs(pageRecommendStore)
 
 const item_album = ref(160)
 const item_album_image = ref(item_album.value - 20)
@@ -75,6 +80,13 @@ const timer = ref()
 let bool_watch = false
 let before_rating = false
 let after_rating = false
+
+const dynamicScroller_personalized_recommendations = ref(null)
+let offset_personalized_recommendations = 0
+const dynamicScroller_popular_recommendations = ref(null)
+let offset_popular_recommendations = 0
+const dynamicScroller_general_recommendations = ref(null)
+let offset_general_recommendations = 0
 
 const dynamicScroller_maximum_playback = ref(null)
 let offset_maximum_playback = 0
@@ -159,6 +171,34 @@ const scrollTo = (
     return newOffset
   }
   return offset
+}
+
+const scrollTo_personalized_recommendations = (value: number) => {
+  offset_personalized_recommendations = scrollTo(
+    value,
+    dynamicScroller_personalized_recommendations,
+    offset_personalized_recommendations,
+    pageRecommendStore.recommend_MediaFiles_PersonalizedRecommendations,
+    224
+  )
+}
+const scrollTo_popular_recommendations = (value: number) => {
+  offset_popular_recommendations = scrollTo(
+    value,
+    dynamicScroller_popular_recommendations,
+    offset_popular_recommendations,
+    pageRecommendStore.recommend_MediaFiles_PopularRecommendations,
+    224
+  )
+}
+const scrollTo_general_recommendations = (value: number) => {
+  offset_general_recommendations = scrollTo(
+    value,
+    dynamicScroller_general_recommendations,
+    offset_general_recommendations,
+    pageRecommendStore.recommend_MediaFiles_GeneralRecommendations,
+    224
+  )
 }
 
 const scrollTo_maximum_playback = (value: number) => {
@@ -296,16 +336,17 @@ const Play_this_album_MediaList_click = async (item: any, list_name: string) => 
   playlistStore.reset_carousel()
 }
 
-const Play_Next_album_MediaList_click = (value: number) => {
-  let current = pageHomeStore.home_selected_top_album_subscript
-  if (value === 1) {
-    current = current >= 17 ? 0 : current + 1
-  } else {
-    current = current === 0 ? 0 : current - 1
-  }
-  pageHomeStore.home_selected_top_album_subscript = current
-  if (current === 0) {
-    pageHomeStore.list_data_StartUpdate = true
+const Play_Recommend_MediaList_click = async (value: any[]) => {
+  if (value != undefined && value.length > 0) {
+    await playerSettingStore.update_current_media_info(value[0], 0)
+    playlistStore.media_page_handleItemDbClick = true
+    playerAppearanceStore.player_mode_of_lock_playlist = false
+    playerAudioStore.this_audio_restart_play = true
+    ////
+    playlistStore.playlist_MediaFiles_temporary = []
+    playlistStore.playlist_MediaFiles_temporary = value
+    playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds = []
+    playlistStore.playlist_datas_CurrentPlayList_ALLMediaIds = value.map((item) => item.id)
   }
 }
 
@@ -479,7 +520,7 @@ onMounted(() => {
   if (store_server_user_model.model_server_type_of_web) {
     if (store_server_users.server_select_kind === 'navidrome') {
       pageHomeStore.home_Files_temporary_type_select = 'album'
-    } else if (store_server_users.server_select_kind != 'ninesong') {
+    } else {
       pageHomeStore.home_Files_temporary_type_select = 'media'
     }
   } else {
@@ -495,6 +536,11 @@ onBeforeUnmount(() => {
     clearInterval(timer.value)
     timer.value = null
   }
+
+  dynamicScroller_personalized_recommendations.value = null
+  dynamicScroller_popular_recommendations.value = null
+  dynamicScroller_general_recommendations.value = null
+
   dynamicScroller_maximum_playback.value = null
   dynamicScroller_random_search.value = null
   dynamicScroller_recently_added.value = null
@@ -570,13 +616,664 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
         <br />
       </div>
     </n-space>
+
+    <!-- Personalized Recommendations -->
+    <n-space vertical class="category-section"
+      v-if="
+      store_server_user_model.model_server_type_of_web && 
+      store_server_users.server_select_kind === 'ninesong' && 
+      home_Files_temporary_type_select === 'media'"
+    >
+      <n-space
+        justify="space-between"
+        align="center"
+        class="category-header"
+        style="
+          margin-top: 20px;
+          padding-left: 14px;
+          border-left: 4px solid var(--primary-color-hover);
+          border-radius: 3px;
+        "
+        :style="{
+          width: `calc(100vw - ${collapsed_width - 15}px)`,
+        }"
+      >
+        <n-space align="center">
+          <span class="category-title">
+            {{ 'NineSong : ' + $t('nsmusics.view_page.personalized') + $t('nsmusics.view_page.recommend') }}
+          </span>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button
+                quaternary
+                @click="
+                  () => {
+                    store_general_fetch_home_list.fetchData_Home_of_PersonalizedRecommendations()
+                    dynamicScroller_personalized_recommendations.$el.scrollLeft = 0
+                    offset_maximum_playback = 0
+                  }
+                "
+              >
+                <template #icon>
+                  <n-icon :size="20"><ArrowReset24Filled /></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('common.refresh') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button
+                  quaternary
+                  @click="
+                  () => {
+                    Play_Recommend_MediaList_click(recommend_MediaFiles_PersonalizedRecommendations)
+                  }
+                "
+              >
+                <template #icon>
+                  <n-icon :size="20"><Play /></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('HeaderPlayAll') }}
+          </n-tooltip>
+        </n-space>
+        <n-space>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary @click="scrollTo_personalized_recommendations(-1)">
+                <n-icon size="20" :depth="2"><ChevronLeft16Filled /></n-icon>
+              </n-button>
+            </template>
+            {{ $t('common.backward') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary @click="scrollTo_personalized_recommendations(1)">
+                <n-icon size="20" :depth="2"><ChevronRight16Filled /></n-icon>
+              </n-button>
+            </template>
+            {{ $t('common.forward') }}
+          </n-tooltip>
+        </n-space>
+      </n-space>
+      <DynamicScroller
+        class="home-wall"
+        ref="dynamicScroller_personalized_recommendations"
+        :style="{
+          width: `calc(100vw - ${collapsed_width - 27}px)`,
+          height: `${item_album_image + 80}px`,
+        }"
+        :items="recommend_MediaFiles_PersonalizedRecommendations"
+        :item-size="itemSize"
+        :min-item-size="itemSize"
+        direction="horizontal"
+      >
+        <template #default="{ item, index, active }">
+          <DynamicScrollerItem
+            :item="item"
+            :active="active"
+            :data-index="index"
+            v-contextmenu:contextmenu
+            @contextmenu.prevent="
+              () => {
+                playlist_Menu_Item = item
+                playlist_Menu_Item_Id = item.id
+              }
+            "
+          >
+            <div :key="item.id" class="home-album">
+              <div
+                class="home-album-cover-container"
+                :style="{
+                  width: `${item_album_image}px`,
+                  height: `${item_album_image}px`,
+                }"
+              >
+                <img
+                  class="home-album-cover-image"
+                  :src="item.medium_image_url"
+                  @error="handleImageError(item)"
+                  :style="{
+                    width: `${item_album_image}px`,
+                    height: `${item_album_image}px`,
+                  }"
+                  alt=""
+                />
+                <div
+                  class="home-album-hover-overlay"
+                  @dblclick="Open_this_album_MediaList_click(item, 'maximum')"
+                >
+                  <div class="home-album-hover-content">
+                    <button
+                      class="play-this-home-album-button"
+                      @click="Play_this_album_MediaList_click(item, 'maximum')"
+                    >
+                      <icon :size="42" color="#FFFFFF"><PlayCircle24Regular /></icon>
+                    </button>
+                    <div
+                      class="home-album-hover-buttons-top"
+                      v-if="
+                        (store_server_users.server_select_kind !== 'jellyfin' &&
+                          store_server_users.server_select_kind !== 'emby') ||
+                        store_server_user_model.model_server_type_of_local
+                      "
+                    >
+                      <rate
+                        class="viaSlot"
+                        :length="5"
+                        v-model="item.rating"
+                        @before-rate="
+                          () => {
+                            before_rating = item.rating === 1
+                          }
+                        "
+                        @after-rate="
+                          (value) => {
+                            after_rating = item.rating === 1 && before_rating
+                            handleItemClick_Rating(`${item.id}-${value}`)
+                            if (after_rating) {
+                              item.rating = 0
+                              after_rating = false
+                            }
+                          }
+                        "
+                      />
+                    </div>
+                    <div class="home-album-hover-buttons-bottom">
+                      <button
+                        v-if="
+                          store_server_user_model.model_server_type_of_local ||
+                          store_server_users.server_select_kind === 'navidrome' ||
+                          (store_server_users.server_select_kind === 'ninesong' &&
+                            home_Files_temporary_type_select === 'album')
+                        "
+                        class="open-this-home-artist-button"
+                        @click="Open_this_album_MediaList_click(item, 'maximum')"
+                      >
+                        <icon :size="20" color="#FFFFFF"><Open28Filled /></icon>
+                      </button>
+                      <button
+                        class="love-this-home-album-button"
+                        @click="
+                          () => {
+                            handleItemClick_Favorite(item.id, item.favorite)
+                            item.favorite = !item.favorite
+                          }
+                        "
+                      >
+                        <icon v-if="item.favorite" :size="20" color="red"><Heart28Filled /></icon>
+                        <icon v-else :size="20" color="#FFFFFF"><Heart24Regular /></icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="home-album-info" :style="{ width: `${item_album_image}px` }">
+                <div class="home-album-text" :style="{ width: `${item_album_txt}px` }">
+                  <div class="home-album-name" :style="{ maxWidth: `${item_album_txt}px` }">
+                    {{
+                      store_server_user_model.model_server_type_of_web &&
+                      store_server_users.server_select_kind === 'ninesong'
+                        ? home_Files_temporary_type_select === 'media'
+                          ? item.title
+                          : item.name
+                        : item.name
+                    }}
+                  </div>
+                  <div class="home-artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
+                    {{ item.artist }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </DynamicScrollerItem>
+        </template>
+      </DynamicScroller>
+    </n-space>
+    <!-- Popular Recommendations -->
+    <n-space vertical class="category-section" 
+      v-if="
+      store_server_user_model.model_server_type_of_web && 
+      store_server_users.server_select_kind === 'ninesong' && 
+      home_Files_temporary_type_select === 'media'"
+    >
+      <n-space
+        justify="space-between"
+        align="center"
+        class="category-header"
+        style="
+          padding-left: 14px;
+          border-left: 4px solid var(--primary-color-hover);
+          border-radius: 3px;
+        "
+        :style="{
+          width: `calc(100vw - ${collapsed_width - 15}px)`,
+        }"
+      >
+        <n-space align="center">
+          <span class="category-title">
+            {{ 'NineSong : ' + $t('nsmusics.view_page.hot') + $t('nsmusics.view_page.recommend') }}
+          </span>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button
+                quaternary
+                @click="
+                  () => {
+                    store_general_fetch_home_list.fetchData_Home_of_PopularRecommendations()
+                    dynamicScroller_popular_recommendations.$el.scrollLeft = 0
+                    offset_maximum_playback = 0
+                  }
+                "
+              >
+                <template #icon>
+                  <n-icon :size="20"><ArrowReset24Filled /></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('common.refresh') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button
+                  quaternary
+                  @click="
+                  () => {
+                    Play_Recommend_MediaList_click(recommend_MediaFiles_PopularRecommendations)
+                  }
+                "
+              >
+                <template #icon>
+                  <n-icon :size="20"><Play /></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('HeaderPlayAll') }}
+          </n-tooltip>
+        </n-space>
+        <n-space>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary @click="scrollTo_popular_recommendations(-1)">
+                <n-icon size="20" :depth="2"><ChevronLeft16Filled /></n-icon>
+              </n-button>
+            </template>
+            {{ $t('common.backward') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary @click="scrollTo_popular_recommendations(1)">
+                <n-icon size="20" :depth="2"><ChevronRight16Filled /></n-icon>
+              </n-button>
+            </template>
+            {{ $t('common.forward') }}
+          </n-tooltip>
+        </n-space>
+      </n-space>
+      <DynamicScroller
+        class="home-wall"
+        ref="dynamicScroller_popular_recommendations"
+        :style="{
+          width: `calc(100vw - ${collapsed_width - 27}px)`,
+          height: `${item_album_image + 80}px`,
+        }"
+        :items="recommend_MediaFiles_PopularRecommendations"
+        :item-size="itemSize"
+        :min-item-size="itemSize"
+        direction="horizontal"
+      >
+        <template #default="{ item, index, active }">
+          <DynamicScrollerItem
+            :item="item"
+            :active="active"
+            :data-index="index"
+            v-contextmenu:contextmenu
+            @contextmenu.prevent="
+              () => {
+                playlist_Menu_Item = item
+                playlist_Menu_Item_Id = item.id
+              }
+            "
+          >
+            <div :key="item.id" class="home-album">
+              <div
+                class="home-album-cover-container"
+                :style="{
+                  width: `${item_album_image}px`,
+                  height: `${item_album_image}px`,
+                }"
+              >
+                <img
+                  class="home-album-cover-image"
+                  :src="item.medium_image_url"
+                  @error="handleImageError(item)"
+                  :style="{
+                    width: `${item_album_image}px`,
+                    height: `${item_album_image}px`,
+                  }"
+                  alt=""
+                />
+                <div
+                  class="home-album-hover-overlay"
+                  @dblclick="Open_this_album_MediaList_click(item, 'maximum')"
+                >
+                  <div class="home-album-hover-content">
+                    <button
+                      class="play-this-home-album-button"
+                      @click="Play_this_album_MediaList_click(item, 'maximum')"
+                    >
+                      <icon :size="42" color="#FFFFFF"><PlayCircle24Regular /></icon>
+                    </button>
+                    <div
+                      class="home-album-hover-buttons-top"
+                      v-if="
+                        (store_server_users.server_select_kind !== 'jellyfin' &&
+                          store_server_users.server_select_kind !== 'emby') ||
+                        store_server_user_model.model_server_type_of_local
+                      "
+                    >
+                      <rate
+                        class="viaSlot"
+                        :length="5"
+                        v-model="item.rating"
+                        @before-rate="
+                          () => {
+                            before_rating = item.rating === 1
+                          }
+                        "
+                        @after-rate="
+                          (value) => {
+                            after_rating = item.rating === 1 && before_rating
+                            handleItemClick_Rating(`${item.id}-${value}`)
+                            if (after_rating) {
+                              item.rating = 0
+                              after_rating = false
+                            }
+                          }
+                        "
+                      />
+                    </div>
+                    <div class="home-album-hover-buttons-bottom">
+                      <button
+                        v-if="
+                          store_server_user_model.model_server_type_of_local ||
+                          store_server_users.server_select_kind === 'navidrome' ||
+                          (store_server_users.server_select_kind === 'ninesong' &&
+                            home_Files_temporary_type_select === 'album')
+                        "
+                        class="open-this-home-artist-button"
+                        @click="Open_this_album_MediaList_click(item, 'maximum')"
+                      >
+                        <icon :size="20" color="#FFFFFF"><Open28Filled /></icon>
+                      </button>
+                      <button
+                        class="love-this-home-album-button"
+                        @click="
+                          () => {
+                            handleItemClick_Favorite(item.id, item.favorite)
+                            item.favorite = !item.favorite
+                          }
+                        "
+                      >
+                        <icon v-if="item.favorite" :size="20" color="red"><Heart28Filled /></icon>
+                        <icon v-else :size="20" color="#FFFFFF"><Heart24Regular /></icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="home-album-info" :style="{ width: `${item_album_image}px` }">
+                <div class="home-album-text" :style="{ width: `${item_album_txt}px` }">
+                  <div class="home-album-name" :style="{ maxWidth: `${item_album_txt}px` }">
+                    {{
+                      store_server_user_model.model_server_type_of_web &&
+                      store_server_users.server_select_kind === 'ninesong'
+                        ? home_Files_temporary_type_select === 'media'
+                          ? item.title
+                          : item.name
+                        : item.name
+                    }}
+                  </div>
+                  <div class="home-artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
+                    {{ item.artist }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </DynamicScrollerItem>
+        </template>
+      </DynamicScroller>
+    </n-space>
+    <!-- General Recommendations -->
+    <n-space vertical class="category-section" 
+      v-if="
+      store_server_user_model.model_server_type_of_web && 
+      store_server_users.server_select_kind === 'ninesong' && 
+      home_Files_temporary_type_select === 'media'"
+    >
+      <n-space
+        justify="space-between"
+        align="center"
+        class="category-header"
+        style="
+          padding-left: 14px;
+          border-left: 4px solid var(--primary-color-hover);
+          border-radius: 3px;
+        "
+        :style="{
+          width: `calc(100vw - ${collapsed_width - 15}px)`,
+        }"
+      >
+        <n-space align="center">
+          <span class="category-title">
+            {{ 'NineSong : ' + $t('page.setting.generalTab') + $t('nsmusics.view_page.recommend') }}
+          </span>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button
+                quaternary
+                @click="
+                  () => {
+                    store_general_fetch_home_list.fetchData_Home_of_GeneralRecommendations()
+                    dynamicScroller_general_recommendations.$el.scrollLeft = 0
+                    offset_maximum_playback = 0
+                  }
+                "
+              >
+                <template #icon>
+                  <n-icon :size="20"><ArrowReset24Filled /></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('common.refresh') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button
+                  quaternary
+                  @click="
+                  () => {
+                    Play_Recommend_MediaList_click(recommend_MediaFiles_GeneralRecommendations)
+                  }
+                "
+              >
+                <template #icon>
+                  <n-icon :size="20"><Play /></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('HeaderPlayAll') }}
+          </n-tooltip>
+        </n-space>
+        <n-space>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary @click="scrollTo_general_recommendations(-1)">
+                <n-icon size="20" :depth="2"><ChevronLeft16Filled /></n-icon>
+              </n-button>
+            </template>
+            {{ $t('common.backward') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary @click="scrollTo_general_recommendations(1)">
+                <n-icon size="20" :depth="2"><ChevronRight16Filled /></n-icon>
+              </n-button>
+            </template>
+            {{ $t('common.forward') }}
+          </n-tooltip>
+        </n-space>
+      </n-space>
+      <DynamicScroller
+        class="home-wall"
+        ref="dynamicScroller_general_recommendations"
+        :style="{
+          width: `calc(100vw - ${collapsed_width - 27}px)`,
+          height: `${item_album_image + 80}px`,
+        }"
+        :items="recommend_MediaFiles_GeneralRecommendations"
+        :item-size="itemSize"
+        :min-item-size="itemSize"
+        direction="horizontal"
+      >
+        <template #default="{ item, index, active }">
+          <DynamicScrollerItem
+            :item="item"
+            :active="active"
+            :data-index="index"
+            v-contextmenu:contextmenu
+            @contextmenu.prevent="
+              () => {
+                playlist_Menu_Item = item
+                playlist_Menu_Item_Id = item.id
+              }
+            "
+          >
+            <div :key="item.id" class="home-album">
+              <div
+                class="home-album-cover-container"
+                :style="{
+                  width: `${item_album_image}px`,
+                  height: `${item_album_image}px`,
+                }"
+              >
+                <img
+                  class="home-album-cover-image"
+                  :src="item.medium_image_url"
+                  @error="handleImageError(item)"
+                  :style="{
+                    width: `${item_album_image}px`,
+                    height: `${item_album_image}px`,
+                  }"
+                  alt=""
+                />
+                <div
+                  class="home-album-hover-overlay"
+                  @dblclick="Open_this_album_MediaList_click(item, 'maximum')"
+                >
+                  <div class="home-album-hover-content">
+                    <button
+                      class="play-this-home-album-button"
+                      @click="Play_this_album_MediaList_click(item, 'maximum')"
+                    >
+                      <icon :size="42" color="#FFFFFF"><PlayCircle24Regular /></icon>
+                    </button>
+                    <div
+                      class="home-album-hover-buttons-top"
+                      v-if="
+                        (store_server_users.server_select_kind !== 'jellyfin' &&
+                          store_server_users.server_select_kind !== 'emby') ||
+                        store_server_user_model.model_server_type_of_local
+                      "
+                    >
+                      <rate
+                        class="viaSlot"
+                        :length="5"
+                        v-model="item.rating"
+                        @before-rate="
+                          () => {
+                            before_rating = item.rating === 1
+                          }
+                        "
+                        @after-rate="
+                          (value) => {
+                            after_rating = item.rating === 1 && before_rating
+                            handleItemClick_Rating(`${item.id}-${value}`)
+                            if (after_rating) {
+                              item.rating = 0
+                              after_rating = false
+                            }
+                          }
+                        "
+                      />
+                    </div>
+                    <div class="home-album-hover-buttons-bottom">
+                      <button
+                        v-if="
+                          store_server_user_model.model_server_type_of_local ||
+                          store_server_users.server_select_kind === 'navidrome' ||
+                          (store_server_users.server_select_kind === 'ninesong' &&
+                            home_Files_temporary_type_select === 'album')
+                        "
+                        class="open-this-home-artist-button"
+                        @click="Open_this_album_MediaList_click(item, 'maximum')"
+                      >
+                        <icon :size="20" color="#FFFFFF"><Open28Filled /></icon>
+                      </button>
+                      <button
+                        class="love-this-home-album-button"
+                        @click="
+                          () => {
+                            handleItemClick_Favorite(item.id, item.favorite)
+                            item.favorite = !item.favorite
+                          }
+                        "
+                      >
+                        <icon v-if="item.favorite" :size="20" color="red"><Heart28Filled /></icon>
+                        <icon v-else :size="20" color="#FFFFFF"><Heart24Regular /></icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="home-album-info" :style="{ width: `${item_album_image}px` }">
+                <div class="home-album-text" :style="{ width: `${item_album_txt}px` }">
+                  <div class="home-album-name" :style="{ maxWidth: `${item_album_txt}px` }">
+                    {{
+                      store_server_user_model.model_server_type_of_web &&
+                      store_server_users.server_select_kind === 'ninesong'
+                        ? home_Files_temporary_type_select === 'media'
+                          ? item.title
+                          : item.name
+                        : item.name
+                    }}
+                  </div>
+                  <div class="home-artist-name" :style="{ maxWidth: `${item_album_txt}px` }">
+                    {{ item.artist }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </DynamicScrollerItem>
+        </template>
+      </DynamicScroller>
+    </n-space>
+
+    <!-- Most Played -->
     <n-space vertical class="category-section">
       <n-space
         justify="space-between"
         align="center"
         class="category-header"
-        style="margin-top: 12px"
+        style="
+          padding-left: 14px;
+          border-left: 4px solid var(--primary-color-hover);
+          border-radius: 3px;
+        "
         :style="{
+          marginTop: home_Files_temporary_type_select != 'media' ? '20px' : '0',
           width: `calc(100vw - ${collapsed_width - 15}px)`,
         }"
       >
@@ -774,12 +1471,17 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
         </template>
       </DynamicScroller>
     </n-space>
-
+    <!-- Explored -->
     <n-space vertical class="category-section">
       <n-space
         justify="space-between"
         align="center"
         class="category-header"
+        style="
+          padding-left: 14px;
+          border-left: 4px solid var(--primary-color-hover);
+          border-radius: 3px;
+        "
         :style="{ width: `calc(100vw - ${collapsed_width - 15}px)` }"
       >
         <n-space align="center">
@@ -976,12 +1678,17 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
         </template>
       </DynamicScroller>
     </n-space>
-
+    <!-- Recently Played -->
     <n-space vertical class="category-section">
       <n-space
         justify="space-between"
         align="center"
         class="category-header"
+        style="
+          padding-left: 14px;
+          border-left: 4px solid var(--primary-color-hover);
+          border-radius: 3px;
+        "
         :style="{ width: `calc(100vw - ${collapsed_width - 15}px)` }"
       >
         <n-space align="center">
@@ -1178,12 +1885,17 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
         </template>
       </DynamicScroller>
     </n-space>
-
+    <!-- Recently Added -->
     <n-space vertical class="category-section">
       <n-space
         justify="space-between"
         align="center"
         class="category-header"
+        style="
+          padding-left: 14px;
+          border-left: 4px solid var(--primary-color-hover);
+          border-radius: 3px;
+        "
         :style="{ width: `calc(100vw - ${collapsed_width - 15}px)` }"
       >
         <n-space align="center">
