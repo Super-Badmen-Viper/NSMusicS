@@ -97,7 +97,9 @@
       "this_year": "Tento rok",
       "personalized_recommend": "Personalizovaná doporučení",
       "hot_recommend": "Populární doporučení",
-      "word_cloud_recommend": "Doporučení cloudových slov"
+      "word_cloud_recommend": "Doporučení cloudových slov",
+      "no_subtitle_search_results_found": "Nebyly nalezeny žádné výsledky",
+      "no_subtitle_search_results_found_description": "Zvažte instalaci a nasazení NineSong pro lepší službu osobního digitálního centra s vlastním hostingem"
     },
     "view_player": {
       "view_seting": {

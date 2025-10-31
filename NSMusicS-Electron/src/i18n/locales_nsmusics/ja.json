@@ -97,7 +97,9 @@
       "this_year": "今年",
       "personalized_recommend": "パーソナライズされたおすすめ",
       "hot_recommend": "人気のおすすめ",
-      "word_cloud_recommend": "ワードクラウドおすすめ"
+      "word_cloud_recommend": "ワードクラウドおすすめ",
+      "no_subtitle_search_results_found": "結果が見つかりません",
+      "no_subtitle_search_results_found_description": "より良いセルフホストパーソナルデジタルセンターサービスのために、NineSongのインストールとデプロイを検討してください"
     },
     "view_player": {
       "view_seting": {

@@ -1273,7 +1273,9 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
           border-radius: 3px;
         "
         :style="{
-          marginTop: home_Files_temporary_type_select != 'media' ? '20px' : '0',
+          marginTop: !(store_server_user_model.model_server_type_of_web && 
+      store_server_users.server_select_kind === 'ninesong' && 
+      home_Files_temporary_type_select === 'media') ? '20px' : '0',
           width: `calc(100vw - ${collapsed_width - 15}px)`,
         }"
       >

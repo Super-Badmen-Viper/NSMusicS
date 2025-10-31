@@ -97,7 +97,9 @@
       "this_year": "今年",
       "personalized_recommend": "個人化推薦",
       "hot_recommend": "熱門推薦",
-      "word_cloud_recommend": "詞雲推薦"
+      "word_cloud_recommend": "詞雲推薦",
+      "no_subtitle_search_results_found": "未找到結果",
+      "no_subtitle_search_results_found_description": "可考慮安裝部署NineSong，它將為您帶來更好的自建個人數字中心服務"
     },
     "view_player": {
       "view_seting": {

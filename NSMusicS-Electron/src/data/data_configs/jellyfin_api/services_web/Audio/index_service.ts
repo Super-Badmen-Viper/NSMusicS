@@ -139,7 +139,7 @@ export class Audio_ApiService_of_Je extends Jellyfin_Api_Services_Web {
       const lyricUrl = `${baseUrl}/emby/Items/${itemId}/${PresentationUniqueKey}/Subtitles/2/Stream.js`
       const response2 = await axios.get(lyricUrl, {
         headers: {
-          Authorization: `MediaBrowser Token="${token}", Client="NSMusicS", Device="Desktop Client", DeviceId="NineSong", Version="2.0.2"`,
+          Authorization: `MediaBrowser Token="${token}", Client="NSMusicS", Device="Desktop Client", DeviceId="NineSong", Version="2.2.0"`,
         },
         timeout: 8000,
         responseType: 'json',
@@ -158,7 +158,7 @@ export class Audio_ApiService_of_Je extends Jellyfin_Api_Services_Web {
         const lyricUrl = `${baseUrl}/emby/Items/${itemId}/${MediaSourcesID}/Subtitles/2/Stream.js`
         const response2 = await axios.get(lyricUrl, {
           headers: {
-            Authorization: `MediaBrowser Token="${token}", Client="NSMusicS", Device="Desktop Client", DeviceId="NineSong", Version="2.0.2"`,
+            Authorization: `MediaBrowser Token="${token}", Client="NSMusicS", Device="Desktop Client", DeviceId="NineSong", Version="2.2.0"`,
           },
           timeout: 8000,
           responseType: 'json',
@@ -173,9 +173,19 @@ export class Audio_ApiService_of_Je extends Jellyfin_Api_Services_Web {
   }
 
   private getFirstLyricsExtradata(data: any): string | null {
-    if (!data?.MediaStreams) return null
-    for (const stream of data.MediaStreams) {
-      if (stream.Extradata) return stream.Extradata
+    if (data?.MediaStreams) {
+      for (const stream of data.MediaStreams) {
+        if (stream.Extradata) return stream.Extradata
+      }
+    }
+    if (data?.MediaSources) {
+      for (const source of data.MediaSources) {
+        if (source.MediaStreams) {
+          for (const stream of source.MediaStreams) {
+            if (stream.Extradata) return stream.Extradata
+          }
+        }
+      }
     }
     return null
   }

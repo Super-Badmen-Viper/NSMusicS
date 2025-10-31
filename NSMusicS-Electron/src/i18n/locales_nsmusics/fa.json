@@ -97,7 +97,9 @@
       "this_year": "امسال",
       "personalized_recommend": "توصیه‌های شخصی‌سازی‌شده",
       "hot_recommend": "توصیه‌های داغ",
-      "word_cloud_recommend": "توصیه‌های ابر کلمات"
+      "word_cloud_recommend": "توصیه‌های ابر کلمات",
+      "no_subtitle_search_results_found": "نتیجه‌ای یافت نشد",
+      "no_subtitle_search_results_found_description": "نصب و راه‌اندازی NineSong را برای سرویس بهتر مرکز دیجیتال شخصی خودمیزبان در نظر بگیرید"
     },
     "view_player": {
       "view_seting": {

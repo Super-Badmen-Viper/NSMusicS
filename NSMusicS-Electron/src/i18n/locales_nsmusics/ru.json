@@ -97,7 +97,9 @@
       "this_year": "В этом году",
       "personalized_recommend": "Персонализированные рекомендации",
       "hot_recommend": "Популярные рекомендации",
-      "word_cloud_recommend": "Рекомендации по облаку слов"
+      "word_cloud_recommend": "Рекомендации по облаку слов",
+      "no_subtitle_search_results_found": "Результаты не найдены",
+      "no_subtitle_search_results_found_description": "Рассмотрите возможность установки и развертывания NineSong для лучшего самостоятельного сервиса персонального цифрового центра"
     },
     "view_player": {
       "view_seting": {

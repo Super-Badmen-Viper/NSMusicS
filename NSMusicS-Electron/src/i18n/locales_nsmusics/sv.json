@@ -97,7 +97,9 @@
       "this_year": "Detta år",
       "personalized_recommend": "Personligt anpassade rekommendationer",
       "hot_recommend": "Populära rekommendationer",
-      "word_cloud_recommend": "Ordmolnsrekommendationer"
+      "word_cloud_recommend": "Ordmolnsrekommendationer",
+      "no_subtitle_search_results_found": "Inga resultat hittades",
+      "no_subtitle_search_results_found_description": "Överväg att installera och distribuera NineSong för en bättre självhostad personlig digital center-tjänst"
     },
     "view_player": {
       "view_seting": {

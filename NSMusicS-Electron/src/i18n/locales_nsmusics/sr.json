@@ -97,7 +97,9 @@
       "this_year": "Ове године",
       "personalized_recommend": "Персонализоване препоруке",
       "hot_recommend": "Популарне препоруке",
-      "word_cloud_recommend": "Препоруке облака речи"
+      "word_cloud_recommend": "Препоруке облака речи",
+      "no_subtitle_search_results_found": "Нису пронађени резултати",
+      "no_subtitle_search_results_found_description": "Размотрите инсталирање и имплементацију NineSong-а за бољу самопостављену услугу личног дигиталног центра"
     },
     "view_player": {
       "view_seting": {

@@ -97,7 +97,9 @@
       "this_year": "Dit jaar",
       "personalized_recommend": "Gepersonaliseerde aanbevelingen",
       "hot_recommend": "Populaire aanbevelingen",
-      "word_cloud_recommend": "Woordwolkaanbevelingen"
+      "word_cloud_recommend": "Woordwolkaanbevelingen",
+      "no_subtitle_search_results_found": "Geen resultaten gevonden",
+      "no_subtitle_search_results_found_description": "Overweeg het installeren en implementeren van NineSong voor een betere zelfgehoste persoonlijke digitale center service"
     },
     "view_player": {
       "view_seting": {

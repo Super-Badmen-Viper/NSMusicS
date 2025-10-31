@@ -97,7 +97,9 @@
       "this_year": "W tym roku",
       "personalized_recommend": "Spersonalizowane rekomendacje",
       "hot_recommend": "Popularne rekomendacje",
-      "word_cloud_recommend": "Rekomendacje chmury słów"
+      "word_cloud_recommend": "Rekomendacje chmury słów",
+      "no_subtitle_search_results_found": "Nie znaleziono wyników",
+      "no_subtitle_search_results_found_description": "Rozważ zainstalowanie i wdrożenie NineSong dla lepszej usługi osobistego centrum cyfrowego self-hosted"
     },
     "view_player": {
       "view_seting": {

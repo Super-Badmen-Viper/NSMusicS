@@ -99,7 +99,9 @@
       "this_year": "今年",
       "personalized_recommend": "个性化推荐",
       "hot_recommend": "热门推荐",
-      "word_cloud_recommend": "词云推荐"
+      "word_cloud_recommend": "词云推荐",
+      "no_subtitle_search_results_found": "未找到结果",
+      "no_subtitle_search_results_found_description": "可考虑安装部署NineSong个人数字中心，它将为您带来更好的自建音乐服务"
     },
     "view_player": {
       "view_seting": {

@@ -62,12 +62,12 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
   const this_audio_lyrics_string = ref('')
   const this_audio_lyrics_null = ref(false)
   const this_audio_lyrics_loaded_complete = ref(false)
-  const this_audio_lyrics_info_line_font = ref([] as any[])
-  const this_audio_lyrics_info_line_time = ref([] as any[])
+  const this_audio_lyrics_info_line_font = ref([] as string[])
+  const this_audio_lyrics_info_line_time = ref([] as number[])
 
   const this_audio_lyrics_info_byte_model = ref(false)
-  const this_audio_lyrics_info_byte_font = ref([] as any[])
-  const this_audio_lyrics_info_byte_time = ref([] as any[])
+  const this_audio_lyrics_info_byte_font = ref([] as string[])
+  const this_audio_lyrics_info_byte_time = ref([] as string[])
 
   const this_audio_lyrics_info_line_num = ref(28)
 
@@ -106,12 +106,12 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
       page_top_album_name.value = ''
 
       this_audio_lyrics_string.value = ''
-      this_audio_lyrics_info_line_font.value = [] as any[]
-      this_audio_lyrics_info_line_time.value = [] as any[]
+      this_audio_lyrics_info_line_font.value = [] as string[]
+      this_audio_lyrics_info_line_time.value = [] as number[]
 
       this_audio_lyrics_info_byte_model.value = false
-      this_audio_lyrics_info_byte_font.value = [] as any[]
-      this_audio_lyrics_info_byte_time.value = [] as any[]
+      this_audio_lyrics_info_byte_font.value = [] as string[]
+      this_audio_lyrics_info_byte_time.value = [] as string[]
 
       this_audio_lyrics_info_line_num.value = 28
     }
@@ -145,28 +145,46 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
       this_audio_lyrics_info_line_font.value.push('')
     }
 
-    const line_all = newValue.split('\n')
+    // 修复：确保 newValue 是字符串类型并安全地分割行
+    const safeNewValue = typeof newValue === 'string' ? newValue : String(newValue || '')
+    const line_all = safeNewValue.split('\n').filter(line => line.trim() !== '')
+    
     const line_times: string[] = []
     line_all.forEach((line) => {
       try {
-        const timestampMatch = line.match(/^\[(\d+,\d+)\]/)
+        // 处理可能包含特殊字符的行
+        const cleanLine = line.trim()
+        if (!cleanLine) return
+        
+        const timestampMatch = cleanLine.match(/^\[(\d+,\d+)\]/)
         if (timestampMatch) {
-          const [startMs, durationMs] = timestampMatch[1].split(',').map(Number)
+          const [startMs] = timestampMatch[1].split(',').map(Number)
           const minutes = Math.floor(startMs / 60000)
           const seconds = Math.floor((startMs % 60000) / 1000)
           const milliseconds = Math.floor((startMs % 1000) / 10)
           const timestamp = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(milliseconds).padStart(2, '0')}`
           line_times.push(timestamp)
-          const lyricsContent = line.replace(timestampMatch[0], '')
+          const lyricsContent = cleanLine.replace(timestampMatch[0], '')
           this_audio_lyrics_info_line_font.value.push(lyricsContent)
         } else {
-          const temp = line.split(']')
+          const temp = cleanLine.split(']')
           if (temp.length > 1) {
-            line_times.push(temp[0].replace('[', ''))
-            this_audio_lyrics_info_line_font.value.push(temp[1])
+            line_times.push(temp[0].replace('[', '').trim())
+            this_audio_lyrics_info_line_font.value.push(temp[1].trim())
+          } else {
+            // 处理没有时间戳的行（如标题信息）
+            if (cleanLine.startsWith('[')) {
+              // 这可能是标题信息，如 [ar:艺术家] 等
+              // 可以选择忽略或特殊处理
+            } else if (cleanLine.length > 0) {
+              // 没有时间戳但有内容的行，添加到歌词中
+              this_audio_lyrics_info_line_font.value.push(cleanLine)
+            }
           }
         }
-      } catch {}
+      } catch (error) {
+        console.error('处理歌词行时出错:', error, '行内容:', line)
+      }
     })
 
     this_audio_lyrics_info_byte_model.value = false
@@ -175,18 +193,18 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
       this_audio_lyrics_info_line_font.value &&
       this_audio_lyrics_info_line_font.value.length > 0
     ) {
-      this_audio_lyrics_info_line_font.value.forEach((element: any, index: number) => {
+      this_audio_lyrics_info_line_font.value.forEach((element: string, index: number) => {
         const timeFontMatches = element.match(/<(\d+,\d+,\d+)>([^<]+)/g)
         if (timeFontMatches) {
           this_audio_lyrics_info_byte_time.value[index] = []
           this_audio_lyrics_info_byte_font.value[index] = []
           const timeFontPairs = timeFontMatches.map((match: string) => {
-            let [time, font] = match.split('>')
+            const [time, font] = match.split('>')
             time = time.replace('<', '')
             return [time.split(',').map(Number), font]
           })
           for (let i = 0; i < timeFontPairs.length; i++) {
-            let [startMs, durationMs, unknown] = timeFontPairs[i][0] as number[]
+            const [startMs, durationMs] = timeFontPairs[i][0] as number[]
             const nextStartMs =
               i < timeFontPairs.length - 1 ? (timeFontPairs[i + 1][0] as number[])[0] : Infinity
 
@@ -212,9 +230,19 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
     // Split time of line
     this_audio_lyrics_info_line_time.value = []
     for (let i = 0; i < line_times.length; i++) {
-      const [minutes, seconds] = line_times[i].split(':')
-      this_audio_lyrics_info_line_time.value[i] =
-        (parseInt(minutes) * 60 + parseInt(seconds)) * 1000
+      const timeParts = line_times[i].split(':')
+      if (timeParts.length >= 2) {
+        const [minutes, seconds] = timeParts
+        const secondsParts = seconds.split('.')
+        if (secondsParts.length >= 2) {
+          const milliseconds = secondsParts[1] || '00'
+          this_audio_lyrics_info_line_time.value[i] =
+            (parseInt(minutes) * 60 + parseInt(secondsParts[0])) * 1000 + parseInt(milliseconds) * 10
+        } else {
+          this_audio_lyrics_info_line_time.value[i] =
+            (parseInt(minutes) * 60 + parseInt(seconds)) * 1000
+        }
+      }
     }
     this_audio_lyrics_loaded_complete.value = true
   }
@@ -222,7 +250,7 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
   const set_carousel_index = async () => {
     const playlistStore = usePlaylistStore()
     const index = playlistStore.playlist_MediaFiles_temporary_carousel.findIndex(
-      (item: any) => item.path === this_audio_file_path.value
+      (item) => item.path === this_audio_file_path.value
     )
     this_audio_Index_of_play_list_carousel.value = index != -1 ? index : 0
   }
@@ -258,10 +286,10 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
           }
         }
       }
-      pageMediaStore.media_Files_temporary.forEach((item: any) => {
+      pageMediaStore.media_Files_temporary.forEach((item) => {
         item.playing = item.id === this_audio_song_id.value
       })
-      playlistStore.playlist_MediaFiles_temporary.forEach((item: any) => {
+      playlistStore.playlist_MediaFiles_temporary.forEach((item) => {
         item.playing = item.id === this_audio_song_id.value
       })
 
@@ -307,7 +335,7 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
   watch(this_audio_song_rating, (newValue) => {
     console.log('this_audio_song_rating：' + newValue)
     const pageMediaStore = usePageMediaStore()
-    pageMediaStore.media_Files_temporary.forEach((item: any) => {
+    pageMediaStore.media_Files_temporary.forEach((item) => {
       if (item.id === this_audio_song_id.value) item.rating = this_audio_song_rating.value
     })
   })
@@ -315,7 +343,7 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
   watch(this_audio_song_favorite, (newValue) => {
     console.log('this_audio_song_favorite：' + newValue)
     const pageMediaStore = usePageMediaStore()
-    pageMediaStore.media_Files_temporary.forEach((item: any) => {
+    pageMediaStore.media_Files_temporary.forEach((item) => {
       if (item.id === this_audio_song_id.value) item.favorite = this_audio_song_favorite.value
     })
   })
@@ -337,7 +365,7 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
       const get_LocalSqlite_AnnotationInfo = new Get_LocalSqlite_AnnotationInfo()
       pageAlbumStore.album_recently_count =
         get_LocalSqlite_AnnotationInfo.Get_Annotation_ItemInfo_Play_Count('album')
-      pageAlbumStore.page_albumlists_statistic.forEach((item: any) => {
+      pageAlbumStore.page_albumlists_statistic.forEach((item) => {
         if (item.id === 'album_list_recently') {
           item.song_count = pageAlbumStore.album_recently_count + ' *'
         }
@@ -347,7 +375,7 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
     }
   })
 
-  watch(this_audio_artist_id, (newValue) => {
+  watch(this_audio_artist_id, () => {
     store_local_data_set_artistInfo.Set_ArtistInfo_To_PlayCount_of_Artist(
       this_audio_artist_id.value
     )
@@ -361,7 +389,7 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
     }
   })
 
-  watch(this_audio_Index_of_play_list, (newValue) => {
+  watch(this_audio_Index_of_play_list, () => {
     const playlistStore = usePlaylistStore()
     playlistStore.reset_carousel()
   })

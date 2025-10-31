@@ -11,6 +11,7 @@ import {
   PaddingDown20Filled,
 } from '@vicons/fluent'
 import { RefreshSharp } from '@vicons/ionicons5'
+import { BrowserNotSupportedTwotone } from '@vicons/material'
 
 // @ts-ignore - 忽略模块导入类型检查
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
@@ -851,7 +852,25 @@ const onScroll = (event: any) => {
     </n-space>
 
     <n-space vertical class="category-recently-add-section">
+      <div 
+        v-if="!groupedRecentlyAdded || groupedRecentlyAdded.length === 0" 
+        class="empty-state"
+        style="
+        margin-left: 10px;margin-top: 10px;
+        height: calc(100vh - 218px);
+        "
+        :style="{
+          width: `calc(100vw - ${collapsed_width - 8}px)`,
+        }"
+      >
+        <n-icon :size="60" :depth="2">
+          <BrowserNotSupportedTwotone />
+        </n-icon>
+        <div class="empty-title">{{ $t('nsmusics.view_page.no_subtitle_search_results_found') }}</div>
+        <div class="empty-description">{{ $t('nsmusics.view_page.no_subtitle_search_results_found_description') }}</div>
+      </div>
       <DynamicScroller
+        v-else
         ref="dynamicScroller"
         style="scroll-behavior: smooth"
         :style="{
@@ -1307,4 +1326,32 @@ const onScroll = (event: any) => {
   font-size: 24px;
   font-weight: 600;
 }
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--card-color);
+  border-radius: 18px;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.02);
+}
+.empty-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-color-1);
+  margin-bottom: 8px;
+}
+.empty-description {
+  font-size: 16px;
+  color: var(--text-color-3);
+  max-width: 300px;
+  line-height: 1.4;
+}
+
 </style>

@@ -22,7 +22,7 @@ import {
 import { Random } from '@vicons/fa'
 import { Play, RefreshSharp } from '@vicons/ionicons5'
 import { Icon } from '@vicons/utils'
-import { Add, Close, Menu } from '@vicons/carbon'
+import { BrowserNotSupportedTwotone } from '@vicons/material'
 
 ////// this_view views_components of navie ui
 import { ref, onMounted, h, computed, watch, onBeforeUnmount } from 'vue'
@@ -249,7 +249,7 @@ function check_sort_state() {
       : ''
   Select_Sort_Model.value = !(
     (sortKey === '_id' || sortKey === 'id') &&
-    (sortOrder === '' || sortOrder === 'ascend')
+    (sortOrder === '' || sortOrder === 'asc' || sortOrder === 'ascend')
   )
 }
 onMounted(() => {
@@ -1157,6 +1157,24 @@ function scrollerEnd() {
         </n-space>
       </n-space>
 
+      <div 
+        v-if="!media_Files_temporary || media_Files_temporary.length === 0" 
+        class="empty-state"
+        style="
+        margin-left: 10px;
+        height: calc(100vh - 241px);
+        position: absolute;top: 90px;
+        "
+        :style="{
+          width: `calc(100vw - ${collapsed_width - 8}px)`,
+        }"
+      >
+        <n-icon :size="60" :depth="2">
+          <BrowserNotSupportedTwotone />
+        </n-icon>
+        <div class="empty-title">{{ $t('nsmusics.view_page.no_subtitle_search_results_found') }}</div>
+        <div class="empty-description">{{ $t('nsmusics.view_page.no_subtitle_search_results_found_description') }}</div>
+      </div>
       <DynamicScroller
         class="table_media_cue"
         ref="dynamicScroller"
@@ -1380,6 +1398,7 @@ function scrollerEnd() {
           </DynamicScrollerItem>
         </template>
       </DynamicScroller>
+
       <v-contextmenu
         ref="contextmenu"
         class="v-contextmenu-item v-contextmenu-item--hover"
@@ -1757,5 +1776,32 @@ function scrollerEnd() {
 ::-webkit-scrollbar-thumb:hover {
   background-color: #88888850;
   border-radius: 4px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--card-color);
+  border-radius: 18px;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.02);
+}
+.empty-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-color-1);
+  margin-bottom: 8px;
+}
+.empty-description {
+  font-size: 16px;
+  color: var(--text-color-3);
+  max-width: 300px;
+  line-height: 1.4;
 }
 </style>

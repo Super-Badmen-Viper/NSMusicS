@@ -97,7 +97,9 @@
       "this_year": "Cette année",
       "personalized_recommend": "Recommandations personnalisées",
       "hot_recommend": "Recommandations populaires",
-      "word_cloud_recommend": "Recommandations de nuage de mots"
+      "word_cloud_recommend": "Recommandations de nuage de mots",
+      "no_subtitle_search_results_found": "Aucun résultat trouvé",
+      "no_subtitle_search_results_found_description": "Envisagez d'installer et de déployer NineSong pour un meilleur service de centre numérique personnel auto-hébergé"
     },
     "view_player": {
       "view_seting": {

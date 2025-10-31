@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <item>
-<version>2.0.2</version>
+<version>2.2.0</version>
 <url> </url>
 <changelog>https://github.com/Super-Badmen-Viper/NSMusicS/releases</changelog>
 <changelog_explain>
-    1.6.0已更新内容;
+    2.2.0已更新内容;
+    更新了很多东西，修复了很多BUG，但是我懒得写了，每个版本都会越来越强，而且每到一定阶段都会进行项目架构重构。
+    .......
     由于node-mpv不再维护具有潜在问题(包括但不限于单曲重复播放、唤起MPV组件失败、MPV状态管理权限问题)，现将默认音频输出设置为howler.js Web输出[√];
     增加迷你播放窗口，竖向模式为仿制AppleMusic迷你播放悬浮窗，横向模式为桌面歌词[√];
     增加服务器配置种类，兼容emby-api[√];
@@ -33,11 +35,8 @@
     ;;
     后续将更新的内容;
     优化NSMusicS产品用户友好性，构建引导程序，逐步引导初次安装的用户完成应用配置操作[进行中];
-    为专辑-乐曲-艺术家页面添加高级筛选: 年份，流派，目录.....[任意条件][进行中];
-    增加对Docker-Web客户端的支持[进行中];
     增加对MaxOS系统客户端的本地模式兼容，完善对MacOSX文件系统的访问兼容;
     增加音效-均衡器(简易/专业)功能(仅适用于音频输出源为howler.js(web输出));
-    增加cue音频格式的支持;
     增加与Windows系统媒体控制(SMTC)交互功能(开发基于C#适用于Windows的dll，用以NSMusicS-Electron访问Windows底层组件功能);
     增加播放器动态渐变背景，可选播放背景(动态渐变背景/专辑底图);
     增加并优化应用主题样式(Windows云母主题，秋霜白主题，暗耀黑主题，火山灰主题);
@@ -45,14 +44,11 @@
     增加歌词样式(桌面歌词功能);
     增加歌词样式(进一步优化并完全开放歌词逐字功能。服务器模式也可使用本地模式中的逐字歌词，逐字效果与AppleMusic歌词逐字效果一致);
     增加快捷键操控模式(可在菜单-快捷键中，根据用户使用习惯自定义快捷键，也可使用默认的快捷键);
-    dlna推送到音响播放;
     ;
     增加webdav服务器配置(数据下载/即时访问);
     增加云存储网盘服务器配置(onedrive以及各类云盘);
     增加服务器配置种类，使用NineSong API;
     增加api配置，使用外置歌词获取api，tag获取补全api;
-    ;
-    增加界面的流媒体管理系统功能，与NineSong服务器端进行融合;
 </changelog_explain>
 <mandatory>false</mandatory>
 </item>
