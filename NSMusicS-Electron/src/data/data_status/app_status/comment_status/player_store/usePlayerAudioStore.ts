@@ -199,12 +199,12 @@ export const usePlayerAudioStore = defineStore('playerAudio', () => {
           this_audio_lyrics_info_byte_time.value[index] = []
           this_audio_lyrics_info_byte_font.value[index] = []
           const timeFontPairs = timeFontMatches.map((match: string) => {
-            const [time, font] = match.split('>')
+            let [time, font] = match.split('>')
             time = time.replace('<', '')
             return [time.split(',').map(Number), font]
           })
           for (let i = 0; i < timeFontPairs.length; i++) {
-            const [startMs, durationMs] = timeFontPairs[i][0] as number[]
+            let [startMs, durationMs] = timeFontPairs[i][0] as number[]
             const nextStartMs =
               i < timeFontPairs.length - 1 ? (timeFontPairs[i + 1][0] as number[])[0] : Infinity
 
