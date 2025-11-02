@@ -1110,11 +1110,9 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
       song_list = result['ninesong-response']['mediaFiles']
     }
     if (song_list != undefined && song_list.length > 0) {
-      this.pageRecommendStore.recommend_MediaFiles_metadata = []
       this.pageRecommendStore.recommend_MediaFiles_temporary = []
       song_list.map(async (song: any, index: number) => {
         let new_song = this.mapMedia(song, url, index, 0)
-        this.pageRecommendStore.recommend_MediaFiles_metadata.push(song)
         this.pageRecommendStore.recommend_MediaFiles_temporary.push({
           ...new_song,
           play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000,

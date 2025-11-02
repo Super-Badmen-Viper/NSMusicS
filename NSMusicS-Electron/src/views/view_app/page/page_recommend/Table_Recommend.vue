@@ -45,7 +45,6 @@ const {
   recommend_WordCloudTag_metadata,
   recommend_WordCloudGenre_metadata,
   recommend_MediaSearch_metadata,
-  recommend_MediaFiles_metadata,
 } = storeToRefs(pageRecommendStore)
 
 echarts.use([TooltipComponent, VisualMapComponent, CanvasRenderer])
@@ -120,7 +119,6 @@ const clearSelections = () => {
   }
   message.info('已清空所有选择')
   pageRecommendStore.recommend_MediaSearch_metadata = []
-  pageRecommendStore.recommend_MediaFiles_metadata = []
   pageRecommendStore.recommend_MediaFiles_temporary = []
 }
 

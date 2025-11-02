@@ -7,7 +7,6 @@ export const usePageRecommendStore = defineStore('pageRecommend', () => {
   const recommend_WordCloudGenre_metadata = ref<any[]>([])
 
   const recommend_MediaSearch_metadata = ref<any[]>([])
-  const recommend_MediaFiles_metadata = ref<any[]>([])
   const recommend_MediaFiles_temporary = ref<any[]>([])
 
   const recommend_MediaFiles_RefreshRecommendations = ref(false)
@@ -20,7 +19,6 @@ export const usePageRecommendStore = defineStore('pageRecommend', () => {
     recommend_WordCloudGenre_metadata,
 
     recommend_MediaSearch_metadata,
-    recommend_MediaFiles_metadata,
     recommend_MediaFiles_temporary,
 
     recommend_MediaFiles_RefreshRecommendations,
