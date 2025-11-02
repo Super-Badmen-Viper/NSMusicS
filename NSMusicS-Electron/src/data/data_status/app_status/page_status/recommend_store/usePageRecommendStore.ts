@@ -10,6 +10,7 @@ export const usePageRecommendStore = defineStore('pageRecommend', () => {
   const recommend_MediaFiles_metadata = ref<any[]>([])
   const recommend_MediaFiles_temporary = ref<any[]>([])
 
+  const recommend_MediaFiles_RefreshRecommendations = ref(false)
   const recommend_MediaFiles_GeneralRecommendations = ref<any[]>([])
   const recommend_MediaFiles_PersonalizedRecommendations = ref<any[]>([])
   const recommend_MediaFiles_PopularRecommendations = ref<any[]>([])
@@ -22,6 +23,7 @@ export const usePageRecommendStore = defineStore('pageRecommend', () => {
     recommend_MediaFiles_metadata,
     recommend_MediaFiles_temporary,
 
+    recommend_MediaFiles_RefreshRecommendations,
     recommend_MediaFiles_GeneralRecommendations,
     recommend_MediaFiles_PersonalizedRecommendations,
     recommend_MediaFiles_PopularRecommendations,

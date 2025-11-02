@@ -65,6 +65,7 @@ const {
 } = storeToRefs(pageHomeStore)
 const {
   recommend_MediaFiles_temporary,
+  recommend_MediaFiles_RefreshRecommendations,
   recommend_MediaFiles_GeneralRecommendations,
   recommend_MediaFiles_PopularRecommendations,
   recommend_MediaFiles_PersonalizedRecommendations,
@@ -647,8 +648,10 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
               <n-button
                 quaternary
                 @click="
-                  () => {
-                    store_general_fetch_home_list.fetchData_Home_of_PersonalizedRecommendations()
+                  async () => {
+                    recommend_MediaFiles_RefreshRecommendations = true
+                    await store_general_fetch_home_list.fetchData_Home_of_PersonalizedRecommendations()
+                    recommend_MediaFiles_RefreshRecommendations = false
                     dynamicScroller_personalized_recommendations.$el.scrollLeft = 0
                     offset_maximum_playback = 0
                   }
@@ -861,8 +864,10 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
               <n-button
                 quaternary
                 @click="
-                  () => {
-                    store_general_fetch_home_list.fetchData_Home_of_PopularRecommendations()
+                  async () => {
+                    recommend_MediaFiles_RefreshRecommendations = true
+                    await store_general_fetch_home_list.fetchData_Home_of_PopularRecommendations()
+                    recommend_MediaFiles_RefreshRecommendations = false
                     dynamicScroller_popular_recommendations.$el.scrollLeft = 0
                     offset_maximum_playback = 0
                   }
@@ -1075,8 +1080,10 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
               <n-button
                 quaternary
                 @click="
-                  () => {
-                    store_general_fetch_home_list.fetchData_Home_of_GeneralRecommendations()
+                  async () => {
+                    recommend_MediaFiles_RefreshRecommendations = true
+                    await store_general_fetch_home_list.fetchData_Home_of_GeneralRecommendations()
+                    recommend_MediaFiles_RefreshRecommendations = false
                     dynamicScroller_general_recommendations.$el.scrollLeft = 0
                     offset_maximum_playback = 0
                   }
