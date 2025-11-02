@@ -31,6 +31,11 @@ export const store_general_fetch_home_list = reactive({
       pageHomeStore.home_Files_temporary_recently_played = []
       pageHomeStore.home_selected_top_album = undefined
 
+      const pageRecommendStore = usePageRecommendStore()
+      pageRecommendStore.recommend_MediaFiles_GeneralRecommendations = []
+      pageRecommendStore.recommend_MediaFiles_PersonalizedRecommendations = []
+      pageRecommendStore.recommend_MediaFiles_PopularRecommendations = []
+
       // @ts-ignore - 忽略属性访问类型检查
       if (store_server_user_model.model_server_type_of_local) {
         const get_HomeDataInfos_From_LocalSqlite = new Get_LocalSqlite_HomeDataInfos()
@@ -245,7 +250,7 @@ export const store_general_fetch_home_list = reactive({
   async fetchData_Home_of_GeneralRecommendations() {
     try {
       const pageRecommendStore = usePageRecommendStore()
-      pageRecommendStore.home_Files_temporary_GeneralRecommendations = []
+      pageRecommendStore.recommend_MediaFiles_GeneralRecommendations = []
       if (store_server_user_model.model_server_type_of_local) {
       } else if (store_server_user_model.model_server_type_of_web) {
         if (store_server_users.server_select_kind === 'ninesong') {
@@ -267,7 +272,7 @@ export const store_general_fetch_home_list = reactive({
   async fetchData_Home_of_PersonalizedRecommendations() {
     try {
       const pageRecommendStore = usePageRecommendStore()
-      pageRecommendStore.home_Files_temporary_PersonalizedRecommendations = []
+      pageRecommendStore.recommend_MediaFiles_PersonalizedRecommendations = []
       if (store_server_user_model.model_server_type_of_local) {
       } else if (store_server_user_model.model_server_type_of_web) {
         if (store_server_users.server_select_kind === 'ninesong') {
@@ -288,7 +293,7 @@ export const store_general_fetch_home_list = reactive({
   async fetchData_Home_of_PopularRecommendations() {
     try {
       const pageRecommendStore = usePageRecommendStore()
-      pageRecommendStore.home_Files_temporary_PopularRecommendations = []
+      pageRecommendStore.recommend_MediaFiles_PopularRecommendations = []
       if (store_server_user_model.model_server_type_of_local) {
       } else if (store_server_user_model.model_server_type_of_web) {
         if (store_server_users.server_select_kind === 'ninesong') {

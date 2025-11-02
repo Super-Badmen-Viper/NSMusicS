@@ -54,15 +54,9 @@ export class Get_NineSong_Temp_Data_To_LocalSqlite {
     await this.get_home_list_of_recently_added(url)
     await this.get_home_list_of_recently_played(url)
 
-    if (this.pageRecommendStore.recommend_MediaFiles_GeneralRecommendations.length === 0) {
-      await this.get_home_list_of_GeneralRecommendations(url, 'media', '18', '0', '0')
-    } 
-    if (this.pageRecommendStore.recommend_MediaFiles_PersonalizedRecommendations.length === 0) {
-      await this.get_home_list_of_PersonalizedRecommendations(url, 'media', '18', '0')
-    } 
-    if (this.pageRecommendStore.recommend_MediaFiles_PopularRecommendations.length === 0) {
-      await this.get_home_list_of_PopularRecommendations(url, 'media', '18')
-    }
+    await this.get_home_list_of_GeneralRecommendations(url, 'media', '18', '0', '0')
+    await this.get_home_list_of_PersonalizedRecommendations(url, 'media', '18', '0')
+    await this.get_home_list_of_PopularRecommendations(url, 'media', '18')
   }
 
   ///
