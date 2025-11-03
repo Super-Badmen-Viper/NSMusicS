@@ -4,11 +4,11 @@ import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/alb
 import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
-import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/data/data_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
+import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/server_api/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
-import { Get_Jellyfin_Temp_Data_To_LocalSqlite } from '@/data/data_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite'
-import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/data/data_configs/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
+import { Get_Jellyfin_Temp_Data_To_LocalSqlite } from '@/server_api/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite'
+import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/server_api/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 
 export const store_server_model_statistics = reactive({
   async get_page_top_info() {

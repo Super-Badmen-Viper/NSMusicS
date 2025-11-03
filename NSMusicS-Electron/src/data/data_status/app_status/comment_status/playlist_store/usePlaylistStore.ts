@@ -23,8 +23,8 @@ import { usePageMediaStore } from '@/data/data_status/app_status/page_status/med
 import { usePlayerSettingStore } from '../player_store/usePlayerSettingStore'
 import { Get_LocalSqlite_PlaylistInfo } from '@/data/data_repository/app_repository/LocalSqlite_Get_PlaylistInfo'
 import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
-import { store_general_fetch_media_list } from '../../../../data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
-import { store_general_fetch_media_cue_list } from '../../../../data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list'
+import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
+import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 
 export const usePlaylistStore = defineStore('playlist', () => {

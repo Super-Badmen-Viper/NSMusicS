@@ -34,7 +34,7 @@ const pageArtistStore = usePageArtistStore()
 
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 import { store_server_data_select_logic } from '@/data/data_stores/server_configs_stores/server_data_select/store_server_data_select_logic'
-import { Users_ApiService_of_Je } from '@/data/data_configs/jellyfin_api/services_web/Users/index_service'
+import { Users_ApiService_of_Je } from '@/server_api/jellyfin_api/services_web/Users/index_service'
 const theme_value = ref('lightTheme')
 const theme_options = ref([
   {
@@ -542,7 +542,7 @@ const model_local_step_2 = computed(() => t('nsmusics.view_page.selectLibrary'))
 
 //////
 import { store_local_data_select_logic } from '@/data/data_stores/local_app_stores/local_data_select/store_local_data_select_logic'
-import { Library_ApiService_of_Je } from '@/data/data_configs/jellyfin_api/services_web/Library/index_service'
+import { Library_ApiService_of_Je } from '@/server_api/jellyfin_api/services_web/Library/index_service'
 </script>
 
 <template>

@@ -41,7 +41,7 @@ const {
 } = storeToRefs(pageMediaStore)
 
 ////// i18n auto lang
-import { Folder_Entity_ApiService_of_NineSong } from '@/data/data_configs/ninesong_api/services_web/Folder_Entity/index_service'
+import { Folder_Entity_ApiService_of_NineSong } from '@/server_api/ninesong_api/services_web/Folder_Entity/index_service'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
 

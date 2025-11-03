@@ -1,9 +1,9 @@
 import { reactive } from 'vue'
-import { Media_Annotation_ApiService_of_ND } from '@/data/data_configs/navidrome_api/services_normal/media_annotation/index_service'
+import { Media_Annotation_ApiService_of_ND } from '@/server_api/navidrome_api/services_normal/media_annotation/index_service'
 import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
 import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
-import { Annotation_ApiService_of_NineSong } from '@/data/data_configs/ninesong_api/services_web/Scene/Music/Annotation/index_service'
+import { Annotation_ApiService_of_NineSong } from '@/server_api/ninesong_api/services_web/Scene/Music/Annotation/index_service'
 
 export const store_server_data_set_annotionInfo = reactive({
   async Set_MediaInfo_Add_Selected_Favorite_Server(ids: string[], value: boolean) {

@@ -5,8 +5,8 @@ import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_statu
 
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
-import { Users_ApiService_of_Je } from '@/data/data_configs/jellyfin_api/services_web/Users/index_service'
-import { Library_ApiService_of_Je } from '@/data/data_configs/jellyfin_api/services_web/Library/index_service'
+import { Users_ApiService_of_Je } from '@/server_api/jellyfin_api/services_web/Users/index_service'
+import { Library_ApiService_of_Je } from '@/server_api/jellyfin_api/services_web/Library/index_service'
 import { store_server_navidrome_userdata_logic } from '../../server_configs_stores/server_data_select/server_navidrome_user_data/store_server_navidrome_userdata_logic'
 import { store_server_model_statistics } from '@/data/data_stores/server_api_stores/server_api_core/model/model_statistics'
 import { store_server_login_logic } from '@/views/view_server/page_login/store/store_server_login_logic'

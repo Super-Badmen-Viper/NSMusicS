@@ -9,7 +9,7 @@ import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_statu
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 
 import { store_system_configs_load } from '@/data/data_stores/local_system_stores/store_system_configs_load'
-import { User_Authorization_ApiWebService_of_ND } from '@/data/data_configs/navidrome_api/services_web/user_authorization/index_service'
+import { User_Authorization_ApiWebService_of_ND } from '@/server_api/navidrome_api/services_web/user_authorization/index_service'
 import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
@@ -18,11 +18,11 @@ import { usePageHomeStore } from '@/data/data_status/app_status/page_status/home
 import { usePageMediaCueStore } from '@/data/data_status/app_status/page_status/media_cue_store/usePageMediaCueStore'
 import { usePageRecommendStore } from '@/data/data_status/app_status/page_status/recommend_store/usePageRecommendStore'
 import { store_server_auth_token } from '@/data/data_stores/server_api_stores/server_api_auth/auth_token'
-import { Auth_Token_ApiService_of_NineSong } from '@/data/data_configs/ninesong_api/services_web/Auth/Auth_Token/index_service'
+import { Auth_Token_ApiService_of_NineSong } from '@/server_api/ninesong_api/services_web/Auth/Auth_Token/index_service'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { store_server_login_logic } from '@/views/view_server/page_login/store/store_server_login_logic'
-import { Folder_Entity_ApiService_of_NineSong } from '@/data/data_configs/ninesong_api/services_web/Folder_Entity/index_service'
+import { Folder_Entity_ApiService_of_NineSong } from '@/server_api/ninesong_api/services_web/Folder_Entity/index_service'
 import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
 
 export const store_server_user_model = reactive({
