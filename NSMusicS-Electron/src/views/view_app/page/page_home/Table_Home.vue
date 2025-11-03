@@ -706,7 +706,9 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
         ref="dynamicScroller_personalized_recommendations"
         :style="{
           width: `calc(100vw - ${collapsed_width - 27}px)`,
-          height: `${item_album_image + 80}px`,
+          height: recommend_MediaFiles_PersonalizedRecommendations != undefined &&
+          recommend_MediaFiles_PersonalizedRecommendations.length > 0 ?
+          `${item_album_image + 80}px` : `20px`,
         }"
         :items="recommend_MediaFiles_PersonalizedRecommendations"
         :item-size="itemSize"
@@ -922,7 +924,9 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
         ref="dynamicScroller_popular_recommendations"
         :style="{
           width: `calc(100vw - ${collapsed_width - 27}px)`,
-          height: `${item_album_image + 80}px`,
+          height: recommend_MediaFiles_PopularRecommendations != undefined &&
+          recommend_MediaFiles_PopularRecommendations.length > 0 ?
+          `${item_album_image + 80}px` : `20px`,
         }"
         :items="recommend_MediaFiles_PopularRecommendations"
         :item-size="itemSize"
@@ -1138,7 +1142,9 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
         ref="dynamicScroller_general_recommendations"
         :style="{
           width: `calc(100vw - ${collapsed_width - 27}px)`,
-          height: `${item_album_image + 80}px`,
+          height: recommend_MediaFiles_GeneralRecommendations != undefined &&
+          recommend_MediaFiles_GeneralRecommendations.length > 0 ?
+          `${item_album_image + 80}px` : `20px`,
         }"
         :items="recommend_MediaFiles_GeneralRecommendations"
         :item-size="itemSize"
@@ -1351,7 +1357,9 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
         ref="dynamicScroller_maximum_playback"
         :style="{
           width: `calc(100vw - ${collapsed_width - 27}px)`,
-          height: `${item_album_image + 80}px`,
+          height: home_Files_temporary_maximum_playback != undefined &&
+          home_Files_temporary_maximum_playback.length > 0 ?
+          `${item_album_image + 80}px` : `20px`,
         }"
         :items="home_Files_temporary_maximum_playback"
         :item-size="itemSize"
@@ -1558,7 +1566,9 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
         ref="dynamicScroller_random_search"
         :style="{
           width: `calc(100vw - ${collapsed_width - 27}px)`,
-          height: `${item_album_image + 80}px`,
+          height: home_Files_temporary_random_search != undefined &&
+          home_Files_temporary_random_search.length > 0 ?
+          `${item_album_image + 80}px` : `20px`,
         }"
         :items="home_Files_temporary_random_search"
         :item-size="itemSize"
@@ -1765,7 +1775,9 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
         ref="dynamicScroller_recently_played"
         :style="{
           width: `calc(100vw - ${collapsed_width - 27}px)`,
-          height: `${item_album_image + 80}px`,
+          height: home_Files_temporary_recently_played != undefined &&
+          home_Files_temporary_recently_played.length > 0 ?
+          `${item_album_image + 80}px` : `20px`,
         }"
         :items="home_Files_temporary_recently_played"
         :item-size="itemSize"
@@ -1972,7 +1984,9 @@ const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
         ref="dynamicScroller_recently_added"
         :style="{
           width: `calc(100vw - ${collapsed_width - 27}px)`,
-          height: `${item_album_image + 80}px`,
+          height: home_Files_temporary_recently_added != undefined &&
+          home_Files_temporary_recently_added.length > 0 ?
+          `${item_album_image + 80}px` : `20px`,
         }"
         :items="home_Files_temporary_recently_added"
         :item-size="itemSize"

@@ -103,19 +103,19 @@ export const store_server_login_logic = reactive({
           ///
           const route = String(sessionStorage.getItem('jwt_route'))
           let route_path =
-            route && route != '/login' && route != '/null' && route !== 'null' ? route : '/home'
+            route && route != '/login' && route != '/null' && route !== 'null' ? route : '/setting'
 
-          // 修复：检查 router 是否为 null，如果为 null 则设置为 '/home'
+          // 修复：检查 router 是否为 null，如果为 null 则设置为 '/setting'
           if (store_router_data_info.router === null) {
-            route_path = '/home'
+            route_path = '/setting'
           }
           // 确保 route_path 不为 null 或 'null'
           if (!route_path || route_path === 'null') {
-            route_path = '/home'
+            route_path = '/setting'
           }
           // 特别处理 route_path 为 '/null' 的情况
           if (route_path === '/null') {
-            route_path = '/home'
+            route_path = '/setting'
           }
           store_router_data_info.router.push(route_path)
         }
