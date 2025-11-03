@@ -1,7 +1,7 @@
 import { reactive } from 'vue'
 import { Set_LocalSqlite_AnnotationInfo } from '@/data/data_repository/app_repository/LocalSqlite_Set_AnnotationInfo'
-import { store_server_data_set_annotionInfo } from '@/data/data_stores/server_api_stores/server_api_core/annotation/store_server_data_set_annotionInfo'
-import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { store_server_data_set_annotionInfo } from '@/server/server_api_store/server_api_core/annotation/store_server_data_set_annotionInfo'
+import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 const set_LocalSqlite_AnnotationInfo = new Set_LocalSqlite_AnnotationInfo()
 export const store_local_data_set_annotionInfo = reactive({
   Set_MediaInfo_Add_Selected_Favorite(ids: string[], value: boolean) {

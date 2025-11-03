@@ -66,7 +66,7 @@ const handleImageError = async (item: any) => {
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
 import { VueDraggable } from 'vue-draggable-plus'
-import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 const { t } = useI18n({
   inheritLocale: true,
 })
@@ -79,13 +79,13 @@ const message = useMessage()
 const themeVars = useThemeVars()
 
 ////// right menu
-import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
+import { store_general_fetch_media_list } from '@/server/server_api_store/server_api_core/page/page_media_file/store_general_fetch_media_list'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
-import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
-import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/server_api/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
+import { store_general_model_player_list } from '@/server/server_api_store/server_api_core/components/player_list/store_general_model_player_list'
+import { store_server_users } from '@/server/server_management/store_server_users'
+import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/server/server_api/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
-import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/server_api/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
+import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/server/server_api/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
 const contextmenu = ref(null)
 async function update_playlist_addMediaFile(id: any, playlist_id: any) {
   try {

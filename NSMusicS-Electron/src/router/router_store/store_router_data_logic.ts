@@ -14,7 +14,7 @@ import { store_router_history_data_of_artist } from '@/router/router_store/store
 // @ts-ignore - 忽略模块导入类型检查
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 // @ts-ignore - 忽略模块导入类型检查
-import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 import { usePageTagStore } from '@/data/data_status/app_status/page_status/tag_store/usePageTagStore'
 
 // 定义页面类型枚举

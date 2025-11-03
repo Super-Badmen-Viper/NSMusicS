@@ -26,11 +26,11 @@ import { store_system_configs_info } from '@/data/data_stores/local_system_store
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 import { store_router_history_data_of_album } from '@/router/router_store/store_router_history_data_of_album'
-import { store_general_fetch_album_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_album/store_general_fetch_album_list'
+import { store_general_fetch_album_list } from '@/server/server_api_store/server_api_core/page/page_album/store_general_fetch_album_list'
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
-import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 ////// changed_data write to sqlite
 import { store_local_data_set_albumInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_albumInfo'
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
@@ -42,7 +42,7 @@ import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_statu
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 
-import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
+import { store_general_fetch_media_list } from '@/server/server_api_store/server_api_core/page/page_media_file/store_general_fetch_media_list'
 ////// right menu
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
@@ -81,8 +81,8 @@ const gridItems = ref(5)
 const itemSecondarySize = ref(185)
 import error_album from '@/assets/img/error_album.jpg'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
-import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
-import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
+import { store_server_users } from '@/server/server_management/store_server_users'
+import { store_general_model_player_list } from '@/server/server_api_store/server_api_core/components/player_list/store_general_model_player_list'
 import { debounce } from 'lodash'
 import { MultipleStopOutlined } from '@vicons/material'
 const errorHandled = ref(new Map())

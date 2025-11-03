@@ -29,7 +29,7 @@ import * as echarts from 'echarts/core'
 import { TooltipComponent, VisualMapComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import 'echarts-wordcloud'
-import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/server_api/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
+import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/server/server_api/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { usePageRecommendStore } from '@/data/data_status/app_status/page_status/recommend_store/usePageRecommendStore'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
@@ -497,8 +497,8 @@ const handleImageError = async (item: any) => {
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
-import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
-import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
+import { store_server_user_model } from '@/server/server_management/store_server_user_model'
+import { store_server_users } from '@/server/server_management/store_server_users'
 const { t } = useI18n({
   inheritLocale: true,
 })

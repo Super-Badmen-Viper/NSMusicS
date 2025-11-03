@@ -646,11 +646,11 @@ import { store_system_configs_info } from '@/data/data_stores/local_system_store
 import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
-import { store_server_data_set_media_cueInfo } from '@/data/data_stores/server_api_stores/server_api_core/annotation/store_server_data_set_media_cueInfo'
+import { store_server_data_set_media_cueInfo } from '@/server/server_api_store/server_api_core/annotation/store_server_data_set_media_cueInfo'
 import type { SelectBaseOption } from 'naive-ui/es/select/src/interface'
 import { store_local_db_info } from '@/data/data_stores/local_app_stores/store_local_db_info'
-import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
-import { store_server_data_set_playlistInfo } from '@/data/data_stores/server_api_stores/server_api_core/annotation/store_server_data_set_playlistInfo'
+import { store_server_user_model } from '@/server/server_management/store_server_user_model'
+import { store_server_data_set_playlistInfo } from '@/server/server_api_store/server_api_core/annotation/store_server_data_set_playlistInfo'
 import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { usePagePlayerTagModifyStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerTagModifyStore'
@@ -660,19 +660,19 @@ const playerAppearanceStore = usePlayerAppearanceStore()
 const playerSettingStore = usePlayerSettingStore()
 const playerTagModifyStore = usePagePlayerTagModifyStore()
 const { page_top_album_image_url, this_audio_song_name } = storeToRefs(playerAudioStore)
-import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
+import { store_general_fetch_media_list } from '@/server/server_api_store/server_api_core/page/page_media_file/store_general_fetch_media_list'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
-import { store_general_fetch_album_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_album/store_general_fetch_album_list'
-import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
-import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/server_api/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
-import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
+import { store_general_fetch_album_list } from '@/server/server_api_store/server_api_core/page/page_album/store_general_fetch_album_list'
+import { store_general_fetch_player_list } from '@/server/server_api_store/server_api_core/components/player_list/store_general_fetch_player_list'
+import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/server/server_api/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
+import { store_server_users } from '@/server/server_management/store_server_users'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
-import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
-import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/server_api/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
+import { store_general_model_player_list } from '@/server/server_api_store/server_api_core/components/player_list/store_general_model_player_list'
+import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/server/server_api/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 import { debounce } from 'lodash'
 import { MultipleStopOutlined } from '@vicons/material'
-import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list'
+import { store_general_fetch_media_cue_list } from '@/server/server_api_store/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list'
 
 ////// Right_click_on_songline show menu
 let click_count = 0

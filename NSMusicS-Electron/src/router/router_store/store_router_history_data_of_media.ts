@@ -1,7 +1,7 @@
 import { reactive, watch } from 'vue'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
-import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
+import { store_general_fetch_media_list } from '@/server/server_api_store/server_api_core/page/page_media_file/store_general_fetch_media_list'
 
 export const store_router_history_data_of_media = reactive({
   router_history_model_of_Media_scroll: false,

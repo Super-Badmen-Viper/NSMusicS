@@ -26,7 +26,7 @@
     "paths": {
       "@/data/*": ["src/data/*"],
       "@/router/*": ["src/router/*"],
-      "@/server_api/*": ["src/server_api/*"],
+      "@/server/*": ["src/server/*"],
       "@/utils/*": ["src/utils/*"],
       "@/views_components/*": ["src/views_components/*"],
       "@/views_drawer/*": ["src/views_drawer/*"],

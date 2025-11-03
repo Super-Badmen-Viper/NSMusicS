@@ -7,11 +7,11 @@ import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_statu
 import { usePagePlayerViewStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerViewStore'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { usePagePlayerTagModifyStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerTagModifyStore'
-import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
+import { store_server_users } from '@/server/server_management/store_server_users'
 import error_album from '@/assets/img/error_album.jpg'
-import { Audio_ApiService_of_Je } from '@/server_api/jellyfin_api/services_web/Audio/index_service'
-import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
-import { Retrieval_ApiService_of_NineSong } from '@/server_api/ninesong_api/services_web/Scene/Music/Retrieval/index_service'
+import { Audio_ApiService_of_Je } from '@/server/server_api/jellyfin_api/services_web/Audio/index_service'
+import { store_server_user_model } from '@/server/server_management/store_server_user_model'
+import { Retrieval_ApiService_of_NineSong } from '@/server/server_api/ninesong_api/services_web/Scene/Music/Retrieval/index_service'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 
 export const usePlayerSettingStore = defineStore('playerSetting', () => {

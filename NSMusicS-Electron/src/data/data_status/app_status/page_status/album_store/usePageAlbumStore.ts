@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 import { store_router_history_data_of_album } from '@/router/router_store/store_router_history_data_of_album'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
-import { store_general_fetch_album_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_album/store_general_fetch_album_list'
+import { store_general_fetch_album_list } from '@/server/server_api_store/server_api_core/page/page_album/store_general_fetch_album_list'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 
 export const usePageAlbumStore = defineStore('pageAlbum', () => {

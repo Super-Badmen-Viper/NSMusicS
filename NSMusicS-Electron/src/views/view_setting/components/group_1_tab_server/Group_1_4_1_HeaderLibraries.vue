@@ -1,15 +1,15 @@
 <script setup lang="ts">
 ////// this_view resource of vicons_svg
 import { AddCircle32Regular, ArrowReset24Filled, Folder24Regular } from '@vicons/fluent'
-import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
+import { store_server_users } from '@/server/server_management/store_server_users'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { Close } from '@vicons/carbon'
 import { NButton, NIcon } from 'naive-ui'
 
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 
-import { Folder_Entity_ApiService_of_NineSong } from '@/server_api/ninesong_api/services_web/Folder_Entity/index_service'
-import { File_Entity_ApiService_of_NineSong } from '@/server_api/ninesong_api/services_web/File_Entity/Scan Folders/index_service'
+import { Folder_Entity_ApiService_of_NineSong } from '@/server/server_api/ninesong_api/services_web/Folder_Entity/index_service'
+import { File_Entity_ApiService_of_NineSong } from '@/server/server_api/ninesong_api/services_web/File_Entity/Scan Folders/index_service'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n({
   inheritLocale: true,
@@ -355,7 +355,7 @@ import { store_server_login_info } from '@/views/view_server/page_login/store/st
 import { usePagePlayerViewStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerViewStore'
 import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
 import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
-import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 
 const contentTypeValue = ref(1)
 const contentTypeOptions = ref([

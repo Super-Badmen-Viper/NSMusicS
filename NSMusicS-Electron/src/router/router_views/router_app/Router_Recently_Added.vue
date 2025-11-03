@@ -2,8 +2,8 @@
 import { onMounted } from 'vue'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import Table_Recently_Added from '@/views/view_app/page/page_recently_added/Table_Recently_Added.vue'
-import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
-import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
+import { store_server_user_model } from '@/server/server_management/store_server_user_model'
+import { store_server_users } from '@/server/server_management/store_server_users'
 
 onMounted(async () => {
   store_router_data_info.router_select = 'recently_added'

@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
-import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
-import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
-import { Browsing_ApiService_of_ND } from '@/server_api/navidrome_api/services_normal/browsing/index_service'
+import { store_server_users } from '@/server/server_management/store_server_users'
+import { Browsing_ApiService_of_ND } from '@/server/server_api/navidrome_api/services_normal/browsing/index_service'
 import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
 import { isElectron, ipcRenderer } from '@/utils/electron/isElectron'
 

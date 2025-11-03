@@ -15,10 +15,10 @@ onBeforeUnmount(() => {
 
 ////// this_view views_components
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
+import { store_server_users } from '@/server/server_management/store_server_users'
 import { ref, onMounted, watch, onBeforeUnmount, computed, h } from 'vue'
 import { NButton, NIcon } from 'naive-ui'
-import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
@@ -33,8 +33,8 @@ const pageMediaStore = usePageMediaStore()
 const pageArtistStore = usePageArtistStore()
 
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
-import { store_server_data_select_logic } from '@/data/data_stores/server_configs_stores/server_data_select/store_server_data_select_logic'
-import { Users_ApiService_of_Je } from '@/server_api/jellyfin_api/services_web/Users/index_service'
+import { store_server_data_select_logic } from '@/server/server_management/server_data_select/store_server_data_select_logic'
+import { Users_ApiService_of_Je } from '@/server/server_api/jellyfin_api/services_web/Users/index_service'
 const theme_value = ref('lightTheme')
 const theme_options = ref([
   {
@@ -542,7 +542,7 @@ const model_local_step_2 = computed(() => t('nsmusics.view_page.selectLibrary'))
 
 //////
 import { store_local_data_select_logic } from '@/data/data_stores/local_app_stores/local_data_select/store_local_data_select_logic'
-import { Library_ApiService_of_Je } from '@/server_api/jellyfin_api/services_web/Library/index_service'
+import { Library_ApiService_of_Je } from '@/server/server_api/jellyfin_api/services_web/Library/index_service'
 </script>
 
 <template>

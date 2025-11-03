@@ -30,9 +30,9 @@ import { onBeforeUnmount } from 'vue'
 const get_playerbar_to_switch_playerview = inject('get_playerbar_to_switch_playerview')
 
 import { useI18n } from 'vue-i18n'
-import { store_server_data_set_mediaInfo } from '@/data/data_stores/server_api_stores/server_api_core/annotation/store_server_data_set_mediaInfo'
-import { store_server_data_set_albumInfo } from '@/data/data_stores/server_api_stores/server_api_core/annotation/store_server_data_set_albumInfo'
-import { store_server_data_set_artistInfo } from '@/data/data_stores/server_api_stores/server_api_core/annotation/store_server_data_set_artistInfo'
+import { store_server_data_set_mediaInfo } from '@/server/server_api_store/server_api_core/annotation/store_server_data_set_mediaInfo'
+import { store_server_data_set_albumInfo } from '@/server/server_api_store/server_api_core/annotation/store_server_data_set_albumInfo'
+import { store_server_data_set_artistInfo } from '@/server/server_api_store/server_api_core/annotation/store_server_data_set_artistInfo'
 import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 const { t } = useI18n({
@@ -614,7 +614,7 @@ watch(
 // )
 
 ////// player_configs player_button order area
-import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 const backpanel_order_leave = () => {
   if (!player_show.value) {
     // playerSettingStore.drawer_order_show = false;
@@ -1044,7 +1044,7 @@ const play_skip_cue_order = async (
   ///
   return true
 }
-import { Retrieval_ApiService_of_NineSong } from '@/server_api/ninesong_api/services_web/Scene/Music/Retrieval/index_service'
+import { Retrieval_ApiService_of_NineSong } from '@/server/server_api/ninesong_api/services_web/Scene/Music/Retrieval/index_service'
 watch(
   () => playerAudioStore.this_audio_cue_track_current_no,
   async (newValue) => {
@@ -1196,20 +1196,20 @@ import { usePagePlayerSoundSpeedStore } from '@/data/data_status/app_status/page
 import { usePagePlayerSoundMoreStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerSoundMoreStore'
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
 
-import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 import { Audio_howler } from '@/data/data_models/app_models/song_Audio_Out/Audio_howler'
 import { Audio_node_mpv } from '@/data/data_models/app_models/song_Audio_Out/Audio_node_mpv'
 import { usePagePlayerTagModifyStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerTagModifyStore'
 const playerTagModifyStore = usePagePlayerTagModifyStore()
 import { Get_LocalSqlite_AnnotationInfo } from '@/data/data_repository/app_repository/LocalSqlite_Get_AnnotationInfo'
-import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/server_api/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
-import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
-import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
-import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/server_api/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
+import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/server/server_api/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
+import { store_server_users } from '@/server/server_management/store_server_users'
+import { store_general_fetch_media_list } from '@/server/server_api_store/server_api_core/page/page_media_file/store_general_fetch_media_list'
+import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/server/server_api/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { usePageMediaCueStore } from '@/data/data_status/app_status/page_status/media_cue_store/usePageMediaCueStore'
-import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list'
-import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
+import { store_general_fetch_media_cue_list } from '@/server/server_api_store/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list'
+import { store_general_fetch_player_list } from '@/server/server_api_store/server_api_core/components/player_list/store_general_fetch_player_list'
 
 const handleItemClick_Favorite = (id, favorite) => {
   if (id != null && id.length > 0 && id != 'undefined') {

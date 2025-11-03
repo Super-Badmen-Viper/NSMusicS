@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { store_general_fetch_charts_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_charts/store_general_fetch_charts_list'
+import { store_general_fetch_charts_list } from '@/server/server_api_store/server_api_core/page/page_charts/store_general_fetch_charts_list'
 
 export const usePageChartsStore = defineStore('pageCharts', () => {
   const charts_media_file_metadata = ref<any[]>([])

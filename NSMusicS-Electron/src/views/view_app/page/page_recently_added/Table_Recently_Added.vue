@@ -21,14 +21,14 @@ import { storeToRefs } from 'pinia'
 // @ts-ignore - 忽略模块导入类型检查
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 // @ts-ignore - 忽略模块导入类型检查
-import { store_general_fetch_album_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_album/store_general_fetch_album_list'
+import { store_general_fetch_album_list } from '@/server/server_api_store/server_api_core/page/page_album/store_general_fetch_album_list'
 
 // @ts-ignore - 忽略模块导入类型检查
-import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 // @ts-ignore - 忽略模块导入类型检查
-import { store_server_users } from '@/data/data_stores/server_configs_stores/store_server_users'
+import { store_server_users } from '@/server/server_management/store_server_users'
 // @ts-ignore - 忽略模块导入类型检查
-import { store_general_fetch_home_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_home/store_general_fetch_home_list'
+import { store_general_fetch_home_list } from '@/server/server_api_store/server_api_core/page/page_home/store_general_fetch_home_list'
 // @ts-ignore - 忽略模块导入类型检查
 import { store_local_data_set_albumInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_albumInfo'
 // @ts-ignore - 忽略模块导入类型检查
@@ -39,7 +39,7 @@ import { store_system_configs_save } from '@/data/data_stores/local_system_store
 // @ts-ignore - 忽略模块导入类型检查
 import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
 // @ts-ignore - 忽略模块导入类型检查
-import { store_general_fetch_media_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_file/store_general_fetch_media_list'
+import { store_general_fetch_media_list } from '@/server/server_api_store/server_api_core/page/page_media_file/store_general_fetch_media_list'
 // @ts-ignore - 忽略模块导入类型检查
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
 // @ts-ignore - 忽略模块导入类型检查
@@ -49,21 +49,21 @@ import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_
 // @ts-ignore - 忽略模块导入类型检查
 import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
 // @ts-ignore - 忽略模块导入类型检查
-import { store_general_fetch_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_fetch_player_list'
+import { store_general_fetch_player_list } from '@/server/server_api_store/server_api_core/components/player_list/store_general_fetch_player_list'
 // @ts-ignore - 忽略模块导入类型检查
-import { store_general_model_player_list } from '@/data/data_stores/server_api_stores/server_api_core/components/player_list/store_general_model_player_list'
+import { store_general_model_player_list } from '@/server/server_api_store/server_api_core/components/player_list/store_general_model_player_list'
 
 // @ts-ignore - 忽略模块导入类型检查
 import error_album from '@/assets/img/error_album.jpg'
 // @ts-ignore - 忽略模块导入类型检查
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 // @ts-ignore - 忽略模块导入类型检查
-import { store_general_fetch_artist_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_artist/store_general_fetch_artist_list'
+import { store_general_fetch_artist_list } from '@/server/server_api_store/server_api_core/page/page_artist/store_general_fetch_artist_list'
 // @ts-ignore - 忽略模块导入类型检查
 import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
 
 // @ts-ignore - 忽略模块导入类型检查
-import { store_general_fetch_media_cue_list } from '@/data/data_stores/server_api_stores/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list'
+import { store_general_fetch_media_cue_list } from '@/server/server_api_store/server_api_core/page/page_media_cue_file/store_general_fetch_media_cue_list'
 
 import { useI18n } from 'vue-i18n'
 // @ts-ignore - 忽略模块导入类型检查
@@ -89,11 +89,14 @@ const itemSecondarySize = ref(185)
 const errorHandled = ref(new Map())
 const timer = ref<NodeJS.Timeout | null>(null)
 let bool_watch = false
-let before_rating: any = false
-let after_rating: boolean = false
+let before_rating = false
+let after_rating = false
 
 // 添加dynamicScroller的定义
-const dynamicScroller = ref(null)
+const dynamicScroller = ref<any>(null)
+// 添加分组数据缓存和已处理数据长度记录
+const _groupedRecentlyAddedCache = ref<any[]>([])
+const _lastProcessedDataLength = ref<number>(0)
 const onResize = () => {
   console.log('resize')
 }
@@ -154,63 +157,219 @@ const groupedRecentlyAdded = computed(() => {
   // 每次重新计算时都基于完整的数据集
   if (currentData.length === 0) return []
 
-  // 按创建时间排序
-  const sortedItems = [...currentData].sort((a: any, b: any) => {
-    if (!a.created_at || !b.created_at) return 0
-    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  })
+  // 检查是否需要完全刷新数据
+  if (isDataRefreshing.value) {
+    // 完全刷新场景：重新计算所有数据
+    
+    // 先对数据进行去重处理，确保id唯一，参考class_Get_NineSong_Temp_Data_To_LocalSqlite.ts 619-626的实现
+    // 使用Map来提高查找性能
+    const uniqueItemsMap = new Map()
+    currentData.forEach((item: any) => {
+      if (item && item.id && !uniqueItemsMap.has(item.id)) {
+        uniqueItemsMap.set(item.id, item)
+      }
+    })
+    const uniqueItems = Array.from(uniqueItemsMap.values())
 
-  // 按时间分组
-  const groups: { [key: string]: any[] } = {}
-  const years: Set<number> = new Set()
-  const now = new Date()
+    // 按创建时间排序
+    const sortedItems = uniqueItems.sort((a: any, b: any) => {
+      if (!a.created_at || !b.created_at) return 0
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    })
 
-  sortedItems.forEach((item: any) => {
-    if (!item.created_at) return
-    const date = new Date(item.created_at)
-    const groupName = getTimeGroupName(date)
-    if (!groups[groupName]) {
-      groups[groupName] = []
-    }
-    groups[groupName].push(item)
+    // 按时间分组
+    const groups: { [key: string]: any[] } = {}
+    const years: Set<number> = new Set()
+    const now = new Date()
 
-    // 收集年份
-    const year = date.getFullYear()
-    if (year < now.getFullYear() && year >= 2020) {
-      // 只收集2020年及以后的年份
-      years.add(year)
-    }
-  })
+    sortedItems.forEach((item: any) => {
+      if (!item.created_at) return
+      const date = new Date(item.created_at)
+      const groupName = getTimeGroupName(date)
+      if (!groups[groupName]) {
+        groups[groupName] = []
+      }
+      groups[groupName].push(item)
 
-  // 动态生成分组顺序，使用计算属性确保语言切换时能实时更新
-  const groupOrder = [
-    timeGroupNames.value.this_week,
-    timeGroupNames.value.this_month,
-    timeGroupNames.value.last_3_months,
-    timeGroupNames.value.last_6_months,
-    timeGroupNames.value.this_year,
-  ]
+      // 收集年份
+      const year = date.getFullYear()
+      if (year < now.getFullYear() && year >= 2020) {
+        // 只收集2020年及以后的年份
+        years.add(year)
+      }
+    })
 
-  // 按年份降序添加
-  const sortedYears = Array.from(years).sort((a, b) => b - a)
-  sortedYears.forEach((year) => {
-    groupOrder.push(year.toString())
-  })
+    // 动态生成分组顺序，使用计算属性确保语言切换时能实时更新
+    const groupOrder = [
+      timeGroupNames.value.this_week,
+      timeGroupNames.value.this_month,
+      timeGroupNames.value.last_3_months,
+      timeGroupNames.value.last_6_months,
+      timeGroupNames.value.this_year,
+    ]
 
-  groupOrder.push('更早')
+    // 按年份降序添加
+    const sortedYears = Array.from(years).sort((a, b) => b - a)
+    sortedYears.forEach((year) => {
+      groupOrder.push(year.toString())
+    })
 
-  // 按时间顺序排列分组
-  const result: { name: string; items: any[] }[] = []
-  groupOrder.forEach((groupName) => {
-    if (groups[groupName] && groups[groupName].length > 0) {
-      result.push({
-        name: groupName,
-        items: groups[groupName],
+    groupOrder.push('更早')
+
+    // 按时间顺序排列分组
+    const result: { name: string; items: any[] }[] = []
+    groupOrder.forEach((groupName) => {
+      if (groups[groupName] && groups[groupName].length > 0) {
+        result.push({
+          name: groupName,
+          items: groups[groupName],
+        })
+      }
+    })
+
+    // 更新缓存
+    _groupedRecentlyAddedCache.value = result
+    // 重置已处理数据长度
+    _lastProcessedDataLength.value = currentData.length
+    
+    return result
+  } else {
+    // 增量追加场景：只处理新增数据并追加到现有分组中
+    // 获取当前已分组的数据
+    const existingGroups = _groupedRecentlyAddedCache.value || []
+    
+    // 如果没有现有分组，回退到完全刷新模式
+    if (existingGroups.length === 0) {
+      // 先对数据进行去重处理，确保id唯一，参考class_Get_NineSong_Temp_Data_To_LocalSqlite.ts 619-626的实现
+      // 使用Map来提高查找性能
+      const uniqueItemsMap = new Map()
+      currentData.forEach((item: any) => {
+        if (item && item.id && !uniqueItemsMap.has(item.id)) {
+          uniqueItemsMap.set(item.id, item)
+        }
       })
-    }
-  })
+      const uniqueItems = Array.from(uniqueItemsMap.values())
 
-  return result
+      // 按创建时间排序
+      const sortedItems = uniqueItems.sort((a: any, b: any) => {
+        if (!a.created_at || !b.created_at) return 0
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      })
+
+      // 按时间分组
+      const groups: { [key: string]: any[] } = {}
+      const years: Set<number> = new Set()
+      const now = new Date()
+
+      sortedItems.forEach((item: any) => {
+        if (!item.created_at) return
+        const date = new Date(item.created_at)
+        const groupName = getTimeGroupName(date)
+        if (!groups[groupName]) {
+          groups[groupName] = []
+        }
+        groups[groupName].push(item)
+
+        // 收集年份
+        const year = date.getFullYear()
+        if (year < now.getFullYear() && year >= 2020) {
+          // 只收集2020年及以后的年份
+          years.add(year)
+        }
+      })
+
+      // 动态生成分组顺序，使用计算属性确保语言切换时能实时更新
+      const groupOrder = [
+        timeGroupNames.value.this_week,
+        timeGroupNames.value.this_month,
+        timeGroupNames.value.last_3_months,
+        timeGroupNames.value.last_6_months,
+        timeGroupNames.value.this_year,
+      ]
+
+      // 按年份降序添加
+      const sortedYears = Array.from(years).sort((a, b) => b - a)
+      sortedYears.forEach((year) => {
+        groupOrder.push(year.toString())
+      })
+
+      groupOrder.push('更早')
+
+      // 按时间顺序排列分组
+      const result: { name: string; items: any[] }[] = []
+      groupOrder.forEach((groupName) => {
+        if (groups[groupName] && groups[groupName].length > 0) {
+          result.push({
+            name: groupName,
+            items: groups[groupName],
+          })
+        }
+      })
+
+      // 缓存结果
+      _groupedRecentlyAddedCache.value = result
+      // 更新已处理数据长度
+      _lastProcessedDataLength.value = currentData.length
+      
+      return result
+    }
+    
+    // 有现有分组的情况下，只处理新增数据
+    // 获取新增的数据（假设新增数据在数组末尾）
+    const existingDataLength = _lastProcessedDataLength.value || 0
+    const newData = currentData.slice(existingDataLength)
+    
+    // 更新已处理数据长度
+    _lastProcessedDataLength.value = currentData.length
+    
+    if (newData.length === 0) {
+      // 没有新增数据，返回缓存的结果
+      return existingGroups
+    }
+    
+    // 对新增数据进行去重处理
+    const uniqueNewItemsMap = new Map()
+    newData.forEach((item: any) => {
+      if (item && item.id && !uniqueNewItemsMap.has(item.id)) {
+        uniqueNewItemsMap.set(item.id, item)
+      }
+    })
+    const uniqueNewItems = Array.from(uniqueNewItemsMap.values())
+    
+    // 将新增数据合并到现有分组中
+    const updatedGroups = [...existingGroups]
+    
+    // 按创建时间排序新增数据
+    const sortedNewItems = uniqueNewItems.sort((a: any, b: any) => {
+      if (!a.created_at || !b.created_at) return 0
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    })
+    
+    // 将新增数据按时间分组并添加到对应分组中
+    const now = new Date()
+    sortedNewItems.forEach((item: any) => {
+      if (!item.created_at) return
+      const date = new Date(item.created_at)
+      const groupName = getTimeGroupName(date)
+      
+      // 查找对应的分组
+      const groupIndex = updatedGroups.findIndex(group => group.name === groupName)
+      if (groupIndex >= 0) {
+        // 如果分组已存在，添加到该分组
+        updatedGroups[groupIndex].items.push(item)
+      } else {
+        // 如果分组不存在，创建新分组
+        updatedGroups.push({
+          name: groupName,
+          items: [item]
+        })
+      }
+    })
+    
+    // 缓存更新后的结果
+    _groupedRecentlyAddedCache.value = updatedGroups
+    return updatedGroups
+  }
 })
 
 // 强制刷新ref，用于在home_Files_temporary_recently_added变化时触发重新渲染
@@ -609,6 +768,11 @@ const home_Files_temporary_type_options = ref([
     value: 'media_cue',
   },
 ])
+
+// 添加一个标志来区分数据更新类型
+const isDataRefreshing = ref(false)
+
+// 修改 change_home_Files_temporary_type 方法以标记完全刷新数据
 function change_home_Files_temporary_type() {
   currentGroupName.value = ''
   _start.value = 0
@@ -617,29 +781,13 @@ function change_home_Files_temporary_type() {
     start: String(_start.value),
     end: String(_end.value),
   }
+  // 标记为完全刷新数据
+  isDataRefreshing.value = true
   pageHomeStore.home_Files_temporary_recently_added = []
   store_general_fetch_home_list.fetchData_Home_of_recently_added()
 }
-const onRefreshSharp = async () => {
-  change_home_Files_temporary_type()
-}
 
-// @ts-ignore - 忽略模块导入类型检查
-import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
-const pageAlbumStore = usePageAlbumStore()
-const playlistStore = usePlaylistStore()
-const playerAudioStore = usePlayerAudioStore()
-const playerAppearanceStore = usePlayerAppearanceStore()
-const playerSettingStore = usePlayerSettingStore()
-const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
-  storeToRefs(playlistStore)
-
-//////
-const _start = ref(0)
-const _end = ref(30)
-const isScrolling = ref(false)
-const onScrollStart = () => {}
-
+// 修改 onScrollEnd 方法以优化数据追加
 const onScrollEnd = async () => {
   if (isScrolling.value) return
   isScrolling.value = true
@@ -654,6 +802,8 @@ const onScrollEnd = async () => {
         start: String(_start.value),
         end: String(_end.value),
       }
+      // 清除刷新标志，表示这是追加数据
+      isDataRefreshing.value = false
       await store_general_fetch_home_list.fetchData_Home_of_recently_added()
 
       // 数据加载完成后，重新计算可见分组索引
@@ -681,7 +831,26 @@ const onScrollEnd = async () => {
   isScrolling.value = false
 }
 
-// 添加一个新的滚动处理函数，用于检测是否滚动到底部
+const onRefreshSharp = async () => {
+  change_home_Files_temporary_type()
+}
+
+// @ts-ignore - 忽略模块导入类型检查
+import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
+const pageAlbumStore = usePageAlbumStore()
+const playlistStore = usePlaylistStore()
+const playerAudioStore = usePlayerAudioStore()
+const playerAppearanceStore = usePlayerAppearanceStore()
+const playerSettingStore = usePlayerSettingStore()
+const { playlist_names_ALLLists, playlist_Menu_Item_Id, playlist_Menu_Item } =
+  storeToRefs(playlistStore)
+
+//////
+const _start = ref(0)
+const _end = ref(30)
+const isScrolling = ref(false)
+const onScrollStart = () => {}
+
 const onScroll = (event: any) => {
   // 如果正在滚动加载数据，则不更新currentGroupName
   if (isScrolling.value) return

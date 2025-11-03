@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { usePagePlayerTagModifyStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerTagModifyStore'
 import { storeToRefs } from 'pinia'
-import { store_server_user_model } from '@/data/data_stores/server_configs_stores/store_server_user_model'
+import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n({
