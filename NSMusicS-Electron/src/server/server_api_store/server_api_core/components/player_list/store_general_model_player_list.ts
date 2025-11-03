@@ -9,7 +9,7 @@ import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/server/server_api/nines
 import { Playlist_ApiService_of_NineSong } from '@/server/server_api/ninesong_api/services_web/Scene/Music/Playlist/index_service'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 import { store_local_data_set_playlistInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_playlistInfo'
-import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+import { usePlaylistStore } from '@/data/data_status/comment_status/playlist_store/usePlaylistStore'
 
 export const store_general_model_player_list = reactive({
   async get_playlists_info() {

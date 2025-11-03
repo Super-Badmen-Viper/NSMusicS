@@ -352,9 +352,9 @@ onBeforeUnmount(() => {
 
 import error_album_old from '@/assets/img/error_album_old.jpg'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
-import { usePagePlayerViewStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerViewStore'
-import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
-import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
+import { usePagePlayerViewStore } from '@/data/data_status/page_status/player_store/usePagePlayerViewStore'
+import { usePlayerAppearanceStore } from '@/data/data_status/comment_status/player_store/usePlayerAppearanceStore'
+import { usePlayerAudioStore } from '@/data/data_status/comment_status/player_store/usePlayerAudioStore'
 import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 
 const contentTypeValue = ref(1)

@@ -19,12 +19,12 @@ import { store_server_users } from '@/server/server_management/store_server_user
 import { ref, onMounted, watch, onBeforeUnmount, computed, h } from 'vue'
 import { NButton, NIcon } from 'naive-ui'
 import { store_server_user_model } from '@/server/server_management/store_server_user_model'
-import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
-import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
-import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
-import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
+import { usePlayerSettingStore } from '@/data/data_status/comment_status/player_store/usePlayerSettingStore'
+import { usePlaylistStore } from '@/data/data_status/comment_status/playlist_store/usePlaylistStore'
+import { usePlayerAudioStore } from '@/data/data_status/comment_status/player_store/usePlayerAudioStore'
+import { usePageMediaStore } from '@/data/data_status/page_status/media_store/usePageMediaStore'
 import { store_local_db_info } from '@/data/data_stores/local_app_stores/store_local_db_info'
-import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
+import { usePageArtistStore } from '@/data/data_status/page_status/artist_store/usePageArtistStore'
 
 const playerSettingStore = usePlayerSettingStore()
 const playlistStore = usePlaylistStore()

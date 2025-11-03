@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
-import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
-import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
+import { usePlayerAudioStore } from '@/data/data_status/comment_status/player_store/usePlayerAudioStore'
+import { usePlayerAppearanceStore } from '@/data/data_status/comment_status/player_store/usePlayerAppearanceStore'
+import { usePlayerSettingStore } from '@/data/data_status/comment_status/player_store/usePlayerSettingStore'
 import { RepeatOneRound } from '@vicons/material'
 
 const playerSettingStore = usePlayerSettingStore()

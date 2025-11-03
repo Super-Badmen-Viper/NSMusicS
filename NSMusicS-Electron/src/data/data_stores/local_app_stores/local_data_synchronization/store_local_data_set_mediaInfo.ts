@@ -4,7 +4,7 @@ import { store_server_user_model } from '@/server/server_management/store_server
 import { store_server_data_set_mediaInfo } from '@/server/server_api_store/server_api_core/annotation/store_server_data_set_mediaInfo'
 import { store_server_users } from '@/server/server_management/store_server_users'
 import { store_server_data_set_media_cueInfo } from '@/server/server_api_store/server_api_core/annotation/store_server_data_set_media_cueInfo'
-import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
+import { usePlayerSettingStore } from '@/data/data_status/comment_status/player_store/usePlayerSettingStore'
 
 export const store_local_data_set_mediaInfo = reactive({
   Set_MediaInfo_To_Favorite(id: string, value: boolean) {

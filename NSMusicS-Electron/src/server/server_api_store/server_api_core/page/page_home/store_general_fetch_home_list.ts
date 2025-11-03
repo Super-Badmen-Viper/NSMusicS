@@ -1,6 +1,6 @@
 import { reactive } from 'vue'
 // @ts-ignore - 忽略模块导入类型检查
-import { usePageHomeStore } from '@/data/data_status/app_status/page_status/home_store/usePageHomeStore'
+import { usePageHomeStore } from '@/data/data_status/page_status/home_store/usePageHomeStore'
 // @ts-ignore - 忽略模块导入类型检查
 import { Get_LocalSqlite_HomeDataInfos } from '@/data/data_repository/app_repository/LocalSqlite_Get_HomeDataInfos'
 // @ts-ignore - 忽略模块导入类型检查
@@ -16,7 +16,7 @@ import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/server/server_api/nines
 // @ts-ignore - 忽略模块导入类型检查
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
 // @ts-ignore - 忽略模块导入类型检查
-import { usePageRecommendStore } from '@/data/data_status/app_status/page_status/recommend_store/usePageRecommendStore'
+import { usePageRecommendStore } from '@/data/data_status/page_status/recommend_store/usePageRecommendStore'
 
 export const store_general_fetch_home_list = reactive({
   async fetchData_Home() {

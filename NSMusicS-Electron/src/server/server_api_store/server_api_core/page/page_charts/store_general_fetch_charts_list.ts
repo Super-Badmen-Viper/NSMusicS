@@ -6,7 +6,7 @@ import { store_server_users } from '@/server/server_management/store_server_user
 import { Get_Jellyfin_Temp_Data_To_LocalSqlite } from '@/server/server_api/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite'
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/server/server_api/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
-import { usePageChartsStore } from '@/data/data_status/app_status/page_status/charts_store/usePageChartsStore'
+import { usePageChartsStore } from '@/data/data_status/page_status/charts_store/usePageChartsStore'
 
 export const store_general_fetch_charts_list = reactive({
   async fetchData_Charts() {

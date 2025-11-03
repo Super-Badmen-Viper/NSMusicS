@@ -43,10 +43,10 @@ const computed_i18n_Label_ViewSetConfig_Cover_6 = computed(() =>
 )
 
 // audio_class & player_bar & player_view
-import { usePagePlayerViewStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerViewStore'
+import { usePagePlayerViewStore } from '@/data/data_status/page_status/player_store/usePagePlayerViewStore'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
-import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
-import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
+import { usePlayerSettingStore } from '@/data/data_status/comment_status/player_store/usePlayerSettingStore'
+import { usePlayerAudioStore } from '@/data/data_status/comment_status/player_store/usePlayerAudioStore'
 
 const playerSettingStore = usePlayerSettingStore()
 
@@ -743,13 +743,13 @@ const unwatch_player_collapsed = watchEffect(() => {
 
 ////// Animation lottie Load // lottie-web will cause memory leaks，so replace lottie-player_configs
 import '@lottiefiles/lottie-player'
-import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
+import { usePlayerAppearanceStore } from '@/data/data_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import Table_Album_Model_1_AlbumScroll from '@/views/view_app/page/page_player/components/Table_Album_Model_1_AlbumScroll.vue'
 import { ArrowsMaximize, ArrowsMinimize } from '@vicons/tabler'
 
-import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+import { usePlaylistStore } from '@/data/data_status/comment_status/playlist_store/usePlaylistStore'
 import { storeToRefs } from 'pinia'
 
 const clear_lottie_animationInstance = ref(false)

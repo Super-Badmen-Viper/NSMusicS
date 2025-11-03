@@ -1,17 +1,17 @@
 // @ts-ignore - 忽略模块导入类型检查
 import { store_server_users } from '@/server/server_management/store_server_users'
 // @ts-ignore - 忽略模块导入类型检查
-import { usePageHomeStore } from '@/data/data_status/app_status/page_status/home_store/usePageHomeStore'
+import { usePageHomeStore } from '@/data/data_status/page_status/home_store/usePageHomeStore'
 // @ts-ignore - 忽略模块导入类型检查
 import { Home_Lists_ApiWebService_of_ND } from '../services_web/page_lists/home_lists/index_service'
 // @ts-ignore - 忽略模块导入类型检查
-import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
+import { usePageArtistStore } from '@/data/data_status/page_status/artist_store/usePageArtistStore'
 // @ts-ignore - 忽略模块导入类型检查
-import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
+import { usePageAlbumStore } from '@/data/data_status/page_status/album_store/usePageAlbumStore'
 // @ts-ignore - 忽略模块导入类型检查
 import { Media_library_scanning_ApiService_of_ND } from '../services_normal/media_library_scanning/index_service'
 // @ts-ignore - 忽略模块导入类型检查
-import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
+import { usePageMediaStore } from '@/data/data_status/page_status/media_store/usePageMediaStore'
 // @ts-ignore - 忽略模块导入类型检查
 import { Artist_Lists_ApiWebService_of_ND } from '../services_web/page_lists/artist_lists/index_service'
 // @ts-ignore - 忽略模块导入类型检查
@@ -29,16 +29,16 @@ import { store_system_configs_save } from '@/data/data_stores/local_system_store
 // @ts-ignore - 忽略模块导入类型检查
 import { store_general_fetch_player_list } from '@/server/server_api_store/server_api_core/components/player_list/store_general_fetch_player_list'
 // @ts-ignore - 忽略模块导入类型检查
-import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+import { usePlaylistStore } from '@/data/data_status/comment_status/playlist_store/usePlaylistStore'
 // @ts-ignore - 忽略模块导入类型检查
 import { Media_Retrieval_ApiService_of_ND } from '../services_normal/media_retrieval/index_service'
 // @ts-ignore - 忽略模块导入类型检查
-import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
+import { usePlayerSettingStore } from '@/data/data_status/comment_status/player_store/usePlayerSettingStore'
 // @ts-ignore - 忽略模块导入类型检查
 import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 
 // @ts-ignore - 忽略模块导入类型检查
-import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
+import { usePlayerAudioStore } from '@/data/data_status/comment_status/player_store/usePlayerAudioStore'
 // @ts-ignore - 忽略模块导入类型检查
 import { store_general_fetch_media_list } from '@/server/server_api_store/server_api_core/page/page_media_file/store_general_fetch_media_list'
 

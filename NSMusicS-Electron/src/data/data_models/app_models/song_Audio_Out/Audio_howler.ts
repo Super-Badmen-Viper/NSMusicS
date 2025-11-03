@@ -1,4 +1,4 @@
-import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
+import { usePlayerSettingStore } from '@/data/data_status/comment_status/player_store/usePlayerSettingStore'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 
 export class Audio_howler {

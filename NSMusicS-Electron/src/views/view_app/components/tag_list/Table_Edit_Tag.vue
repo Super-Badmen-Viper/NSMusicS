@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { usePagePlayerTagModifyStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerTagModifyStore'
+import { usePagePlayerTagModifyStore } from '@/data/data_status/page_status/player_store/usePagePlayerTagModifyStore'
 import { storeToRefs } from 'pinia'
 import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 
@@ -9,9 +9,9 @@ const { t } = useI18n({
 })
 import { useMessage } from 'naive-ui'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
-import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
-import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
+import { usePageMediaStore } from '@/data/data_status/page_status/media_store/usePageMediaStore'
+import { usePageAlbumStore } from '@/data/data_status/page_status/album_store/usePageAlbumStore'
+import { usePageArtistStore } from '@/data/data_status/page_status/artist_store/usePageArtistStore'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 const message = useMessage()
 const pageMediaStore = usePageMediaStore()

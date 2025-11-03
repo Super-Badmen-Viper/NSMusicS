@@ -10,7 +10,7 @@ import { store_local_data_set_artistInfo } from '@/data/data_stores/local_app_st
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
 import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 
-import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+import { usePlaylistStore } from '@/data/data_status/comment_status/playlist_store/usePlaylistStore'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 

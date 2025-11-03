@@ -23,7 +23,7 @@ import { Icon } from '@vicons/utils'
 import { computed, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { type InputInst, NButton, NIcon, useMessage, useThemeVars } from 'naive-ui'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
+import { usePageAlbumStore } from '@/data/data_status/page_status/album_store/usePageAlbumStore'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 import { store_router_history_data_of_album } from '@/router/router_store/store_router_history_data_of_album'
 import { store_general_fetch_album_list } from '@/server/server_api_store/server_api_core/page/page_album/store_general_fetch_album_list'
@@ -34,19 +34,19 @@ import { store_server_user_model } from '@/server/server_management/store_server
 ////// changed_data write to sqlite
 import { store_local_data_set_albumInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_albumInfo'
 import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_mediaInfo'
-import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
+import { usePageMediaStore } from '@/data/data_status/page_status/media_store/usePageMediaStore'
 
-import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+import { usePlaylistStore } from '@/data/data_status/comment_status/playlist_store/usePlaylistStore'
 import { storeToRefs } from 'pinia'
-import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
-import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
-import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
+import { usePlayerAudioStore } from '@/data/data_status/comment_status/player_store/usePlayerAudioStore'
+import { usePlayerAppearanceStore } from '@/data/data_status/comment_status/player_store/usePlayerAppearanceStore'
+import { usePlayerSettingStore } from '@/data/data_status/comment_status/player_store/usePlayerSettingStore'
 
 import { store_general_fetch_media_list } from '@/server/server_api_store/server_api_core/page/page_media_file/store_general_fetch_media_list'
 ////// right menu
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
-import { usePagePlayerTagModifyStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerTagModifyStore'
+import { usePagePlayerTagModifyStore } from '@/data/data_status/page_status/player_store/usePagePlayerTagModifyStore'
 
 // 在顶层获取 Store 实例
 const playlistStore = usePlaylistStore()
@@ -1204,24 +1204,24 @@ const { page_top_album_name, page_top_album_image_url, this_audio_artist_id, pag
         </n-space>
       </n-space>
 
-      <div 
-        v-if="!album_Files_temporary || album_Files_temporary.length === 0" 
-        class="empty-state"
-        style="
-        margin-left: 10px;
-        height: calc(100vh - 241px);
-        position: absolute;top: 90px;
-        padding-top: 150px;
-        "
-        :style="{
-          width: `calc(100vw - ${collapsed_width - 8}px)`,
-        }"
-      >
+<!--      <div -->
+<!--        v-if="!album_Files_temporary || album_Files_temporary.length === 0" -->
+<!--        class="empty-state"-->
+<!--        style="-->
+<!--        margin-left: 10px;-->
+<!--        height: calc(100vh - 241px);-->
+<!--        position: absolute;top: 90px;-->
+<!--        padding-top: 150px;-->
+<!--        "-->
+<!--        :style="{-->
+<!--          width: `calc(100vw - ${collapsed_width - 8}px)`,-->
+<!--        }"-->
+<!--      >-->
 <!--        <n-icon :size="60" :depth="2">-->
 <!--          <BrowserNotSupportedTwotone />-->
 <!--        </n-icon>-->
 <!--        <div class="empty-title">{{ $t('nsmusics.view_page.no_subtitle_search_results_found') }}</div>-->
-      </div>
+<!--      </div>-->
       <DynamicScroller
         class="album-wall"
         ref="dynamicScroller"

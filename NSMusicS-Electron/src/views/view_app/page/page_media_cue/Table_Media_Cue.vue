@@ -37,9 +37,9 @@ const { t } = useI18n({
 ////// songlist_view page_layout lineItems
 import error_album from '@/assets/img/error_album.jpg'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
-import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+import { usePlaylistStore } from '@/data/data_status/comment_status/playlist_store/usePlaylistStore'
 import { storeToRefs } from 'pinia'
-import { usePageMediaCueStore } from '@/data/data_status/app_status/page_status/media_cue_store/usePageMediaCueStore'
+import { usePageMediaCueStore } from '@/data/data_status/page_status/media_cue_store/usePageMediaCueStore'
 
 const playlistStore = usePlaylistStore()
 const pageMediaCueStore = usePageMediaCueStore()
@@ -643,17 +643,17 @@ import { useMessage } from 'naive-ui'
 const message = useMessage()
 const themeVars = useThemeVars()
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
-import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
+import { usePlayerAudioStore } from '@/data/data_status/comment_status/player_store/usePlayerAudioStore'
+import { usePlayerAppearanceStore } from '@/data/data_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
 import { store_server_data_set_media_cueInfo } from '@/server/server_api_store/server_api_core/annotation/store_server_data_set_media_cueInfo'
 import type { SelectBaseOption } from 'naive-ui/es/select/src/interface'
 import { store_local_db_info } from '@/data/data_stores/local_app_stores/store_local_db_info'
 import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 import { store_server_data_set_playlistInfo } from '@/server/server_api_store/server_api_core/annotation/store_server_data_set_playlistInfo'
-import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
+import { usePlayerSettingStore } from '@/data/data_status/comment_status/player_store/usePlayerSettingStore'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
-import { usePagePlayerTagModifyStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerTagModifyStore'
+import { usePagePlayerTagModifyStore } from '@/data/data_status/page_status/player_store/usePagePlayerTagModifyStore'
 
 const playerAudioStore = usePlayerAudioStore()
 const playerAppearanceStore = usePlayerAppearanceStore()
@@ -1157,24 +1157,24 @@ function scrollerEnd() {
         </n-space>
       </n-space>
 
-      <div 
-        v-if="!media_Files_temporary || media_Files_temporary.length === 0" 
-        class="empty-state"
-        style="
-        margin-left: 10px;
-        height: calc(100vh - 241px);
-        position: absolute;top: 90px;
-        "
-        :style="{
-          width: `calc(100vw - ${collapsed_width - 8}px)`,
-        }"
-      >
+<!--      <div -->
+<!--        v-if="!media_Files_temporary || media_Files_temporary.length === 0" -->
+<!--        class="empty-state"-->
+<!--        style="-->
+<!--        margin-left: 10px;-->
+<!--        height: calc(100vh - 241px);-->
+<!--        position: absolute;top: 90px;-->
+<!--        "-->
+<!--        :style="{-->
+<!--          width: `calc(100vw - ${collapsed_width - 8}px)`,-->
+<!--        }"-->
+<!--      >-->
 <!--        <n-icon :size="60" :depth="2">-->
 <!--          <BrowserNotSupportedTwotone />-->
 <!--        </n-icon>-->
 <!--        <div class="empty-title">{{ $t('nsmusics.view_page.no_subtitle_search_results_found') }}</div>-->
 <!--        <div class="empty-description">{{ $t('nsmusics.view_page.no_subtitle_search_results_found_description') }}</div>-->
-      </div>
+<!--      </div>-->
       <DynamicScroller
         class="table_media_cue"
         ref="dynamicScroller"

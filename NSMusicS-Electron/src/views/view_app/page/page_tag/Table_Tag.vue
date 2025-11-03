@@ -5,9 +5,9 @@ import { Folder28Filled, Search28Filled } from '@vicons/fluent'
 import { useI18n } from 'vue-i18n'
 import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 import { store_server_users } from '@/server/server_management/store_server_users'
-import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
+import { usePageMediaStore } from '@/data/data_status/page_status/media_store/usePageMediaStore'
 import { storeToRefs } from 'pinia'
-import { usePageTagStore } from '@/data/data_status/app_status/page_status/tag_store/usePageTagStore'
+import { usePageTagStore } from '@/data/data_status/page_status/tag_store/usePageTagStore'
 
 const { t } = useI18n({
   inheritLocale: true,

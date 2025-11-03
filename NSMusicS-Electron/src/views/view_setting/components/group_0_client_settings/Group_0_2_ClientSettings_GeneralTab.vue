@@ -29,7 +29,7 @@ const computed_i18n_Label_SidebarConfiguration_15 = computed(() =>
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { ref, onMounted, computed } from 'vue'
 import { NButton } from 'naive-ui'
-import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
+import { usePlayerSettingStore } from '@/data/data_status/comment_status/player_store/usePlayerSettingStore'
 import { store_system_configs_theme } from '@/data/data_stores/local_system_stores/store_system_configs_theme'
 
 const playerSettingStore = usePlayerSettingStore()

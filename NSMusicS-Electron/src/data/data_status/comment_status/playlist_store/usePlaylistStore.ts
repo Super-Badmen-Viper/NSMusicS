@@ -17,9 +17,9 @@ interface Play_List {
 
 // 导入依赖
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
-import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
+import { usePlayerAudioStore } from '@/data/data_status/comment_status/player_store/usePlayerAudioStore'
 import { store_server_user_model } from '@/server/server_management/store_server_user_model'
-import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
+import { usePageMediaStore } from '@/data/data_status/page_status/media_store/usePageMediaStore'
 import { usePlayerSettingStore } from '../player_store/usePlayerSettingStore'
 import { Get_LocalSqlite_PlaylistInfo } from '@/data/data_repository/app_repository/LocalSqlite_Get_PlaylistInfo'
 import { store_general_model_player_list } from '@/server/server_api_store/server_api_core/components/player_list/store_general_model_player_list'

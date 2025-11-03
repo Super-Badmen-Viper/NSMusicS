@@ -3,8 +3,8 @@ import { ChevronLeft16Filled, ChevronRight16Filled } from '@vicons/fluent'
 
 ////// this_view views_components of navie ui
 import { ref, onMounted, computed } from 'vue'
-import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
-import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+import { usePlayerAudioStore } from '@/data/data_status/comment_status/player_store/usePlayerAudioStore'
+import { usePlaylistStore } from '@/data/data_status/comment_status/playlist_store/usePlaylistStore'
 import { storeToRefs } from 'pinia'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 

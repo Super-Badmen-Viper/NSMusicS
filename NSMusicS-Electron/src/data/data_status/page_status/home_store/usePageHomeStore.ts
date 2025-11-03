@@ -5,7 +5,7 @@ const error_album = '/assets/img/error_album.jpg'
 // @ts-ignore - 忽略模块导入类型检查
 import { store_general_fetch_home_list } from '@/server/server_api_store/server_api_core/page/page_home/store_general_fetch_home_list'
 // @ts-ignore - 忽略模块导入类型检查
-import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
+import { usePageMediaStore } from '@/data/data_status/page_status/media_store/usePageMediaStore'
 
 // 定义专辑类型接口
 interface AlbumType {

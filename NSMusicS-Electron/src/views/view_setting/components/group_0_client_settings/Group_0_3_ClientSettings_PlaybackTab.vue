@@ -8,8 +8,8 @@ const { t } = useI18n({
 ////// this_view views_components
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { ref, onMounted, computed } from 'vue'
-import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
-import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
+import { usePlayerSettingStore } from '@/data/data_status/comment_status/player_store/usePlayerSettingStore'
+import { usePlayerAppearanceStore } from '@/data/data_status/comment_status/player_store/usePlayerAppearanceStore'
 
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 import { storeToRefs } from 'pinia'

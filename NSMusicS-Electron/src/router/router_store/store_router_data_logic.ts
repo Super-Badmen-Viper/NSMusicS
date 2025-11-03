@@ -1,13 +1,13 @@
 import { reactive } from 'vue'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 // @ts-ignore - 忽略模块导入类型检查
-import { usePageHomeStore } from '@/data/data_status/app_status/page_status/home_store/usePageHomeStore'
+import { usePageHomeStore } from '@/data/data_status/page_status/home_store/usePageHomeStore'
 // @ts-ignore - 忽略模块导入类型检查
-import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
+import { usePageMediaStore } from '@/data/data_status/page_status/media_store/usePageMediaStore'
 // @ts-ignore - 忽略模块导入类型检查
-import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
+import { usePageAlbumStore } from '@/data/data_status/page_status/album_store/usePageAlbumStore'
 // @ts-ignore - 忽略模块导入类型检查
-import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
+import { usePageArtistStore } from '@/data/data_status/page_status/artist_store/usePageArtistStore'
 import { store_router_history_data_of_media } from '@/router/router_store/store_router_history_data_of_media'
 import { store_router_history_data_of_album } from '@/router/router_store/store_router_history_data_of_album'
 import { store_router_history_data_of_artist } from '@/router/router_store/store_router_history_data_of_artist'
@@ -15,7 +15,7 @@ import { store_router_history_data_of_artist } from '@/router/router_store/store
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 // @ts-ignore - 忽略模块导入类型检查
 import { store_server_user_model } from '@/server/server_management/store_server_user_model'
-import { usePageTagStore } from '@/data/data_status/app_status/page_status/tag_store/usePageTagStore'
+import { usePageTagStore } from '@/data/data_status/page_status/tag_store/usePageTagStore'
 
 // 定义页面类型枚举
 type PageType =

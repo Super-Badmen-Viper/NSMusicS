@@ -5,9 +5,9 @@ import { store_server_users } from '@/server/server_management/store_server_user
 import { store_server_jellyfin_userdata_logic } from './server_jellyfin_user_data/store_server_jellyfin_userdata_logic'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { store_server_ninesong_userdata_logic } from './server_ninesong_user_data/store_server_ninesong_userdata_logic'
-import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
-import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
-import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
+import { usePageAlbumStore } from '@/data/data_status/page_status/album_store/usePageAlbumStore'
+import { usePageArtistStore } from '@/data/data_status/page_status/artist_store/usePageArtistStore'
+import { usePageMediaStore } from '@/data/data_status/page_status/media_store/usePageMediaStore'
 
 export const store_server_data_select_logic = reactive({
   /// app add

@@ -10,7 +10,7 @@ import { NSelect, NSpace } from 'naive-ui'
 use([BarChart, ScatterChart, DatasetComponent, GridComponent])
 
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { usePageChartsStore } from '@/data/data_status/app_status/page_status/charts_store/usePageChartsStore'
+import { usePageChartsStore } from '@/data/data_status/page_status/charts_store/usePageChartsStore'
 import { store_general_fetch_charts_list } from '@/server/server_api_store/server_api_core/page/page_charts/store_general_fetch_charts_list'
 
 const pageChartsStore = usePageChartsStore()

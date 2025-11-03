@@ -27,8 +27,8 @@ import { computed, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { type InputInst, NButton, NIcon, useMessage, useThemeVars } from 'naive-ui'
 import { Icon } from '@vicons/utils'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
-import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
+import { usePlayerAudioStore } from '@/data/data_status/comment_status/player_store/usePlayerAudioStore'
+import { usePageArtistStore } from '@/data/data_status/page_status/artist_store/usePageArtistStore'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 import { store_router_history_data_of_artist } from '@/router/router_store/store_router_history_data_of_artist'
 import { store_general_fetch_artist_list } from '@/server/server_api_store/server_api_core/page/page_artist/store_general_fetch_artist_list'
@@ -41,10 +41,10 @@ import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 ////// changed_data write to sqlite
 import { store_local_data_set_artistInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_artistInfo'
 
-import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+import { usePlaylistStore } from '@/data/data_status/comment_status/playlist_store/usePlaylistStore'
 import { storeToRefs } from 'pinia'
 
-import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
+import { usePageMediaStore } from '@/data/data_status/page_status/media_store/usePageMediaStore'
 ////// right menu
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
 import { store_general_fetch_media_list } from '@/server/server_api_store/server_api_core/page/page_media_file/store_general_fetch_media_list'
@@ -52,12 +52,12 @@ import { store_local_data_set_mediaInfo } from '@/data/data_stores/local_app_sto
 import { store_local_data_set_albumInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_albumInfo'
 import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 import { store_general_fetch_album_list } from '@/server/server_api_store/server_api_core/page/page_album/store_general_fetch_album_list'
-import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
-import { usePagePlayerTagModifyStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerTagModifyStore'
-import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
+import { usePageAlbumStore } from '@/data/data_status/page_status/album_store/usePageAlbumStore'
+import { usePagePlayerTagModifyStore } from '@/data/data_status/page_status/player_store/usePagePlayerTagModifyStore'
+import { usePlayerSettingStore } from '@/data/data_status/comment_status/player_store/usePlayerSettingStore'
 import { store_server_users } from '@/server/server_management/store_server_users'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
-import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
+import { usePlayerAppearanceStore } from '@/data/data_status/comment_status/player_store/usePlayerAppearanceStore'
 import { store_general_model_player_list } from '@/server/server_api_store/server_api_core/components/player_list/store_general_model_player_list'
 import { debounce } from 'lodash'
 import { MultipleStopOutlined } from '@vicons/material'
@@ -1849,24 +1849,24 @@ onMounted(() => {
           </template>
         </DynamicScroller>
 
-        <div 
-          v-if="pageArtistStore.page_view_model === 'grid' && (!artist_Files_temporary || artist_Files_temporary.length === 0)" 
-          class="empty-state"
-          style="
-          margin-left: 10px;
-          height: calc(100vh - 241px);
-          position: absolute;top: 90px;
-          padding-top: 150px;
-          "
-          :style="{
-            width: `calc(100vw - ${collapsed_width - 8}px)`,
-          }"
-        >
+<!--        <div -->
+<!--          v-if="pageArtistStore.page_view_model === 'grid' && (!artist_Files_temporary || artist_Files_temporary.length === 0)" -->
+<!--          class="empty-state"-->
+<!--          style="-->
+<!--          margin-left: 10px;-->
+<!--          height: calc(100vh - 241px);-->
+<!--          position: absolute;top: 90px;-->
+<!--          padding-top: 150px;-->
+<!--          "-->
+<!--          :style="{-->
+<!--            width: `calc(100vw - ${collapsed_width - 8}px)`,-->
+<!--          }"-->
+<!--        >-->
 <!--          <n-icon :size="60" :depth="2">-->
 <!--            <BrowserNotSupportedTwotone />-->
 <!--          </n-icon>-->
 <!--          <div class="empty-title">{{ $t('nsmusics.view_page.no_subtitle_search_results_found') }}</div>-->
-        </div>
+<!--        </div>-->
         <DynamicScroller
           v-if="pageArtistStore.page_view_model === 'grid'"
           class="artist-wall"

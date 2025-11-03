@@ -31,19 +31,19 @@ import Bar_Music_Player from '@/views/view_app/components/player_bar/Bar_Music_P
 import Bar_Music_PlayList from '@/views/view_app/drawer/View_Player_PlayList.vue'
 import View_Screen_Music_Player from '@/views/view_app/page/page_player/View_Screen_Music_Player.vue'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { usePlayerAppearanceStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAppearanceStore'
-import { usePagePlayerSoundEffectsStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerSoundEffectsStore'
-import { usePagePlayerSoundSpeedStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerSoundSpeedStore'
-import { usePagePlayerSoundMoreStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerSoundMoreStore'
-import { usePlaylistStore } from '@/data/data_status/app_status/comment_status/playlist_store/usePlaylistStore'
+import { usePlayerAppearanceStore } from '@/data/data_status/comment_status/player_store/usePlayerAppearanceStore'
+import { usePagePlayerSoundEffectsStore } from '@/data/data_status/page_status/player_store/usePagePlayerSoundEffectsStore'
+import { usePagePlayerSoundSpeedStore } from '@/data/data_status/page_status/player_store/usePagePlayerSoundSpeedStore'
+import { usePagePlayerSoundMoreStore } from '@/data/data_status/page_status/player_store/usePagePlayerSoundMoreStore'
+import { usePlaylistStore } from '@/data/data_status/comment_status/playlist_store/usePlaylistStore'
 import { storeToRefs } from 'pinia'
 import { store_server_login_logic } from '@/views/view_server/page_login/store/store_server_login_logic'
 import { store_server_model_statistics } from '@/server/server_api_store/server_api_core/model/model_statistics'
 import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 
-import { usePageArtistStore } from '@/data/data_status/app_status/page_status/artist_store/usePageArtistStore'
-import { usePlayerSettingStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerSettingStore'
-import { usePageMediaStore } from '@/data/data_status/app_status/page_status/media_store/usePageMediaStore'
+import { usePageArtistStore } from '@/data/data_status/page_status/artist_store/usePageArtistStore'
+import { usePlayerSettingStore } from '@/data/data_status/comment_status/player_store/usePlayerSettingStore'
+import { usePageMediaStore } from '@/data/data_status/page_status/media_store/usePageMediaStore'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { store_router_data_logic } from '@/router/router_store/store_router_data_logic'
 import { store_system_configs_save } from '@/data/data_stores/local_system_stores/store_system_configs_save'
@@ -54,8 +54,8 @@ import { store_general_fetch_media_cue_list } from '@/server/server_api_store/se
 import { store_general_fetch_home_list } from '@/server/server_api_store/server_api_core/page/page_home/store_general_fetch_home_list'
 import { store_general_fetch_album_list } from '@/server/server_api_store/server_api_core/page/page_album/store_general_fetch_album_list'
 import { store_general_fetch_artist_list } from '@/server/server_api_store/server_api_core/page/page_artist/store_general_fetch_artist_list'
-import { usePageMediaCueStore } from '@/data/data_status/app_status/page_status/media_cue_store/usePageMediaCueStore'
-import { usePagePlayerTagModifyStore } from '@/data/data_status/app_status/page_status/player_store/usePagePlayerTagModifyStore'
+import { usePageMediaCueStore } from '@/data/data_status/page_status/media_cue_store/usePageMediaCueStore'
+import { usePagePlayerTagModifyStore } from '@/data/data_status/page_status/player_store/usePagePlayerTagModifyStore'
 
 ////// BrowserWindow
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
@@ -63,7 +63,7 @@ let mobile_model = false
 // 在setup上下文中获取Store实例
 const playerAppearanceStore = usePlayerAppearanceStore()
 const playlistStore = usePlaylistStore()
-import { usePlayerAudioStore } from '@/data/data_status/app_status/comment_status/player_store/usePlayerAudioStore'
+import { usePlayerAudioStore } from '@/data/data_status/comment_status/player_store/usePlayerAudioStore'
 const playerAudioStore = usePlayerAudioStore()
 const playerSettingStore = usePlayerSettingStore()
 const pageArtistStore = usePageArtistStore()
@@ -226,7 +226,7 @@ provide('get_playerbar_to_switch_playerview', get_playerbar_to_switch_playerview
 store_router_data_info.router = useRouter()
 import routers from './router'
 import { store_system_configs_update } from '@/data/data_stores/local_system_stores/store_system_configs_update'
-import { usePageAlbumStore } from '@/data/data_status/app_status/page_status/album_store/usePageAlbumStore'
+import { usePageAlbumStore } from '@/data/data_status/page_status/album_store/usePageAlbumStore'
 import { store_server_users } from '@/server/server_management/store_server_users'
 routers.beforeEach((to, from, next) => {
   if (to.name !== from.name) {
@@ -804,7 +804,7 @@ const computed_i18n_Label_Update = computed(() => t('filter.recentlyUpdated'))
 import View_Edit_Tag from '@/views/view_app/drawer/View_Edit_Tag.vue'
 import View_Player_Effect from '@/views/view_app/drawer/View_Player_Effect.vue'
 import View_Mini_Music_Player from '@/views/view_app/page/page_player/View_Mini_Music_Player.vue'
-import { usePageHomeStore } from '@/data/data_status/app_status/page_status/home_store/usePageHomeStore'
+import { usePageHomeStore } from '@/data/data_status/page_status/home_store/usePageHomeStore'
 
 ////// Load Configs
 const { locale } = useI18n({
