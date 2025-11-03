@@ -1862,10 +1862,10 @@ onMounted(() => {
             width: `calc(100vw - ${collapsed_width - 8}px)`,
           }"
         >
-          <n-icon :size="60" :depth="2">
-            <BrowserNotSupportedTwotone />
-          </n-icon>
-          <div class="empty-title">{{ $t('nsmusics.view_page.no_subtitle_search_results_found') }}</div>
+<!--          <n-icon :size="60" :depth="2">-->
+<!--            <BrowserNotSupportedTwotone />-->
+<!--          </n-icon>-->
+<!--          <div class="empty-title">{{ $t('nsmusics.view_page.no_subtitle_search_results_found') }}</div>-->
         </div>
         <DynamicScroller
           v-if="pageArtistStore.page_view_model === 'grid'"
