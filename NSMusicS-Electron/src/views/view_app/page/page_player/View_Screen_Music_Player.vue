@@ -352,11 +352,7 @@ const scrollToItem = (index: number) => {
   } catch {}
 }
 onMounted(() => {
-  playerAppearanceStore.player_lyric_fontSize_Num =
-    playerAppearanceStore.player_use_lyric_skip_forward
-      ? 36 + Math.floor((window.innerHeight - 880) / 200) * 6
-      : 33 + Math.floor((window.innerHeight - 880) / 200) * 6
-  playerAppearanceStore.player_lyric_fontSize = `${playerAppearanceStore.player_lyric_fontSize_Num}px`
+  init_player_theme()
 })
 
 const lastIndex = ref(-1)
@@ -707,10 +703,12 @@ const player_theme_set_theme = (index: number) => {
 }
 function init_player_theme() {
   player_show_of_control_info.value = player_background_model_num.value !== 0
-  player_lyric_fontSize_Num.value = player_use_lyric_skip_forward
-    ? 36 + Math.floor((window.innerHeight - 880) / 200) * 6
-    : 33 + Math.floor((window.innerHeight - 880) / 200) * 6
-  player_lyric_fontSize.value = `${player_lyric_fontSize_Num.value}px`
+  ///
+  playerAppearanceStore.player_lyric_fontSize_Num =
+      playerAppearanceStore.player_use_lyric_skip_forward
+          ? 36 + Math.floor((window.innerHeight - 880) / 200) * 6
+          : 33 + Math.floor((window.innerHeight - 880) / 200) * 6
+  playerAppearanceStore.player_lyric_fontSize = `${playerAppearanceStore.player_lyric_fontSize_Num}px`
 }
 
 ////// player_configs page_ui set
