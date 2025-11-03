@@ -1,7 +1,5 @@
 import { NineSong_Api_Services_Web } from '../NineSong_Api_Services_Web'
-import {
-  usePageRecommendStore
-} from "@/data/data_status/app_status/page_status/recommend_store/usePageRecommendStore";
+import { usePageRecommendStore } from '@/data/data_status/app_status/page_status/recommend_store/usePageRecommendStore';
 
 export class Recommend_ApiService_of_NineSong extends NineSong_Api_Services_Web {
   public async getWordCloudTag(): Promise<any> {
