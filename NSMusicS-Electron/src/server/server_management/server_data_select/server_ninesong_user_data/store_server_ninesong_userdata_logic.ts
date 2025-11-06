@@ -1,6 +1,6 @@
 import { reactive } from 'vue'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
-import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
+import { store_server_login_info } from '@/data/data_status/comment_status/login_store/store_server_login_info'
 import axios from 'axios'
 import { Auth_Token_ApiService_of_NineSong } from '@/server/server_api/ninesong_api/services_web/Auth/Auth_Token/index_service'
 import { store_server_users } from '@/server/server_management/store_server_users'

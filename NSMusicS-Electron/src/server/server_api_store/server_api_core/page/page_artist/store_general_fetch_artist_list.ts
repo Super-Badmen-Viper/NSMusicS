@@ -21,7 +21,7 @@ import { usePlayerSettingStore } from '@/data/data_status/comment_status/player_
 import { Get_Navidrome_Temp_Data_To_LocalSqlite } from '@/server/server_api/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite'
 import { Get_Jellyfin_Temp_Data_To_LocalSqlite } from '@/server/server_api/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite'
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/server/server_api/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
-import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
+import { store_server_login_info } from '@/data/data_status/comment_status/login_store/store_server_login_info'
 import { store_general_fetch_artist_tree } from '@/server/server_api_store/server_api_core/page/page_artist/store_general_fetch_artist_tree'
 
 export const store_general_fetch_artist_list = reactive({

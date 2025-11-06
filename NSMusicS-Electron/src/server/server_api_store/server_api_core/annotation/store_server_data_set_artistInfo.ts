@@ -5,7 +5,7 @@ import { store_server_users } from '@/server/server_management/store_server_user
 import { Media_Annotation_ApiService_of_ND } from '@/server/server_api/navidrome_api/services_normal/media_annotation/index_service'
 import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 import { UserFavoriteItems_ApiService_of_Je } from '@/server/server_api/jellyfin_api/services_web/UserFavoriteItems/index_service'
-import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
+import { store_server_login_info } from '@/data/data_status/comment_status/login_store/store_server_login_info'
 import { Annotation_ApiService_of_NineSong } from '@/server/server_api/ninesong_api/services_web/Scene/Music/Annotation/index_service'
 
 export const store_server_data_set_artistInfo = reactive({

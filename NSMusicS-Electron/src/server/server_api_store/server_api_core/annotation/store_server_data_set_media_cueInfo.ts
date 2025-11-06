@@ -7,7 +7,7 @@ import { store_server_data_set_playlistInfo } from '@/server/server_api_store/se
 import { UserPlayedItems_ApiService_of_Je } from '@/server/server_api/jellyfin_api/services_web/UserPlayedItems/index_service'
 import { UserFavoriteItems_ApiService_of_Je } from '@/server/server_api/jellyfin_api/services_web/UserFavoriteItems/index_service'
 import { Playlists_ApiService_of_Je } from '@/server/server_api/jellyfin_api/services_web/Playlists/index_service'
-import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
+import { store_server_login_info } from '@/data/data_status/comment_status/login_store/store_server_login_info'
 import { Annotation_ApiService_of_NineSong } from '@/server/server_api/ninesong_api/services_web/Scene/Music/Annotation/index_service'
 import { Playlist_ApiService_of_NineSong } from '@/server/server_api/ninesong_api/services_web/Scene/Music/Playlist/index_service'
 

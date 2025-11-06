@@ -4,8 +4,8 @@ import { useI18n } from 'vue-i18n'
 import error_album_old from '@/assets/img/error_album_old.jpg'
 import NSMusicS from '@/assets/img/NSMusicS.png'
 import { darkTheme, NConfigProvider, useMessage } from 'naive-ui'
-import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
-import { store_server_login_logic } from '@/views/view_server/page_login/store/store_server_login_logic'
+import { store_server_login_info } from '@/data/data_status/comment_status/login_store/store_server_login_info'
+import { store_server_login_logic } from '@/data/data_status/comment_status/login_store/store_server_login_logic'
 const { t } = useI18n({
   inheritLocale: true,
 })

@@ -22,7 +22,7 @@ import { store_general_fetch_player_list } from '@/server/server_api_store/serve
 import shrink_up_arrow from '@/assets/svg/shrink_up_arrow.svg'
 import { store_local_db_info } from '@/data/data_stores/local_app_stores/store_local_db_info'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
-import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
+import { store_server_login_info } from '@/data/data_status/comment_status/login_store/store_server_login_info'
 import { store_server_auth_token } from '@/server/server_api_store/server_api_auth/auth_token'
 import { store_server_model_statistics } from '@/server/server_api_store/server_api_core/model/model_statistics'
 import { Audio_howler } from '@/data/data_models/app_models/song_Audio_Out/Audio_howler'

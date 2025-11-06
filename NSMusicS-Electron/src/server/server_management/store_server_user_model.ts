@@ -19,9 +19,9 @@ import { usePageMediaCueStore } from '@/data/data_status/page_status/media_cue_s
 import { usePageRecommendStore } from '@/data/data_status/page_status/recommend_store/usePageRecommendStore'
 import { store_server_auth_token } from '@/server/server_api_store/server_api_auth/auth_token'
 import { Auth_Token_ApiService_of_NineSong } from '@/server/server_api/ninesong_api/services_web/Auth/Auth_Token/index_service'
-import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
+import { store_server_login_info } from '@/data/data_status/comment_status/login_store/store_server_login_info'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import { store_server_login_logic } from '@/views/view_server/page_login/store/store_server_login_logic'
+import { store_server_login_logic } from '@/data/data_status/comment_status/login_store/store_server_login_logic'
 import { Folder_Entity_ApiService_of_NineSong } from '@/server/server_api/ninesong_api/services_web/Folder_Entity/index_service'
 import { store_general_fetch_player_list } from '@/server/server_api_store/server_api_core/components/player_list/store_general_fetch_player_list'
 

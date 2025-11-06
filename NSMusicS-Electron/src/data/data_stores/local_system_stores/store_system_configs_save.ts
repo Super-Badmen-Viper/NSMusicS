@@ -20,7 +20,7 @@ import { store_router_data_logic } from '@/router/router_store/store_router_data
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { store_local_db_info } from '@/data/data_stores/local_app_stores/store_local_db_info'
 import axios from 'axios'
-import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
+import { store_server_login_info } from '@/data/data_status/comment_status/login_store/store_server_login_info'
 import { store_system_configs_load } from '@/data/data_stores/local_system_stores/store_system_configs_load'
 
 export const store_system_configs_save = reactive({

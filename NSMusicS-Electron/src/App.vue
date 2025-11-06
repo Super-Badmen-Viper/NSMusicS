@@ -37,7 +37,7 @@ import { usePagePlayerSoundSpeedStore } from '@/data/data_status/page_status/pla
 import { usePagePlayerSoundMoreStore } from '@/data/data_status/page_status/player_store/usePagePlayerSoundMoreStore'
 import { usePlaylistStore } from '@/data/data_status/comment_status/playlist_store/usePlaylistStore'
 import { storeToRefs } from 'pinia'
-import { store_server_login_logic } from '@/views/view_server/page_login/store/store_server_login_logic'
+import { store_server_login_logic } from '@/data/data_status/comment_status/login_store/store_server_login_logic'
 import { store_server_model_statistics } from '@/server/server_api_store/server_api_core/model/model_statistics'
 import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 

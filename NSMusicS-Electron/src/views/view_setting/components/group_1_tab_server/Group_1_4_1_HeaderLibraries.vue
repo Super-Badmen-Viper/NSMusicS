@@ -351,7 +351,7 @@ onBeforeUnmount(() => {
 })
 
 import error_album_old from '@/assets/img/error_album_old.jpg'
-import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
+import { store_server_login_info } from '@/data/data_status/comment_status/login_store/store_server_login_info'
 import { usePagePlayerViewStore } from '@/data/data_status/page_status/player_store/usePagePlayerViewStore'
 import { usePlayerAppearanceStore } from '@/data/data_status/comment_status/player_store/usePlayerAppearanceStore'
 import { usePlayerAudioStore } from '@/data/data_status/comment_status/player_store/usePlayerAudioStore'

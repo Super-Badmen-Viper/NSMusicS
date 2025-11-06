@@ -9,8 +9,8 @@ import { Users_ApiService_of_Je } from '@/server/server_api/jellyfin_api/service
 import { Library_ApiService_of_Je } from '@/server/server_api/jellyfin_api/services_web/Library/index_service'
 import { store_server_navidrome_userdata_logic } from '@/server/server_management/server_data_select/server_navidrome_user_data/store_server_navidrome_userdata_logic'
 import { store_server_model_statistics } from '@/server/server_api_store/server_api_core/model/model_statistics'
-import { store_server_login_logic } from '@/views/view_server/page_login/store/store_server_login_logic'
-import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
+import { store_server_login_logic } from '@/data/data_status/comment_status/login_store/store_server_login_logic'
+import { store_server_login_info } from '@/data/data_status/comment_status/login_store/store_server_login_info'
 
 export const store_server_auth_token = reactive({
   async init_login_server() {

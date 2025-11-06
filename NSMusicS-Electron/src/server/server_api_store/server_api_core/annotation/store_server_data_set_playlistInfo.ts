@@ -4,7 +4,7 @@ import { store_server_users } from '@/server/server_management/store_server_user
 import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 import { Playlists_ApiService_of_Je } from '@/server/server_api/jellyfin_api/services_web/Playlists/index_service'
 import { Items_ApiService_of_Je } from '@/server/server_api/jellyfin_api/services_web/Items/index_service'
-import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
+import { store_server_login_info } from '@/data/data_status/comment_status/login_store/store_server_login_info'
 import { Playlist_ApiService_of_NineSong } from '@/server/server_api/ninesong_api/services_web/Scene/Music/Playlist/index_service'
 
 export const store_server_data_set_playlistInfo = reactive({

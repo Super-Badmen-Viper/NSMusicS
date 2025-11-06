@@ -42,7 +42,7 @@ const {
 
 ////// i18n auto lang
 import { Folder_Entity_ApiService_of_NineSong } from '@/server/server_api/ninesong_api/services_web/Folder_Entity/index_service'
-import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
+import { store_server_login_info } from '@/data/data_status/comment_status/login_store/store_server_login_info'
 import { store_general_fetch_media_list } from '@/server/server_api_store/server_api_core/page/page_media_file/store_general_fetch_media_list'
 
 let folder_Entity_ApiService_of_NineSong = new Folder_Entity_ApiService_of_NineSong(

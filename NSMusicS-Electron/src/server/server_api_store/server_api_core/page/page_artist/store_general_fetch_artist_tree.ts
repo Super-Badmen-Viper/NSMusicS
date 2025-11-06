@@ -3,7 +3,7 @@ import { store_server_user_model } from '@/server/server_management/store_server
 import { usePageArtistStore } from '@/data/data_status/page_status/artist_store/usePageArtistStore'
 import { store_server_users } from '@/server/server_management/store_server_users'
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/server/server_api/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
-import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
+import { store_server_login_info } from '@/data/data_status/comment_status/login_store/store_server_login_info'
 
 export const store_general_fetch_artist_tree = reactive({
   async fetchData_ArtistTree() {

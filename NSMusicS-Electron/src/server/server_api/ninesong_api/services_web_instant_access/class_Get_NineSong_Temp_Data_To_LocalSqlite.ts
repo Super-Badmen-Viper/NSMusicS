@@ -14,10 +14,8 @@ import { store_general_fetch_media_list } from '@/server/server_api_store/server
 import { Artists_ApiService_of_NineSong } from '../services_web/Scene/Music/Artists/index_service'
 import { Albums_ApiService_of_NineSong } from '../services_web/Scene/Music/Albums/index_service'
 import { Medias_ApiService_of_NineSong } from '../services_web/Scene/Music/Media_Files/index_service'
-import { Annotation_ApiService_of_NineSong } from '../services_web/Scene/Music/Annotation/index_service'
 import { Playlist_ApiService_of_NineSong } from '../services_web/Scene/Music/Playlist/index_service'
-import { Retrieval_ApiService_of_NineSong } from '../services_web/Scene/Music/Retrieval/index_service'
-import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
+import { store_server_login_info } from '@/data/data_status/comment_status/login_store/store_server_login_info'
 import { Home_ApiService_of_NineSong } from '../services_web/Scene/Music/Home/index_service'
 import error_artist from '@/assets/img/error_artist.jpg'
 import error_album from '@/assets/img/error_album.jpg'
@@ -26,7 +24,6 @@ import { usePageMediaCueStore } from '@/data/data_status/page_status/media_cue_s
 import { Recommend_ApiService_of_NineSong } from '../services_web/Scene/Music/Recommend/index_service'
 import { usePageTagStore } from '@/data/data_status/page_status/tag_store/usePageTagStore'
 import { usePageRecommendStore } from '@/data/data_status/page_status/recommend_store/usePageRecommendStore'
-import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 
 export class Get_NineSong_Temp_Data_To_LocalSqlite {
   private artistsApi = new Artists_ApiService_of_NineSong(store_server_login_info.server_url)

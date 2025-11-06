@@ -1,6 +1,6 @@
 import { reactive } from 'vue'
 import { store_server_user_model } from '@/server/server_management/store_server_user_model'
-import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
+import { store_server_login_info } from '@/data/data_status/comment_status/login_store/store_server_login_info'
 
 export const store_server_users = reactive({
   percentage_of_local: 0,

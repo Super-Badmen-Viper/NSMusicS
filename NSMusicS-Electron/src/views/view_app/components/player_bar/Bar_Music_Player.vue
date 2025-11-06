@@ -34,7 +34,7 @@ import { store_server_data_set_mediaInfo } from '@/server/server_api_store/serve
 import { store_server_data_set_albumInfo } from '@/server/server_api_store/server_api_core/annotation/store_server_data_set_albumInfo'
 import { store_server_data_set_artistInfo } from '@/server/server_api_store/server_api_core/annotation/store_server_data_set_artistInfo'
 import { usePageMediaStore } from '@/data/data_status/page_status/media_store/usePageMediaStore'
-import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
+import { store_server_login_info } from '@/data/data_status/comment_status/login_store/store_server_login_info'
 const { t } = useI18n({
   inheritLocale: true,
 })

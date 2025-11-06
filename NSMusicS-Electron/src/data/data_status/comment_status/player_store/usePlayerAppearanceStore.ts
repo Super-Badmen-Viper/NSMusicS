@@ -139,7 +139,7 @@ export const usePlayerAppearanceStore = defineStore('player-appearance', () => {
   watch(
     () => player_use_playbar_auto_hide,
     (newValue) => {
-      player_collapsed_action_bar_of_Immersion_model.value = newValue
+      player_collapsed_action_bar_of_Immersion_model.value = Boolean(newValue)
       store_system_configs_save.save_system_config_of_Player_Configs_of_UI()
     }
   )

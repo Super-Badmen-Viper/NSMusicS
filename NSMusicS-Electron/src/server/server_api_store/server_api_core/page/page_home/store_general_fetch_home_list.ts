@@ -14,7 +14,7 @@ import { Get_Jellyfin_Temp_Data_To_LocalSqlite } from '@/server/server_api/jelly
 // @ts-ignore - 忽略模块导入类型检查
 import { Get_NineSong_Temp_Data_To_LocalSqlite } from '@/server/server_api/ninesong_api/services_web_instant_access/class_Get_NineSong_Temp_Data_To_LocalSqlite'
 // @ts-ignore - 忽略模块导入类型检查
-import { store_server_login_info } from '@/views/view_server/page_login/store/store_server_login_info'
+import { store_server_login_info } from '@/data/data_status/comment_status/login_store/store_server_login_info'
 // @ts-ignore - 忽略模块导入类型检查
 import { usePageRecommendStore } from '@/data/data_status/page_status/recommend_store/usePageRecommendStore'
 
