@@ -817,6 +817,11 @@ onMounted(() => {
 onMounted(async () => {
   try {
     if (!isElectron) {
+      const lang = String(localStorage.getItem('jwt_lang'))
+      if (lang != null && lang !== 'null' && lang !== '') {
+        locale.value = lang
+        store_system_configs_info.lang = lang
+      }
       // isLogin
       await store_server_login_logic.checkLoginStatus()
     } else {
@@ -851,6 +856,8 @@ watch(
   () => store_system_configs_info.lang,
   async (newValue) => {
     locale.value = newValue
+    localStorage.setItem('jwt_lang', String(newValue))
+    store_system_configs_save.save_system_config_of_App_Configs()
   }
 )
 if (isElectron) {

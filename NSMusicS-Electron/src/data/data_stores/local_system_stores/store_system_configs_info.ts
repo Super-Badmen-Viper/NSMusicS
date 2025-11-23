@@ -112,14 +112,6 @@ export const store_system_configs_info = reactive({
   },
 })
 watch(
-  () => store_system_configs_info.lang,
-  (newValue) => {
-    console.log(newValue)
-    localStorage.setItem('jwt_lang', String(newValue))
-    store_system_configs_save.save_system_config_of_App_Configs()
-  }
-)
-watch(
   () => store_system_configs_info.app_view_left_menu_select_activeKey,
   (newValue) => {
     store_system_configs_save.save_system_config_of_App_Configs()
