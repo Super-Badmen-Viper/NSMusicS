@@ -20,9 +20,6 @@ export const store_server_login_logic = reactive({
       store_server_users.server_select_kind = 'ninesong'
     }
 
-    const lang = String(sessionStorage.getItem('jwt_lang'))
-    store_system_configs_info.lang = lang && lang != 'null' ? lang : 'en'
-
     const currentTime = new Date().getTime()
     store_server_login_info.server_accessToken = String(sessionStorage.getItem('jwt_token'))
     const expireTime = sessionStorage.getItem('jwt_expire_time')
