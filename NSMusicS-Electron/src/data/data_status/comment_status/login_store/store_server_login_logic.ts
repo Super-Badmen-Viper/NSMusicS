@@ -20,9 +20,6 @@ export const store_server_login_logic = reactive({
       store_server_users.server_select_kind = 'ninesong'
     }
 
-    const lang = String(sessionStorage.getItem('jwt_lang'))
-    store_system_configs_info.lang = lang && lang != 'null' ? lang : 'en'
-
     const currentTime = new Date().getTime()
     store_server_login_info.server_accessToken = String(sessionStorage.getItem('jwt_token'))
     const expireTime = sessionStorage.getItem('jwt_expire_time')
@@ -41,7 +38,16 @@ export const store_server_login_logic = reactive({
               sessionStorage.setItem('jwt_expire_time', String(currentTime + this.jwt_expire_time)) // 1 小时
 
               store_router_data_info.router_select_model_server_login = false
-              await store_system_configs_info.load_app()
+              try {
+                await store_system_configs_info.load_app()
+              } catch (error) {
+                console.log('error load_app 45:', error)
+              }
+              ///
+              const lang = String(sessionStorage.getItem('jwt_lang'))
+              store_system_configs_info.lang = lang && lang != 'null' ? lang : 'en'
+              console.log('store_system_configs_info.lang | lang: ' + store_system_configs_info.lang + ' | ' + lang)
+              ///
               await store_general_fetch_home_list.fetchData_Home()
               console.log('已登录: ' + store_server_login_info.server_accessToken)
 
@@ -99,7 +105,15 @@ export const store_server_login_logic = reactive({
           sessionStorage.setItem('jwt_token', store_server_login_info.server_accessToken)
           sessionStorage.setItem('jwt_expire_time', expireTime.toString())
           sessionStorage.setItem('email', email)
-          await store_system_configs_info.load_app()
+          try {
+            await store_system_configs_info.load_app()
+          } catch (error) {
+            console.log('error load_app 103:', error)
+          }
+          ///
+          const lang = String(sessionStorage.getItem('jwt_lang'))
+          store_system_configs_info.lang = lang && lang != 'null' ? lang : 'en'
+          console.log('store_system_configs_info.lang | lang: ' + store_system_configs_info.lang + ' | ' + lang)
           ///
           const route = String(sessionStorage.getItem('jwt_route'))
           let route_path =
