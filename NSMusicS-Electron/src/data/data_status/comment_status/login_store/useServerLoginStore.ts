@@ -56,7 +56,11 @@ export const useServerLoginStore = defineStore('serverLogin', () => {
               sessionStorage.setItem('jwt_expire_time', String(currentTime + jwt_expire_time)) // 1 小时
 
               store_router_data_info.router_select_model_server_login = false
-              await store_system_configs_info.load_app()
+              try {
+                await store_system_configs_info.load_app()
+              } catch (error) {
+                console.log('error load_app 60:', error)
+              }
               await store_general_fetch_home_list.fetchData_Home()
               console.log('已登录: ' + server_accessToken.value)
 
@@ -115,7 +119,11 @@ export const useServerLoginStore = defineStore('serverLogin', () => {
           sessionStorage.setItem('jwt_token', server_accessToken.value)
           sessionStorage.setItem('jwt_expire_time', expireTime.toString())
           sessionStorage.setItem('email', email)
-          await store_system_configs_info.load_app()
+          try {
+            await store_system_configs_info.load_app()
+          } catch (error) {
+            console.log('error load_app 119:', error)
+          }
           ///
           const lang = String(sessionStorage.getItem('jwt_lang'))
           store_system_configs_info.lang = lang && lang != 'null' ? lang : 'en'
