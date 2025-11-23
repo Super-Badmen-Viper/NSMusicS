@@ -117,6 +117,9 @@ export const useServerLoginStore = defineStore('serverLogin', () => {
           sessionStorage.setItem('email', email)
           await store_system_configs_info.load_app()
           ///
+          const lang = String(sessionStorage.getItem('jwt_lang'))
+          store_system_configs_info.lang = lang && lang != 'null' ? lang : 'en'
+          ///
           const route = String(sessionStorage.getItem('jwt_route'))
           let route_path = 
             route && route != '/login' && route != '/null' && route !== 'null' ? route : '/setting'
