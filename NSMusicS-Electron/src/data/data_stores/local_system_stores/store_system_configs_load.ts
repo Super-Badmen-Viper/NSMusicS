@@ -141,10 +141,16 @@ export const store_system_configs_load = reactive({
         store_system_configs_info.theme_name = '' + system_Configs_Read.app_Configs.value['theme']
         store_system_configs_info.theme_auto_system =
           '' + system_Configs_Read.app_Configs.value['theme_auto_system'] === 'true'
-        store_system_configs_info.lang = '' + system_Configs_Read.app_Configs.value['lang']
-        if (store_system_configs_info.lang === 'null') {
-          store_system_configs_info.lang = 'en'
+        ///
+        const lang = '' + system_Configs_Read.app_Configs.value['lang']
+        if (lang && lang != 'null' && lang != '') {
+          if (!(lang != 'en' && store_system_configs_info.lang != 'en')) {
+            // 当store_system_configs_info.lang的优先级低于app_Configs.value['lang']时
+            // 以lang为准
+            store_system_configs_info.lang = lang
+          }
         }
+        ///
         playerSettingStore.orderPanelWidath =
           playerSettingStore.langWidths[store_system_configs_info.lang.toString()]
         playerSettingStore.orderButonWidath = playerSettingStore.orderPanelWidath - 14

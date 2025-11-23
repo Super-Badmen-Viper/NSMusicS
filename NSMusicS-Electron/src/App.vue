@@ -821,6 +821,7 @@ onMounted(async () => {
       if (lang != null && lang !== 'null' && lang !== '') {
         locale.value = lang
         store_system_configs_info.lang = lang
+        console.log('init lang: ' + lang)
       }
       // isLogin
       await store_server_login_logic.checkLoginStatus()

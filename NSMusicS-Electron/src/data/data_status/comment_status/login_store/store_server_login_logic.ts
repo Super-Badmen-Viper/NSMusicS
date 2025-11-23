@@ -45,7 +45,8 @@ export const store_server_login_logic = reactive({
               }
               ///
               const lang = String(localStorage.getItem('jwt_lang'))
-              store_system_configs_info.lang = lang && lang != 'null' ? lang : 'en'
+              if (store_system_configs_info.lang != 'en')
+                store_system_configs_info.lang = lang && lang != 'null' && lang != '' ? lang : 'en'
               console.log('store_system_configs_info.lang | lang: ' + store_system_configs_info.lang + ' | ' + lang)
               ///
               await store_general_fetch_home_list.fetchData_Home()
@@ -112,7 +113,8 @@ export const store_server_login_logic = reactive({
           }
           ///
           const lang = String(localStorage.getItem('jwt_lang'))
-          store_system_configs_info.lang = lang && lang != 'null' ? lang : 'en'
+          if (store_system_configs_info.lang != 'en')
+            store_system_configs_info.lang = lang && lang != 'null' && lang != '' ? lang : 'en'
           console.log('store_system_configs_info.lang | lang: ' + store_system_configs_info.lang + ' | ' + lang)
           ///
           const route = String(localStorage.getItem('jwt_route'))
