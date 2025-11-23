@@ -108,12 +108,12 @@ export class Read_LocalSqlite_System_Configs {
     })
   )
   public playlist_File_Configs = ref<string[]>([])
-  public view_Media_History_Configs = ref<Interface_View_Router_Date[]>([])
-  public view_Album_History_Configs = ref<Interface_View_Router_Date[]>([])
-  public view_Artist_History_Configs = ref<Interface_View_Router_Date[]>([])
-  public view_Media_History_select_Configs = ref<Interface_View_Router_Date>()
-  public view_Album_History_select_Configs = ref<Interface_View_Router_Date>()
-  public view_Artist_History_select_Configs = ref<Interface_View_Router_Date>()
+  public view_Media_History_Configs = ref<any[]>([])
+  public view_Album_History_Configs = ref<any[]>([])
+  public view_Artist_History_Configs = ref<any[]>([])
+  public view_Media_History_select_Configs = ref<any>()
+  public view_Album_History_select_Configs = ref<any>()
+  public view_Artist_History_select_Configs = ref<any>()
 
   public async init() {
     if (isElectron) {
@@ -347,6 +347,7 @@ export class Read_LocalSqlite_System_Configs {
       })
       response_library.data.forEach((row: any) => {
         this.library_Configs.value.push({
+          show: false,
           id: row.ID,
           config_key: row.ConfigKey,
           config_value: row.ConfigValue,
@@ -362,6 +363,7 @@ export class Read_LocalSqlite_System_Configs {
       if (response_server_Configs != undefined && response_server_Configs.data != undefined) {
         response_server_Configs.data.forEach((row: any) => {
           this.server_Configs.value.push({
+            show: false,
             id: row.ID,
             server_name: row.ServerName,
             url: row.URL,

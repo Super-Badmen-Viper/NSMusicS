@@ -115,7 +115,7 @@ watch(
   () => store_system_configs_info.lang,
   (newValue) => {
     console.log(newValue)
-    sessionStorage.setItem('jwt_lang', String(newValue))
+    localStorage.setItem('jwt_lang', String(newValue))
     store_system_configs_save.save_system_config_of_App_Configs()
   }
 )

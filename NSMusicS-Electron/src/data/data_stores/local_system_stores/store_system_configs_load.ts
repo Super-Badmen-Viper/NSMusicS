@@ -656,7 +656,7 @@ export const store_system_configs_load = reactive({
         }
         store_router_data_info.router.push(store_router_data_info.router_name)
       } else {
-        const route = String(sessionStorage.getItem('jwt_route'))
+        const route = String(localStorage.getItem('jwt_route'))
         const route_path =
           route && route != '/login' && route != '/null' && route !== 'null' ? route : '/setting'
         store_system_configs_info.app_view_left_menu_select_activeKey = route_path

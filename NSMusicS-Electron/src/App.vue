@@ -315,7 +315,7 @@ routers.afterEach(async (to, from) => {
       }
     }
     if (to.name !== 'login') {
-      sessionStorage.setItem('jwt_route', String('/' + to.name))
+      localStorage.setItem('jwt_route', String('/' + String(to.name)))
     }
   }
 })

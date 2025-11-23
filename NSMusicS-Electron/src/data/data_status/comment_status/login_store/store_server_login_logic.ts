@@ -44,7 +44,7 @@ export const store_server_login_logic = reactive({
                 console.log('error load_app 45:', error)
               }
               ///
-              const lang = String(sessionStorage.getItem('jwt_lang'))
+              const lang = String(localStorage.getItem('jwt_lang'))
               store_system_configs_info.lang = lang && lang != 'null' ? lang : 'en'
               console.log('store_system_configs_info.lang | lang: ' + store_system_configs_info.lang + ' | ' + lang)
               ///
@@ -111,11 +111,11 @@ export const store_server_login_logic = reactive({
             console.log('error load_app 103:', error)
           }
           ///
-          const lang = String(sessionStorage.getItem('jwt_lang'))
+          const lang = String(localStorage.getItem('jwt_lang'))
           store_system_configs_info.lang = lang && lang != 'null' ? lang : 'en'
           console.log('store_system_configs_info.lang | lang: ' + store_system_configs_info.lang + ' | ' + lang)
           ///
-          const route = String(sessionStorage.getItem('jwt_route'))
+          const route = String(localStorage.getItem('jwt_route'))
           let route_path =
             route && route != '/login' && route != '/null' && route !== 'null' ? route : '/setting'
 
