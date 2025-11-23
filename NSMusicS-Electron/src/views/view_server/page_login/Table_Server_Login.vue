@@ -6,6 +6,8 @@ import NSMusicS from '@/assets/img/NSMusicS.png'
 import { darkTheme, NConfigProvider, useMessage } from 'naive-ui'
 import { store_server_login_info } from '@/data/data_status/comment_status/login_store/store_server_login_info'
 import { store_server_login_logic } from '@/data/data_status/comment_status/login_store/store_server_login_logic'
+import {onMounted} from "vue";
+import {isElectron} from "@/utils/electron/isElectron";
 const { t } = useI18n({
   inheritLocale: true,
 })
@@ -22,6 +24,18 @@ async function login() {
     message.error(t('HeaderLoginFailure'))
   }
 }
+onMounted(() => {
+  if (!isElectron) {
+    if (!sessionStorage.getItem("hasReloaded")) {
+      sessionStorage.setItem("hasReloaded", "true");
+      // 快速刷新，修复lang获取缺陷，因为本地缓存第一次获取不到lang
+      window.location.reload();
+    } else {
+      // 可选：清除标记，以便下次进入页面时能再次刷新
+      sessionStorage.removeItem("hasReloaded");
+    }
+  }
+})
 </script>
 <template>
   <div class="view">
