@@ -119,6 +119,7 @@ export const useServerLoginStore = defineStore('serverLogin', () => {
           ///
           const lang = String(sessionStorage.getItem('jwt_lang'))
           store_system_configs_info.lang = lang && lang != 'null' ? lang : 'en'
+          console.log('store_system_configs_info.lang | lang: ' + store_system_configs_info.lang + ' | ' + lang)
           ///
           const route = String(sessionStorage.getItem('jwt_route'))
           let route_path = 
