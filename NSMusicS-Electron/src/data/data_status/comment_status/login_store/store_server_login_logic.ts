@@ -21,8 +21,8 @@ export const store_server_login_logic = reactive({
     }
 
     const currentTime = new Date().getTime()
-    store_server_login_info.server_accessToken = String(sessionStorage.getItem('jwt_token'))
-    const expireTime = sessionStorage.getItem('jwt_expire_time')
+    store_server_login_info.server_accessToken = String(localStorage.getItem('jwt_token'))
+    const expireTime = localStorage.getItem('jwt_expire_time')
 
     try {
       if (store_server_login_info.server_accessToken) {
@@ -35,7 +35,7 @@ export const store_server_login_logic = reactive({
           if (store_server_login_info.server_accessToken && expireTime) {
             const remainingTime = parseInt(expireTime) - currentTime
             if (remainingTime > 0) {
-              sessionStorage.setItem('jwt_expire_time', String(currentTime + this.jwt_expire_time)) // 1 小时
+              localStorage.setItem('jwt_expire_time', String(currentTime + this.jwt_expire_time)) // 1 小时
 
               store_router_data_info.router_select_model_server_login = false
               try {
@@ -76,7 +76,8 @@ export const store_server_login_logic = reactive({
         return this.server_logout()
       }
     } catch (error) {
-      console.error('验证登录状态失败:', error)
+      // 跨页面不给予认证，直接输出
+      console.log('状态error:', error)
       return this.server_logout()
     }
   },
@@ -103,9 +104,9 @@ export const store_server_login_logic = reactive({
         if (store_system_configs_info.desktop_system_kind === 'docker') {
           store_router_data_info.router_select_model_server_login = false
           const expireTime = new Date().getTime() + this.jwt_expire_time
-          sessionStorage.setItem('jwt_token', store_server_login_info.server_accessToken)
-          sessionStorage.setItem('jwt_expire_time', expireTime.toString())
-          sessionStorage.setItem('email', email)
+          localStorage.setItem('jwt_token', store_server_login_info.server_accessToken)
+          localStorage.setItem('jwt_expire_time', expireTime.toString())
+          localStorage.setItem('email', email)
           try {
             await store_system_configs_info.load_app()
           } catch (error) {
@@ -145,12 +146,21 @@ export const store_server_login_logic = reactive({
     return undefined
   },
   server_logout() {
-    sessionStorage.removeItem('jwt_token')
-    sessionStorage.removeItem('jwt_expire_time')
+    localStorage.removeItem('jwt_token')
+    localStorage.removeItem('jwt_expire_time')
 
     store_server_login_info.server_accessToken = ''
 
     store_router_data_info.router.push('/login')
+
+    if (!localStorage.getItem("hasReloaded")) {
+      localStorage.setItem("hasReloaded", "true");
+      // 快速刷新，修复lang获取缺陷，因为本地缓存第一次获取不到lang
+      window.location.reload();
+    } else {
+      // 可选：清除标记，以便下次进入页面时能再次刷新
+      localStorage.removeItem("hasReloaded");
+    }
 
     return false
   },

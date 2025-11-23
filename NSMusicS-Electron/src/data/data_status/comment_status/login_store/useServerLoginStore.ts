@@ -91,7 +91,8 @@ export const useServerLoginStore = defineStore('serverLogin', () => {
         return server_logout()
       }
     } catch (error) {
-      console.error('验证登录状态失败:', error)
+      // 跨页面不给予认证，直接输出
+      console.log('状态error:', error)
       return server_logout()
     }
   }
