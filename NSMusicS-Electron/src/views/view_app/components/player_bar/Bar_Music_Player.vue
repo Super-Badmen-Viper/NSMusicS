@@ -750,11 +750,13 @@ async function Play_Media_Order(model_num: string, increased: number) {
       if (!store_server_user_model.random_play_model || index < last_index) {
         if (!stop_play) {
           if (store_server_user_model.model_server_type_of_web) {
-            if (index >= playlist_MediaFiles_temporary.value.length) {
+            const test_index = playlist_MediaFiles_temporary.value.length
+            if (index >= test_index) {
               store_general_fetch_media_list._load_model = 'play'
               await store_general_fetch_media_list.fetchData_Media_of_server_web_end()
               store_general_fetch_media_list._load_model = 'search'
-              index_zero = false
+              ///
+              index_zero = test_index === playlist_MediaFiles_temporary.value.length
             }
           }
           if (index_zero)

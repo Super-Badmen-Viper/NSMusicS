@@ -7,7 +7,7 @@
     "email": "1774148579@qq.com"
   },
   "description": "NSMusicS For Web(Electron+Vue3+TS),Multi platform Multi mode Super Music Software (Full stack development, audio processing, artificial intelligence, natural language processing)",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "private": true,
   "license": "AGPL - 3.0",
   "scripts": {
@@ -40,7 +40,7 @@
     "fast-xml-parser": "^4.5.0",
     "file-uri-to-path": "^2.0.0",
     "hammerjs": "^2.0.8",
-    "howler": "^2.2.4",
+    "howler": "^2.2.5",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
     "node-cache": "^5.1.2",

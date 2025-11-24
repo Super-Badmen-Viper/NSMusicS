@@ -28,7 +28,7 @@ export class Jellyfin_Api_Services_Web {
         store_server_user_model.authorization_of_Je.length > 0
       ) {
         const headers = {
-          Authorization: `MediaBrowser Token="${store_server_user_model.authorization_of_Je}", Client="NSMusicS", Device="Desktop Client", DeviceId="NineSong", Version="2.2.4"`,
+          Authorization: `MediaBrowser Token="${store_server_user_model.authorization_of_Je}", Client="NSMusicS", Device="Desktop Client", DeviceId="NineSong", Version="2.2.5"`,
         }
 
         const queryString = params ? new URLSearchParams(params).toString() : ''
