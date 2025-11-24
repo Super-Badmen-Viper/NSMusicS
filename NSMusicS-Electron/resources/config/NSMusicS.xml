@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <item>
-<version>2.2.3</version>
+<version>2.2.4</version>
 <url> </url>
 <changelog>https://github.com/Super-Badmen-Viper/NSMusicS/releases</changelog>
 <changelog_explain>
-    2.2.3已更新内容;
+    2.2.4已更新内容;
     更新了很多东西，修复了很多BUG，但是我懒得写了，每个版本都会越来越强，而且每到一定阶段都会进行项目架构重构。
     .......
     由于node-mpv不再维护具有潜在问题(包括但不限于单曲重复播放、唤起MPV组件失败、MPV状态管理权限问题)，现将默认音频输出设置为howler.js Web输出[√];

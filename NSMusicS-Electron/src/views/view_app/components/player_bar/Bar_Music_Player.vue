@@ -670,6 +670,7 @@ async function Play_Media_Order(model_num: string, increased: number) {
       )
     }
 
+    let index_zero = false
     if (index !== -1) {
       if (model_num === 'playback-1') {
         index += increased
@@ -678,7 +679,7 @@ async function Play_Media_Order(model_num: string, increased: number) {
             stop_play = true
             playerSettingStore.player_is_play_ended = false
           } else {
-            index = 0
+            index_zero = true
           }
         } else if (index < 0) {
           index = last_index - 1
@@ -686,7 +687,7 @@ async function Play_Media_Order(model_num: string, increased: number) {
       } else if (model_num === 'playback-2') {
         index += increased
         if (index >= last_index) {
-          index = 0
+          index_zero = true
         } else if (index < 0) {
           index = last_index - 1
         }
@@ -696,7 +697,7 @@ async function Play_Media_Order(model_num: string, increased: number) {
           if (index < 0) {
             index = last_index - 1
           } else if (index >= last_index) {
-            index = 0
+            index_zero = true
           }
         }
       } else if (model_num === 'playback-4') {
@@ -753,8 +754,11 @@ async function Play_Media_Order(model_num: string, increased: number) {
               store_general_fetch_media_list._load_model = 'play'
               await store_general_fetch_media_list.fetchData_Media_of_server_web_end()
               store_general_fetch_media_list._load_model = 'search'
+              index_zero = false
             }
           }
+          if (index_zero)
+            index = 0
           const media_file = playlist_MediaFiles_temporary.value[index]
           await playerSettingStore.update_current_media_info(media_file, index)
           console.log(media_file)
