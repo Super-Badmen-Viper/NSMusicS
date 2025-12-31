@@ -307,7 +307,7 @@ async function update_server_config_of_current_user_of_sqlite(value: any, select
           store_server_users.server_select_kind = 'jellyfin'
         } else if (user_config?.type === 'emby') {
           store_server_users.server_select_kind = 'emby'
-        } else if (user_config?.type === 'ninesong') {
+        } else if (user_config?.type === 'ninesong' || user_config === undefined) {
           store_server_users.server_select_kind = 'ninesong'
           ///
           pageArtistStore.page_view_model = 'tree'

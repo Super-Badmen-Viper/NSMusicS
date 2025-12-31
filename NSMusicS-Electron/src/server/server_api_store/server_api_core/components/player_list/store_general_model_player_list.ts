@@ -28,7 +28,7 @@ export const store_general_model_player_list = reactive({
     } else if (user_config?.type === 'jellyfin' || user_config?.type === 'emby') {
       const get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
       await get_Jellyfin_Temp_Data_To_LocalSqlite.get_playlist_je()
-    } else if (user_config?.type === 'ninesong') {
+    } else if (user_config?.type === 'ninesong' || user_config === undefined) {
       const get_NineSong_Temp_Data_To_LocalSqlite = new Get_NineSong_Temp_Data_To_LocalSqlite()
       await get_NineSong_Temp_Data_To_LocalSqlite.get_playlist_ninesong()
     }
