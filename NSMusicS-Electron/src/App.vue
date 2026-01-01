@@ -813,7 +813,9 @@ const { locale } = useI18n({
   useScope: 'global',
 })
 onMounted(() => {
-  store_system_configs_load.app_configs_loading = true
+  if (!isElectron) {
+    store_system_configs_load.app_configs_loading = true
+  }
   create_menuOptions_appBar()
 })
 onMounted(async () => {

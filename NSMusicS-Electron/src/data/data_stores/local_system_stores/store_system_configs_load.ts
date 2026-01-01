@@ -28,7 +28,7 @@ import { store_server_model_statistics } from '@/server/server_api_store/server_
 import { Audio_howler } from '@/data/data_models/app_models/song_Audio_Out/Audio_howler'
 
 export const store_system_configs_load = reactive({
-  app_configs_loading: true,
+  app_configs_loading: false,
   async load_app_config() {
     const playerAppearanceStore = usePlayerAppearanceStore()
     const playerAudioStore = usePlayerAudioStore()
