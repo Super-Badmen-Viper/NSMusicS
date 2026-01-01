@@ -162,7 +162,7 @@ export class Read_LocalSqlite_System_Configs {
         db_navidrome.exec('BEGIN')
         const tableSchema = db_navidrome.prepare(`PRAGMA table_info(media_file)`).all()
         const hasMediumImageUrlColumn = tableSchema.some(
-          (column) => column.name === 'medium_image_url'
+          (column: any) => column.name === 'medium_image_url'
         )
         if (!hasMediumImageUrlColumn) {
           db_navidrome.exec(`ALTER TABLE media_file
@@ -275,54 +275,54 @@ export class Read_LocalSqlite_System_Configs {
         .map((item) => item.media_file_id)
 
       /// view_router_hisotry
-      db.prepare(
-        `SELECT *
-                        FROM system_view_media_history`
-      )
-        .all()
-        .forEach((row: Interface_View_Router_Date) => {
-          this.view_Media_History_Configs.value.push(row)
-        })
-      db.prepare(
-        `SELECT *
-                        FROM system_view_album_history`
-      )
-        .all()
-        .forEach((row: Interface_View_Router_Date) => {
-          this.view_Album_History_Configs.value.push(row)
-        })
-      db.prepare(
-        `SELECT *
-                        FROM system_view_artist_history`
-      )
-        .all()
-        .forEach((row: Interface_View_Router_Date) => {
-          this.view_Artist_History_Configs.value.push(row)
-        })
-      db.prepare(
-        `SELECT *
-                        FROM system_view_media_select_history`
-      )
-        .all()
-        .forEach((row: Interface_View_Router_Date) => {
-          this.view_Media_History_select_Configs.value = row
-        })
-      db.prepare(
-        `SELECT *
-                        FROM system_view_album_select_history`
-      )
-        .all()
-        .forEach((row: Interface_View_Router_Date) => {
-          this.view_Album_History_select_Configs.value = row
-        })
-      db.prepare(
-        `SELECT *
-                        FROM system_view_artist_select_history`
-      )
-        .all()
-        .forEach((row: Interface_View_Router_Date) => {
-          this.view_Artist_History_select_Configs.value = row
-        })
+      // db.prepare(
+      //   `SELECT *
+      //                   FROM system_view_media_history`
+      // )
+      //   .all()
+      //   .forEach((row: any) => {
+      //     this.view_Media_History_Configs.value.push(row)
+      //   })
+      // db.prepare(
+      //   `SELECT *
+      //                   FROM system_view_album_history`
+      // )
+      //   .all()
+      //   .forEach((row: any) => {
+      //     this.view_Album_History_Configs.value.push(row)
+      //   })
+      // db.prepare(
+      //   `SELECT *
+      //                   FROM system_view_artist_history`
+      // )
+      //   .all()
+      //   .forEach((row: Interface_View_Router_Date) => {
+      //     this.view_Artist_History_Configs.value.push(row)
+      //   })
+      // db.prepare(
+      //   `SELECT *
+      //                   FROM system_view_media_select_history`
+      // )
+      //   .all()
+      //   .forEach((row: any) => {
+      //     this.view_Media_History_select_Configs.value = row
+      //   })
+      // db.prepare(
+      //   `SELECT *
+      //                   FROM system_view_album_select_history`
+      // )
+      //   .all()
+      //   .forEach((row: any) => {
+      //     this.view_Album_History_select_Configs.value = row
+      //   })
+      // db.prepare(
+      //   `SELECT *
+      //                   FROM system_view_artist_select_history`
+      // )
+      //   .all()
+      //   .forEach((row: any) => {
+      //     this.view_Artist_History_select_Configs.value = row
+      //   })
 
       db.close()
       db = null
@@ -332,27 +332,31 @@ export class Read_LocalSqlite_System_Configs {
           Authorization: `Bearer ${store_server_login_info.server_accessToken}`,
         },
       })
-      response_app_Configs.data.forEach((row: any) => {
-        const propertyName = row.ConfigKey
-        const propertyValue = row.ConfigValue
-        if (this.app_Configs.value.hasOwnProperty(propertyName)) {
-          this.app_Configs.value[propertyName] = propertyValue
-        }
-      })
+      if (response_app_Configs != undefined && response_app_Configs.data != undefined) {
+        response_app_Configs.data.forEach((row: any) => {
+          const propertyName = row.ConfigKey
+          const propertyValue = row.ConfigValue
+          if (this.app_Configs.value.hasOwnProperty(propertyName)) {
+            this.app_Configs.value[propertyName] = propertyValue
+          }
+        })
+      }
       //
       const response_library = await axios.get('/api/app/library', {
         headers: {
           Authorization: `Bearer ${store_server_login_info.server_accessToken}`,
         },
       })
-      response_library.data.forEach((row: any) => {
-        this.library_Configs.value.push({
-          show: false,
-          id: row.ID,
-          config_key: row.ConfigKey,
-          config_value: row.ConfigValue,
+      if (response_library != undefined && response_library.data != undefined) {
+        response_library.data.forEach((row: any) => {
+          this.library_Configs.value.push({
+            show: false,
+            id: row.ID,
+            config_key: row.ConfigKey,
+            config_value: row.ConfigValue,
+          })
         })
-      })
+      }
       //
       this.server_Configs.value = []
       const response_server_Configs = await axios.get('/api/app/server', {
@@ -374,6 +378,7 @@ export class Read_LocalSqlite_System_Configs {
           })
           if (row.ID === '' + this.app_Configs.value['server_select']) {
             this.server_Configs_Current.value = {
+              show: false,
               id: row.ID,
               server_name: row.ServerName,
               url: row.URL,
@@ -391,35 +396,41 @@ export class Read_LocalSqlite_System_Configs {
           Authorization: `Bearer ${store_server_login_info.server_accessToken}`,
         },
       })
-      response_player_Configs_of_Audio_Info.data.forEach((row: any) => {
-        const propertyName = row.ConfigKey
-        const propertyValue = row.ConfigValue
-        if (this.player_Configs_of_Audio_Info.value.hasOwnProperty(propertyName)) {
-          this.player_Configs_of_Audio_Info.value[propertyName] = propertyValue
-        }
-      })
+      if (response_player_Configs_of_Audio_Info != undefined && response_player_Configs_of_Audio_Info.data != undefined) {
+        response_player_Configs_of_Audio_Info.data.forEach((row: any) => {
+          const propertyName = row.ConfigKey
+          const propertyValue = row.ConfigValue
+          if (this.player_Configs_of_Audio_Info.value.hasOwnProperty(propertyName)) {
+            this.player_Configs_of_Audio_Info.value[propertyName] = propertyValue
+          }
+        })
+      }
       //
       const response_player_Configs_of_UI = await axios.get('/api/app/ui', {
         headers: {
           Authorization: `Bearer ${store_server_login_info.server_accessToken}`,
         },
       })
-      response_player_Configs_of_UI.data.forEach((row: any) => {
-        const propertyName = row.ConfigKey
-        const propertyValue = row.ConfigValue
-        if (this.player_Configs_of_UI.value.hasOwnProperty(propertyName)) {
-          this.player_Configs_of_UI.value[propertyName] = propertyValue
-        }
-      })
+      if (response_player_Configs_of_UI != undefined && response_player_Configs_of_UI.data != undefined) {
+        response_player_Configs_of_UI.data.forEach((row: any) => {
+          const propertyName = row.ConfigKey
+          const propertyValue = row.ConfigValue
+          if (this.player_Configs_of_UI.value.hasOwnProperty(propertyName)) {
+            this.player_Configs_of_UI.value[propertyName] = propertyValue
+          }
+        })
+      }
       //
       const response_playlist_File_Configs = await axios.get('/api/app/playlist', {
         headers: {
           Authorization: `Bearer ${store_server_login_info.server_accessToken}`,
         },
       })
-      this.playlist_File_Configs.value = response_playlist_File_Configs.data.map(
-        (item) => item.ConfigKey
-      )
+      if (response_playlist_File_Configs != undefined && response_playlist_File_Configs.data != undefined) {
+        this.playlist_File_Configs.value = response_playlist_File_Configs.data.map(
+          (item: any) => item.ConfigKey
+        )
+      }
     }
   }
 }

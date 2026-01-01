@@ -807,11 +807,13 @@ import View_Mini_Music_Player from '@/views/view_app/page/page_player/View_Mini_
 import { usePageHomeStore } from '@/data/data_status/page_status/home_store/usePageHomeStore'
 
 ////// Load Configs
+import { store_system_configs_load } from '@/data/data_stores/local_system_stores/store_system_configs_load'
 const { locale } = useI18n({
   inheritLocale: true,
   useScope: 'global',
 })
 onMounted(() => {
+  store_system_configs_load.app_configs_loading = true
   create_menuOptions_appBar()
 })
 onMounted(async () => {
