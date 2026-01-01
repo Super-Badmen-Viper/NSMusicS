@@ -813,14 +813,13 @@ const { locale } = useI18n({
   useScope: 'global',
 })
 onMounted(() => {
-  if (!isElectron) {
-    store_system_configs_load.app_configs_loading = true
-  }
   create_menuOptions_appBar()
 })
 onMounted(async () => {
   try {
     if (!isElectron) {
+      store_system_configs_load.app_configs_loading = true;
+      /// 
       const lang = String(localStorage.getItem('jwt_lang'))
       if (lang != null && lang !== 'null' && lang !== '') {
         locale.value = lang
