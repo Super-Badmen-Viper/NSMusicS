@@ -235,6 +235,7 @@ routers.beforeEach((to, from, next) => {
 })
 routers.afterEach(async (to, from) => {
   if (to.name !== from.name) {
+    store_router_data_info.router_select_model_server_login = false
     try {
       store_server_model_statistics.get_page_top_info()
     } catch (error) {
