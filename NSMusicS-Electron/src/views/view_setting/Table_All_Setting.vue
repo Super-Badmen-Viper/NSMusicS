@@ -34,31 +34,14 @@ import Group01ClientSettingsLibraries from '@/views/view_setting/components/grou
 import Group02ClientSettingsGeneralTab from '@/views/view_setting/components/group_0_client_settings/Group_0_2_ClientSettings_GeneralTab.vue'
 import Group03ClientSettingsPlaybackTab from '@/views/view_setting/components/group_0_client_settings/Group_0_3_ClientSettings_PlaybackTab.vue'
 import Group04ClientSettingsHotkeysTab from '@/views/view_setting/components/group_0_client_settings/Group_0_4_ClientSettings_HotkeysTab.vue'
-import Group05ClientSettingsWindowTab from '@/views/view_setting/components/group_0_client_settings/Group_0_5_ClientSettings_WindowTab.vue'
-import Group11TabDashboard from '@/views/view_setting/components/group_1_tab_server/Group_1_1_TabDashboard.vue'
-import Group12General from '@/views/view_setting/components/group_1_tab_server/Group_1_2_General.vue'
+
 import Group13HeaderUser from '@/views/view_setting/components/group_1_tab_server/Group_1_3_HeaderUser.vue'
 import Group141HeaderLibraries from '@/views/view_setting/components/group_1_tab_server/Group_1_4_1_HeaderLibraries.vue'
-import Group142Display from '@/views/view_setting/components/group_1_tab_server/Group_1_4_2_Display.vue'
-import Group143LabelMetadata from '@/views/view_setting/components/group_1_tab_server/Group_1_4_3_LabelMetadata.vue'
-import Group144TabNfoSettings from '@/views/view_setting/components/group_1_tab_server/Group_1_4_4_TabNfoSettings.vue'
 import Group151LabelTranscodes from '@/views/view_setting/components/group_1_tab_server/Group_1_5_1_LabelTranscodes.vue'
-import Group152ButtonResume from '@/views/view_setting/components/group_1_tab_server/Group_1_5_2_ButtonResume.vue'
-import Group153TabStreaming from '@/views/view_setting/components/group_1_tab_server/Group_1_5_3_TabStreaming.vue'
-import Group_1_5_4 from '@/views/view_setting/components/group_1_tab_server/group_1_5_4.vue'
-import Group21HeaderDevices from '@/views/view_setting/components/group_2_header_devices/Group_2_1_HeaderDevices.vue'
-import Group22HeaderActivity from '@/views/view_setting/components/group_2_header_devices/Group_2_2_HeaderActivity.vue'
-import Group23Dlna from '@/views/view_setting/components/group_2_header_devices/Group_2_3_DLNA.vue'
-import Group31LiveTv from '@/views/view_setting/components/group_3_live_TV/Group_3_1_LiveTV.vue'
-import Group32HeaderDvr from '@/views/view_setting/components/group_3_live_TV/Group_3_2_HeaderDVR.vue'
-import Group41TabNetworking from '@/views/view_setting/components/group_4_tab_advanced/Group_4_1_TabNetworking.vue'
-import Group42HeaderApiKey from '@/views/view_setting/components/group_4_tab_advanced/Group_4_2_HeaderApiKey.vue'
-import Group43TabLogs from '@/views/view_setting/components/group_4_tab_advanced/Group_4_3_TabLogs.vue'
-import Group44HeaderAlert from '@/views/view_setting/components/group_4_tab_advanced/Group_4_4_HeaderAlert.vue'
-import Group451TabMyPlugins from '@/views/view_setting/components/group_4_tab_advanced/Group_4_5_1_TabMyPlugins.vue'
-import Group452TabCatalog from '@/views/view_setting/components/group_4_tab_advanced/Group_4_5_2_TabCatalog.vue'
-import Group453TabRepositories from '@/views/view_setting/components/group_4_tab_advanced/Group_4_5_3_TabRepositories.vue'
-import Group46TabScheduledTasks from '@/views/view_setting/components/group_4_tab_advanced/Group_4_6_TabScheduledTasks.vue'
+
+
+
+
 function renderIcon(icon) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
@@ -97,12 +80,7 @@ const menuOptions: any[] = reactive([
         key: 'type-group-0-4',
         icon: renderIcon(Keyboard),
       },
-      {
-        label: computed(() => t('page.setting.windowTab')),
-        key: 'type-group-0-5',
-        icon: renderIcon(AppWindow),
-        disabled: true,
-      },
+
     ],
   },
   { key: 'divider-1', type: 'divider', props: { style: { marginLeft: '16px' } } },
@@ -111,18 +89,8 @@ const menuOptions: any[] = reactive([
     key: 'type-group-1',
     icon: renderIcon(BareMetalServer),
     children: [
-      {
-        label: computed(() => t('TabDashboard')),
-        key: 'type-group-1-1',
-        icon: renderIcon(BlockStorageAlt),
-        disabled: true,
-      },
-      {
-        label: computed(() => t('General')),
-        key: 'type-group-1-2',
-        icon: renderIcon(Settings),
-        disabled: true,
-      },
+
+
       {
         label: computed(() => t('HeaderUser')),
         key: 'type-group-1-3',
@@ -130,126 +98,21 @@ const menuOptions: any[] = reactive([
       },
       {
         label: computed(() => t('HeaderLibraries')),
-        key: 'type-group-1-4',
+        key: 'type-group-1-4-1',
         icon: renderIcon(MediaLibrary),
-        children: [
-          { label: computed(() => t('HeaderLibraries')), key: 'type-group-1-4-1' },
-          { label: computed(() => t('Display')), key: 'type-group-1-4-2', disabled: true },
-          { label: computed(() => t('LabelMetadata')), key: 'type-group-1-4-3', disabled: true },
-          { label: computed(() => t('TabNfoSettings')), key: 'type-group-1-4-4', disabled: true },
-        ],
       },
       {
-        label: computed(() => t('Play')),
-        key: 'type-group-1-5',
-        icon: renderIcon(PlayCircle16Regular),
-        disabled: true,
-        children: [
-          { label: computed(() => t('LabelTranscodes')), key: 'type-group-1-5-1' },
-          { label: computed(() => t('ButtonResume')), key: 'type-group-1-5-2' },
-          { label: computed(() => t('TabStreaming')), key: 'type-group-1-5-3' },
-          { label: '特技播放', key: 'type-group-1-5-4' },
-        ],
+        label: computed(() => t('LabelTranscodes')),
+        key: 'type-group-1-5-1',
+        icon: renderIcon(SendBackward),
       },
-    ],
-  },
-  { key: 'divider-1', type: 'divider', props: { style: { marginLeft: '16px' } } },
-  {
-    label: computed(() => t('HeaderDevices')),
-    key: 'type-group-2',
-    icon: renderIcon(Devices),
-    children: [
-      {
-        label: computed(() => t('HeaderDevices')),
-        key: 'type-group-2-1',
-        icon: renderIcon(Devices),
-        disabled: true,
-      },
-      {
-        label: computed(() => t('HeaderActivity')),
-        key: 'type-group-2-2',
-        icon: renderIcon(Activity),
-        disabled: true,
-      },
-      { label: 'DLNA', key: 'type-group-2-3', icon: renderIcon(SendBackward), disabled: true },
-    ],
-  },
-  { key: 'divider-1', type: 'divider', props: { style: { marginLeft: '16px' } } },
-  {
-    label: computed(() => t('LiveTV')),
-    key: 'type-group-3',
-    icon: renderIcon(LiveTvRound),
-    children: [
-      {
-        label: computed(() => t('LiveTV')),
-        key: 'type-group-3-1',
-        icon: renderIcon(LiveTvRound),
-        disabled: true,
-      },
-      {
-        label: computed(() => t('HeaderDVR')),
-        key: 'type-group-3-2',
-        icon: renderIcon(Video),
-        disabled: true,
-      },
-    ],
-  },
-  { key: 'divider-1', type: 'divider', props: { style: { marginLeft: '16px' } } },
-  {
-    label: computed(() => t('TabAdvanced')),
-    key: 'type-group-4',
-    icon: renderIcon(LauncherSettings24Regular),
-    children: [
-      {
-        label: computed(() => t('TabNetworking')),
-        key: 'type-group-4-1',
-        icon: renderIcon(ContentDeliveryNetwork),
-        disabled: true,
-      },
-      {
-        label: computed(() => t('HeaderApiKey')),
-        key: 'type-group-4-2',
-        icon: renderIcon(Key24Regular),
-        disabled: true,
-      },
-      {
-        label: computed(() => t('TabLogs')),
-        key: 'type-group-4-3',
-        icon: renderIcon(Catalog),
-        disabled: true,
-      },
-      {
-        label: computed(() => t('HeaderAlert')),
-        key: 'type-group-4-4',
-        icon: renderIcon(NotificationsOutline),
-        disabled: true,
-      },
-      {
-        label: computed(() => t('TabPlugins')),
-        key: 'type-group-4-5',
-        icon: renderIcon(PlugConnected20Regular),
-        disabled: true,
-        children: [
-          { label: computed(() => t('TabMyPlugins')), key: 'type-group-4-5-1' },
-          { label: computed(() => t('TabCatalog')), key: 'type-group-4-5-2' },
-          { label: computed(() => t('TabRepositories')), key: 'type-group-4-5-3' },
-        ],
-      },
-      {
-        label: computed(() => t('TabScheduledTasks')),
-        key: 'type-group-4-6',
-        icon: renderIcon(Timer),
-        disabled: true,
-      },
+
     ],
   },
 ])
 const defaultExpandedKeys = [
   'type-group-0',
   'type-group-1',
-  'type-group-2',
-  'type-group-3',
-  'type-group-4',
 ]
 
 ///
@@ -315,25 +178,10 @@ onMounted(() => {
                   'type-group-0-4'
                 "
               />
-              <Group05ClientSettingsWindowTab
-                v-if="
-                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
-                  'type-group-0-5'
-                "
-              />
+
               <!--服务器-->
-              <Group11TabDashboard
-                v-if="
-                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
-                  'type-group-1-1'
-                "
-              />
-              <Group12General
-                v-if="
-                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
-                  'type-group-1-2'
-                "
-              />
+
+
               <Group13HeaderUser
                 v-if="
                   store_system_configs_info.app_view_server_client_setting_select_tab_name ===
@@ -346,126 +194,29 @@ onMounted(() => {
                   'type-group-1-4-1'
                 "
               />
-              <Group142Display
-                v-if="
-                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
-                  'type-group-1-4-2'
-                "
-              />
-              <Group143LabelMetadata
-                v-if="
-                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
-                  'type-group-1-4-3'
-                "
-              />
-              <Group144TabNfoSettings
-                v-if="
-                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
-                  'type-group-1-4-4'
-                "
-              />
               <Group151LabelTranscodes
                 v-if="
                   store_system_configs_info.app_view_server_client_setting_select_tab_name ===
                   'type-group-1-5-1'
                 "
               />
-              <Group152ButtonResume
-                v-if="
-                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
-                  'type-group-1-5-2'
-                "
-              />
-              <Group153TabStreaming
-                v-if="
-                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
-                  'type-group-1-5-3'
-                "
-              />
-              <Group_1_5_4
-                v-if="
-                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
-                  'type-group-1-5-4'
-                "
-              />
-              <Group21HeaderDevices
-                v-if="
-                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
-                  'type-group-2-1'
-                "
-              />
-              <Group22HeaderActivity
-                v-if="
-                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
-                  'type-group-2-2'
-                "
-              />
-              <Group23Dlna
-                v-if="
-                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
-                  'type-group-2-3'
-                "
-              />
-              <Group31LiveTv
-                v-if="
-                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
-                  'type-group-3-1'
-                "
-              />
-              <Group32HeaderDvr
-                v-if="
-                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
-                  'type-group-3-2'
-                "
-              />
-              <Group41TabNetworking
-                v-if="
-                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
-                  'type-group-4-1'
-                "
-              />
-              <Group42HeaderApiKey
-                v-if="
-                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
-                  'type-group-4-2'
-                "
-              />
-              <Group43TabLogs
-                v-if="
-                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
-                  'type-group-4-3'
-                "
-              />
-              <Group44HeaderAlert
-                v-if="
-                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
-                  'type-group-4-4'
-                "
-              />
-              <Group451TabMyPlugins
-                v-if="
-                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
-                  'type-group-4-5-1'
-                "
-              />
-              <Group452TabCatalog
-                v-if="
-                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
-                  'type-group-4-5-2'
-                "
-              />
-              <Group453TabRepositories
-                v-if="
-                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
-                  'type-group-4-5-3'
-                "
-              />
-              <Group46TabScheduledTasks
-                v-if="
-                  store_system_configs_info.app_view_server_client_setting_select_tab_name ===
-                  'type-group-4-6'
-                "
-              />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </div>
           </n-layout>
         </n-layout>
