@@ -115,7 +115,6 @@ function renderRouterLink(nameValue, defaultValue) {
   return () => h(RouterLink, { to: { name: nameValue } }, { default: () => defaultValue })
 }
 function create_menuOptions_appBar() {
-  store_system_configs_info.app_view_menuOptions = []
   store_system_configs_info.app_view_menuOptions.push(
     {
       label: computed(() => renderRouterLink('setting', t('HeaderAdmin') + t('Console'))),
@@ -813,8 +812,20 @@ const { locale } = useI18n({
   useScope: 'global',
 })
 onMounted(() => {
+  // 初始化菜单选项
   create_menuOptions_appBar()
 })
+
+// 监听 app_view_menuOptions，如果为空数组或null，则重新创建菜单
+watch(
+  () => store_system_configs_info.app_view_menuOptions,
+  (newVal) => {
+    if (!newVal || newVal.length === 0) {
+      create_menuOptions_appBar()
+    }
+  },
+  { deep: true }
+)
 onMounted(async () => {
   try {
     if (!isElectron) {
