@@ -108,6 +108,11 @@ export const viteElectronBuild = (): Plugin => {
             target: 'dmg',
             icon: 'resources/config/NSMusicS.icns',
             artifactName: '${productName}-Mac-${version}-${arch}.${ext}',
+            hardenedRuntime: true,
+            gatekeeperAssess: false,
+            entitlements: 'build/entitlements.mac.plist',
+            entitlementsInherit: 'build/entitlements.mac.plist',
+            identity: null  // 设置为null以跳过签名（适用于本地构建）
           },
           nsis: {
             oneClick: false,
