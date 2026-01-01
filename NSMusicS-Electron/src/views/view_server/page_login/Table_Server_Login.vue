@@ -25,6 +25,20 @@ async function login() {
 }
 
 ////// i18n auto lang
+import {
+  Home28Regular,
+  Settings20Regular,
+  DataHistogram20Regular,
+  TagMultiple24Regular,
+  History20Filled,
+} from '@vicons/fluent'
+import {
+  AlbumFilled,
+  MusicNoteRound,
+  LibraryMusicOutlined,
+  FindInPageFilled,
+} from '@vicons/material'
+import { UserAvatarFilledAlt } from '@vicons/carbon'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { store_router_data_info } from '@/router/router_store/store_router_data_info'
 import { h, onMounted, computed, } from 'vue'
