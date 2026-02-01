@@ -68,6 +68,7 @@
       "selectLibrary_select_0": "Exportieren Sie nicht den eingebetteten Cover des Musikfiles, verwenden Sie nur das Cover mit dem gleichen Namen auf der gleichen Ebene wie die Musikdatei",
       "selectLibrary_select_1": "Exportiere die eingebettete Covergrafik der Musikdatei als Coverdatei mit demselben Namen (überspringe, wenn bereits eine Coverdatei mit demselben Namen existiert) und speichere die Datei im Anwendungscache",
       "mediaLibrary": "Medienbibliothek",
+      "mediaLibrary_health_check": "Bibliotheks-Check",
       "mediaLibrary_begin_import": "Import Beginen",
       "mediaLibrary_media_tag_modify_local": "Derzeit wird nur die Lokale-Modus-Navigation|Bearbeitung von Tag-Informationen unterstützt",
       "hideHalfLyric": "Verstecke die Textzeilen vor den aktuellen verfolgten Textzeilen",

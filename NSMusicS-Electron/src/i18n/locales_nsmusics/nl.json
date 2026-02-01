@@ -68,6 +68,7 @@
       "selectLibrary_select_0": "Gebruik geen ingebedde cover van het muziekbestand, gebruik alleen de cover met dezelfde naam op hetzelfde niveau als het muziekbestand",
       "selectLibrary_select_1": "Muziekbestand ingesloten cover exporteren als coverbestand met dezelfde naam (bestaand coverbestand met dezelfde naam overslaan) en bestand opslaan in app-cache",
       "mediaLibrary": "Mediatheek",
+      "mediaLibrary_health_check": "Gezondheidscontrole Bibliotheek",
       "mediaLibrary_begin_import": "Begin Importeren",
       "mediaLibrary_media_tag_modify_local": "Momenteel wordt alleen lokaal modus bladeren|bewerken van tag-informatie ondersteund",
       "hideHalfLyric": "Verberg de tekst voor de tekst die momenteel wordt gevolgd",

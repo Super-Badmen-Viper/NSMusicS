@@ -1,6 +1,6 @@
 <script setup lang="ts">
 ////// this_view resource of vicons_svg
-import { AddCircle32Regular, ArrowReset24Filled, Folder24Regular } from '@vicons/fluent'
+import { AddCircle32Regular, ArrowReset24Filled, Folder24Regular, MoreHorizontal16Regular } from '@vicons/fluent'
 import { store_server_users } from '@/server/server_management/store_server_users'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
 import { Close } from '@vicons/carbon'
@@ -21,7 +21,7 @@ const message = useMessage()
 const Type_Server_Add = ref(false)
 const server_set_of_addLibrary_of_name = ref('')
 const server_set_of_addLibrary_of_path = ref('')
-const scanningPaths = ref<string[]>([]) // 存储正在扫描的路径
+const scanningPaths = ref([]) // 存储正在扫描的路径
 /// app add
 async function update_server_addUser() {
   browseFolderOptions.value.forEach((folder) => {
@@ -36,6 +36,7 @@ async function update_server_addUser() {
     return
   }
 
+  
   try {
     const result = await folder_Entity_ApiService_of_NineSong.createFolder_Entity(
       server_set_of_addLibrary_of_name.value,
@@ -61,7 +62,8 @@ async function update_server_addUser() {
       //     1,
       //     0
       // );
-      await scan_server_folder_path(server_set_of_addLibrary_of_path.value, 1, 0)
+      // await scan_server_folder_path(server_set_of_addLibrary_of_path.value, 1, 0, false)
+      startProgressPolling(server_set_of_addLibrary_of_path.value)
     } else {
       message.error(t('ButtonAddMediaLibrary') + ' | ' + t('LabelFailed'), { duration: 3000 })
     }
@@ -86,7 +88,8 @@ async function update_server_deleteUser(id: string, folderPath: string) {
           store_server_users.server_all_library =
             await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
         }
-        await scan_server_folder_path(folderPath, 1, 3)
+        // 删除媒体库后启动进度轮询
+        startProgressPolling(folderPath)
       } else {
         message.error(t('HeaderRemoveMediaFolder') + ' | ' + t('LabelFailed'), { duration: 3000 })
       }
@@ -121,7 +124,8 @@ async function update_server_setUser(id: string, newName: string, newFolderPath:
         store_server_users.server_all_library =
           await folder_Entity_ApiService_of_NineSong.getFolder_Entity_All()
       }
-      await scan_server_folder_path('', 1, 2)
+      // 更新媒体库后启动进度轮询
+      startProgressPolling(newFolderPath)
     } else {
       message.error(t('HeaderError'), { duration: 3000 })
     }
@@ -188,6 +192,10 @@ async function scan_server_folder_path(
 const startProgressPolling = (folder_path: string) => {
   // 确保之前的定时器被清理
   stopProgressPolling()
+  
+  // 显示进度条
+  progressBarShow.value = true
+  createMessage()
 
   timer.value = setInterval(async () => {
     try {
@@ -231,6 +239,8 @@ const stopProgressPolling = () => {
   store_server_login_info.scanningAll = false
   store_server_login_info.scanning_paths = []
   scanningPaths.value = []
+  progressBarShow.value = false
+  removeMessage()
 }
 
 onMounted(async () => {
@@ -403,10 +413,14 @@ const refreshModeOptions = ref([
     label: computed(() => t('SearchForMissingMetadata')),
     value: 1,
   },
-  // {
-  //   label: computed(() => t('ReplaceAllMetadata')),
-  //   value: 2,
-  // },
+  {
+    label: computed(() => t('ReplaceAllMetadata')),
+    value: 2,
+  },
+  {
+    label: computed(() => t('nsmusics.view_page.mediaLibrary_health_check')),
+    value: 3,
+  },
 ])
 </script>
 <template>
@@ -463,6 +477,81 @@ const refreshModeOptions = ref([
             </NIcon>
           </template>
           {{ $t('ButtonScanAllLibraries') + ' : ' + $t('ReplaceAllMetadata') }}
+        </n-button>
+        <n-button
+          icon-placement="left"
+          secondary
+          strong
+          @click="
+            async () => {
+              if (scanningPaths.length > 0 || store_server_login_info.scanningAll) {
+                message.error(t('LibraryScanFanoutConcurrency') + ' | ' + t('LabelFailed'), {
+                  duration: 3000,
+                })
+                return
+              } else {
+                store_server_login_info.scanningAll = true
+                scan_server_folder_path('', 1, 0)
+              }
+            }
+          "
+        >
+          <template #icon>
+            <NIcon>
+              <ArrowReset24Filled />
+            </NIcon>
+          </template>
+          {{ $t('ButtonScanAllLibraries') + ' : ' + $t('ScanForNewAndUpdatedFiles') }}
+        </n-button>
+        <n-button
+          icon-placement="left"
+          secondary
+          strong
+          @click="
+            async () => {
+              if (scanningPaths.length > 0 || store_server_login_info.scanningAll) {
+                message.error(t('LibraryScanFanoutConcurrency') + ' | ' + t('LabelFailed'), {
+                  duration: 3000,
+                })
+                return
+              } else {
+                store_server_login_info.scanningAll = true
+                scan_server_folder_path('', 1, 1)
+              }
+            }
+          "
+        >
+          <template #icon>
+            <NIcon>
+              <ArrowReset24Filled />
+            </NIcon>
+          </template>
+          {{ $t('ButtonScanAllLibraries') + ' : ' + $t('SearchForMissingMetadata') }}
+        </n-button>
+        <n-button
+          icon-placement="left"
+          secondary
+          strong
+          @click="
+            async () => {
+              if (scanningPaths.length > 0 || store_server_login_info.scanningAll) {
+                message.error(t('LibraryScanFanoutConcurrency') + ' | ' + t('LabelFailed'), {
+                  duration: 3000,
+                })
+                return
+              } else {
+                store_server_login_info.scanningAll = true
+                scan_server_folder_path('', 1, 3)
+              }
+            }
+          "
+        >
+          <template #icon>
+            <NIcon>
+              <ArrowReset24Filled />
+            </NIcon>
+          </template>
+          {{ $t('ButtonScanAllLibraries') + ' : ' + $t('nsmusics.view_page.mediaLibrary_health_check') }}
         </n-button>
         <!--  -->
         <n-slider
@@ -524,8 +613,36 @@ const refreshModeOptions = ref([
                   <Folder24Regular />
                 </n-icon>
               </template>
-              <n-space vertical justify="end">
-                <div>
+              <div style="position: relative;">
+                <n-popover trigger="click">
+                  <template #trigger>
+                    <n-button
+                      circle
+                      size="tiny"
+                      type="primary"
+                      style="position: absolute; top: 0; right: 0; z-index: 10;"
+                      @click.stop="
+                        () => {
+                          if (!store_server_login_info.scanningAll) {
+                            item.show = !item.show
+                          } else {
+                            message.error(t('LibraryScanFanoutConcurrency') + ' | ' + t('LabelFailed'), {
+                              duration: 3000,
+                            })
+                          }
+                        }
+                      "
+                    >
+                      <template #icon>
+                        <n-icon size="14">
+                          <MoreHorizontal16Regular />
+                        </n-icon>
+                      </template>
+                    </n-button>
+                  </template>
+                  <span>{{ $t('ManageLibrary') }}</span>
+                </n-popover>
+                <div style="padding-right: 30px;">
                   <n-space>
                     <div
                       style="
@@ -574,7 +691,7 @@ const refreshModeOptions = ref([
                     </div>
                   </n-space>
                 </div>
-              </n-space>
+              </div>
               <n-modal v-model:show="item.show">
                 <n-card style="width: 450px; border-radius: 4px">
                   <n-space vertical size="large" style="width: 400px">
@@ -723,7 +840,7 @@ const refreshModeOptions = ref([
             <n-button strong secondary type="error" @click="Type_Server_Add = !Type_Server_Add">
               {{ $t('ButtonClose') }}
             </n-button>
-            <n-button strong secondary type="info" @click="update_server_addUser()">
+            <n-button strong secondary type="info" :loading="addingLibrary" :disabled="addingLibrary" @click="update_server_addUser()">
               {{ $t('common.save') }}
             </n-button>
           </n-space>

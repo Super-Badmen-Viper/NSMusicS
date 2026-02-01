@@ -68,6 +68,7 @@
       "selectLibrary_select_0": "Neexportujte vložený obrázek albumu z hudby, použijte pouze obrázek stejného jména na stejné úrovni jako hudobní soubor",
       "selectLibrary_select_1": "Exportovat vestavěnou obalovou stránku souboru s hudbou jako obalovou stránku se stejným názvem (přeskočit, pokud již existuje obalová stránka se stejným názvem) a uložit soubor do mezipaměti aplikace",
       "mediaLibrary": "Médiální knihovna",
+      "mediaLibrary_health_check": "Kontrola zdraví knihovny",
       "mediaLibrary_begin_import": "Zahájit Import",
       "mediaLibrary_media_tag_modify_local": "Momentálně je podporováno pouze místní prohlížení|úprava informací o značkách",
       "hideHalfLyric": "Skrýt text písně před aktuálně sledovaným textem",

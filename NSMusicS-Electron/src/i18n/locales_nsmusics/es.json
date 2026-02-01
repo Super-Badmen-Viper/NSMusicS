@@ -68,6 +68,7 @@
       "selectLibrary_select_0": "No exportar la portada incrustada del archivo de música, utilizar solo la portada con el mismo nombre que el archivo de música",
       "selectLibrary_select_1": "Exportar la portada incrustada en el archivo de música como un archivo de portada con el mismo nombre (saltar si ya existe un archivo de portada con el mismo nombre) y guardar el archivo en la caché de la aplicación",
       "mediaLibrary": "Biblioteca de Medios",
+      "mediaLibrary_health_check": "Verificación de Salud de la Biblioteca",
       "mediaLibrary_begin_import": "Comenzar a Importar",
       "mediaLibrary_media_tag_modify_local": "Actualmente, solo se admite la exploración en modo local|modificación de información de etiquetas",
       "hideHalfLyric": "Ocultar las letras anteriores a las letras que se están siguiendo actualmente",

@@ -68,6 +68,7 @@
       "selectLibrary_select_0": "音楽ファイルに埋め込まれたカバーをエクスポートしないでください。音楽ファイルと同レベルの同名のカバーのみを使用してください",
       "selectLibrary_select_1": "音楽ファイルに埋め込まれたジャケットを同じ名前のジャケットファイルに変換する（同じ名前のジャケットファイルが存在する場合はスキップ）、ファイルはアプリのキャッシュに保存する",
       "mediaLibrary": "メディアライブラリ",
+      "mediaLibrary_health_check": "ライブラリーヘルスチェック",
       "mediaLibrary_begin_import": "インポートを開始",
       "mediaLibrary_media_tag_modify_local": "現在、ローカルモードでの閲覧|タグ情報の編集のみサポートされています",
       "hideHalfLyric": "現在追っている歌詞以前の歌詞を隠す",

@@ -68,6 +68,7 @@
       "selectLibrary_select_0": "Non esportare la copertina incorporata del file musicale, utilizzare solo la copertina con lo stesso nome allo stesso livello del file musicale",
       "selectLibrary_select_1": "Esporta la copertina incorporata nel file musicale come file di copertina omonimo (salta se esiste già un file di copertina omonimo) e salva il file nella cache dell'applicazione",
       "mediaLibrary": "Libreria Multimediale",
+      "mediaLibrary_health_check": "Controllo Integrità Libreria",
       "mediaLibrary_begin_import": "Inizia Importazione",
       "mediaLibrary_media_tag_modify_local": "Attualmente, è supportata solo la navigazione in modalità locale|modifica delle informazioni dei tag",
       "hideHalfLyric": "Nascondi le parole prima delle parole attualmente seguite",

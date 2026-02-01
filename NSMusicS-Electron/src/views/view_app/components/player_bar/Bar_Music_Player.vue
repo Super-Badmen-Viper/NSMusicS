@@ -250,6 +250,36 @@ const Play_This_Audio_Path = () => {
                 }
               }
             }
+            // if (playerSettingStore.player_select === 'web') {
+            //   const supportedFormats = ['mp3', 'flac', 'wav', 'aac']
+            //   if (!supportedFormats.includes(playerAudioStore.this_audio_song_suffix)) {
+            //     message.success(t('setting.transcode'), { duration: 10000 })
+            //   }
+            //
+            //   // 获取解码信息
+            //   try {
+            //     const retrieval = new Retrieval_ApiService_of_NineSong(store_server_login_info.server_url)
+            //     const decodeInfo = await retrieval.getDecodeInfo()
+            //     // 提取decodeInfo中的所有相关信息并设置到store中现有的属性
+            //     if (decodeInfo && decodeInfo.duration) {
+            //       playerSettingStore.player_duration = decodeInfo.duration
+            //     }
+            //     if (decodeInfo && decodeInfo.metadata && decodeInfo.metadata['lyrics-XXX']) {
+            //       await playerAudioStore.set_lyric(decodeInfo.metadata['lyrics-XXX'])
+            //     }
+            //     if (decodeInfo && decodeInfo.title) {
+            //       playerAudioStore.this_audio_song_name = decodeInfo.title
+            //     }
+            //     if (decodeInfo && decodeInfo.artist) {
+            //       playerAudioStore.this_audio_artist_name = decodeInfo.artist
+            //     }
+            //     if (decodeInfo && decodeInfo.album) {
+            //       playerAudioStore.this_audio_album_name = decodeInfo.album
+            //     }
+            //   } catch (error) {
+            //     console.error('获取解码信息失败:', error)
+            //   }
+            // }
           }
         }
         await playerSettingStore.player.load(audio_url)
@@ -320,6 +350,36 @@ const init_player_howler = async () => {
           }
         }
       }
+      // if (playerSettingStore.player_select === 'web') {
+      //   const supportedFormats = ['mp3', 'flac', 'wav', 'aac']
+      //   if (!supportedFormats.includes(playerAudioStore.this_audio_song_suffix)) {
+      //     message.success(t('setting.transcode'), { duration: 10000 })
+      //   }
+      //
+      //   // 获取解码信息
+      //   try {
+      //     const retrieval = new Retrieval_ApiService_of_NineSong(store_server_login_info.server_url)
+      //     const decodeInfo = await retrieval.getDecodeInfo()
+      //     // 提取decodeInfo中的所有相关信息并设置到store中现有的属性
+      //     if (decodeInfo && decodeInfo.duration) {
+      //       playerSettingStore.player_duration = decodeInfo.duration
+      //     }
+      //     if (decodeInfo && decodeInfo.metadata && decodeInfo.metadata['lyrics-XXX']) {
+      //       await playerAudioStore.set_lyric(decodeInfo.metadata['lyrics-XXX'])
+      //     }
+      //     if (decodeInfo && decodeInfo.title) {
+      //       playerAudioStore.this_audio_song_name = decodeInfo.title
+      //     }
+      //     if (decodeInfo && decodeInfo.artist) {
+      //       playerAudioStore.this_audio_artist_name = decodeInfo.artist
+      //     }
+      //     if (decodeInfo && decodeInfo.album) {
+      //       playerAudioStore.this_audio_album_name = decodeInfo.album
+      //     }
+      //   } catch (error) {
+      //     console.error('获取解码信息失败:', error)
+      //   }
+      // }
     }
   }
   playerSettingStore.player.howl = new Howl({

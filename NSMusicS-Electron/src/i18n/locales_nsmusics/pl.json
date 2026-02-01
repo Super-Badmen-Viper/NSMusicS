@@ -68,6 +68,7 @@
       "selectLibrary_select_0": "Nie eksportuj osadzonej okładki pliku muzycznego, używaj tylko okładki o tej samej nazwie co plik muzyczny",
       "selectLibrary_select_1": "Eksportuj włożoną okładkę pliku muzycznego jako plik okładki o tej samej nazwie (pomiń, jeśli już istnieje plik okładki o tej samej nazwie) i zapisz plik w pamięci podręcznej aplikacji",
       "mediaLibrary": "Biblioteka Multimedialna",
+      "mediaLibrary_health_check": "Kontrola Stanu Biblioteki",
       "mediaLibrary_begin_import": "Rozpocznij Import",
       "mediaLibrary_media_tag_modify_local": "Obecnie obsługiwane są tylko przeglądanie w trybie lokalnym|edycja informacji o tagach",
       "hideHalfLyric": "Ukryj tekst piosenki przed aktualnie śledzonym tekstem",

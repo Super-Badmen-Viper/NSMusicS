@@ -28,4 +28,11 @@ export class Retrieval_ApiService_of_NineSong extends NineSong_Api_Services_Web 
       file_type,
     })
   }
+   /**
+    * 获取当前解码信息
+    * @returns 解码信息，包含歌词、FFmpeg输出等
+    */
+   public async getDecodeInfo(): Promise<any> {
+     return this.sendRequest('GET', 'media/decode_info')
+   }
 }

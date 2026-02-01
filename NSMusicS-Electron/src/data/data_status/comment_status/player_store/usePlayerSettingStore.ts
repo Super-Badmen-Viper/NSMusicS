@@ -47,6 +47,7 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
   const player_replayGainClip = ref(false)
   const player_replayGainFallback = ref(0)
   const player_mpvExtraParameters = ref('')
+  const player_duration = ref(0)
 
   // Player state flags
   const player_is_play_ended = ref(false)
@@ -508,6 +509,7 @@ export const usePlayerSettingStore = defineStore('playerSetting', () => {
     player_replayGainClip,
     player_replayGainFallback,
     player_mpvExtraParameters,
+    player_duration,
 
     // Player state flags
     player_is_play_ended,

@@ -1,5 +1,8 @@
 import { usePlayerSettingStore } from '@/data/data_status/comment_status/player_store/usePlayerSettingStore'
+import { usePlayerAudioStore } from '@/data/data_status/comment_status/player_store/usePlayerAudioStore'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
+import { store_server_user_model } from '@/server/server_management/store_server_user_model'
+import { store_server_users } from '@/server/server_management/store_server_users'
 
 export class Audio_howler {
   public howl: any
@@ -46,6 +49,17 @@ export class Audio_howler {
     } catch {}
   }
   getDuration() {
+    // // 检查是否满足特定条件：server_type_of_web为true，server_select_kind为'ninesong'，player_select为'web'，且音频格式不是mp3/flac/wav/aac
+    // const supportedFormats = ['mp3', 'flac', 'wav', 'aac'];
+    // const playerAudioStore = usePlayerAudioStore();
+    // if (store_server_user_model.model_server_type_of_web &&
+    //     store_server_users.server_select_kind === 'ninesong' &&
+    //     this.playerSettingStore.player_select === 'web' &&
+    //     !supportedFormats.includes(playerAudioStore.this_audio_song_suffix)) {
+    //   // 在这些条件下，返回player_duration属性
+    //   return this.playerSettingStore.player_duration
+    // }
+    
     if (this.howl) {
       this.isDuration = this.howl.duration()
       return this.isDuration
