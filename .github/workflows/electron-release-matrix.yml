@@ -1182,10 +1182,10 @@ jobs:
                   failAboveFactor: 1.35,
                 },
                 targz: {
-                  referenceBytes: 161745939,
-                  warnBelowFactor: 0.67,
+                  referenceBytes: 100 * megabyte,
+                  warnBelowFactor: 0.95,
                   warnAboveFactor: 1.15,
-                  failBelowFactor: 0.65,
+                  failBelowFactor: 0.9,
                   failAboveFactor: 1.3,
                 },
                 appimage: {
@@ -1212,10 +1212,10 @@ jobs:
                   failAboveFactor: 1.7,
                 },
                 targz: {
-                  referenceBytes: 154 * megabyte,
-                  warnBelowFactor: 0.75,
+                  referenceBytes: 100 * megabyte,
+                  warnBelowFactor: 0.95,
                   warnAboveFactor: 1.3,
-                  failBelowFactor: 0.65,
+                  failBelowFactor: 0.9,
                   failAboveFactor: 1.6,
                 },
                 appimage: {
