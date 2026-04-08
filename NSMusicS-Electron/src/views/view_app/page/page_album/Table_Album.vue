@@ -79,7 +79,7 @@ const item_album_txt = ref(item_album.value - 20)
 const itemSize = ref(220)
 const gridItems = ref(5)
 const itemSecondarySize = ref(185)
-import error_album from '@/assets/img/error_album.jpg'
+import error_album from '@/assets/img/error_album.webp'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { store_server_users } from '@/server/server_management/store_server_users'
 import { store_general_model_player_list } from '@/server/server_api_store/server_api_core/components/player_list/store_general_model_player_list'

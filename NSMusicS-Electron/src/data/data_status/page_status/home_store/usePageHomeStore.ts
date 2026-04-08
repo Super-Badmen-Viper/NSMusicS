@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
-// 使用相对路径或更可靠的方式获取错误图片
-const error_album = '/assets/img/error_album.jpg'
+import error_album from '@/assets/img/error_album.webp'
 // @ts-ignore - 忽略模块导入类型检查
 import { store_general_fetch_home_list } from '@/server/server_api_store/server_api_core/page/page_home/store_general_fetch_home_list'
 // @ts-ignore - 忽略模块导入类型检查

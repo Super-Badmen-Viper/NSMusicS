@@ -12,7 +12,7 @@ import { storeToRefs } from 'pinia'
 function getAssetImage(firstImage: string) {
   return new URL(firstImage, import.meta.url).href
 }
-import error_album from '@/assets/img/error_album.jpg'
+import error_album from '@/assets/img/error_album.webp'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 const handleImageError = async (event) => {
   const originalSrc = event.target.src

@@ -36,7 +36,7 @@ import { store_general_fetch_artist_tree } from '@/server/server_api_store/serve
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
-import error_artist from '@/assets/img/error_artist.jpg'
+import error_artist from '@/assets/img/error_artist.webp'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 ////// changed_data write to sqlite
 import { store_local_data_set_artistInfo } from '@/data/data_stores/local_app_stores/local_data_synchronization/store_local_data_set_artistInfo'

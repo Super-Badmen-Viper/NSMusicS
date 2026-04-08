@@ -21,7 +21,7 @@ onMounted(() => {
 })
 
 ////// changed_data write to sqlite
-import error_album from '@/assets/img/error_album.jpg'
+import error_album from '@/assets/img/error_album.webp'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 const errorHandled = ref(new Map())
 

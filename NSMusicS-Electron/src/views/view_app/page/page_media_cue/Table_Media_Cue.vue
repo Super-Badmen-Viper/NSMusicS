@@ -35,7 +35,7 @@ const { t } = useI18n({
 })
 
 ////// songlist_view page_layout lineItems
-import error_album from '@/assets/img/error_album.jpg'
+import error_album from '@/assets/img/error_album.webp'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { usePlaylistStore } from '@/data/data_status/comment_status/playlist_store/usePlaylistStore'
 import { storeToRefs } from 'pinia'

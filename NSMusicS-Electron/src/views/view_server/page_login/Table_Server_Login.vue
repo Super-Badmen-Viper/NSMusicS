@@ -1,8 +1,8 @@
 <script setup lang="ts">
 //////
 import { useI18n } from 'vue-i18n'
-import error_album_old from '@/assets/img/error_album_old.jpg'
-import NSMusicS from '@/assets/img/NSMusicS.png'
+import error_album_old from '@/assets/img/error_album_old.webp'
+import NSMusicS from '@/assets/img/NSMusicS.webp'
 import { darkTheme, NConfigProvider, useMessage, NIcon } from 'naive-ui'
 import { store_server_login_info } from '@/data/data_status/comment_status/login_store/store_server_login_info'
 import { store_server_login_logic } from '@/data/data_status/comment_status/login_store/store_server_login_logic'

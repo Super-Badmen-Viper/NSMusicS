@@ -35,7 +35,7 @@ import { usePageMediaStore } from '@/data/data_status/page_status/media_store/us
 import { store_general_fetch_player_list } from '@/server/server_api_store/server_api_core/components/player_list/store_general_fetch_player_list'
 import { store_general_model_player_list } from '@/server/server_api_store/server_api_core/components/player_list/store_general_model_player_list'
 
-import error_album from '@/assets/img/error_album.jpg'
+import error_album from '@/assets/img/error_album.webp'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 import { store_general_fetch_artist_list } from '@/server/server_api_store/server_api_core/page/page_artist/store_general_fetch_artist_list'
 import { usePlayerSettingStore } from '@/data/data_status/comment_status/player_store/usePlayerSettingStore'

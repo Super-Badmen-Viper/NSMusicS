@@ -360,7 +360,7 @@ onBeforeUnmount(() => {
   store_server_login_info.scanning_paths = scanningPaths.value
 })
 
-import error_album_old from '@/assets/img/error_album_old.jpg'
+import error_album_old from '@/assets/img/error_album_old.webp'
 import { store_server_login_info } from '@/data/data_status/comment_status/login_store/store_server_login_info'
 import { usePagePlayerViewStore } from '@/data/data_status/page_status/player_store/usePagePlayerViewStore'
 import { usePlayerAppearanceStore } from '@/data/data_status/comment_status/player_store/usePlayerAppearanceStore'
