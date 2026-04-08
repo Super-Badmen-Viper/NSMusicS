@@ -458,7 +458,6 @@ jobs:
           @'
           const childProcess = require('node:child_process')
           const fs = require('node:fs')
-          const fs = require('node:fs')
           const path = require('node:path')
 
           const platformName = process.env.NSMUSICS_ELECTRON_PLATFORM
