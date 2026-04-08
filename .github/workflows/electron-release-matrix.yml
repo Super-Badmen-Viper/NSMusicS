@@ -623,6 +623,62 @@ jobs:
             'nl',
           ]
 
+          const macLprojWhitelist = new Set([
+            'base',
+            'en',
+            ...electronLanguageWhitelist.map((value) => value.replace(/_/g, '-').toLowerCase()),
+          ])
+
+          const normalizeMacLprojName = (value) =>
+            value.replace(/\.lproj$/i, '').replace(/_/g, '-').toLowerCase()
+
+          const pruneMacLprojDirectories = (rootDir) => {
+            const removed = []
+
+            const walk = (currentDir) => {
+              for (const entry of fs.readdirSync(currentDir, { withFileTypes: true })) {
+                if (!entry.isDirectory()) {
+                  continue
+                }
+
+                const fullPath = path.join(currentDir, entry.name)
+                if (/\.lproj$/i.test(entry.name)) {
+                  const normalized = normalizeMacLprojName(entry.name)
+                  if (!macLprojWhitelist.has(normalized)) {
+                    fs.rmSync(fullPath, { recursive: true, force: true })
+                    removed.push(path.relative(rootDir, fullPath).replace(/\\/g, '/'))
+                    continue
+                  }
+                }
+
+                walk(fullPath)
+              }
+            }
+
+            if (fs.existsSync(rootDir)) {
+              walk(rootDir)
+            }
+
+            return removed.sort()
+          }
+
+          const afterPack = async (context) => {
+            if ((context.electronPlatformName || '').toLowerCase() !== 'darwin') {
+              return
+            }
+
+            const removed = pruneMacLprojDirectories(context.appOutDir)
+            console.log(
+              `[ci-electron-builder] macOS lproj pruning removed ${removed.length} directories under ${context.appOutDir}`
+            )
+            for (const relativePath of removed.slice(0, 80)) {
+              console.log(`[ci-electron-builder] pruned lproj: ${relativePath}`)
+            }
+            if (removed.length > 80) {
+              console.log(`[ci-electron-builder] pruned lproj: ... ${removed.length - 80} more`)
+            }
+          }
+
           const packagedFilePatterns = [
             '**/*',
             '!**/*.map',
@@ -721,6 +777,7 @@ jobs:
               app: path.join(process.cwd(), 'dist'),
             },
             asar: true,
+            afterPack,
             files: packagedFilePatterns,
             extraResources: buildExtraResources(platformName),
           }
