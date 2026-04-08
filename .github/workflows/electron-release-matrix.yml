@@ -1126,9 +1126,9 @@ jobs:
                 },
                 targz: {
                   referenceBytes: 161745939,
-                  warnBelowFactor: 0.78,
+                  warnBelowFactor: 0.67,
                   warnAboveFactor: 1.15,
-                  failBelowFactor: 0.67,
+                  failBelowFactor: 0.65,
                   failAboveFactor: 1.3,
                 },
                 appimage: {
