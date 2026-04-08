@@ -15,10 +15,6 @@ cd "${PROJECT_ROOT}"
 
 echo "[docker-mac-upload] project root: ${PROJECT_ROOT}"
 echo "[docker-mac-upload] push: ${IMAGE_REPO}:arm64-pure"
-
 docker push "${IMAGE_REPO}:arm64-pure"
-docker manifest rm "${IMAGE_REPO}:latest" >/dev/null 2>&1 || true
-docker manifest create --amend "${IMAGE_REPO}:latest" "${IMAGE_REPO}:amd64-pure" "${IMAGE_REPO}:arm64-pure"
-docker manifest annotate "${IMAGE_REPO}:latest" "${IMAGE_REPO}:amd64-pure" --os linux --arch amd64
-docker manifest annotate "${IMAGE_REPO}:latest" "${IMAGE_REPO}:arm64-pure" --os linux --arch arm64 --variant v8
-docker manifest push --purge "${IMAGE_REPO}:latest"
+
+echo "[docker-mac-upload] done: pushed ${IMAGE_REPO}:arm64-pure"

@@ -54,7 +54,7 @@ import { store_general_fetch_player_list } from '@/server/server_api_store/serve
 import { store_general_model_player_list } from '@/server/server_api_store/server_api_core/components/player_list/store_general_model_player_list'
 
 // @ts-ignore - 忽略模块导入类型检查
-import error_album from '@/assets/img/error_album.jpg'
+import error_album from '@/assets/img/error_album.webp'
 // @ts-ignore - 忽略模块导入类型检查
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 // @ts-ignore - 忽略模块导入类型检查

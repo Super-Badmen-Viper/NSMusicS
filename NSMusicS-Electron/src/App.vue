@@ -230,8 +230,8 @@ import { store_server_users } from '@/server/server_management/store_server_user
 routers.beforeEach((to, from, next) => {
   if (to.name !== from.name) {
     store_router_data_logic.clearAllTemporaryFiles()
-    next()
   }
+  next()
 })
 routers.afterEach(async (to, from) => {
   if (to.name !== from.name) {
@@ -1074,6 +1074,11 @@ function fullScreen() {
             <RouterView
               class="view_show_data"
               v-else-if="store_router_data_info.router_select_model_server_library"
+            ></RouterView>
+            <!--Fallback View -->
+            <RouterView
+              class="view_show_data"
+              v-else-if="store_router_data_info.router_select !== 'login'"
             ></RouterView>
             <!--Top Bar-->
             <div class="bar_top_setapp" style="background-color: transparent">

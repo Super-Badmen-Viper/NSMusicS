@@ -6,8 +6,8 @@ import { GlobeComponent } from 'echarts-gl/components'
 import { shallowRef, onMounted } from 'vue'
 import VChart from 'vue-echarts'
 import VExample from './Example.vue'
-import world from '../assets/world.jpg'
-import starfield from '../assets/starfield.jpg'
+import world from '../assets/world.webp'
+import starfield from '../assets/starfield.webp'
 
 use([Bar3DChart, VisualMapComponent, GlobeComponent])
 

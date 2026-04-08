@@ -1,0 +1,3084 @@
+name: Electron Release Matrix
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_mode:
+        description: Select strict full-matrix auditing or release-only supported targets.
+        required: true
+        default: supported-only
+        type: choice
+        options:
+          - supported-only
+          - strict-all
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/electron-release-matrix.yml"
+      - "NSMusicS-Electron/**"
+    tags:
+      - "v*"
+      - "electron-v*"
+      - "NSMusicS-v*"
+      - "validate-v*"
+      - "validate-electron-v*"
+      - "validate-NSMusicS-v*"
+
+concurrency:
+  group: electron-release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  PROJECT_DIR: NSMusicS-Electron
+  NODE_VERSION: "20.15.0"
+  ELECTRON_CACHE: ${{ github.workspace }}/NSMusicS-Electron/.cache/electron
+  ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/NSMusicS-Electron/.cache/electron-builder
+  BUILD_MODE: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.build_mode || 'supported-only' }}
+  ARTIFACT_PREFIX: nsmusics-electron
+
+jobs:
+  plan:
+    name: Build Plan
+    runs-on: ubuntu-latest
+    outputs:
+      build_mode: ${{ steps.plan.outputs.build_mode }}
+      matrix: ${{ steps.plan.outputs.matrix }}
+      all_targets: ${{ steps.plan.outputs.all_targets }}
+      planned_targets: ${{ steps.plan.outputs.planned_targets }}
+
+    steps:
+      - name: Generate build plan
+        id: plan
+        shell: bash
+        env:
+          WORKFLOW_BUILD_MODE: ${{ env.BUILD_MODE }}
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs')
+
+          const buildMode = process.env.WORKFLOW_BUILD_MODE
+          const outputPath = process.env.GITHUB_OUTPUT
+          const summaryPath = process.env.GITHUB_STEP_SUMMARY
+
+          const allTargets = [
+            {
+              platform: 'win',
+              platform_name: 'windows',
+              electron_platform: 'win32',
+              arch: 'x64',
+              runner: 'windows-latest',
+              supported: true,
+              support_reason:
+                'The workflow installs a Windows x64 mpv runtime and stages it into the packaged resources path expected by src/background.ts.',
+            },
+            {
+              platform: 'win',
+              platform_name: 'windows',
+              electron_platform: 'win32',
+              arch: 'ia32',
+              runner: 'windows-latest',
+              supported: true,
+              support_reason:
+                'The workflow downloads a pinned Windows i686 mpv runtime, stages it into resources, and rebuilds native Electron dependencies for ia32 packaging.',
+            },
+            {
+              platform: 'win',
+              platform_name: 'windows',
+              electron_platform: 'win32',
+              arch: 'arm64',
+              runner: 'windows-latest',
+              supported: true,
+              support_reason:
+                'The workflow downloads a pinned Windows arm64 mpv runtime, stages it into resources, and rebuilds native Electron dependencies for arm64 packaging.',
+            },
+            {
+              platform: 'linux',
+              platform_name: 'linux',
+              electron_platform: 'linux',
+              arch: 'x64',
+              runner: 'ubuntu-24.04',
+              supported: true,
+              support_reason:
+                'src/background.ts resolves Linux mpv from NSMUSICS_MPV_BINARY or system PATH, and the workflow installs and validates a system mpv runtime on ubuntu-24.04.',
+            },
+            {
+              platform: 'linux',
+              platform_name: 'linux',
+              electron_platform: 'linux',
+              arch: 'arm64',
+              runner: 'ubuntu-24.04-arm',
+              supported: true,
+              support_reason:
+                'The workflow uses a native Ubuntu arm64 runner, installs system mpv, rebuilds Electron native modules, and publishes Linux arm64 AppImage, deb, rpm, and tar.gz assets.',
+            },
+            {
+              platform: 'mac',
+              platform_name: 'macos',
+              electron_platform: 'darwin',
+              arch: 'x64',
+              runner: 'macos-15-intel',
+              supported: true,
+              support_reason:
+                'The workflow downloads a pinned macOS Intel mpv.app runtime and stages it into the packaged resources path expected by src/background.ts.',
+            },
+            {
+              platform: 'mac',
+              platform_name: 'macos',
+              electron_platform: 'darwin',
+              arch: 'arm64',
+              runner: 'macos-15',
+              supported: true,
+              support_reason:
+                'The workflow downloads a pinned macOS Apple Silicon mpv.app runtime and stages it into the packaged resources path expected by src/background.ts.',
+            },
+          ]
+
+          const plannedTargets =
+            buildMode === 'strict-all'
+              ? allTargets
+              : allTargets.filter((target) => target.supported)
+
+          const writeOutput = (key, value) => {
+            fs.appendFileSync(outputPath, `${key}=${value}\n`)
+          }
+
+          writeOutput('build_mode', buildMode)
+          writeOutput('matrix', JSON.stringify({ include: plannedTargets }))
+          writeOutput('all_targets', JSON.stringify(allTargets))
+          writeOutput('planned_targets', JSON.stringify(plannedTargets))
+
+          if (summaryPath) {
+            const lines = [
+              '## Build Plan',
+              `- Mode: ${buildMode}`,
+              `- Total targets: ${allTargets.length}`,
+              `- Planned targets: ${plannedTargets.length}`,
+            ]
+            fs.appendFileSync(summaryPath, `${lines.join('\n')}\n`)
+          }
+          NODE
+
+  policy:
+    name: Release Policy
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Verify deterministic dependency lockfile
+        working-directory: NSMusicS-Electron
+        shell: bash
+        run: |
+          if [ ! -f package-lock.json ]; then
+            {
+              echo "## Release Policy"
+              echo "- FAIL package-lock.json is missing."
+              echo "- Reason: production releases must use a committed npm lockfile for deterministic dependency resolution."
+            } >> "${GITHUB_STEP_SUMMARY}"
+            echo "::error title=Release Policy::package-lock.json is missing. Production releases must use a committed npm lockfile."
+            exit 1
+          fi
+
+          {
+            echo "## Release Policy"
+            echo "- PASS package-lock.json is present."
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+      - name: Verify release tag matches package version
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        working-directory: NSMusicS-Electron
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          raw_tag="${GITHUB_REF_NAME}"
+          normalized_tag="${raw_tag}"
+          normalized_tag="${normalized_tag#validate-}"
+          normalized_tag="${normalized_tag#electron-v}"
+          normalized_tag="${normalized_tag#NSMusicS-v}"
+          normalized_tag="${normalized_tag#v}"
+
+          package_version="$(node -p "require('./package.json').version")"
+
+          {
+            echo "## Release Tag Policy"
+            echo "- Raw tag: ${raw_tag}"
+            echo "- Normalized tag version: ${normalized_tag}"
+            echo "- package.json version: ${package_version}"
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+          if [ -z "${normalized_tag}" ]; then
+            echo "::error title=Release Policy::Unable to normalize release tag version from ${raw_tag}."
+            exit 1
+          fi
+
+          if [ "${normalized_tag}" != "${package_version}" ]; then
+            echo "::error title=Release Policy::Tag version ${normalized_tag} does not match package.json version ${package_version}."
+            exit 1
+          fi
+
+          echo "- PASS release tag version matches package.json." >> "${GITHUB_STEP_SUMMARY}"
+
+  build:
+    name: Build ${{ matrix.platform_name }}-${{ matrix.arch }}
+    needs:
+      - plan
+      - policy
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 90
+    defaults:
+      run:
+        shell: pwsh
+        working-directory: NSMusicS-Electron
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: NSMusicS-Electron/package-lock.json
+
+      - name: Print build context
+        env:
+          NSMUSICS_ELECTRON_PLATFORM: ${{ matrix.platform }}
+          NSMUSICS_ELECTRON_ARCH: ${{ matrix.arch }}
+        run: |
+          node -e "console.log(JSON.stringify({runnerOS: process.env.RUNNER_OS, node: process.version, hostPlatform: process.platform, hostArch: process.arch, targetPlatform: process.env.NSMUSICS_ELECTRON_PLATFORM, targetArch: process.env.NSMUSICS_ELECTRON_ARCH}, null, 2))"
+
+      - name: Summarize build policy
+        run: |
+          Add-Content $env:GITHUB_STEP_SUMMARY "## Build Policy"
+          Add-Content $env:GITHUB_STEP_SUMMARY "- Mode: ${{ env.BUILD_MODE }}"
+          Add-Content $env:GITHUB_STEP_SUMMARY "- Target: ${{ matrix.platform_name }}-${{ matrix.arch }}"
+          Add-Content $env:GITHUB_STEP_SUMMARY "- Repository supported: ${{ matrix.supported }}"
+          Add-Content $env:GITHUB_STEP_SUMMARY "- Support note: ${{ matrix.support_reason }}"
+
+      - name: Fail unsupported target in strict-all mode
+        if: ${{ env.BUILD_MODE == 'strict-all' && !matrix.supported }}
+        run: |
+          $message = "Strict-all rejected ${{ matrix.platform_name }}-${{ matrix.arch }}. ${{ matrix.support_reason }}"
+          Add-Content $env:GITHUB_STEP_SUMMARY "- FAIL $message"
+          Write-Host "::error title=Repository Compatibility::$message"
+          throw $message
+
+      - name: Install Linux packaging dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential python3 ruby ruby-dev rpm fakeroot libarchive-tools mpv dpkg desktop-file-utils squashfs-tools xz-utils
+          sudo gem install --no-document fpm
+          ruby --version
+          gem --version
+          fpm --version
+
+      - name: Provision Windows mpv runtime
+        if: runner.os == 'Windows'
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $releaseTag = '20260408'
+          switch ('${{ matrix.arch }}') {
+            'x64' {
+              $archiveName = 'mpv-x86_64-20260408-git-e2180e5.7z'
+              $targetDirName = 'mpv-x86_64-20260408'
+              $expectedSha256 = 'fa5696629db058d0a2b0817f054e497d4afb556584a18a73565ffc5454e493fa'
+            }
+            'ia32' {
+              $archiveName = 'mpv-i686-20260408-git-e2180e5.7z'
+              $targetDirName = 'mpv-i686-20260408'
+              $expectedSha256 = 'b8ed6fc4cd08f9f8a4a5d5cd549cae97a55411c60018afdf766126446974735d'
+            }
+            'arm64' {
+              $archiveName = 'mpv-aarch64-20260408-git-e2180e5.7z'
+              $targetDirName = 'mpv-aarch64-20260408'
+              $expectedSha256 = '53033dd82f737cb9de50f611ef58e6137262bb2ef95c45167266f46091f87656'
+            }
+            default {
+              throw "Unsupported Windows mpv target arch: ${{ matrix.arch }}"
+            }
+          }
+
+          $archiveUrl = "https://github.com/shinchiro/mpv-winbuild-cmake/releases/download/$releaseTag/$archiveName"
+          $archivePath = Join-Path $env:RUNNER_TEMP $archiveName
+          $extractRoot = Join-Path $env:RUNNER_TEMP ("mpv-extract-" + '${{ matrix.arch }}')
+          $sevenZip = Get-Command 7z.exe -ErrorAction SilentlyContinue
+          if (-not $sevenZip) {
+            throw '7z.exe is required to extract the pinned Windows mpv runtime archive.'
+          }
+
+          if (Test-Path $extractRoot) {
+            Remove-Item -LiteralPath $extractRoot -Recurse -Force
+          }
+          New-Item -ItemType Directory -Path $extractRoot -Force | Out-Null
+          Invoke-WebRequest -Uri $archiveUrl -OutFile $archivePath
+          $actualSha256 = (Get-FileHash -LiteralPath $archivePath -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($actualSha256 -ne $expectedSha256) {
+            throw "Windows mpv runtime hash mismatch for $archiveName. Expected=$expectedSha256 Actual=$actualSha256"
+          }
+
+          & $sevenZip.Source x $archivePath "-o$extractRoot" -y | Out-Host
+          if ($LASTEXITCODE -ne 0) {
+            throw "7z extraction failed for $archivePath"
+          }
+
+          $mpvBinary = Get-ChildItem -Path $extractRoot -Filter mpv.exe -File -Recurse -ErrorAction SilentlyContinue |
+            Sort-Object FullName |
+            Select-Object -First 1
+          if (-not $mpvBinary) {
+            throw "Unable to locate mpv.exe after extracting $archiveName"
+          }
+
+          $sourceDir = Split-Path $mpvBinary.FullName -Parent
+          $targetDir = Join-Path $PWD ("resources\" + $targetDirName)
+          if (Test-Path $targetDir) {
+            Remove-Item -LiteralPath $targetDir -Recurse -Force
+          }
+          New-Item -ItemType Directory -Path $targetDir -Force | Out-Null
+          Get-ChildItem -LiteralPath $sourceDir -Force | ForEach-Object {
+            Copy-Item -LiteralPath $_.FullName -Destination $targetDir -Recurse -Force
+          }
+
+          $preparedBinary = Join-Path $targetDir 'mpv.exe'
+          if (-not (Test-Path $preparedBinary)) {
+            throw "Prepared Windows mpv runtime missing mpv.exe at $preparedBinary"
+          }
+
+          Write-Host "Prepared Windows mpv runtime from: $sourceDir"
+          Get-ChildItem -LiteralPath $targetDir -Force
+
+      - name: Provision macOS mpv runtime
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "${{ matrix.arch }}" in
+            arm64)
+              MPV_URL="https://laboratory.stolendata.net/~djinn/mpv_osx/mpv-arm64-0.39.0.tar.gz"
+              MPV_SHA256="9c81c5cf2e756cf9c2fef97a00627140ea7c6b46079469ce3b1a13b4cd4f5b2b"
+              ;;
+            x64)
+              MPV_URL="https://laboratory.stolendata.net/~djinn/mpv_osx/mpv-0.39.0.tar.gz"
+              MPV_SHA256="35ec81ad86a97b24956a8d0f4fa1ba2690b44ae7741c920e923620bcd7bd402a"
+              ;;
+            *)
+              echo "Unsupported macOS architecture for mpv provisioning: ${{ matrix.arch }}" >&2
+              exit 1
+              ;;
+          esac
+
+          ARCHIVE_PATH="$RUNNER_TEMP/mpv-${{ matrix.arch }}.tar.gz"
+          EXTRACT_DIR="$RUNNER_TEMP/mpv-extract-${{ matrix.arch }}"
+          rm -rf "$EXTRACT_DIR"
+          mkdir -p "$EXTRACT_DIR"
+          curl -L --fail "$MPV_URL" -o "$ARCHIVE_PATH"
+          echo "$MPV_SHA256  $ARCHIVE_PATH" | shasum -a 256 -c -
+          tar -xzf "$ARCHIVE_PATH" -C "$EXTRACT_DIR"
+
+          APP_PATH="$(find "$EXTRACT_DIR" -maxdepth 2 -type d -name 'mpv.app' | head -n 1 || true)"
+          if [ -z "$APP_PATH" ]; then
+            echo "Unable to locate mpv.app after extracting $MPV_URL" >&2
+            exit 1
+          fi
+
+          TARGET_DIR="$PWD/resources/mpv-0.39.0"
+          rm -rf "$TARGET_DIR"
+          mkdir -p "$TARGET_DIR"
+          cp -R "$APP_PATH" "$TARGET_DIR/mpv.app"
+          test -f "$TARGET_DIR/mpv.app/Contents/MacOS/mpv"
+          file "$TARGET_DIR/mpv.app/Contents/MacOS/mpv" || true
+          echo "Prepared macOS mpv runtime from: $MPV_URL"
+
+      - name: Prepare CI helper files
+        run: |
+          New-Item -ItemType Directory -Path .github/workflows/.tmp -Force | Out-Null
+
+          @'
+          const childProcess = require('node:child_process')
+          const fs = require('node:fs')
+          const path = require('node:path')
+
+          const platformName = process.env.NSMUSICS_ELECTRON_PLATFORM
+          const archName = process.env.NSMUSICS_ELECTRON_ARCH
+          const key = `${platformName}:${archName}`
+
+          if (platformName === 'win' && archName !== 'x64') {
+            console.log(
+              JSON.stringify(
+                {
+                  platformName,
+                  archName,
+                  note: 'Skipping frontend native package repair for cross-arch Windows packaging; renderer toolchain binaries run on the x64 Windows host runner.',
+                },
+                null,
+                2
+              )
+            )
+            process.exit(0)
+          }
+
+          const packageSets = {
+            'win:x64': [
+              '@esbuild/win32-x64',
+              '@rollup/rollup-win32-x64-msvc',
+              '@tailwindcss/oxide-win32-x64-msvc',
+              'lightningcss-win32-x64-msvc',
+            ],
+            'linux:x64': [
+              '@esbuild/linux-x64',
+              '@rollup/rollup-linux-x64-gnu',
+              '@tailwindcss/oxide-linux-x64-gnu',
+              'lightningcss-linux-x64-gnu',
+            ],
+            'linux:arm64': [
+              '@esbuild/linux-arm64',
+              '@rollup/rollup-linux-arm64-gnu',
+              '@tailwindcss/oxide-linux-arm64-gnu',
+              'lightningcss-linux-arm64-gnu',
+            ],
+            'mac:x64': [
+              '@esbuild/darwin-x64',
+              '@rollup/rollup-darwin-x64',
+              '@tailwindcss/oxide-darwin-x64',
+              'lightningcss-darwin-x64',
+            ],
+            'mac:arm64': [
+              '@esbuild/darwin-arm64',
+              '@rollup/rollup-darwin-arm64',
+              '@tailwindcss/oxide-darwin-arm64',
+              'lightningcss-darwin-arm64',
+            ],
+          }
+
+          const requiredPackages = packageSets[key] || []
+          const packageExists = (packageName) =>
+            fs.existsSync(path.join(process.cwd(), 'node_modules', ...packageName.split('/'), 'package.json'))
+
+          const missingPackages = requiredPackages.filter((packageName) => !packageExists(packageName))
+
+          console.log(
+            JSON.stringify(
+              {
+                key,
+                platformName,
+                archName,
+                requiredPackages,
+                missingPackages,
+              },
+              null,
+              2
+            )
+          )
+
+          if (missingPackages.length > 0) {
+            const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm'
+            const install = childProcess.spawnSync(
+              npmCommand,
+              ['install', '--no-save', '--package-lock=false', '--no-audit', '--no-fund', ...missingPackages],
+              {
+                stdio: 'inherit',
+                cwd: process.cwd(),
+                env: process.env,
+              }
+            )
+            if (install.status !== 0) {
+              throw new Error(`Failed to install missing frontend native packages for ${key}`)
+            }
+          }
+
+          for (const packageName of requiredPackages) {
+            if (!packageExists(packageName)) {
+              throw new Error(`Required frontend native package is still missing after repair: ${packageName}`)
+            }
+          }
+          '@ | Set-Content -Path .github/workflows/.tmp/ensure-platform-frontend-packages.cjs -Encoding utf8
+
+          @'
+          const childProcess = require('node:child_process')
+          const fs = require('node:fs')
+          const path = require('node:path')
+
+          const productName = 'NSMusicS'
+          const rootDir = process.cwd()
+          const releaseDir = path.join(rootDir, 'release')
+          const packageJsonPath = path.join(rootDir, 'package.json')
+          const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'))
+          const version = packageJson.version
+          const platformName = process.env.NSMUSICS_ELECTRON_PLATFORM
+          const platformLabel = process.env.NSMUSICS_PLATFORM_NAME || platformName
+          const archName = process.env.NSMUSICS_ELECTRON_ARCH
+          const buildMode = process.env.NSMUSICS_BUILD_MODE || 'supported-only'
+          const artifactPrefix = process.env.NSMUSICS_ARTIFACT_PREFIX || 'nsmusics-electron'
+          const supported = process.env.NSMUSICS_TARGET_SUPPORTED || ''
+          const supportReason = process.env.NSMUSICS_SUPPORT_REASON || ''
+          const bundleRoot = path.join(
+            rootDir,
+            '.github',
+            'workflows',
+            '.out',
+            buildMode,
+            `${platformLabel}-${archName}`
+          )
+          const publishDir = path.join(bundleRoot, 'publish')
+          const summaryPath = process.env.GITHUB_STEP_SUMMARY
+          const megabyte = 1024 * 1024
+
+          const appendSummary = (message) => {
+            if (!summaryPath) {
+              return
+            }
+            fs.appendFileSync(summaryPath, `${message}\n`)
+          }
+
+          const fail = (message) => {
+            appendSummary(`- FAIL ${message}`)
+            console.error(`::error title=Publish Asset Staging::${message.replace(/\r?\n/g, ' ')}`)
+            throw new Error(message)
+          }
+
+          const runCommand = (command, args) => {
+            const result = childProcess.spawnSync(command, args, {
+              cwd: rootDir,
+              encoding: 'utf8',
+            })
+            if (result.status !== 0) {
+              fail(
+                `Command failed: ${command} ${args.join(' ')}\n${(result.stderr || result.stdout || '').trim()}`
+              )
+            }
+            return result.stdout || ''
+          }
+
+          const walkFiles = (dirPath) => {
+            if (!fs.existsSync(dirPath)) {
+              fail(`release output directory not found: ${dirPath}`)
+            }
+            return fs.readdirSync(dirPath, { withFileTypes: true }).flatMap((entry) => {
+              const fullPath = path.join(dirPath, entry.name)
+              return entry.isDirectory() ? walkFiles(fullPath) : [fullPath]
+            })
+          }
+
+          const relativeToRoot = (targetPath) => path.relative(rootDir, targetPath).replace(/\\/g, '/')
+          const relativeToBundle = (targetPath) => path.relative(bundleRoot, targetPath).replace(/\\/g, '/')
+          const fileBasename = (targetPath) => path.basename(targetPath)
+
+          // Reference bytes are anchored to established NSMusicS release assets.
+          // Smaller packages are generally desirable, so lower-side checks are kept loose and
+          // only guard against obviously incomplete outputs rather than penalizing reductions.
+          const expectedSizeProfiles = {
+            win: {
+              x64: {
+                exe: {
+                  referenceBytes: 163438490,
+                  warnBelowFactor: 0.7,
+                  warnAboveFactor: 1.2,
+                  failBelowFactor: 0.55,
+                  failAboveFactor: 1.35,
+                },
+                exe_blockmap: {
+                  referenceBytes: 171899,
+                  warnBelowFactor: 0.6,
+                  warnAboveFactor: 1.7,
+                  failBelowFactor: 0.3,
+                  failAboveFactor: 3.0,
+                },
+                zip: {
+                  referenceBytes: 216856608,
+                  warnBelowFactor: 0.7,
+                  warnAboveFactor: 1.18,
+                  failBelowFactor: 0.55,
+                  failAboveFactor: 1.35,
+                },
+              },
+              ia32: {
+                exe: {
+                  referenceBytes: 163438490,
+                  warnBelowFactor: 0.7,
+                  warnAboveFactor: 1.18,
+                  failBelowFactor: 0.55,
+                  failAboveFactor: 1.35,
+                },
+                exe_blockmap: {
+                  referenceBytes: 171899,
+                  warnBelowFactor: 0.5,
+                  warnAboveFactor: 1.7,
+                  failBelowFactor: 0.25,
+                  failAboveFactor: 3.0,
+                },
+                zip: {
+                  referenceBytes: 216856608,
+                  warnBelowFactor: 0.7,
+                  warnAboveFactor: 1.18,
+                  failBelowFactor: 0.55,
+                  failAboveFactor: 1.35,
+                },
+              },
+              arm64: {
+                exe: {
+                  referenceBytes: 163438490,
+                  warnBelowFactor: 0.7,
+                  warnAboveFactor: 1.18,
+                  failBelowFactor: 0.55,
+                  failAboveFactor: 1.35,
+                },
+                exe_blockmap: {
+                  referenceBytes: 171899,
+                  warnBelowFactor: 0.5,
+                  warnAboveFactor: 1.7,
+                  failBelowFactor: 0.25,
+                  failAboveFactor: 3.0,
+                },
+                zip: {
+                  referenceBytes: 216856608,
+                  warnBelowFactor: 0.7,
+                  warnAboveFactor: 1.18,
+                  failBelowFactor: 0.55,
+                  failAboveFactor: 1.35,
+                },
+              },
+            },
+            linux: {
+              x64: {
+                deb: {
+                  referenceBytes: 104383034,
+                  warnBelowFactor: 0.8,
+                  warnAboveFactor: 1.18,
+                  failBelowFactor: 0.72,
+                  failAboveFactor: 1.35,
+                },
+                rpm: {
+                  referenceBytes: 104383034,
+                  warnBelowFactor: 0.78,
+                  warnAboveFactor: 1.2,
+                  failBelowFactor: 0.7,
+                  failAboveFactor: 1.35,
+                },
+                targz: {
+                  referenceBytes: 161745939,
+                  warnBelowFactor: 0.8,
+                  warnAboveFactor: 1.18,
+                  failBelowFactor: 0.65,
+                  failAboveFactor: 1.35,
+                },
+                appimage: {
+                  referenceBytes: 162956976,
+                  warnBelowFactor: 0.8,
+                  warnAboveFactor: 1.18,
+                  failBelowFactor: 0.65,
+                  failAboveFactor: 1.35,
+                },
+              },
+              arm64: {
+                deb: {
+                  referenceBytes: 100 * megabyte,
+                  warnBelowFactor: 0.75,
+                  warnAboveFactor: 1.35,
+                  failBelowFactor: 0.6,
+                  failAboveFactor: 1.7,
+                },
+                rpm: {
+                  referenceBytes: 100 * megabyte,
+                  warnBelowFactor: 0.75,
+                  warnAboveFactor: 1.35,
+                  failBelowFactor: 0.6,
+                  failAboveFactor: 1.7,
+                },
+                targz: {
+                  referenceBytes: 100 * megabyte,
+                  warnBelowFactor: 0.95,
+                  warnAboveFactor: 1.3,
+                  failBelowFactor: 0.9,
+                  failAboveFactor: 1.6,
+                },
+                appimage: {
+                  referenceBytes: 76 * megabyte,
+                  warnBelowFactor: 0.95,
+                  warnAboveFactor: 1.3,
+                  failBelowFactor: 0.9,
+                  failAboveFactor: 1.6,
+                },
+              },
+            },
+            mac: {
+              x64: {
+                dmg: {
+                  referenceBytes: 205706082,
+                  warnBelowFactor: 0.58,
+                  warnAboveFactor: 1.15,
+                  failBelowFactor: 0.5,
+                  failAboveFactor: 1.25,
+                },
+                dmg_blockmap: {
+                  referenceBytes: 214898,
+                  warnBelowFactor: 0.6,
+                  warnAboveFactor: 1.7,
+                  failBelowFactor: 0.3,
+                  failAboveFactor: 3.0,
+                },
+                zip: {
+                  referenceBytes: 205445399,
+                  warnBelowFactor: 0.58,
+                  warnAboveFactor: 1.15,
+                  failBelowFactor: 0.5,
+                  failAboveFactor: 1.25,
+                },
+              },
+              arm64: {
+                dmg: {
+                  referenceBytes: 176798083,
+                  warnBelowFactor: 0.64,
+                  warnAboveFactor: 1.15,
+                  failBelowFactor: 0.5,
+                  failAboveFactor: 1.25,
+                },
+                dmg_blockmap: {
+                  referenceBytes: 182756,
+                  warnBelowFactor: 0.6,
+                  warnAboveFactor: 1.7,
+                  failBelowFactor: 0.3,
+                  failAboveFactor: 3.0,
+                },
+                zip: {
+                  referenceBytes: 176469444,
+                  warnBelowFactor: 0.64,
+                  warnAboveFactor: 1.15,
+                  failBelowFactor: 0.5,
+                  failAboveFactor: 1.25,
+                },
+              },
+            },
+          }
+
+          const resolveSizeProfile = (platformName, archName, kind) => {
+            const platformProfiles = expectedSizeProfiles[platformName]
+            if (!platformProfiles) {
+              throw new Error(`Missing size profile platform: ${platformName}`)
+            }
+
+            const archProfiles = platformProfiles[archName]
+            if (!archProfiles) {
+              throw new Error(`Missing size profile arch: ${platformName}-${archName}`)
+            }
+
+            const profile = archProfiles[kind]
+            if (!profile) {
+              throw new Error(`Missing size profile kind: ${platformName}-${archName}-${kind}`)
+            }
+
+            return profile
+          }
+
+          const roundByte = (value) => Math.round(value)
+
+          const baseSpecs = {
+            win: {
+              packageLabel: 'Win',
+              assets: [
+                {
+                  kind: 'exe',
+                  matches: (value) => value.endsWith('.exe') && !value.endsWith('.exe.blockmap'),
+                  outputName: () => `${productName}-Win-${version}-${archName}.exe`,
+                },
+                {
+                  kind: 'exe_blockmap',
+                  matches: (value) => value.endsWith('.exe.blockmap'),
+                  outputName: () => `${productName}-Win-${version}-${archName}.exe.blockmap`,
+                },
+                {
+                  kind: 'zip',
+                  matches: (value) => value.endsWith('.zip'),
+                  outputName: () => `${productName}-Win-${version}-${archName}.zip`,
+                },
+              ],
+            },
+            linux: {
+              packageLabel: 'Linux',
+              assets: [
+                {
+                  kind: 'deb',
+                  matches: (value) => value.endsWith('.deb'),
+                  outputName: () =>
+                    `${productName}-Linux-${version}-${archName === 'x64' ? 'amd64' : archName}.deb`,
+                },
+                {
+                  kind: 'rpm',
+                  matches: (value) => value.endsWith('.rpm'),
+                  outputName: () =>
+                    `${productName}-Linux-${version}-${archName === 'x64' ? 'x86_64' : archName}.rpm`,
+                },
+                {
+                  kind: 'targz',
+                  matches: (value) => value.endsWith('.tar.gz'),
+                  outputName: () => `${productName}-Linux-${version}-${archName}.tar.gz`,
+                },
+                {
+                  kind: 'appimage',
+                  matches: (value) => value.endsWith('.AppImage'),
+                  outputName: () =>
+                    `${productName}-Linux-${version}-${archName === 'x64' ? 'x86_64' : archName}.AppImage`,
+                },
+              ],
+            },
+            mac: {
+              packageLabel: 'Mac',
+              assets: [
+                {
+                  kind: 'dmg',
+                  matches: (value) => value.endsWith('.dmg') && !value.endsWith('.dmg.blockmap'),
+                  outputName: () => `${productName}-Mac-${version}-${archName}.dmg`,
+                },
+                {
+                  kind: 'dmg_blockmap',
+                  matches: (value) => value.endsWith('.dmg.blockmap'),
+                  outputName: () => `${productName}-Mac-${version}-${archName}.dmg.blockmap`,
+                },
+                {
+                  kind: 'zip',
+                  matches: (value) => value.endsWith('.zip'),
+                  outputName: () => `${productName}-Mac-${version}-${archName}.zip`,
+                },
+              ],
+            },
+          }
+
+          const validateLinuxDebDepends = (debPath) => {
+            if (platformName !== 'linux') {
+              return
+            }
+            const dependsLine = runCommand('dpkg-deb', ['-f', debPath, 'Depends']).trim()
+            if (!/\bmpv\b/.test(dependsLine)) {
+              fail(`Linux deb package does not declare required mpv dependency: ${relativeToRoot(debPath)}`)
+            }
+            appendSummary(`- PASS Linux deb dependency metadata includes mpv: ${path.basename(debPath)}`)
+          }
+
+          const validateLinuxRpmDepends = (rpmPath) => {
+            if (platformName !== 'linux') {
+              return
+            }
+            const dependsOutput = runCommand('rpm', ['-qpR', rpmPath]).trim()
+            if (!/(^|\r?\n)mpv(?:\s|[<>=()]|$)/m.test(dependsOutput)) {
+              fail(`Linux rpm package does not declare required mpv dependency: ${relativeToRoot(rpmPath)}`)
+            }
+            appendSummary(`- PASS Linux rpm dependency metadata includes mpv: ${path.basename(rpmPath)}`)
+          }
+
+          const spec = baseSpecs[platformName]
+          if (!spec) {
+            fail(`Unsupported publish asset staging platform label: ${platformLabel}`)
+          }
+
+          const releaseFiles = walkFiles(releaseDir)
+          if (releaseFiles.length === 0) {
+            fail(`release output is empty under ${releaseDir}`)
+          }
+          const rootFiles = releaseFiles.filter((targetPath) => path.dirname(targetPath) === releaseDir)
+          const rootEntries = fs
+            .readdirSync(releaseDir, { withFileTypes: true })
+            .map((entry) => (entry.isDirectory() ? `${entry.name}/` : entry.name))
+            .sort()
+          const packageLikeFiles = releaseFiles
+            .filter((targetPath) =>
+              /(\.AppImage|\.deb|\.rpm|\.tar\.gz|\.zip|\.dmg|\.dmg\.blockmap|\.exe|\.exe\.blockmap)$/i.test(
+                fileBasename(targetPath)
+              )
+            )
+            .map(relativeToRoot)
+            .sort()
+
+          fs.rmSync(bundleRoot, { recursive: true, force: true })
+          fs.mkdirSync(publishDir, { recursive: true })
+
+          const stagedAssets = []
+          for (const assetSpec of spec.assets) {
+            let matches = rootFiles.filter((targetPath) => assetSpec.matches(fileBasename(targetPath)))
+            if (matches.length === 0) {
+              matches = releaseFiles.filter((targetPath) => assetSpec.matches(fileBasename(targetPath)))
+            }
+            if (matches.length !== 1) {
+              fail(
+                `Expected exactly one ${platformLabel}-${archName} ${assetSpec.kind} asset, found ${matches.length}. Candidates: ${matches
+                  .map((targetPath) => relativeToRoot(targetPath))
+                  .join(', ')}. Root entries: ${rootEntries.join(', ')}. Package-like files: ${packageLikeFiles.join(', ')}`
+              )
+            }
+
+            const sourcePath = matches[0]
+            const outputName = assetSpec.outputName()
+            const destinationPath = path.join(publishDir, outputName)
+            const sizeBytes = fs.statSync(sourcePath).size
+            const sizeProfile = resolveSizeProfile(platformName, archName, assetSpec.kind)
+            const warnMinBytes = roundByte(sizeProfile.referenceBytes * sizeProfile.warnBelowFactor)
+            const warnMaxBytes = roundByte(sizeProfile.referenceBytes * sizeProfile.warnAboveFactor)
+            const failMinBytes = roundByte(sizeProfile.referenceBytes * sizeProfile.failBelowFactor)
+            const failMaxBytes = roundByte(sizeProfile.referenceBytes * sizeProfile.failAboveFactor)
+
+            if (sizeBytes <= 0) {
+              fail(`Publish asset is empty: ${relativeToRoot(sourcePath)}`)
+            }
+            if (sizeBytes < failMinBytes) {
+              fail(
+                `Publish asset ${relativeToRoot(sourcePath)} is ${sizeBytes} bytes, which is below the ${failMinBytes} byte hard minimum for ${platformLabel}-${archName} ${assetSpec.kind}. Reference=${sizeProfile.referenceBytes}.`
+              )
+            }
+            if (sizeBytes > failMaxBytes) {
+              fail(
+                `Publish asset ${relativeToRoot(sourcePath)} is ${sizeBytes} bytes, which exceeds the ${failMaxBytes} byte hard maximum for ${platformLabel}-${archName} ${assetSpec.kind}. Reference=${sizeProfile.referenceBytes}.`
+              )
+            }
+            if (sizeBytes < warnMinBytes || sizeBytes > warnMaxBytes) {
+              appendSummary(
+                `- WARN Asset size drift: ${outputName} is ${sizeBytes} bytes, reference ${sizeProfile.referenceBytes}, warn range ${warnMinBytes}-${warnMaxBytes}.`
+              )
+            }
+
+            if (assetSpec.kind === 'deb') {
+              validateLinuxDebDepends(sourcePath)
+            }
+            if (assetSpec.kind === 'rpm') {
+              validateLinuxRpmDepends(sourcePath)
+            }
+
+            if (path.dirname(sourcePath) !== releaseDir) {
+              appendSummary(
+                `- NOTE Packaged asset discovered below release root: ${relativeToRoot(sourcePath)}`
+              )
+            }
+
+            fs.copyFileSync(sourcePath, destinationPath)
+              stagedAssets.push({
+                kind: assetSpec.kind,
+                source_name: fileBasename(sourcePath),
+                file_name: outputName,
+                size_bytes: sizeBytes,
+                reference_bytes: sizeProfile.referenceBytes,
+                warn_min_bytes: warnMinBytes,
+                warn_max_bytes: warnMaxBytes,
+                fail_min_bytes: failMinBytes,
+                fail_max_bytes: failMaxBytes,
+                relative_path: relativeToBundle(destinationPath),
+              })
+          }
+
+          const manifest = {
+            artifact_name: `${artifactPrefix}-${buildMode}-${platformLabel}-${archName}`,
+            build_mode: buildMode,
+            version,
+            platform: platformLabel,
+            platform_id: platformName,
+            arch: archName,
+            supported,
+            support_reason: supportReason,
+            ref: process.env.GITHUB_REF || '',
+            sha: process.env.GITHUB_SHA || '',
+            run_id: process.env.GITHUB_RUN_ID || '',
+            release_files: releaseFiles.map(relativeToRoot).sort(),
+            publish_assets: stagedAssets.map((asset) => asset.relative_path),
+            publish_asset_details: stagedAssets,
+          }
+
+          const inventoryPath = path.join(bundleRoot, 'publish-assets.txt')
+          const manifestPath = path.join(bundleRoot, 'build-manifest.json')
+          fs.writeFileSync(
+            inventoryPath,
+            stagedAssets
+              .map((asset) => `${asset.file_name}\t${asset.size_bytes}\t${asset.kind}`)
+              .join('\n') + '\n'
+          )
+          fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n')
+
+          appendSummary(`- Upload artifact bundle: ${manifest.artifact_name}`)
+          appendSummary(`- Publishable assets: ${stagedAssets.length}`)
+          for (const asset of stagedAssets) {
+            appendSummary(
+              `- Asset: ${asset.file_name} (${asset.size_bytes} bytes, reference ${asset.reference_bytes}, warn ${asset.warn_min_bytes}-${asset.warn_max_bytes}, fail ${asset.fail_min_bytes}-${asset.fail_max_bytes})`
+            )
+          }
+          '@ | Set-Content -Path .github/workflows/.tmp/stage-publish-assets.cjs -Encoding utf8
+
+          @'
+          const childProcess = require('node:child_process')
+          const fs = require('node:fs')
+          const path = require('node:path')
+
+          const mode = process.argv[2] || 'packaged'
+          const platformName = process.env.NSMUSICS_ELECTRON_PLATFORM
+          const archName = process.env.NSMUSICS_ELECTRON_ARCH
+          const productName = 'NSMusicS'
+          const rootDir = process.cwd()
+          const releaseDir = path.join(rootDir, 'release')
+          const summaryPath = process.env.GITHUB_STEP_SUMMARY
+
+          const fail = (message) => {
+            appendSummary(`- FAIL ${message}`)
+            console.error(`::error title=Native Validation::${message.replace(/\r?\n/g, ' ')}`)
+            console.error(`[native-validate] ${message}`)
+            process.exit(1)
+          }
+
+          const note = (message) => {
+            console.log(`[native-validate] ${message}`)
+          }
+
+          const appendSummary = (message) => {
+            if (!summaryPath) {
+              return
+            }
+            fs.appendFileSync(summaryPath, `${message}\n`)
+          }
+
+          const ensureExists = (targetPath, description) => {
+            if (!fs.existsSync(targetPath)) {
+              fail(`${description} not found: ${targetPath}`)
+            }
+            return targetPath
+          }
+
+          const resolveCommandPath = (commandName) => {
+            const probe = childProcess.spawnSync('bash', ['-lc', `command -v ${commandName}`], {
+              encoding: 'utf8',
+            })
+            if (probe.status !== 0) {
+              fail(
+                `Unable to resolve required command from PATH: ${commandName}\n${(probe.stderr || '').trim()}`
+              )
+            }
+            const resolved = (probe.stdout || '')
+              .split(/\r?\n/)
+              .map((value) => value.trim())
+              .find(Boolean)
+            if (!resolved) {
+              fail(`command -v returned no path for required command: ${commandName}`)
+            }
+            return fs.realpathSync(resolved)
+          }
+
+          const dedupe = (values) => [...new Set(values)]
+
+          const cpuTypeToArch = (cpuType) => {
+            switch (cpuType >>> 0) {
+              case 0x00000007:
+                return 'ia32'
+              case 0x01000007:
+                return 'x64'
+              case 0x0100000c:
+                return 'arm64'
+              default:
+                return `unknown-0x${(cpuType >>> 0).toString(16)}`
+            }
+          }
+
+          const machineToArch = (machine) => {
+            switch (machine) {
+              case 0x014c:
+                return 'ia32'
+              case 0x8664:
+                return 'x64'
+              case 0xaa64:
+                return 'arm64'
+              case 0x0003:
+                return 'ia32'
+              case 0x003e:
+                return 'x64'
+              case 0x00b7:
+                return 'arm64'
+              default:
+                return `unknown-0x${machine.toString(16)}`
+            }
+          }
+
+          const detectBinaryInfo = (targetPath) => {
+            const buffer = fs.readFileSync(targetPath)
+            if (buffer.length < 64) {
+              fail(`Binary too small to inspect: ${targetPath}`)
+            }
+
+            if (buffer[0] === 0x4d && buffer[1] === 0x5a) {
+              const peOffset = buffer.readUInt32LE(0x3c)
+              if (peOffset + 6 > buffer.length) {
+                fail(`Invalid PE header offset for ${targetPath}`)
+              }
+              if (buffer.readUInt32LE(peOffset) !== 0x00004550) {
+                fail(`Invalid PE signature for ${targetPath}`)
+              }
+              const machine = buffer.readUInt16LE(peOffset + 4)
+              return { format: 'pe', arches: [machineToArch(machine)] }
+            }
+
+            if (
+              buffer[0] === 0x7f &&
+              buffer[1] === 0x45 &&
+              buffer[2] === 0x4c &&
+              buffer[3] === 0x46
+            ) {
+              const machine = buffer.readUInt16LE(18)
+              return { format: 'elf', arches: [machineToArch(machine)] }
+            }
+
+            const magicBE = buffer.readUInt32BE(0)
+            if (magicBE === 0xcefaedfe || magicBE === 0xcffaedfe) {
+              return { format: 'mach-o', arches: [cpuTypeToArch(buffer.readUInt32LE(4))] }
+            }
+            if (magicBE === 0xfeedface || magicBE === 0xfeedfacf) {
+              return { format: 'mach-o', arches: [cpuTypeToArch(buffer.readUInt32BE(4))] }
+            }
+            if (magicBE === 0xcafebabe) {
+              const count = buffer.readUInt32BE(4)
+              const arches = []
+              for (let index = 0; index < count; index += 1) {
+                const offset = 8 + index * 20
+                if (offset + 20 > buffer.length) {
+                  fail(`Invalid fat Mach-O header for ${targetPath}`)
+                }
+                arches.push(cpuTypeToArch(buffer.readUInt32BE(offset)))
+              }
+              return { format: 'mach-o-fat', arches: dedupe(arches) }
+            }
+            if (magicBE === 0xcafebabf) {
+              const count = buffer.readUInt32BE(4)
+              const arches = []
+              for (let index = 0; index < count; index += 1) {
+                const offset = 8 + index * 32
+                if (offset + 32 > buffer.length) {
+                  fail(`Invalid fat64 Mach-O header for ${targetPath}`)
+                }
+                arches.push(cpuTypeToArch(buffer.readUInt32BE(offset)))
+              }
+              return { format: 'mach-o-fat64', arches: dedupe(arches) }
+            }
+
+            fail(`Unsupported binary format: ${targetPath}`)
+          }
+
+          const assertBinaryArch = (targetPath, expectedArch, description) => {
+            const info = detectBinaryInfo(targetPath)
+            if (!info.arches.includes(expectedArch)) {
+              fail(
+                `${description} architecture mismatch. expected=${expectedArch} actual=${info.arches.join(',')} format=${info.format} path=${targetPath}`
+              )
+            }
+            note(`${description}: ${info.format} ${info.arches.join(',')} ${targetPath}`)
+          }
+
+          const findDirectory = (baseDir, matcher) => {
+            const entries = fs.readdirSync(baseDir, { withFileTypes: true })
+            for (const entry of entries) {
+              if (entry.isDirectory() && matcher.test(entry.name)) {
+                return path.join(baseDir, entry.name)
+              }
+            }
+            return null
+          }
+
+          const resolveUnpackedRoot = () => {
+            ensureExists(releaseDir, 'release output directory')
+
+            if (platformName === 'win') {
+              const result = findDirectory(releaseDir, /^win.*unpacked$/i)
+              if (result) return result
+            } else if (platformName === 'linux') {
+              const result = findDirectory(releaseDir, /^linux.*unpacked$/i)
+              if (result) return result
+            } else if (platformName === 'mac') {
+              const result = findDirectory(releaseDir, /^mac($|-)/i)
+              if (result) return result
+            }
+
+            fail(`Unable to resolve unpacked directory for platform=${platformName}`)
+          }
+
+          const resolveMacBundle = (unpackedRoot) => {
+            const direct = path.join(unpackedRoot, `${productName}.app`)
+            if (fs.existsSync(direct)) {
+              return direct
+            }
+
+            const entries = fs.readdirSync(unpackedRoot, { withFileTypes: true })
+            for (const entry of entries) {
+              if (entry.isDirectory() && entry.name.endsWith('.app')) {
+                return path.join(unpackedRoot, entry.name)
+              }
+            }
+
+            fail(`Unable to locate packaged macOS app bundle under ${unpackedRoot}`)
+          }
+
+          const resolveLinuxExecutable = (unpackedRoot) => {
+            const preferred = [
+              path.join(unpackedRoot, productName),
+              path.join(unpackedRoot, productName.toLowerCase()),
+            ]
+
+            for (const candidate of preferred) {
+              if (fs.existsSync(candidate)) {
+                return candidate
+              }
+            }
+
+            const entries = fs
+              .readdirSync(unpackedRoot, { withFileTypes: true })
+              .filter((entry) => entry.isFile())
+              .map((entry) => path.join(unpackedRoot, entry.name))
+              .filter((candidate) => {
+                const basename = path.basename(candidate)
+                const extension = path.extname(candidate).toLowerCase()
+                if (
+                  [
+                    '.pak',
+                    '.dll',
+                    '.so',
+                    '.dylib',
+                    '.json',
+                    '.yaml',
+                    '.yml',
+                    '.bin',
+                    '.dat',
+                    '.blockmap',
+                  ].includes(extension)
+                ) {
+                  return false
+                }
+                if (basename === 'chrome-sandbox') {
+                  return false
+                }
+                return (fs.statSync(candidate).mode & 0o111) !== 0
+              })
+
+            if (entries.length === 1) {
+              return entries[0]
+            }
+
+            fail(`Unable to uniquely identify packaged Linux executable under ${unpackedRoot}`)
+          }
+
+          const resolveWindowsMpvRuntimeDir = (baseDir) => {
+            const archAliases = {
+              x64: ['x86_64'],
+              ia32: ['i686'],
+              arm64: ['aarch64', 'arm64'],
+            }
+            const aliases = archAliases[archName] || [archName]
+            const candidates = fs
+              .readdirSync(baseDir, { withFileTypes: true })
+              .filter((entry) => entry.isDirectory() && /^mpv[-_]/i.test(entry.name))
+              .map((entry) => entry.name)
+              .filter((name) => aliases.some((alias) => name.toLowerCase().includes(alias)))
+              .sort((left, right) => right.localeCompare(left))
+
+            if (candidates.length === 0) {
+              fail(`Unable to locate Windows mpv runtime directory for ${archName} under ${baseDir}`)
+            }
+
+            return path.join(baseDir, candidates[0])
+          }
+
+          const validateWindowsMpv = (baseDir) => {
+            const mpvRuntimeDir = resolveWindowsMpvRuntimeDir(baseDir)
+            const mpvPath = ensureExists(path.join(mpvRuntimeDir, 'mpv.exe'), 'Windows mpv runtime')
+            assertBinaryArch(mpvPath, archName, 'Windows mpv runtime')
+          }
+
+          const validateMacMpv = (baseDir) => {
+            const mpvPath = ensureExists(
+              path.join(baseDir, 'mpv-0.39.0', 'mpv.app', 'Contents', 'MacOS', 'mpv'),
+              'macOS mpv runtime'
+            )
+            assertBinaryArch(mpvPath, archName, 'macOS mpv runtime')
+          }
+
+          const auditRepositorySupport = () => {
+            appendSummary(`### Repository Compatibility Audit: ${platformName}-${archName}`)
+
+            if (platformName === 'win') {
+              const backgroundSource = fs.readFileSync(path.join(rootDir, 'src', 'background.ts'), 'utf8')
+              if (
+                !backgroundSource.includes('function resolveWindowsMpvBinary()') ||
+                !backgroundSource.includes('binary: resolveWindowsMpvBinary()')
+              ) {
+                fail(
+                  `Repository support audit failed for ${platformName}-${archName}: src/background.ts must dynamically resolve the packaged Windows mpv runtime by process.arch.`
+                )
+              }
+              validateWindowsMpv(path.join(rootDir, 'resources'))
+              appendSummary(`- PASS Windows repository runtime resolves and validates the prepared mpv runtime for ${archName}.`)
+              note(`Repository compatibility audit passed for ${platformName}-${archName}`)
+              return
+            }
+
+            if (platformName === 'mac') {
+              const macMpvPath = path.join(
+                rootDir,
+                'resources',
+                'mpv-0.39.0',
+                'mpv.app',
+                'Contents',
+                'MacOS',
+                'mpv'
+              )
+              if (!fs.existsSync(macMpvPath)) {
+                fail(
+                  `Repository support audit failed for ${platformName}-${archName}: src/background.ts expects resources/mpv-0.39.0/mpv.app/Contents/MacOS/mpv but the workflow did not prepare that runtime.`
+                )
+              }
+              appendSummary(`- PASS macOS source path contract is consistent with the prepared CI mpv.app runtime for ${archName}.`)
+              note(`Repository compatibility audit passed for ${platformName}-${archName}`)
+              return
+            }
+
+            if (platformName === 'linux') {
+              const backgroundSource = fs.readFileSync(
+                path.join(rootDir, 'src', 'background.ts'),
+                'utf8'
+              )
+              if (
+                !backgroundSource.includes('process.env.NSMUSICS_MPV_BINARY') ||
+                !backgroundSource.includes("binary: linuxMpvBinary")
+              ) {
+                fail(
+                  `Repository support audit failed for ${platformName}-${archName}: src/background.ts must resolve Linux mpv from NSMUSICS_MPV_BINARY or system PATH.`
+                )
+              }
+              appendSummary(
+                `- PASS Linux repository runtime is configured to resolve mpv from NSMUSICS_MPV_BINARY or the system PATH.`
+              )
+              note(`Repository compatibility audit passed for ${platformName}-${archName}`)
+              return
+            }
+
+            fail(`Unsupported repository compatibility audit platform: ${platformName}`)
+          }
+
+          const validatePreflight = () => {
+            const betterSqlitePath = ensureExists(
+              path.join(rootDir, 'resources', 'better_sqlite3.node'),
+              'Prepared better_sqlite3 runtime binary'
+            )
+            assertBinaryArch(
+              betterSqlitePath,
+              archName,
+              'Prepared better_sqlite3 runtime binary'
+            )
+
+            if (platformName === 'win') {
+              validateWindowsMpv(path.join(rootDir, 'resources'))
+            } else if (platformName === 'mac') {
+              validateMacMpv(path.join(rootDir, 'resources'))
+            } else if (platformName === 'linux') {
+              const linuxMpvPath = resolveCommandPath('mpv')
+              assertBinaryArch(linuxMpvPath, archName, 'System Linux mpv runtime')
+              appendSummary(`- PASS Linux system mpv runtime found at ${linuxMpvPath}.`)
+            } else {
+              fail(`Unsupported preflight validation platform: ${platformName}`)
+            }
+          }
+
+          const validatePackaged = () => {
+            const unpackedRoot = resolveUnpackedRoot()
+            note(`Resolved unpacked directory: ${unpackedRoot}`)
+
+            if (platformName === 'win') {
+              const executablePath = ensureExists(
+                path.join(unpackedRoot, `${productName}.exe`),
+                'Packaged Windows executable'
+              )
+              assertBinaryArch(executablePath, archName, 'Packaged Windows executable')
+              const resourcesDir = ensureExists(
+                path.join(unpackedRoot, 'resources'),
+                'Packaged Windows resources directory'
+              )
+              const betterSqlitePath = ensureExists(
+                path.join(resourcesDir, 'better_sqlite3.node'),
+                'Packaged better_sqlite3 runtime binary'
+              )
+              assertBinaryArch(
+                betterSqlitePath,
+                archName,
+                'Packaged better_sqlite3 runtime binary'
+              )
+              validateWindowsMpv(resourcesDir)
+              return
+            }
+
+            if (platformName === 'linux') {
+              const executablePath = resolveLinuxExecutable(unpackedRoot)
+              assertBinaryArch(executablePath, archName, 'Packaged Linux executable')
+              const resourcesDir = ensureExists(
+                path.join(unpackedRoot, 'resources'),
+                'Packaged Linux resources directory'
+              )
+              const betterSqlitePath = ensureExists(
+                path.join(resourcesDir, 'better_sqlite3.node'),
+                'Packaged better_sqlite3 runtime binary'
+              )
+              assertBinaryArch(
+                betterSqlitePath,
+                archName,
+                'Packaged better_sqlite3 runtime binary'
+              )
+              appendSummary(
+                '- PASS Packaged Linux artifact is validated against system mpv runtime usage; the application resolves `mpv` from PATH at runtime.'
+              )
+              return
+            }
+
+            if (platformName === 'mac') {
+              const appBundlePath = resolveMacBundle(unpackedRoot)
+              const executablePath = ensureExists(
+                path.join(appBundlePath, 'Contents', 'MacOS', productName),
+                'Packaged macOS executable'
+              )
+              assertBinaryArch(executablePath, archName, 'Packaged macOS executable')
+              const resourcesDir = ensureExists(
+                path.join(appBundlePath, 'Contents', 'Resources'),
+                'Packaged macOS resources directory'
+              )
+              const betterSqlitePath = ensureExists(
+                path.join(resourcesDir, 'better_sqlite3.node'),
+                'Packaged better_sqlite3 runtime binary'
+              )
+              assertBinaryArch(
+                betterSqlitePath,
+                archName,
+                'Packaged better_sqlite3 runtime binary'
+              )
+              validateMacMpv(resourcesDir)
+              return
+            }
+
+            fail(`Unsupported validation platform: ${platformName}`)
+          }
+
+          if (mode === 'repo-audit') {
+            auditRepositorySupport()
+            appendSummary(`- PASS Repository compatibility audit finished for ${platformName}-${archName}.`)
+            note('Repository compatibility audit passed.')
+          } else if (mode === 'preflight') {
+            validatePreflight()
+            appendSummary(`- PASS Native preflight validation finished for ${platformName}-${archName}.`)
+            note('Preflight native validation passed.')
+          } else if (mode === 'packaged') {
+            validatePackaged()
+            appendSummary(`- PASS Packaged native validation finished for ${platformName}-${archName}.`)
+            note('Packaged native validation passed.')
+          } else {
+            fail(`Unknown validation mode: ${mode}`)
+          }
+          '@ | Set-Content -Path .github/workflows/.tmp/validate-packaged-native.cjs -Encoding utf8
+
+      - name: Repository compatibility audit
+        env:
+          NSMUSICS_ELECTRON_PLATFORM: ${{ matrix.platform }}
+          NSMUSICS_ELECTRON_ARCH: ${{ matrix.arch }}
+        run: node .github/workflows/.tmp/validate-packaged-native.cjs repo-audit
+
+      - name: Install project dependencies
+        run: npm ci --include=optional --no-audit --no-fund
+
+      - name: Ensure platform frontend native packages
+        env:
+          NSMUSICS_ELECTRON_PLATFORM: ${{ matrix.platform }}
+          NSMUSICS_ELECTRON_ARCH: ${{ matrix.arch }}
+        run: node .github/workflows/.tmp/ensure-platform-frontend-packages.cjs
+
+      - name: Record frontend dependency inventory
+        run: |
+          $diagnosticsDir = '.github/workflows/.tmp/diagnostics'
+          New-Item -ItemType Directory -Path $diagnosticsDir -Force | Out-Null
+          $logPath = Join-Path $diagnosticsDir 'frontend-dependency-inventory.log'
+          npm ls --depth=0 vite esbuild rollup lightningcss @tailwindcss/vite @tailwindcss/oxide *>&1 | Tee-Object -FilePath $logPath
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
+
+      - name: Clean previous release output
+        run: |
+          node -e "const fs=require('fs'); for (const dir of ['dist', 'release']) fs.rmSync(dir, { recursive: true, force: true });"
+
+      - name: Rebuild native Electron dependencies for target arch
+        run: npx electron-builder install-app-deps --platform ${{ matrix.electron_platform }} --arch ${{ matrix.arch }}
+
+      - name: Stage runtime native resources
+        run: |
+          node -e "const fs=require('fs'); const path=require('path'); const root=process.cwd(); const direct=path.join(root,'node_modules','better-sqlite3','build','Release','better_sqlite3.node'); const fallback=[]; const walk=(dir)=>{ for(const entry of fs.readdirSync(dir,{withFileTypes:true})){ const full=path.join(dir,entry.name); if(entry.isDirectory()) walk(full); else if(entry.isFile() && entry.name==='better_sqlite3.node') fallback.push(full); } }; if(!fs.existsSync(direct)){ const packageRoot=path.join(root,'node_modules','better-sqlite3'); if(fs.existsSync(packageRoot)) walk(packageRoot); } const source=fs.existsSync(direct)?direct:fallback[0]; if(!source) throw new Error('Unable to locate rebuilt better_sqlite3.node under node_modules/better-sqlite3 after install-app-deps.'); const target=path.join(root,'resources','better_sqlite3.node'); fs.copyFileSync(source,target); console.log(JSON.stringify({copiedFrom:source,copiedTo:target},null,2));"
+
+      - name: Strict native preflight validation
+        env:
+          NSMUSICS_ELECTRON_PLATFORM: ${{ matrix.platform }}
+          NSMUSICS_ELECTRON_ARCH: ${{ matrix.arch }}
+        run: node .github/workflows/.tmp/validate-packaged-native.cjs preflight
+
+      - name: Build distributable artifacts
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
+          NSMUSICS_ELECTRON_PLATFORM: ${{ matrix.platform }}
+          NSMUSICS_ELECTRON_ARCH: ${{ matrix.arch }}
+          USE_SYSTEM_FPM: ${{ runner.os == 'Linux' && 'true' || '' }}
+          FPM_DEBUG: ${{ runner.os == 'Linux' && '1' || '' }}
+        run: |
+          $diagnosticsDir = '.github/workflows/.tmp/diagnostics'
+          $collectedAssetsDir = '.github/workflows/.tmp/collected-release-assets'
+          New-Item -ItemType Directory -Path $diagnosticsDir -Force | Out-Null
+          if (Test-Path $collectedAssetsDir) {
+            Remove-Item -LiteralPath $collectedAssetsDir -Recurse -Force -ErrorAction SilentlyContinue
+          }
+          New-Item -ItemType Directory -Path $collectedAssetsDir -Force | Out-Null
+          $logPath = Join-Path $diagnosticsDir 'electron-builder-package.log'
+
+          function Repair-MacDmgBusyFailure([string]$targetLogPath, [int]$attempt, [int]$maxAttempts) {
+            if (-not (Test-Path $targetLogPath)) {
+              return $false
+            }
+
+            $logContent = Get-Content -LiteralPath $targetLogPath -Raw
+            $isBusyDetach = $logContent -match "hdiutil: couldn't eject" -and $logContent -match 'Resource busy'
+            if (-not $isBusyDetach -or $attempt -ge $maxAttempts) {
+              return $false
+            }
+
+            Write-Host "::warning title=macOS DMG retry::Transient hdiutil detach busy failure detected on attempt $attempt of $maxAttempts. Retrying dmg packaging."
+            Write-Host '::group::macOS disk image state'
+            & hdiutil info *>&1 | ForEach-Object { Write-Host $_ }
+            Write-Host '::endgroup::'
+
+            $disks = [regex]::Matches($logContent, '/dev/disk\d+') |
+              ForEach-Object { $_.Value } |
+              Select-Object -Unique
+
+            foreach ($disk in $disks) {
+              Write-Host "::group::Cleanup $disk"
+              try {
+                & hdiutil detach -force $disk *>&1 | ForEach-Object { Write-Host $_ }
+              } catch {
+                Write-Host $_
+              }
+              $diskName = $disk -replace '^/dev/', ''
+              try {
+                & diskutil eject $diskName *>&1 | ForEach-Object { Write-Host $_ }
+              } catch {
+                Write-Host $_
+              }
+              Write-Host '::endgroup::'
+            }
+
+            if (Test-Path 'release') {
+              Get-ChildItem -Path 'release' -Recurse -File -ErrorAction SilentlyContinue |
+                Where-Object {
+                  $_.Name -like '*.dmg' -or
+                  $_.Name -like '*.dmg.blockmap'
+                } |
+                ForEach-Object {
+                  Remove-Item -LiteralPath $_.FullName -Force -ErrorAction SilentlyContinue
+                }
+            }
+            Start-Sleep -Seconds (5 * $attempt)
+            return $true
+          }
+
+          function Collect-ReleaseArtifacts([string]$label, [string[]]$patterns) {
+            foreach ($pattern in $patterns) {
+              $matches = Get-ChildItem -Path 'release' -Recurse -File -ErrorAction SilentlyContinue |
+                Where-Object { $_.Name -like $pattern } |
+                Sort-Object FullName |
+                Select-Object -ExpandProperty FullName
+              $matches = @($matches | Select-Object -Unique)
+
+              if ($matches.Count -ne 1) {
+                $candidateList = if ($matches.Count -eq 0) { '' } else { ($matches -join ', ') }
+                Write-Host "::error title=Collected packaged artifact missing::Expected exactly one $label file matching $pattern, found $($matches.Count). Candidates: $candidateList"
+                exit 1
+              }
+
+              $sourcePath = $matches[0]
+              $destinationPath = Join-Path $collectedAssetsDir (Split-Path -Leaf $sourcePath)
+              Copy-Item -LiteralPath $sourcePath -Destination $destinationPath -Force
+            }
+          }
+
+          function Restore-CollectedArtifacts() {
+            if (-not (Test-Path 'release')) {
+              New-Item -ItemType Directory -Path 'release' -Force | Out-Null
+            }
+
+            Get-ChildItem -Path $collectedAssetsDir -File -ErrorAction SilentlyContinue |
+              ForEach-Object {
+                $destinationPath = Join-Path 'release' $_.Name
+                Copy-Item -LiteralPath $_.FullName -Destination $destinationPath -Force
+              }
+          }
+
+          function Reset-BuildOutputs() {
+            foreach ($targetPath in @('dist', 'release')) {
+              if (Test-Path $targetPath) {
+                Remove-Item -LiteralPath $targetPath -Recurse -Force -ErrorAction SilentlyContinue
+              }
+            }
+            New-Item -ItemType Directory -Path 'release' -Force | Out-Null
+          }
+
+          if ('${{ matrix.platform }}' -eq 'linux' -and '${{ matrix.arch }}' -eq 'arm64') {
+            $targets = @('AppImage', 'deb', 'rpm', 'tar.gz')
+            foreach ($target in $targets) {
+              $safeTarget = $target.Replace('.', '_').Replace('/', '_')
+              $targetLogPath = Join-Path $diagnosticsDir ("electron-builder-$safeTarget.log")
+              Reset-BuildOutputs
+              $env:NSMUSICS_ELECTRON_TARGETS = $target
+              npx vite build *>&1 | Tee-Object -FilePath $targetLogPath
+              $targetExitCode = $LASTEXITCODE
+              if ($targetExitCode -ne 0) {
+                exit $targetExitCode
+              }
+
+              switch ($target) {
+                'AppImage' {
+                  Collect-ReleaseArtifacts -label 'linux-arm64 AppImage' -patterns @('*.AppImage')
+                }
+                'deb' {
+                  Collect-ReleaseArtifacts -label 'linux-arm64 deb' -patterns @('*.deb')
+                }
+                'rpm' {
+                  Collect-ReleaseArtifacts -label 'linux-arm64 rpm' -patterns @('*.rpm')
+                }
+                'tar.gz' {
+                  Collect-ReleaseArtifacts -label 'linux-arm64 tar.gz' -patterns @('*.tar.gz')
+                }
+              }
+            }
+
+            Restore-CollectedArtifacts
+            Remove-Item Env:NSMUSICS_ELECTRON_TARGETS -ErrorAction SilentlyContinue
+          } elseif ('${{ matrix.platform }}' -eq 'mac') {
+            $macTargets = @('zip', 'dmg')
+            foreach ($target in $macTargets) {
+              $maxAttempts = if ($target -eq 'dmg') { 3 } else { 1 }
+              $targetSucceeded = $false
+
+              for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
+                $logSuffix = if ($maxAttempts -gt 1) { "$target-attempt$attempt" } else { $target }
+                $targetLogPath = Join-Path $diagnosticsDir ("electron-builder-$logSuffix.log")
+                Reset-BuildOutputs
+                $env:NSMUSICS_ELECTRON_TARGETS = $target
+                npx vite build *>&1 | Tee-Object -FilePath $targetLogPath
+                $targetExitCode = $LASTEXITCODE
+                if ($targetExitCode -eq 0) {
+                  $targetSucceeded = $true
+                  break
+                }
+
+                $shouldRetry = Repair-MacDmgBusyFailure -targetLogPath $targetLogPath -attempt $attempt -maxAttempts $maxAttempts
+                if (-not $shouldRetry) {
+                  exit $targetExitCode
+                }
+              }
+
+              if (-not $targetSucceeded) {
+                exit 1
+              }
+
+              switch ($target) {
+                'zip' {
+                  Collect-ReleaseArtifacts -label 'macOS zip' -patterns @('*.zip')
+                }
+                'dmg' {
+                  Collect-ReleaseArtifacts -label 'macOS dmg' -patterns @('*.dmg', '*.dmg.blockmap')
+                }
+              }
+            }
+
+            Restore-CollectedArtifacts
+            Remove-Item Env:NSMUSICS_ELECTRON_TARGETS -ErrorAction SilentlyContinue
+          } else {
+            Remove-Item Env:NSMUSICS_ELECTRON_TARGETS -ErrorAction SilentlyContinue
+            Reset-BuildOutputs
+            npx vite build *>&1 | Tee-Object -FilePath $logPath
+            if ($LASTEXITCODE -ne 0) {
+              exit $LASTEXITCODE
+            }
+          }
+
+      - name: Strict packaged native validation
+        env:
+          NSMUSICS_ELECTRON_PLATFORM: ${{ matrix.platform }}
+          NSMUSICS_ELECTRON_ARCH: ${{ matrix.arch }}
+        run: node .github/workflows/.tmp/validate-packaged-native.cjs packaged
+
+      - name: List release files
+        run: |
+          $diagnosticsDir = '.github/workflows/.tmp/diagnostics'
+          New-Item -ItemType Directory -Path $diagnosticsDir -Force | Out-Null
+          $inventoryPath = Join-Path $diagnosticsDir 'release-file-inventory.txt'
+          node -e "const fs=require('fs'); const path=require('path'); const root='release'; const walk=(dir)=>fs.readdirSync(dir,{withFileTypes:true}).flatMap((entry)=>{const full=path.join(dir,entry.name); return entry.isDirectory()?walk(full):[full]}); if(!fs.existsSync(root)){throw new Error('release output not found')} const files=walk(root).sort(); if(files.length===0){throw new Error('release output is empty')} console.log(files.map((file)=>file + '\t' + fs.statSync(file).size).join('\n'));" *>&1 | Tee-Object -FilePath $inventoryPath
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
+
+      - name: Stage upload bundle
+        env:
+          NSMUSICS_ELECTRON_PLATFORM: ${{ matrix.platform }}
+          NSMUSICS_PLATFORM_NAME: ${{ matrix.platform_name }}
+          NSMUSICS_ELECTRON_ARCH: ${{ matrix.arch }}
+          NSMUSICS_BUILD_MODE: ${{ env.BUILD_MODE }}
+          NSMUSICS_ARTIFACT_PREFIX: ${{ env.ARTIFACT_PREFIX }}
+          NSMUSICS_TARGET_SUPPORTED: ${{ matrix.supported }}
+          NSMUSICS_SUPPORT_REASON: ${{ matrix.support_reason }}
+        run: node .github/workflows/.tmp/stage-publish-assets.cjs
+
+      - name: Inspect packaged publish contents
+        env:
+          NSMUSICS_ELECTRON_PLATFORM: ${{ matrix.platform }}
+          NSMUSICS_PLATFORM_NAME: ${{ matrix.platform_name }}
+          NSMUSICS_ELECTRON_ARCH: ${{ matrix.arch }}
+          NSMUSICS_BUILD_MODE: ${{ env.BUILD_MODE }}
+        run: |
+          $bundleLabel = "$($env:NSMUSICS_PLATFORM_NAME)-$($env:NSMUSICS_ELECTRON_ARCH)"
+          $bundleRoot = Join-Path (Join-Path '.github/workflows/.out' $env:NSMUSICS_BUILD_MODE) $bundleLabel
+          $publishDir = Join-Path $bundleRoot 'publish'
+          $inspectionRoot = Join-Path $bundleRoot 'inspection'
+          $scratchRoot = Join-Path (Join-Path '.github/workflows/.tmp/package-inspection' $env:NSMUSICS_BUILD_MODE) $bundleLabel
+          $scriptPath = '.github/workflows/.tmp/summarize-package-contents.cjs'
+          if (-not (Test-Path $publishDir)) {
+            throw "Publish directory not found: $publishDir"
+          }
+          if (Test-Path $inspectionRoot) {
+            Remove-Item -LiteralPath $inspectionRoot -Recurse -Force -ErrorAction SilentlyContinue
+          }
+          if (Test-Path $scratchRoot) {
+            Remove-Item -LiteralPath $scratchRoot -Recurse -Force -ErrorAction SilentlyContinue
+          }
+          New-Item -ItemType Directory -Path $inspectionRoot -Force | Out-Null
+          New-Item -ItemType Directory -Path $scratchRoot -Force | Out-Null
+
+          @'
+          const fs = require('node:fs')
+          const path = require('node:path')
+
+          const [rootPathArg, outputPathArg, platformArg, archArg, kindArg, sourceFileArg] = process.argv.slice(2)
+
+          if (!rootPathArg || !outputPathArg || !platformArg || !archArg || !kindArg || !sourceFileArg) {
+            throw new Error('Expected arguments: <rootPath> <outputPath> <platform> <arch> <kind> <sourceFile>')
+          }
+
+          const normalize = (value) => value.split(path.sep).join('/')
+          const formatBytes = (value) => {
+            const units = ['B', 'KB', 'MB', 'GB']
+            let size = value
+            let unitIndex = 0
+            while (size >= 1024 && unitIndex < units.length - 1) {
+              size /= 1024
+              unitIndex += 1
+            }
+            return `${size.toFixed(size >= 100 ? 0 : size >= 10 ? 1 : 2)} ${units[unitIndex]}`
+          }
+
+          const maybeCollapseSingleDirectory = (inputDir) => {
+            let current = path.resolve(inputDir)
+            while (true) {
+              const entries = fs
+                .readdirSync(current, { withFileTypes: true })
+                .filter((entry) => entry.name !== '.DS_Store')
+              if (entries.length !== 1 || !entries[0].isDirectory()) {
+                return current
+              }
+              current = path.join(current, entries[0].name)
+            }
+          }
+
+          const rootPath = maybeCollapseSingleDirectory(rootPathArg)
+          const fileEntries = []
+          const dirSizes = new Map()
+          let fileCount = 0
+          let dirCount = 0
+          let symlinkCount = 0
+          let totalBytes = 0
+          let localesTotalBytes = 0
+          let localesCount = 0
+          let resourcesTotalBytes = 0
+          let resourcesNodeTotalBytes = 0
+          let mpvTotalBytes = 0
+          let electronLocalesTotalBytes = 0
+          let appAsarBytes = 0
+          let betterSqliteBytes = 0
+          const forbiddenPaths = []
+
+          const addDirSize = (relativeFilePath, bytes) => {
+            const directory = path.dirname(relativeFilePath)
+            const segments = directory === '.' ? [] : directory.split('/')
+            for (let depth = 1; depth <= Math.min(segments.length, 4); depth += 1) {
+              const prefix = segments.slice(0, depth).join('/')
+              dirSizes.set(prefix, (dirSizes.get(prefix) || 0) + bytes)
+            }
+          }
+
+          const walk = (currentDir) => {
+            const entries = fs.readdirSync(currentDir, { withFileTypes: true })
+            for (const entry of entries) {
+              const fullPath = path.join(currentDir, entry.name)
+              const stat = fs.lstatSync(fullPath)
+              if (stat.isSymbolicLink()) {
+                symlinkCount += 1
+                continue
+              }
+              if (stat.isDirectory()) {
+                dirCount += 1
+                walk(fullPath)
+                continue
+              }
+              if (!stat.isFile()) {
+                continue
+              }
+              const relativePath = normalize(path.relative(rootPath, fullPath))
+              const lowerPath = relativePath.toLowerCase()
+              const bytes = stat.size
+              fileCount += 1
+              totalBytes += bytes
+              fileEntries.push({ path: relativePath, bytes })
+              addDirSize(relativePath, bytes)
+
+              if (
+                /(^|\/)(locales|locales_[^/]+)\//i.test(relativePath) ||
+                /\.lproj\/locale\.pak$/i.test(relativePath) ||
+                /(^|\/)locales\/[^/]+\.pak$/i.test(relativePath)
+              ) {
+                localesTotalBytes += bytes
+                localesCount += 1
+              }
+              if (/(^|\/)(resources|Resources)\//.test(relativePath)) {
+                resourcesTotalBytes += bytes
+              }
+              if (/(^|\/)(resources|Resources)\/node\//.test(relativePath)) {
+                resourcesNodeTotalBytes += bytes
+              }
+              if (/(^|\/)(resources|Resources)\/mpv[^/]*\//.test(relativePath)) {
+                mpvTotalBytes += bytes
+              }
+              if (/(^|\/)locales\/[^/]+\.pak$/i.test(relativePath) || /\.lproj\/locale\.pak$/i.test(relativePath)) {
+                electronLocalesTotalBytes += bytes
+              }
+              if (/\/app\.asar$/i.test(relativePath)) {
+                appAsarBytes += bytes
+              }
+              if (/better_sqlite3\.node$/i.test(relativePath)) {
+                betterSqliteBytes += bytes
+              }
+              if (
+                /(^|\/)(resources|Resources)\/node\/(linux|macos|win)\//.test(lowerPath) ||
+                /mpv[-_][^/]*(x86_64|i686|aarch64|arm64|x86)[^/]*\/(7z|doc|installer)\//.test(lowerPath) ||
+                /mpv[-_][^/]*(x86_64|i686|aarch64|arm64|x86)[^/]*\/.*\.(7z|pdf|ignore)$/.test(lowerPath) ||
+                /mpv[-_][^/]*(x86_64|i686|aarch64|arm64|x86)[^/]*\/chocolatey/.test(lowerPath) ||
+                /mpv[-_][^/]*(x86_64|i686|aarch64|arm64|x86)[^/]*\/(updater\.bat|settings\.xml)$/.test(lowerPath)
+              ) {
+                forbiddenPaths.push(relativePath)
+              }
+            }
+          }
+
+          walk(rootPath)
+
+          fileEntries.sort((left, right) => right.bytes - left.bytes || left.path.localeCompare(right.path))
+          const topDirectories = [...dirSizes.entries()]
+            .map(([dirPath, bytes]) => ({ path: dirPath, bytes }))
+            .sort((left, right) => right.bytes - left.bytes || left.path.localeCompare(right.path))
+            .slice(0, 25)
+
+          const summary = {
+            platform: platformArg,
+            arch: archArg,
+            kind: kindArg,
+            source_file: path.basename(sourceFileArg),
+            source_path: normalize(sourceFileArg),
+            analyzed_root: normalize(rootPath),
+            file_count: fileCount,
+            dir_count: dirCount,
+            symlink_count: symlinkCount,
+            total_bytes: totalBytes,
+            app_asar_bytes: appAsarBytes,
+            locales_total_bytes: localesTotalBytes,
+            locales_count: localesCount,
+            electron_locales_total_bytes: electronLocalesTotalBytes,
+            resources_total_bytes: resourcesTotalBytes,
+            resources_node_total_bytes: resourcesNodeTotalBytes,
+            mpv_total_bytes: mpvTotalBytes,
+            better_sqlite3_bytes: betterSqliteBytes,
+            forbidden_paths: forbiddenPaths.sort(),
+            top_files: fileEntries.slice(0, 25),
+            top_directories: topDirectories,
+          }
+
+          const markdownLines = [
+            `# Packaged Content Summary: ${platformArg}-${archArg} ${kindArg}`,
+            '',
+            `- Source file: ${summary.source_file}`,
+            `- Analyzed root: ${summary.analyzed_root}`,
+            `- Files: ${summary.file_count}`,
+            `- Directories: ${summary.dir_count}`,
+            `- Symlinks: ${summary.symlink_count}`,
+            `- Total extracted bytes: ${formatBytes(summary.total_bytes)}`,
+            `- app.asar: ${formatBytes(summary.app_asar_bytes)}`,
+            `- Resources total: ${formatBytes(summary.resources_total_bytes)}`,
+            `- Electron locales total: ${formatBytes(summary.electron_locales_total_bytes)}`,
+            `- Locale entries counted: ${summary.locales_count}`,
+            `- mpv payload total: ${formatBytes(summary.mpv_total_bytes)}`,
+            `- better_sqlite3.node: ${formatBytes(summary.better_sqlite3_bytes)}`,
+            `- Forbidden paths: ${summary.forbidden_paths.length}`,
+            '',
+            '## Top Directories',
+            '| Path | Size |',
+            '| --- | ---: |',
+            ...summary.top_directories.map((entry) => `| ${entry.path} | ${formatBytes(entry.bytes)} |`),
+            '',
+            '## Top Files',
+            '| Path | Size |',
+            '| --- | ---: |',
+            ...summary.top_files.map((entry) => `| ${entry.path} | ${formatBytes(entry.bytes)} |`),
+          ]
+
+          if (summary.forbidden_paths.length > 0) {
+            markdownLines.push('', '## Forbidden Paths', ...summary.forbidden_paths.map((entry) => `- ${entry}`))
+          }
+
+          fs.mkdirSync(path.dirname(outputPathArg), { recursive: true })
+          fs.writeFileSync(outputPathArg, JSON.stringify(summary, null, 2) + '\n')
+          fs.writeFileSync(outputPathArg.replace(/\.json$/i, '.md'), markdownLines.join('\n') + '\n')
+          '@ | Set-Content -Path $scriptPath -Encoding utf8
+
+          function Get-SinglePublishAsset([string]$pattern, [string]$label) {
+            $matches = Get-ChildItem -Path $publishDir -File -ErrorAction SilentlyContinue |
+              Where-Object { $_.Name -like $pattern } |
+              Sort-Object Name
+            $matches = @($matches)
+            if ($matches.Count -ne 1) {
+              $candidates = if ($matches.Count -eq 0) { '' } else { ($matches.FullName -join ', ') }
+              throw "Expected exactly one $label matching $pattern under $publishDir. Found $($matches.Count). Candidates: $candidates"
+            }
+            return $matches[0].FullName
+          }
+
+          function Write-InspectionSummary([string]$kind, [string]$rootPath, [string]$sourcePath) {
+            $kindDir = Join-Path $inspectionRoot $kind
+            New-Item -ItemType Directory -Path $kindDir -Force | Out-Null
+            $summaryPath = Join-Path $kindDir 'package-content-summary.json'
+            node $scriptPath $rootPath $summaryPath $env:NSMUSICS_PLATFORM_NAME $env:NSMUSICS_ELECTRON_ARCH $kind $sourcePath
+            if ($LASTEXITCODE -ne 0) {
+              throw "Package content summarizer failed for $kind"
+            }
+          }
+
+          function Resolve-AppAsarPath([string]$rootPath) {
+            $matches = Get-ChildItem -Path $rootPath -Recurse -File -ErrorAction SilentlyContinue |
+              Where-Object { $_.Name -eq 'app.asar' } |
+              Sort-Object FullName
+            $matches = @($matches)
+            if ($matches.Count -ne 1) {
+              $candidates = if ($matches.Count -eq 0) { '' } else { ($matches.FullName -join ', ') }
+              throw "Expected exactly one app.asar under $rootPath. Found $($matches.Count). Candidates: $candidates"
+            }
+            return $matches[0].FullName
+          }
+
+          function Write-AsarInspectionSummary([string]$kind, [string]$rootPath) {
+            $asarPath = Resolve-AppAsarPath -rootPath $rootPath
+            $asarExtractDir = Join-Path $scratchRoot "$kind-app-asar"
+            if (Test-Path $asarExtractDir) {
+              Remove-Item -LiteralPath $asarExtractDir -Recurse -Force -ErrorAction SilentlyContinue
+            }
+            New-Item -ItemType Directory -Path $asarExtractDir -Force | Out-Null
+            & npx asar extract $asarPath $asarExtractDir
+            if ($LASTEXITCODE -ne 0) {
+              throw "asar extraction failed for $asarPath"
+            }
+            Write-InspectionSummary -kind "$kind-app.asar" -rootPath $asarExtractDir -sourcePath $asarPath
+          }
+
+          if ($env:NSMUSICS_ELECTRON_PLATFORM -eq 'win') {
+            $zipPath = Get-SinglePublishAsset '*.zip' 'Windows packaged zip'
+            $zipExtractDir = Join-Path $scratchRoot 'zip-extracted'
+            Expand-Archive -LiteralPath $zipPath -DestinationPath $zipExtractDir -Force
+            Write-InspectionSummary -kind 'zip' -rootPath $zipExtractDir -sourcePath $zipPath
+            Write-AsarInspectionSummary -kind 'zip' -rootPath $zipExtractDir
+          } elseif ($env:NSMUSICS_ELECTRON_PLATFORM -eq 'linux') {
+            $tarGzPath = Get-SinglePublishAsset '*.tar.gz' 'Linux tar.gz package'
+            $tarExtractDir = Join-Path $scratchRoot 'tar-gz-extracted'
+            New-Item -ItemType Directory -Path $tarExtractDir -Force | Out-Null
+            & tar -xzf $tarGzPath -C $tarExtractDir
+            if ($LASTEXITCODE -ne 0) {
+              throw "tar extraction failed for $tarGzPath"
+            }
+            Write-InspectionSummary -kind 'tar.gz' -rootPath $tarExtractDir -sourcePath $tarGzPath
+            Write-AsarInspectionSummary -kind 'tar.gz' -rootPath $tarExtractDir
+
+            $debPath = Get-SinglePublishAsset '*.deb' 'Linux deb package'
+            $debExtractDir = Join-Path $scratchRoot 'deb-extracted'
+            New-Item -ItemType Directory -Path $debExtractDir -Force | Out-Null
+            & dpkg-deb -x $debPath $debExtractDir
+            if ($LASTEXITCODE -ne 0) {
+              throw "dpkg-deb extraction failed for $debPath"
+            }
+            Write-InspectionSummary -kind 'deb' -rootPath $debExtractDir -sourcePath $debPath
+            Write-AsarInspectionSummary -kind 'deb' -rootPath $debExtractDir
+
+            $rpmPath = Get-SinglePublishAsset '*.rpm' 'Linux rpm package'
+            $rpmExtractDir = Join-Path $scratchRoot 'rpm-extracted'
+            New-Item -ItemType Directory -Path $rpmExtractDir -Force | Out-Null
+            & bsdtar -xf $rpmPath -C $rpmExtractDir
+            if ($LASTEXITCODE -ne 0) {
+              throw "rpm extraction failed for $rpmPath"
+            }
+            Write-InspectionSummary -kind 'rpm' -rootPath $rpmExtractDir -sourcePath $rpmPath
+            Write-AsarInspectionSummary -kind 'rpm' -rootPath $rpmExtractDir
+
+            $appImagePath = Get-SinglePublishAsset '*.AppImage' 'Linux AppImage package'
+            $appImageExtractDir = Join-Path $scratchRoot 'appimage-extracted'
+            New-Item -ItemType Directory -Path $appImageExtractDir -Force | Out-Null
+            Push-Location $appImageExtractDir
+            try {
+              & chmod +x $appImagePath
+              & $appImagePath --appimage-extract
+              if ($LASTEXITCODE -ne 0) {
+                throw "AppImage extraction failed for $appImagePath"
+              }
+            } finally {
+              Pop-Location
+            }
+            $appImageRoot = Join-Path $appImageExtractDir 'squashfs-root'
+            if (-not (Test-Path $appImageRoot)) {
+              throw "AppImage extraction output not found: $appImageRoot"
+            }
+            Write-InspectionSummary -kind 'AppImage' -rootPath $appImageRoot -sourcePath $appImagePath
+            Write-AsarInspectionSummary -kind 'AppImage' -rootPath $appImageRoot
+          } elseif ($env:NSMUSICS_ELECTRON_PLATFORM -eq 'mac') {
+            $zipPath = Get-SinglePublishAsset '*.zip' 'macOS packaged zip'
+            $zipExtractDir = Join-Path $scratchRoot 'zip-extracted'
+            New-Item -ItemType Directory -Path $zipExtractDir -Force | Out-Null
+            & ditto -x -k $zipPath $zipExtractDir
+            if ($LASTEXITCODE -ne 0) {
+              throw "ditto extraction failed for $zipPath"
+            }
+            Write-InspectionSummary -kind 'zip' -rootPath $zipExtractDir -sourcePath $zipPath
+            Write-AsarInspectionSummary -kind 'zip' -rootPath $zipExtractDir
+
+            $dmgPath = Get-SinglePublishAsset '*.dmg' 'macOS dmg package'
+            $dmgMountPath = Join-Path $scratchRoot 'dmg-mount'
+            New-Item -ItemType Directory -Path $dmgMountPath -Force | Out-Null
+            try {
+              & hdiutil attach $dmgPath -nobrowse -mountpoint $dmgMountPath
+              if ($LASTEXITCODE -ne 0) {
+                throw "hdiutil attach failed for $dmgPath"
+              }
+              Write-InspectionSummary -kind 'dmg' -rootPath $dmgMountPath -sourcePath $dmgPath
+            } finally {
+              & hdiutil detach $dmgMountPath -force | Out-Null
+            }
+          } else {
+            throw "Unsupported inspection platform: $($env:NSMUSICS_ELECTRON_PLATFORM)"
+          }
+
+          node -e "const fs=require('fs'); const path=require('path'); const root=path.resolve(process.argv[1]); const files=[]; const walk=(dir)=>{ for(const entry of fs.readdirSync(dir,{withFileTypes:true})){ const full=path.join(dir,entry.name); if(entry.isDirectory()) walk(full); else if(entry.isFile() && entry.name==='package-content-summary.json') files.push(full); } }; walk(root); const summaries=files.sort().map((filePath)=>JSON.parse(fs.readFileSync(filePath,'utf8'))); fs.writeFileSync(path.join(root,'package-content-summaries.json'), JSON.stringify(summaries,null,2)+'\n');" $inspectionRoot
+          Remove-Item -LiteralPath $scratchRoot -Recurse -Force -ErrorAction SilentlyContinue
+
+      - name: Upload packaged artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.ARTIFACT_PREFIX }}-${{ env.BUILD_MODE }}-bundle-${{ matrix.platform_name }}-${{ matrix.arch }}
+          path: |
+            NSMusicS-Electron/.github/workflows/.out/${{ env.BUILD_MODE }}/${{ matrix.platform_name }}-${{ matrix.arch }}/build-manifest.json
+            NSMusicS-Electron/.github/workflows/.out/${{ env.BUILD_MODE }}/${{ matrix.platform_name }}-${{ matrix.arch }}/publish-assets.txt
+            NSMusicS-Electron/.github/workflows/.out/${{ env.BUILD_MODE }}/${{ matrix.platform_name }}-${{ matrix.arch }}/inspection/**
+            NSMusicS-Electron/.github/workflows/.out/${{ env.BUILD_MODE }}/${{ matrix.platform_name }}-${{ matrix.arch }}/publish/**
+          if-no-files-found: error
+          include-hidden-files: true
+          overwrite: true
+          compression-level: 0
+          retention-days: 21
+
+      - name: Surface failure diagnostics in job log
+        if: ${{ failure() }}
+        run: |
+          $summaryPath = $env:GITHUB_STEP_SUMMARY
+
+          function Append-Summary([string]$message) {
+            if ($summaryPath) {
+              Add-Content -Path $summaryPath -Value $message
+            }
+          }
+
+          function Show-LogTail([string]$title, [string]$path) {
+            Write-Host "::group::$title"
+            Get-Content -LiteralPath $path -Tail 160
+            Write-Host "::endgroup::"
+          }
+
+          $paths = @()
+
+          if (Test-Path '.github/workflows/.tmp/diagnostics') {
+            $paths += Get-ChildItem -Path '.github/workflows/.tmp/diagnostics' -Recurse -File |
+              Sort-Object FullName |
+              Select-Object -ExpandProperty FullName
+          }
+
+          if (Test-Path 'release') {
+            $paths += Get-ChildItem -Path 'release' -Recurse -File -ErrorAction SilentlyContinue |
+              Where-Object {
+                $_.Name -match '\.log$' -or
+                $_.Name -eq 'builder-debug.yml' -or
+                $_.Name -eq 'builder-effective-config.yaml'
+              } |
+              Sort-Object FullName |
+              Select-Object -ExpandProperty FullName
+          }
+
+          $paths = @($paths | Select-Object -Unique)
+
+          if ($paths.Count -eq 0) {
+            Write-Host '::warning title=No failure diagnostics captured::No diagnostic log files were found in the workspace.'
+            Append-Summary('### Failure Diagnostics')
+            Append-Summary('- WARN No diagnostic log files were found in the workspace.')
+            exit 0
+          }
+
+          Write-Host "::error title=Build failure diagnostics surfaced::See the grouped log tails below and the uploaded diagnostics artifact for the full files."
+          Write-Host '::group::Failure diagnostics inventory'
+          $paths | ForEach-Object { Write-Host $_ }
+          Write-Host '::endgroup::'
+
+          Append-Summary('### Failure Diagnostics')
+          Append-Summary("- Surfaced logs: $($paths.Count)")
+
+          foreach ($path in $paths) {
+            Append-Summary("- $(Split-Path -Leaf $path)")
+            Show-LogTail -title ("Failure log: " + (Split-Path -Leaf $path)) -path $path
+          }
+
+      - name: Upload failure diagnostics
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.ARTIFACT_PREFIX }}-failure-${{ env.BUILD_MODE }}-${{ matrix.platform_name }}-${{ matrix.arch }}
+          path: |
+            NSMusicS-Electron/.github/workflows/.tmp/diagnostics/**
+            NSMusicS-Electron/.github/workflows/.out/${{ env.BUILD_MODE }}/${{ matrix.platform_name }}-${{ matrix.arch }}/**
+            NSMusicS-Electron/release/**/*.log
+            NSMusicS-Electron/release/**/builder-debug.yml
+            NSMusicS-Electron/release/**/builder-effective-config.yaml
+          if-no-files-found: warn
+          include-hidden-files: true
+          overwrite: true
+          compression-level: 0
+          retention-days: 14
+
+  report:
+    name: Build Report
+    if: ${{ always() }}
+    needs:
+      - plan
+      - policy
+      - build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+
+    steps:
+      - name: Download build artifacts
+        continue-on-error: true
+        uses: actions/download-artifact@v8
+        with:
+          pattern: ${{ env.ARTIFACT_PREFIX }}-${{ needs.plan.outputs.build_mode }}-*
+          path: report-artifacts
+
+      - name: Generate workflow report
+        shell: bash
+        env:
+          BUILD_MODE_VALUE: ${{ needs.plan.outputs.build_mode }}
+          POLICY_RESULT: ${{ needs.policy.result }}
+          ALL_TARGETS_JSON: ${{ needs.plan.outputs.all_targets }}
+          BUILD_RESULT: ${{ needs.build.result }}
+        run: |
+          mkdir -p report-output
+          node - <<'NODE'
+          const fs = require('node:fs')
+          const path = require('node:path')
+
+          const buildMode = process.env.BUILD_MODE_VALUE
+          const policyResult = process.env.POLICY_RESULT
+          const buildResult = process.env.BUILD_RESULT
+          const githubRef = process.env.GITHUB_REF
+          const githubSha = process.env.GITHUB_SHA
+          const summaryPath = process.env.GITHUB_STEP_SUMMARY
+          const formatBytes = (value) => {
+            if (!Number.isFinite(value) || value <= 0) {
+              return '0 B'
+            }
+            const units = ['B', 'KB', 'MB', 'GB']
+            let size = value
+            let unitIndex = 0
+            while (size >= 1024 && unitIndex < units.length - 1) {
+              size /= 1024
+              unitIndex += 1
+            }
+            return `${size.toFixed(size >= 100 ? 0 : size >= 10 ? 1 : 2)} ${units[unitIndex]}`
+          }
+
+          const targets = JSON.parse(process.env.ALL_TARGETS_JSON).map((target) => ({
+            platform: target.platform_name,
+            arch: target.arch,
+            supported: target.supported,
+            support_reason: target.support_reason,
+          }))
+
+          const artifactRoot = path.resolve('report-artifacts')
+          const manifests = []
+          const inspectionFiles = []
+
+          const walk = (dir) => {
+            if (!fs.existsSync(dir)) {
+              return
+            }
+            for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+              const full = path.join(dir, entry.name)
+              if (entry.isDirectory()) {
+                walk(full)
+              } else if (entry.isFile() && entry.name === 'build-manifest.json') {
+                manifests.push(full)
+              } else if (entry.isFile() && entry.name === 'package-content-summary.json') {
+                inspectionFiles.push(full)
+              }
+            }
+          }
+
+          walk(artifactRoot)
+
+          const manifestMap = new Map()
+          for (const filePath of manifests) {
+            const data = JSON.parse(fs.readFileSync(filePath, 'utf8'))
+            manifestMap.set(`${data.platform}-${data.arch}`, data)
+          }
+
+          const inspectionMap = new Map()
+          for (const filePath of inspectionFiles) {
+            const data = JSON.parse(fs.readFileSync(filePath, 'utf8'))
+            const key = `${data.platform}-${data.arch}`
+            const list = inspectionMap.get(key) || []
+            list.push(data)
+            inspectionMap.set(key, list)
+          }
+          for (const [key, list] of inspectionMap.entries()) {
+            inspectionMap.set(
+              key,
+              list.sort((left, right) => left.kind.localeCompare(right.kind))
+            )
+          }
+
+          const rows = targets.map((target) => {
+            const key = `${target.platform}-${target.arch}`
+            const planned = buildMode === 'strict-all' || target.supported
+            const artifactProduced = manifestMap.has(key)
+            const releaseEligible =
+              buildMode === 'supported-only' &&
+              githubRef.startsWith('refs/tags/') &&
+              target.supported &&
+              artifactProduced
+
+            let outcome = 'not-scheduled'
+            if (planned && artifactProduced) {
+              outcome = 'artifact-produced'
+            } else if (planned && !artifactProduced && buildMode === 'strict-all' && !target.supported) {
+              outcome = 'expected-hard-fail'
+            } else if (planned && !artifactProduced) {
+              outcome = 'missing-artifact'
+            }
+
+            return {
+              ...target,
+              planned,
+              artifactProduced,
+              releaseEligible,
+              outcome,
+              artifactName: manifestMap.get(key)?.artifact_name || '',
+            }
+          })
+
+          const missingSupported = rows.filter(
+            (row) => row.supported && row.planned && !row.artifactProduced
+          )
+          const missingInspections = rows.filter(
+            (row) => row.artifactProduced && (inspectionMap.get(`${row.platform}-${row.arch}`) || []).length === 0
+          )
+
+          const notes = [
+            '# Workflow Report',
+            '',
+            `- Build mode: ${buildMode}`,
+            `- Policy result: ${policyResult}`,
+            `- Aggregate build result: ${buildResult}`,
+            `- Git ref: ${githubRef}`,
+            `- Commit: ${githubSha}`,
+            `- Produced artifacts: ${rows.filter((row) => row.artifactProduced).length}`,
+            '',
+            '| Target | Supported | Planned | Artifact | Release | Outcome |',
+            '| --- | --- | --- | --- | --- | --- |',
+          ]
+
+          for (const row of rows) {
+            notes.push(
+              `| ${row.platform}-${row.arch} | ${row.supported ? 'yes' : 'no'} | ${row.planned ? 'yes' : 'no'} | ${row.artifactProduced ? 'yes' : 'no'} | ${row.releaseEligible ? 'yes' : 'no'} | ${row.outcome} |`
+            )
+            notes.push(`Reason: ${row.support_reason}`)
+            if (row.artifactName) {
+              notes.push(`Artifact: ${row.artifactName}`)
+            }
+          }
+
+          const contentAuditRows = []
+          notes.push('', '## Packaged Content Audit')
+          if (inspectionFiles.length === 0) {
+            notes.push('- WARN No package content summaries were discovered.')
+          } else {
+            notes.push('| Target | Kind | Files | app.asar | Electron Locales | Resources | mpv | Forbidden |')
+            notes.push('| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |')
+            for (const row of rows) {
+              const summaries = inspectionMap.get(`${row.platform}-${row.arch}`) || []
+              for (const summary of summaries) {
+                contentAuditRows.push({
+                  target: `${row.platform}-${row.arch}`,
+                  kind: summary.kind,
+                  source_file: summary.source_file,
+                  file_count: summary.file_count,
+                  total_bytes: summary.total_bytes,
+                  app_asar_bytes: summary.app_asar_bytes,
+                  electron_locales_total_bytes: summary.electron_locales_total_bytes,
+                  resources_total_bytes: summary.resources_total_bytes,
+                  mpv_total_bytes: summary.mpv_total_bytes,
+                  forbidden_path_count: (summary.forbidden_paths || []).length,
+                  top_files: summary.top_files || [],
+                  top_directories: summary.top_directories || [],
+                })
+                notes.push(
+                  `| ${row.platform}-${row.arch} | ${summary.kind} | ${summary.file_count} | ${formatBytes(summary.app_asar_bytes)} | ${formatBytes(summary.electron_locales_total_bytes)} | ${formatBytes(summary.resources_total_bytes)} | ${formatBytes(summary.mpv_total_bytes)} | ${(summary.forbidden_paths || []).length} |`
+                )
+              }
+            }
+          }
+
+          fs.writeFileSync(path.join('report-output', 'workflow-report.md'), `${notes.join('\n')}\n`)
+          fs.writeFileSync(
+            path.join('report-output', 'workflow-report.json'),
+            JSON.stringify(
+              {
+                build_mode: buildMode,
+                build_result: buildResult,
+                git_ref: githubRef,
+                git_sha: githubSha,
+                rows,
+                content_audit_rows: contentAuditRows,
+              },
+              null,
+              2
+            ) + '\n'
+          )
+          fs.writeFileSync(
+            path.join('report-output', 'package-content-audit.json'),
+            JSON.stringify(contentAuditRows, null, 2) + '\n'
+          )
+          fs.writeFileSync(
+            path.join('report-output', 'package-content-audit.md'),
+            `${notes.slice(notes.indexOf('## Packaged Content Audit')).join('\n')}\n`
+          )
+
+          if (summaryPath) {
+            fs.appendFileSync(summaryPath, `${notes.join('\n')}\n`)
+          }
+
+          if (missingSupported.length > 0 || missingInspections.length > 0) {
+            const messages = []
+            if (missingSupported.length > 0) {
+              messages.push(
+                `Supported targets missing artifacts: ${missingSupported
+                  .map((row) => `${row.platform}-${row.arch}`)
+                  .join(', ')}`
+              )
+            }
+            if (missingInspections.length > 0) {
+              messages.push(
+                `Produced targets missing content inspections: ${missingInspections
+                  .map((row) => `${row.platform}-${row.arch}`)
+                  .join(', ')}`
+              )
+            }
+            console.error(
+              messages.join('\n')
+            )
+            process.exit(1)
+          }
+          NODE
+
+      - name: Upload workflow report artifact
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.ARTIFACT_PREFIX }}-report-${{ needs.plan.outputs.build_mode }}
+          path: report-output/**
+          overwrite: true
+          if-no-files-found: error
+          retention-days: 21
+
+  publish-release:
+    name: Publish GitHub Release
+    if: ${{ startsWith(github.ref, 'refs/tags/') && needs.plan.outputs.build_mode == 'supported-only' && needs.policy.result == 'success' && needs.build.result == 'success' && needs.report.result == 'success' }}
+    needs:
+      - plan
+      - policy
+      - build
+      - report
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v8
+        with:
+          pattern: ${{ env.ARTIFACT_PREFIX }}-${{ needs.plan.outputs.build_mode }}-*
+          path: release-artifacts
+
+      - name: List downloaded assets
+        run: find release-artifacts -type f -print | sort
+
+      - name: Verify GitHub CLI release context
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          gh --version
+          gh repo view "${GH_REPO}" --json name >/dev/null
+
+      - name: Build release notes and asset manifest
+        shell: bash
+        run: |
+          node - <<'NODE'
+          const crypto = require('node:crypto')
+          const fs = require('node:fs')
+          const path = require('node:path')
+          const summaryPath = process.env.GITHUB_STEP_SUMMARY
+
+          const formatBytes = (value) => {
+            if (value < 1024) {
+              return `${value} B`
+            }
+            const units = ['KB', 'MB', 'GB']
+            let size = value
+            let unitIndex = -1
+            do {
+              size /= 1024
+              unitIndex += 1
+            } while (size >= 1024 && unitIndex < units.length - 1)
+            return `${size.toFixed(size >= 100 ? 0 : size >= 10 ? 1 : 2)} ${units[unitIndex]}`
+          }
+
+          const formatPercent = (value) => {
+            const sign = value > 0 ? '+' : ''
+            return `${sign}${value.toFixed(1)}%`
+          }
+
+          const classifyAssetSize = (asset) => {
+            if (asset.size_bytes < asset.fail_min_bytes || asset.size_bytes > asset.fail_max_bytes) {
+              return 'FAIL'
+            }
+            if (asset.size_bytes < asset.warn_min_bytes || asset.size_bytes > asset.warn_max_bytes) {
+              return 'WARN'
+            }
+            return 'PASS'
+          }
+
+          const root = path.resolve('release-artifacts')
+          const manifests = []
+
+          const walk = (dir) => {
+            for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+              const full = path.join(dir, entry.name)
+              if (entry.isDirectory()) {
+                walk(full)
+              } else if (entry.isFile() && entry.name === 'build-manifest.json') {
+                manifests.push(full)
+              }
+            }
+          }
+
+          walk(root)
+
+          if (manifests.length === 0) {
+            throw new Error('No build-manifest.json files were downloaded.')
+          }
+
+          const entries = manifests
+            .map((filePath) => {
+              const data = JSON.parse(fs.readFileSync(filePath, 'utf8'))
+              const artifactRoot = path.dirname(filePath)
+              const publishAssets = (data.publish_assets || []).map((relativePath) =>
+                path.join(artifactRoot, relativePath)
+              )
+              const publishAssetDetails = (data.publish_asset_details || []).map((asset) => ({
+                ...asset,
+                absolute_path: path.join(artifactRoot, asset.relative_path),
+              }))
+              return { ...data, artifactRoot, publishAssets, publishAssetDetails }
+            })
+            .sort((left, right) =>
+              `${left.platform}-${left.arch}`.localeCompare(`${right.platform}-${right.arch}`)
+            )
+
+          const assetLines = []
+          const notes = [
+            '# NSMusicS Electron Release',
+            '',
+            `- Build mode: ${process.env.BUILD_MODE}`,
+            `- Git ref: ${process.env.GITHUB_REF}`,
+            `- Commit: ${process.env.GITHUB_SHA}`,
+            '',
+            '## Included Targets',
+          ]
+
+          for (const entry of entries) {
+            notes.push(`- ${entry.platform}-${entry.arch}`)
+            notes.push(`  Support note: ${entry.support_reason}`)
+            if (!entry.publishAssets.length) {
+              throw new Error(`No publish assets were declared for ${entry.platform}-${entry.arch}`)
+            }
+            for (const asset of entry.publishAssetDetails) {
+              notes.push(`  Asset: ${asset.file_name} (${formatBytes(asset.size_bytes)})`)
+            }
+            for (const assetPath of entry.publishAssets) {
+              if (!fs.existsSync(assetPath)) {
+                throw new Error(`Declared publish asset missing: ${assetPath}`)
+              }
+              assetLines.push(assetPath)
+            }
+          }
+
+          const dedupedAssets = [...new Set(assetLines)].sort((left, right) =>
+            path.basename(left).localeCompare(path.basename(right))
+          )
+          const basenameCounts = new Map()
+          for (const assetPath of dedupedAssets) {
+            const base = path.basename(assetPath)
+            basenameCounts.set(base, (basenameCounts.get(base) || 0) + 1)
+          }
+          const duplicateBasenames = [...basenameCounts.entries()]
+            .filter(([, count]) => count > 1)
+            .map(([base]) => base)
+          if (duplicateBasenames.length > 0) {
+            throw new Error(
+              `Release asset basenames must be unique. Duplicates: ${duplicateBasenames.join(', ')}`
+            )
+          }
+          const checksumLines = dedupedAssets.map((assetPath) => {
+            const digest = crypto.createHash('sha256').update(fs.readFileSync(assetPath)).digest('hex')
+            return `${digest}  ${path.basename(assetPath)}`
+          })
+          const checksumPath = path.join(root, 'SHA256SUMS.txt')
+          fs.writeFileSync(checksumPath, checksumLines.join('\n') + '\n')
+          dedupedAssets.push(checksumPath)
+          notes.push('')
+          notes.push('## Integrity')
+          notes.push('- Release assets include `SHA256SUMS.txt` for checksum verification.')
+
+          const auditRows = entries.flatMap((entry) =>
+            entry.publishAssetDetails.map((asset) => {
+              const deltaPercent = ((asset.size_bytes - asset.reference_bytes) / asset.reference_bytes) * 100
+              return {
+                target: `${entry.platform}-${entry.arch}`,
+                name: asset.file_name,
+                kind: asset.kind,
+                size_bytes: asset.size_bytes,
+                size_human: formatBytes(asset.size_bytes),
+                reference_bytes: asset.reference_bytes,
+                reference_human: formatBytes(asset.reference_bytes),
+                delta_percent: deltaPercent,
+                status: classifyAssetSize(asset),
+                warn_range_human: `${formatBytes(asset.warn_min_bytes)} - ${formatBytes(asset.warn_max_bytes)}`,
+                fail_range_human: `${formatBytes(asset.fail_min_bytes)} - ${formatBytes(asset.fail_max_bytes)}`,
+              }
+            })
+          )
+
+          const auditLines = [
+            '# Release Asset Audit',
+            '',
+            `- Build mode: ${process.env.BUILD_MODE}`,
+            `- Git ref: ${process.env.GITHUB_REF}`,
+            `- Commit: ${process.env.GITHUB_SHA}`,
+            `- Assets: ${auditRows.length}`,
+            '',
+            '| Target | File | Kind | Size | Reference | Delta | Status |',
+            '| --- | --- | --- | ---: | ---: | ---: | --- |',
+            ...auditRows.map(
+              (row) =>
+                `| ${row.target} | ${row.name} | ${row.kind} | ${row.size_human} | ${row.reference_human} | ${formatPercent(row.delta_percent)} | ${row.status} |`
+            ),
+            '',
+            '## Thresholds',
+            '| File | Warn Range | Fail Range |',
+            '| --- | --- | --- |',
+            ...auditRows.map(
+              (row) => `| ${row.name} | ${row.warn_range_human} | ${row.fail_range_human} |`
+            ),
+          ]
+
+          fs.writeFileSync(path.join(root, 'release-notes.md'), `${notes.join('\n')}\n`)
+          fs.writeFileSync(path.join(root, 'publish-assets.txt'), dedupedAssets.join('\n') + '\n')
+          fs.writeFileSync(path.join(root, 'release-asset-audit.md'), `${auditLines.join('\n')}\n`)
+          fs.writeFileSync(path.join(root, 'release-asset-audit.json'), `${JSON.stringify(auditRows, null, 2)}\n`)
+
+          if (summaryPath) {
+            fs.appendFileSync(summaryPath, `${auditLines.join('\n')}\n`)
+          }
+          NODE
+
+      - name: Create or update release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          retry_gh() {
+            local attempt=1
+            local max_attempts=5
+            local sleep_seconds=15
+
+            while true; do
+              if gh "$@"; then
+                return 0
+              fi
+
+              if [ "${attempt}" -ge "${max_attempts}" ]; then
+                echo "gh command failed after ${attempt} attempts: gh $*" >&2
+                return 1
+              fi
+
+              echo "gh command failed on attempt ${attempt}/${max_attempts}: gh $*" >&2
+              echo "Retrying in ${sleep_seconds}s..." >&2
+              sleep "${sleep_seconds}"
+              attempt=$((attempt + 1))
+            done
+          }
+
+          release_exists() {
+            local target_tag="$1"
+            local attempt=1
+            local max_attempts=5
+            local sleep_seconds=10
+            local response_file
+            local headers_file
+            local api_url
+            local http_code
+            local curl_exit
+            response_file="$(mktemp)"
+            headers_file="$(mktemp)"
+            api_url="https://api.github.com/repos/${GH_REPO}/releases/tags/${target_tag}"
+
+            while true; do
+              curl_exit=0
+              http_code="$(
+                curl --silent --show-error --location \
+                  --output "${response_file}" \
+                  --dump-header "${headers_file}" \
+                  --write-out "%{http_code}" \
+                  -H "Authorization: Bearer ${GH_TOKEN}" \
+                  -H "Accept: application/vnd.github+json" \
+                  -H "X-GitHub-Api-Version: 2022-11-28" \
+                  "${api_url}"
+              )" || curl_exit=$?
+
+              if [ "${curl_exit}" -eq 0 ] && [ "${http_code}" = "200" ]; then
+                rm -f "${response_file}" "${headers_file}"
+                return 0
+              fi
+
+              if [ "${curl_exit}" -eq 0 ] && [ "${http_code}" = "404" ]; then
+                rm -f "${response_file}" "${headers_file}"
+                return 1
+              fi
+
+              if [ "${attempt}" -ge "${max_attempts}" ]; then
+                if [ -s "${headers_file}" ]; then
+                  cat "${headers_file}" >&2
+                fi
+                if [ -s "${response_file}" ]; then
+                  cat "${response_file}" >&2
+                fi
+                rm -f "${response_file}" "${headers_file}"
+                echo "Unable to determine whether release ${target_tag} exists after ${attempt} attempts." >&2
+                return 2
+              fi
+
+              echo "Release lookup attempt ${attempt}/${max_attempts} for ${target_tag} returned curl_exit=${curl_exit} http_code=${http_code:-unset}." >&2
+              if [ -s "${headers_file}" ]; then
+                cat "${headers_file}" >&2
+              fi
+              if [ -s "${response_file}" ]; then
+                cat "${response_file}" >&2
+              fi
+              echo "Retrying release existence check for ${target_tag} in ${sleep_seconds}s..." >&2
+              sleep "${sleep_seconds}"
+              : > "${response_file}"
+              : > "${headers_file}"
+              attempt=$((attempt + 1))
+            done
+          }
+
+          tag="${GITHUB_REF_NAME}"
+          release_is_validation=false
+          if [[ "${tag}" == validate-* ]]; then
+            release_is_validation=true
+          fi
+          mapfile -t files < release-artifacts/publish-assets.txt
+
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "No publish assets were prepared." >&2
+            exit 1
+          fi
+
+          expected_asset_names=()
+          for file_path in "${files[@]}"; do
+            expected_asset_names+=("$(basename "${file_path}")")
+          done
+
+          if release_exists "${tag}"; then
+            release_status=0
+          else
+            release_status=$?
+          fi
+
+          if [ "${release_status}" -eq 0 ]; then
+            if [ "${release_is_validation}" = true ]; then
+              retry_gh release edit "${tag}" --draft --notes-file release-artifacts/release-notes.md --title "${tag}"
+            else
+              retry_gh release edit "${tag}" --draft=false --prerelease=false --notes-file release-artifacts/release-notes.md --title "${tag}"
+            fi
+            retry_gh release upload "${tag}" "${files[@]}" --clobber
+            current_asset_names="$(retry_gh release view "${tag}" --json assets --jq '.assets[].name')"
+            while IFS= read -r asset_name; do
+              keep_asset=false
+              for expected_name in "${expected_asset_names[@]}"; do
+                if [ "${expected_name}" = "${asset_name}" ]; then
+                  keep_asset=true
+                  break
+                fi
+              done
+              if [ -n "${asset_name}" ] && [ "${keep_asset}" = false ]; then
+                retry_gh release delete-asset "${tag}" "${asset_name}" --yes
+              fi
+            done <<< "${current_asset_names}"
+          elif [ "${release_status}" -eq 1 ]; then
+            if [ "${release_is_validation}" = true ]; then
+              retry_gh release create "${tag}" "${files[@]}" --notes-file release-artifacts/release-notes.md --title "${tag}" --draft
+            else
+              retry_gh release create "${tag}" "${files[@]}" --notes-file release-artifacts/release-notes.md --title "${tag}"
+            fi
+          else
+            echo "Failed to resolve release existence state for ${tag}." >&2
+            exit 1
+          fi
+
+          {
+            echo "## Release Publish"
+            echo "- Tag: ${tag}"
+            echo "- Validation lane: ${release_is_validation}"
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+      - name: Verify published release assets
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          node - <<'NODE'
+          const crypto = require('node:crypto')
+          const fs = require('node:fs')
+          const path = require('node:path')
+          const childProcess = require('node:child_process')
+
+          const tag = process.env.GITHUB_REF_NAME
+          const repo = process.env.GITHUB_REPOSITORY
+          const summaryPath = process.env.GITHUB_STEP_SUMMARY
+          const publishListPath = path.join('release-artifacts', 'publish-assets.txt')
+          const maxAttempts = 36
+          const sleepSeconds = 10
+
+          const stringifyError = (error) => {
+            const chunks = []
+            for (const value of [error?.message, error?.stderr, error?.stdout]) {
+              if (!value) {
+                continue
+              }
+              const text = Buffer.isBuffer(value) ? value.toString('utf8') : String(value)
+              if (text.trim()) {
+                chunks.push(text.trim())
+              }
+            }
+            return chunks.join('\n')
+          }
+
+          const ghApiJson = (endpoint) => {
+            const payload = childProcess.execFileSync(
+              'gh',
+              ['api', '-H', 'Accept: application/vnd.github+json', endpoint],
+              { encoding: 'utf8' }
+            )
+            return JSON.parse(payload)
+          }
+
+          const ghApiMaybeJson = (endpoint) => {
+            try {
+              return ghApiJson(endpoint)
+            } catch (error) {
+              const detail = stringifyError(error)
+              if (/HTTP 404|Not Found/i.test(detail)) {
+                return null
+              }
+              throw new Error(`gh api ${endpoint} failed.\n${detail}`)
+            }
+          }
+
+          const resolveRelease = () => {
+            const direct = ghApiMaybeJson(`repos/${repo}/releases/tags/${tag}`)
+            if (direct) {
+              return direct
+            }
+
+            for (let page = 1; page <= 5; page += 1) {
+              const releases = ghApiJson(`repos/${repo}/releases?per_page=100&page=${page}`)
+              const match = releases.find((release) => release.tag_name === tag)
+              if (match) {
+                return match
+              }
+              if (releases.length < 100) {
+                break
+              }
+            }
+
+            return null
+          }
+
+          if (!fs.existsSync(publishListPath)) {
+            throw new Error(`Expected publish asset list not found: ${publishListPath}`)
+          }
+
+          const localPaths = fs
+            .readFileSync(publishListPath, 'utf8')
+            .split(/\r?\n/)
+            .map((value) => value.trim())
+            .filter(Boolean)
+
+          if (localPaths.length === 0) {
+            throw new Error('No expected publish assets were found for verification.')
+          }
+
+          const localAssets = localPaths.map((filePath) => {
+            if (!fs.existsSync(filePath)) {
+              throw new Error(`Expected local release asset missing: ${filePath}`)
+            }
+            const stat = fs.statSync(filePath)
+            const digest = crypto
+              .createHash('sha256')
+              .update(fs.readFileSync(filePath))
+              .digest('hex')
+            return {
+              name: path.basename(filePath),
+              size: stat.size,
+              digest: `sha256:${digest}`,
+            }
+          })
+
+          const expectedByName = new Map(localAssets.map((asset) => [asset.name, asset]))
+          const expectedNames = [...expectedByName.keys()].sort()
+
+          const sleep = (seconds) => {
+            childProcess.execFileSync('sleep', [String(seconds)], { stdio: 'inherit' })
+          }
+
+          const validateRemoteAssets = (remoteAssets) => {
+            const actualByName = new Map(remoteAssets.map((asset) => [asset.name, asset]))
+            const actualNames = [...actualByName.keys()].sort()
+
+            if (expectedNames.join('\n') !== actualNames.join('\n')) {
+              throw new Error(
+                `Published release asset names do not match expected assets.\nExpected: ${expectedNames.join(', ')}\nActual: ${actualNames.join(', ')}`
+              )
+            }
+
+            for (const expected of localAssets) {
+              const actual = actualByName.get(expected.name)
+              if (!actual) {
+                throw new Error(`Published release asset missing: ${expected.name}`)
+              }
+              if (!actual.digest) {
+                throw new Error(`Published release asset digest missing from GitHub API response: ${expected.name}`)
+              }
+              if (expected.size !== actual.size) {
+                throw new Error(
+                  `Published release asset size mismatch for ${expected.name}. expected=${expected.size} actual=${actual.size}`
+                )
+              }
+              if (expected.digest !== actual.digest) {
+                throw new Error(
+                  `Published release asset digest mismatch for ${expected.name}. expected=${expected.digest} actual=${actual.digest}`
+                )
+              }
+            }
+          }
+
+          let verifiedAssets = null
+          let lastError = null
+          let lastReleaseMeta = null
+          let lastRemoteAssets = []
+
+          for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+            try {
+              const release = resolveRelease()
+              if (!release) {
+                throw new Error(`Published release ${tag} is not visible through the release API yet.`)
+              }
+
+              lastReleaseMeta = {
+                id: release.id,
+                draft: Boolean(release.draft),
+                prerelease: Boolean(release.prerelease),
+                assetCount: Array.isArray(release.assets) ? release.assets.length : 0,
+              }
+
+              const remoteAssets = (release.assets || []).map((asset) => ({
+                name: asset.name,
+                size: asset.size,
+                digest: asset.digest || '',
+              }))
+              lastRemoteAssets = remoteAssets
+
+              validateRemoteAssets(remoteAssets)
+              verifiedAssets = remoteAssets
+              lastError = null
+              break
+            } catch (error) {
+              lastError = error
+              if (attempt === maxAttempts) {
+                break
+              }
+              console.log(
+                `Release verification attempt ${attempt}/${maxAttempts} did not pass yet: ${error.message}`
+              )
+              console.log(`Waiting ${sleepSeconds}s for GitHub release asset indexing to settle...`)
+              sleep(sleepSeconds)
+            }
+          }
+
+          if (lastError) {
+            const diagnostics = [
+              `Release verification exhausted ${maxAttempts} attempts for ${tag}.`,
+              lastReleaseMeta
+                ? `Last visible release state: id=${lastReleaseMeta.id} draft=${lastReleaseMeta.draft} prerelease=${lastReleaseMeta.prerelease} assets=${lastReleaseMeta.assetCount}`
+                : 'Last visible release state: release not resolved.',
+            ]
+
+            if (lastRemoteAssets.length > 0) {
+              diagnostics.push(
+                `Last remote asset inventory: ${lastRemoteAssets
+                  .map((asset) => `${asset.name} [size=${asset.size}, digest=${asset.digest || 'missing'}]`)
+                  .join('; ')}`
+              )
+            }
+
+            const diagnosticText = diagnostics.join('\n')
+            console.error(diagnosticText)
+            if (summaryPath) {
+              fs.appendFileSync(
+                summaryPath,
+                [
+                  '## Release Verification Failure',
+                  `- Tag: ${tag}`,
+                  `- Attempts: ${maxAttempts}`,
+                  `- Last error: ${lastError.message}`,
+                  `- Last release state: ${
+                    lastReleaseMeta
+                      ? `id=${lastReleaseMeta.id} draft=${lastReleaseMeta.draft} prerelease=${lastReleaseMeta.prerelease} assets=${lastReleaseMeta.assetCount}`
+                      : 'release not resolved'
+                  }`,
+                  `- Last remote asset inventory: ${
+                    lastRemoteAssets.length > 0
+                      ? lastRemoteAssets
+                          .map((asset) => `${asset.name} [size=${asset.size}, digest=${asset.digest || 'missing'}]`)
+                          .join('; ')
+                      : 'none'
+                  }`,
+                ].join('\n') + '\n'
+              )
+            }
+            throw lastError
+          }
+
+          if (summaryPath) {
+            fs.appendFileSync(
+              summaryPath,
+              [
+                '## Release Verification',
+                `- Tag: ${tag}`,
+                `- Verified assets: ${verifiedAssets.length}`,
+                '- Validation: name + size + sha256 digest',
+                `- Retry window: up to ${maxAttempts * sleepSeconds} seconds for GitHub release indexing`,
+              ].join('\n') + '\n'
+            )
+          }
+          NODE
+
+      - name: Cleanup validation release
+        if: ${{ startsWith(github.ref, 'refs/tags/validate-') && success() }}
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          retry_delete() {
+            local attempt=1
+            local max_attempts=5
+            local sleep_seconds=10
+
+            while true; do
+              if gh release delete "${GITHUB_REF_NAME}" --yes; then
+                return 0
+              fi
+
+              if [ "${attempt}" -ge "${max_attempts}" ]; then
+                echo "Failed to delete validation release ${GITHUB_REF_NAME} after ${attempt} attempts." >&2
+                return 1
+              fi
+
+              echo "Validation release delete failed on attempt ${attempt}/${max_attempts}; retrying in ${sleep_seconds}s..." >&2
+              sleep "${sleep_seconds}"
+              attempt=$((attempt + 1))
+            done
+          }
+
+          retry_delete
+          {
+            echo "## Validation Cleanup"
+            echo "- Deleted draft validation release: ${GITHUB_REF_NAME}"
+          } >> "${GITHUB_STEP_SUMMARY}"

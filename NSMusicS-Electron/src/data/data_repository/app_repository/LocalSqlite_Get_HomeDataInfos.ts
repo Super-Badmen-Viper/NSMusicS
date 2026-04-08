@@ -1,7 +1,7 @@
 import moment from 'moment/moment'
 import { store_server_user_model } from '@/server/server_management/store_server_user_model'
 import { store_system_configs_info } from '@/data/data_stores/local_system_stores/store_system_configs_info'
-import error_album from '@/assets/img/error_album.jpg'
+import error_album from '@/assets/img/error_album.webp'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron'
 
 export class Get_LocalSqlite_HomeDataInfos {

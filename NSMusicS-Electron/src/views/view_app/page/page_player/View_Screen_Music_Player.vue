@@ -579,12 +579,12 @@ type PlayerTheme_LyricItem = {
   name: any
   normalStyle: PlayerTheme_Style
 }
-import player_theme_1_png from '@/assets/img/player_theme_1.png'
-import player_theme_2_png from '@/assets/img/player_theme_2.png'
-import player_theme_3_png from '@/assets/img/player_theme_3.png'
-import player_theme_4_png from '@/assets/img/player_theme_4.png'
-import player_theme_5_png from '@/assets/img/player_theme_5.png'
-import player_theme_6_png from '@/assets/img/player_theme_6.png'
+import player_theme_1_png from '@/assets/img/player_theme_1.webp'
+import player_theme_2_png from '@/assets/img/player_theme_2.webp'
+import player_theme_3_png from '@/assets/img/player_theme_3.webp'
+import player_theme_4_png from '@/assets/img/player_theme_4.webp'
+import player_theme_5_png from '@/assets/img/player_theme_5.webp'
+import player_theme_6_png from '@/assets/img/player_theme_6.webp'
 import Animation_1715591164841 from '@/assets/lottie_json/Animation - 1715591164841.json'
 import Animation_1715392202806 from '@/assets/lottie_json/Animation - 1715392202806.json'
 import Animation_1715417974362 from '@/assets/lottie_json/Animation - 1715417974362.json'

@@ -1,11 +1,15 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
+
+const useFileProtocolHistory = typeof window !== 'undefined' && window.location.protocol === 'file:'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: useFileProtocolHistory
+    ? createWebHashHistory(import.meta.env.BASE_URL)
+    : createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      redirect: '/login',
+      redirect: useFileProtocolHistory ? '/setting' : '/login',
       meta: {
         cleanup: true,
       },

@@ -27,6 +27,25 @@ import { store_server_auth_token } from '@/server/server_api_store/server_api_au
 import { store_server_model_statistics } from '@/server/server_api_store/server_api_core/model/model_statistics'
 import { Audio_howler } from '@/data/data_models/app_models/song_Audio_Out/Audio_howler'
 
+function pushStoredRoute(routeNameOrPath: string) {
+  if (!store_router_data_info.router) {
+    return
+  }
+
+  const normalizedRoute = String(routeNameOrPath || '').trim()
+  if (!normalizedRoute || normalizedRoute === 'null') {
+    store_router_data_info.router.push({ name: 'home' })
+    return
+  }
+
+  if (normalizedRoute.startsWith('/')) {
+    store_router_data_info.router.push(normalizedRoute)
+    return
+  }
+
+  store_router_data_info.router.push({ name: normalizedRoute })
+}
+
 export const store_system_configs_load = reactive({
   app_configs_loading: false,
   async load_app_config() {
@@ -723,7 +742,7 @@ export const store_system_configs_load = reactive({
           store_system_configs_info.app_view_left_menu_select_activeKey = 'home'
           store_router_data_info.router_name = 'home'
         }
-        store_router_data_info.router.push(store_router_data_info.router_name)
+        pushStoredRoute(store_router_data_info.router_name)
       } else {
         const route = String(localStorage.getItem('jwt_route'))
         const route_path =
@@ -752,7 +771,7 @@ export const store_system_configs_load = reactive({
           final_route_path = '/setting'
         }
 
-        store_router_data_info.router.push(store_router_data_info.router_name)
+        pushStoredRoute(store_router_data_info.router_name)
       }
 
       // init image

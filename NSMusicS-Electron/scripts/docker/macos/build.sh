@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
-# 手动执行示例:
-# export NSMUSICS_DOCKER_IMAGE="xiangch007/nsmusics"
-# docker build --platform linux/arm64/v8 -t xiangch007/nsmusics:arm64-pure --provenance=false .
-#
-# 通过 npm 调用:
-# npm run docker:build:mac
-
+# mac docker build wrapper (arm64 host expected)
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

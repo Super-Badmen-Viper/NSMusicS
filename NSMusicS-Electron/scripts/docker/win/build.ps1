@@ -1,11 +1,3 @@
-# 手动执行示例:
-# $env:NSMUSICS_DOCKER_IMAGE = "xiangch007/nsmusics"
-# $env:NSMUSICS_DOCKER_PROXY = "http://127.0.0.1:10808"
-# docker build --platform linux/amd64 -t xiangch007/nsmusics:amd64-pure --provenance=false .
-#
-# 通过 npm 调用:
-# npm run docker:build:win
-
 param(
   [string]$ImageRepo = $(if ($env:NSMUSICS_DOCKER_IMAGE) { $env:NSMUSICS_DOCKER_IMAGE } else { 'xiangch007/nsmusics' }),
   [string]$ProxyUrl = $(if ($env:NSMUSICS_DOCKER_PROXY) { $env:NSMUSICS_DOCKER_PROXY } else { 'http://127.0.0.1:10808' })

@@ -29,7 +29,11 @@ coverage
 
 *.tsbuildinfo
 .VSCodeCounter
+.tmp/
 NSMusicS-Electron/release
+NSMusicS-Electron/.cache/
+NSMusicS-Electron/.github/workflows/.out/
+NSMusicS-Electron/.github/workflows/.tmp/
 NSMusicS-Electron/.VSCodeCounter
 NSMusicS-Electron/resources/nsmusics.db-shm
 NSMusicS-Electron/resources/nsmusics.db-wal
@@ -40,12 +44,23 @@ NSMusicS-Electron/resources/mpv-0.39.0
 NSMusicS-Electron/src_example
 NSMusicS-Electron/refactoring_suggestions.md
 NSMusicS-Electron/docs/
-NSMusicS-Vue/
 
 NineSong/tmp/main.exe
 
 Business.md
 
-NSMusicS-AI
-NSMusicS-Flutter
-NSMusicS-MPV-DLNA
+# Workspace sibling projects under refactor: keep Git and packaging focused on NSMusicS-Electron only.
+NSMusicS-AI/
+NSMusicS-Angular/
+NSMusicS-Avalonia/
+NSMusicS-Core/
+NSMusicS-Flutter/
+NSMusicS-MPV-DLNA/
+NSMusicS-React/
+NSMusicS-Vue/
+NSMusicS-WinUI3/
+NSMusicS-WPF/
+Universal-ToC-DotNet-Stack-Architecture-Specification.md
+Universal-ToC-Flutter-Stack-Architecture-Specification.md
+Universal-ToC-Shared-Application-And-Governance-Specification.md
+Universal-ToC-Web-Stack-Architecture-Specification.md
