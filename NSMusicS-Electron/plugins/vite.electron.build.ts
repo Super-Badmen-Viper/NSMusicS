@@ -110,6 +110,17 @@ const ELECTRON_LANGUAGE_WHITELIST = [
   'nl',
 ]
 
+const PACKAGED_FILE_PATTERNS = [
+  '**/*',
+  '!**/*.map',
+  '!**/.github{,/**}',
+  '!**/{test,tests,__tests__,example,examples,doc,docs,benchmark,benchmarks}{,/**}',
+  '!**/node_modules/better-sqlite3/deps{,/**}',
+  '!**/node_modules/better-sqlite3/src{,/**}',
+  '!**/node_modules/node-taglib-sharp/src{,/**}',
+  '!**/node_modules/moment/src{,/**}',
+]
+
 const buildExtraResources = (platform?: string) => {
   const resources: Array<Record<string, any>> = [
     { from: './resources/better_sqlite3.node', to: 'better_sqlite3.node' },
@@ -181,12 +192,14 @@ export const viteElectronBuild = (): Plugin => {
         config: {
           appId: 'github.com.nsmusics.xiang.cheng',
           productName: 'NSMusicS',
+          compression: 'maximum',
           electronLanguages: ELECTRON_LANGUAGE_WHITELIST,
           directories: {
             output: path.join(process.cwd(), 'release'), //输出目录
             app: path.join(process.cwd(), 'dist'), //app目录
           },
           asar: true,
+          files: PACKAGED_FILE_PATTERNS,
           win: {
             target: ['nsis', 'zip'],
             icon: 'resources/config/NSMusicS.ico',
