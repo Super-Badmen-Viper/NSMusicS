@@ -462,22 +462,15 @@ jobs:
 
           const platformName = process.env.NSMUSICS_ELECTRON_PLATFORM
           const archName = process.env.NSMUSICS_ELECTRON_ARCH
+          const targetKey = `${platformName}:${archName}`
+          const hostKey = `${process.platform}:${process.arch}`
 
-          const packageSets = {
-            'win:x64': [
+          const hostPackageSets = {
+            'win32:x64': [
               '@esbuild/win32-x64',
               '@rollup/rollup-win32-x64-msvc',
               '@tailwindcss/oxide-win32-x64-msvc',
               'lightningcss-win32-x64-msvc',
-            ],
-            'win:arm64': [
-              '@esbuild/win32-arm64',
-              '@rollup/rollup-win32-arm64-msvc',
-              '@tailwindcss/oxide-win32-arm64-msvc',
-              'lightningcss-win32-arm64-msvc',
-            ],
-            'win:ia32': [
-              '@esbuild/win32-ia32',
             ],
             'linux:x64': [
               '@esbuild/linux-x64',
@@ -491,13 +484,13 @@ jobs:
               '@tailwindcss/oxide-linux-arm64-gnu',
               'lightningcss-linux-arm64-gnu',
             ],
-            'mac:x64': [
+            'darwin:x64': [
               '@esbuild/darwin-x64',
               '@rollup/rollup-darwin-x64',
               '@tailwindcss/oxide-darwin-x64',
               'lightningcss-darwin-x64',
             ],
-            'mac:arm64': [
+            'darwin:arm64': [
               '@esbuild/darwin-arm64',
               '@rollup/rollup-darwin-arm64',
               '@tailwindcss/oxide-darwin-arm64',
@@ -505,16 +498,30 @@ jobs:
             ],
           }
 
-          const key = `${platformName}:${archName}`
-          const requiredPackages = packageSets[key] || []
-          const packageExists = (packageName) =>
-            fs.existsSync(path.join(process.cwd(), 'node_modules', ...packageName.split('/'), 'package.json'))
+          const requiredPackages = hostPackageSets[hostKey] || []
+          const packageExists = (packageName) => {
+            try {
+              require.resolve(packageName, { paths: [process.cwd()] })
+              return true
+            } catch {
+              const storeRoot = path.join(process.cwd(), 'node_modules', '.store')
+              if (!fs.existsSync(storeRoot)) {
+                return false
+              }
+              const normalizedStorePrefix = `${packageName.replace(/\//g, '+').toLowerCase()}@`
+              return fs
+                .readdirSync(storeRoot, { withFileTypes: true })
+                .some((entry) => entry.isDirectory() && entry.name.toLowerCase().startsWith(normalizedStorePrefix))
+            }
+          }
 
           const missingPackages = requiredPackages.filter((packageName) => !packageExists(packageName))
 
           console.log(
             JSON.stringify(
               {
+                targetKey,
+                hostKey,
                 platformName,
                 archName,
                 requiredPackages,
@@ -537,13 +544,17 @@ jobs:
               }
             )
             if (install.status !== 0) {
-              throw new Error(`Failed to install missing frontend native packages for ${key}`)
+              throw new Error(
+                `Failed to install missing frontend native packages for host ${hostKey} while preparing target ${targetKey}`
+              )
             }
           }
 
           for (const packageName of requiredPackages) {
             if (!packageExists(packageName)) {
-              throw new Error(`Required frontend native package is still missing after repair: ${packageName}`)
+              throw new Error(
+                `Required frontend native package is still missing after repair for host ${hostKey}: ${packageName}`
+              )
             }
           }
           '@ | Set-Content -Path .github/workflows/.tmp/ensure-platform-frontend-packages.cjs -Encoding utf8
