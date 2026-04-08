@@ -623,6 +623,17 @@ jobs:
             'nl',
           ]
 
+          const packagedFilePatterns = [
+            '**/*',
+            '!**/*.map',
+            '!**/.github{,/**}',
+            '!**/{test,tests,__tests__,example,examples,doc,docs,benchmark,benchmarks}{,/**}',
+            '!**/node_modules/better-sqlite3/deps{,/**}',
+            '!**/node_modules/better-sqlite3/src{,/**}',
+            '!**/node_modules/node-taglib-sharp/src{,/**}',
+            '!**/node_modules/moment/src{,/**}',
+          ]
+
           const buildExtraResources = (platformName) => {
             const resources = [
               { from: './resources/better_sqlite3.node', to: 'better_sqlite3.node' },
@@ -699,12 +710,14 @@ jobs:
           const baseConfig = {
             appId: 'github.com.nsmusics.xiang.cheng',
             productName: 'NSMusicS',
+            compression: 'maximum',
             electronLanguages: electronLanguageWhitelist,
             directories: {
               output: path.join(process.cwd(), 'release'),
               app: path.join(process.cwd(), 'dist'),
             },
             asar: true,
+            files: packagedFilePatterns,
             extraResources: buildExtraResources(platformName),
           }
 
