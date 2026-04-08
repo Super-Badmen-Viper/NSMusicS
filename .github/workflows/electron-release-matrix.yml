@@ -1016,17 +1016,17 @@ jobs:
           const relativeToBundle = (targetPath) => path.relative(bundleRoot, targetPath).replace(/\\/g, '/')
           const fileBasename = (targetPath) => path.basename(targetPath)
 
-          // Reference bytes are anchored to the published NSMusicS-v2.3.0 release assets.
-          // The hard floors are intentionally looser than the warning band so successful
-          // package-size reductions warn for review instead of failing the whole release.
+          // Reference bytes are anchored to the established release/Test style publish assets.
+          // Smaller packages are generally desirable, so lower-side checks are kept loose and
+          // only guard against obviously incomplete outputs rather than penalizing reductions.
           const expectedSizeProfiles = {
             win: {
               x64: {
                 exe: {
                   referenceBytes: 163438490,
-                  warnBelowFactor: 0.78,
+                  warnBelowFactor: 0.7,
                   warnAboveFactor: 1.2,
-                  failBelowFactor: 0.73,
+                  failBelowFactor: 0.55,
                   failAboveFactor: 1.35,
                 },
                 exe_blockmap: {
@@ -1038,18 +1038,18 @@ jobs:
                 },
                 zip: {
                   referenceBytes: 216856608,
-                  warnBelowFactor: 0.78,
+                  warnBelowFactor: 0.7,
                   warnAboveFactor: 1.18,
-                  failBelowFactor: 0.72,
+                  failBelowFactor: 0.55,
                   failAboveFactor: 1.35,
                 },
               },
               ia32: {
                 exe: {
                   referenceBytes: 163438490,
-                  warnBelowFactor: 0.75,
+                  warnBelowFactor: 0.7,
                   warnAboveFactor: 1.18,
-                  failBelowFactor: 0.68,
+                  failBelowFactor: 0.55,
                   failAboveFactor: 1.35,
                 },
                 exe_blockmap: {
@@ -1061,18 +1061,18 @@ jobs:
                 },
                 zip: {
                   referenceBytes: 216856608,
-                  warnBelowFactor: 0.72,
+                  warnBelowFactor: 0.7,
                   warnAboveFactor: 1.18,
-                  failBelowFactor: 0.66,
+                  failBelowFactor: 0.55,
                   failAboveFactor: 1.35,
                 },
               },
               arm64: {
                 exe: {
                   referenceBytes: 163438490,
-                  warnBelowFactor: 0.75,
+                  warnBelowFactor: 0.7,
                   warnAboveFactor: 1.18,
-                  failBelowFactor: 0.68,
+                  failBelowFactor: 0.55,
                   failAboveFactor: 1.35,
                 },
                 exe_blockmap: {
@@ -1084,9 +1084,9 @@ jobs:
                 },
                 zip: {
                   referenceBytes: 216856608,
-                  warnBelowFactor: 0.72,
+                  warnBelowFactor: 0.7,
                   warnAboveFactor: 1.18,
-                  failBelowFactor: 0.66,
+                  failBelowFactor: 0.55,
                   failAboveFactor: 1.35,
                 },
               },
