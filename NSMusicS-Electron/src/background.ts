@@ -1077,20 +1077,49 @@ let currentFade = 0
 let currentVolume = 0
 let currentParameters = null
 let isPlaying = false
+
+function resolvePackagedResourcesPath() {
+  return process.env.NODE_ENV === 'development' ? path.resolve('resources') : path.join(process.resourcesPath)
+}
+
+function resolveWindowsMpvBinary() {
+  const resourcesPath = resolvePackagedResourcesPath()
+  const archAliases: Record<string, string[]> = {
+    x64: ['x86_64'],
+    ia32: ['i686'],
+    arm64: ['aarch64', 'arm64'],
+  }
+  const aliases = archAliases[process.arch] || [process.arch]
+  const candidates = fs
+    .readdirSync(resourcesPath, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && /^mpv[-_]/i.test(entry.name))
+    .map((entry) => entry.name)
+    .filter((name) => aliases.some((alias) => name.toLowerCase().includes(alias)))
+    .sort((left, right) => right.localeCompare(left))
+
+  if (candidates.length === 0) {
+    throw new Error(`Unable to locate Windows mpv runtime for arch ${process.arch} under ${resourcesPath}`)
+  }
+
+  const binaryPath = path.join(resourcesPath, candidates[0], 'mpv.exe')
+  if (!fs.existsSync(binaryPath)) {
+    throw new Error(`Windows mpv runtime is missing mpv.exe at ${binaryPath}`)
+  }
+
+  return binaryPath
+}
+
 async function initNodeMpv() {
   if (process.platform === 'win32') {
     mpv = new mpvAPI({
       audio_only: true,
       auto_restart: true,
-      binary: path.resolve('resources/mpv-x86_64-20241124/mpv.exe'),
+      binary: resolveWindowsMpvBinary(),
       debug: true,
       verbose: true,
     })
   } else if (process.platform === 'darwin') {
-    const resourcesPath =
-      process.env.NODE_ENV === 'development'
-        ? path.resolve('resources')
-        : path.join(process.resourcesPath)
+    const resourcesPath = resolvePackagedResourcesPath()
     mpv = new mpvAPI({
       audio_only: true,
       auto_restart: true,

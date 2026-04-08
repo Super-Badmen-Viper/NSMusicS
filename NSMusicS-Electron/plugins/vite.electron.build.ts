@@ -68,6 +68,29 @@ const buildWindowsMpvFilters = () => [
   '!**/settings.xml',
 ]
 
+const resolveWindowsMpvResourceDirectory = (targetArch?: string) => {
+  const archAliases: Record<string, string[]> = {
+    x64: ['x86_64'],
+    ia32: ['i686'],
+    arm64: ['aarch64', 'arm64'],
+  }
+  const archName = targetArch || process.arch
+  const aliases = archAliases[archName] || [archName]
+  const resourcesRoot = path.join(process.cwd(), 'resources')
+  const candidates = fs
+    .readdirSync(resourcesRoot, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && /^mpv[-_]/i.test(entry.name))
+    .map((entry) => entry.name)
+    .filter((name) => aliases.some((alias) => name.toLowerCase().includes(alias)))
+    .sort((left, right) => right.localeCompare(left))
+
+  if (candidates.length === 0) {
+    throw new Error(`Missing Windows mpv runtime directory for arch ${archName} under ${resourcesRoot}`)
+  }
+
+  return candidates[0]
+}
+
 const ELECTRON_LANGUAGE_WHITELIST = [
   'zh-CN',
   'zh-TW',
@@ -98,9 +121,10 @@ const buildExtraResources = (platform?: string) => {
   ]
 
   if (platform === 'win') {
+    const mpvDir = resolveWindowsMpvResourceDirectory(process.env.NSMUSICS_ELECTRON_ARCH || process.arch)
     resources.push({
-      from: './resources/mpv-x86_64-20241124',
-      to: 'mpv-x86_64-20241124',
+      from: `./resources/${mpvDir}`,
+      to: mpvDir,
       filter: buildWindowsMpvFilters(),
     })
   }
@@ -164,7 +188,7 @@ export const viteElectronBuild = (): Plugin => {
           },
           asar: true,
           win: {
-            target: 'nsis',
+            target: ['nsis', 'zip'],
             icon: 'resources/config/NSMusicS.ico',
             artifactName: '${productName}-Win-${version}-${arch}.${ext}',
           },
@@ -180,7 +204,7 @@ export const viteElectronBuild = (): Plugin => {
           // icon
           // resources/config/png: sudo chmod 0644 *
           linux: {
-            target: ['AppImage', 'deb'],
+            target: ['AppImage', 'deb', 'rpm', 'tar.gz'],
             icon: 'resources/config/png',
             desktop: {
               Icon: '/usr/share/icons/hicolor/512x512/apps/nsmusics.png',
@@ -190,6 +214,9 @@ export const viteElectronBuild = (): Plugin => {
             artifactName: '${productName}-Linux-${version}-${arch}.${ext}',
           },
           deb: {
+            depends: ['mpv'],
+          },
+          rpm: {
             depends: ['mpv'],
           },
           // arch -x86_64 zsh
@@ -228,7 +255,7 @@ export const viteElectronBuild = (): Plugin => {
           // node -p "process.arch"
           // 5.再次打包，很显然这没有github工作流方便，但是涉及到原生编译的情况，github工作流可能并非好使
           mac: {
-            target: 'dmg',
+            target: ['dmg', 'zip'],
             icon: 'resources/config/NSMusicS.icns',
             artifactName: '${productName}-Mac-${version}-${arch}.${ext}',
             hardenedRuntime: true,
