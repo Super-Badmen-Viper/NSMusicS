@@ -632,6 +632,10 @@ jobs:
             '!**/node_modules/better-sqlite3/src{,/**}',
             '!**/node_modules/node-taglib-sharp/src{,/**}',
             '!**/node_modules/moment/src{,/**}',
+            '!**/node_modules/moment/dist{,/**}',
+            '!**/node_modules/moment/min{,/**}',
+            '!**/node_modules/moment/ts3.1-typings{,/**}',
+            '!**/node_modules/moment/{ender.js,moment.d.ts,CHANGELOG.md}',
           ]
 
           const buildExtraResources = (platformName) => {
@@ -1129,9 +1133,9 @@ jobs:
                 },
                 appimage: {
                   referenceBytes: 162956976,
-                  warnBelowFactor: 0.78,
+                  warnBelowFactor: 0.55,
                   warnAboveFactor: 1.15,
-                  failBelowFactor: 0.67,
+                  failBelowFactor: 0.5,
                   failAboveFactor: 1.3,
                 },
               },
@@ -1159,9 +1163,9 @@ jobs:
                 },
                 appimage: {
                   referenceBytes: 155 * megabyte,
-                  warnBelowFactor: 0.75,
+                  warnBelowFactor: 0.54,
                   warnAboveFactor: 1.3,
-                  failBelowFactor: 0.65,
+                  failBelowFactor: 0.5,
                   failAboveFactor: 1.6,
                 },
               },
@@ -1170,9 +1174,9 @@ jobs:
               x64: {
                 dmg: {
                   referenceBytes: 205706082,
-                  warnBelowFactor: 0.78,
+                  warnBelowFactor: 0.58,
                   warnAboveFactor: 1.15,
-                  failBelowFactor: 0.65,
+                  failBelowFactor: 0.5,
                   failAboveFactor: 1.25,
                 },
                 dmg_blockmap: {
@@ -1184,18 +1188,18 @@ jobs:
                 },
                 zip: {
                   referenceBytes: 205445399,
-                  warnBelowFactor: 0.78,
+                  warnBelowFactor: 0.58,
                   warnAboveFactor: 1.15,
-                  failBelowFactor: 0.65,
+                  failBelowFactor: 0.5,
                   failAboveFactor: 1.25,
                 },
               },
               arm64: {
                 dmg: {
                   referenceBytes: 176798083,
-                  warnBelowFactor: 0.82,
+                  warnBelowFactor: 0.64,
                   warnAboveFactor: 1.15,
-                  failBelowFactor: 0.74,
+                  failBelowFactor: 0.5,
                   failAboveFactor: 1.25,
                 },
                 dmg_blockmap: {
@@ -1207,9 +1211,9 @@ jobs:
                 },
                 zip: {
                   referenceBytes: 176469444,
-                  warnBelowFactor: 0.82,
+                  warnBelowFactor: 0.64,
                   warnAboveFactor: 1.15,
-                  failBelowFactor: 0.74,
+                  failBelowFactor: 0.5,
                   failAboveFactor: 1.25,
                 },
               },
@@ -2182,7 +2186,13 @@ jobs:
 
       - name: List release files
         run: |
-          node -e "const fs=require('fs'); const path=require('path'); const root='release'; const walk=(dir)=>fs.readdirSync(dir,{withFileTypes:true}).flatMap((entry)=>{const full=path.join(dir,entry.name); return entry.isDirectory()?walk(full):[full]}); if(!fs.existsSync(root)){throw new Error('release output not found')} const files=walk(root); if(files.length===0){throw new Error('release output is empty')} console.log(files.join('\n'));"
+          $diagnosticsDir = '.github/workflows/.tmp/diagnostics'
+          New-Item -ItemType Directory -Path $diagnosticsDir -Force | Out-Null
+          $inventoryPath = Join-Path $diagnosticsDir 'release-file-inventory.txt'
+          node -e "const fs=require('fs'); const path=require('path'); const root='release'; const walk=(dir)=>fs.readdirSync(dir,{withFileTypes:true}).flatMap((entry)=>{const full=path.join(dir,entry.name); return entry.isDirectory()?walk(full):[full]}); if(!fs.existsSync(root)){throw new Error('release output not found')} const files=walk(root).sort(); if(files.length===0){throw new Error('release output is empty')} console.log(files.map((file)=>file + '\t' + fs.statSync(file).size).join('\n'));" *>&1 | Tee-Object -FilePath $inventoryPath
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
 
       - name: Stage upload bundle
         env:
@@ -2627,6 +2637,7 @@ jobs:
           name: ${{ env.ARTIFACT_PREFIX }}-failure-${{ env.BUILD_MODE }}-${{ matrix.platform_name }}-${{ matrix.arch }}
           path: |
             NSMusicS-Electron/.github/workflows/.tmp/diagnostics/**
+            NSMusicS-Electron/.github/workflows/.out/${{ env.BUILD_MODE }}/${{ matrix.platform_name }}-${{ matrix.arch }}/**
             NSMusicS-Electron/release/**/*.log
             NSMusicS-Electron/release/**/builder-debug.yml
             NSMusicS-Electron/release/**/builder-effective-config.yaml

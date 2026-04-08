@@ -119,6 +119,10 @@ const PACKAGED_FILE_PATTERNS = [
   '!**/node_modules/better-sqlite3/src{,/**}',
   '!**/node_modules/node-taglib-sharp/src{,/**}',
   '!**/node_modules/moment/src{,/**}',
+  '!**/node_modules/moment/dist{,/**}',
+  '!**/node_modules/moment/min{,/**}',
+  '!**/node_modules/moment/ts3.1-typings{,/**}',
+  '!**/node_modules/moment/{ender.js,moment.d.ts,CHANGELOG.md}',
 ]
 
 const buildExtraResources = (platform?: string) => {
