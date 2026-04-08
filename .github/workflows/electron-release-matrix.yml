@@ -81,9 +81,9 @@ jobs:
               electron_platform: 'win32',
               arch: 'ia32',
               runner: 'windows-latest',
-              supported: false,
+              supported: true,
               support_reason:
-                'src/background.ts hardcodes resources/mpv-x86_64-20241124/mpv.exe, so Windows ia32 has no matching runtime asset.',
+                'The workflow downloads a pinned Windows i686 mpv runtime, stages it into resources, and rebuilds native Electron dependencies for ia32 packaging.',
             },
             {
               platform: 'win',
@@ -91,9 +91,9 @@ jobs:
               electron_platform: 'win32',
               arch: 'arm64',
               runner: 'windows-latest',
-              supported: false,
+              supported: true,
               support_reason:
-                'src/background.ts hardcodes resources/mpv-x86_64-20241124/mpv.exe, so Windows arm64 has no matching runtime asset.',
+                'The workflow downloads a pinned Windows arm64 mpv runtime, stages it into resources, and rebuilds native Electron dependencies for arm64 packaging.',
             },
             {
               platform: 'linux',
@@ -113,7 +113,7 @@ jobs:
               runner: 'ubuntu-24.04-arm',
               supported: true,
               support_reason:
-                'The workflow uses a native Ubuntu arm64 runner, installs system mpv, rebuilds Electron native modules, and publishes Linux arm64 AppImage, deb, and tar.gz assets.',
+                'The workflow uses a native Ubuntu arm64 runner, installs system mpv, rebuilds Electron native modules, and publishes Linux arm64 AppImage, deb, rpm, and tar.gz assets.',
             },
             {
               platform: 'mac',
@@ -291,51 +291,60 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           $ErrorActionPreference = 'Stop'
-          $packages = @('mpvio.portable', 'mpvio.install', 'mpv.install', 'mpv')
-          $installedPackage = $null
-          foreach ($package in $packages) {
-            try {
-              choco install $package -y --no-progress
-              $installedPackage = $package
-              break
-            } catch {
-              Write-Host "Chocolatey package failed: $package"
+          $releaseTag = '20260408'
+          switch ('${{ matrix.arch }}') {
+            'x64' {
+              $archiveName = 'mpv-x86_64-20260408-git-e2180e5.7z'
+              $targetDirName = 'mpv-x86_64-20260408'
+              $expectedSha256 = 'fa5696629db058d0a2b0817f054e497d4afb556584a18a73565ffc5454e493fa'
             }
-          }
-          if (-not $installedPackage) {
-            throw 'Unable to install an mpv Chocolatey package for Windows packaging.'
-          }
-
-          $candidateRoots = @()
-          if ($env:ChocolateyInstall) {
-            $candidateRoots += (Join-Path $env:ChocolateyInstall 'lib')
-          }
-          $candidateRoots += 'C:\ProgramData\chocolatey\lib'
-
-          $mpvCandidates = foreach ($root in ($candidateRoots | Select-Object -Unique)) {
-            if (Test-Path $root) {
-              Get-ChildItem -Path $root -Filter mpv.exe -File -Recurse -ErrorAction SilentlyContinue
+            'ia32' {
+              $archiveName = 'mpv-i686-20260408-git-e2180e5.7z'
+              $targetDirName = 'mpv-i686-20260408'
+              $expectedSha256 = 'b8ed6fc4cd08f9f8a4a5d5cd549cae97a55411c60018afdf766126446974735d'
+            }
+            'arm64' {
+              $archiveName = 'mpv-aarch64-20260408-git-e2180e5.7z'
+              $targetDirName = 'mpv-aarch64-20260408'
+              $expectedSha256 = '53033dd82f737cb9de50f611ef58e6137262bb2ef95c45167266f46091f87656'
+            }
+            default {
+              throw "Unsupported Windows mpv target arch: ${{ matrix.arch }}"
             }
           }
 
-          $mpvBinary = $mpvCandidates |
-            Where-Object { $_.FullName -notmatch '\\bin\\' } |
+          $archiveUrl = "https://github.com/shinchiro/mpv-winbuild-cmake/releases/download/$releaseTag/$archiveName"
+          $archivePath = Join-Path $env:RUNNER_TEMP $archiveName
+          $extractRoot = Join-Path $env:RUNNER_TEMP ("mpv-extract-" + '${{ matrix.arch }}')
+          $sevenZip = Get-Command 7z.exe -ErrorAction SilentlyContinue
+          if (-not $sevenZip) {
+            throw '7z.exe is required to extract the pinned Windows mpv runtime archive.'
+          }
+
+          if (Test-Path $extractRoot) {
+            Remove-Item -LiteralPath $extractRoot -Recurse -Force
+          }
+          New-Item -ItemType Directory -Path $extractRoot -Force | Out-Null
+          Invoke-WebRequest -Uri $archiveUrl -OutFile $archivePath
+          $actualSha256 = (Get-FileHash -LiteralPath $archivePath -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($actualSha256 -ne $expectedSha256) {
+            throw "Windows mpv runtime hash mismatch for $archiveName. Expected=$expectedSha256 Actual=$actualSha256"
+          }
+
+          & $sevenZip.Source x $archivePath "-o$extractRoot" -y | Out-Host
+          if ($LASTEXITCODE -ne 0) {
+            throw "7z extraction failed for $archivePath"
+          }
+
+          $mpvBinary = Get-ChildItem -Path $extractRoot -Filter mpv.exe -File -Recurse -ErrorAction SilentlyContinue |
             Sort-Object FullName |
             Select-Object -First 1
-
           if (-not $mpvBinary) {
-            $command = Get-Command mpv.exe -ErrorAction SilentlyContinue
-            if ($command) {
-              $mpvBinary = Get-Item $command.Source
-            }
-          }
-
-          if (-not $mpvBinary) {
-            throw 'Unable to locate mpv.exe after Chocolatey installation.'
+            throw "Unable to locate mpv.exe after extracting $archiveName"
           }
 
           $sourceDir = Split-Path $mpvBinary.FullName -Parent
-          $targetDir = Join-Path $PWD 'resources\mpv-x86_64-20241124'
+          $targetDir = Join-Path $PWD ("resources\" + $targetDirName)
           if (Test-Path $targetDir) {
             Remove-Item -LiteralPath $targetDir -Recurse -Force
           }
@@ -566,6 +575,28 @@ jobs:
             '!**/settings.xml',
           ]
 
+          const resolveWindowsMpvResourceDirectory = () => {
+            const archAliases = {
+              x64: ['x86_64'],
+              ia32: ['i686'],
+              arm64: ['aarch64', 'arm64'],
+            }
+            const aliases = archAliases[archName] || [archName]
+            const resourcesRoot = path.join(process.cwd(), 'resources')
+            const candidates = fs
+              .readdirSync(resourcesRoot, { withFileTypes: true })
+              .filter((entry) => entry.isDirectory() && /^mpv[-_]/i.test(entry.name))
+              .map((entry) => entry.name)
+              .filter((name) => aliases.some((alias) => name.toLowerCase().includes(alias)))
+              .sort((left, right) => right.localeCompare(left))
+
+            if (candidates.length === 0) {
+              throw new Error(`Missing Windows mpv runtime directory for arch ${archName} under ${resourcesRoot}`)
+            }
+
+            return candidates[0]
+          }
+
           const electronLanguageWhitelist = [
             'zh-CN',
             'zh-TW',
@@ -596,9 +627,10 @@ jobs:
             ]
 
             if (platformName === 'win') {
+              const mpvDir = resolveWindowsMpvResourceDirectory()
               resources.push({
-                from: './resources/mpv-x86_64-20241124',
-                to: 'mpv-x86_64-20241124',
+                from: `./resources/${mpvDir}`,
+                to: mpvDir,
                 filter: buildWindowsMpvFilters(),
               })
             }
@@ -629,7 +661,7 @@ jobs:
           const targetMap = {
             dir: ['dir'],
             win: ['nsis', 'zip'],
-            linux: ['AppImage', 'deb', 'tar.gz'],
+            linux: ['AppImage', 'deb', 'rpm', 'tar.gz'],
             mac: ['dmg', 'zip'],
           }
 
@@ -690,7 +722,7 @@ jobs:
               ...(mode === 'dir'
                 ? {}
                 : {
-                    target: ['AppImage', 'deb', 'tar.gz'],
+                    target: ['AppImage', 'deb', 'rpm', 'tar.gz'],
                     artifactName: '${productName}-Linux-${version}-${arch}.${ext}',
                   }),
             },
@@ -710,13 +742,16 @@ jobs:
             },
             ...(mode === 'dir'
               ? {}
-              : {
-                  deb: {
-                    depends: ['mpv'],
-                  },
-                  nsis: {
-                    oneClick: false,
-                    perMachine: true,
+                : {
+                    deb: {
+                      depends: ['mpv'],
+                    },
+                    rpm: {
+                      depends: ['mpv'],
+                    },
+                    nsis: {
+                      oneClick: false,
+                      perMachine: true,
                     allowElevation: true,
                     allowToChangeInstallationDirectory: true,
                     installerIcon: 'resources/config/NSMusicS.ico',
@@ -744,6 +779,7 @@ jobs:
             const relativeFiles = releaseFiles.map((targetPath) =>
               path.relative(process.cwd(), targetPath).replace(/\\/g, '/')
             )
+            const windowsMpvResourcePattern = /\/resources\/mpv[-_][^/]*(x86_64|i686|aarch64|arm64|x86)[^/]*\//i
 
             const isForbiddenReleaseFile = (relativePath) => {
               if (
@@ -754,7 +790,7 @@ jobs:
                 return true
               }
 
-              if (platformName !== 'win' && relativePath.includes('/resources/mpv-x86_64-20241124/')) {
+              if (platformName !== 'win' && windowsMpvResourcePattern.test(relativePath)) {
                 return true
               }
 
@@ -762,20 +798,23 @@ jobs:
                 return true
               }
 
-              if (!relativePath.includes('/resources/mpv-x86_64-20241124/')) {
+              if (!windowsMpvResourcePattern.test(relativePath)) {
                 return false
               }
 
               return (
-                relativePath.includes('/resources/mpv-x86_64-20241124/7z/') ||
-                relativePath.includes('/resources/mpv-x86_64-20241124/doc/') ||
-                relativePath.includes('/resources/mpv-x86_64-20241124/installer/') ||
-                relativePath.endsWith('.7z') ||
-                relativePath.endsWith('.pdf') ||
-                relativePath.endsWith('.ignore') ||
-                relativePath.endsWith('/updater.bat') ||
-                relativePath.endsWith('/settings.xml') ||
-                relativePath.toLowerCase().includes('chocolatey')
+                /\/resources\/mpv[-_][^/]*(x86_64|i686|aarch64|arm64|x86)[^/]*\/(7z|doc|installer)\//i.test(
+                  relativePath
+                ) ||
+                /\/resources\/mpv[-_][^/]*(x86_64|i686|aarch64|arm64|x86)[^/]*\/.*\.(7z|pdf|ignore)$/i.test(
+                  relativePath
+                ) ||
+                /\/resources\/mpv[-_][^/]*(x86_64|i686|aarch64|arm64|x86)[^/]*\/chocolatey/i.test(
+                  relativePath
+                ) ||
+                /\/resources\/mpv[-_][^/]*(x86_64|i686|aarch64|arm64|x86)[^/]*\/(updater\.bat|settings\.xml)$/i.test(
+                  relativePath
+                )
               )
             }
 
@@ -794,6 +833,7 @@ jobs:
             zip: (value) => value.endsWith('.zip'),
             AppImage: (value) => value.endsWith('.AppImage'),
             deb: (value) => value.endsWith('.deb'),
+            rpm: (value) => value.endsWith('.rpm'),
             'tar.gz': (value) => value.endsWith('.tar.gz'),
             dmg: (value) => value.endsWith('.dmg') && !value.endsWith('.dmg.blockmap'),
           }
@@ -997,6 +1037,52 @@ jobs:
                   failAboveFactor: 1.35,
                 },
               },
+              ia32: {
+                exe: {
+                  referenceBytes: 163438490,
+                  warnBelowFactor: 0.75,
+                  warnAboveFactor: 1.18,
+                  failBelowFactor: 0.68,
+                  failAboveFactor: 1.35,
+                },
+                exe_blockmap: {
+                  referenceBytes: 171899,
+                  warnBelowFactor: 0.5,
+                  warnAboveFactor: 1.7,
+                  failBelowFactor: 0.25,
+                  failAboveFactor: 3.0,
+                },
+                zip: {
+                  referenceBytes: 216856608,
+                  warnBelowFactor: 0.72,
+                  warnAboveFactor: 1.18,
+                  failBelowFactor: 0.66,
+                  failAboveFactor: 1.35,
+                },
+              },
+              arm64: {
+                exe: {
+                  referenceBytes: 163438490,
+                  warnBelowFactor: 0.75,
+                  warnAboveFactor: 1.18,
+                  failBelowFactor: 0.68,
+                  failAboveFactor: 1.35,
+                },
+                exe_blockmap: {
+                  referenceBytes: 171899,
+                  warnBelowFactor: 0.5,
+                  warnAboveFactor: 1.7,
+                  failBelowFactor: 0.25,
+                  failAboveFactor: 3.0,
+                },
+                zip: {
+                  referenceBytes: 216856608,
+                  warnBelowFactor: 0.72,
+                  warnAboveFactor: 1.18,
+                  failBelowFactor: 0.66,
+                  failAboveFactor: 1.35,
+                },
+              },
             },
             linux: {
               x64: {
@@ -1005,6 +1091,13 @@ jobs:
                   warnBelowFactor: 0.8,
                   warnAboveFactor: 1.18,
                   failBelowFactor: 0.72,
+                  failAboveFactor: 1.35,
+                },
+                rpm: {
+                  referenceBytes: 104383034,
+                  warnBelowFactor: 0.78,
+                  warnAboveFactor: 1.2,
+                  failBelowFactor: 0.7,
                   failAboveFactor: 1.35,
                 },
                 targz: {
@@ -1024,6 +1117,13 @@ jobs:
               },
               arm64: {
                 deb: {
+                  referenceBytes: 100 * megabyte,
+                  warnBelowFactor: 0.75,
+                  warnAboveFactor: 1.35,
+                  failBelowFactor: 0.6,
+                  failAboveFactor: 1.7,
+                },
+                rpm: {
                   referenceBytes: 100 * megabyte,
                   warnBelowFactor: 0.75,
                   warnAboveFactor: 1.35,
@@ -1148,6 +1248,12 @@ jobs:
                     `${productName}-Linux-${version}-${archName === 'x64' ? 'amd64' : archName}.deb`,
                 },
                 {
+                  kind: 'rpm',
+                  matches: (value) => value.endsWith('.rpm'),
+                  outputName: () =>
+                    `${productName}-Linux-${version}-${archName === 'x64' ? 'x86_64' : archName}.rpm`,
+                },
+                {
                   kind: 'targz',
                   matches: (value) => value.endsWith('.tar.gz'),
                   outputName: () => `${productName}-Linux-${version}-${archName}.tar.gz`,
@@ -1193,6 +1299,17 @@ jobs:
             appendSummary(`- PASS Linux deb dependency metadata includes mpv: ${path.basename(debPath)}`)
           }
 
+          const validateLinuxRpmDepends = (rpmPath) => {
+            if (platformName !== 'linux') {
+              return
+            }
+            const dependsOutput = runCommand('rpm', ['-qpR', rpmPath]).trim()
+            if (!/(^|\r?\n)mpv(?:\s|[<>=()]|$)/m.test(dependsOutput)) {
+              fail(`Linux rpm package does not declare required mpv dependency: ${relativeToRoot(rpmPath)}`)
+            }
+            appendSummary(`- PASS Linux rpm dependency metadata includes mpv: ${path.basename(rpmPath)}`)
+          }
+
           const spec = baseSpecs[platformName]
           if (!spec) {
             fail(`Unsupported publish asset staging platform label: ${platformLabel}`)
@@ -1209,7 +1326,7 @@ jobs:
             .sort()
           const packageLikeFiles = releaseFiles
             .filter((targetPath) =>
-              /(\.AppImage|\.deb|\.tar\.gz|\.zip|\.dmg|\.dmg\.blockmap|\.exe|\.exe\.blockmap)$/i.test(
+              /(\.AppImage|\.deb|\.rpm|\.tar\.gz|\.zip|\.dmg|\.dmg\.blockmap|\.exe|\.exe\.blockmap)$/i.test(
                 fileBasename(targetPath)
               )
             )
@@ -1264,6 +1381,9 @@ jobs:
 
             if (assetSpec.kind === 'deb') {
               validateLinuxDebDepends(sourcePath)
+            }
+            if (assetSpec.kind === 'rpm') {
+              validateLinuxRpmDepends(sourcePath)
             }
 
             if (path.dirname(sourcePath) !== releaseDir) {
@@ -1578,17 +1698,31 @@ jobs:
             fail(`Unable to uniquely identify packaged Linux executable under ${unpackedRoot}`)
           }
 
-          const validateWindowsMpv = (baseDir) => {
-            const mpvPath = ensureExists(
-              path.join(baseDir, 'mpv-x86_64-20241124', 'mpv.exe'),
-              'Windows mpv runtime'
-            )
-            assertBinaryArch(mpvPath, 'x64', 'Windows mpv runtime')
-            if (archName !== 'x64') {
-              fail(
-                `Windows target ${archName} is not supportable in the current repository state: src/background.ts hardcodes resources/mpv-x86_64-20241124/mpv.exe and the bundled mpv binary is x64-only.`
-              )
+          const resolveWindowsMpvRuntimeDir = (baseDir) => {
+            const archAliases = {
+              x64: ['x86_64'],
+              ia32: ['i686'],
+              arm64: ['aarch64', 'arm64'],
             }
+            const aliases = archAliases[archName] || [archName]
+            const candidates = fs
+              .readdirSync(baseDir, { withFileTypes: true })
+              .filter((entry) => entry.isDirectory() && /^mpv[-_]/i.test(entry.name))
+              .map((entry) => entry.name)
+              .filter((name) => aliases.some((alias) => name.toLowerCase().includes(alias)))
+              .sort((left, right) => right.localeCompare(left))
+
+            if (candidates.length === 0) {
+              fail(`Unable to locate Windows mpv runtime directory for ${archName} under ${baseDir}`)
+            }
+
+            return path.join(baseDir, candidates[0])
+          }
+
+          const validateWindowsMpv = (baseDir) => {
+            const mpvRuntimeDir = resolveWindowsMpvRuntimeDir(baseDir)
+            const mpvPath = ensureExists(path.join(mpvRuntimeDir, 'mpv.exe'), 'Windows mpv runtime')
+            assertBinaryArch(mpvPath, archName, 'Windows mpv runtime')
           }
 
           const validateMacMpv = (baseDir) => {
@@ -1603,16 +1737,17 @@ jobs:
             appendSummary(`### Repository Compatibility Audit: ${platformName}-${archName}`)
 
             if (platformName === 'win') {
-              ensureExists(
-                path.join(rootDir, 'resources', 'mpv-x86_64-20241124', 'mpv.exe'),
-                'Prepared Windows mpv runtime'
-              )
-              if (archName !== 'x64') {
+              const backgroundSource = fs.readFileSync(path.join(rootDir, 'src', 'background.ts'), 'utf8')
+              if (
+                !backgroundSource.includes('function resolveWindowsMpvBinary()') ||
+                !backgroundSource.includes('binary: resolveWindowsMpvBinary()')
+              ) {
                 fail(
-                  `Repository support audit failed for ${platformName}-${archName}: src/background.ts hardcodes resources/mpv-x86_64-20241124/mpv.exe and the workflow only provisions an x64 Windows mpv runtime.`
+                  `Repository support audit failed for ${platformName}-${archName}: src/background.ts must dynamically resolve the packaged Windows mpv runtime by process.arch.`
                 )
               }
-              appendSummary(`- PASS Windows source path contract is consistent with the prepared CI mpv runtime for ${archName}.`)
+              validateWindowsMpv(path.join(rootDir, 'resources'))
+              appendSummary(`- PASS Windows repository runtime resolves and validates the prepared mpv runtime for ${archName}.`)
               note(`Repository compatibility audit passed for ${platformName}-${archName}`)
               return
             }
@@ -1942,7 +2077,7 @@ jobs:
           }
 
           if ('${{ matrix.platform }}' -eq 'linux' -and '${{ matrix.arch }}' -eq 'arm64') {
-            $targets = @('AppImage', 'deb', 'tar.gz')
+            $targets = @('AppImage', 'deb', 'rpm', 'tar.gz')
             foreach ($target in $targets) {
               $safeTarget = $target.Replace('.', '_').Replace('/', '_')
               $targetLogPath = Join-Path $diagnosticsDir ("electron-builder-$safeTarget.log")
@@ -1960,6 +2095,9 @@ jobs:
                 }
                 'deb' {
                   Collect-ReleaseArtifacts -label 'linux-arm64 deb' -patterns @('*.deb')
+                }
+                'rpm' {
+                  Collect-ReleaseArtifacts -label 'linux-arm64 rpm' -patterns @('*.rpm')
                 }
                 'tar.gz' {
                   Collect-ReleaseArtifacts -label 'linux-arm64 tar.gz' -patterns @('*.tar.gz')
@@ -2176,10 +2314,10 @@ jobs:
               }
               if (
                 /(^|\/)(resources|Resources)\/node\/(linux|macos|win)\//.test(lowerPath) ||
-                /mpv-x86_64-20241124\/(7z|doc|installer)\//.test(lowerPath) ||
-                /mpv-x86_64-20241124\/.*\.(7z|pdf|ignore)$/.test(lowerPath) ||
-                /mpv-x86_64-20241124\/chocolatey/.test(lowerPath) ||
-                /mpv-x86_64-20241124\/(updater\.bat|settings\.xml)$/.test(lowerPath)
+                /mpv[-_][^/]*(x86_64|i686|aarch64|arm64|x86)[^/]*\/(7z|doc|installer)\//.test(lowerPath) ||
+                /mpv[-_][^/]*(x86_64|i686|aarch64|arm64|x86)[^/]*\/.*\.(7z|pdf|ignore)$/.test(lowerPath) ||
+                /mpv[-_][^/]*(x86_64|i686|aarch64|arm64|x86)[^/]*\/chocolatey/.test(lowerPath) ||
+                /mpv[-_][^/]*(x86_64|i686|aarch64|arm64|x86)[^/]*\/(updater\.bat|settings\.xml)$/.test(lowerPath)
               ) {
                 forbiddenPaths.push(relativePath)
               }
@@ -2328,6 +2466,17 @@ jobs:
               throw "dpkg-deb extraction failed for $debPath"
             }
             Write-InspectionSummary -kind 'deb' -rootPath $debExtractDir -sourcePath $debPath
+            Write-AsarInspectionSummary -kind 'deb' -rootPath $debExtractDir
+
+            $rpmPath = Get-SinglePublishAsset '*.rpm' 'Linux rpm package'
+            $rpmExtractDir = Join-Path $scratchRoot 'rpm-extracted'
+            New-Item -ItemType Directory -Path $rpmExtractDir -Force | Out-Null
+            & bsdtar -xf $rpmPath -C $rpmExtractDir
+            if ($LASTEXITCODE -ne 0) {
+              throw "rpm extraction failed for $rpmPath"
+            }
+            Write-InspectionSummary -kind 'rpm' -rootPath $rpmExtractDir -sourcePath $rpmPath
+            Write-AsarInspectionSummary -kind 'rpm' -rootPath $rpmExtractDir
 
             $appImagePath = Get-SinglePublishAsset '*.AppImage' 'Linux AppImage package'
             $appImageExtractDir = Join-Path $scratchRoot 'appimage-extracted'
@@ -2347,6 +2496,7 @@ jobs:
               throw "AppImage extraction output not found: $appImageRoot"
             }
             Write-InspectionSummary -kind 'AppImage' -rootPath $appImageRoot -sourcePath $appImagePath
+            Write-AsarInspectionSummary -kind 'AppImage' -rootPath $appImageRoot
           } elseif ($env:NSMUSICS_ELECTRON_PLATFORM -eq 'mac') {
             $zipPath = Get-SinglePublishAsset '*.zip' 'macOS packaged zip'
             $zipExtractDir = Join-Path $scratchRoot 'zip-extracted'
