@@ -110,6 +110,62 @@ const ELECTRON_LANGUAGE_WHITELIST = [
   'nl',
 ]
 
+const MAC_LPROJ_WHITELIST = new Set([
+  'base',
+  'en',
+  ...ELECTRON_LANGUAGE_WHITELIST.map((value) => value.replace(/_/g, '-').toLowerCase()),
+])
+
+const normalizeMacLprojName = (value: string) =>
+  value.replace(/\.lproj$/i, '').replace(/_/g, '-').toLowerCase()
+
+const pruneMacLprojDirectories = (rootDir: string) => {
+  const removed: string[] = []
+
+  const walk = (currentDir: string) => {
+    for (const entry of fs.readdirSync(currentDir, { withFileTypes: true })) {
+      if (!entry.isDirectory()) {
+        continue
+      }
+
+      const fullPath = path.join(currentDir, entry.name)
+      if (/\.lproj$/i.test(entry.name)) {
+        const normalized = normalizeMacLprojName(entry.name)
+        if (!MAC_LPROJ_WHITELIST.has(normalized)) {
+          fs.rmSync(fullPath, { recursive: true, force: true })
+          removed.push(path.relative(rootDir, fullPath).replace(/\\/g, '/'))
+          continue
+        }
+      }
+
+      walk(fullPath)
+    }
+  }
+
+  if (fs.existsSync(rootDir)) {
+    walk(rootDir)
+  }
+
+  return removed.sort()
+}
+
+const afterPack = async (context: { electronPlatformName?: string; appOutDir: string }) => {
+  if ((context.electronPlatformName || '').toLowerCase() !== 'darwin') {
+    return
+  }
+
+  const removed = pruneMacLprojDirectories(context.appOutDir)
+  console.log(
+    `[electron-builder] macOS lproj pruning removed ${removed.length} directories under ${context.appOutDir}`
+  )
+  for (const relativePath of removed.slice(0, 80)) {
+    console.log(`[electron-builder] pruned lproj: ${relativePath}`)
+  }
+  if (removed.length > 80) {
+    console.log(`[electron-builder] pruned lproj: ... ${removed.length - 80} more`)
+  }
+}
+
 const PACKAGED_FILE_PATTERNS = [
   '**/*',
   '!**/*.map',
@@ -203,6 +259,7 @@ export const viteElectronBuild = (): Plugin => {
             app: path.join(process.cwd(), 'dist'), //app目录
           },
           asar: true,
+          afterPack,
           files: PACKAGED_FILE_PATTERNS,
           win: {
             target: ['nsis', 'zip'],
