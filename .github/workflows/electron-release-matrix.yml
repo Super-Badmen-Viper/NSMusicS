@@ -675,7 +675,7 @@ jobs:
           const builderArch = archMap[archName]
           const builderPlatform = platformMap[platformName]
 
-          if (!builderArch) {
+          if (builderArch === undefined) {
             throw new Error(`Unsupported NSMUSICS_ELECTRON_ARCH: ${archName}`)
           }
           if (!builderPlatform) {
