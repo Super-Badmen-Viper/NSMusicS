@@ -1,0 +1,391 @@
+name: Web Mirror Docker Sync
+
+on:
+  workflow_dispatch:
+    inputs:
+      push_image:
+        description: Push the validated Web mirror image to Docker Hub.
+        required: true
+        default: false
+        type: boolean
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/web-mirror-dockerhub.yml"
+      - "NSMusicS-Electron/**"
+    tags:
+      - "v*"
+      - "electron-v*"
+      - "NSMusicS-v*"
+
+concurrency:
+  group: web-mirror-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  PROJECT_DIR: NSMusicS-Electron
+  NODE_VERSION: "20.15.0"
+  DOCKER_IMAGE_REPOSITORY: xiangch007/nsmusics
+  WEB_ARTIFACT_NAME: nsmusics-web-release-bundle
+
+jobs:
+  build-web:
+    name: Build Web Mirror
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+        working-directory: NSMusicS-Electron
+    outputs:
+      version: ${{ steps.meta.outputs.version }}
+      should_push: ${{ steps.meta.outputs.should_push }}
+      docker_tags: ${{ steps.meta.outputs.docker_tags }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: NSMusicS-Electron/package-lock.json
+
+      - name: Verify deterministic dependency lockfile
+        run: |
+          if [ ! -f package-lock.json ]; then
+            echo "::error title=Web Release Policy::package-lock.json is missing. Production web releases must use a committed npm lockfile."
+            exit 1
+          fi
+
+      - name: Resolve release metadata
+        id: meta
+        env:
+          MANUAL_PUSH_IMAGE: ${{ github.event_name == 'workflow_dispatch' && inputs.push_image || 'false' }}
+        run: |
+          set -euo pipefail
+
+          version="$(node -p "require('./package.json').version")"
+          raw_tag="${GITHUB_REF_NAME:-}"
+          normalized_tag="${raw_tag#validate-}"
+          normalized_tag="${normalized_tag#electron-v}"
+          normalized_tag="${normalized_tag#NSMusicS-v}"
+          normalized_tag="${normalized_tag#v}"
+
+          should_push=false
+          tag_one="${DOCKER_IMAGE_REPOSITORY}:sha-${GITHUB_SHA::7}"
+          tag_two=""
+
+          if [[ "${GITHUB_REF:-}" == refs/tags/* ]]; then
+            if [[ -z "${normalized_tag}" ]]; then
+              echo "::error title=Web Release Policy::Unable to normalize tag version from ${raw_tag}."
+              exit 1
+            fi
+            if [[ "${normalized_tag}" != "${version}" ]]; then
+              echo "::error title=Web Release Policy::Tag version ${normalized_tag} does not match package.json version ${version}."
+              exit 1
+            fi
+            should_push=true
+            tag_one="${DOCKER_IMAGE_REPOSITORY}:${version}"
+            tag_two="${DOCKER_IMAGE_REPOSITORY}:latest"
+          elif [[ "${MANUAL_PUSH_IMAGE}" == "true" ]]; then
+            should_push=true
+            tag_one="${DOCKER_IMAGE_REPOSITORY}:edge"
+            tag_two="${DOCKER_IMAGE_REPOSITORY}:sha-${GITHUB_SHA::7}"
+          fi
+
+          {
+            echo "version=${version}"
+            echo "should_push=${should_push}"
+            echo "docker_tags<<EOF"
+            echo "${tag_one}"
+            if [[ -n "${tag_two}" ]]; then
+              echo "${tag_two}"
+            fi
+            echo "EOF"
+          } >> "${GITHUB_OUTPUT}"
+
+          {
+            echo "## Web Mirror Build Plan"
+            echo "- Version: ${version}"
+            echo "- Git ref: ${GITHUB_REF}"
+            echo "- Push image: ${should_push}"
+            echo "- Docker tags:"
+            echo "  - ${tag_one}"
+            if [[ -n "${tag_two}" ]]; then
+              echo "  - ${tag_two}"
+            fi
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+      - name: Install project dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Build Web mirror dist
+        run: npm run build
+
+      - name: Validate dist and stage Web release bundle
+        env:
+          NSMUSICS_VERSION: ${{ steps.meta.outputs.version }}
+        run: |
+          set -euo pipefail
+
+          node - <<'NODE'
+          const fs = require('node:fs')
+          const path = require('node:path')
+
+          const root = process.cwd()
+          const distDir = path.join(root, 'dist')
+          const outputRoot = path.join(root, '.github', 'workflows', '.out', 'web-release')
+          const contextDir = path.join(outputRoot, 'context')
+          const publishDir = path.join(outputRoot, 'publish')
+          const version = process.env.NSMUSICS_VERSION
+          const summaryPath = process.env.GITHUB_STEP_SUMMARY
+
+          const fail = (message) => {
+            console.error(`::error title=Web Dist Validation::${message}`)
+            throw new Error(message)
+          }
+
+          const appendSummary = (message) => {
+            if (summaryPath) {
+              fs.appendFileSync(summaryPath, `${message}\n`)
+            }
+          }
+
+          const walkFiles = (dirPath) => {
+            return fs.readdirSync(dirPath, { withFileTypes: true }).flatMap((entry) => {
+              const fullPath = path.join(dirPath, entry.name)
+              return entry.isDirectory() ? walkFiles(fullPath) : [fullPath]
+            })
+          }
+
+          if (!fs.existsSync(distDir)) {
+            fail(`dist directory not found: ${distDir}`)
+          }
+
+          const indexHtmlPath = path.join(distDir, 'index.html')
+          if (!fs.existsSync(indexHtmlPath)) {
+            fail(`dist/index.html is missing: ${indexHtmlPath}`)
+          }
+
+          const assetsDir = path.join(distDir, 'assets')
+          if (!fs.existsSync(assetsDir)) {
+            fail(`dist/assets is missing: ${assetsDir}`)
+          }
+
+          const distFiles = walkFiles(distDir)
+          if (distFiles.length < 3) {
+            fail(`dist directory looks incomplete. File count=${distFiles.length}`)
+          }
+
+          const zeroByteFiles = distFiles.filter((filePath) => fs.statSync(filePath).size === 0)
+          if (zeroByteFiles.length > 0) {
+            fail(`dist contains zero-byte files: ${zeroByteFiles.map((filePath) => path.relative(root, filePath)).join(', ')}`)
+          }
+
+          const totalBytes = distFiles.reduce((sum, filePath) => sum + fs.statSync(filePath).size, 0)
+          if (totalBytes < 512 * 1024) {
+            fail(`dist payload is unexpectedly small: ${totalBytes} bytes`)
+          }
+
+          fs.rmSync(outputRoot, { recursive: true, force: true })
+          fs.mkdirSync(contextDir, { recursive: true })
+          fs.mkdirSync(publishDir, { recursive: true })
+
+          const requiredRootFiles = ['Dockerfile', 'docker-entrypoint.sh', 'nginx.conf']
+          for (const fileName of requiredRootFiles) {
+            const sourcePath = path.join(root, fileName)
+            if (!fs.existsSync(sourcePath)) {
+              fail(`required Docker context file is missing: ${sourcePath}`)
+            }
+            fs.copyFileSync(sourcePath, path.join(contextDir, fileName))
+          }
+
+          const copyRecursive = (sourceDir, targetDir) => {
+            fs.mkdirSync(targetDir, { recursive: true })
+            for (const entry of fs.readdirSync(sourceDir, { withFileTypes: true })) {
+              const sourcePath = path.join(sourceDir, entry.name)
+              const targetPath = path.join(targetDir, entry.name)
+              if (entry.isDirectory()) {
+                copyRecursive(sourcePath, targetPath)
+              } else {
+                fs.copyFileSync(sourcePath, targetPath)
+              }
+            }
+          }
+
+          copyRecursive(distDir, path.join(contextDir, 'dist'))
+
+          const manifest = {
+            version,
+            git_ref: process.env.GITHUB_REF || '',
+            git_sha: process.env.GITHUB_SHA || '',
+            dist_files: distFiles.length,
+            dist_total_bytes: totalBytes,
+            context_files: walkFiles(contextDir).map((filePath) => path.relative(contextDir, filePath).replace(/\\/g, '/')).sort(),
+          }
+
+          fs.writeFileSync(path.join(outputRoot, 'build-manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`)
+
+          appendSummary('## Web Dist Validation')
+          appendSummary(`- dist files: ${distFiles.length}`)
+          appendSummary(`- dist total bytes: ${totalBytes}`)
+          appendSummary(`- staged Docker context: ${path.relative(root, contextDir).replace(/\\\\/g, '/')}`)
+          NODE
+
+          tar -C .github/workflows/.out/web-release/context -czf ".github/workflows/.out/web-release/publish/NSMusicS-Web-${NSMUSICS_VERSION}.tar.gz" .
+
+      - name: Local Docker smoke test
+        env:
+          NSMUSICS_VERSION: ${{ steps.meta.outputs.version }}
+        run: |
+          set -euo pipefail
+
+          image_tag="nsmusics-web-smoke:${NSMUSICS_VERSION}"
+          context_dir=".github/workflows/.out/web-release/context"
+
+          docker build --platform linux/amd64 -t "${image_tag}" "${context_dir}"
+
+          cid="$(docker run -d -p 18080:80 "${image_tag}")"
+          cleanup() {
+            docker logs "${cid}" || true
+            docker rm -f "${cid}" >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+
+          ready=false
+          for _ in $(seq 1 20); do
+            if curl --fail --silent http://127.0.0.1:18080/ > /tmp/nsmusics-web-index.html; then
+              ready=true
+              break
+            fi
+            sleep 1
+          done
+
+          if [[ "${ready}" != "true" ]]; then
+            echo "::error title=Web Docker Smoke Test::Container did not serve index content on http://127.0.0.1:18080/ within 20 seconds."
+            exit 1
+          fi
+
+          if ! grep -Eq '<!doctype html>|<!DOCTYPE html>' /tmp/nsmusics-web-index.html; then
+            echo "::error title=Web Docker Smoke Test::Served root document does not look like HTML."
+            exit 1
+          fi
+
+          {
+            echo "## Web Docker Smoke Test"
+            echo "- Local image: ${image_tag}"
+            echo "- Route: http://127.0.0.1:18080/"
+            echo "- Result: PASS"
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+      - name: Upload Web release bundle
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.WEB_ARTIFACT_NAME }}
+          path: |
+            NSMusicS-Electron/.github/workflows/.out/web-release/**
+          overwrite: true
+          if-no-files-found: error
+          retention-days: 21
+
+  publish-dockerhub:
+    name: Publish Web Mirror To Docker Hub
+    if: ${{ needs.build-web.outputs.should_push == 'true' }}
+    needs:
+      - build-web
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+
+    steps:
+      - name: Download Web release bundle
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ env.WEB_ARTIFACT_NAME }}
+          path: web-release
+
+      - name: Resolve Docker context
+        id: context
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          context_dir="$(find web-release -type f -name Dockerfile -print -quit | xargs -r dirname)"
+          if [[ -z "${context_dir}" ]]; then
+            echo "::error title=Docker Context::Unable to locate Dockerfile inside the downloaded Web release artifact."
+            exit 1
+          fi
+
+          if [[ ! -f "${context_dir}/docker-entrypoint.sh" || ! -f "${context_dir}/nginx.conf" || ! -f "${context_dir}/dist/index.html" ]]; then
+            echo "::error title=Docker Context::Downloaded Web release context is incomplete."
+            find web-release -maxdepth 4 -type f | sort
+            exit 1
+          fi
+
+          echo "context_dir=${context_dir}" >> "${GITHUB_OUTPUT}"
+
+      - name: Verify Docker Hub credentials
+        shell: bash
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${DOCKERHUB_USERNAME}" || -z "${DOCKERHUB_TOKEN}" ]]; then
+            echo "::error title=Docker Hub Credentials::DOCKERHUB_USERNAME and DOCKERHUB_TOKEN secrets are required for Docker Hub publication."
+            exit 1
+          fi
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push multi-arch image
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ steps.context.outputs.context_dir }}
+          file: ${{ steps.context.outputs.context_dir }}/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          provenance: false
+          sbom: false
+          tags: ${{ needs.build-web.outputs.docker_tags }}
+          labels: |
+            org.opencontainers.image.title=NSMusicS Web Mirror
+            org.opencontainers.image.description=NSMusicS Web mirror image built from the validated release workflow
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.version=${{ needs.build-web.outputs.version }}
+
+      - name: Verify published image manifests
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          while IFS= read -r tag; do
+            [[ -z "${tag}" ]] && continue
+            docker buildx imagetools inspect "${tag}" >/tmp/docker-inspect.txt
+            grep -q 'linux/amd64' /tmp/docker-inspect.txt
+            grep -q 'linux/arm64' /tmp/docker-inspect.txt
+            {
+              echo "## Docker Hub Publish"
+              echo "- Verified image: ${tag}"
+              echo "- Platforms: linux/amd64, linux/arm64"
+            } >> "${GITHUB_STEP_SUMMARY}"
+          done <<< "${{ needs.build-web.outputs.docker_tags }}"

@@ -2496,6 +2496,12 @@ jobs:
             return `${sign}${value.toFixed(1)}%`
           }
 
+          const normalizeReleaseTag = (tag) =>
+            (tag || '')
+              .replace(/^validate-/, '')
+              .replace(/^electron-v/, 'v')
+              .replace(/^NSMusicS-v/, 'v')
+
           const classifyAssetSize = (asset) => {
             if (asset.size_bytes < asset.fail_min_bytes || asset.size_bytes > asset.fail_max_bytes) {
               return 'FAIL'
@@ -2544,15 +2550,24 @@ jobs:
             )
 
           const assetLines = []
-          const notes = [
-            '# NSMusicS Electron Release',
-            '',
-            `- Build mode: ${process.env.BUILD_MODE}`,
-            `- Git ref: ${process.env.GITHUB_REF}`,
-            `- Commit: ${process.env.GITHUB_SHA}`,
-            '',
-            '## Included Targets',
+          const rawTag = process.env.GITHUB_REF_NAME || ''
+          const normalizedTag = normalizeReleaseTag(rawTag)
+          const releaseNotesCandidates = [
+            path.resolve('doc', 'releases', `NSMusicS-${normalizedTag}.md`),
+            path.resolve('doc', 'releases', `${rawTag}.md`),
           ]
+          const customReleaseNotesPath = releaseNotesCandidates.find((filePath) => fs.existsSync(filePath))
+          const notes = customReleaseNotesPath
+            ? [fs.readFileSync(customReleaseNotesPath, 'utf8').trim(), '', '## Included Targets']
+            : [
+                '# NSMusicS Electron Release',
+                '',
+                `- Build mode: ${process.env.BUILD_MODE}`,
+                `- Git ref: ${process.env.GITHUB_REF}`,
+                `- Commit: ${process.env.GITHUB_SHA}`,
+                '',
+                '## Included Targets',
+              ]
 
           for (const entry of entries) {
             notes.push(`- ${entry.platform}-${entry.arch}`)
@@ -2646,6 +2661,12 @@ jobs:
           fs.writeFileSync(path.join(root, 'release-asset-audit.json'), `${JSON.stringify(auditRows, null, 2)}\n`)
 
           if (summaryPath) {
+            if (customReleaseNotesPath) {
+              fs.appendFileSync(
+                summaryPath,
+                `## Release Notes Source\n- Custom file: ${path.relative(process.cwd(), customReleaseNotesPath).replace(/\\\\/g, '/')}\n`
+              )
+            }
             fs.appendFileSync(summaryPath, `${auditLines.join('\n')}\n`)
           }
           NODE

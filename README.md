@@ -12,13 +12,16 @@ Its paired server, [NineSong](https://github.com/Super-Badmen-Viper/NineSong), p
 
 ## Current Release And Roadmap
 
-As of March 22, 2026:
+As of April 9, 2026:
 
 - The latest Windows release is already live on Microsoft Store.
 - Microsoft Store web page: [https://apps.microsoft.com/detail/9N0RWS2TJXG1](https://apps.microsoft.com/detail/9N0RWS2TJXG1)
 - Windows Store deep link: `ms-windows-store://pdp/?productid=9N0RWS2TJXG1`
 - A 15-day free trial is currently available on Windows.
-- The refactored edition of this project is expected around two months later, which currently points to roughly May 2026.
+- The current Electron and Web delivery line is a transition release that keeps the project available before the next-generation client wave lands.
+- The next refactored client wave is targeted for roughly mid-May 2026.
+- That refactored wave is planned to include React, React Native, Vue, and Angular client lines.
+- The Electron and Web variants in that wave are intended to follow the official and community-recommended best practices of each stack instead of forcing one shared implementation style across all frameworks.
 - App Store releases for macOS and iOS, plus the Google Play release for Android, are planned next.
 - The product direction remains centered on local music libraries, private cloud music, compatibility with major self-hosted servers, and deeper integration with [NineSong](https://github.com/Super-Badmen-Viper/NineSong).
 
@@ -42,7 +45,10 @@ The product line first built credibility through open-source distribution, then 
 
 The current planning direction includes:
 
-- A refactored NSMusicS edition expected around two months later.
+- The current Electron/Web release line serving as the transition edition before the refactored client wave ships.
+- A refactored NSMusicS client wave targeted for roughly mid-May 2026.
+- Parallel client lines for React, React Native, Vue, and Angular.
+- Electron and Web implementations for the refactored wave following the best-practice direction of each stack and its surrounding community.
 - Continued evolution of the NineSong-backed client and cloud experience.
 - Expansion of the cross-platform product line across Windows, macOS, iOS, Android, Linux, and later HarmonyOS scenarios.
 - Deeper support for local libraries, private cloud music, and broader self-hosted media workflows.
@@ -57,6 +63,12 @@ The desktop client currently covers:
 - macOS
 - Linux
 - Docker-oriented desktop and web-adjacent scenarios
+
+Current status:
+
+- This is the currently released transition client line.
+- It remains the bridge release until the refactored React, React Native, Vue, and Angular client wave is published.
+- Its Web mirror and Docker delivery remain important for the current transition period.
 
 Current focus areas include:
 
@@ -109,6 +121,7 @@ The current roadmap expects the refactored edition around two months later, with
 - Windows production release: [Microsoft Store Web Page](https://apps.microsoft.com/detail/9N0RWS2TJXG1)
 - Windows Store deep link: `ms-windows-store://pdp/?productid=9N0RWS2TJXG1`
 - Electron releases: https://github.com/Super-Badmen-Viper/NSMusicS/releases
+- Web mirror Docker image: https://hub.docker.com/r/xiangch007/nsmusics
 - Legacy WPF release: https://github.com/Super-Badmen-Viper/NSMusicS_WPF/releases/tag/NSMusicS_Win(WPF)_0.9.0
 - NineSong releases: https://github.com/Super-Badmen-Viper/NineSong/releases/
 
@@ -125,7 +138,7 @@ The current roadmap expects the refactored edition around two months later, with
 
 | Project | Status | Stack | Platforms | License |
 | --- | --- | --- | --- | --- |
-| [NSMusicS Desktop and Docker](https://github.com/Super-Badmen-Viper/NSMusicS) | Updating | Electron, Node.js, Vue, TypeScript, SQLite, Docker | Windows, Linux, Docker, macOS | AGPL-3.0 with commercial-use restrictions noted in project docs |
+| [NSMusicS Desktop and Docker](https://github.com/Super-Badmen-Viper/NSMusicS) | Transition release | Electron, Node.js, Vue, TypeScript, SQLite, Docker | Windows, Linux, Docker, macOS | AGPL-3.0 with commercial-use restrictions noted in project docs |
 | [NineSong](https://github.com/Super-Badmen-Viper/NineSong) | Frozen public snapshot | Go, MongoDB, Gin, JWT, SQLite, Docker | Docker | AGPL-3.0 with commercial-use restrictions noted in project docs |
 | NineSongAI | Updating | Java, MongoDB, Spring Boot, MySQL, Docker | Docker | AGPL-3.0 with commercial-use restrictions noted in project docs |
 | NineSongPro | Updating | Java, MongoDB, Spring Cloud Alibaba, MySQL, Docker | Docker | AGPL-3.0 with commercial-use restrictions noted in project docs |
