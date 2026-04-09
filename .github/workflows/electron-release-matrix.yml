@@ -2798,13 +2798,19 @@ jobs:
             current_asset_names="$(retry_gh release view "${tag}" --json assets --jq '.assets[].name')"
             while IFS= read -r asset_name; do
               keep_asset=false
+              preserve_external_asset=false
               for expected_name in "${expected_asset_names[@]}"; do
                 if [ "${expected_name}" = "${asset_name}" ]; then
                   keep_asset=true
                   break
                 fi
               done
-              if [ -n "${asset_name}" ] && [ "${keep_asset}" = false ]; then
+              case "${asset_name}" in
+                NSMusicS-Web-*)
+                  preserve_external_asset=true
+                  ;;
+              esac
+              if [ -n "${asset_name}" ] && [ "${keep_asset}" = false ] && [ "${preserve_external_asset}" = false ]; then
                 retry_gh release delete-asset "${tag}" "${asset_name}" --yes
               fi
             done <<< "${current_asset_names}"

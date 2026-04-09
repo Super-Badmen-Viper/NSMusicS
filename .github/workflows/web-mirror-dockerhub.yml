@@ -240,6 +240,10 @@ jobs:
           NODE
 
           tar -C .github/workflows/.out/web-release/context -czf ".github/workflows/.out/web-release/publish/NSMusicS-Web-${NSMUSICS_VERSION}.tar.gz" .
+          (
+            cd .github/workflows/.out/web-release/publish
+            sha256sum "NSMusicS-Web-${NSMUSICS_VERSION}.tar.gz" > "NSMusicS-Web-${NSMUSICS_VERSION}.tar.gz.sha256"
+          )
 
       - name: Local Docker smoke test
         env:
@@ -387,5 +391,84 @@ jobs:
               echo "## Docker Hub Publish"
               echo "- Verified image: ${tag}"
               echo "- Platforms: linux/amd64, linux/arm64"
-            } >> "${GITHUB_STEP_SUMMARY}"
+          } >> "${GITHUB_STEP_SUMMARY}"
           done <<< "${{ needs.build-web.outputs.docker_tags }}"
+
+  publish-release-asset:
+    name: Attach Web Mirror Release Asset
+    if: ${{ startsWith(github.ref, 'refs/tags/') && needs.build-web.result == 'success' && (needs.publish-dockerhub.result == 'success' || needs.publish-dockerhub.result == 'skipped') }}
+    needs:
+      - build-web
+      - publish-dockerhub
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download Web release bundle
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ env.WEB_ARTIFACT_NAME }}
+          path: web-release
+
+      - name: Verify GitHub CLI release context
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          gh --version
+          gh repo view "${GH_REPO}" --json name >/dev/null
+
+      - name: Upload Web assets to GitHub Release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          tag="${GITHUB_REF_NAME}"
+          mapfile -t files < <(find web-release -type f \( -name 'NSMusicS-Web-*.tar.gz' -o -name 'NSMusicS-Web-*.tar.gz.sha256' \) | sort)
+
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "::error title=Web Release Asset::No Web release assets were found in the downloaded artifact."
+            find web-release -type f | sort
+            exit 1
+          fi
+
+          release_ready=false
+          for attempt in $(seq 1 36); do
+            if gh release view "${tag}" --repo "${GH_REPO}" >/dev/null 2>&1; then
+              release_ready=true
+              break
+            fi
+            echo "Waiting for GitHub Release ${tag} to become visible before uploading Web assets. Attempt ${attempt}/36."
+            sleep 10
+          done
+
+          if [ "${release_ready}" != "true" ]; then
+            echo "::error title=Web Release Asset::GitHub Release ${tag} was not visible after waiting 360 seconds."
+            exit 1
+          fi
+
+          gh release upload "${tag}" "${files[@]}" --repo "${GH_REPO}" --clobber
+
+          asset_names="$(gh release view "${tag}" --repo "${GH_REPO}" --json assets --jq '.assets[].name')"
+          for file_path in "${files[@]}"; do
+            asset_name="$(basename "${file_path}")"
+            if ! grep -Fxq "${asset_name}" <<< "${asset_names}"; then
+              echo "::error title=Web Release Asset::Uploaded Web asset not found on release: ${asset_name}"
+              exit 1
+            fi
+          done
+
+          {
+            echo "## Web Release Asset"
+            echo "- Tag: ${tag}"
+            for file_path in "${files[@]}"; do
+              echo "- Uploaded: $(basename "${file_path}")"
+            done
+          } >> "${GITHUB_STEP_SUMMARY}"
