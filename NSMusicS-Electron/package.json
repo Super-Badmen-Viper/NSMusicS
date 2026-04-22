@@ -65,7 +65,7 @@
     "reflect-metadata": "^0.2.2",
     "spark-md5": "^3.0.2",
     "tailwindcss": "^4.1.14",
-    "uuid": "^9.0.1",
+    "uuid": "^14.0.0",
     "v-contextmenu": "^3.2.0",
     "vue-draggable-plus": "^0.5.3",
     "vue-echarts": "^7.0.3",
